@@ -2,8 +2,6 @@
 
 use App\Currency;
 use App\BusinessSetting;
-use App\HelperClasses\Colorcodeconverter;
-use App\HelperClasses\Timezones;
 use App\Product;
 use App\SubSubCategory;
 use App\FlashDealProduct;

@@ -25,7 +25,6 @@
                             Gather the information mentioned above before hitting the start installation button. If you are ready....
                         </p>
                         <br>
-						<p>Nulled BY NUllJungle.com</p>
                         <div class="text-center">
                             <a href="{{ route('step1') }}" class="btn btn-primary">
                                 Start Installation Process

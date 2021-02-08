@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\HelperClasses\Combinations;
 use Illuminate\Http\Request;
 use App\Product;
 use App\ProductTranslation;
@@ -14,6 +13,7 @@ use App\SubSubCategory;
 use Session;
 use ImageOptimizer;
 use DB;
+use Combinations;
 use CoreComponentRepository;
 use Illuminate\Support\Str;
 use Artisan;
