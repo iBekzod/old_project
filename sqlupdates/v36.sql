@@ -1423,7 +1423,7 @@ INSERT INTO `business_settings` (`type`, `value`, `created_at`, `updated_at`) VA
     (1356, 'en', 'Update your product', 'Update your product', '2020-11-15 11:39:14', '2020-11-15 11:39:14'),
     (1357, 'en', 'Product has been updated successfully', 'Product has been updated successfully', '2020-11-15 11:51:36', '2020-11-15 11:51:36'),
     (1358, 'en', 'Add Your Digital Product', 'Add Your Digital Product', '2020-11-15 12:24:21', '2020-11-15 12:24:21'),
-    (1359, 'en', 'Active eCommerce CMS Update Process', 'Active eCommerce CMS Update Process', '2020-11-16 07:53:31', '2020-11-16 07:53:31'),
+    (1359, 'en', 'eCommerce Update Process', 'eCommerce Update Process', '2020-11-16 07:53:31', '2020-11-16 07:53:31'),
     (1360, 'en', 'You will need to know the following items before\r\n        proceeding', 'You will need to know the following items before\r\n        proceeding', '2020-11-16 07:53:31', '2020-11-16 07:53:31'),
     (1361, 'en', 'Codecanyon purchase code', 'Codecanyon purchase code', '2020-11-16 07:53:31', '2020-11-16 07:53:31'),
     (1362, 'en', 'Database Name', 'Database Name', '2020-11-16 07:53:31', '2020-11-16 07:53:31'),
