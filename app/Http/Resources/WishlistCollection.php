@@ -10,9 +10,10 @@ class WishlistCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection->map(function($data) {
+                if($data->product) {
                 return [
                     'id' => (integer) $data->id,
-                    'product' => [
+                        'product_id' => $data->product->id,
                         'name' => $data->product->name,
                         'thumbnail_image' => api_asset($data->product->thumbnail_img),
                         'base_price' => (double) homeBasePrice($data->product->id),
@@ -27,6 +28,7 @@ class WishlistCollection extends ResourceCollection
                         ]
                     ]
                 ];
+                }
             })
         ];
     }

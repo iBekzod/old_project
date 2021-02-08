@@ -46,30 +46,31 @@ class ManualPaymentMethodController extends Controller
      */
     public function store(Request $request)
     {
-        $manual_payment_method = new ManualPaymentMethod;
-        $manual_payment_method->type = $request->type;
-        $manual_payment_method->photo = $request->photo;
-        $manual_payment_method->heading = $request->heading;
-        $manual_payment_method->description = $request->description;
+        if ($request->hasFile('photo')) {
+            $manual_payment_method = new ManualPaymentMethod;
+            $manual_payment_method->type = $request->type;
+            $manual_payment_method->photo = $request->photo;
+            $manual_payment_method->heading = $request->heading;
+            $manual_payment_method->description = $request->description;
 
-        if($request->type == 'bank_payment')
-        {
-            $banks_informations = array();
-            for ($i=0; $i < count($request->bank_name); $i++) {
-                $item = array();
-                $item['bank_name'] = $request->bank_name[$i];
-                $item['account_name'] = $request->account_name[$i];
-                $item['account_number'] = $request->account_number[$i];
-                $item['routing_number'] = $request->routing_number[$i];
-                array_push($banks_informations, $item);
+            if ($request->type == 'bank_payment') {
+                $banks_informations = array();
+                for ($i = 0; $i < count($request->bank_name); $i++) {
+                    $item = array();
+                    $item['bank_name'] = $request->bank_name[$i];
+                    $item['account_name'] = $request->account_name[$i];
+                    $item['account_number'] = $request->account_number[$i];
+                    $item['routing_number'] = $request->routing_number[$i];
+                    array_push($banks_informations, $item);
+                }
+
+                $manual_payment_method->bank_info = json_encode($banks_informations);
             }
 
-            $manual_payment_method->bank_info = json_encode($banks_informations);
+            $manual_payment_method->save();
+            flash(translate('Method has been inserted successfully'))->success();
+            return redirect()->route('manual_payment_methods.index');
         }
-
-        $manual_payment_method->save();
-        flash(translate('Method has been inserted successfully'))->success();
-        return redirect()->route('manual_payment_methods.index');
     }
 
     /**
@@ -123,7 +124,11 @@ class ManualPaymentMethodController extends Controller
 
             $manual_payment_method->bank_info = json_encode($banks_informations);
         }
-        $manual_payment_method->photo = $request->photo;
+
+        if($request->hasFile('photo')){
+            $manual_payment_method->photo = $request->photo->store('uploads/payment_method');
+        }
+
         $manual_payment_method->save();
         flash( translate('Method has been updated successfully'))->success();
         return redirect()->route('manual_payment_methods.index');
@@ -176,7 +181,13 @@ class ManualPaymentMethodController extends Controller
             $data['name']   = $request->name;
             $data['amount'] = $request->amount;
             $data['trx_id'] = $request->trx_id;
-            $data['photo']  = $request->photo;
+            if($request->hasFile('photo')){
+                $path = $request->photo->store('uploads/manual_payment');
+            }
+            else {
+                $path = null;
+            }
+            $data['photo'] = $path;
         }
         else {
             flash(translate('Please fill all the fields'))->warning();

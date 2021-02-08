@@ -19,11 +19,13 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
+        //\Fruitcake\Cors\HandleCors::class,
         \App\Http\Middleware\CheckForMaintenanceMode::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\TrustProxies::class,
+        // \App\Http\Middleware\SetLocale::class,
     ];
 
     /**
@@ -43,6 +45,11 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\Language::class,
             \App\Http\Middleware\HttpsProtocol::class
         ],
+
+        'spa' => [
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        ],
+
 
         'api' => [
             'throttle:100,1',

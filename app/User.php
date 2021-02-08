@@ -5,12 +5,15 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Laravel\Passport\HasApiTokens;
 use App\Models\Cart;
 use App\Notifications\EmailVerificationNotification;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
+    public const PROFILE_IMAGE_URL = 'uploads/profile/';
     use Notifiable, HasApiTokens;
 
     public function sendEmailVerificationNotification()
@@ -24,7 +27,21 @@ class User extends Authenticatable implements MustVerifyEmail
     * @var array
     */
     protected $fillable = [
-        'name', 'email', 'password', 'address', 'city', 'postal_code', 'phone', 'country', 'provider_id', 'email_verified_at', 'verification_code'
+        'name',
+        'email',
+        'password',
+        'address',
+        'city',
+        'postal_code',
+        'phone',
+        'country',
+        'provider_id',
+        'email_verified_at',
+        'verification_code',
+        'date_of_birth',
+        'gender',
+        'full_address',
+        'profile_image',
     ];
 
     /**
@@ -124,5 +141,46 @@ class User extends Authenticatable implements MustVerifyEmail
     public function addresses()
     {
         return $this->hasMany(Address::class);
+    }
+
+
+
+    /**
+     * Upload Image
+     *
+     * @param $image
+     */
+    public function uploadProfileImage($image)
+    {
+        if($image == null) return;
+
+        $this->removeProfileImage();
+        $filemame = $this->createFileName($image->extension());
+        $image->storeAs(self::PROFILE_IMAGE_URL, $filemame);
+        $this->update([
+            'profile_image' => $filemame
+        ]);
+    }
+
+    /**
+     *  Remove Image
+     */
+    public function removeProfileImage()
+    {
+        Storage::delete(self::PROFILE_IMAGE_URL . $this->profile_image);
+        $this->update([
+            'profile_image' => null
+        ]);
+    }
+
+    /**
+     * Create FileName with extension
+     *
+     * @param $extension
+     * @return string
+     */
+    public function createFileName($extension)
+    {
+        return Str::random(10) . '.' . $extension;
     }
 }

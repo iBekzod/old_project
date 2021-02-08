@@ -75,7 +75,7 @@ class PaytmController extends Controller
         }else if($transaction->isFailed()){
             $request->session()->forget('order_id');
             $request->session()->forget('payment_data');
-            flash(translate('Payment cancelled'))->error();
+            flash(__('Payment cancelled'))->error();
         	return back();
         }else if($transaction->isOpen()){
           //Transaction Open/Processing

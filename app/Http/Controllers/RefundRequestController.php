@@ -110,13 +110,17 @@ class RefundRequestController extends Controller
     {
         $business_settings = BusinessSetting::where('type', $request->type)->first();
         if ($business_settings != null) {
-            $business_settings->value = $request->logo;
+            if($request->hasFile('logo')){
+                $business_settings->value = $request->file('logo')->store('frontend/refund_sticker');
+            }
             $business_settings->save();
         }
         else {
             $business_settings = new BusinessSetting;
             $business_settings->type = $request->type;
-            $business_settings->value = $request->logo;
+            if($request->hasFile('logo')){
+                $business_settings->value = $request->file('logo')->store('frontend/refund_sticker');
+            }
             $business_settings->save();
         }
         flash( translate("Refund Sticker has been updated successfully"))->success();

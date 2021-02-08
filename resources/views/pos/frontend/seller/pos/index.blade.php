@@ -11,20 +11,20 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="mb-2">
-                                <input class="form-control form-control-sm" type="text" name="keyword" placeholder="Search by Product Name/Barcode" onkeyup="filterProducts()">
+                                <input class="form-control" type="text" name="keyword" placeholder="Search by Product Name/Barcode" onkeyup="filterProducts()">
                             </div>
                             <div class="row gutters-5">
                                 <div class="col-6">
                                     <div class="">
                                         <div class="form-group">
-                                            <select name="poscategory" class="form-control form-control-sm aiz-selectpicker" data-live-search="true" onchange="filterProducts()">
-                                                <option value="">{{ translate('All Categories') }}</option>
+                                            <select name="poscategory" class="form-control selectpicker" onchange="filterProducts()">
+                                                <option value="">All Categories</option>
                                                 @foreach (\App\Category::all() as $key => $category)
-                                                    <option value="category-{{ $category->id }}">{{ $category->getTranslation('name') }}</option>
+                                                    <option value="category-{{ $category->id }}">{{ $category->name }}</option>
                                                     @foreach ($category->subcategories as $key => $subcategory)
-                                                        <option value="subcategory-{{ $subcategory->id }}">- {{ $subcategory->getTranslation('name') }}</option>
+                                                        <option value="subcategory-{{ $subcategory->id }}">- {{ $subcategory->name }}</option>
                                                         @foreach ($subcategory->subsubcategories as $key => $subsubcategory)
-                                                            <option value="subsubcategory-{{ $subsubcategory->id }}">- - {{ $subsubcategory->getTranslation('name') }}</option>
+                                                            <option value="subsubcategory-{{ $subsubcategory->id }}">- - {{ $subsubcategory->name }}</option>
                                                         @endforeach
                                                     @endforeach
                                                 @endforeach

@@ -43,7 +43,7 @@ class ProductDetailCollection extends ResourceCollection
                     ],
                     'photos' => $this->convertPhotos(explode(',', $data->photos)),
                     'thumbnail_image' => api_asset($data->thumbnail_img),
-                    'tags' => explode(',', $data->tags),
+                    'tag' => explode(',', $data->tags),
                     'price_lower' => (double) explode('-', homeDiscountedPrice($data->id))[0],
                     'price_higher' => (double) explode('-', homeDiscountedPrice($data->id))[1],
                     'choice_options' => $this->convertToChoiceOptions(json_decode($data->choice_options)),

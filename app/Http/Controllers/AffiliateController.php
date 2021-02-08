@@ -11,7 +11,6 @@ use App\AffiliateConfig;
 use App\AffiliateUser;
 use App\AffiliatePayment;
 use App\AffiliateEarningDetail;
-use App\AffiliateWithdrawRequest;
 use App\User;
 use App\Customer;
 use App\Category;
@@ -19,7 +18,6 @@ use Session;
 use Cookie;
 use Auth;
 use Hash;
-use Illuminate\Auth\Events\Registered;
 
 class AffiliateController extends Controller
 {
@@ -99,7 +97,7 @@ class AffiliateController extends Controller
     public function store_affiliate_user(Request $request){
         if(!Auth::check()){
             if(User::where('email', $request->email)->first() != null){
-                flash(translate('Email already exists!'))->error();
+                flash(__('Email already exists!'))->error();
                 return back();
             }
             if($request->password == $request->password_confirmation){
@@ -115,17 +113,9 @@ class AffiliateController extends Controller
                 $customer->save();
 
                 auth()->login($user, false);
-
-                if(BusinessSetting::where('type', 'email_verification')->first()->value != 1){
-                    $user->email_verified_at = date('Y-m-d H:m:s');
-                    $user->save();
-                }
-                else {
-                    event(new Registered($user));
-                }
             }
             else{
-                flash(translate('Sorry! Password did not match.'))->error();
+                flash(__('Sorry! Password did not match.'))->error();
                 return back();
             }
         }
@@ -164,11 +154,11 @@ class AffiliateController extends Controller
         }
         $affiliate_user->informations = json_encode($data);
         if($affiliate_user->save()){
-            flash(translate('Your verification request has been submitted successfully!'))->success();
+            flash(__('Your verification request has been submitted successfully!'))->success();
             return redirect()->route('home');
         }
 
-        flash(translate('Sorry! Something went wrong.'))->error();
+        flash(__('Sorry! Something went wrong.'))->error();
         return back();
     }
 
@@ -187,10 +177,10 @@ class AffiliateController extends Controller
         $affiliate_user = AffiliateUser::findOrFail($id);
         $affiliate_user->status = 1;
         if($affiliate_user->save()){
-            flash(translate('Affiliate user has been approved successfully'))->success();
+            flash(__('Affiliate user has been approved successfully'))->success();
             return redirect()->route('affiliate.users');
         }
-        flash(translate('Something went wrong'))->error();
+        flash(__('Something went wrong'))->error();
         return back();
     }
 
@@ -200,10 +190,10 @@ class AffiliateController extends Controller
         $affiliate_user->status = 0;
         $affiliate_user->informations = null;
         if($affiliate_user->save()){
-            flash(translate('Affiliate user request has been rejected successfully'))->success();
+            flash(__('Affiliate user request has been rejected successfully'))->success();
             return redirect()->route('affiliate.users');
         }
-        flash(translate('Something went wrong'))->error();
+        flash(__('Something went wrong'))->error();
         return back();
     }
 
@@ -234,7 +224,7 @@ class AffiliateController extends Controller
         $affiliate_user->balance -= $request->amount;
         $affiliate_user->save();
 
-        flash(translate('Payment completed'))->success();
+        flash(__('Payment completed'))->success();
         return back();
     }
 
@@ -247,10 +237,7 @@ class AffiliateController extends Controller
     public function user_index(){
         $affiliate_user = Auth::user()->affiliate_user;
         $affiliate_payments = $affiliate_user->affiliate_payments();
-
-        $affiliate_withdraw_requests = AffiliateWithdrawRequest::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->paginate(10);
-
-        return view('affiliate.frontend.index', compact('affiliate_payments','affiliate_withdraw_requests'));
+        return view('affiliate.frontend.index', compact('affiliate_payments'));
     }
 
     public function payment_settings(){
@@ -263,7 +250,7 @@ class AffiliateController extends Controller
         $affiliate_user->paypal_email = $request->paypal_email;
         $affiliate_user->bank_information = $request->bank_information;
         $affiliate_user->save();
-        flash(translate('Affiliate payment settings has been updated successfully'))->success();
+        flash(__('Affiliate payment settings has been updated successfully'))->success();
         return redirect()->route('affiliate.user.index');
     }
 

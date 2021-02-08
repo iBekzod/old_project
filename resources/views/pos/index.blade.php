@@ -19,9 +19,9 @@
                                         <option value="">All Categories</option>
                                         @foreach (\App\Category::all() as $key => $category)
                                             <option value="category-{{ $category->id }}">{{ $category->getTranslation('name') }}</option>
-                                            @foreach ($category->subcategories as $key => $subcategory)
+                                            @foreach ($category->childrenCategories as $key => $subcategory)
                                                 <option value="subcategory-{{ $subcategory->id }}">- {{ $subcategory->getTranslation('name') }}</option>
-                                                @foreach ($subcategory->subsubcategories as $key => $subsubcategory)
+                                                @foreach ($subcategory->childrenCategories as $key => $subsubcategory)
                                                     <option value="subsubcategory-{{ $subsubcategory->id }}">- - {{ $subsubcategory->getTranslation('name') }}</option>
                                                 @endforeach
                                             @endforeach

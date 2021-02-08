@@ -9,9 +9,10 @@ class SliderCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->map(function($data) {
+            'data' => $this->collection->map(function($data, $index) {
                 return [
-                    'photo' => api_asset($data)
+                    'photo' => api_asset($data),
+                    'link' => json_decode(get_setting('home_slider_links'), true)[$index]
                 ];
             })
         ];

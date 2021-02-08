@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Фев 08 2021 г., 08:30
+-- Время создания: Фев 08 2021 г., 09:27
 -- Версия сервера: 5.7.29
 -- Версия PHP: 7.4.5
 
@@ -38,6 +38,20 @@ CREATE TABLE `addons` (
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf32 COLLATE=utf32_unicode_ci;
 
+--
+-- Дамп данных таблицы `addons`
+--
+
+INSERT INTO `addons` (`id`, `name`, `unique_identifier`, `version`, `activated`, `image`, `created_at`, `updated_at`) VALUES
+(1, 'affiliate', 'affiliate_system', '1.4', 1, 'affiliate_banner.jpg', '2021-02-08 01:00:36', '2021-02-08 01:00:36'),
+(2, 'club_point', 'club_point', '1.2', 1, 'club_points.png', '2021-02-08 01:01:06', '2021-02-08 01:01:06'),
+(3, 'Offline Payment', 'offline_payment', '1.3', 1, 'offline_banner.jpg', '2021-02-08 01:01:11', '2021-02-08 01:01:11'),
+(4, 'OTP', 'otp_system', '1.4', 1, 'otp_system.jpg', '2021-02-08 01:01:17', '2021-02-08 01:01:17'),
+(5, 'Paytm', 'paytm', '1.1', 1, 'paytm.png', '2021-02-08 01:01:29', '2021-02-08 01:01:29'),
+(6, 'Point of Sale', 'pos_system', '1.3', 1, 'pos_banner.jpg', '2021-02-08 01:01:48', '2021-02-08 01:01:48'),
+(7, 'refund', 'refund_request', '1.1', 1, 'refund_request.png', '2021-02-08 01:01:55', '2021-02-08 01:01:55'),
+(8, 'Seller Subscription System', 'seller_subscription', '1.0', 1, 'seller_subscription.jpg', '2021-02-08 01:02:01', '2021-02-08 01:02:01');
+
 -- --------------------------------------------------------
 
 --
@@ -53,6 +67,115 @@ CREATE TABLE `addresses` (
   `postal_code` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `phone` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `set_default` int(1) NOT NULL DEFAULT '0',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `affiliate_configs`
+--
+
+CREATE TABLE `affiliate_configs` (
+  `id` int(11) NOT NULL,
+  `type` varchar(1000) COLLATE utf32_unicode_ci DEFAULT NULL,
+  `value` text COLLATE utf32_unicode_ci,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf32 COLLATE=utf32_unicode_ci;
+
+--
+-- Дамп данных таблицы `affiliate_configs`
+--
+
+INSERT INTO `affiliate_configs` (`id`, `type`, `value`, `created_at`, `updated_at`) VALUES
+(1, 'verification_form', '[{\"type\":\"text\",\"label\":\"Your name\"},{\"type\":\"text\",\"label\":\"Email\"},{\"type\":\"text\",\"label\":\"Full Address\"},{\"type\":\"text\",\"label\":\"Phone Number\"},{\"type\":\"text\",\"label\":\"How will you affiliate?\"}]', '2020-03-09 09:56:21', '2020-03-09 04:30:59');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `affiliate_options`
+--
+
+CREATE TABLE `affiliate_options` (
+  `id` int(11) NOT NULL,
+  `type` varchar(255) COLLATE utf32_unicode_ci DEFAULT NULL,
+  `details` longtext COLLATE utf32_unicode_ci,
+  `percentage` double NOT NULL DEFAULT '0',
+  `status` int(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf32 COLLATE=utf32_unicode_ci;
+
+--
+-- Дамп данных таблицы `affiliate_options`
+--
+
+INSERT INTO `affiliate_options` (`id`, `type`, `details`, `percentage`, `status`, `created_at`, `updated_at`) VALUES
+(2, 'user_registration_first_purchase', NULL, 20, 1, '2020-03-03 05:08:37', '2020-03-05 03:56:30'),
+(3, 'product_sharing', NULL, 20, 0, '2020-03-08 01:55:03', '2020-03-10 02:12:32'),
+(4, 'category_wise_affiliate', NULL, 0, 0, '2020-03-08 01:55:03', '2020-03-10 02:12:32');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `affiliate_payments`
+--
+
+CREATE TABLE `affiliate_payments` (
+  `id` int(11) NOT NULL,
+  `affiliate_user_id` int(11) NOT NULL,
+  `amount` double(8,2) NOT NULL,
+  `payment_method` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `payment_details` longtext COLLATE utf8_unicode_ci,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `affiliate_payments`
+--
+
+INSERT INTO `affiliate_payments` (`id`, `affiliate_user_id`, `amount`, `payment_method`, `payment_details`, `created_at`, `updated_at`) VALUES
+(2, 1, 20.00, 'Paypal', NULL, '2020-03-10 02:04:30', '2020-03-10 02:04:30');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `affiliate_users`
+--
+
+CREATE TABLE `affiliate_users` (
+  `id` int(11) NOT NULL,
+  `paypal_email` varchar(255) COLLATE utf32_unicode_ci DEFAULT NULL,
+  `bank_information` text COLLATE utf32_unicode_ci,
+  `user_id` int(11) NOT NULL,
+  `informations` text COLLATE utf32_unicode_ci,
+  `balance` double(10,2) NOT NULL DEFAULT '0.00',
+  `status` int(1) NOT NULL DEFAULT '0',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf32 COLLATE=utf32_unicode_ci;
+
+--
+-- Дамп данных таблицы `affiliate_users`
+--
+
+INSERT INTO `affiliate_users` (`id`, `paypal_email`, `bank_information`, `user_id`, `informations`, `balance`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'demo@gmail.com', '123456', 8, '[{\"type\":\"text\",\"label\":\"Your name\",\"value\":\"Nostrum dicta sint l\"},{\"type\":\"text\",\"label\":\"Email\",\"value\":\"Aut perferendis null\"},{\"type\":\"text\",\"label\":\"Full Address\",\"value\":\"Voluptatem Sit dolo\"},{\"type\":\"text\",\"label\":\"Phone Number\",\"value\":\"Ut ad beatae occaeca\"},{\"type\":\"text\",\"label\":\"How will you affiliate?\",\"value\":\"Porro sint soluta u\"}]', 30.00, 1, '2020-03-09 05:35:07', '2020-03-10 02:04:30');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `affiliate_withdraw_requests`
+--
+
+CREATE TABLE `affiliate_withdraw_requests` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `amount` double(10,2) NOT NULL,
+  `status` int(1) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -83,7 +206,7 @@ CREATE TABLE `app_settings` (
 --
 
 INSERT INTO `app_settings` (`id`, `name`, `logo`, `currency_id`, `currency_format`, `facebook`, `twitter`, `instagram`, `youtube`, `google_plus`, `created_at`, `updated_at`) VALUES
-(1, 'eCommerce', 'uploads/logo/matggar.png', 1, 'symbol', 'https://facebook.com', 'https://twitter.com', 'https://instagram.com', 'https://youtube.com', 'https://google.com', '2019-08-04 16:39:15', '2019-08-04 16:39:18');
+(1, 'Active eCommerce', 'uploads/logo/matggar.png', 1, 'symbol', 'https://facebook.com', 'https://twitter.com', 'https://instagram.com', 'https://youtube.com', 'https://google.com', '2019-08-04 16:39:15', '2019-08-04 16:39:18');
 
 -- --------------------------------------------------------
 
@@ -308,7 +431,9 @@ INSERT INTO `business_settings` (`id`, `type`, `value`, `created_at`, `updated_a
 (109, 'decimal_separator', '1', '2020-12-30 16:45:56', '2020-12-30 16:45:56'),
 (110, 'nagad', '0', '2021-01-22 10:30:03', '2021-01-22 10:30:03'),
 (111, 'bkash', '0', '2021-01-22 10:30:03', '2021-01-22 10:30:03'),
-(112, 'bkash_sandbox', '1', '2021-01-22 10:30:03', '2021-01-22 10:30:03');
+(112, 'bkash_sandbox', '1', '2021-01-22 10:30:03', '2021-01-22 10:30:03'),
+(113, 'club_point_convert_rate', '10', '2019-03-12 05:58:23', '2019-03-12 05:58:23'),
+(114, 'refund_request_time', '3', '2019-03-12 00:58:23', '2019-03-12 00:58:23');
 
 -- --------------------------------------------------------
 
@@ -403,6 +528,37 @@ CREATE TABLE `city_translations` (
   `city_id` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `lang` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `club_points`
+--
+
+CREATE TABLE `club_points` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `points` double(18,2) NOT NULL,
+  `convert_status` int(1) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `club_point_details`
+--
+
+CREATE TABLE `club_point_details` (
+  `id` int(11) NOT NULL,
+  `club_point_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `product_qty` int(11) NOT NULL,
+  `point` double(8,2) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -1144,7 +1300,7 @@ CREATE TABLE `general_settings` (
 --
 
 INSERT INTO `general_settings` (`id`, `frontend_color`, `logo`, `footer_logo`, `admin_logo`, `admin_login_background`, `admin_login_sidebar`, `favicon`, `site_name`, `address`, `description`, `phone`, `email`, `facebook`, `instagram`, `twitter`, `youtube`, `google_plus`, `created_at`, `updated_at`) VALUES
-(1, 'default', 'uploads/logo/pfdIuiMeXGkDAIpPEUrvUCbQrOHu484nbGfz77zB.png', NULL, 'uploads/admin_logo/wCgHrz0Q5QoL1yu4vdrNnQIr4uGuNL48CXfcxOuS.png', NULL, NULL, 'uploads/favicon/uHdGidSaRVzvPgDj6JFtntMqzJkwDk9659233jrb.png', 'Ecommerce CMS', 'Demo Address', 'eCommerce CMS is a Multi vendor system is such a platform to build a border less marketplace.', '1234567890', 'admin@example.com', 'https://www.facebook.com', 'https://www.instagram.com', 'https://www.twitter.com', 'https://www.youtube.com', 'https://www.googleplus.com', '2019-03-13 08:01:06', '2019-03-13 02:01:06');
+(1, 'default', 'uploads/logo/pfdIuiMeXGkDAIpPEUrvUCbQrOHu484nbGfz77zB.png', NULL, 'uploads/admin_logo/wCgHrz0Q5QoL1yu4vdrNnQIr4uGuNL48CXfcxOuS.png', NULL, NULL, 'uploads/favicon/uHdGidSaRVzvPgDj6JFtntMqzJkwDk9659233jrb.png', 'Active Ecommerce CMS', 'Demo Address', 'Active eCommerce CMS is a Multi vendor system is such a platform to build a border less marketplace.', '1234567890', 'admin@example.com', 'https://www.facebook.com', 'https://www.instagram.com', 'https://www.twitter.com', 'https://www.youtube.com', 'https://www.googleplus.com', '2019-03-13 08:01:06', '2019-03-13 02:01:06');
 
 -- --------------------------------------------------------
 
@@ -1205,6 +1361,23 @@ CREATE TABLE `links` (
   `url` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `manual_payment_methods`
+--
+
+CREATE TABLE `manual_payment_methods` (
+  `id` int(11) NOT NULL,
+  `type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `heading` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `description` text COLLATE utf8_unicode_ci,
+  `bank_info` text COLLATE utf8_unicode_ci,
+  `photo` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1371,6 +1544,8 @@ CREATE TABLE `orders` (
   `guest_id` int(11) DEFAULT NULL,
   `shipping_address` longtext COLLATE utf8_unicode_ci,
   `payment_type` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `manual_payment` int(1) NOT NULL DEFAULT '0',
+  `manual_payment_data` text COLLATE utf8_unicode_ci,
   `payment_status` varchar(20) COLLATE utf8_unicode_ci DEFAULT 'unpaid',
   `payment_details` longtext COLLATE utf8_unicode_ci,
   `grand_total` double(20,2) DEFAULT NULL,
@@ -1409,6 +1584,34 @@ CREATE TABLE `order_details` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `otp_configurations`
+--
+
+CREATE TABLE `otp_configurations` (
+  `id` int(11) NOT NULL,
+  `type` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `value` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `otp_configurations`
+--
+
+INSERT INTO `otp_configurations` (`id`, `type`, `value`, `created_at`, `updated_at`) VALUES
+(1, 'nexmo', '1', '2020-03-22 09:19:07', '2020-03-22 09:19:07'),
+(2, 'otp_for_order', '1', '2020-03-22 09:19:07', '2020-03-22 09:19:07'),
+(3, 'otp_for_delivery_status', '1', '2020-03-22 09:19:37', '2020-03-22 09:19:37'),
+(4, 'otp_for_paid_status', '0', '2020-03-22 09:19:37', '2020-03-22 09:19:37'),
+(5, 'twillo', '0', '2020-03-22 09:54:03', '2020-03-22 03:54:20'),
+(6, 'ssl_wireless', '0', '2020-03-22 09:54:03', '2020-03-22 03:54:20'),
+(7, 'fast2sms', '0', '2020-03-22 09:54:03', '2020-03-22 03:54:20'),
+(8, 'mimo', '0', '2020-12-27 09:54:03', '2020-12-28 03:54:20');
 
 -- --------------------------------------------------------
 
@@ -1593,6 +1796,8 @@ CREATE TABLE `products` (
   `meta_img` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `pdf` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `slug` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+  `refundable` int(1) NOT NULL DEFAULT '0',
+  `earn_point` double(8,2) NOT NULL DEFAULT '0.00',
   `rating` double(8,2) NOT NULL DEFAULT '0.00',
   `barcode` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `digital` int(1) NOT NULL DEFAULT '0',
@@ -1632,6 +1837,28 @@ CREATE TABLE `product_translations` (
   `unit` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `description` longtext COLLATE utf8_unicode_ci,
   `lang` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `refund_requests`
+--
+
+CREATE TABLE `refund_requests` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `order_detail_id` int(11) NOT NULL,
+  `seller_id` int(11) NOT NULL,
+  `seller_approval` int(1) NOT NULL DEFAULT '0',
+  `admin_approval` int(1) NOT NULL DEFAULT '0',
+  `refund_amount` double(8,2) NOT NULL DEFAULT '0.00',
+  `reason` longtext COLLATE utf8_unicode_ci,
+  `admin_seen` int(11) NOT NULL,
+  `refund_status` int(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -1722,6 +1949,10 @@ INSERT INTO `searches` (`id`, `query`, `count`, `created_at`, `updated_at`) VALU
 CREATE TABLE `sellers` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
+  `seller_package_id` int(11) DEFAULT NULL,
+  `remaining_uploads` int(11) NOT NULL DEFAULT '0',
+  `remaining_digital_uploads` int(11) NOT NULL DEFAULT '0',
+  `invalid_at` date DEFAULT NULL,
   `verification_status` int(1) NOT NULL DEFAULT '0',
   `verification_info` longtext COLLATE utf8_unicode_ci,
   `cash_on_delivery_status` int(1) NOT NULL DEFAULT '0',
@@ -1739,8 +1970,26 @@ CREATE TABLE `sellers` (
 -- Дамп данных таблицы `sellers`
 --
 
-INSERT INTO `sellers` (`id`, `user_id`, `verification_status`, `verification_info`, `cash_on_delivery_status`, `admin_to_pay`, `bank_name`, `bank_acc_name`, `bank_acc_no`, `bank_routing_no`, `bank_payment_status`, `created_at`, `updated_at`) VALUES
-(1, 3, 1, '[{\"type\":\"text\",\"label\":\"Name\",\"value\":\"Mr. Seller\"},{\"type\":\"select\",\"label\":\"Marital Status\",\"value\":\"Married\"},{\"type\":\"multi_select\",\"label\":\"Company\",\"value\":\"[\\\"Company\\\"]\"},{\"type\":\"select\",\"label\":\"Gender\",\"value\":\"Male\"},{\"type\":\"file\",\"label\":\"Image\",\"value\":\"uploads\\/verification_form\\/CRWqFifcbKqibNzllBhEyUSkV6m1viknGXMEhtiW.png\"}]', 1, 78.40, NULL, NULL, NULL, NULL, 0, '2018-10-07 04:42:57', '2020-01-26 04:21:11');
+INSERT INTO `sellers` (`id`, `user_id`, `seller_package_id`, `remaining_uploads`, `remaining_digital_uploads`, `invalid_at`, `verification_status`, `verification_info`, `cash_on_delivery_status`, `admin_to_pay`, `bank_name`, `bank_acc_name`, `bank_acc_no`, `bank_routing_no`, `bank_payment_status`, `created_at`, `updated_at`) VALUES
+(1, 3, NULL, 0, 0, NULL, 1, '[{\"type\":\"text\",\"label\":\"Name\",\"value\":\"Mr. Seller\"},{\"type\":\"select\",\"label\":\"Marital Status\",\"value\":\"Married\"},{\"type\":\"multi_select\",\"label\":\"Company\",\"value\":\"[\\\"Company\\\"]\"},{\"type\":\"select\",\"label\":\"Gender\",\"value\":\"Male\"},{\"type\":\"file\",\"label\":\"Image\",\"value\":\"uploads\\/verification_form\\/CRWqFifcbKqibNzllBhEyUSkV6m1viknGXMEhtiW.png\"}]', 1, 78.40, NULL, NULL, NULL, NULL, 0, '2018-10-07 04:42:57', '2020-01-26 04:21:11');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `seller_packages`
+--
+
+CREATE TABLE `seller_packages` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `amount` double(11,2) NOT NULL DEFAULT '0.00',
+  `product_upload` int(11) NOT NULL DEFAULT '0',
+  `digital_product_upload` int(11) NOT NULL DEFAULT '0',
+  `logo` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `duration` int(11) NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -3004,7 +3253,7 @@ INSERT INTO `translations` (`id`, `lang`, `lang_key`, `lang_value`, `created_at`
 (1356, 'en', 'Update your product', 'Update your product', '2020-11-15 11:39:14', '2020-11-15 11:39:14'),
 (1357, 'en', 'Product has been updated successfully', 'Product has been updated successfully', '2020-11-15 11:51:36', '2020-11-15 11:51:36'),
 (1358, 'en', 'Add Your Digital Product', 'Add Your Digital Product', '2020-11-15 12:24:21', '2020-11-15 12:24:21'),
-(1359, 'en', 'eCommerce Update Process', 'eCommerce Update Process', '2020-11-16 07:53:31', '2020-11-16 07:53:31'),
+(1359, 'en', 'Active eCommerce CMS Update Process', 'Active eCommerce CMS Update Process', '2020-11-16 07:53:31', '2020-11-16 07:53:31'),
 (1361, 'en', 'Codecanyon purchase code', 'Codecanyon purchase code', '2020-11-16 07:53:31', '2020-11-16 07:53:31'),
 (1362, 'en', 'Database Name', 'Database Name', '2020-11-16 07:53:31', '2020-11-16 07:53:31'),
 (1363, 'en', 'Database Username', 'Database Username', '2020-11-16 07:53:31', '2020-11-16 07:53:31'),
@@ -3218,7 +3467,206 @@ INSERT INTO `translations` (`id`, `lang`, `lang_key`, `lang_value`, `created_at`
 (1572, 'bd', 'Seller Payments', 'Seller Payments', '2021-02-08 00:18:42', '2021-02-08 00:18:42'),
 (1573, 'bd', 'Amount', 'Amount', '2021-02-08 00:18:42', '2021-02-08 00:18:42'),
 (1574, 'bd', 'Payment Details', 'Payment Details', '2021-02-08 00:18:42', '2021-02-08 00:18:42'),
-(1575, 'bd', 'My Panel', 'My Panel', '2021-02-08 00:28:45', '2021-02-08 00:28:45');
+(1575, 'bd', 'My Panel', 'My Panel', '2021-02-08 00:28:45', '2021-02-08 00:28:45'),
+(1576, 'bd', 'Installed Addon', 'Installed Addon', '2021-02-08 00:41:17', '2021-02-08 00:41:17'),
+(1577, 'bd', 'Available Addon', 'Available Addon', '2021-02-08 00:41:17', '2021-02-08 00:41:17'),
+(1578, 'bd', 'Install/Update Addon', 'Install/Update Addon', '2021-02-08 00:41:17', '2021-02-08 00:41:17'),
+(1579, 'bd', 'No Addon Installed', 'No Addon Installed', '2021-02-08 00:41:17', '2021-02-08 00:41:17'),
+(1580, 'bd', 'Status updated successfully', 'Status updated successfully', '2021-02-08 00:41:17', '2021-02-08 00:41:17'),
+(1581, 'en', 'Install/Update Addon', 'Install/Update Addon', '2021-02-08 00:41:18', '2021-02-08 00:41:18'),
+(1582, 'en', 'No Addon Installed', 'No Addon Installed', '2021-02-08 00:41:18', '2021-02-08 00:41:18'),
+(1583, 'en', 'Search in menu', 'Search in menu', '2021-02-08 00:41:18', '2021-02-08 00:41:18'),
+(1584, 'en', 'Uploaded Files', 'Uploaded Files', '2021-02-08 00:41:18', '2021-02-08 00:41:18'),
+(1585, 'en', 'Shipping Cities', 'Shipping Cities', '2021-02-08 00:41:18', '2021-02-08 00:41:18'),
+(1586, 'en', 'System', 'System', '2021-02-08 00:41:18', '2021-02-08 00:41:18'),
+(1587, 'en', 'Server status', 'Server status', '2021-02-08 00:41:18', '2021-02-08 00:41:18'),
+(1588, 'en', 'Nothing Found', 'Nothing Found', '2021-02-08 00:41:18', '2021-02-08 00:41:18'),
+(1589, 'bd', 'Zip File', 'Zip File', '2021-02-08 00:41:20', '2021-02-08 00:41:20'),
+(1590, 'bd', 'Choose file', 'Choose file', '2021-02-08 00:41:20', '2021-02-08 00:41:20'),
+(1591, 'bd', 'Install/Update', 'Install/Update', '2021-02-08 00:41:20', '2021-02-08 00:41:20'),
+(1592, 'bd', 'Forgot password?', 'Forgot password?', '2021-02-08 00:58:08', '2021-02-08 00:58:08'),
+(1593, 'bd', 'Dont have an account?', 'Dont have an account?', '2021-02-08 00:58:08', '2021-02-08 00:58:08'),
+(1594, 'bd', 'Register Now', 'Register Now', '2021-02-08 00:58:08', '2021-02-08 00:58:08'),
+(1595, 'bd', 'Inhouse Product sale report', 'Inhouse Product sale report', '2021-02-08 00:59:23', '2021-02-08 00:59:23'),
+(1596, 'bd', 'Sort by Category', 'Sort by Category', '2021-02-08 00:59:23', '2021-02-08 00:59:23'),
+(1597, 'bd', 'Filter', 'Filter', '2021-02-08 00:59:23', '2021-02-08 00:59:23'),
+(1598, 'bd', 'Product Name', 'Product Name', '2021-02-08 00:59:23', '2021-02-08 00:59:23'),
+(1599, 'bd', 'Num of Sale', 'Num of Sale', '2021-02-08 00:59:23', '2021-02-08 00:59:23'),
+(1600, 'bd', 'Seller Based Selling Report', 'Seller Based Selling Report', '2021-02-08 00:59:25', '2021-02-08 00:59:25'),
+(1601, 'bd', 'Sort by verificarion status', 'Sort by verificarion status', '2021-02-08 00:59:25', '2021-02-08 00:59:25'),
+(1602, 'bd', 'Non Approved', 'Non Approved', '2021-02-08 00:59:25', '2021-02-08 00:59:25'),
+(1603, 'bd', 'Seller Name', 'Seller Name', '2021-02-08 00:59:25', '2021-02-08 00:59:25'),
+(1604, 'bd', 'Shop Name', 'Shop Name', '2021-02-08 00:59:25', '2021-02-08 00:59:25'),
+(1605, 'bd', 'Number of Product Sale', 'Number of Product Sale', '2021-02-08 00:59:25', '2021-02-08 00:59:25'),
+(1606, 'bd', 'Order Amount', 'Order Amount', '2021-02-08 00:59:25', '2021-02-08 00:59:25'),
+(1607, 'bd', 'Product wise stock report', 'Product wise stock report', '2021-02-08 00:59:26', '2021-02-08 00:59:26'),
+(1608, 'bd', 'Stock', 'Stock', '2021-02-08 00:59:26', '2021-02-08 00:59:26'),
+(1609, 'bd', 'Product Wish Report', 'Product Wish Report', '2021-02-08 00:59:27', '2021-02-08 00:59:27'),
+(1610, 'bd', 'Number of Wish', 'Number of Wish', '2021-02-08 00:59:27', '2021-02-08 00:59:27'),
+(1611, 'bd', 'User Search Report', 'User Search Report', '2021-02-08 00:59:28', '2021-02-08 00:59:28'),
+(1612, 'bd', 'Search By', 'Search By', '2021-02-08 00:59:28', '2021-02-08 00:59:28'),
+(1613, 'bd', 'Number searches', 'Number searches', '2021-02-08 00:59:28', '2021-02-08 00:59:28'),
+(1614, 'bd', 'Conversations', 'Conversations', '2021-02-08 00:59:31', '2021-02-08 00:59:31'),
+(1615, 'bd', 'Title', 'Title', '2021-02-08 00:59:31', '2021-02-08 00:59:31'),
+(1616, 'bd', 'Sender', 'Sender', '2021-02-08 00:59:31', '2021-02-08 00:59:31'),
+(1617, 'bd', 'Receiver', 'Receiver', '2021-02-08 00:59:31', '2021-02-08 00:59:31'),
+(1618, 'bd', 'Support Desk', 'Support Desk', '2021-02-08 00:59:32', '2021-02-08 00:59:32'),
+(1619, 'bd', 'Type ticket code & Enter', 'Type ticket code & Enter', '2021-02-08 00:59:32', '2021-02-08 00:59:32'),
+(1620, 'bd', 'Ticket ID', 'Ticket ID', '2021-02-08 00:59:32', '2021-02-08 00:59:32'),
+(1621, 'bd', 'Sending Date', 'Sending Date', '2021-02-08 00:59:32', '2021-02-08 00:59:32'),
+(1622, 'bd', 'Subject', 'Subject', '2021-02-08 00:59:32', '2021-02-08 00:59:32'),
+(1623, 'bd', 'User', 'User', '2021-02-08 00:59:32', '2021-02-08 00:59:32'),
+(1624, 'bd', 'Last reply', 'Last reply', '2021-02-08 00:59:32', '2021-02-08 00:59:32'),
+(1626, 'bd', 'Version', 'Version', '2021-02-08 01:00:37', '2021-02-08 01:00:37'),
+(1627, 'bd', 'Affiliate System', 'Affiliate System', '2021-02-08 01:00:37', '2021-02-08 01:00:37'),
+(1628, 'bd', 'Affiliate Registration Form', 'Affiliate Registration Form', '2021-02-08 01:00:37', '2021-02-08 01:00:37'),
+(1629, 'bd', 'Affiliate Configurations', 'Affiliate Configurations', '2021-02-08 01:00:37', '2021-02-08 01:00:37'),
+(1630, 'bd', 'Affiliate Users', 'Affiliate Users', '2021-02-08 01:00:37', '2021-02-08 01:00:37'),
+(1631, 'bd', 'Referral Users', 'Referral Users', '2021-02-08 01:00:37', '2021-02-08 01:00:37'),
+(1632, 'bd', 'Affiliate Withdraw Requests', 'Affiliate Withdraw Requests', '2021-02-08 01:00:37', '2021-02-08 01:00:37'),
+(1633, 'bd', 'Basic Affiliate', 'Basic Affiliate', '2021-02-08 01:00:50', '2021-02-08 01:00:50'),
+(1634, 'bd', 'User Registration & First Purchase', 'User Registration & First Purchase', '2021-02-08 01:00:50', '2021-02-08 01:00:50'),
+(1635, 'bd', 'Product Sharing Affiliate', 'Product Sharing Affiliate', '2021-02-08 01:00:50', '2021-02-08 01:00:50'),
+(1636, 'bd', 'Product Sharing and Purchasing', 'Product Sharing and Purchasing', '2021-02-08 01:00:50', '2021-02-08 01:00:50'),
+(1637, 'bd', 'Product Sharing Affiliate (Category Wise)', 'Product Sharing Affiliate (Category Wise)', '2021-02-08 01:00:50', '2021-02-08 01:00:50'),
+(1638, 'bd', 'Due Amount', 'Due Amount', '2021-02-08 01:00:51', '2021-02-08 01:00:51'),
+(1639, 'bd', 'Pay Now', 'Pay Now', '2021-02-08 01:00:51', '2021-02-08 01:00:51'),
+(1640, 'bd', 'Refferal Users', 'Refferal Users', '2021-02-08 01:00:54', '2021-02-08 01:00:54'),
+(1641, 'bd', 'Reffered By', 'Reffered By', '2021-02-08 01:00:54', '2021-02-08 01:00:54'),
+(1642, 'bd', 'Affiliate Withdraw Request', 'Affiliate Withdraw Request', '2021-02-08 01:00:55', '2021-02-08 01:00:55'),
+(1643, 'bd', 'Affiliate Withdraw Request Reject', 'Affiliate Withdraw Request Reject', '2021-02-08 01:00:55', '2021-02-08 01:00:55'),
+(1644, 'bd', 'Are you sure, You want to reject this?', 'Are you sure, You want to reject this?', '2021-02-08 01:00:55', '2021-02-08 01:00:55'),
+(1645, 'bd', 'Reject', 'Reject', '2021-02-08 01:00:55', '2021-02-08 01:00:55'),
+(1647, 'bd', 'Club Point System', 'Club Point System', '2021-02-08 01:01:06', '2021-02-08 01:01:06'),
+(1648, 'bd', 'Club Point Configurations', 'Club Point Configurations', '2021-02-08 01:01:06', '2021-02-08 01:01:06'),
+(1649, 'bd', 'Set Product Point', 'Set Product Point', '2021-02-08 01:01:06', '2021-02-08 01:01:06'),
+(1650, 'bd', 'User Points', 'User Points', '2021-02-08 01:01:06', '2021-02-08 01:01:06'),
+(1652, 'bd', 'Offline Payment System', 'Offline Payment System', '2021-02-08 01:01:12', '2021-02-08 01:01:12'),
+(1653, 'bd', 'Manual Payment Methods', 'Manual Payment Methods', '2021-02-08 01:01:12', '2021-02-08 01:01:12'),
+(1654, 'bd', 'Offline Wallet Recharge', 'Offline Wallet Recharge', '2021-02-08 01:01:12', '2021-02-08 01:01:12'),
+(1656, 'bd', 'Bulk SMS', 'Bulk SMS', '2021-02-08 01:01:17', '2021-02-08 01:01:17'),
+(1657, 'bd', 'OTP System', 'OTP System', '2021-02-08 01:01:18', '2021-02-08 01:01:18'),
+(1658, 'bd', 'OTP Configurations', 'OTP Configurations', '2021-02-08 01:01:18', '2021-02-08 01:01:18'),
+(1659, 'bd', 'Set OTP Credentials', 'Set OTP Credentials', '2021-02-08 01:01:18', '2021-02-08 01:01:18'),
+(1660, 'bd', 'Addon nstalled successfully', 'Addon nstalled successfully', '2021-02-08 01:01:29', '2021-02-08 01:01:29'),
+(1661, 'bd', 'Paytm Payment Gateway', 'Paytm Payment Gateway', '2021-02-08 01:01:29', '2021-02-08 01:01:29'),
+(1662, 'bd', 'Set Paytm Credentials', 'Set Paytm Credentials', '2021-02-08 01:01:29', '2021-02-08 01:01:29'),
+(1663, 'bd', 'Activate OTP', 'Activate OTP', '2021-02-08 01:01:32', '2021-02-08 01:01:32'),
+(1664, 'bd', 'Nexmo OTP', 'Nexmo OTP', '2021-02-08 01:01:32', '2021-02-08 01:01:32'),
+(1665, 'bd', 'Twillo OTP', 'Twillo OTP', '2021-02-08 01:01:32', '2021-02-08 01:01:32'),
+(1666, 'bd', 'SSL Wireless OTP', 'SSL Wireless OTP', '2021-02-08 01:01:32', '2021-02-08 01:01:32'),
+(1667, 'bd', 'Fast2SMS OTP', 'Fast2SMS OTP', '2021-02-08 01:01:32', '2021-02-08 01:01:32'),
+(1668, 'bd', 'MIMO OTP', 'MIMO OTP', '2021-02-08 01:01:32', '2021-02-08 01:01:32'),
+(1669, 'bd', 'OTP will be Used For', 'OTP will be Used For', '2021-02-08 01:01:32', '2021-02-08 01:01:32'),
+(1670, 'bd', 'Order Placement', 'Order Placement', '2021-02-08 01:01:32', '2021-02-08 01:01:32'),
+(1671, 'bd', 'Delivery Status Changing Time', 'Delivery Status Changing Time', '2021-02-08 01:01:32', '2021-02-08 01:01:32'),
+(1672, 'bd', 'Paid Status Changing Time', 'Paid Status Changing Time', '2021-02-08 01:01:32', '2021-02-08 01:01:32'),
+(1673, 'bd', 'Settings updated successfully', 'Settings updated successfully', '2021-02-08 01:01:32', '2021-02-08 01:01:32'),
+(1674, 'bd', 'Twillo Credential', 'Twillo Credential', '2021-02-08 01:01:40', '2021-02-08 01:01:40'),
+(1675, 'bd', 'TWILIO SID', 'TWILIO SID', '2021-02-08 01:01:40', '2021-02-08 01:01:40'),
+(1676, 'bd', 'TWILIO AUTH TOKEN', 'TWILIO AUTH TOKEN', '2021-02-08 01:01:40', '2021-02-08 01:01:40'),
+(1677, 'bd', 'TWILIO VERIFY SID', 'TWILIO VERIFY SID', '2021-02-08 01:01:40', '2021-02-08 01:01:40'),
+(1678, 'bd', 'VALID TWILLO NUMBER', 'VALID TWILLO NUMBER', '2021-02-08 01:01:40', '2021-02-08 01:01:40'),
+(1679, 'bd', 'Nexmo Credential', 'Nexmo Credential', '2021-02-08 01:01:40', '2021-02-08 01:01:40'),
+(1680, 'bd', 'NEXMO KEY', 'NEXMO KEY', '2021-02-08 01:01:40', '2021-02-08 01:01:40'),
+(1681, 'bd', 'NEXMO SECRET', 'NEXMO SECRET', '2021-02-08 01:01:40', '2021-02-08 01:01:40'),
+(1682, 'bd', 'SSL Wireless Credential', 'SSL Wireless Credential', '2021-02-08 01:01:40', '2021-02-08 01:01:40'),
+(1683, 'bd', 'SSL SMS API TOKEN', 'SSL SMS API TOKEN', '2021-02-08 01:01:40', '2021-02-08 01:01:40'),
+(1684, 'bd', 'SSL SMS SID', 'SSL SMS SID', '2021-02-08 01:01:40', '2021-02-08 01:01:40'),
+(1685, 'bd', 'SSL SMS URL', 'SSL SMS URL', '2021-02-08 01:01:40', '2021-02-08 01:01:40'),
+(1686, 'bd', 'Fast2SMS Credential', 'Fast2SMS Credential', '2021-02-08 01:01:40', '2021-02-08 01:01:40'),
+(1687, 'bd', 'AUTH KEY', 'AUTH KEY', '2021-02-08 01:01:40', '2021-02-08 01:01:40'),
+(1688, 'bd', 'ROUTE', 'ROUTE', '2021-02-08 01:01:40', '2021-02-08 01:01:40'),
+(1689, 'bd', 'Promotional Use', 'Promotional Use', '2021-02-08 01:01:40', '2021-02-08 01:01:40'),
+(1690, 'bd', 'Transactional Use', 'Transactional Use', '2021-02-08 01:01:40', '2021-02-08 01:01:40'),
+(1691, 'bd', 'LANGUAGE', 'LANGUAGE', '2021-02-08 01:01:40', '2021-02-08 01:01:40'),
+(1692, 'bd', 'SENDER ID', 'SENDER ID', '2021-02-08 01:01:40', '2021-02-08 01:01:40'),
+(1693, 'bd', 'MIMO Credential', 'MIMO Credential', '2021-02-08 01:01:40', '2021-02-08 01:01:40'),
+(1694, 'bd', 'MIMO_USERNAME', 'MIMO_USERNAME', '2021-02-08 01:01:40', '2021-02-08 01:01:40'),
+(1695, 'bd', 'MIMO_PASSWORD', 'MIMO_PASSWORD', '2021-02-08 01:01:40', '2021-02-08 01:01:40'),
+(1696, 'bd', 'MIMO_SENDER_ID', 'MIMO_SENDER_ID', '2021-02-08 01:01:40', '2021-02-08 01:01:40'),
+(1697, 'bd', 'POS System', 'POS System', '2021-02-08 01:01:48', '2021-02-08 01:01:48'),
+(1698, 'bd', 'POS Manager', 'POS Manager', '2021-02-08 01:01:48', '2021-02-08 01:01:48'),
+(1699, 'bd', 'POS Configuration', 'POS Configuration', '2021-02-08 01:01:48', '2021-02-08 01:01:48'),
+(1700, 'bd', 'POS', 'POS', '2021-02-08 01:01:49', '2021-02-08 01:01:49'),
+(1701, 'bd', 'Refunds', 'Refunds', '2021-02-08 01:01:55', '2021-02-08 01:01:55'),
+(1702, 'bd', 'Refund Requests', 'Refund Requests', '2021-02-08 01:01:55', '2021-02-08 01:01:55'),
+(1703, 'bd', 'Approved Refund', 'Approved Refund', '2021-02-08 01:01:55', '2021-02-08 01:01:55'),
+(1704, 'bd', 'Refund Configuration', 'Refund Configuration', '2021-02-08 01:01:55', '2021-02-08 01:01:55'),
+(1705, 'bd', 'Seller Packages', 'Seller Packages', '2021-02-08 01:02:02', '2021-02-08 01:02:02'),
+(1706, 'bd', 'Offline Seller Package Payments', 'Offline Seller Package Payments', '2021-02-08 01:02:02', '2021-02-08 01:02:02'),
+(1707, 'bd', 'Convert Point To Wallet', 'Convert Point To Wallet', '2021-02-08 01:02:19', '2021-02-08 01:02:19'),
+(1708, 'bd', 'Set Point For ', 'Set Point For ', '2021-02-08 01:02:19', '2021-02-08 01:02:19'),
+(1709, 'bd', 'Points', 'Points', '2021-02-08 01:02:19', '2021-02-08 01:02:19'),
+(1710, 'bd', 'Note: You need to activate wallet option first before using club point addon.', 'Note: You need to activate wallet option first before using club point addon.', '2021-02-08 01:02:19', '2021-02-08 01:02:19'),
+(1711, 'bd', 'Product Owner', 'Product Owner', '2021-02-08 01:02:25', '2021-02-08 01:02:25'),
+(1712, 'bd', 'Base Price', 'Base Price', '2021-02-08 01:02:25', '2021-02-08 01:02:25'),
+(1713, 'bd', 'Rating', 'Rating', '2021-02-08 01:02:25', '2021-02-08 01:02:25'),
+(1714, 'bd', 'Point', 'Point', '2021-02-08 01:02:25', '2021-02-08 01:02:25'),
+(1715, 'bd', 'Set Point for Product Within a Range', 'Set Point for Product Within a Range', '2021-02-08 01:02:25', '2021-02-08 01:02:25'),
+(1716, 'bd', 'Set Point for multiple products', 'Set Point for multiple products', '2021-02-08 01:02:25', '2021-02-08 01:02:25'),
+(1717, 'bd', 'Min Price', 'Min Price', '2021-02-08 01:02:25', '2021-02-08 01:02:25'),
+(1718, 'bd', 'Max Price', 'Max Price', '2021-02-08 01:02:25', '2021-02-08 01:02:25'),
+(1719, 'bd', 'Set Point for all Products', 'Set Point for all Products', '2021-02-08 01:02:25', '2021-02-08 01:02:25'),
+(1720, 'bd', 'Convert Status', 'Convert Status', '2021-02-08 01:02:28', '2021-02-08 01:02:28'),
+(1721, 'bd', 'Earned At', 'Earned At', '2021-02-08 01:02:28', '2021-02-08 01:02:28'),
+(1722, 'bd', 'Paytm Credential', 'Paytm Credential', '2021-02-08 01:02:31', '2021-02-08 01:02:31'),
+(1723, 'bd', 'PAYTM ENVIRONMENT', 'PAYTM ENVIRONMENT', '2021-02-08 01:02:31', '2021-02-08 01:02:31'),
+(1724, 'bd', 'PAYTM MERCHANT ID', 'PAYTM MERCHANT ID', '2021-02-08 01:02:31', '2021-02-08 01:02:31'),
+(1725, 'bd', 'PAYTM MERCHANT KEY', 'PAYTM MERCHANT KEY', '2021-02-08 01:02:31', '2021-02-08 01:02:31'),
+(1726, 'bd', 'PAYTM MERCHANT WEBSITE', 'PAYTM MERCHANT WEBSITE', '2021-02-08 01:02:31', '2021-02-08 01:02:31'),
+(1727, 'bd', 'PAYTM CHANNEL', 'PAYTM CHANNEL', '2021-02-08 01:02:31', '2021-02-08 01:02:31'),
+(1728, 'bd', 'PAYTM INDUSTRY TYPE', 'PAYTM INDUSTRY TYPE', '2021-02-08 01:02:31', '2021-02-08 01:02:31'),
+(1729, 'bd', 'Add New Payment Method', 'Add New Payment Method', '2021-02-08 01:02:42', '2021-02-08 01:02:42'),
+(1730, 'bd', 'Manual Payment Method', 'Manual Payment Method', '2021-02-08 01:02:42', '2021-02-08 01:02:42'),
+(1731, 'bd', 'Heading', 'Heading', '2021-02-08 01:02:42', '2021-02-08 01:02:42'),
+(1732, 'bd', 'Logo', 'Logo', '2021-02-08 01:02:42', '2021-02-08 01:02:42'),
+(1733, 'bd', 'Offline Wallet Recharge Requests', 'Offline Wallet Recharge Requests', '2021-02-08 01:02:44', '2021-02-08 01:02:44'),
+(1734, 'bd', 'Method', 'Method', '2021-02-08 01:02:44', '2021-02-08 01:02:44'),
+(1735, 'bd', 'TXN ID', 'TXN ID', '2021-02-08 01:02:44', '2021-02-08 01:02:44'),
+(1736, 'bd', 'Photo', 'Photo', '2021-02-08 01:02:44', '2021-02-08 01:02:44'),
+(1737, 'bd', 'Money has been added successfully', 'Money has been added successfully', '2021-02-08 01:02:44', '2021-02-08 01:02:44'),
+(1738, 'bd', 'Be an affiliate partner', 'Be an affiliate partner', '2021-02-08 01:02:47', '2021-02-08 01:02:47'),
+(1739, 'en', 'Something went wrong!', 'Something went wrong!', '2021-02-08 01:02:47', '2021-02-08 01:02:47'),
+(1740, 'en', 'Sorry for the inconvenience, but we\'re working on it.', 'Sorry for the inconvenience, but we\'re working on it.', '2021-02-08 01:02:47', '2021-02-08 01:02:47'),
+(1741, 'en', 'Error code', 'Error code', '2021-02-08 01:02:47', '2021-02-08 01:02:47'),
+(1742, 'bd', 'Manual Payment Information', 'Manual Payment Information', '2021-02-08 01:04:12', '2021-02-08 01:04:12'),
+(1743, 'bd', 'Type', 'Type', '2021-02-08 01:04:12', '2021-02-08 01:04:12'),
+(1744, 'bd', 'Custom Payment', 'Custom Payment', '2021-02-08 01:04:12', '2021-02-08 01:04:12'),
+(1745, 'bd', 'Bank Payment', 'Bank Payment', '2021-02-08 01:04:12', '2021-02-08 01:04:12'),
+(1746, 'bd', 'Check Payment', 'Check Payment', '2021-02-08 01:04:12', '2021-02-08 01:04:12'),
+(1747, 'bd', 'Checkout Thumbnail', 'Checkout Thumbnail', '2021-02-08 01:04:12', '2021-02-08 01:04:12'),
+(1748, 'bd', 'Browse', 'Browse', '2021-02-08 01:04:12', '2021-02-08 01:04:12'),
+(1749, 'bd', 'Payment Instruction', 'Payment Instruction', '2021-02-08 01:04:12', '2021-02-08 01:04:12'),
+(1750, 'bd', 'Bank Information', 'Bank Information', '2021-02-08 01:04:12', '2021-02-08 01:04:12'),
+(1751, 'bd', 'Remove', 'Remove', '2021-02-08 01:04:12', '2021-02-08 01:04:12'),
+(1752, 'bd', 'POS Activation for Seller', 'POS Activation for Seller', '2021-02-08 01:05:05', '2021-02-08 01:05:05'),
+(1753, 'bd', 'Email Or Phone', 'Email Or Phone', '2021-02-08 01:11:18', '2021-02-08 01:11:18'),
+(1754, 'bd', 'Use country code before number', 'Use country code before number', '2021-02-08 01:11:18', '2021-02-08 01:11:18'),
+(1755, 'bd', 'Language changed to ', 'Language changed to ', '2021-02-08 01:13:58', '2021-02-08 01:13:58'),
+(1756, 'bd', 'General', 'General', '2021-02-08 01:14:49', '2021-02-08 01:14:49'),
+(1757, 'bd', 'Frontend Website Name', 'Frontend Website Name', '2021-02-08 01:14:49', '2021-02-08 01:14:49'),
+(1758, 'bd', 'Website Name', 'Website Name', '2021-02-08 01:14:49', '2021-02-08 01:14:49'),
+(1759, 'bd', 'Site Motto', 'Site Motto', '2021-02-08 01:14:49', '2021-02-08 01:14:49'),
+(1760, 'bd', 'Best eCommerce Website', 'Best eCommerce Website', '2021-02-08 01:14:49', '2021-02-08 01:14:49'),
+(1761, 'bd', 'Site Icon', 'Site Icon', '2021-02-08 01:14:49', '2021-02-08 01:14:49'),
+(1762, 'bd', 'Website favicon. 32x32 .png', 'Website favicon. 32x32 .png', '2021-02-08 01:14:49', '2021-02-08 01:14:49'),
+(1763, 'bd', 'Website Base Color', 'Website Base Color', '2021-02-08 01:14:49', '2021-02-08 01:14:49'),
+(1764, 'bd', 'Hex Color Code', 'Hex Color Code', '2021-02-08 01:14:49', '2021-02-08 01:14:49'),
+(1765, 'bd', 'Website Base Hover Color', 'Website Base Hover Color', '2021-02-08 01:14:49', '2021-02-08 01:14:49'),
+(1766, 'bd', 'Global SEO', 'Global SEO', '2021-02-08 01:14:49', '2021-02-08 01:14:49'),
+(1767, 'bd', 'Meta Title', 'Meta Title', '2021-02-08 01:14:49', '2021-02-08 01:14:49'),
+(1768, 'bd', 'Meta description', 'Meta description', '2021-02-08 01:14:49', '2021-02-08 01:14:49'),
+(1769, 'bd', 'Keywords', 'Keywords', '2021-02-08 01:14:49', '2021-02-08 01:14:49'),
+(1770, 'bd', 'Separate with coma', 'Separate with coma', '2021-02-08 01:14:49', '2021-02-08 01:14:49'),
+(1771, 'bd', 'Meta Image', 'Meta Image', '2021-02-08 01:14:49', '2021-02-08 01:14:49'),
+(1772, 'bd', 'Cookies Agreement', 'Cookies Agreement', '2021-02-08 01:14:49', '2021-02-08 01:14:49'),
+(1773, 'bd', 'Cookies Agreement Text', 'Cookies Agreement Text', '2021-02-08 01:14:49', '2021-02-08 01:14:49'),
+(1774, 'bd', 'Show Cookies Agreement?', 'Show Cookies Agreement?', '2021-02-08 01:14:49', '2021-02-08 01:14:49'),
+(1775, 'bd', 'Custom Script', 'Custom Script', '2021-02-08 01:14:49', '2021-02-08 01:14:49'),
+(1776, 'bd', 'Header custom script - before </head>', 'Header custom script - before </head>', '2021-02-08 01:14:49', '2021-02-08 01:14:49'),
+(1777, 'bd', 'Write script with <script> tag', 'Write script with <script> tag', '2021-02-08 01:14:49', '2021-02-08 01:14:49'),
+(1778, 'bd', 'Footer custom script - before </body>', 'Footer custom script - before </body>', '2021-02-08 01:14:49', '2021-02-08 01:14:49');
 
 -- --------------------------------------------------------
 
@@ -3294,6 +3742,9 @@ CREATE TABLE `wallets` (
   `amount` double(20,2) NOT NULL,
   `payment_method` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `payment_details` longtext COLLATE utf8_unicode_ci,
+  `approval` int(1) NOT NULL DEFAULT '0',
+  `offline_payment` int(1) NOT NULL DEFAULT '0',
+  `reciept` varchar(150) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -3326,6 +3777,36 @@ ALTER TABLE `addons`
 -- Индексы таблицы `addresses`
 --
 ALTER TABLE `addresses`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `affiliate_configs`
+--
+ALTER TABLE `affiliate_configs`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `affiliate_options`
+--
+ALTER TABLE `affiliate_options`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `affiliate_payments`
+--
+ALTER TABLE `affiliate_payments`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `affiliate_users`
+--
+ALTER TABLE `affiliate_users`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `affiliate_withdraw_requests`
+--
+ALTER TABLE `affiliate_withdraw_requests`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -3399,6 +3880,18 @@ ALTER TABLE `cities`
 -- Индексы таблицы `city_translations`
 --
 ALTER TABLE `city_translations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `club_points`
+--
+ALTER TABLE `club_points`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `club_point_details`
+--
+ALTER TABLE `club_point_details`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -3516,6 +4009,12 @@ ALTER TABLE `links`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Индексы таблицы `manual_payment_methods`
+--
+ALTER TABLE `manual_payment_methods`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Индексы таблицы `messages`
 --
 ALTER TABLE `messages`
@@ -3571,6 +4070,12 @@ ALTER TABLE `orders`
 -- Индексы таблицы `order_details`
 --
 ALTER TABLE `order_details`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `otp_configurations`
+--
+ALTER TABLE `otp_configurations`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -3636,6 +4141,12 @@ ALTER TABLE `product_translations`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Индексы таблицы `refund_requests`
+--
+ALTER TABLE `refund_requests`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Индексы таблицы `reviews`
 --
 ALTER TABLE `reviews`
@@ -3665,6 +4176,12 @@ ALTER TABLE `searches`
 ALTER TABLE `sellers`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `user_id` (`user_id`);
+
+--
+-- Индексы таблицы `seller_packages`
+--
+ALTER TABLE `seller_packages`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Индексы таблицы `seller_withdraw_requests`
@@ -3754,12 +4271,42 @@ ALTER TABLE `wishlists`
 -- AUTO_INCREMENT для таблицы `addons`
 --
 ALTER TABLE `addons`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT для таблицы `addresses`
 --
 ALTER TABLE `addresses`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `affiliate_configs`
+--
+ALTER TABLE `affiliate_configs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT для таблицы `affiliate_options`
+--
+ALTER TABLE `affiliate_options`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT для таблицы `affiliate_payments`
+--
+ALTER TABLE `affiliate_payments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT для таблицы `affiliate_users`
+--
+ALTER TABLE `affiliate_users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT для таблицы `affiliate_withdraw_requests`
+--
+ALTER TABLE `affiliate_withdraw_requests`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -3802,7 +4349,7 @@ ALTER TABLE `brand_translations`
 -- AUTO_INCREMENT для таблицы `business_settings`
 --
 ALTER TABLE `business_settings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=115;
 
 --
 -- AUTO_INCREMENT для таблицы `carts`
@@ -3832,6 +4379,18 @@ ALTER TABLE `cities`
 -- AUTO_INCREMENT для таблицы `city_translations`
 --
 ALTER TABLE `city_translations`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `club_points`
+--
+ALTER TABLE `club_points`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `club_point_details`
+--
+ALTER TABLE `club_point_details`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -3949,6 +4508,12 @@ ALTER TABLE `links`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT для таблицы `manual_payment_methods`
+--
+ALTER TABLE `manual_payment_methods`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT для таблицы `messages`
 --
 ALTER TABLE `messages`
@@ -3983,6 +4548,12 @@ ALTER TABLE `orders`
 --
 ALTER TABLE `order_details`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `otp_configurations`
+--
+ALTER TABLE `otp_configurations`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT для таблицы `pages`
@@ -4039,6 +4610,12 @@ ALTER TABLE `product_translations`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT для таблицы `refund_requests`
+--
+ALTER TABLE `refund_requests`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT для таблицы `reviews`
 --
 ALTER TABLE `reviews`
@@ -4067,6 +4644,12 @@ ALTER TABLE `searches`
 --
 ALTER TABLE `sellers`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT для таблицы `seller_packages`
+--
+ALTER TABLE `seller_packages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT для таблицы `seller_withdraw_requests`
@@ -4120,7 +4703,7 @@ ALTER TABLE `ticket_replies`
 -- AUTO_INCREMENT для таблицы `translations`
 --
 ALTER TABLE `translations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1576;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1779;
 
 --
 -- AUTO_INCREMENT для таблицы `uploads`

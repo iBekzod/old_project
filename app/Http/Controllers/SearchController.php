@@ -2,11 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
+use App\ProductTranslation;
 use Illuminate\Http\Request;
 use App\Search;
 
 class SearchController extends Controller
 {
+    public function search(Request $request)
+    {
+        $request->validate([
+            'search' => 'required'
+        ]);
+
+        dd(ProductTranslation::all());
+
+    }
+
     /**
      * Display a listing of the resource.
      *

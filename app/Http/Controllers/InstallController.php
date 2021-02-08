@@ -30,12 +30,12 @@ class InstallController extends Controller
     }
 
     public function step3($error = "") {
-        CoreComponentRepository::instantiateShopRepository();
-        if($error == ""){
+        // CoreComponentRepository::instantiateShopRepository();
+//        if($error == ""){
             return view('installation.step3');
-        }else {
-            return view('installation.step3', compact('error'));
-        }
+//        }else {
+//            return view('installation.step3', compact('error'));
+//        }
     }
 
     public function step4() {

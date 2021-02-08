@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\HelperClasses\Combinations;
 use Illuminate\Http\Request;
 use App\Product;
 use App\ProductTranslation;

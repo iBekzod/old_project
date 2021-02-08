@@ -6,6 +6,7 @@ use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductDetailCollection;
 use App\Http\Resources\SearchProductCollection;
 use App\Http\Resources\FlashDealCollection;
+use App\Models\Attribute;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\FlashDeal;
@@ -38,12 +39,118 @@ class ProductController extends Controller
         return new ProductCollection(Product::where('added_by', 'seller')->latest()->paginate(10));
     }
 
-    public function category($id)
+    public function category(Request $request, $id)
     {
+        if (!$id) {
+            abort(404);
+        }
+//        $category_ids = CategoryUtility::children_ids($id);
+//        $category_ids[] = $id;
+        $sort_by = $request->sort_by;
+
+        $conditions = ['published' => 1];
+
+//        if ($request->brand != null) {
+//            $brand_id = (\App\Brand::where('slug', $request->brand)->first() != null) ? Brand::where('slug', $request->brand)->first()->id : null;
+//            $conditions = array_merge($conditions, ['brand_id' => $brand_id]);
+//        }
+
+        $products = \App\Product::where($conditions);
+
         $category_ids = CategoryUtility::children_ids($id);
         $category_ids[] = $id;
 
-        return new ProductCollection(Product::whereIn('category_id', $category_ids)->latest()->paginate(10));
+        $products = $products->whereIn('category_id', $category_ids);
+
+        if($sort_by != null){
+            switch ($sort_by) {
+                case 'newest':
+                    $products->orderBy('created_at', 'desc');
+                    break;
+                case 'oldest':
+                    $products->orderBy('created_at', 'asc');
+                    break;
+                case 'price-asc':
+                    $products->orderBy('unit_price', 'asc');
+                    break;
+                case 'price-desc':
+                    $products->orderBy('unit_price', 'desc');
+                    break;
+                default:
+                    // code...
+                    break;
+            }
+        }
+
+
+        $non_paginate_products = filter_products($products)->get();
+
+        $attributes = array();
+
+        foreach ($non_paginate_products as $key => $product) {
+            if($product->attributes != null && is_array(json_decode($product->attributes))){
+                foreach (json_decode($product->attributes) as $key => $value) {
+                    $flag = false;
+                    $pos = 0;
+                    foreach ($attributes as $key => $attribute) {
+                        if($attribute['id'] == $value){
+                            $flag = true;
+                            $pos = $key;
+                            break;
+                        }
+                    }
+                    if(!$flag){
+                        $item['id'] = $value;
+                        $item['values'] = array();
+                        foreach (json_decode($product->choice_options) as $key => $choice_option) {
+                            if($choice_option->attribute_id == $value){
+                                $item['values'] = $choice_option->values;
+                                break;
+                            }
+                        }
+                        array_push($attributes, $item);
+                    }
+                    else {
+                        foreach (json_decode($product->choice_options) as $key => $choice_option) {
+                            if($choice_option->attribute_id == $value){
+                                foreach ($choice_option->values as $key => $value) {
+                                    if(!in_array($value, $attributes[$pos]['values'])){
+                                        array_push($attributes[$pos]['values'], $value);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        foreach ($attributes as $key => $attribute)
+        {
+            $attributes[$key]['attr'] = Attribute::find($attribute['id']);
+        }
+
+        $selected_attributes = array();
+
+        foreach ($attributes as $key => $attribute) {
+            if($request->has('attribute_'.$attribute['id'])){
+                foreach ($request['attribute_'.$attribute['id']] as $key => $value) {
+                    $str = '"'.$value.'"';
+                    $products = $products->where('choice_options', 'like', '%'.$str.'%');
+                }
+
+                $item['id'] = $attribute['id'];
+                $item['values'] = $request['attribute_'.$attribute['id']];
+                array_push($selected_attributes, $item);
+            }
+        }
+
+
+        return new ProductCollection(
+            Product::whereIn('category_id', $category_ids)
+                ->latest()
+                ->paginate(10)
+        );
     }
 
     public function subCategory($id)
@@ -91,7 +198,12 @@ class ProductController extends Controller
     public function related($id)
     {
         $product = Product::find($id);
+        if($product)
         return new ProductCollection(Product::where('category_id', $product->category_id)->where('id', '!=', $id)->limit(10)->get());
+
+        return response()->json([
+            'error' => 'Такого продукта не существует.'
+        ], 404);
     }
 
     public function topFromSeller($id)

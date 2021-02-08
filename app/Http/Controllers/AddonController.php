@@ -22,7 +22,7 @@ class AddonController extends Controller
      */
     public function index()
     {
-        CoreComponentRepository::instantiateShopRepository();
+        // CoreComponentRepository::instantiateShopRepository();
         return view('backend.addons.index');
     }
 

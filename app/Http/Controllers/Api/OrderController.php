@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Address;
+use App\Http\Resources\OrderCollection;
+use App\PickupPoint;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Cart;
@@ -15,6 +18,19 @@ use DB;
 
 class OrderController extends Controller
 {
+    public function userOrders(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id'
+        ]);
+
+        $orders = Order::where('user_id', $request->user_id)->get();
+
+        return response()->json([
+            'orders' => new OrderCollection($orders)
+        ], 200);
+    }
+
     public function processOrder(Request $request)
     {
         $shippingAddress = json_decode($request->shipping_address);
@@ -28,26 +44,24 @@ class OrderController extends Controller
 
         if (\App\BusinessSetting::where('type', 'shipping_type')->first()->value == 'flat_rate') {
             $shipping = \App\BusinessSetting::where('type', 'flat_rate_shipping_cost')->first()->value;
-        }
-        elseif (\App\BusinessSetting::where('type', 'shipping_type')->first()->value == 'seller_wise_shipping') {
+        } elseif (\App\BusinessSetting::where('type', 'shipping_type')->first()->value == 'seller_wise_shipping') {
             foreach ($cartItems as $cartItem) {
                 $product = \App\Product::find($cartItem->product_id);
-                if($product->added_by == 'admin'){
+                if ($product->added_by == 'admin') {
                     array_push($admin_products, $cartItem->product_id);
-                }
-                else{
+                } else {
                     $product_ids = array();
-                    if(array_key_exists($product->user_id, $seller_products)){
+                    if (array_key_exists($product->user_id, $seller_products)) {
                         $product_ids = $seller_products[$product->user_id];
                     }
                     array_push($product_ids, $cartItem->product_id);
                     $seller_products[$product->user_id] = $product_ids;
                 }
             }
-                if(!empty($admin_products)){
+            if (!empty($admin_products)) {
                     $shipping = \App\BusinessSetting::where('type', 'shipping_cost_admin')->first()->value;
                 }
-                if(!empty($seller_products)){
+            if (!empty($seller_products)) {
                     foreach ($seller_products as $key => $seller_product) {
                         $shipping += \App\Shop::where('user_id', $key)->first()->shipping_cost;
                     }
@@ -79,20 +93,17 @@ class OrderController extends Controller
                 ]);
             }
 
-            $order_detail_shipping_cost= 0;
+            $order_detail_shipping_cost = 0;
 
             if (\App\BusinessSetting::where('type', 'shipping_type')->first()->value == 'flat_rate') {
-                $order_detail_shipping_cost = $shipping/count($cartItems);
+                $order_detail_shipping_cost = $shipping / count($cartItems);
+            } elseif (\App\BusinessSetting::where('type', 'shipping_type')->first()->value == 'seller_wise_shipping') {
+                if ($product->added_by == 'admin') {
+                    $order_detail_shipping_cost = \App\BusinessSetting::where('type', 'shipping_cost_admin')->first()->value / count($admin_products);
+                } else {
+                    $order_detail_shipping_cost = \App\Shop::where('user_id', $product->user_id)->first()->shipping_cost / count($seller_products[$product->user_id]);
             }
-            elseif (\App\BusinessSetting::where('type', 'shipping_type')->first()->value == 'seller_wise_shipping') {
-                if($product->added_by == 'admin'){
-                    $order_detail_shipping_cost = \App\BusinessSetting::where('type', 'shipping_cost_admin')->first()->value/count($admin_products);
-                }
-                else {
-                    $order_detail_shipping_cost = \App\Shop::where('user_id', $product->user_id)->first()->shipping_cost/count($seller_products[$product->user_id]);
-                }
-            }
-            else{
+            } else {
                 $order_detail_shipping_cost = $product->shipping_cost;
             }
 
@@ -142,5 +153,86 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         return $this->processOrder($request);
+    }
+
+    public function storeApi(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required',
+            'payment_type' => 'required',
+            'shipping_address' => 'required',
+            'payment_status' => 'required',
+            'coupon_code' => 'nullable'
+        ]);
+    }
+
+    public function getUserAddress(Request $request)
+    {
+        if ($request->user('api')) {
+            return response()->json([
+                'addresses' => $request->user('api')->addresses
+            ], 200);
+        }
+
+        return abort(401);
+    }
+
+    public function storeUserAddress(Request $request)
+    {
+        $request->validate([
+            'address' => 'required',
+            'country' => 'required',
+            'city' => 'required',
+            'postal_code' => 'required',
+            'phone' => 'required',
+            'set_default' => 'required|integer'
+        ]);
+
+        if ($request->user('api')) {
+            $user = $request->user('api');
+
+            Address::create([
+                'user_id' => $user->id,
+                'address' => $request->get('address'),
+                'country' => $request->get('country'),
+                'city' => $request->get('city'),
+                'postal_code' => $request->get('postal_code'),
+                'phone' => $request->get('phone'),
+                'set_default' => $request->get('set_default')
+            ]);
+
+            return response()->json([], 200);
+        }
+
+        return abort(401);
+    }
+
+    public function getPickUpPoints(Request $request)
+    {
+        return response()->json([
+            'pick_up_points' => \App\PickupPoint::where('pick_up_status', 1)->get()
+        ], 200);
+    }
+
+    public function paymentMethods()
+    {
+        return response()->json([
+            'methods' => [
+                [
+                    'name' => 'cash_on_delivery',
+                    'image' => static_asset('assets/img/cards/cod.png'),
+                    'type' => 1
+                ],
+            ]
+        ]);
+    }
+
+    public function processApiCheckout(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required',
+            'products' => 'required',
+            ''
+        ]);
     }
 }

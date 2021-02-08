@@ -7,7 +7,6 @@ use App\Customer;
 use App\BusinessSetting;
 use App\OtpConfiguration;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\OTPVerificationController;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;

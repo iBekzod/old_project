@@ -58,3 +58,7 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $('.demo-select2').select2();
+</script>
