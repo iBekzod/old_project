@@ -14,7 +14,6 @@ use App\SubSubCategory;
 use Session;
 use ImageOptimizer;
 use DB;
-use Combinations;
 use CoreComponentRepository;
 use Illuminate\Support\Str;
 use Artisan;
