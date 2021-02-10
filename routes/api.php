@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\V2\HomePageController;
+
 Route::prefix('v1/auth')->group(function () {
     Route::post('login', 'Api\AuthController@login');
     Route::post('signup', 'Api\AuthController@signup');
@@ -10,6 +12,12 @@ Route::prefix('v1/auth')->group(function () {
         Route::get('user', 'Api\AuthController@user');
     });
 });
+
+Route::prefix('v2')->group(function () {
+    // Route::get('banners', 'Api\V2\HomePageController@banners');
+    Route::match(['get', 'post'], 'banners', [HomePageController::class, 'banners']);
+});
+
 
 Route::prefix('v1')->group(function () {
     Route::apiResource('banners', 'Api\BannerController')->only('index');
