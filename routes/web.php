@@ -16,11 +16,7 @@ Route::get('/demo/cron_1', 'DemoController@cron_1');
 Route::get('/demo/cron_2', 'DemoController@cron_2');
 Route::get('/convert_assets', 'DemoController@convert_assets');
 Route::get('/convert_category', 'DemoController@convert_category');
-
-
-Route::get('/refresh-csrf', function(){
-    return csrf_token();
-});
+Route::get('/refresh-csrf', 'HelperController@refreshCSRF');
 Route::post('/aiz-uploader', 'AizUploadController@show_uploader');
 Route::post('/aiz-uploader/upload', 'AizUploadController@upload');
 Route::get('/aiz-uploader/get_uploaded_files', 'AizUploadController@get_uploaded_files');

@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\Api\V2\HomePageController;
+use \App\Http\Controllers\API\SearchController;
 
 Route::prefix('v1/auth')->group(function () {
     Route::post('login', 'Api\AuthController@login');
+    Route::post('signinByPhoneNumber', 'Api\AuthController@signinByPhoneNumber');
+    Route::post('registerPhoneNumber', 'Api\AuthController@registerPhoneNumber');
     Route::post('signup', 'Api\AuthController@signup');
     Route::post('social-login', 'Api\AuthController@socialLogin');
     Route::post('password/create', 'Api\PasswordResetController@create');
@@ -13,10 +16,18 @@ Route::prefix('v1/auth')->group(function () {
     });
 });
 
-Route::prefix('v2')->group(function () {
-    // Route::get('banners', 'Api\V2\HomePageController@banners');
+Route::prefix('v1')->group(function () {
+    Route::match(['get', 'post'], '/user/addresses', 'Api\OrderController@getUserAddress');
+    Route::match(['get', 'post'], '/store/user/addresses', 'Api\OrderController@storeUserAddress');
+    Route::match(['get', 'post'], '/pick-up-points', 'Api\OrderController@getPickUpPoints');
+    Route::match(['get', 'post'], '/payment-methods', 'Api\OrderController@paymentMethods');
+
+
+//    Route::apiResource('banners', 'Api\BannerController')->only('index');
+    Route::match(['get', 'post'], 'ajax_search', [SearchController::class, 'ajax_search']);
     Route::match(['get', 'post'], 'banners', [HomePageController::class, 'banners']);
-});
+    Route::match(['get', 'post'], 'user/orders', [\App\Http\Controllers\Api\OrderController::class, 'userOrders']); //->middleware('auth:api');
+    Route::match(['get', 'post'], 'make/orders', [\App\Http\Controllers\Api\OrderController::class, 'processApiCheckout']); //->middleware('auth:api');
 
 
 Route::prefix('v1')->group(function () {
@@ -31,6 +42,7 @@ Route::prefix('v1')->group(function () {
     Route::get('categories/home', 'Api\CategoryController@home');
     Route::apiResource('categories', 'Api\CategoryController')->only('index');
     Route::get('sub-categories/{id}', 'Api\SubCategoryController@index')->name('subCategories.index');
+//    Route::get('sub-categories2/{id}', 'Api\SubCategoryController@index2')->name('subCategories.index');
 
     Route::apiResource('colors', 'Api\ColorController')->only('index');
 
@@ -107,6 +119,8 @@ Route::prefix('v1')->group(function () {
 
     Route::get('wallet/balance/{id}', 'Api\WalletController@balance')->middleware('auth:api');
     Route::get('wallet/history/{id}', 'Api\WalletController@walletRechargeHistory')->middleware('auth:api');
+
+    Route::match(['get', 'post'], 'search', 'SearchController@search');
 });
 
 Route::fallback(function() {
