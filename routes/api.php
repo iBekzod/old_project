@@ -16,6 +16,8 @@ Route::prefix('v1/auth')->group(function () {
     });
 });
 
+
+
 Route::prefix('v1')->group(function () {
     Route::match(['get', 'post'], '/user/addresses', 'Api\OrderController@getUserAddress');
     Route::match(['get', 'post'], '/store/user/addresses', 'Api\OrderController@storeUserAddress');
@@ -29,8 +31,6 @@ Route::prefix('v1')->group(function () {
     Route::match(['get', 'post'], 'user/orders', [\App\Http\Controllers\Api\OrderController::class, 'userOrders']); //->middleware('auth:api');
     Route::match(['get', 'post'], 'make/orders', [\App\Http\Controllers\Api\OrderController::class, 'processApiCheckout']); //->middleware('auth:api');
 
-
-Route::prefix('v1')->group(function () {
     Route::apiResource('banners', 'Api\BannerController')->only('index');
 
     Route::get('brands/top', 'Api\BrandController@top');
