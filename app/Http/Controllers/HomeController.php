@@ -371,9 +371,11 @@ class HomeController extends Controller
     public function listingByCategory(Request $request, $category_slug)
     {
         $category = Category::where('slug', $category_slug)->first();
+
         if ($category != null) {
             return $this->search($request, $category->id);
         }
+
         abort(404);
     }
 

@@ -29,7 +29,8 @@ class OrderCollection extends ResourceCollection
                     'viewed' => $data->viewed,
                     'delivery_viewed' => $data->delivery_viewed,
                     'payment_status_viewed' => $data->payment_status_viewed,
-                    'updated_at' => $data->updated_at
+                    'updated_at' => $data->updated_at,
+                    'ordered_products' => new OrderDetailCollection($data->orderDetails)
                 ];
             })
         ];

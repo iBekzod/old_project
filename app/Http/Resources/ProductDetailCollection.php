@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\ProductStock;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use App\Models\Review;
 use App\Models\Attribute;
@@ -12,7 +13,7 @@ class ProductDetailCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection->map(function($data) {
-                return [
+                $arr = [
                     'id' => (integer) $data->id,
                     'name' => $data->name,
                     'added_by' => $data->added_by,
@@ -25,15 +26,6 @@ class ProductDetailCollection extends ResourceCollection
                         'shop_logo' => $data->added_by == 'admin' ? '' : uploaded_asset($data->user->shop->logo),
                         'shop_link' => $data->added_by == 'admin' ? '' : route('shops.info', $data->user->shop->id)
                     ],
-                    'category' => [
-                        'name' => $data->category->name,
-                        'banner' => api_asset($data->category->banner),
-                        'icon' => $data->category->icon,
-                        'links' => [
-                            'products' => route('api.products.category', $data->category_id),
-                            'sub_categories' => route('subCategories.index', $data->category_id)
-                        ]
-                    ],
                     'brand' => [
                         'name' => $data->brand != null ? $data->brand->name : null,
                         'logo' => $data->brand != null ? api_asset($data->brand->logo) : null,
@@ -41,6 +33,7 @@ class ProductDetailCollection extends ResourceCollection
                             'products' => $data->brand != null ? route('api.products.brand', $data->brand_id) : null
                         ]
                     ],
+                    'variations' => ProductStock::where('product_id', $data->id)->get(),
                     'photos' => $this->convertPhotos(explode(',', $data->photos)),
                     'thumbnail_image' => api_asset($data->thumbnail_img),
                     'tag' => explode(',', $data->tags),
@@ -67,6 +60,19 @@ class ProductDetailCollection extends ResourceCollection
                         'related' => route('products.related', $data->id)
                     ]
                 ];
+                if($data->category_id !== 0)
+                {
+                    $arr['category'] = [
+                        'name' => $data->category->name,
+                        'banner' => api_asset($data->category->banner),
+                        'icon' => $data->category->icon,
+                        'links' => [
+                            'products' => route('api.products.category', $data->category_id),
+                            'sub_categories' => route('subCategories.index', $data->category_id)
+                        ]
+                    ];
+                }
+                return $arr;
             })
         ];
     }

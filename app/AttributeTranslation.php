@@ -8,7 +8,8 @@ class AttributeTranslation extends Model
 {
   protected $fillable = ['name', 'lang', 'attribute_id'];
 
-  public function attribute(){
+    public function attribute()
+    {
     return $this->belongsTo(Attribute::class);
   }
 

@@ -21,7 +21,12 @@ class UserCollection extends ResourceCollection
                     'city' => $data->city,
                     'country' => $data->country,
                     'postal_code' => $data->postal_code,
-                    'phone' => $data->phone
+                    'phone' => $data->phone,
+                    'full_name' => $data->full_name,
+                    'profile_image' => $data->profile_image,
+                    'date_of_birth' => $data->date_of_birth,
+                    'gender' => $data->gender,
+                    'full_address' => $data->full_address,
                 ];
             })
         ];

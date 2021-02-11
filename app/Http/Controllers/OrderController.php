@@ -21,7 +21,6 @@ use DB;
 use PDF;
 use Mail;
 use App\Mail\InvoiceEmailManager;
-use CoreComponentRepository;
 
 class OrderController extends Controller
 {
@@ -69,8 +68,6 @@ class OrderController extends Controller
     // All Orders
     public function all_orders(Request $request)
     {
-         CoreComponentRepository::instantiateShopRepository();
-
          $date = $request->date;
          $sort_search = null;
          $orders = Order::orderBy('code', 'desc');
@@ -94,8 +91,6 @@ class OrderController extends Controller
     // Inhouse Orders
     public function admin_orders(Request $request)
     {
-        CoreComponentRepository::instantiateShopRepository();
-
         $date = $request->date;
         $payment_status = null;
         $delivery_status = null;
@@ -139,8 +134,6 @@ class OrderController extends Controller
     // Seller Orders
     public function seller_orders(Request $request)
     {
-        CoreComponentRepository::instantiateShopRepository();
-
         $date = $request->date;
         $payment_status = null;
         $delivery_status = null;
@@ -356,7 +349,7 @@ class OrderController extends Controller
                 else {
                     $order_detail->shipping_cost = 0;
                 }
-                
+
                 $shipping += $order_detail->shipping_cost;
 
                 if ($cartItem['shipping_type'] == 'pickup_point') {

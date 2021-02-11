@@ -9,7 +9,6 @@ use ZipArchive;
 use DB;
 use Auth;
 use App\BusinessSetting;
-use CoreComponentRepository;
 use Illuminate\Support\Str;
 use Storage;
 

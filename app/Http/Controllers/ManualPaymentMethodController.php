@@ -46,16 +46,18 @@ class ManualPaymentMethodController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->hasFile('photo')) {
+        if($request->hasFile('photo'))
+        {
             $manual_payment_method = new ManualPaymentMethod;
             $manual_payment_method->type = $request->type;
-            $manual_payment_method->photo = $request->photo;
+            $manual_payment_method->photo = $request->photo->store('uploads/payment_method');
             $manual_payment_method->heading = $request->heading;
             $manual_payment_method->description = $request->description;
 
-            if ($request->type == 'bank_payment') {
+            if($request->type == 'bank_payment')
+            {
                 $banks_informations = array();
-                for ($i = 0; $i < count($request->bank_name); $i++) {
+                for ($i=0; $i < count($request->bank_name); $i++) {
                     $item = array();
                     $item['bank_name'] = $request->bank_name[$i];
                     $item['account_name'] = $request->account_name[$i];

@@ -42,6 +42,11 @@ class Category extends Model
         });
     }
 
+    public function parent()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     public function subCategories()
     {
         return $this->hasMany(SubCategory::class);

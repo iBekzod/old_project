@@ -152,6 +152,7 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
         if (!Auth::attempt($credentials))
             return response()->json(['message' => 'Unauthorized', 'user' => null], 401);
+
         $user = $request->user();
         if($user->email_verified_at == null){
             return response()->json(['message' => 'Please verify your account', 'user' => null], 401);
@@ -207,19 +208,7 @@ class AuthController extends Controller
             'expires_at' => Carbon::parse(
                 $tokenResult->token->expires_at
             )->toDateTimeString(),
-            'user' => [
-                'id' => $user->id,
-                'type' => $user->user_type,
-                'name' => $user->name,
-                'email' => $user->email,
-                'avatar' => $user->avatar,
-                'avatar_original' => $user->avatar_original,
-                'address' => $user->address,
-                'country'  => $user->country,
-                'city' => $user->city,
-                'postal_code' => $user->postal_code,
-                'phone' => $user->phone
-            ]
+            'user' => $user
         ]);
     }
 }
