@@ -129,6 +129,11 @@ class UserController extends Controller
             $changed[]='profile_image';
         }
 
+        if ($request->hasFile('avatar')) {
+            $user->uploadAvatarImage($request->file('avatar'));
+            $changed[]='avatar';
+        }
+
         return response()->json([
             'message' => 'Profile information has been updated successfully',
             'changed_fields' =>$changed

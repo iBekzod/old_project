@@ -163,6 +163,23 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Upload Image
+     *
+     * @param $image
+     */
+    public function uploadAvatarImage($image)
+    {
+        if($image == null) return;
+
+        $this->removeAvatarImage();
+        $filemame = $this->createFileName($image->extension());
+        $image->storeAs(self::PROFILE_IMAGE_URL, $filemame);
+        $this->update([
+            'avatar' => $filemame
+        ]);
+    }
+
+    /**
      *  Remove Image
      */
     public function removeProfileImage()
@@ -170,6 +187,17 @@ class User extends Authenticatable implements MustVerifyEmail
         Storage::delete(self::PROFILE_IMAGE_URL . $this->profile_image);
         $this->update([
             'profile_image' => null
+        ]);
+    }
+
+    /**
+     *  Remove Image
+     */
+    public function removeAvatarImage()
+    {
+        Storage::delete(self::PROFILE_IMAGE_URL . $this->avatar);
+        $this->update([
+            'avatar' => null
         ]);
     }
 
