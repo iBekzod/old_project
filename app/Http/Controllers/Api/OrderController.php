@@ -177,6 +177,18 @@ class OrderController extends Controller
         return abort(401);
     }
 
+    public function deleteUserAddress(Request $request)
+    {
+        $request->validate([
+            'address_id' => 'required'
+        ]);
+
+        $address = Address::findOrFail($request->address_id);
+        $address->delete();
+
+        return response([],200);
+    }
+
     public function storeUserAddress(Request $request)
     {
         $request->validate([
@@ -201,7 +213,11 @@ class OrderController extends Controller
                 'set_default' => $request->get('set_default')
             ]);
 
-            return response()->json([], 200);
+            $addresses = $user->addresses;
+
+            return response()->json([
+                'addresses' => $addresses
+            ], 200);
         }
 
         return abort(401);

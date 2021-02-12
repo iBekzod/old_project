@@ -16,11 +16,10 @@ Route::prefix('v1/auth')->group(function () {
     });
 });
 
-
-
 Route::prefix('v1')->group(function () {
     Route::match(['get', 'post'], '/user/addresses', 'Api\OrderController@getUserAddress');
-    Route::match(['get', 'post'], '/store/user/addresses', 'Api\OrderController@storeUserAddress');
+    Route::match(['get', 'post'], '/store/user/addresses', 'Api\OrderController@storeUserAddress')->middleware('auth:api');
+    Route::match(['get', 'post'], '/delete/user/addresses', 'Api\OrderController@deleteUserAddress')->middleware('auth:api');
     Route::match(['get', 'post'], '/pick-up-points', 'Api\OrderController@getPickUpPoints');
     Route::match(['get', 'post'], '/payment-methods', 'Api\OrderController@paymentMethods');
 
@@ -102,8 +101,8 @@ Route::prefix('v1')->group(function () {
     Route::get('policies/support', 'Api\PolicyController@supportPolicy')->name('policies.support');
     Route::get('policies/return', 'Api\PolicyController@returnPolicy')->name('policies.return');
 
+    Route::match(['get', 'post'], 'user/info/update', 'Api\UserController@updateUser');
     Route::get('user/info/{id}', 'Api\UserController@info')->middleware('auth:api');
-    Route::post('user/info/update', 'Api\UserController@updateName')->middleware('auth:api');
     Route::get('user/shipping/address/{id}', 'Api\AddressController@addresses')->middleware('auth:api');
     Route::post('user/shipping/create', 'Api\AddressController@createShippingAddress')->middleware('auth:api');
     Route::get('user/shipping/delete/{id}', 'Api\AddressController@deleteShippingAddress')->middleware('auth:api');

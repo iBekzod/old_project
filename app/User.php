@@ -42,6 +42,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'gender',
         'full_address',
         'profile_image',
+        'avatar',
+        'avatar_original',
+        'full_name',
     ];
 
     /**
@@ -142,8 +145,6 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Address::class);
     }
-
-
 
     /**
      * Upload Image

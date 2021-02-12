@@ -40,7 +40,7 @@ class ProductDetailCollection extends ResourceCollection
                     'price_lower' => (double) explode('-', homeDiscountedPrice($data->id))[0],
                     'price_higher' => (double) explode('-', homeDiscountedPrice($data->id))[1],
                     'choice_options' => $this->convertToChoiceOptions(json_decode($data->choice_options)),
-                    'colors' => json_decode($data->colors),
+                    'colors' => new ProductColorCollection(json_decode($data->colors)),
                     'todays_deal' => (integer) $data->todays_deal,
                     'featured' => (integer) $data->featured,
                     'current_stock' => (integer) $data->current_stock,
