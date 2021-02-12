@@ -157,8 +157,8 @@ class UserController extends Controller
 
             $changed[] = 'avatar2';
             $changed['filename'] = 'public/images/avatar/' . $file;
-            $changed['user'] = $user;
         }
+        $changed['user'] = $user;
 
         return response()->json([
             'message' => 'Profile information has been updated successfully',
