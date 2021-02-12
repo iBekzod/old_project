@@ -186,7 +186,12 @@ class OrderController extends Controller
         $address = Address::findOrFail($request->address_id);
         $address->delete();
 
-        return response([],200);
+        $user = $request->user();
+        $addresses = $user->addresses;
+
+        return response()->json([
+            'addresses' => $addresses
+        ], 200);
     }
 
     public function storeUserAddress(Request $request)
