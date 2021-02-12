@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\ProductStock;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class ProductCollection extends ResourceCollection
@@ -24,6 +25,7 @@ class ProductCollection extends ResourceCollection
                     'discount_type' => $data->discount_type,
                     'rating' => (double) $data->rating,
                     'sales' => (integer) $data->num_of_sale,
+                    'variations' => ProductStock::where('product_id', $data->id)->get(),
                     'links' => [
                         'details' => route('products.show', $data->id),
                         'reviews' => route('api.reviews.index', $data->id),
