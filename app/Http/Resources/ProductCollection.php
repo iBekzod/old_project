@@ -25,6 +25,7 @@ class ProductCollection extends ResourceCollection
                     'discount_type' => $data->discount_type,
                     'rating' => (double) $data->rating,
                     'sales' => (integer) $data->num_of_sale,
+                    'variant' => ProductStock::where('product_id', $data->id)->first(),
                     'variations' => ProductStock::where('product_id', $data->id)->get(),
                     'links' => [
                         'details' => route('products.show', $data->id),
