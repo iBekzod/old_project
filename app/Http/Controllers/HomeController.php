@@ -292,14 +292,14 @@ class HomeController extends Controller
     public function show_product_upload_form(Request $request)
     {
         if(\App\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated){
-            if(Auth::user()->seller->remaining_uploads > 0){
+//            if(Auth::user()->seller->remaining_uploads > 0){
                 $categories = Category::all();
                 return view('frontend.user.seller.product_upload', compact('categories'));
-            }
-            else {
-                flash(translate('Upload limit has been reached. Please upgrade your package.'))->warning();
-                return back();
-            }
+//            }
+//            else {
+//                flash(translate('Upload limit has been reached. Please upgrade your package.'))->warning();
+//                return back();
+//            }
         }
         $categories = Category::where('parent_id', 0)
             ->where('digital', 0)
@@ -681,15 +681,15 @@ class HomeController extends Controller
     public function show_digital_product_upload_form(Request $request)
     {
         if(\App\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated){
-            if(Auth::user()->seller->remaining_digital_uploads > 0){
+//            if(Auth::user()->seller->remaining_digital_uploads > 0){
                 $business_settings = BusinessSetting::where('type', 'digital_product_upload')->first();
                 $categories = Category::where('digital', 1)->get();
                 return view('frontend.user.seller.digitalproducts.product_upload', compact('categories'));
-            }
-            else {
-                flash(translate('Upload limit has been reached. Please upgrade your package.'))->warning();
-                return back();
-            }
+//            }
+//            else {
+//                flash(translate('Upload limit has been reached. Please upgrade your package.'))->warning();
+//                return back();
+//            }
         }
 
         $business_settings = BusinessSetting::where('type', 'digital_product_upload')->first();
