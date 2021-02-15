@@ -88,10 +88,14 @@ class ProductDetailCollection extends ResourceCollection
     protected function convertToChoiceOptions($data){
         $result = array();
         foreach ($data as $key => $choice) {
-            $item['name'] = $choice->attribute_id;
-            $item['title'] = Attribute::find($choice->attribute_id)->name;
-            $item['options'] = $choice->values;
-            array_push($result, $item);
+            $attr = Attribute::find($choice->attribute_id);
+            if($attr)
+            {
+                $item['name'] = $choice->attribute_id;
+                $item['title'] = Attribute::find($choice->attribute_id)->name;
+                $item['options'] = $choice->values;
+                array_push($result, $item);   
+            }
         }
         return $result;
     }
