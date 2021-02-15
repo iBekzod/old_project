@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
-
     public function ajax_search(Request $request)
     {
         $request->validate([

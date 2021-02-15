@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V2\HomePageController;
-use \App\Http\Controllers\API\SearchController;
+use \App\Http\Controllers\Api\SearchController;
 
 Route::prefix('v1/auth')->group(function () {
     Route::post('login', 'Api\AuthController@login');
@@ -17,6 +17,12 @@ Route::prefix('v1/auth')->group(function () {
 });
 
 Route::prefix('v1')->group(function () {
+    Route::match(['get', 'post'], '/sellers', 'Api\SellerController@sellers');
+    Route::match(['get', 'post'], '/sellers/{id}', 'Api\SellerController@seller');
+    Route::match(['get', 'post'], '/sellers/{id}/top-selling', 'Api\SellerController@topSelling');
+    Route::match(['get', 'post'], '/sellers/{id}/featured-products', 'Api\SellerController@featuredProducts');
+    Route::match(['get', 'post'], '/sellers/{id}/all-products', 'Api\SellerController@allProducts');
+
     Route::match(['get', 'post'], '/user/addresses', 'Api\OrderController@getUserAddress');
     Route::match(['get', 'post'], '/store/user/addresses', 'Api\OrderController@storeUserAddress')->middleware('auth:api');
     Route::match(['get', 'post'], '/delete/user/addresses', 'Api\OrderController@deleteUserAddress')->middleware('auth:api');
