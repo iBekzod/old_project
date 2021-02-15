@@ -362,7 +362,7 @@ class PosController extends Controller
                                 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true,
                                 'logOutputFile' => storage_path('logs/log.htm'),
                                 'tempDir' => storage_path('logs/')
-                            ])->loadView('invoices.customer_invoice', compact('order'));
+                            ])->loadView('backend.invoices.customer_invoice', compact('order'));
                 $output = $pdf->output();
         		file_put_contents('public/invoices/'.'Order#'.$order->code.'.pdf', $output);
 
