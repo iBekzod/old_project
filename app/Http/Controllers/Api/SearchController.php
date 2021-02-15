@@ -48,8 +48,6 @@ class SearchController extends Controller
             ]);
         }
 
-        return response()->json([
-            'error' => "ERROR"
-        ], 500);
+        return response()->json([], 200);
     }
 }
