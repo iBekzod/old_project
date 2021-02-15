@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Language;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use App\BusinessSetting;
 use App\Currency;
@@ -26,7 +27,8 @@ class SettingsCollection extends ResourceCollection
                         'exchange_rate' => (double) $this->exchangeRate(Currency::findOrFail(BusinessSetting::where('type', 'system_default_currency')->first()->value)),
                         'code' => Currency::findOrFail(BusinessSetting::where('type', 'system_default_currency')->first()->value)->code
                     ],
-                    'currency_format' => $data->currency_format
+                    'currency_format' => $data->currency_format,
+                    'languages'       => Language::all()
                 ];
             })
         ];
