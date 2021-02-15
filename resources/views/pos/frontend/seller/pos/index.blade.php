@@ -21,9 +21,9 @@
                                                 <option value="">All Categories</option>
                                                 @foreach (\App\Category::all() as $key => $category)
                                                     <option value="category-{{ $category->id }}">{{ $category->name }}</option>
-                                                    @foreach ($category->subcategories as $key => $subcategory)
+                                                    @foreach ($category->childrenCategories as $key => $subcategory)
                                                         <option value="subcategory-{{ $subcategory->id }}">- {{ $subcategory->name }}</option>
-                                                        @foreach ($subcategory->subsubcategories as $key => $subsubcategory)
+                                                        @foreach ($subcategory->childrenCategories as $key => $subsubcategory)
                                                             <option value="subsubcategory-{{ $subsubcategory->id }}">- - {{ $subsubcategory->name }}</option>
                                                         @endforeach
                                                     @endforeach
