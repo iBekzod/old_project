@@ -82,6 +82,12 @@ class SearchController extends Controller
 
         $category = Category::where('id', $request->get('category_id'))->with('childrenCategories')->first();
 
+        if (!$category) {
+            return response()->json([
+                'desc' => 'Category not found'
+            ], 404);
+        }
+
         $category_ids = [];
         $category_ids[] = $category->id;
 
