@@ -187,6 +187,7 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 
 	Route::resource('product-attributes','ProductAttributeController');
 	Route::post('product-attributes/add/attr','ProductAttributeController@createAttr')->name('product-attributes.add_attr');
+	Route::post('product-attributes/{id}/attr/edit','ProductAttributeController@editAttr')->name('product-attributes.edit_attr');
 
 	Route::resource('attributes','AttributeController');
 	Route::get('/attributes/edit/{id}', 'AttributeController@edit')->name('attributes.edit');

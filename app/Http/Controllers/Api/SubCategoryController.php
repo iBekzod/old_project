@@ -29,8 +29,8 @@ class SubCategoryController extends Controller
         $category_collection->additional['filter'] = $this->searchByAttrs($request, $id);
         $category_collection->additional['category'] = Category::where('id', $id)->with('parent')->first();
         $category_collection->additional['category']['tag'] = $this->getTags($category);
-        $category_collection->additional['min_price'] = filter_products(\App\Product::query())->get()->min('unit_price');
-        $category_collection->additional['max_price'] = filter_products(\App\Product::query())->get()->max('unit_price');
+        $category_collection->additional['category']['min_price'] = filter_products(\App\Product::query())->get()->min('unit_price');
+        $category_collection->additional['category']['max_price'] = filter_products(\App\Product::query())->get()->max('unit_price');
 
         return $category_collection;
     }

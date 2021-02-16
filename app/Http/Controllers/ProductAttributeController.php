@@ -83,6 +83,15 @@ class ProductAttributeController extends Controller
         return redirect()->route('product-attributes.edit', [$request->get('attribute_id'), 'lang' => $request->get('lang')]);
     }
 
+    public function editAttr(Request $request, $id)
+    {
+        $lang = $request->lang;
+        $attribute = ProductAttribute::findOrFail($id);
+        $attributes = $attribute->attributes;
+
+        return view('backend.product-attributes.edit_attr', compact('attribute', 'attributes', 'lang'));
+    }
+
     /**
      * Display the specified resource.
      *
@@ -102,10 +111,10 @@ class ProductAttributeController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $lang      = $request->lang;
+        $lang = $request->lang;
         $attribute = ProductAttribute::findOrFail($id);
         $attributes = $attribute->attributes;
-        return view('backend.product-attributes.edit', compact('attribute', 'attributes','lang'));
+        return view('backend.product-attributes.edit', compact('attribute', 'attributes', 'lang'));
     }
 
     /**
@@ -118,7 +127,7 @@ class ProductAttributeController extends Controller
     public function update(Request $request, $id)
     {
         $attribute = ProductAttribute::findOrFail($id);
-        if($request->lang == env("DEFAULT_LANGUAGE")){
+        if ($request->lang == env("DEFAULT_LANGUAGE")) {
             $attribute->name = $request->name;
         }
         $attribute->save();
