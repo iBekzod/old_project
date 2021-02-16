@@ -50,7 +50,8 @@
                     <h5 class="mb-0 h6">{{ translate('Add Attribute') }}</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('product-attributes.store') }}" method="POST">
+                    <form action="{{ route('product-attributes.add_attr') }}" method="POST">
+                        <input type="hidden" name="attribute_id" value="{{ $attribute->id }}">
                         @csrf
                         <div class="form-group mb-3">
                             <label for="name">{{ translate('Name') }}</label>

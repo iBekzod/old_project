@@ -186,7 +186,7 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
     Route::post('/sellers/approved', 'SellerController@updateApproved')->name('sellers.approved');
 
 	Route::resource('product-attributes','ProductAttributeController');
-	Route::get('product-attributes/add/attr','ProductAttributeController@createAttr');
+	Route::post('product-attributes/add/attr','ProductAttributeController@createAttr')->name('product-attributes.add_attr');
 
 	Route::resource('attributes','AttributeController');
 	Route::get('/attributes/edit/{id}', 'AttributeController@edit')->name('attributes.edit');

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\AttributeTranslation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 
@@ -30,6 +29,6 @@ class ProductAttribute extends Model
 
     public function attributes()
     {
-        return $this->hasMany(self::class);
+        return $this->hasMany(ProductAttributeCharacteristics::class, 'attribute_id', 'id');
     }
 }

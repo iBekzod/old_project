@@ -12,6 +12,10 @@ class Product extends Model
         'purchase_price', 'unit', 'slug', 'colors', 'choice_options', 'variations', 'current_stock'
       ];
 
+    public $appends = [
+        'thumbnaile_image'
+    ];
+
     public function getTranslation($field = '', $lang = false){
       $lang = $lang == false ? App::getLocale() : $lang;
       $product_translations = $this->hasMany(ProductTranslation::class)->where('lang', $lang)->first();
@@ -47,6 +51,11 @@ class Product extends Model
     }
 
     public function stocks(){
-    return $this->hasMany(ProductStock::class);
+        return $this->hasMany(ProductStock::class);
+    }
+
+    public function getThumbnaileImageAttribute($value)
+    {
+        return api_asset($this->thumbnail_img);
     }
 }

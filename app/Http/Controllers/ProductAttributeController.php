@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Attribute;
-use App\AttributeTranslation;
 use App\Models\ProductAttribute;
+use App\Models\ProductAttributeCharacteristics;
+use App\Models\ProductAttributeCharacteristicTranslation;
 use App\Models\ProductAttributeTranslation;
 use Illuminate\Http\Request;
 
@@ -17,7 +17,6 @@ class ProductAttributeController extends Controller
      */
     public function index()
     {
-        // CoreComponentRepository::instantiateShopRepository();
         $attributes = ProductAttribute::latest()->get();
 
         return view('backend.product-attributes.index', compact('attributes'));
@@ -60,9 +59,28 @@ class ProductAttributeController extends Controller
         return redirect()->route('product-attributes.index');
     }
 
-    public function createAttr()
+    public function createAttr(Request $request)
     {
-        return view('backend.product-attributes.add_attr');
+        $request->validate([
+            'name' => 'required',
+            'attribute_id' => 'required'
+        ]);
+
+        $attribute = ProductAttributeCharacteristics::create([
+            'name' => $request->get('name'),
+            'attribute_id' => (int)$request->get('attribute_id')
+        ]);
+
+        $attribute_translation = ProductAttributeCharacteristicTranslation::firstOrNew([
+            'lang' => env('DEFAULT_LANGUAGE'),
+            'attribute_id' => $attribute->id
+        ]);
+
+        $attribute_translation->name = $request->get('name');
+        $attribute_translation->save();
+
+        flash(translate('Attribute has been inserted successfully'))->success();
+        return redirect()->route('product-attributes.edit', [$request->get('attribute_id'), 'lang' => $request->get('lang')]);
     }
 
     /**
@@ -86,7 +104,8 @@ class ProductAttributeController extends Controller
     {
         $lang      = $request->lang;
         $attribute = ProductAttribute::findOrFail($id);
-        return view('backend.product-attributes.edit', compact('attribute','lang'));
+        $attributes = $attribute->attributes;
+        return view('backend.product-attributes.edit', compact('attribute', 'attributes','lang'));
     }
 
     /**

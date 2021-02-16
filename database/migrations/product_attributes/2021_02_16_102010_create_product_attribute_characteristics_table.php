@@ -18,6 +18,12 @@ class CreateProductAttributeCharacteristicsTable extends Migration
 
             $table->text('name');
 
+            $table->unsignedBigInteger('attribute_id');
+            $table->foreign('attribute_id')
+                ->references('id')
+                ->on('product_attributes')
+                ->onDelete('cascade');
+
             $table->timestamps();
         });
     }
