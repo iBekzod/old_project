@@ -32,6 +32,7 @@ Route::prefix('v1')->group(function () {
 
 //    Route::apiResource('banners', 'Api\BannerController')->only('index');
     Route::match(['get', 'post'], 'ajax_search', [SearchController::class, 'ajax_search']);
+    Route::match(['get', 'post'], 'search-by-category', [SearchController::class, 'searchByHashtags']);
     Route::match(['get', 'post'], 'banners', [HomePageController::class, 'banners']);
     Route::match(['get', 'post'], 'user/orders', [\App\Http\Controllers\Api\OrderController::class, 'userOrders']); //->middleware('auth:api');
     Route::match(['get', 'post'], 'make/orders', [\App\Http\Controllers\Api\OrderController::class, 'processApiCheckout']); //->middleware('auth:api');

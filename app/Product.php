@@ -15,7 +15,6 @@ class Product extends Model
     public function getTranslation($field = '', $lang = false){
       $lang = $lang == false ? App::getLocale() : $lang;
       $product_translations = $this->hasMany(ProductTranslation::class)->where('lang', $lang)->first();
-      dd($product_translations);
       return $product_translations != null ? $product_translations->$field : $this->$field;
     }
 
