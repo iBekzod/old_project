@@ -50,4 +50,65 @@ class SearchController extends Controller
 
         return response()->json([], 200);
     }
+
+    public function searchByHashtags(Request $request)
+    {
+        $request->validate([
+            'category_id' => 'required',
+            'search' => 'required'
+        ]);
+
+        $keywords = [];
+
+        $products = Product::where('published', 1)
+            ->where('tags', 'like', '%'.$request->search.'%')
+            ->where('category_id', $request->get('category_id'))
+            ->get();
+
+        foreach ($products as $key => $product) {
+            foreach (explode(',',$product->tags) as $key => $tag) {
+                if(stripos($tag, $request->search) !== false){
+                    if(sizeof($keywords) > 5){
+                        break;
+                    }
+                    else{
+                        if(!in_array(strtolower($tag), $keywords)){
+                            array_push($keywords, strtolower($tag));
+                        }
+                    }
+                }
+            }
+        }
+
+        $products = filter_products(Product::where('published', 1)
+            ->where('name', 'like', '%'.$request->search.'%'))
+            ->where('category_id', $request->get('category_id'))
+            ->get()
+            ->take(3);
+
+        $categories = Category::where('name', 'like', '%'.$request->search.'%')
+            ->get()
+            ->take(3);
+
+        $shops = Shop::whereIn('user_id', verified_sellers_id())
+            ->where('name', 'like', '%'.$request->search.'%')
+            ->get()
+            ->take(3);
+
+        if(
+            sizeof($keywords)>0 ||
+            sizeof($categories)>0 ||
+            sizeof($products)>0 ||
+            sizeof($shops) >0
+        ){
+            return response()->json([
+                'products' => $products,
+                'categories' => $categories,
+                'keywords' => $keywords,
+                'shops' => $shops,
+            ]);
+        }
+
+        return response()->json([], 200);
+    }
 }
