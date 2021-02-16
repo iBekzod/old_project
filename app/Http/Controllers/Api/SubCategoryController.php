@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Brand;
 use App\Http\Controllers\SearchController;
 use App\Http\Resources\CategoryCollection;
+use App\Http\Resources\CategorySubCategoryCollection;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\SearchProductCollection;
 use App\Models\Attribute;
 use App\Models\Category;
+use App\Category as MainCategory;
 use App\Models\Product;
 use App\Seller;
 use App\Utility\CategoryUtility;
@@ -29,6 +31,17 @@ class SubCategoryController extends Controller
         $category_collection->additional['category']['tag'] = $this->getTags($category);
         $category_collection->additional['min_price'] = filter_products(\App\Product::query())->get()->min('unit_price');
         $category_collection->additional['max_price'] = filter_products(\App\Product::query())->get()->max('unit_price');
+
+        return $category_collection;
+    }
+
+    public function subCategories($id)
+    {
+        $category = MainCategory::where('parent_id', $id)
+            ->with('products')
+            ->get();
+
+        $category_collection = new CategorySubCategoryCollection($category);
 
         return $category_collection;
     }

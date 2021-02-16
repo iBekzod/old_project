@@ -20,11 +20,16 @@ class ProductAttribute extends Model
         $attribute_translation = $this->hasMany(ProductAttributeTranslation::class, 'attribute_id', 'id')
             ->where('lang', $lang)
             ->first();
-        return $attribute_translation != null ? $attribute_translation->$field : $this->$field;
+        return $attribute_translation != null ? $attribute_translation->{$field} : $this->{$field};
     }
 
     public function attribute_translations()
     {
         return $this->hasMany(ProductAttributeTranslation::class, 'attribute_id', 'id');
+    }
+
+    public function attributes()
+    {
+        return $this->hasMany(self::class);
     }
 }

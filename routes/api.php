@@ -49,6 +49,7 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('categories', 'Api\CategoryController')->only('index');
     Route::match(['get', 'post'], '/all-categories', 'Api\CategoryController@allCategories');
     Route::get('sub-categories/{id}', 'Api\SubCategoryController@index')->name('subCategories.index');
+    Route::get('category/sub-categories/{id}', 'Api\SubCategoryController@subCategories')->name('subCategories.category');
 //    Route::get('sub-categories2/{id}', 'Api\SubCategoryController@index2')->name('subCategories.index');
 
     Route::apiResource('colors', 'Api\ColorController')->only('index');

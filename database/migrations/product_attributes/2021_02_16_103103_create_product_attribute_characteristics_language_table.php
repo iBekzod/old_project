@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductAttributesTranslationTable extends Migration
+class CreateProductAttributeCharacteristicsLanguageTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateProductAttributesTranslationTable extends Migration
      */
     public function up()
     {
-        Schema::create('product_attributes_translation', function (Blueprint $table) {
+        Schema::create('product_attribute_characteristics_language', function (Blueprint $table) {
             $table->bigIncrements('id');
 
             $table->unsignedBigInteger('attribute_id');
             $table->foreign('attribute_id')
                 ->references('id')
-                ->on('product_attributes')
+                ->on('product_attribute_characteristics')
                 ->onDelete('cascade');
 
             $table->string('name');
@@ -36,6 +36,6 @@ class CreateProductAttributesTranslationTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_attributes_translation');
+        Schema::dropIfExists('product_attribute_characteristics_language');
     }
 }

@@ -60,6 +60,11 @@ class ProductAttributeController extends Controller
         return redirect()->route('product-attributes.index');
     }
 
+    public function createAttr()
+    {
+        return view('backend.product-attributes.add_attr');
+    }
+
     /**
      * Display the specified resource.
      *
@@ -77,9 +82,11 @@ class ProductAttributeController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        //
+        $lang      = $request->lang;
+        $attribute = ProductAttribute::findOrFail($id);
+        return view('backend.product-attributes.edit', compact('attribute','lang'));
     }
 
     /**
@@ -91,7 +98,18 @@ class ProductAttributeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $attribute = ProductAttribute::findOrFail($id);
+        if($request->lang == env("DEFAULT_LANGUAGE")){
+            $attribute->name = $request->name;
+        }
+        $attribute->save();
+
+        $attribute_translation = ProductAttributeTranslation::firstOrNew(['lang' => $request->lang, 'attribute_id' => $attribute->id]);
+        $attribute_translation->name = $request->name;
+        $attribute_translation->save();
+
+        flash(translate('Attribute has been updated successfully'))->success();
+        return back();
     }
 
     /**

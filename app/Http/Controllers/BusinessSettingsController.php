@@ -199,6 +199,7 @@ class BusinessSettingsController extends Controller
         }
 
         flash(translate("Settings updated successfully"))->success();
+
         return back();
     }
 
