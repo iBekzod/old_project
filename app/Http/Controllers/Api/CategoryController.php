@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Category;
 use App\Http\Resources\CategoryCollection;
 use App\Models\BusinessSetting;
-use App\Models\Category;
 
 class CategoryController extends Controller
 {
@@ -24,5 +24,12 @@ class CategoryController extends Controller
         $homepageCategories = BusinessSetting::where('type', 'home_categories')->first();
         $homepageCategories = json_decode($homepageCategories->value);
         return new CategoryCollection(Category::whereIn('id', $homepageCategories)->get());
+    }
+
+    public function allCategories()
+    {
+        return response()->json([
+            'categories' => Category::with('childrenCategories')->get()
+        ]);
     }
 }

@@ -47,6 +47,7 @@ Route::prefix('v1')->group(function () {
     Route::get('categories/featured', 'Api\CategoryController@featured');
     Route::get('categories/home', 'Api\CategoryController@home');
     Route::apiResource('categories', 'Api\CategoryController')->only('index');
+    Route::match(['get', 'post'], '/all-categories', 'Api\CategoryController@allCategories');
     Route::get('sub-categories/{id}', 'Api\SubCategoryController@index')->name('subCategories.index');
 //    Route::get('sub-categories2/{id}', 'Api\SubCategoryController@index2')->name('subCategories.index');
 
