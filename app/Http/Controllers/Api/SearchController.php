@@ -80,9 +80,29 @@ class SearchController extends Controller
             }
         }
 
+        $category = Category::where('id', $request->get('category_id'))->with('childrenCategories')->first();
+
+        $category_ids = [];
+        $category_ids[] = $category->id;
+
+        foreach ($category->childrenCategories as $subcategory)
+        {
+            array_push($category_ids, $subcategory->id);
+            if($subcategory->childrenCategories)
+            {
+                $this->cycleCategories($subcategory, $category_ids);
+            }
+        }
+
         $products = filter_products(Product::where('published', 1)
-            ->where('name', 'like', '%'.$request->search.'%'))
+            ->where('name', 'like', '%' . $request->search . '%'))
             ->where('category_id', $request->get('category_id'))
+            ->where(function ($query) use ($category_ids) {
+                foreach ($category_ids as $category_id)
+                {
+                    $query->orWhere('category_id', $category_id);
+                }
+            })
             ->get()
             ->take(3);
 
@@ -110,5 +130,17 @@ class SearchController extends Controller
         }
 
         return response()->json([], 200);
+    }
+
+    public function cycleCategories($category, &$arr)
+    {
+        if($category->childrenCategories)
+        {;
+            foreach ($category->childrenCategories as $subcategory)
+            {
+                array_push($arr, $subcategory->id);
+                $this->cycleCategories($subcategory, $arr);
+            }
+        }
     }
 }
