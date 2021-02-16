@@ -20,6 +20,16 @@
 
     @yield('meta')
 
+    <script src="/supportboard/js/min/jquery.min.js"></script>
+    <script id="sbinit" src="/supportboard/js/main.js"></script>
+    @php
+        $code = '';
+        if (Auth::check() && !isAdmin()) $code = 'var SB_AECOMMERCE_ACTIVE_USER = ' . Auth::user()->id . ';';
+        if (isset($detailedProduct)) $code .= 'var SB_DEFAULT_AGENT = "aecommerce-' . $detailedProduct->user->id . '";';
+        if (Session::has('cart')) if (count($cart = Session::get('cart')) > 0) { $code .= 'var SB_AECOMMERCE_CART = ['; foreach ($cart as $key => $item) { $code .= '["' . $item['id'] . '", "' . $item['price'] . '", "' . $item['quantity'] . '"],'; } $code = substr($code, 0, -1) . '];'; }
+        if ($code != '') echo '<script>' . $code . '</script>';
+    @endphp
+
     @if(!isset($detailedProduct) && !isset($shop) && !isset($page))
     <!-- Schema.org markup for Google+ -->
     <meta itemprop="name" content="{{ config('app.name', 'Laravel') }}">

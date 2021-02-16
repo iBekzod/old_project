@@ -213,7 +213,15 @@
 
                                     <div class="row no-gutters">
                                         <div class="col-sm-2">
-                                            <div class="opacity-50 my-2">{{ \App\Attribute::find($choice->attribute_id)->getTranslation('name') }}:</div>
+                                            @php
+                                            $attr = \App\Attribute::find($choice->attribute_id);
+                                            if($attr) {
+                                                $name = $attr->getTranslation('name');
+                                            } else {
+                                                $name = '';
+                                            }
+                                            @endphp
+                                            <div class="opacity-50 my-2">{{ $name }}:</div>
                                         </div>
                                         <div class="col-sm-10">
                                             <div class="aiz-radio-inline">
