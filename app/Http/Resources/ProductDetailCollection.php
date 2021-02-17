@@ -55,6 +55,7 @@ class ProductDetailCollection extends ResourceCollection
                     'rating' => (double) $data->rating,
                     'rating_count' => (integer) Review::where(['product_id' => $data->id])->count(),
                     'description' => $data->description,
+                    'reviews' => new ReviewCollection(Review::where('product_id', $data->id)->latest()->get()),
                     'links' => [
                         'reviews' => route('api.reviews.index', $data->id),
                         'related' => route('products.related', $data->id)
@@ -94,7 +95,7 @@ class ProductDetailCollection extends ResourceCollection
                 $item['name'] = $choice->attribute_id;
                 $item['title'] = Attribute::find($choice->attribute_id)->name;
                 $item['options'] = $choice->values;
-                array_push($result, $item);   
+                array_push($result, $item);
             }
         }
         return $result;
