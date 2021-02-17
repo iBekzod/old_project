@@ -87,7 +87,7 @@ class SubCategoryController extends Controller
 
         foreach ($array as $item) {
             $data = explode(',', $item->brand);
-            $brands[] = $data;
+            $brands[] = $data->name;
         }
 
         return $brands;
