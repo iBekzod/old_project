@@ -20,4 +20,9 @@ class Seller extends Model
     {
         return $this->hasMany(Product::class, 'user_id', 'user_id');
     }
+
+    public function getVerificationInfoAttribute($value)
+    {
+        return json_decode($value);
+    }
 }

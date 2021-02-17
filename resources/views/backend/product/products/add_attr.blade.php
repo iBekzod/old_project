@@ -14,7 +14,7 @@
         new Vue({
             el: '#app',
             data: () => ({
-                options: {{ json_encode($options) }}
+                options: {{ $options->toArray() }}
             }),
             mounted() {
                 console.log(this.options)
