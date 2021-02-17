@@ -14,10 +14,10 @@
         new Vue({
             el: '#app',
             data: () => ({
-                options: {{ $options->toArray() }}
+                options: '{{ json_encode($options) }}'
             }),
             mounted() {
-                console.log(this.options)
+                console.log(JSON.parse(this.options))
             },
             template: `
             <div class="col-lg-8 mx-auto">
