@@ -11,9 +11,25 @@ class SellerController extends Controller
 {
     public function shop($id)
     {
+        $shop = Shop::where('id', $id)->with('user')->firstOrFail();
+        $topSelling = \App\Product::where('user_id', $shop->user_id)
+            ->where('published', 1)
+            ->orderBy('num_of_sale', 'desc')
+            ->paginate(24);
+        $featuredProducts = \App\Product::where('user_id', $shop->user_id)
+            ->where('published', 1)
+            ->orderBy('created_at', 'desc'  )
+            ->paginate(24);
+        $allProducts = \App\Product::where('user_id', $shop->user_id)
+            ->where('published', 1)
+            ->paginate(24);
+
         return response()->json([
-            'shop' => Shop::where('id', $id)->firstOrFail()
-        ], 200);
+            'shop' => $shop,
+            'top_selling' => $topSelling,
+            'featured_products' => $featuredProducts,
+            'all_products' => $allProducts,
+        ], 500);
     }
 
     public function sellers()
