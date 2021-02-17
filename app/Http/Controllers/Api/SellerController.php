@@ -9,6 +9,13 @@ use Illuminate\Http\Request;
 
 class SellerController extends Controller
 {
+    public function shop($id)
+    {
+        return response()->json([
+            'shop' => Shop::where('id', $id)->firstOrFail()
+        ], 200);
+    }
+
     public function sellers()
     {
         return response()->json([
