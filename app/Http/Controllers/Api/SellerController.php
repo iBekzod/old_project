@@ -11,7 +11,7 @@ class SellerController extends Controller
     public function sellers()
     {
         return response()->json([
-            'sellers' => Seller::all()
+            'sellers' => Seller::with('user')->get()
         ], 200);
     }
 
