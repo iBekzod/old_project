@@ -138,6 +138,9 @@
 							</label>
 						</td>
 						<td class="text-right">
+                            <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{route('products.in_stock', ['id'=>$product->id, 'lang'=>env('DEFAULT_LANGUAGE')] )}}" title="{{ translate('Products in stock') }}">
+                                <i class="las la-list"></i>
+                            </a>
 							@if ($type == 'Seller')
 		                      <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{route('products.seller.edit', ['id'=>$product->id, 'lang'=>env('DEFAULT_LANGUAGE')] )}}" title="{{ translate('Edit') }}">
 		                          <i class="las la-edit"></i>

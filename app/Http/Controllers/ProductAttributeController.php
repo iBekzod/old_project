@@ -6,6 +6,7 @@ use App\Models\ProductAttribute;
 use App\Models\ProductAttributeCharacteristics;
 use App\Models\ProductAttributeCharacteristicTranslation;
 use App\Models\ProductAttributeTranslation;
+use App\Product;
 use Illuminate\Http\Request;
 
 class ProductAttributeController extends Controller
@@ -86,10 +87,39 @@ class ProductAttributeController extends Controller
     public function editAttr(Request $request, $id)
     {
         $lang = $request->lang;
-        $attribute = ProductAttribute::findOrFail($id);
-        $attributes = $attribute->attributes;
+        $attribute = ProductAttributeCharacteristics::findOrFail($id);
 
-        return view('backend.product-attributes.edit_attr', compact('attribute', 'attributes', 'lang'));
+        return view('backend.product-attributes.edit_attr', compact('attribute', 'lang'));
+    }
+
+    public function updateAttr(Request $request, $id)
+    {
+        $attribute = ProductAttributeCharacteristics::findOrFail($id);
+        if ($request->lang == env("DEFAULT_LANGUAGE")) {
+            $attribute->name = $request->name;
+        }
+        $attribute->save();
+
+        $attribute_translation = ProductAttributeCharacteristicTranslation::firstOrNew(['lang' => $request->lang, 'attribute_id' => $attribute->id]);
+        $attribute_translation->name = $request->name;
+        $attribute_translation->save();
+
+        flash(translate('Attribute has been updated successfully'))->success();
+        return back();
+    }
+
+    public function destroyAttr($id)
+    {
+        $attribute = ProductAttributeCharacteristics::findOrFail($id);
+        $parent_id = $attribute->attribute_id;
+
+        foreach ($attribute->attribute_translations as $key => $attribute_translation) {
+            $attribute_translation->delete();
+        }
+
+        ProductAttributeCharacteristics::destroy($id);
+        flash(translate('Attribute has been deleted successfully'))->success();
+        return redirect()->back();
     }
 
     /**

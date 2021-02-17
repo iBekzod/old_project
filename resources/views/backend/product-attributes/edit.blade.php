@@ -95,7 +95,7 @@
                                        title="{{ translate('Edit') }}">
                                         <i class="las la-edit"></i>
                                     </a>
-                                    <form action="{{ route('product-attributes.destroy', $attribute->id) }}" method="post">
+                                    <form action="{{ route('product-attributes.destroy_attr', $attribute->id) }}" method="post">
                                         @csrf
                                         @method('delete')
                                         <button class="btn btn-soft-danger btn-icon btn-circle btn-sm"

@@ -51,7 +51,7 @@ class Product extends Model
     }
 
     public function stocks(){
-        return $this->hasMany(ProductStock::class);
+        return $this->hasMany(ProductStock::class)->with('product');
     }
 
     public function getThumbnaileImageAttribute($value)

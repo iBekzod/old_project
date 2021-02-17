@@ -29,6 +29,7 @@ class SubCategoryController extends Controller
         $category_collection->additional['filter'] = $this->searchByAttrs($request, $id);
         $category_collection->additional['category'] = Category::where('id', $id)->with('parent')->first();
         $category_collection->additional['category']['tag'] = $this->getTags($category);
+        $category_collection->additional['category']['brands'] = $this->getBrands($category);
         $category_collection->additional['category']['min_price'] = filter_products(\App\Product::query())->get()->min('unit_price');
         $category_collection->additional['category']['max_price'] = filter_products(\App\Product::query())->get()->max('unit_price');
 
@@ -66,6 +67,30 @@ class SubCategoryController extends Controller
         }
 
         return $tags;
+    }
+
+    public function getBrands($category)
+    {
+        $products = $category->map(function ($item) {
+            return $item->products->all();
+        });
+
+        $array = [];
+
+        foreach ($products as $value) {
+            foreach ($value as $item) {
+                $array[] = $item;
+            }
+        }
+
+        $brands = [];
+
+        foreach ($array as $item) {
+            $data = explode(',', $item->brand);
+            $brands[] = $data;
+        }
+
+        return $brands;
     }
 
     public function searchByAttrs($request, $id)

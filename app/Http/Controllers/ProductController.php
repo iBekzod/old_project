@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\HelperClasses\Combinations;
+use App\Models\ProductAttribute;
 use Illuminate\Http\Request;
 use App\Product;
 use App\ProductTranslation;
@@ -20,6 +21,31 @@ use Artisan;
 
 class ProductController extends Controller
 {
+    public function addInStockProductAttrs(Request $request, $id)
+    {
+        $product = ProductStock::where('id', $id)->firstOrFail();
+        $lang = $request->get('lang');
+        $options = ProductAttribute::all();
+
+        return view('backend.product.products.add_attr', [
+            'product' => $product,
+            'lang' => $lang,
+            'options' => $options
+        ]);
+    }
+
+    public function inStock($id)
+    {
+        $product = Product::where('id', $id)->firstOrFail();
+        $type = 'All';
+
+        return view('backend.product.products.in_stock', [
+            'product' => $product,
+            'products' => $product->stocks()->paginate(15),
+            'type' => $type
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      *

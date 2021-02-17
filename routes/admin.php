@@ -37,6 +37,8 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::post('/products/todays_deal', 'ProductController@updateTodaysDeal')->name('products.todays_deal');
 	Route::post('/products/featured', 'ProductController@updateFeatured')->name('products.featured');
 	Route::post('/products/get_products_by_subcategory', 'ProductController@get_products_by_subcategory')->name('products.get_products_by_subcategory');
+	Route::get('/products/{id}/in-stock', 'ProductController@inStock')->name('products.in_stock');
+	Route::get('/products/{id}/in-stock/add/attrs', 'ProductController@addInStockProductAttrs')->name('products.in_stock_add_attrs');
 
 	Route::resource('sellers','SellerController');
 	Route::get('sellers_ban/{id}','SellerController@ban')->name('sellers.ban');
@@ -187,7 +189,9 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 
 	Route::resource('product-attributes','ProductAttributeController');
 	Route::post('product-attributes/add/attr','ProductAttributeController@createAttr')->name('product-attributes.add_attr');
-	Route::post('product-attributes/{id}/attr/edit','ProductAttributeController@editAttr')->name('product-attributes.edit_attr');
+	Route::get('product-attributes/{id}/attr/edit','ProductAttributeController@editAttr')->name('product-attributes.edit_attr');
+	Route::patch('product-attributes/{id}/attr/update','ProductAttributeController@updateAttr')->name('product-attributes.update_attr');
+	Route::delete('product-attributes/{id}/attr/destoy','ProductAttributeController@destroyAttr')->name('product-attributes.destroy_attr');
 
 	Route::resource('attributes','AttributeController');
 	Route::get('/attributes/edit/{id}', 'AttributeController@edit')->name('attributes.edit');

@@ -22,4 +22,9 @@ class ProductAttributeCharacteristics extends Model
             ->first();
         return $attribute_translation != null ? $attribute_translation->{$field} : $this->{$field};
     }
+
+    public function attribute_translations()
+    {
+        return $this->hasMany(ProductAttributeCharacteristicTranslation::class, 'attribute_id', 'id');
+    }
 }
