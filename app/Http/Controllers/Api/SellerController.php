@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Seller;
+use App\Shop;
 use Illuminate\Http\Request;
 
 class SellerController extends Controller
@@ -11,7 +12,8 @@ class SellerController extends Controller
     public function sellers()
     {
         return response()->json([
-            'sellers' => Seller::with('user')->get()
+            'sellers' => Seller::with('user')->get(),
+            'shops' => Shop::all()
         ], 200);
     }
 
