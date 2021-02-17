@@ -22,6 +22,9 @@ Route::prefix('v1')->group(function () {
     Route::match(['get', 'post'], '/sellers', 'Api\SellerController@sellers');
     Route::match(['get', 'post'], '/sellers/{id}', 'Api\SellerController@seller');
     Route::match(['get', 'post'], '/shop/{id}', 'Api\SellerController@shop');
+    Route::match(['get', 'post'], '/shop/{id}/all-products', 'Api\SellerController@shopAllProducts');
+    Route::match(['get', 'post'], '/shop/{id}/featured-products', 'Api\SellerController@shopFeaturedProducts');
+    Route::match(['get', 'post'], '/shop/{id}/top-selling-products', 'Api\SellerController@shopTopSelling');
     Route::match(['get', 'post'], '/sellers/{id}/top-selling', 'Api\SellerController@topSelling');
     Route::match(['get', 'post'], '/sellers/{id}/featured-products', 'Api\SellerController@featuredProducts');
     Route::match(['get', 'post'], '/sellers/{id}/all-products', 'Api\SellerController@allProducts');
