@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\ProductDetailCollection;
 use App\Http\Resources\ReviewCollection;
 use App\Models\Review;
 use App\Product;
@@ -30,7 +31,8 @@ class ReviewController extends Controller
             'rating' => $request->get('rating')
         ]);
 
-        $product = Product::where('id', $request->get('product_id'))->with('reviews')->firstOrFail();
+        $product = Product::where('id', $request->get('product_id'))->with('reviews')->get();
+        $product = new ProductDetailCollection($product);
 
         return response()->json([
             'comment' => $comment,
