@@ -12,7 +12,9 @@ class ReviewCollection extends ResourceCollection
             'data' => $this->collection->map(function($data) {
                 return [
                     'user' => [
-                        'name' => $data->user->name
+                        'name' => $data->user->name,
+                        'avatar' => $data->user->avatar,
+                        'avatar_original' => api_asset($data->user->avatar_original),
                     ],
                     'rating' => $data->rating,
                     'comment' => $data->comment,
