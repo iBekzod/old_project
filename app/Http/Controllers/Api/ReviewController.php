@@ -29,15 +29,12 @@ class ReviewController extends Controller
             'comment' => $request->get('comment'),
             'rating' => $request->get('rating')
         ]);
-        if($product = Product::findOrFail($request->get('product_id'))){
-            $reviews=$product->reviews();
-            return response()->json([
-                'comment' => $comment,
-                'reviews'=>$reviews
-            ], 200);
-        }
+
+        $product = Product::where('id', $request->get('product_id'))->with('reviews')->firstOrFail();
+
         return response()->json([
-            'comment' => $comment
+            'comment' => $comment,
+            'product' => $product
         ], 200);
     }
 }
