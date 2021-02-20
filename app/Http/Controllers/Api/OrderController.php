@@ -33,6 +33,16 @@ class OrderController extends Controller
 
     public function processOrder(Request $request)
     {
+        $request->validate([
+            'shipping_address' => 'nullable',
+            'user_id' => 'nullable',
+            'payment_type' => 'nullable',
+            'payment_status' => 'nullable',
+            'grand_total' => 'nullable',
+            'coupon_discount' => 'nullable',
+            'coupon_code' => 'nullable',
+        ]);
+
         $shippingAddress = json_decode($request->shipping_address);
 
         $cartItems = Cart::where('user_id', $request->user_id)->get();
@@ -251,12 +261,13 @@ class OrderController extends Controller
     public function processApiCheckout(Request $request)
     {
         $request->validate([
-            'user_id' => 'required',
+            'user_id'            => 'required',
             'address_id'         => 'required',
             'cart_products'      => 'required',
             'payment_type'       => 'required',
             'shipping_type'      => 'required'
         ]);
+
         $user = User::where('id', $request->user_id)->first();
         $address = Address::where('id', $request->address_id)->first();
 

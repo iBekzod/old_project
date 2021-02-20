@@ -18,6 +18,7 @@ Route::prefix('v1/auth')->group(function () {
 
 Route::prefix('v1')->group(function () {
     Route::match(['post'], '/store/review', 'Api\ReviewController@store');
+    Route::match(['get', 'post'], '/get/page', 'Api\PageController@page');
 
     Route::match(['get', 'post'], '/sellers', 'Api\SellerController@sellers');
     Route::match(['get', 'post'], '/sellers/{id}', 'Api\SellerController@seller');

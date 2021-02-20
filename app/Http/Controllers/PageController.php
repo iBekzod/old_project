@@ -42,7 +42,7 @@ class PageController extends Controller
         if (Page::where('slug', preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->slug)))->first() == null) {
             $page->slug             = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->slug));
             $page->type             = "custom_page";
-            $page->content          = $request->content;
+            $page->content          = $request->get('content');
             $page->meta_title       = $request->meta_title;
             $page->meta_description = $request->meta_description;
             $page->keywords         = $request->keywords;
@@ -51,7 +51,7 @@ class PageController extends Controller
 
             $page_translation           = PageTranslation::firstOrNew(['lang' => env('DEFAULT_LANGUAGE'), 'page_id' => $page->id]);
             $page_translation->title    = $request->title;
-            $page_translation->content  = $request->content;
+            $page_translation->content  = $request->get('content');
             $page_translation->save();
 
             flash(translate('New page has been created successfully'))->success();
