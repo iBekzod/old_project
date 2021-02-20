@@ -28,7 +28,13 @@ class ReviewController extends Controller
             'comment' => $request->get('comment'),
             'rating' => $request->get('rating')
         ]);
-
+        if($product = Product::findOrFail($request->get('product_id'))){
+            $reviews=$product->reviews();
+            return response()->json([
+                'comment' => $comment,
+                'reviews'=>$reviews
+            ], 200);
+        }
         return response()->json([
             'comment' => $comment
         ], 200);
