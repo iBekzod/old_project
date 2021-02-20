@@ -32,6 +32,7 @@ class SubCategoryController extends Controller
         $category_collection->additional['category']['brands'] = $this->getBrands($category);
         $category_collection->additional['category']['min_price'] = filter_products(\App\Product::query())->get()->min('unit_price');
         $category_collection->additional['category']['max_price'] = filter_products(\App\Product::query())->get()->max('unit_price');
+        $category_collection->additional['category']->banner = api_asset($category_collection->additional['category']->banner);
 
         return $category_collection;
     }
