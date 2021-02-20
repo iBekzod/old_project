@@ -8,32 +8,65 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
     <script>
-        $(document).ready(function() {
-            $('select[name=bla_bla_bla]').select2();
-        });
         new Vue({
             el: '#app',
             data: () => ({
-                options: '{{ json_encode($options) }}'
+                option: false,
+                options: '@json($options)',
+                data: []
             }),
-            mounted() {
-                console.log(JSON.parse(this.options))
+            mounted () {
+                this.options = JSON.parse(this.options)
             },
             template: `
-            <div class="col-lg-8 mx-auto">
+            <div class="col-lg-12 mx-auto">
                 <div class="card">
                     <div class="card-body">
                         <label>Добавить готовую сетку</label>
-                        <select name="bla_bla_bla" id="" class="form-control">
-                            <option value=""></option>
+                        <select @change="changeSelect" v-model="option" name="bla_bla_bla" id="" class="form-control">
+                            <option :value="false"></option>
                             @foreach($options as $option)
                                 <option value="{{ $option->id }}">{{ $option->getTranslation('name') }}</option>
                             @endforeach
                         </select>
+                        <div class="mt-3 mb-3"></div>
+                        <div class="row" v-for="(item, index) in data">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label>Key</label>
+                                    <input type="text" disabled :value="item.key" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label>Value</label>
+                                    <input type="text" :value="item.value" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Action</label>
+                                    <input type="button" @click="removeItem(index)" class="btn btn-danger form-control" value="delete">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            `
+            `,
+            methods: {
+                changeSelect() {
+                    console.log(this.options[this.option])
+                    this.options[this.option].attributes.map((val) => {
+                        this.data.push({
+                            attribute_id: val.id,
+                            key: val.name,
+                            value: ''
+                        })
+                    })
+                    this.option = false
+                }
+            }
         })
     </script>
 @endsection

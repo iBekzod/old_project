@@ -21,6 +21,16 @@ use Artisan;
 
 class ProductController extends Controller
 {
+    public function characteristics(Request $request, $id)
+    {
+        $product = Product::where('id', $id)->firstOrFail();
+        $options = ProductAttribute::with('attributes')->get();
+
+        return view('backend.product.products.add_attr', compact(
+            'product', 'options'
+        ));
+    }
+
     public function addInStockProductAttrs(Request $request, $id)
     {
         $product = ProductStock::where('id', $id)->firstOrFail();
