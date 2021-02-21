@@ -92,11 +92,9 @@ class Product extends Model
             ]);
         }
 
-        $arr = $arr->groupBy('parent_id');
-
         $parents = collect();
 
-        foreach ($arr as $key => $val)
+        foreach ($arr->groupBy('parent_id') as $key => $val)
         {
             $parents[] = App\Models\ProductAttribute::where('id', $key)->first();
         }
