@@ -13,10 +13,19 @@
             data: () => ({
                 option: false,
                 options: '@json($options)',
+                values: '@json($product->characteristicValues2)',
                 data: []
             }),
             mounted () {
+                this.values = JSON.parse(this.values)
                 this.options = JSON.parse(this.options)
+                this.values.filter((val) => {
+                    this.data.push({
+                        attribute_id: val.attribute_id,
+                        key: val.key,
+                        value: val.value
+                    })
+                })
             },
             template: `
             <div class="col-lg-12 mx-auto">
@@ -33,36 +42,41 @@
                             @endforeach
                         </select>
                         <div class="mt-3 mb-3"></div>
-                        <div class="row" v-for="(item, index) in data">
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    <label>Key</label>
-                                    <input type="text" disabled :value="item.key" class="form-control">
+                        <form action="{{ route('products.characteristics', $product->id) }}" method="post">
+                            @csrf
+                            <div class="row" v-for="(item, index) in data">
+                                <input type="hidden" :name="'attr[' + index + '][attr_key]'" :value="item.attribute_id">
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <input type="text" :name="'attr[' + index + '][name]'" readonly :value="item.key" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <input type="text" :name="'attr[' + index + '][value]'" :value="item.value" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <input type="button" @click="removeItem(index)" class="btn btn-danger form-control" value="delete">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    <label>Value</label>
-                                    <input type="text" :value="item.value" class="form-control">
-                                </div>
+
+
+                            <div class="form-group">
+                                <button type="submit" class="form-control">Submit</button>
                             </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label>Action</label>
-                                    <input type="button" @click="removeItem(index)" class="btn btn-danger form-control" value="delete">
-                                </div>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
 `,
             methods: {
                 changeSelect() {
-                    console.log(this.options[this.option])
                     this.options.filter((el) => {
                         el.attributes.filter((val) => {
-                            if (val.id === this.option) {
+                            if (val.id === parseInt(this.option)) {
                                 this.data.push({
                                     attribute_id: val.id,
                                     key: val.name,
@@ -71,17 +85,15 @@
                             }
                         })
                     })
-                    // this.options[this.option].attributes.map((val) => {
-                    //     this.data.push({
-                    //         attribute_id: val.id,
-                    //         key: val.name,
-                    //         value: ''
-                    //     })
-                    // })
                     this.option = false
+                },
+                removeItem(index) {
+                    this.data.splice(index, 1)
                 }
             }
         })
+    </script>
+    <script type="text/x-template" id="form-template">
     </script>
 @endsection
 
