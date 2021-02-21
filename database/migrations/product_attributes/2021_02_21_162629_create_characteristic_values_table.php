@@ -18,6 +18,7 @@ class CreateCharacteristicValuesTable extends Migration
 
             $table->unsignedInteger('attr_id')->nullable();
             $table->unsignedInteger('product_id')->nullable();
+            $table->unsignedInteger('parent_id')->nullable();
             $table->string('name')->nullable();
             $table->text('values')->nullable();
 

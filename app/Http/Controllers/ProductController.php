@@ -31,7 +31,8 @@ class ProductController extends Controller
                 foreach ($request->get('attr') as $item) {
                     CharacteristicValues::create([
                         'product_id' => $product->id,
-                        'attr_id' => $item['attr_key'],
+                        'parent_id' => $item['parent_id'],
+                        'attr_id' => $item['id'],
                         'name' => $item['name'],
                         'values' => $item['value']
                     ]);

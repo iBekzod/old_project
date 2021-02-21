@@ -19,9 +19,11 @@
             mounted () {
                 this.values = JSON.parse(this.values)
                 this.options = JSON.parse(this.options)
+                console.log(this.values)
                 this.values.filter((val) => {
                     this.data.push({
-                        attribute_id: val.attribute_id,
+                        id: val.attr_id,
+                        parent_id: val.parent_id,
                         key: val.key,
                         value: val.value
                     })
@@ -45,7 +47,8 @@
                         <form action="{{ route('products.characteristics', $product->id) }}" method="post">
                             @csrf
                             <div class="row" v-for="(item, index) in data">
-                                <input type="hidden" :name="'attr[' + index + '][attr_key]'" :value="item.attribute_id">
+                                <input type="hidden" :name="'attr[' + index + '][id]'" :value="item.id">
+                                <input type="hidden" :name="'attr[' + index + '][parent_id]'" :value="item.parent_id">
                                 <div class="col-md-5">
                                     <div class="form-group">
                                         <input type="text" :name="'attr[' + index + '][name]'" readonly :value="item.key" class="form-control">
@@ -78,7 +81,8 @@
                         el.attributes.filter((val) => {
                             if (val.id === parseInt(this.option)) {
                                 this.data.push({
-                                    attribute_id: val.id,
+                                    id: val.id,
+                                    parent_id: val.attribute_id,
                                     key: val.name,
                                     value: ''
                                 })

@@ -13,7 +13,7 @@ class Product extends Model
     ];
 
     public $appends = [
-        'thumbnaile_image', 'characteristicValues2', 'characteristicValuesForDetailProduct'
+        'thumbnaile_image', 'characteristicValues2'
     ];
 
     public function characteristicValues()
@@ -69,7 +69,8 @@ class Product extends Model
         $arr = [];
         foreach ($this->characteristicValues as $item) {
             $arr[] = [
-                'attribute_id' => $item->attr_id,
+                'attr_id' => $item->attr_id,
+                'parent_id' => $item->parent_id,
                 'key'          => $item->name,
                 'value'        => $item->values
             ];
@@ -79,15 +80,30 @@ class Product extends Model
 
     public function getCharacteristicValuesForDetailProductAttribute()
     {
-        $arr = [];
+        $arr = collect();
+
         foreach ($this->characteristicValues as $item) {
-            $arr[] = [
+            $arr->push([
+                'parent_id' => $item->parent_id,
                 'attribute_id' => $item->attr_id,
                 'attribute' => App\Models\ProductAttributeCharacteristics::where('id', $item->attr_id)->first(),
                 'key'         => $item->name,
                 'value'        => $item->values
-            ];
+            ]);
         }
-        return $arr;
+
+        $arr = $arr->groupBy('parent_id');
+
+        $parents = collect();
+
+        foreach ($arr as $key => $val)
+        {
+            $parents[] = App\Models\ProductAttribute::where('id', $key)->first();
+        }
+
+        return [
+            'attrs' => $arr,
+            'parents' => $parents
+        ];
     }
 }
