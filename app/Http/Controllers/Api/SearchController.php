@@ -48,7 +48,9 @@ class SearchController extends Controller
             ]);
         }
 
-        return response()->json([], 200);
+        return response()->json([
+            'message'=>'Nothing found'
+        ], 200);
     }
 
     public function searchByHashtags(Request $request)
