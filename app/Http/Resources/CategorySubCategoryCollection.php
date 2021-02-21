@@ -14,7 +14,7 @@ class CategorySubCategoryCollection extends ResourceCollection
                 return [
                     'id'=>$data->id,
                     'name' => $data->name,
-                    'banner' => api_asset($data->banner),
+                    'banner' => $data->banner ? api_asset($data->banner) : 'public/images/default-image.jpg',
                     'icon' => api_asset($data->icon),
                     // 'brands' => brandsOfCategory($data->id),
                     'sub_categories' => $data->categories,
