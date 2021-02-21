@@ -12,9 +12,9 @@ class CategoryCollection extends ResourceCollection
             'data' => $this->collection->map(function($data) {
 //                try {
                 return [
-                        'id'=>$data->id,
+                    'id'=>$data->id,
                     'name' => $data->name,
-                    'banner' => api_asset($data->banner),
+                    'banner' => $data->banner ? api_asset($data->banner) : 'public/images/default-image.jpg',
                     'icon' => api_asset($data->icon),
                     // 'brands' => brandsOfCategory($data->id),
                     'links' => [
