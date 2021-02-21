@@ -58,8 +58,8 @@
                                 <table class="table table-bordered">
                                     <tbody>
                                         <tr>
-                                            <td>admin@example.com</td>
-                                            <td>123456</td>
+                                            <td>admin@admin.uz</td>
+                                            <td>admin123456</td>
                                             <td><button class="btn btn-info btn-xs" onclick="autoFill()">{{ translate('Copy') }}</button></td>
                                         </tr>
                                     </tbody>
@@ -79,8 +79,8 @@
 @section('script')
     <script type="text/javascript">
         function autoFill(){
-            $('#email').val('admin@example.com');
-            $('#password').val('123456');
+            $('#email').val('admin@admin.uz');
+            $('#password').val('admin123456');
         }
     </script>
 @endsection
