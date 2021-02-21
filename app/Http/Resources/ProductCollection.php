@@ -21,7 +21,7 @@ class ProductCollection extends ResourceCollection
                     'todays_deal' => (integer) $data->todays_deal,
                     'featured' =>(integer) $data->featured,
                     'unit' => $data->unit,
-                    'discount' => (double) $data->discount,
+                    'discount' => (integer) $data->discount,
                     'discount_type' => $data->discount_type,
                     'rating' => (double) $data->rating,
                     'sales' => (integer) $data->num_of_sale,

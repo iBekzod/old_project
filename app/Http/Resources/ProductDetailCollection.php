@@ -45,7 +45,7 @@ class ProductDetailCollection extends ResourceCollection
                     'featured' => (integer) $data->featured,
                     'current_stock' => (integer) $data->current_stock,
                     'unit' => $data->unit,
-                    'discount' => (double) $data->discount,
+                    'discount' => (integer) $data->discount,
                     'discount_type' => $data->discount_type,
                     'tax' => (double) $data->tax,
                     'tax_type' => $data->tax_type,
