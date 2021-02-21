@@ -26,7 +26,10 @@
                         <select @change="changeSelect" v-model="option" name="bla_bla_bla" id="" class="form-control">
                             <option :value="false"></option>
                             @foreach($options as $option)
-                                <option value="{{ $option->id }}">{{ $option->getTranslation('name') }}</option>
+                                <option disabled value="{{ $option->id }}">{{ $option->getTranslation('name') }}</option>
+                                 @foreach($option->attributes as $attr)
+                                    <option value="{{ $attr->id }}"> - {{ $attr->getTranslation('name') }}</option>
+                                 @endforeach
                             @endforeach
                         </select>
                         <div class="mt-3 mb-3"></div>
@@ -53,17 +56,28 @@
                     </div>
                 </div>
             </div>
-            `,
+`,
             methods: {
                 changeSelect() {
                     console.log(this.options[this.option])
-                    this.options[this.option].attributes.map((val) => {
-                        this.data.push({
-                            attribute_id: val.id,
-                            key: val.name,
-                            value: ''
+                    this.options.filter((el) => {
+                        el.attributes.filter((val) => {
+                            if (val.id === this.option) {
+                                this.data.push({
+                                    attribute_id: val.id,
+                                    key: val.name,
+                                    value: ''
+                                })
+                            }
                         })
                     })
+                    // this.options[this.option].attributes.map((val) => {
+                    //     this.data.push({
+                    //         attribute_id: val.id,
+                    //         key: val.name,
+                    //         value: ''
+                    //     })
+                    // })
                     this.option = false
                 }
             }
@@ -75,6 +89,17 @@
 
     <div class="aiz-titlebar text-left mt-2 mb-3">
         <h5 class="mb-0 h6">{{translate('Add attributes')}}</h5>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">{{ translate('dashboard') }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('products.all') }}">{{ translate('all_products') }}</a></li>
+                </ol>
+            </nav>
+        </div>
     </div>
 
 {{--    <div class="row">--}}

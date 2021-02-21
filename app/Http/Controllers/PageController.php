@@ -111,7 +111,7 @@ class PageController extends Controller
             }
             if($request->lang == env("DEFAULT_LANGUAGE")){
               $page->title          = $request->title;
-              $page->content        = $request->content;
+              $page->content        = $request->get('content');
             }
             $page->meta_title       = $request->meta_title;
             $page->meta_description = $request->meta_description;
@@ -121,7 +121,7 @@ class PageController extends Controller
 
             $page_translation           = PageTranslation::firstOrNew(['lang' => $request->lang, 'page_id' => $page->id]);
             $page_translation->title    = $request->title;
-            $page_translation->content  = $request->content;
+            $page_translation->content  = $request->get('content');
             $page_translation->save();
 
             flash(translate('Page has been updated successfully'))->success();

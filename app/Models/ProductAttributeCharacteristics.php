@@ -13,6 +13,11 @@ class ProductAttributeCharacteristics extends Model
         'name', 'attribute_id'
     ];
 
+    public function parent()
+    {
+        return $this->hasOne(ProductAttribute::class, 'id', 'attribute_id');
+    }
+
 
     public function getTranslation($field = '', $lang = false)
     {
