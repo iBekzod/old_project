@@ -10,11 +10,16 @@ class Product extends Model
     protected $fillable = [
         'name','added_by', 'user_id', 'category_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
         'purchase_price', 'unit', 'slug', 'colors', 'choice_options', 'variations', 'current_stock'
-      ];
+    ];
 
     public $appends = [
-        'thumbnaile_image'
+        'thumbnaile_image', 'characteristicValues2'
     ];
+
+    public function characteristicValues()
+    {
+        return $this->hasMany(App\Models\CharacteristicValues::class, 'product_id', 'id');
+    }
 
     public function getTranslation($field = '', $lang = false){
       $lang = $lang == false ? App::getLocale() : $lang;
@@ -54,8 +59,49 @@ class Product extends Model
         return $this->hasMany(ProductStock::class)->with('product');
     }
 
-    public function getThumbnaileImageAttribute($value)
+    public function getThumbnaileImageAttribute()
     {
         return api_asset($this->thumbnail_img);
+    }
+
+    public function getCharacteristicValues2Attribute()
+    {
+        $arr = [];
+        foreach ($this->characteristicValues as $item) {
+            $arr[] = [
+                'attr_id' => $item->attr_id,
+                'parent_id' => $item->parent_id,
+                'key'          => $item->name,
+                'value'        => $item->values
+            ];
+        }
+        return $arr;
+    }
+
+    public function getCharacteristicValuesForDetailProductAttribute()
+    {
+        $arr = collect();
+
+        foreach ($this->characteristicValues as $item) {
+            $arr->push([
+                'parent_id' => $item->parent_id,
+                'attribute_id' => $item->attr_id,
+                'attribute' => App\Models\ProductAttributeCharacteristics::where('id', $item->attr_id)->first(),
+                'key'         => $item->name,
+                'value'        => $item->values
+            ]);
+        }
+
+        $parents = collect();
+
+        foreach ($arr->groupBy('parent_id') as $key => $val)
+        {
+            $parents[] = App\Models\ProductAttribute::where('id', $key)->first();
+        }
+
+        return [
+            'attrs' => $arr,
+            'parents' => $parents
+        ];
     }
 }

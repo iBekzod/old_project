@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\HelperClasses\Combinations;
+use App\Models\CharacteristicValues;
 use App\Models\ProductAttribute;
 use Illuminate\Http\Request;
 use App\Product;
@@ -23,12 +24,31 @@ class ProductController extends Controller
 {
     public function characteristics(Request $request, $id)
     {
-        $product = Product::where('id', $id)->firstOrFail();
-        $options = ProductAttribute::with('attributes')->get();
+        if ($request->method() == 'POST') {
+            $product = Product::where('id', $id)->firstOrFail();
+            $product->characteristicValues()->delete();
+            if($request->get('attr')){
+                foreach ($request->get('attr') as $item) {
+                    CharacteristicValues::create([
+                        'product_id' => $product->id,
+                        'parent_id' => $item['parent_id'],
+                        'attr_id' => $item['id'],
+                        'name' => $item['name'],
+                        'values' => $item['value']
+                    ]);
+                }
+            }
 
-        return view('backend.product.products.add_attr', compact(
-            'product', 'options'
-        ));
+            flash(translate('Saved successfully'))->success();
+            return back();
+        }else {
+            $product = Product::where('id', $id)->with(['characteristicValues'])->firstOrFail();
+            $options = ProductAttribute::with('attributes')->get();
+
+            return view('backend.product.products.add_attr', compact(
+                'product', 'options'
+            ));
+        }
     }
 
     public function addInStockProductAttrs(Request $request, $id)

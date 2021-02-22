@@ -55,6 +55,7 @@ class ProductDetailCollection extends ResourceCollection
                     'rating' => (double) $data->rating,
                     'rating_count' => (integer) Review::where(['product_id' => $data->id])->count(),
                     'description' => $data->description,
+                    'characteristics' => $data->characteristicValuesForDetailProduct,
                     'reviews' => new ReviewCollection(Review::where('product_id', $data->id)->latest()->get()),
                     'links' => [
                         'reviews' => route('api.reviews.index', $data->id),

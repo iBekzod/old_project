@@ -11,7 +11,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\FlashDeal;
 use App\Models\FlashDealProduct;
-use App\Models\Product;
+use App\Product;
 use App\Models\Shop;
 use App\Models\Color;
 use Illuminate\Http\Request;

@@ -7,6 +7,18 @@
     </div>
 
     <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">{{ translate('dashboard') }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('product-attributes.edit', $attribute->parent->id) }}">{{ translate('parent') }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ $attribute->name }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-lg-8 mx-auto">
             <div class="card">
                 <div class="card-body p-0">
