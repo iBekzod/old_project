@@ -275,12 +275,14 @@ class ProductController extends Controller
                 $item['attribute_id'] = $no;
 
                 $data = array();
-                foreach (json_decode($request[$str][0]) as $key => $eachValue) {
-                    array_push($data, $eachValue->value);
-                }
-
-                $item['values'] = $data;
-                array_push($choice_options, $item);
+                if($request[$str][0])
+                {
+                    foreach (json_decode($request[$str][0]) as $key => $eachValue) {
+                        array_push($data, $eachValue->value);
+                    }
+                    $item['values'] = $data;
+                    array_push($choice_options, $item);
+                }                
             }
         }
 
@@ -308,10 +310,15 @@ class ProductController extends Controller
             foreach ($request->choice_no as $key => $no) {
                 $name = 'choice_options_'.$no;
                 $data = array();
-                foreach (json_decode($request[$name][0]) as $key => $item) {
-                    array_push($data, $item->value);
+                if($request[$name][0])
+                {
+                    foreach (json_decode($request[$name][0]) as $key => $item) {
+                        array_push($data, $item->value);
+                    }
+                    array_push($options, $data);
+
                 }
-                array_push($options, $data);
+                
             }
         }
 
@@ -520,12 +527,16 @@ class ProductController extends Controller
                 $item['attribute_id'] = $no;
 
                 $data = array();
-                foreach (json_decode($request[$str][0]) as $key => $eachValue) {
-                    array_push($data, $eachValue->value);
+                if($request[$str][0])
+                {
+                    foreach (json_decode($request[$str][0]) as $key => $eachValue) {
+                        array_push($data, $eachValue->value);
+                    }
+                    $item['values'] = $data;
+                    array_push($choice_options, $item);
                 }
 
-                $item['values'] = $data;
-                array_push($choice_options, $item);
+                
             }
         }
 
