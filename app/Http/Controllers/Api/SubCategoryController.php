@@ -210,10 +210,19 @@ class SubCategoryController extends Controller
         }
 
         $selected_attributes = array();
-
         foreach ($attributes as $key => $attribute) {
             $attr = Attribute::find($attribute['id']);
-            if ($request->has('attribute_'.$attribute['id']) && $attr != null) {
+            if ($attr != null)
+            {
+               $attributes[$key]['attr'] = $attr;
+            }else{
+                unset($attributes[$key]);
+            }
+            
+        }
+
+        foreach ($attributes as $key => $attribute) {
+            if ($request->has('attribute_'.$attribute['id'])) {
                 foreach ($request['attribute_'.$attribute['id']] as $key => $value) {
                     $str = '"'.$value.'"';
                     $products = $products->where('choice_options', 'like', '%'.$str.'%');
@@ -221,10 +230,8 @@ class SubCategoryController extends Controller
 
                 $item['id'] = $attribute['id'];
                 $item['values'] = $request['attribute_'.$attribute['id']];
+                $item['attr'] = $attr;
                 array_push($selected_attributes, $item);
-                $attributes[$key]['attr'] = $attr;
-            } else {
-                unset($attributes[$key]);
             }
         }
 
