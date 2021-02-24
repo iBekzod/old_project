@@ -97,7 +97,7 @@ class SubCategoryController extends Controller
 
     public function searchByAttrs($request, $id)
     {
-        $category = \App\Category::where('id', $id)->first();
+        $category = \App\Category::where('id', $id)->orWhere('slug', 'like', '%'. $id .'%')->first();
 
         if ($category != null) {
             return $this->search($request, $category->id);
