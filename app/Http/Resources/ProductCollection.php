@@ -13,6 +13,7 @@ class ProductCollection extends ResourceCollection
             'data' => $this->collection->map(function($data) {
                 return [
                     'id'=>$data->id,
+                    'slug'=>$data->slug,
                     'owner_id' => $data->user_id,
                     'name' => $data->name,
                     'photos' => explode(',', $data->photos),
