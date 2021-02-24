@@ -212,7 +212,8 @@ class SubCategoryController extends Controller
         $selected_attributes = array();
 
         foreach ($attributes as $key => $attribute) {
-            if($request->has('attribute_'.$attribute['id'])){
+            $attr = Attribute::find($attribute['id']);
+            if ($request->has('attribute_'.$attribute['id']) && $attr) {
                 foreach ($request['attribute_'.$attribute['id']] as $key => $value) {
                     $str = '"'.$value.'"';
                     $products = $products->where('choice_options', 'like', '%'.$str.'%');
@@ -221,13 +222,6 @@ class SubCategoryController extends Controller
                 $item['id'] = $attribute['id'];
                 $item['values'] = $request['attribute_'.$attribute['id']];
                 array_push($selected_attributes, $item);
-            }
-        }
-
-        foreach ($attributes as $key => $attribute)
-        {
-            $attr = Attribute::find($attribute['id']);
-            if ($attr) {
                 $attributes[$key]['attr'] = $attr;
             }
         }
