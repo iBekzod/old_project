@@ -213,7 +213,7 @@ class SubCategoryController extends Controller
 
         foreach ($attributes as $key => $attribute) {
             $attr = Attribute::find($attribute['id']);
-            if ($request->has('attribute_'.$attribute['id']) && $attr) {
+            if ($request->has('attribute_'.$attribute['id']) && $attr != null) {
                 foreach ($request['attribute_'.$attribute['id']] as $key => $value) {
                     $str = '"'.$value.'"';
                     $products = $products->where('choice_options', 'like', '%'.$str.'%');
