@@ -223,6 +223,8 @@ class SubCategoryController extends Controller
                 $item['values'] = $request['attribute_'.$attribute['id']];
                 array_push($selected_attributes, $item);
                 $attributes[$key]['attr'] = $attr;
+            } else {
+                unset($attributes[$key]);
             }
         }
 
