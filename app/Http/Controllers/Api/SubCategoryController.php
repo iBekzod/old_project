@@ -39,11 +39,11 @@ class SubCategoryController extends Controller
 
     public function subCategories($id)
     {
-        $category = MainCategory::where('parent_id', $id)
+        $category = MainCategory::where('slug', 'like', '%'. $id .'%')
             ->with('products')
-            ->get();
+            ->first();
 
-        $category_collection = new CategorySubCategoryCollection($category);
+        $category_collection = new CategorySubCategoryCollection($category->childrenCategories);
 
         return $category_collection;
     }
