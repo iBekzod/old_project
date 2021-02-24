@@ -341,4 +341,11 @@ class ProductController extends Controller
     {
         return new ProductCollection(Product::inRandomOrder()->take(50)->get());
     }
+
+    public function freeShippingProduct()
+    {
+        return response()->json([
+            'products'=> \App\Models\Product::where('shipping_type','free')->latest()->limit(12)->get()
+        ]);
+    }
 }
