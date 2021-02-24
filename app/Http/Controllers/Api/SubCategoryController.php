@@ -22,10 +22,10 @@ class SubCategoryController extends Controller
     public function index(Request $request, $id)
     {
         $category = Category::where('slug', 'like', '%'. $id .'%')
-            ->with(['products', 'subCategories'])
+            ->with(['products', 'children'])
             ->get();
 
-        $category_collection = new CategoryCollection($category->subCategories);
+        $category_collection = new CategoryCollection($category->children);
         $category_collection->additional['filter'] = $this->searchByAttrs($request, $id);
         $category_collection->additional['category'] = Category::where('id', $id)->orWhere('slug', 'like', '%'. $id .'%')->with('parent')->first();
         $category_collection->additional['category']['tag'] = $this->getTags($category);
