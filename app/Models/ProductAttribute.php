@@ -10,7 +10,7 @@ class ProductAttribute extends Model
     protected $table = 'product_attributes';
 
     protected $fillable = [
-        'name'
+        'name','category_id'
     ];
 
     public function getTranslation($field = '', $lang = false)

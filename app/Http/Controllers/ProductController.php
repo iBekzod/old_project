@@ -302,7 +302,7 @@ class ProductController extends Controller
                     }
                     $item['values'] = $data;
                     array_push($choice_options, $item);
-                }                
+                }
             }
         }
 
@@ -338,7 +338,7 @@ class ProductController extends Controller
                     array_push($options, $data);
 
                 }
-                
+
             }
         }
 
@@ -556,7 +556,7 @@ class ProductController extends Controller
                     array_push($choice_options, $item);
                 }
 
-                
+
             }
         }
 

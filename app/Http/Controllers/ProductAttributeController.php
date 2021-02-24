@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use App\Models\ProductAttribute;
 use App\Models\ProductAttributeCharacteristics;
 use App\Models\ProductAttributeCharacteristicTranslation;
@@ -19,8 +20,11 @@ class ProductAttributeController extends Controller
     public function index()
     {
         $attributes = ProductAttribute::latest()->get();
-
-        return view('backend.product-attributes.index', compact('attributes'));
+        $categories = Category::where('parent_id', 0)
+            ->where('digital', 0)
+            ->with('childrenCategories')
+            ->get();
+        return view('backend.product-attributes.index', compact('attributes','categories'));
     }
 
     /**
@@ -42,11 +46,13 @@ class ProductAttributeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required'
+            'name' => 'required',
+            'category_id'=>'required'
         ]);
 
         $attribute = ProductAttribute::create([
-            'name' => $request->get('name')
+            'name' => $request->get('name'),
+            'category_id'=>$request->get('category_id')
         ]);
 
         $attribute_translation = ProductAttributeTranslation::firstOrNew([
