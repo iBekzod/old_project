@@ -52,6 +52,11 @@ class Category extends Model
         return $this->hasMany(SubCategory::class);
     }
 
+    public function children()
+    {
+        return $this->hasMany(\App\Category::class, 'parent_id');
+    }
+
     public function subSubCategories()
     {
         return $this->hasMany(SubSubCategory::class);
