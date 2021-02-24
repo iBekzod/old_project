@@ -214,11 +214,10 @@ class SubCategoryController extends Controller
             $attr = Attribute::find($attribute['id']);
             if ($attr != null)
             {
-               $attributes[$key]['attr'] = $attr;
+                $attributes[$key]['attr'] = $attr;
             }else{
                 unset($attributes[$key]);
             }
-            
         }
 
         foreach ($attributes as $key => $attribute) {
