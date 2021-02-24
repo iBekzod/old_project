@@ -218,7 +218,6 @@ class SubCategoryController extends Controller
             }else{
                 unset($attributes[$key]);
             }
-
         }
 
         foreach ($attributes as $key => $attribute) {
