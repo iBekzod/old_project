@@ -22,14 +22,14 @@ class SubCategoryController extends Controller
     public function index(Request $request, $id)
     {
         $category = Category::where('slug', 'like', '%'. $id .'%')
-            ->with(['products', 'children'])
-            ->get();
+            ->with(['products', 'childrenCategories'])
+            ->first();
 
-        $category_collection = new CategoryCollection($category->children);
+        $category_collection = new CategoryCollection($category->childrenCategories);
         $category_collection->additional['filter'] = $this->searchByAttrs($request, $id);
         $category_collection->additional['category'] = Category::where('id', $id)->orWhere('slug', 'like', '%'. $id .'%')->with('parent')->first();
-        $category_collection->additional['category']['tag'] = $this->getTags($category);
-        $category_collection->additional['category']['brands'] = $this->getBrands($category);
+        $category_collection->additional['category']['tag'] = $this->getTags($category->childrenCategories);
+        $category_collection->additional['category']['brands'] = $this->getBrands($category->childrenCategories);
         $category_collection->additional['category']['min_price'] = filter_products(\App\Product::query())->get()->min('unit_price');
         $category_collection->additional['category']['max_price'] = filter_products(\App\Product::query())->get()->max('unit_price');
         $category_collection->additional['category']->banner = api_asset($category_collection->additional['category']->banner);
