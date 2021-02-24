@@ -22,6 +22,7 @@ class SubCategoryController extends Controller
     public function index(Request $request, $id)
     {
         $category = Category::where('parent_id', $id)
+            ->orWhere('slug', 'like', '%'. $id .'%')
             ->with('products')
             ->get();
 
