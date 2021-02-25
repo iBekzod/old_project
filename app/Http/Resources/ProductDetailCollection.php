@@ -6,7 +6,7 @@ use App\ProductStock;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use App\Models\Review;
 use App\Models\Attribute;
-
+use App\Models\FlashDealProduct;
 class ProductDetailCollection extends ResourceCollection
 {
     public function toArray($request)
@@ -63,6 +63,11 @@ class ProductDetailCollection extends ResourceCollection
                         'related' => route('products.related', $data->id)
                     ]
                 ];
+                if($flashDeal = FlashDealProduct::where('id',$data->id)->first())
+                {
+                   $arr['flashDeal'] = $flashDeal;
+                }
+
                 if($data->category_id !== 0)
                 {
                     $arr['category'] = [

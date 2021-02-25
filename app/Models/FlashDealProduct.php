@@ -32,9 +32,4 @@ class FlashDealProduct extends Model
     {
         return $this->hasOne(Product::class, 'id', 'product_id');
     }
-
-    public function flashDealProducts()
-    {
-        return $this->hasMany(FlashDeal::class,'flash_deal_id','id');
-    }
 }
