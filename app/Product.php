@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\ProductAttribute;
 use Illuminate\Database\Eloquent\Model;
 use App;
 
@@ -76,6 +77,15 @@ class Product extends Model
             ];
         }
         return $arr;
+    }
+
+    public function productAttributes()
+    {
+        return $this->belongsToMany(ProductAttribute::class,
+            'product_product_attributes',
+            'product_id',
+            'product_attribute_id'
+        );
     }
 
     public function getCharacteristicValuesForDetailProductAttribute()
