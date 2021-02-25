@@ -44,6 +44,7 @@ class ProductController extends Controller
         if (!$id) {
             abort(404);
         }
+        $categoryA = Category::where('slug', 'like', '%'.$id.'%')->firstOrFail();
 //        $category_ids = CategoryUtility::children_ids($id);
 //        $category_ids[] = $id;
         $sort_by = $request->sort_by;
@@ -57,7 +58,7 @@ class ProductController extends Controller
 
         $products = \App\Product::where($conditions);
 
-        $category_ids = CategoryUtility::children_ids($id);
+        $category_ids = CategoryUtility::children_ids($categoryA->id);
         $category_ids[] = $id;
 
         $products = $products->whereIn('category_id', $category_ids);

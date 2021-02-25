@@ -129,4 +129,13 @@ class Product extends Model
     {
         return $this->hasMany(ProductStock::class);
     }
+
+    public function productAttributes()
+    {
+        return $this->belongsToMany(ProductAttribute::class,
+            'product_product_attributes',
+            'product_id',
+            'product_attribute_id'
+        );
+    }
 }
