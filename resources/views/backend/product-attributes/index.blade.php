@@ -34,7 +34,8 @@
                                        title="{{ translate('Edit') }}">
                                         <i class="las la-edit"></i>
                                     </a>
-                                    <form action="{{ route('product-attributes.destroy', $attribute->id) }}" method="post">
+                                    <form action="{{ route('product-attributes.destroy', $attribute->id) }}"
+                                          method="post">
                                         @csrf
                                         @method('delete')
                                         <button class="btn btn-soft-danger btn-icon btn-circle btn-sm"
@@ -68,10 +69,12 @@
                         <div class="form-group row" id="category">
                             <label class="col-lg-3 col-from-label">{{translate('Category')}}</label>
                             <div class="col-lg-8">
-                                <select class="form-control aiz-selectpicker" name="category_id[]" id="category_id"
+                                <select multiple class="form-control aiz-selectpicker" name="category_id[]"
+                                        id="category_id"
                                         data-live-search="true" required>
                                     @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->getTranslation('name') }}</option>
+                                        <option
+                                            value="{{ $category->id }}">{{ $category->getTranslation('name') }}</option>
                                         @foreach ($category->childrenCategories as $childCategory)
                                             @include('categories.child_category', ['child_category' => $childCategory])
                                         @endforeach

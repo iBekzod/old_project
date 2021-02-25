@@ -51,9 +51,10 @@ class ProductAttributeController extends Controller
         ]);
 
         $attribute = ProductAttribute::create([
-            'name' => $request->get('name'),
-            'category_id'=>$request->get('category_id')
+            'name' => $request->get('name')
         ]);
+
+        $attribute->categories()->attach($request->get('category_id'));
 
         $attribute_translation = ProductAttributeTranslation::firstOrNew([
             'lang' => env('DEFAULT_LANGUAGE'),
@@ -64,6 +65,15 @@ class ProductAttributeController extends Controller
 
         flash(translate('Attribute has been inserted successfully'))->success();
         return redirect()->route('product-attributes.index');
+    }
+
+    public function changeCategories(Request $request, $id)
+    {
+        $attr = ProductAttribute::findOrFail($id);
+        $attr->categories()->detach();
+        $attr->categories()->attach($request->get('category_id'));
+
+        return back();
     }
 
     public function createAttr(Request $request)
@@ -148,9 +158,17 @@ class ProductAttributeController extends Controller
     public function edit(Request $request, $id)
     {
         $lang = $request->lang;
-        $attribute = ProductAttribute::findOrFail($id);
-        $attributes = $attribute->attributes;
-        return view('backend.product-attributes.edit', compact('attribute', 'attributes', 'lang'));
+        $attr = ProductAttribute::where('id', $id)->with('categories')->firstOrFail();
+        $attributes = $attr->attributes;
+        $selected_categories = $attr->categories;
+        $selected_categories = $selected_categories->pluck('id');
+        $selected_categories = $selected_categories->toArray();
+        $categories = Category::where('parent_id', 0)
+            ->where('digital', 0)
+            ->with('childrenCategories')
+            ->get();
+
+        return view('backend.product-attributes.edit', compact('attr', 'attributes', 'lang', 'categories', 'selected_categories'));
     }
 
     /**

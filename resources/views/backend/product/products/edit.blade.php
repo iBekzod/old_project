@@ -49,6 +49,16 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group row" id="category">
+                        <label class="col-lg-3 col-from-label">{{translate('Product Attributes')}}</label>
+                        <div class="col-lg-8">
+                            <select class="form-control aiz-selectpicker" multiple name="attrs[]" id="attrs" data-live-search="true" required>
+                                @foreach ($productAttributes as $attr)
+                                    <option @if(in_array($attr->id, $selectedProductAttributes)) selected @endif value="{{ $attr->id }}">{{ $attr->getTranslation('name') }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group row" id="brand">
                         <label class="col-lg-3 col-from-label">{{translate('Brand')}}</label>
                         <div class="col-lg-8">

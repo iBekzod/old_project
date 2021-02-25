@@ -43,7 +43,7 @@ class ProductController extends Controller
             return back();
         }else {
             $product = Product::where('id', $id)->with(['characteristicValues'])->firstOrFail();
-            $options = ProductAttribute::with('attributes')->get();
+            $options = $product->category->productAttributes;
 
             return view('backend.product.products.add_attr', compact(
                 'product', 'options'
@@ -431,13 +431,16 @@ class ProductController extends Controller
      public function admin_product_edit(Request $request, $id)
      {
         $product = Product::findOrFail($id);
+        $productAttributes = $product->category->productAttributes;
+        $selectedProductAttributes = $product->productAttributes->pluck('id')->toArray();
         $lang = $request->lang;
         $tags = json_decode($product->tags);
         $categories = Category::where('parent_id', 0)
             ->where('digital', 0)
             ->with('childrenCategories')
             ->get();
-        return view('backend.product.products.edit', compact('product', 'categories', 'tags','lang'));
+
+        return view('backend.product.products.edit', compact('product', 'categories', 'tags','lang', 'productAttributes', 'selectedProductAttributes'));
      }
 
     /**
@@ -466,6 +469,8 @@ class ProductController extends Controller
     {
         $refund_request_addon       = \App\Addon::where('unique_identifier', 'refund_request')->first();
         $product                    = Product::findOrFail($id);
+        $product->productAttributes()->detach();
+        $product->productAttributes()->attach($request->get('attrs'));
         $product->category_id       = $request->category_id;
         $product->brand_id          = $request->brand_id;
         $product->current_stock     = $request->current_stock;

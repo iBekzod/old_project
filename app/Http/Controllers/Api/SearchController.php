@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Category;
 use App\Http\Controllers\Controller;
+use App\Http\HelperTrait;
+use App\Models\FlashDealProduct;
 use App\Product;
 use App\Shop;
 use Illuminate\Http\Request;
@@ -16,7 +18,7 @@ class SearchController extends Controller
             'search' => 'required'
         ]);
 
-        $keywords = array();
+        $keywords = [];
         $products = Product::where('published', 1)->where('tags', 'like', '%'.$request->search.'%')->get();
         foreach ($products as $key => $product) {
             foreach (explode(',',$product->tags) as $key => $tag) {
