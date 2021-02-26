@@ -190,7 +190,7 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
     Route::post('/sellers/approved', 'SellerController@updateApproved')->name('sellers.approved');
 
 	Route::resource('product-attributes','ProductAttributeController');
-	Route::resource('product-attribute-sets','ProductAttributeSetController');
+	// Route::resource('product-attribute-sets','ProductAttributeSetController');
 	Route::post('product-attributes/add/attr','ProductAttributeController@createAttr')->name('product-attributes.add_attr');
 	Route::get('product-attributes/{id}/attr/edit','ProductAttributeController@editAttr')->name('product-attributes.edit_attr');
 	Route::patch('product-attributes/{id}/attr/update','ProductAttributeController@updateAttr')->name('product-attributes.update_attr');
@@ -238,4 +238,13 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::any('/uploaded-files/file-info', 'AizUploadController@file_info')->name('uploaded-files.info');
 	Route::resource('/uploaded-files', 'AizUploadController');
 	Route::get('/uploaded-files/destroy/{id}', 'AizUploadController@destroy')->name('uploaded-files.destroy');
+
+
+	Route::get('products/product_warehouse/{id}', 'ProductController@productWarehouseData');
+	Route::resource('warehouse', 'WarehouseController')->except([
+		'create'
+	]);
+	Route::post('importwarehouse', 'WarehouseController@importWarehouse')->name('warehouse.import');
+	Route::post('warehouse/deletebyselection', 'WarehouseController@deleteBySelection');
+	Route::get('warehouse/lims_warehouse_search', 'WarehouseController@limsWarehouseSearch')->name('warehouse.search');
 });

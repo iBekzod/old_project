@@ -19,6 +19,8 @@ use DB;
 use CoreComponentRepository;
 use Illuminate\Support\Str;
 use Artisan;
+use App\Product_Warehouse;
+use App\Warehouse;
 
 class ProductController extends Controller
 {
@@ -825,6 +827,41 @@ class ProductController extends Controller
 
         $combinations = Combinations::makeCombinations($options);
         return view('backend.product.products.sku_combinations_edit', compact('combinations', 'unit_price', 'colors_active', 'product_name', 'product'));
+    }
+
+    public function productWarehouseData($id)
+    {
+        $warehouse = [];
+        $qty = [];
+        $warehouse_name = [];
+        $variant_name = [];
+        $variant_qty = [];
+        $product_warehouse = [];
+        $product_variant_warehouse = [];
+        $lims_product_data = Product::select('id', 'is_variant')->find($id);
+        // if($lims_product_data->is_variant) {
+        //     $lims_product_variant_warehouse_data = Product_Warehouse::where('product_id', $lims_product_data->id)->orderBy('warehouse_id')->get();
+        //     $lims_product_warehouse_data = Product_Warehouse::select('warehouse_id', DB::raw('sum(qty) as qty'))->where('product_id', $id)->groupBy('warehouse_id')->get();
+        //     foreach ($lims_product_variant_warehouse_data as $key => $product_variant_warehouse_data) {
+        //         $lims_warehouse_data = Warehouse::find($product_variant_warehouse_data->warehouse_id);
+        //         $lims_variant_data = Variant::find($product_variant_warehouse_data->variant_id);
+        //         $warehouse_name[] = $lims_warehouse_data->name;
+        //         $variant_name[] = $lims_variant_data->name;
+        //         $variant_qty[] = $product_variant_warehouse_data->qty;
+        //     }
+        // }
+        // else{
+            $lims_product_warehouse_data = Product_Warehouse::where('product_id', $id)->get();
+        // }
+        foreach ($lims_product_warehouse_data as $key => $product_warehouse_data) {
+            $lims_warehouse_data = Warehouse::find($product_warehouse_data->warehouse_id);
+            $warehouse[] = $lims_warehouse_data->name;
+            $qty[] = $product_warehouse_data->qty;
+        }
+
+        $product_warehouse = [$warehouse, $qty];
+        $product_variant_warehouse = [$warehouse_name, $variant_name, $variant_qty];
+        return ['product_warehouse' => $product_warehouse, 'product_variant_warehouse' => $product_variant_warehouse];
     }
 
 }
