@@ -10,7 +10,7 @@ class ProductAttribute extends Model
     protected $table = 'product_attributes';
 
     protected $fillable = [
-        'name','category_id'
+        'name'
     ];
 
     public function getTranslation($field = '', $lang = false)
@@ -30,5 +30,14 @@ class ProductAttribute extends Model
     public function attributes()
     {
         return $this->hasMany(ProductAttributeCharacteristics::class, 'attribute_id', 'id');
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class,
+            'product_attribute_category',
+            'product_attribute_id',
+            'category_id'
+        );
     }
 }

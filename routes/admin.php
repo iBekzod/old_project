@@ -195,6 +195,7 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::get('product-attributes/{id}/attr/edit','ProductAttributeController@editAttr')->name('product-attributes.edit_attr');
 	Route::patch('product-attributes/{id}/attr/update','ProductAttributeController@updateAttr')->name('product-attributes.update_attr');
 	Route::delete('product-attributes/{id}/attr/destoy','ProductAttributeController@destroyAttr')->name('product-attributes.destroy_attr');
+	Route::post('product-attributes/{id}/change/categories','ProductAttributeController@changeCategories')->name('product-attributes.change_categories');
 
 	Route::resource('attributes','AttributeController');
 	Route::get('/attributes/edit/{id}', 'AttributeController@edit')->name('attributes.edit');

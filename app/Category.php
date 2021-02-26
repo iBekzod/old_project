@@ -39,4 +39,13 @@ class Category extends Model
     {
         return $this->belongsTo(Category::class, 'parent_id');
     }
+
+    public function productAttributes()
+    {
+        return $this->belongsToMany(\App\Models\ProductAttribute::class,
+            'product_attribute_category',
+            'category_id',
+            'product_attribute_id'
+        );
+    }
 }

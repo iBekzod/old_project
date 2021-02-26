@@ -44,6 +44,7 @@ class ProductController extends Controller
         if (!$id) {
             abort(404);
         }
+        $categoryA = Category::where('slug', 'like', '%'.$id.'%')->firstOrFail();
 //        $category_ids = CategoryUtility::children_ids($id);
 //        $category_ids[] = $id;
         $sort_by = $request->sort_by;
@@ -57,7 +58,7 @@ class ProductController extends Controller
 
         $products = \App\Product::where($conditions);
 
-        $category_ids = CategoryUtility::children_ids($id);
+        $category_ids = CategoryUtility::children_ids($categoryA->id);
         $category_ids[] = $id;
 
         $products = $products->whereIn('category_id', $category_ids);
@@ -340,5 +341,12 @@ class ProductController extends Controller
     public function home()
     {
         return new ProductCollection(Product::inRandomOrder()->take(50)->get());
+    }
+
+    public function freeShippingProduct()
+    {
+        return response()->json([
+            'products'=> \App\Models\Product::where('shipping_type','free')->latest()->limit(12)->get()
+        ]);
     }
 }

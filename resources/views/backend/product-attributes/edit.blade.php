@@ -14,7 +14,7 @@
                         @foreach (\App\Language::all() as $key => $language)
                             <li class="nav-item">
                                 <a class="nav-link text-reset @if ($language->code == $lang) active @else bg-soft-dark border-light border-left-0 @endif py-3"
-                                   href="{{ route('product-attributes.edit', [$attribute->id, 'lang'=> $language->code] ) }}">
+                                   href="{{ route('product-attributes.edit', [$attr->id, 'lang'=> $language->code] ) }}">
                                     <img src="{{ static_asset('assets/img/flags/'.$language->code.'.png') }}" height="11"
                                          class="mr-1">
                                     <span>{{ $language->name }}</span>
@@ -22,7 +22,7 @@
                             </li>
                         @endforeach
                     </ul>
-                    <form class="p-4" action="{{ route('product-attributes.update', $attribute->id) }}" method="POST">
+                    <form class="p-4" action="{{ route('product-attributes.update', $attr->id) }}" method="POST">
                         <input name="_method" type="hidden" value="PATCH">
                         <input type="hidden" name="lang" value="{{ $lang }}">
                         @csrf
@@ -32,7 +32,7 @@
                             <div class="col-sm-9">
                                 <input type="text" placeholder="{{ translate('Name')}}" id="name" name="name"
                                        class="form-control" required
-                                       value="{{ $attribute->getTranslation('name', $lang) }}">
+                                       value="{{ $attr->getTranslation('name', $lang) }}">
                             </div>
                         </div>
                         <div class="form-group mb-0 text-right">
@@ -51,7 +51,7 @@
                 </div>
                 <div class="card-body">
                     <form action="{{ route('product-attributes.add_attr') }}" method="POST">
-                        <input type="hidden" name="attribute_id" value="{{ $attribute->id }}">
+                        <input type="hidden" name="attribute_id" value="{{ $attr->id }}">
                         @csrf
                         <div class="form-group mb-3">
                             <label for="name">{{ translate('Name') }}</label>
@@ -110,6 +110,40 @@
                         @endforeach
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0 h6">{{ translate('Change categories') }}</h5>
+                </div>
+                <div class="card-body">
+                    <form action="{{ route('product-attributes.change_categories', $attr->id) }}" method="POST">
+                        <input type="hidden" name="attribute_id" value="{{ $attr->id }}">
+                        @csrf
+                        <div class="form-group" id="category">
+                            <label>{{translate('Category')}}</label>
+                            <select multiple class="form-control aiz-selectpicker" name="category_id[]"
+                                    id="category_id"
+                                    data-live-search="true" required>
+                                @foreach ($categories as $category)
+                                    <option
+                                        @if(in_array($category->id, $selected_categories))
+                                        selected
+                                        @endif
+                                        value="{{ $category->id }}">{{ $category->getTranslation('name') }}</option>
+                                    @foreach ($category->childrenCategories as $childCategory)
+                                        @include('backend.product-attributes.components.child_category', ['child_category' => $childCategory,'selected_categories' => $selected_categories])
+                                    @endforeach
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group mb-3 text-right">
+                            <button type="submit" class="btn btn-primary">{{ translate('Save') }}</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
