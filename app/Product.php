@@ -36,6 +36,10 @@ class Product extends Model
     	return $this->belongsTo(Category::class);
     }
 
+    public function parentHierarchy(){
+    	return $this->hasOne(Category::class, 'id', 'category_id')->with('parentCategoryHierarchy');
+    }
+
     public function brand(){
     	return $this->belongsTo(Brand::class);
     }

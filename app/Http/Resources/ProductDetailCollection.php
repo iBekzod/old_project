@@ -90,6 +90,9 @@ class ProductDetailCollection extends ResourceCollection
     public function with($request)
     {
         return [
+            'breadcrumbs' => [
+                $this->collection
+            ],
             'success' => true,
             'status' => 200
         ];

@@ -40,6 +40,11 @@ class Category extends Model
         return $this->belongsTo(Category::class, 'parent_id');
     }
 
+    public function parentCategoryHierarchy()
+    {
+        return $this->hasOne(Category::class, 'id', 'parent_id')->with('parentCategoryHierarchy');
+    }
+
     public function productAttributes()
     {
         return $this->belongsToMany(\App\Models\ProductAttribute::class,

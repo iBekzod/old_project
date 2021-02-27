@@ -26,7 +26,34 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        return new ProductDetailCollection(Product::where('id', $id)->orWhere('slug', 'like', '%'. $id .'%')->get());
+        function innerCategory($category, &$breadcrumbs)
+        {
+            $breadcrumbs[] = $category;
+            if($category->parentCategoryHierarchy) {
+                innerCategory($category->parentCategoryHierarchy, $breadcrumbs);
+            }
+        }
+
+        $product = Product::where('id', $id)->orWhere('slug', 'like', '%'. $id .'%')->firstOrFail();
+        $breadcrumbs = [];
+        if($product) {
+            $categories = $product->parentHierarchy;
+            $breadcrumbs[] = $categories;
+            if($categories->parentCategoryHierarchy) {
+                innerCategory($categories->parentCategoryHierarchy, $breadcrumbs);
+            }
+            foreach ($breadcrumbs as $item) {
+                unset($item->parentCategoryHierarchy);
+            }
+            $breadcrumbs = array_reverse($breadcrumbs);
+        }
+        $product->breadcrumbs = $breadcrumbs;
+
+        return [
+            'data' => [
+                $product
+            ]
+        ];
     }
 
     public function admin()
