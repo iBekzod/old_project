@@ -57,6 +57,11 @@ class Category extends Model
         return $this->hasMany(Category::class, 'parent_id');
     }
 
+    public function parentCategoryHierarchy()
+    {
+        return $this->hasOne(self::class, 'id', 'parent_id')->with('parentCategoryHierarchy');
+    }
+
     public function subSubCategories()
     {
         return $this->hasMany(SubSubCategory::class);

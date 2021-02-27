@@ -22,7 +22,7 @@ class SubCategoryController extends Controller
     public function index(Request $request, $id)
     {
         $category = Category::where('slug', 'like', '%'. $id .'%')
-            ->with(['products', 'childrenCategories'])
+            ->with(['products', 'childrenCategories', ''])
             ->first();
 
         $category_collection = new CategoryCollection($category->childrenCategories);
@@ -33,6 +33,7 @@ class SubCategoryController extends Controller
         $category_collection->additional['category']['min_price'] = filter_products(\App\Product::query())->get()->min('unit_price');
         $category_collection->additional['category']['max_price'] = filter_products(\App\Product::query())->get()->max('unit_price');
         $category_collection->additional['category']->banner = api_asset($category_collection->additional['category']->banner);
+        $category_collection->additional['category']['breadcrumbs'] = $category->parentCategoryHierarchy;
 
         return $category_collection;
     }
