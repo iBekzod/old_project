@@ -43,6 +43,7 @@ class ProductDetailCollection extends ResourceCollection
                     'colors' => new ProductColorCollection(json_decode($data->colors)),
                     'todays_deal' => (integer) $data->todays_deal,
                     'featured' => (integer) $data->featured,
+                    'base_price' => (double) homeBasePrice($data->id),
                     'current_stock' => (integer) $data->current_stock,
                     'slug' => $data->slug,
                     'unit' => $data->unit,

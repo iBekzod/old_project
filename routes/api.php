@@ -17,6 +17,7 @@ Route::prefix('v1/auth')->group(function () {
 });
 
 Route::prefix('v1')->group(function () {
+    Route::get('/get/all/products', 'Api\ProductController@getAllProducts');
     Route::match(['get','post'], '/free/shipping/products','Api\ProductController@freeShippingProduct');
     Route::match(['get','post'], '/free/featured/products','Api\FlashDealController@featuredProduct');
     Route::match(['get','post'], '/super/discount/products','Api\FlashDealController@superDiscount');

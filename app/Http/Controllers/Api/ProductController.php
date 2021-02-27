@@ -19,6 +19,28 @@ use App\Utility\CategoryUtility;
 
 class ProductController extends Controller
 {
+    public function cloneProduct(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required'
+        ]);
+
+        $product = Product::findOrFail($request->get('product_id'));
+    }
+
+    public function getAllProducts(Request $request)
+    {
+        $query = $request->get('q');
+
+        if ($query) {
+            return [
+                'products' => Product::where('name', 'like', '%'. $query .'%')->get()
+            ];
+        } else {
+            return [];
+        }
+    }
+
     public function index()
     {
         return new ProductCollection(Product::latest()->paginate(10));

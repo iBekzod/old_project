@@ -10,12 +10,22 @@
         $(function () {
             $('#cloneProduct').select2({
                 ajax: {
-                    url: 'https://api.github.com/search/repositories',
+                    url: '/api/v1/get/all/products',
                     dataType: 'json',
                     processResults: function (data) {
                         console.log(data)
+                        let items = data.products.map((el) => {
+                            return {
+                                id: el.id,
+                                text: el.name
+                            }
+                        })
+
                         return {
-                            results: data.items
+                            results: items
+                            // pagination: {
+                            //     "more": true
+                            // }
                         };
                     }
                 }
@@ -41,14 +51,17 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <form action="#" method="post">
+                        <form action="{{ route('seller.products.clone') }}" method="post">
                             @csrf
                             <div class="form-group">
                                 <label>Products</label>
-                                <select class="form-control" name="asd" id="cloneProduct"></select>
+                                <select class="form-control" name="product_id" id="cloneProduct"></select>
+                                @error('product_id')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="form-group text-center">
-                                <button type="button" class="btn btn-danger">
+                                <button class="btn btn-danger">
                                     {{ translate('Submit') }}
                                 </button>
                             </div>
