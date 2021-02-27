@@ -63,6 +63,7 @@ class ProductDetailCollection extends ResourceCollection
                         'related' => route('products.related', $data->id)
                     ]
                 ];
+
                 if($data->category_id !== 0)
                 {
                     $arr['category'] = [
@@ -75,6 +76,7 @@ class ProductDetailCollection extends ResourceCollection
                         ]
                     ];
                 }
+
                 return $arr;
             })
         ];

@@ -289,6 +289,13 @@ class HomeController extends Controller
         return view('frontend.all_brand', compact('categories'));
     }
 
+    public function show_product_clone_form(Request $request)
+    {
+
+
+        return view('frontend.user.seller.product_clone');
+    }
+
     public function show_product_upload_form(Request $request)
     {
         if(\App\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated){

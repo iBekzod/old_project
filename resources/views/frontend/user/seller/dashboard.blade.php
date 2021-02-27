@@ -157,6 +157,7 @@
                                 <br>
                                 <div class="text-center">
                                     <a href="{{ route('seller.products.upload')}}" class="btn btn-primary d-inline-block">{{ translate('Add New Product')}}</a>
+                                    <a href="{{ route('seller.products.clone')}}" class="btn btn-primary d-inline-block">{{ translate('Clone Product')}}</a>
                                 </div>
                               </div>
                           </div>

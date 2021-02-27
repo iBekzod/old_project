@@ -87,8 +87,11 @@ class SubCategoryController extends Controller
         $brands = [];
 
         foreach ($array as $item) {
-            $data = $item->brand;
-            $brands[] = $data;
+            if(!isset($brands[$item]))
+            {
+                $data = $item->brand;
+                $brands[] = $data;
+            }
         }
 
         return $brands;

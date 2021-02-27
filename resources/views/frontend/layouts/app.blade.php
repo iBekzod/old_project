@@ -121,6 +121,9 @@
     echo get_setting('header_script');
 @endphp
 
+    @yield('js_pre')
+    @yield('css_pre')
+
 </head>
 <body>
 
