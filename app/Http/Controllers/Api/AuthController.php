@@ -32,7 +32,8 @@ class AuthController extends Controller
             $user->email_verified_at = date('Y-m-d H:m:s');
         }
         else {
-            $user->notify(new EmailVerificationNotification());
+            // TODO Check for maintenance
+//            $user->notify(new EmailVerificationNotification());
         }
         $user->save();
 

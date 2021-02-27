@@ -23,7 +23,7 @@ class SubCategoryController extends Controller
     {
         $category = Category::where('slug', 'like', '%'. $id .'%')
             ->with(['products', 'childrenCategories', 'parentCategoryHierarchy'])
-            ->first();
+            ->firstOrFail();
 
         $category_collection = new CategoryCollection($category->childrenCategories);
         $category_collection->additional['filter'] = $this->searchByAttrs($request, $id);
