@@ -34,7 +34,8 @@ class ProductController extends Controller
             }
         }
 
-        $product = Product::where('id', $id)->orWhere('slug', 'like', '%'. $id .'%')->firstOrFail();
+        $products = Product::where('id', $id)->orWhere('slug', 'like', '%'. $id .'%')->get();
+        $product = $products[0];
         $breadcrumbs = [];
         if($product) {
             $categories = $product->parentHierarchy;
@@ -50,9 +51,8 @@ class ProductController extends Controller
         $product->breadcrumbs = $breadcrumbs;
 
         return [
-            'data' => [
-                $product
-            ]
+            'product' => new ProductDetailCollection($products),
+            'breadcrumbs' => $breadcrumbs
         ];
     }
 
