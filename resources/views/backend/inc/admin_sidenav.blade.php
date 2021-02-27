@@ -139,7 +139,24 @@
                         </ul>
                     </li>
                 @endif
+                    <!-- Warehouse -->
+                <li class="aiz-side-nav-item">
+                    <a href="#" class="aiz-side-nav-link">
+                        <i class="las la-money-bill aiz-side-nav-icon"></i>
+                        <span class="aiz-side-nav-text">Warehouse</span>
+                        <span class="aiz-side-nav-arrow"></span>
+                    </a>
 
+                    <!--Submenu-->
+                    <ul class="aiz-side-nav-list level-2">
+                        <li class="aiz-side-nav-item">
+                            <a href="{{ route('warehouse.index') }}"
+                                class="aiz-side-nav-link {{ areActiveRoutes(['warehouse.index', 'warehouse.show'])}}">
+                                <span class="aiz-side-nav-text">All warehouses</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
             <!-- Sale -->
                 <li class="aiz-side-nav-item">
                     <a href="#" class="aiz-side-nav-link">

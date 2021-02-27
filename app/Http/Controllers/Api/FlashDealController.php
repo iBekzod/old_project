@@ -25,4 +25,11 @@ class FlashDealController extends Controller
             ])->get()
         ]);
     }
+
+    public function discountEndDate()
+    {
+        return response()->json([
+            'discountEndDate' => FlashDeal::where('end_date', '>', \Carbon\Carbon::now()->timestamp)->get()
+        ]);
+    }
 }
