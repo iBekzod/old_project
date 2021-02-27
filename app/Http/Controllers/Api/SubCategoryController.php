@@ -22,7 +22,7 @@ class SubCategoryController extends Controller
     public function index(Request $request, $id)
     {
         $category = Category::where('slug', 'like', '%'. $id .'%')
-            ->with(['products', 'childrenCategories', ''])
+            ->with(['products', 'childrenCategories', 'parentCategoryHierarchy'])
             ->first();
 
         $category_collection = new CategoryCollection($category->childrenCategories);
