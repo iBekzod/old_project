@@ -299,8 +299,9 @@ class HomeController extends Controller
             $product = Product::find($request->get('product_id'));
             $product_new = $product->replicate();
             $product_new->slug = substr($product_new->slug, 0, -5).Str::random(5);
-            $product->user_id = Auth::user()->id;
-            $product->added_by = 'seller';
+            $product_new->user_id = Auth::user()->id;
+            $product_new->added_by = 'seller';
+            $product_new->on_moderation = 1;
 
             if($product_new->save()){
                 return redirect()->route('seller.products.edit', [$product_new->id, 'lang' => 'en']);

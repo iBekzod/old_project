@@ -35,6 +35,29 @@ class SubCategoryController extends Controller
         $category_collection->additional['category']->banner = api_asset($category_collection->additional['category']->banner);
         $category_collection->additional['category']['breadcrumbs'] = $category->parentCategoryHierarchy;
 
+        function innerCategory($category, &$breadcrumbs)
+        {
+            $breadcrumbs[] = $category;
+            if($category->parentCategoryHierarchy) {
+                innerCategory($category->parentCategoryHierarchy, $breadcrumbs);
+            }
+        }
+
+        $breadcrumbs = [];
+        if($category) {
+            $categories = $category->parentCategoryHierarchy;
+            $breadcrumbs[] = $categories;
+            if($categories->parentCategoryHierarchy) {
+                innerCategory($categories->parentCategoryHierarchy, $breadcrumbs);
+            }
+            foreach ($breadcrumbs as $item) {
+                unset($item->parentCategoryHierarchy);
+            }
+            $breadcrumbs = array_reverse($breadcrumbs);
+        };
+
+        $category_collection->additional['category']['breadcrumbs'] = $breadcrumbs;
+
         return $category_collection;
     }
 
