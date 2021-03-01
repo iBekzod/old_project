@@ -46,22 +46,6 @@
                                                          class="h-50px"></td>
                                                 <td>{{ date('d-m-Y H:i:s', $flash_deal->start_date) }}</td>
                                                 <td>{{ date('d-m-Y H:i:s', $flash_deal->end_date) }}</td>
-                                                <td>
-                                                    <label class="aiz-switch aiz-switch-success mb-0">
-                                                        <input onchange="update_flash_deal_status(this)"
-                                                               value="{{ $flash_deal->id }}"
-                                                               type="checkbox" <?php if ($flash_deal->status == 1) echo "checked";?> >
-                                                        <span class="slider round"></span>
-                                                    </label>
-                                                </td>
-                                                <td>
-                                                    <label class="aiz-switch aiz-switch-success mb-0">
-                                                        <input onchange="update_flash_deal_feature(this)"
-                                                               value="{{ $flash_deal->id }}"
-                                                               type="checkbox" <?php if ($flash_deal->featured == 1) echo "checked";?> >
-                                                        <span class="slider round"></span>
-                                                    </label>
-                                                </td>
                                                 <td>{{ url('flash-deal/'.$flash_deal->slug) }}</td>
                                                 <td class="text-right">
                                                     <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"

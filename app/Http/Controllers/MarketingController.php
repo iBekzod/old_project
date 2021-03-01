@@ -76,6 +76,8 @@ class MarketingController extends Controller
         $flash_deal->user_id = Auth::user()->id;
         $flash_deal->title = $request->title;
         $flash_deal->text_color = $request->text_color;
+        $flash_deal->text_color = $request->text_color;
+        $flash_deal->on_moderation = 1;
 
         $date_var               = explode(" to ", $request->date_range);
         $flash_deal->start_date = strtotime($date_var[0]);
