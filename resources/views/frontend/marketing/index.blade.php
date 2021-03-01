@@ -47,7 +47,7 @@
                                                 <td>{{ url('flash-deal/'.$flash_deal->slug) }}</td>
                                                 <td class="text-right">
                                                     <a class="btn btn-primary btn-icon btn-circle btn-sm"
-                                                       style="@if(!$flash_deal->on_moderation) background-color: red; @else background-color: green; @endif"
+                                                       style="@if($flash_deal->on_moderation) background-color: red; @else background-color: green; @endif"
                                                        title="{{ translate('Status') }}">
                                                         <i class="las la-check"></i>
                                                     </a>
