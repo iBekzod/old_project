@@ -10,14 +10,8 @@ class ShopCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection->map(function($data) {
-                return [
+                $arr = [
                     'name' => $data->name,
-                    'user' => [
-                        'name' => $data->user->name,
-                        'email' => $data->user->email,
-                        'avatar' => $data->user->avatar,
-                        'avatar_original' => $data->user->avatar_original
-                    ],
                     'logo' => api_asset($data->logo),
                     'sliders' => $this->convertPhotos(explode(',', $data->sliders)),
                     'address' => $data->address,
@@ -34,6 +28,17 @@ class ShopCollection extends ResourceCollection
                         'brands' => route('shops.brands', $data->id)
                     ]
                 ];
+
+                if($data->user) {
+                    $arr['user'] = [
+                        'name' => $data->user->name,
+                        'email' => $data->user->email,
+                        'avatar' => $data->user->avatar,
+                        'avatar_original' => $data->user->avatar_original
+                    ];
+                }
+
+                return $arr;
             })
         ];
     }
