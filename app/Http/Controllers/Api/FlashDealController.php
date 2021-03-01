@@ -26,7 +26,13 @@ class FlashDealController extends Controller
             }
         ])->first();
 
-        $products = new FlashDealProductCollection($featuredProduct->flashDealProducts);
+        $featProds = $featuredProduct->flashDealProducts->filter(function ($item) {
+            if($item->product) {
+                return $item;
+            }
+        });
+
+        $products = new FlashDealProductCollection($featProds);
 
         return response()->json($products);
     }
