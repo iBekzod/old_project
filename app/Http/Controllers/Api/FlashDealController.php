@@ -18,11 +18,11 @@ class FlashDealController extends Controller
     public function featuredProduct()
     {
         return response()->json([
-            'featuredProduct_id' => FlashDeal::where('status','1')->where('featured','1')->with([
+            'featuredProduct' => FlashDeal::where('status','1')->where('featured','1')->with([
                 'flashDealProducts' => function($query) {
                     $query->latest()->limit(12);
                 }
-            ])->get()
+            ])->first()
         ]);
     }
 
