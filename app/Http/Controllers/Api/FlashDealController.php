@@ -13,7 +13,14 @@ class FlashDealController extends Controller
     public function superDiscount()
     {
         $discountProducts = \App\Models\FlashDealProduct::latest()->take(12)->with('product')->get();
-        $products = new FlashDealProductCollection($discountProducts);
+
+        $featProds = $discountProducts->filter(function ($item) {
+            if($item->product) {
+                return $item;
+            }
+        });
+
+        $products = new FlashDealProductCollection($featProds);
 
         return response()->json($products);
     }
