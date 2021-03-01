@@ -12,9 +12,10 @@ class FlashDealController extends Controller
 {
     public function superDiscount()
     {
-        return response()->json([
-            'products'=> \App\Models\FlashDealProduct::latest()->take(12)->with('product')->get()
-        ]);
+        $discountProducts = \App\Models\FlashDealProduct::latest()->take(12)->with('product')->get();
+        $products = new FlashDealProductCollection($discountProducts);
+
+        return response()->json($products);
     }
 
     public function featuredProduct()
