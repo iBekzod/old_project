@@ -31,8 +31,6 @@
                                             <th>{{ translate('Banner') }}</th>
                                             <th>{{ translate('Start Date') }}</th>
                                             <th>{{ translate('End Date') }}</th>
-                                            <th>{{ translate('Status') }}</th>
-                                            <th>{{ translate('Featured') }}</th>
                                             <th>{{ translate('Page Link') }}</th>
                                             <th class="text-right">{{translate('Options')}}</th>
                                         </tr>
