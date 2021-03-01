@@ -126,6 +126,7 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::post('/flash_deals/update_featured', 'FlashDealController@update_featured')->name('flash_deals.update_featured');
 	Route::post('/flash_deals/product_discount', 'FlashDealController@product_discount')->name('flash_deals.product_discount');
 	Route::post('/flash_deals/product_discount_edit', 'FlashDealController@product_discount_edit')->name('flash_deals.product_discount_edit');
+	Route::get('/flash_deals/change/status/{id}', 'FlashDealController@changeStatus')->name('flash_deals.change_status');
 
 	//Subscribers
 	Route::get('/subscribers', 'SubscriberController@index')->name('subscribers.index');

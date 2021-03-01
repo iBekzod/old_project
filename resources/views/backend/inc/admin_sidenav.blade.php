@@ -386,6 +386,12 @@
                                     <a href="{{ route('flash_deals.index') }}"
                                        class="aiz-side-nav-link {{ areActiveRoutes(['flash_deals.index', 'flash_deals.create', 'flash_deals.edit'])}}">
                                         <span class="aiz-side-nav-text">{{ translate('Flash deals') }}</span>
+                                        @php
+                                        $var = \App\Models\FlashDeal::where('on_moderation', 1)->get();
+                                        @endphp
+                                        @if (count($var) > 0)
+                                            <span class="badge badge-info">{{ count($var) }}</span>
+                                        @endif
                                     </a>
                                 </li>
                             @endif

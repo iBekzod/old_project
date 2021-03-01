@@ -159,6 +159,19 @@ class FlashDealController extends Controller
         }
     }
 
+    public function changeStatus($id)
+    {
+        $flashDeal = FlashDeal::findOrFail($id);
+        $flashDeal->on_moderation = 0;
+        if($flashDeal->save()) {
+            flash(translate('Success'))->success();
+            return back();
+        }else{
+            flash(translate('Something went wrong'))->error();
+            return back();
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      *
