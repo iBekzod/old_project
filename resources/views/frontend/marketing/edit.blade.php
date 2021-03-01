@@ -28,7 +28,7 @@
                                             </li>
                                         @endforeach
                                     </ul>
-                                    <form class="p-4" action="{{ route('flash_deals.update', $flash_deal->id) }}" method="POST">
+                                    <form class="p-4" action="{{ route('seller.flash_deals.update', $flash_deal->id) }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="_method" value="PATCH">
                                         <input type="hidden" name="lang" value="{{ $lang }}">
@@ -111,3 +111,30 @@
         </div>
     </section>
 @endsection
+
+@section('script')
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            get_flash_deal_discount();
+
+            $('#products').on('change', function(){
+                get_flash_deal_discount();
+            });
+
+            function get_flash_deal_discount(){
+                var product_ids = $('#products').val();
+                if(product_ids.length > 0){
+                    $.post('{{ route('seller.flash_deals.product_discount_edit') }}', {_token:'{{ csrf_token() }}', product_ids:product_ids, flash_deal_id:{{ $flash_deal->id }}}, function(data){
+                        $('#discount_table').html(data);
+                        $(".aiz-selectpicker").selectpicker();
+                    });
+                }
+                else{
+                    $('#discount_table').html(null);
+                }
+            }
+        });
+    </script>
+@endsection
+

@@ -53,7 +53,7 @@
                                                     </a>
                                                     <a href="#"
                                                        class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
-                                                       data-href="{{route('flash_deals.destroy', $flash_deal->id)}}"
+                                                       data-href="{{route('seller.flash_deals.destroy', $flash_deal->id)}}"
                                                        title="{{ translate('Delete') }}">
                                                         <i class="las la-trash"></i>
                                                     </a>
@@ -77,6 +77,9 @@
     </section>
 @endsection
 
+@section('modal')
+    @include('modals.delete_modal')
+@endsection
 
 @section('script')
     <script type="text/javascript">

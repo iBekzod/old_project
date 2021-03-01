@@ -178,7 +178,7 @@ class FlashDealController extends Controller
 
         FlashDeal::destroy($id);
         flash(translate('FlashDeal has been deleted successfully'))->success();
-        return redirect()->route('flash_deals.index');
+        return back();
     }
 
     public function update_status(Request $request)
