@@ -20,7 +20,12 @@ class FlashDealController extends Controller
             }
         });
 
-        $products = new FlashDealProductCollection($featProds);
+        $arr = [];
+        foreach ($featProds as $item) {
+            $arr[] = $item;
+        }
+
+        $products = new FlashDealProductCollection($arr);
 
         return response()->json($products);
     }
@@ -39,7 +44,12 @@ class FlashDealController extends Controller
             }
         });
 
-        $products = new FlashDealProductCollection($featProds);
+        $arr = [];
+        foreach ($featProds as $item) {
+            $arr[] = $item;
+        }
+
+        $products = new FlashDealProductCollection($arr);
 
         return response()->json($products);
     }
