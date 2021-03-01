@@ -167,6 +167,8 @@ Route::group(['middleware' => ['user', 'verified','unbanned']], function(){
 Route::get('/customer_products/destroy/{id}', 'CustomerProductController@destroy')->name('customer_products.destroy');
 
 Route::group(['prefix' =>'seller', 'middleware' => ['seller', 'verified', 'user']], function(){
+    Route::post('/flash_deals/product_discount', 'FlashDealController@product_discount')->name('seller.flash_deals.product_discount');
+    Route::post('/flash_deals/product_discount_edit', 'FlashDealController@product_discount_edit')->name('seller.flash_deals.product_discount_edit');
     Route::get('/marketing', 'MarketingController@marketing')->name('seller.marketing');
     Route::get('/marketing/create', 'MarketingController@create')->name('seller.marketing.create');
     Route::post('/marketing/store', 'MarketingController@store')->name('seller.marketing.store');

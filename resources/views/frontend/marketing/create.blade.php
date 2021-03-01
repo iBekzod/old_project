@@ -102,7 +102,7 @@
             $('#products').on('change', function(){
                 var product_ids = $('#products').val();
                 if(product_ids.length > 0){
-                    $.post('{{ route('flash_deals.product_discount') }}', {_token:'{{ csrf_token() }}', product_ids:product_ids}, function(data){
+                    $.post('{{ route('seller.flash_deals.product_discount') }}', {_token:'{{ csrf_token() }}', product_ids:product_ids}, function(data){
                         $('#discount_table').html(data);
                         $(".aiz-selectpicker").selectpicker();
                     });
