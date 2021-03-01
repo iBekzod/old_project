@@ -131,7 +131,7 @@
     </div>
     <div class="card-body">
         <div class="aiz-carousel gutters-10 half-outside-arrow" data-items="6" data-xl-items="5" data-lg-items="4" data-md-items="3" data-sm-items="2" data-arrows='true'>
-            @foreach (filter_products(\App\Product::where('published', 1)->orderBy('num_of_sale', 'desc'))->limit(12)->get() as $key => $product)
+            @foreach (filter_products(\App\Product::where('published', 1)->with('product_translations')->orderBy('num_of_sale', 'desc'))->limit(12)->get() as $key => $product)
                 <div class="carousel-box">
                     <div class="aiz-card-box border border-light rounded shadow-sm hov-shadow-md mb-2 has-transition bg-white">
                         <div class="position-relative">
@@ -357,7 +357,7 @@
                         @php
                             $category_ids = \App\Utility\CategoryUtility::children_ids($category->id);
                             $category_ids[] = $category->id;
-                            
+
                             $products = \App\Product::whereIn('category_id', $category_ids)->get();
                             $qty = 0;
                             foreach ($products as $key => $product) {
