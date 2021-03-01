@@ -167,6 +167,12 @@ Route::group(['middleware' => ['user', 'verified','unbanned']], function(){
 Route::get('/customer_products/destroy/{id}', 'CustomerProductController@destroy')->name('customer_products.destroy');
 
 Route::group(['prefix' =>'seller', 'middleware' => ['seller', 'verified', 'user']], function(){
+    Route::get('/marketing', 'MarketingController@marketing')->name('seller.marketing');
+    Route::get('/marketing/create', 'MarketingController@create')->name('seller.marketing.create');
+    Route::post('/marketing/store', 'MarketingController@store')->name('seller.marketing.store');
+    Route::get('/marketing/{id}/edit', 'MarketingController@edit')->name('seller.marketing.edit');
+    Route::post('/marketing/update/status', 'MarketingController@updateStatus')->name('marketing.update_status');
+    Route::post('/marketing/update_featured', 'MarketingController@updateFeatured')->name('marketing.update_featured');
 	Route::get('/products', 'HomeController@seller_product_list')->name('seller.products');
 	Route::get('/product/upload', 'HomeController@show_product_upload_form')->name('seller.products.upload');
 	Route::get('/product/clone', 'HomeController@show_product_clone_form')->name('seller.products.clone');

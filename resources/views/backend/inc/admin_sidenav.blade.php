@@ -73,6 +73,11 @@
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
+                                <a href="{{route('products.manage')}}" class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{ translate('Mange Added Products') }}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
                                 <a href="{{route('products.admin')}}"
                                    class="aiz-side-nav-link {{ areActiveRoutes(['products.admin', 'products.create', 'products.admin.edit']) }}">
                                     <span class="aiz-side-nav-text">{{ translate('In House Products') }}</span>

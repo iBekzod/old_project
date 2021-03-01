@@ -44,6 +44,13 @@
                     </a>
                 </li>
 
+                <li class="aiz-side-nav-item">
+                    <a href="{{ route('seller.marketing') }}" class="aiz-side-nav-link {{ areActiveRoutes(['seller.marketing', 'seller.marketing.create'])}}">
+                        <i class="las la-bullhorn aiz-side-nav-icon"></i>
+                        <span class="aiz-side-nav-text">{{ translate('Marketing') }}</span>
+                    </a>
+                </li>
+
                 @php
                     $delivery_viewed = App\Order::where('user_id', Auth::user()->id)->where('delivery_viewed', 0)->get()->count();
                     $payment_status_viewed = App\Order::where('user_id', Auth::user()->id)->where('payment_status_viewed', 0)->get()->count();
@@ -273,7 +280,7 @@
           <!-- <div class="sidebar-widget-title py-3">
               <span></span>
           </div> -->
-          @php 
+          @php
               $date = date("Y-m-d");
               $days_ago_30 = date('Y-m-d', strtotime('-30 days', strtotime($date)));
               $days_ago_60 = date('Y-m-d', strtotime('-60 days', strtotime($date)));

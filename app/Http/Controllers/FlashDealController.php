@@ -19,11 +19,14 @@ class FlashDealController extends Controller
     {
         $sort_search =null;
         $flash_deals = FlashDeal::orderBy('created_at', 'desc');
+
         if ($request->has('search')){
             $sort_search = $request->search;
             $flash_deals = $flash_deals->where('title', 'like', '%'.$sort_search.'%');
         }
+
         $flash_deals = $flash_deals->paginate(15);
+
         return view('backend.marketing.flash_deals.index', compact('flash_deals', 'sort_search'));
     }
 

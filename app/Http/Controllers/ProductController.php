@@ -24,6 +24,27 @@ use App\Warehouse;
 
 class ProductController extends Controller
 {
+    public function changeOnModeration(Request $request, $id)
+    {
+        $product = Product::findOrFail($id);
+        $product->update([
+            'on_moderation' => 0
+        ]);
+
+        return redirect()->route('products.manage');
+    }
+
+    public function manageProducts(Request $request)
+    {
+        $products = Product::where('on_moderation', 1)->latest()->paginate(10);
+        $type = 'Seller';
+
+        return view('backend.product.manage', [
+            'products' => $products,
+            'type' => $type
+        ]);
+    }
+
     public function characteristics(Request $request, $id)
     {
         if ($request->method() == 'POST') {
