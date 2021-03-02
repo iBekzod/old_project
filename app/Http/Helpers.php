@@ -712,8 +712,10 @@ function translate($key, $lang = null){
         $lang = App::getLocale();
     }
 
+    $obj = \App\HelperClasses\Translations::getInstance();
+
     // TODO Обдумать
-    $translation_def = Translation::where('lang', env('DEFAULT_LANGUAGE', 'en'))->where('lang_key', $key)->first();
+    $translation_def = $obj->translations->where('lang', env('DEFAULT_LANGUAGE', 'en'))->where('lang_key', $key)->first();
     if($translation_def == null){
         $translation_def = new Translation;
         $translation_def->lang = env('DEFAULT_LANGUAGE', 'en');
@@ -723,7 +725,7 @@ function translate($key, $lang = null){
     }
 
     //Check for session lang
-    $translation_locale = Translation::where('lang_key', $key)->where('lang', $lang)->first();
+    $translation_locale = $obj->translations->where('lang_key', $key)->where('lang', $lang)->first();
     if($translation_locale != null && $translation_locale->lang_value != null){
         return $translation_locale->lang_value;
     }
