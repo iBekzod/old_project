@@ -28,19 +28,18 @@ class SetLocale
      */
     protected function parseLocale($request)
     {
-        $locales = config('app.locales');
+        $locales = \App\Models\Language::all()->pluck('code');
 
-        $locale = $request->server('HTTP_ACCEPT_LANGUAGE');
+        $locale = $request->header('accept-language');
         $locale = substr($locale, 0, strpos($locale, ',') ?: strlen($locale));
 
-//        if (array_key_exists($locale, $locales)) {
-//            return $locale;
-//        }
-//        TODO Add validation for locale
+        if (in_array($locale, $locales->toArray())) {
+            return $locale;
+        }
+
         $locale = substr($locale, 0, 2);
-//        if (array_key_exists($locale, $locales)) {
-//            return $locale;
-//        }
-        return $locale;
+        if (in_array($locale, $locales->toArray())) {
+            return $locale;
+        }
     }
 }
