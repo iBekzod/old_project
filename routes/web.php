@@ -32,6 +32,7 @@ Route::get('/email_change/callback', 'HomeController@email_change_callback')->na
 Route::post('/password/reset/email/submit', 'HomeController@reset_password_with_code')->name('password.update');
 
 Route::get('/test', function () {
+    \App\Category::fixTree();
     dd(\App\Category::all()->toTree());
 });
 
