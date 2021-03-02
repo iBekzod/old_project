@@ -4,9 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App;
+use Kalnoy\Nestedset\NodeTrait;
 
 class Category extends Model
 {
+    use NodeTrait;
+
     public function getTranslation($field = '', $lang = false){
         $lang = $lang == false ? App::getLocale() : $lang;
         $category_translation = $this->hasMany(CategoryTranslation::class)->where('lang', $lang)->first();

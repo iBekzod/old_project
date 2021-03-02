@@ -29,67 +29,67 @@
                     </div>
                 </div>
             </div>
-            @if (\App\Addon::where('unique_identifier', 'pos_system')->first() != null && \App\Addon::where('unique_identifier', 'pos_system')->first()->activated)
-                <div class="d-none d-md-flex justify-content-around align-items-center align-items-stretch ml-3">
-                    <div class="aiz-topbar-item">
-                        <div class="d-flex align-items-center">
-                            <a class="btn btn-icon btn-circle btn-light" href="{{ route('poin-of-sales.index') }}" target="_blank" title="{{ translate('POS') }}">
-                                <i class="las la-print"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            @endif
+{{--            @if (\App\Addon::where('unique_identifier', 'pos_system')->first() != null && \App\Addon::where('unique_identifier', 'pos_system')->first()->activated)--}}
+{{--                <div class="d-none d-md-flex justify-content-around align-items-center align-items-stretch ml-3">--}}
+{{--                    <div class="aiz-topbar-item">--}}
+{{--                        <div class="d-flex align-items-center">--}}
+{{--                            <a class="btn btn-icon btn-circle btn-light" href="{{ route('poin-of-sales.index') }}" target="_blank" title="{{ translate('POS') }}">--}}
+{{--                                <i class="las la-print"></i>--}}
+{{--                            </a>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            @endif--}}
         </div>
         <div class="d-flex justify-content-around align-items-center align-items-stretch">
-            @php
-                $orders = DB::table('orders')
-                            ->orderBy('code', 'desc')
-                            ->join('order_details', 'orders.id', '=', 'order_details.order_id')
-                            ->where('order_details.seller_id', \App\User::where('user_type', 'admin')->first()->id)
-                            ->where('orders.viewed', 0)
-                            ->select('orders.id')
-                            ->distinct()
-                            ->count();
-                $sellers = \App\Seller::where('verification_status', 0)->where('verification_info', '!=', null)->count();
-            @endphp
+{{--            @php--}}
+{{--                $orders = DB::table('orders')--}}
+{{--                            ->orderBy('code', 'desc')--}}
+{{--                            ->join('order_details', 'orders.id', '=', 'order_details.order_id')--}}
+{{--                            ->where('order_details.seller_id', \App\User::where('user_type', 'admin')->first()->id)--}}
+{{--                            ->where('orders.viewed', 0)--}}
+{{--                            ->select('orders.id')--}}
+{{--                            ->distinct()--}}
+{{--                            ->count();--}}
+{{--                $sellers = \App\Seller::where('verification_status', 0)->where('verification_info', '!=', null)->count();--}}
+{{--            @endphp--}}
 
-            <div class="aiz-topbar-item ml-2">
-                <div class="align-items-stretch d-flex dropdown">
-                    <a class="dropdown-toggle no-arrow" data-toggle="dropdown" href="javascript:void(0);" role="button" aria-haspopup="false" aria-expanded="false">
-                        <span class="btn btn-icon p-1">
-                            <span class=" position-relative d-inline-block">
-                                <i class="las la-bell la-2x"></i>
-                                @if($orders > 0 || $sellers > 0)
-                                    <span class="badge badge-dot badge-circle badge-primary position-absolute absolute-top-right"></span>
-                                @endif
-                            </span>
-                        </span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-lg py-0">
-                        <div class="p-3 bg-light border-bottom">
-                            <h6 class="mb-0">{{ translate('Notifications') }}</h6>
-                        </div>
-                        <ul class="list-group c-scrollbar-light overflow-auto" style="max-height:300px;">
+{{--            <div class="aiz-topbar-item ml-2">--}}
+{{--                <div class="align-items-stretch d-flex dropdown">--}}
+{{--                    <a class="dropdown-toggle no-arrow" data-toggle="dropdown" href="javascript:void(0);" role="button" aria-haspopup="false" aria-expanded="false">--}}
+{{--                        <span class="btn btn-icon p-1">--}}
+{{--                            <span class=" position-relative d-inline-block">--}}
+{{--                                <i class="las la-bell la-2x"></i>--}}
+{{--                                @if($orders > 0 || $sellers > 0)--}}
+{{--                                    <span class="badge badge-dot badge-circle badge-primary position-absolute absolute-top-right"></span>--}}
+{{--                                @endif--}}
+{{--                            </span>--}}
+{{--                        </span>--}}
+{{--                    </a>--}}
+{{--                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-lg py-0">--}}
+{{--                        <div class="p-3 bg-light border-bottom">--}}
+{{--                            <h6 class="mb-0">{{ translate('Notifications') }}</h6>--}}
+{{--                        </div>--}}
+{{--                        <ul class="list-group c-scrollbar-light overflow-auto" style="max-height:300px;">--}}
 
-                            @if($orders > 0)
-                            <li class="list-group-item">
-                                <a href="{{ route('inhouse_orders.index') }}" class="text-reset">
-                                    <span class="ml-2">{{ $orders }} {{translate('new orders')}}</span>
-                                </a>
-                            </li>
-                            @endif
-                            @if($sellers > 0)
-                            <li class="list-group-item">
-                                <a href="{{ route('sellers.index') }}" class="text-reset">
-                                    <span class="ml-2">{{translate('New verification request(s)')}}</span>
-                                </a>
-                            </li>
-                            @endif
-                        </ul>
-                    </div>
-                </div>
-            </div>
+{{--                            @if($orders > 0)--}}
+{{--                            <li class="list-group-item">--}}
+{{--                                <a href="{{ route('inhouse_orders.index') }}" class="text-reset">--}}
+{{--                                    <span class="ml-2">{{ $orders }} {{translate('new orders')}}</span>--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
+{{--                            @endif--}}
+{{--                            @if($sellers > 0)--}}
+{{--                            <li class="list-group-item">--}}
+{{--                                <a href="{{ route('sellers.index') }}" class="text-reset">--}}
+{{--                                    <span class="ml-2">{{translate('New verification request(s)')}}</span>--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
+{{--                            @endif--}}
+{{--                        </ul>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
 
             {{-- language --}}
             @php

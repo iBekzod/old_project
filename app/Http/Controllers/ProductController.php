@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Brand;
 use App\Http\HelperClasses\Combinations;
 use App\Models\CharacteristicValues;
 use App\Models\ProductAttribute;
@@ -202,15 +203,15 @@ class ProductController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        $categories = Category::where('parent_id', 0)
-            ->where('digital', 0)
-            ->get();
+//        $data = [
+//            'categories' => Category::all()->toTree(),
+//            'brands' => Brand::all()
+//        ];
 
-        return view('backend.product.products.create', compact('categories'));
+        return view('backend.product.products.create');
     }
 
     /**
