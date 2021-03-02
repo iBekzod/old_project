@@ -6,7 +6,7 @@
 @endphp
 <option value="{{ $child_category->id }}">{{ $value." ".$child_category->getTranslation('name') }}</option>
 @if ($child_category->children)
-    @foreach ($child_category->categories as $childCategory)
+    @foreach ($child_category->children as $childCategory)
         @include('categories.child_category', ['child_category' => $childCategory])
     @endforeach
 @endif
