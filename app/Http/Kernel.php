@@ -7,6 +7,7 @@ use App\Http\Middleware\IsSeller;
 use App\Http\Middleware\IsUser;
 use App\Http\Middleware\CheckoutMiddleware;
 use App\Http\Middleware\IsUnbanned;
+use App\Http\Middleware\SetLocale;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -48,12 +49,14 @@ class Kernel extends HttpKernel
 
         'spa' => [
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            SetLocale::class
         ],
 
 
         'api' => [
             'throttle:100,1',
             'bindings',
+            'locale'
         ],
     ];
 
@@ -66,6 +69,7 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'admin' => IsAdmin::class,
+        'locale' => SetLocale::class,
         'seller' => IsSeller::class,
         'user' => IsUser::class,
         'unbanned' => IsUnbanned::class,
