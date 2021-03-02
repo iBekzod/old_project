@@ -159,7 +159,7 @@
                             <td class="text-right">
                                 <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
                                    href="{{route('products.characteristics', ['id'=>$product->id, 'type'=>$type]  )}}"
-                                   title="{{ translate('Duplicate') }}">
+                                   title="{{ translate('Product Attributes') }}">
                                     <i class="las la-list"></i>
                                 </a>
                                 @if ($type == 'Seller')
