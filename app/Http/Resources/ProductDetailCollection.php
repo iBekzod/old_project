@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\ProductStock;
+use App\ProductTranslation;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use App\Models\Review;
 use App\Models\Attribute;
@@ -33,6 +34,7 @@ class ProductDetailCollection extends ResourceCollection
                             'products' => $data->brand != null ? route('api.products.brand', $data->brand_id) : null
                         ]
                     ],
+                    'translations' => ProductTranslation::where('product_id', $data->id)->get(),
                     'variations' => ProductStock::where('product_id', $data->id)->get(),
                     'photos' => $this->convertPhotos(explode(',', $data->photos)),
                     'thumbnail_image' => api_asset($data->thumbnail_img),
