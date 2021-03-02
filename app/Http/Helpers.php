@@ -713,14 +713,14 @@ function translate($key, $lang = null){
     }
 
     // TODO Обдумать
-//    $translation_def = Translation::where('lang', env('DEFAULT_LANGUAGE', 'en'))->where('lang_key', $key)->first();
-//    if($translation_def == null){
-//        $translation_def = new Translation;
-//        $translation_def->lang = env('DEFAULT_LANGUAGE', 'en');
-//        $translation_def->lang_key = $key;
-//        $translation_def->lang_value = $key;
-//        $translation_def->save();
-//    }
+    $translation_def = Translation::where('lang', env('DEFAULT_LANGUAGE', 'en'))->where('lang_key', $key)->first();
+    if($translation_def == null){
+        $translation_def = new Translation;
+        $translation_def->lang = env('DEFAULT_LANGUAGE', 'en');
+        $translation_def->lang_key = $key;
+        $translation_def->lang_value = $key;
+        $translation_def->save();
+    }
 
     //Check for session lang
     $translation_locale = Translation::where('lang_key', $key)->where('lang', $lang)->first();
