@@ -169,6 +169,11 @@
 
 @endsection
 @section('script')
+@php
+    $lvl0Categories = \App\Category::where('level', 0)->get();
+    $published1Products = \App\Product::where('published', 1)->get();
+    $allSellers = \App\Seller::all();
+@endphp
 <script type="text/javascript">
     AIZ.plugins.chart('#pie-1',{
         type: 'doughnut',
@@ -181,9 +186,9 @@
             datasets: [
                 {
                     data: [
-                        {{ \App\Product::where('published', 1)->get()->count() }},
-                        {{ \App\Product::where('published', 1)->where('added_by', 'seller')->get()->count() }},
-                        {{ \App\Product::where('published', 1)->where('added_by', 'admin')->get()->count() }}
+                        {{ $published1Products->count() }},
+                        {{ count($published1Products->where('added_by', 'seller')->all()) }},
+                        {{ count($published1Products->where('added_by', 'admin')->all()) }}
                     ],
                     backgroundColor: [
                         "#fd3995",
@@ -227,9 +232,9 @@
             datasets: [
                 {
                     data: [
-                        {{ \App\Seller::all()->count() }},
-                        {{ \App\Seller::where('verification_status', 1)->get()->count() }},
-                        {{ \App\Seller::where('verification_status', 0)->count() }}
+                        {{ $allSellers->count() }},
+                        {{ count($allSellers->where('verification_status', 1)->all()) }},
+                        {{ count($allSellers->where('verification_status', 0)) }}
                     ],
                     backgroundColor: [
                         "#fd3995",
@@ -263,12 +268,12 @@
     });
     var sfs = {
             labels: [
-                @foreach (\App\Category::where('level', 0)->get() as $key => $category)
+                @foreach ($lvl0Categories as $key => $category)
                 '{{ $category->getTranslation('name') }}',
                 @endforeach
             ],
             datasets: [
-                @foreach (\App\Category::where('level', 0)->get() as $key => $category)
+                @foreach ($lvl0Categories as $key => $category)
                 {{ \App\Product::where('category_id', $category->id)->sum('num_of_sale') }},
                 @endforeach
             ]
@@ -277,14 +282,14 @@
         type: 'bar',
         data: {
             labels: [
-                @foreach (\App\Category::where('level', 0)->get() as $key => $category)
+                @foreach ($lvl0Categories as $key => $category)
                 '{{ $category->getTranslation('name') }}',
                 @endforeach
             ],
             datasets: [{
                 label: '{{ translate('Number of sale') }}',
                 data: [
-                    @foreach (\App\Category::where('level', 0)->get() as $key => $category)
+                    @foreach ($lvl0Categories as $key => $category)
                         @php
                             $category_ids = \App\Utility\CategoryUtility::children_ids($category->id);
                             $category_ids[] = $category->id;
@@ -293,12 +298,12 @@
                     @endforeach
                 ],
                 backgroundColor: [
-                    @foreach (\App\Category::where('level', 0)->get() as $key => $category)
+                    @foreach ($lvl0Categories as $key => $category)
                         'rgba(55, 125, 255, 0.4)',
                     @endforeach
                 ],
                 borderColor: [
-                    @foreach (\App\Category::where('level', 0)->get() as $key => $category)
+                    @foreach ($lvl0Categories as $key => $category)
                         'rgba(55, 125, 255, 1)',
                     @endforeach
                 ],
@@ -342,9 +347,6 @@
             }
         }
     });
-    @php
-    $lvl0Categories = \App\Category::where('level', 0)->get();
-    @endphp
     AIZ.plugins.chart('#graph-2',{
         type: 'bar',
         data: {
