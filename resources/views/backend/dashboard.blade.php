@@ -342,18 +342,21 @@
             }
         }
     });
+    @php
+    $lvl0Categories = \App\Category::where('level', 0)->get();
+    @endphp
     AIZ.plugins.chart('#graph-2',{
         type: 'bar',
         data: {
             labels: [
-                @foreach (\App\Category::where('level', 0)->get() as $key => $category)
+                @foreach ($lvl0Categories as $key => $category)
                 '{{ $category->getTranslation('name') }}',
                 @endforeach
             ],
             datasets: [{
                 label: '{{ translate('Number of Stock') }}',
                 data: [
-                    @foreach (\App\Category::where('level', 0)->get() as $key => $category)
+                    @foreach ($lvl0Categories as $key => $category)
                         @php
                             $category_ids = \App\Utility\CategoryUtility::children_ids($category->id);
                             $category_ids[] = $category->id;
@@ -375,12 +378,12 @@
                     @endforeach
                 ],
                 backgroundColor: [
-                    @foreach (\App\Category::where('level', 0)->get() as $key => $category)
+                    @foreach ($lvl0Categories as $key => $category)
                         'rgba(253, 57, 149, 0.4)',
                     @endforeach
                 ],
                 borderColor: [
-                    @foreach (\App\Category::where('level', 0)->get() as $key => $category)
+                    @foreach ($lvl0Categories as $key => $category)
                         'rgba(253, 57, 149, 1)',
                     @endforeach
                 ],
