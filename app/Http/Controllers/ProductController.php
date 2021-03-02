@@ -206,12 +206,12 @@ class ProductController extends Controller
      */
     public function create()
     {
-//        $data = [
-//            'categories' => Category::all()->toTree(),
-//            'brands' => Brand::all()
-//        ];
+        $data = [
+            'categories' => Category::all()->toTree(),
+            'brands' => Brand::all()
+        ];
 
-        return view('backend.product.products.create');
+        return view('backend.product.products.create', $data);
     }
 
     /**
