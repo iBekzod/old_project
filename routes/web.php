@@ -31,6 +31,9 @@ Route::get('/verification-confirmation/{code}', 'Auth\VerificationController@ver
 Route::get('/email_change/callback', 'HomeController@email_change_callback')->name('email_change.callback');
 Route::post('/password/reset/email/submit', 'HomeController@reset_password_with_code')->name('password.update');
 
+Route::get('/test', function () {
+    dd(\App\Category::all()->toTree());
+});
 
 Route::post('/language', 'LanguageController@changeLanguage')->name('language.change');
 Route::post('/currency', 'CurrencyController@changeCurrency')->name('currency.change');
