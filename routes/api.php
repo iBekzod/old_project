@@ -17,9 +17,7 @@ Route::prefix('v1/auth')->group(function () {
 });
 
 Route::prefix('v1')->group(function () {
-    Route::get('/test', function () {
-        return \App\Translation::all();
-    });
+    Route::match(['get', 'post'], 'Api\CategoryController@all');
     Route::get('/get/all/products', 'Api\ProductController@getAllProducts');
     Route::match(['get','post'], '/free/shipping/products','Api\ProductController@freeShippingProduct');
     Route::match(['get','post'], '/free/featured/products','Api\FlashDealController@featuredProduct');
