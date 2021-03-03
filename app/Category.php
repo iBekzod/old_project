@@ -54,6 +54,6 @@ class Category extends Model
             'product_attribute_category',
             'category_id',
             'product_attribute_id'
-        );
+        )->with('attributes');
     }
 }

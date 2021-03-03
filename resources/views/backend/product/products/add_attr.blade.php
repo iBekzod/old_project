@@ -19,7 +19,7 @@
             mounted () {
                 this.values = JSON.parse(this.values)
                 this.options = JSON.parse(this.options)
-                console.log(this.values)
+                console.log(this.options)
                 this.values.filter((val) => {
                     this.data.push({
                         id: val.attr_id,
@@ -78,6 +78,7 @@
             methods: {
                 changeSelect() {
                     this.options.filter((el) => {
+                        console.log(el)
                         if (el.attributes) {
                             el.attributes.filter((val) => {
                                 if (val.id === parseInt(this.option)) {
