@@ -207,7 +207,10 @@ class ProductController extends Controller
     public function create()
     {
         $data = [
-            'categories' => Category::all()->toTree(),
+            'categories' => Category::where('parent_id', 0)
+                ->where('digital', 0)
+                ->with('childrenCategories')
+                ->get(),
             'brands' => Brand::all()
         ];
 
