@@ -50,6 +50,8 @@ class ProductDetailCollection extends ResourceCollection
                     'current_stock' => (integer) $data->current_stock,
                     'slug' => $data->slug,
                     'unit' => $data->unit,
+                    'video_link' => $data->video_link,
+                    'video_provider' => $data->video_provider,
                     'discount' => (integer) $data->discount,
                     'discount_type' => $data->discount_type,
                     'tax' => (double) $data->tax,
