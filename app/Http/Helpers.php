@@ -722,6 +722,7 @@ function translate($key, $lang = null){
         $translation_def->lang_key = $key;
         $translation_def->lang_value = $key;
         $translation_def->save();
+        $obj->getTranslations();
     }
 
     //Check for session lang
