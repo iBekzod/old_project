@@ -35,17 +35,8 @@ use Rennokki\QueryCache\Traits\QueryCacheable;
 
 class Category extends Model
 {
-    use QueryCacheable, NodeTrait;
+    use NodeTrait;
 
-    public $cacheFor = 3600; // cache time, in seconds
-
-    /**
-     * Invalidate the cache automatically
-     * upon update in the database.
-     *
-     * @var bool
-     */
-    protected static $flushCacheOnUpdate = true;
     protected static function boot()
     {
         parent::boot();
