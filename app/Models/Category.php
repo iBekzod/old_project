@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Kalnoy\Nestedset\NodeTrait;
 use Rennokki\QueryCache\Traits\QueryCacheable;
 
 /**
@@ -34,7 +35,7 @@ use Rennokki\QueryCache\Traits\QueryCacheable;
 
 class Category extends Model
 {
-    use QueryCacheable;
+    use QueryCacheable, NodeTrait;
 
     public $cacheFor = 3600; // cache time, in seconds
 
