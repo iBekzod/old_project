@@ -17,6 +17,9 @@ Route::prefix('v1/auth')->group(function () {
 });
 
 Route::prefix('v1')->group(function () {
+    Route::get('/fix/tree/categories', function () {
+        Category::fixTree();
+    });
     Route::match(['get', 'post'], '/nested/categories', 'Api\CategoryController@all');
     Route::get('/get/all/products', 'Api\ProductController@getAllProducts');
     Route::match(['get','post'], '/free/shipping/products','Api\ProductController@freeShippingProduct');
