@@ -15,7 +15,7 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        View::composer('backend.inc.admin_sidenav', AdminPageComposer::class);
+//        View::composer('backend.inc.admin_sidenav', AdminPageComposer::class);
     }
 
     /**
