@@ -9,7 +9,7 @@ use Rennokki\QueryCache\Traits\QueryCacheable;
 
 class Category extends Model
 {
-    use QueryCacheable;
+    use QueryCacheable, NodeTrait;
 
     public $cacheFor = 3600; // cache time, in seconds
 
@@ -20,8 +20,6 @@ class Category extends Model
      * @var bool
      */
     protected static $flushCacheOnUpdate = true;
-
-    use NodeTrait;
 
     public function getTranslation($field = '', $lang = false){
         $lang = $lang == false ? App::getLocale() : $lang;
