@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Rennokki\QueryCache\Traits\QueryCacheable;
 
 /**
  * App\Models\Category
@@ -33,6 +34,17 @@ use Illuminate\Database\Eloquent\Builder;
 
 class Category extends Model
 {
+    use QueryCacheable;
+
+    public $cacheFor = 3600; // cache time, in seconds
+
+    /**
+     * Invalidate the cache automatically
+     * upon update in the database.
+     *
+     * @var bool
+     */
+    protected static $flushCacheOnUpdate = true;
     protected static function boot()
     {
         parent::boot();
