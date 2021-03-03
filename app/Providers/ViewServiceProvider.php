@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
-use App\HelperClasses\Translations;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\View;
+use App\Http\View\Composers\AdminPageComposer;
 
-class AppServiceProvider extends ServiceProvider
+class ViewServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
@@ -15,10 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //\Debugbar::disable();
-        Translations::getInstance()->getTranslations();
-        \Debugbar::disable();
-        Schema::defaultStringLength(191);
+        View::composer('backend.inc.admin_sidenav', AdminPageComposer::class);
     }
 
     /**

@@ -8,6 +8,12 @@ use App\Models\BusinessSetting;
 
 class CategoryController extends Controller
 {
+    public function all()
+    {
+        return response()->json([
+            'categories' => Category::all()->toTree()
+        ]);
+    }
 
     public function index()
     {
