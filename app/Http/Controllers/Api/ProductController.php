@@ -57,7 +57,7 @@ class ProductController extends Controller
         }
 
         $products = Product::where('id', $id)->orWhere('slug', 'like', '%'. $id .'%')->get();
-        $product = $products[0];
+        $product = isset($products[0]) ? $products[0] : null;
         $breadcrumbs = [];
         if($product) {
             $categories = $product->parentHierarchy;
