@@ -5,7 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Http\View\Composers\AdminPageComposer;
-class MyViewServiceProvider extends ServiceProvider
+
+class ViewServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.

@@ -190,7 +190,6 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        \App\Providers\MyViewServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         \App\Providers\ViewServiceProvider::class
     ],
