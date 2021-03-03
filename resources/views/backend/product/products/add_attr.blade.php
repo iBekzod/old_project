@@ -78,16 +78,18 @@
             methods: {
                 changeSelect() {
                     this.options.filter((el) => {
-                        el.attributes.filter((val) => {
-                            if (val.id === parseInt(this.option)) {
-                                this.data.push({
-                                    id: val.id,
-                                    parent_id: val.attribute_id,
-                                    key: val.name,
-                                    value: ''
-                                })
-                            }
-                        })
+                        if (el.attributes) {
+                            el.attributes.filter((val) => {
+                                if (val.id === parseInt(this.option)) {
+                                    this.data.push({
+                                        id: val.id,
+                                        parent_id: val.attribute_id,
+                                        key: val.name,
+                                        value: ''
+                                    })
+                                }
+                            })
+                        }
                     })
                     this.option = false
                 },
