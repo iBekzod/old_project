@@ -27,8 +27,8 @@
                 <div class="card-body">
                     <div class="form-group row">
                         <label class="col-lg-3 col-from-label">{{translate('Product Name')}} <i
-                                    class="las la-language text-danger"
-                                    title="{{translate('Translatable')}}"></i></label>
+                                class="las la-language text-danger"
+                                title="{{translate('Translatable')}}"></i></label>
                         <div class="col-lg-8">
                             <input type="text" class="form-control" name="name"
                                    placeholder="{{translate('Product Name')}}"
@@ -52,9 +52,11 @@
                     <div class="form-group row" id="category">
                         <label class="col-lg-3 col-from-label">{{translate('Filter')}}</label>
                         <div class="col-lg-8">
-                            <select class="form-control aiz-selectpicker" multiple name="attrs[]" id="attrs" data-live-search="true">
+                            <select class="form-control aiz-selectpicker" multiple name="attrs[]" id="attrs"
+                                    data-live-search="true">
                                 @foreach ($productAttributes as $attr)
-                                    <option @if(in_array($attr->id, $selectedProductAttributes)) selected @endif value="{{ $attr->id }}">{{ $attr->getTranslation('name') }}</option>
+                                    <option @if(in_array($attr->id, $selectedProductAttributes)) selected
+                                            @endif value="{{ $attr->id }}">{{ $attr->getTranslation('name') }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -74,7 +76,7 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-lg-3 col-from-label">{{translate('Unit')}} <i
-                                    class="las la-language text-danger" title="{{translate('Translatable')}}"></i>
+                                class="las la-language text-danger" title="{{translate('Translatable')}}"></i>
                         </label>
                         <div class="col-lg-8">
                             <input type="text" class="form-control" name="unit"
@@ -140,7 +142,8 @@
                         <div class="col-md-8">
                             <div class="input-group" data-toggle="aizuploader" data-type="image" data-multiple="true">
                                 <div class="input-group-prepend">
-                                    <div class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse')}}</div>
+                                    <div
+                                        class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse')}}</div>
                                 </div>
                                 <div class="form-control file-amount">{{ translate('Choose File') }}</div>
                                 <input type="hidden" name="photos" value="{{ $product->photos }}"
@@ -156,7 +159,8 @@
                         <div class="col-md-8">
                             <div class="input-group" data-toggle="aizuploader" data-type="image">
                                 <div class="input-group-prepend">
-                                    <div class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse')}}</div>
+                                    <div
+                                        class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse')}}</div>
                                 </div>
                                 <div class="form-control file-amount">{{ translate('Choose File') }}</div>
                                 <input type="hidden" name="thumbnail_img" value="{{ $product->thumbnail_img }}"
@@ -211,9 +215,12 @@
                         <label class="col-lg-3 col-from-label">{{translate('Video Provider')}}</label>
                         <div class="col-lg-8">
                             <select class="form-control aiz-selectpicker" name="video_provider" id="video_provider">
-                                <option value="youtube" <?php if ($product->video_provider == 'youtube') echo "selected";?> >{{translate('Youtube')}}</option>
-                                <option value="dailymotion" <?php if ($product->video_provider == 'dailymotion') echo "selected";?> >{{translate('Dailymotion')}}</option>
-                                <option value="vimeo" <?php if ($product->video_provider == 'vimeo') echo "selected";?> >{{translate('Vimeo')}}</option>
+                                <option
+                                    value="youtube" <?php if ($product->video_provider == 'youtube') echo "selected";?> >{{translate('Youtube')}}</option>
+                                <option
+                                    value="dailymotion" <?php if ($product->video_provider == 'dailymotion') echo "selected";?> >{{translate('Dailymotion')}}</option>
+                                <option
+                                    value="vimeo" <?php if ($product->video_provider == 'vimeo') echo "selected";?> >{{translate('Vimeo')}}</option>
                             </select>
                         </div>
                     </div>
@@ -240,8 +247,8 @@
                                     data-selected-text-format="count" name="colors[]" id="colors" multiple>
                                 @foreach (\App\Color::orderBy('name', 'asc')->get() as $key => $color)
                                     <option
-                                            value="{{ $color->code }}"
-                                            data-content="<span><span class='size-15px d-inline-block mr-2 rounded border' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"
+                                        value="{{ $color->code }}"
+                                        data-content="<span><span class='size-15px d-inline-block mr-2 rounded border' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"
                                     <?php if (in_array($color->code, json_decode($product->colors))) echo 'selected'?>
                                     ></option>
                                 @endforeach
@@ -266,7 +273,8 @@
                                     data-placeholder="{{ translate('Choose Attributes') }}">
                                 @foreach (\App\Attribute::all() as $key => $attribute)
                                     <option value="{{ $attribute->id }}"
-                                            @if($product->attributes != null && in_array($attribute->id, json_decode($product->attributes, true))) selected @endif>{{ $attribute->getTranslation('name') }}</option>
+                                            @if($product->attributes != null && in_array($attribute->id, json_decode($product->attributes, true)))
+                                            selected @endif>{{ $attribute->getTranslation('name') }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -336,8 +344,10 @@
                         </div>
                         <div class="col-lg-3">
                             <select class="form-control aiz-selectpicker" name="tax_type" required>
-                                <option value="amount" <?php if ($product->tax_type == 'amount') echo "selected";?> >{{translate('Flat')}}</option>
-                                <option value="percent" <?php if ($product->tax_type == 'percent') echo "selected";?> >{{translate('Percent')}}</option>
+                                <option
+                                    value="amount" <?php if ($product->tax_type == 'amount') echo "selected";?> >{{translate('Flat')}}</option>
+                                <option
+                                    value="percent" <?php if ($product->tax_type == 'percent') echo "selected";?> >{{translate('Percent')}}</option>
                             </select>
                         </div>
                     </div>
@@ -349,8 +359,10 @@
                         </div>
                         <div class="col-lg-3">
                             <select class="form-control aiz-selectpicker" name="discount_type" required>
-                                <option value="amount" <?php if ($product->discount_type == 'amount') echo "selected";?> >{{translate('Flat')}}</option>
-                                <option value="percent" <?php if ($product->discount_type == 'percent') echo "selected";?> >{{translate('Percent')}}</option>
+                                <option
+                                    value="amount" <?php if ($product->discount_type == 'amount') echo "selected";?> >{{translate('Flat')}}</option>
+                                <option
+                                    value="percent" <?php if ($product->discount_type == 'percent') echo "selected";?> >{{translate('Percent')}}</option>
                             </select>
                         </div>
                     </div>
@@ -375,8 +387,8 @@
                 <div class="card-body">
                     <div class="form-group row">
                         <label class="col-lg-3 col-from-label">{{translate('Description')}} <i
-                                    class="las la-language text-danger"
-                                    title="{{translate('Translatable')}}"></i></label>
+                                class="las la-language text-danger"
+                                title="{{translate('Translatable')}}"></i></label>
                         <div class="col-lg-9">
                             <textarea class="aiz-text-editor"
                                       name="description">{{ $product->getTranslation('description', $lang) }}</textarea>
@@ -451,7 +463,8 @@
                         <div class="col-md-8">
                             <div class="input-group" data-toggle="aizuploader">
                                 <div class="input-group-prepend">
-                                    <div class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse')}}</div>
+                                    <div
+                                        class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse')}}</div>
                                 </div>
                                 <div class="form-control file-amount">{{ translate('Choose File') }}</div>
                                 <input type="hidden" name="pdf" value="{{ $product->pdf }}" class="selected-files">
@@ -486,7 +499,8 @@
                         <div class="col-md-8">
                             <div class="input-group" data-toggle="aizuploader" data-type="image" data-multiple="true">
                                 <div class="input-group-prepend">
-                                    <div class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse')}}</div>
+                                    <div
+                                        class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse')}}</div>
                                 </div>
                                 <div class="form-control file-amount">{{ translate('Choose File') }}</div>
                                 <input type="hidden" name="meta_img" value="{{ $product->meta_img }}"

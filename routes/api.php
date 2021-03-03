@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 use App\Http\Controllers\Api\V2\HomePageController;
 use \App\Http\Controllers\Api\SearchController;
