@@ -11,7 +11,7 @@ class CategoryController extends Controller
     public function all()
     {
         return response()->json([
-            'categories' => Category::select('id', 'name', 'id', 'parent_id', 'slug')->get()->toTree()
+            'categories' => Category::select('id', 'name', 'id', 'parent_id', 'slug', '_lft', '_rgt')->get()->toTree()
         ]);
     }
 
