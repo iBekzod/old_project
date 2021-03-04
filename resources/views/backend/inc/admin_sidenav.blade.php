@@ -106,24 +106,21 @@
                             </li>
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('products.admin')}}"
-                                   class="aiz-side-nav-link">
-                                                                        {{ areActiveRoutes(['products.admin', 'products.create', 'products.admin.edit']) }}
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['products.admin', 'products.create', 'products.admin.edit']) }}">
                                     <span class="aiz-side-nav-text">{{ translate('In House Products') }}</span>
                                 </a>
                             </li>
                             @if($vendor_system_activation->value == 1)
                                 <li class="aiz-side-nav-item">
                                     <a href="{{route('products.seller')}}"
-                                       class="aiz-side-nav-link ">
-                                                                                {{ areActiveRoutes(['products.seller', 'products.seller.edit']) }}
+                                       class="aiz-side-nav-link {{ areActiveRoutes(['products.seller', 'products.seller.edit']) }}">
                                         <span class="aiz-side-nav-text">{{ translate('Seller Products') }}</span>
                                     </a>
                                 </li>
                             @endif
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('digitalproducts.index')}}"
-                                   class="aiz-side-nav-link">
-                                                                        {{ areActiveRoutes(['digitalproducts.index', 'digitalproducts.create', 'digitalproducts.edit']) }}
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['digitalproducts.index', 'digitalproducts.create', 'digitalproducts.edit']) }}">
                                     <span class="aiz-side-nav-text">{{ translate('Digital Products') }}</span>
                                 </a>
                             </li>
@@ -139,32 +136,29 @@
                             </li>
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('categories.index')}}"
-                                   class="aiz-side-nav-link">
-                                                                        {{ areActiveRoutes(['categories.index', 'categories.create', 'categories.edit'])}}
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['categories.index', 'categories.create', 'categories.edit'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Category')}}</span>
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('brands.index')}}"
-                                   class="aiz-side-nav-link">
-                                                                        {{ areActiveRoutes(['brands.index', 'brands.create', 'brands.edit'])}}
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['brands.index', 'brands.create', 'brands.edit'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Brand')}}</span>
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('attributes.index')}}"
-                                   class="aiz-side-nav-link ">
-{{--                                                                        {{ areActiveRoutes(['attributes.index','attributes.create','attributes.edit'])}}--}}
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['attributes.index','attributes.create','attributes.edit'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Attribute')}}</span>
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
-                                <a href="{{route('product-attributes.index')}}" class="aiz-side-nav-link">
-{{--                                                                        {{ areActiveRoutes([--}}
-{{--                                                                        'product-attributes.index',--}}
-{{--                                                                        'product-attributes.create',--}}
-{{--                                                                        'product-attributes.edit'--}}
-{{--                                                                    ])}}--}}
+                                <a href="{{route('product-attributes.index')}}" class="aiz-side-nav-link {{ areActiveRoutes([
+                                                                        'product-attributes.index',
+                                                                        'product-attributes.create',
+                                                                        'product-attributes.edit'
+                                                                    ])}}">
+
                                     <span class="aiz-side-nav-text">
                                         {{ translate('Product Attributes') }}
                                     </span>
@@ -822,22 +816,19 @@
                             </li>
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('shipping_configuration.index')}}"
-                                   class="aiz-side-nav-link">
-                                                                        {{ areActiveRoutes(['shipping_configuration.index','shipping_configuration.edit','shipping_configuration.update'])}}
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['shipping_configuration.index','shipping_configuration.edit','shipping_configuration.update'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Shipping Configuration')}}</span>
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('countries.index')}}"
-                                   class="aiz-side-nav-link">
-                                                                        {{ areActiveRoutes(['countries.index','countries.edit','countries.update'])}}
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['countries.index','countries.edit','countries.update'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Shipping Countries')}}</span>
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('cities.index')}}"
-                                   class="aiz-side-nav-link">
-                                                                        {{ areActiveRoutes(['cities.index','cities.edit','cities.update'])}}
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['cities.index','cities.edit','cities.update'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Shipping Cities')}}</span>
                                 </a>
                             </li>
