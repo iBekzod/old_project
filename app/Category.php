@@ -12,6 +12,7 @@ class Category extends Model
     use NodeTrait;
 
     public function getTranslation($field = '', $lang = false){
+        return $this->{$field};
         $lang = $lang == false ? App::getLocale() : $lang;
         $category_translation = $this->category_translations->where('lang', $lang)->first();
         return $category_translation != null ? $category_translation->$field : $this->$field;
