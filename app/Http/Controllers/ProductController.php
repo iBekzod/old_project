@@ -451,7 +451,7 @@ class ProductController extends Controller
         $selectedProductAttributes = $product->productAttributes->pluck('id')->toArray();
         $lang = $request->lang;
         $tags = json_decode($product->tags);
-        $categories = Category::with('category_translations')->get()->toTree();
+        $categories = Category::all()->toTree();
 
         return view('backend.product.products.edit', compact('product', 'categories', 'tags', 'lang', 'productAttributes', 'selectedProductAttributes'));
     }
