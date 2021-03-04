@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\FlashDealProductCollection;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductDetailCollection;
 use App\Http\Resources\SearchProductCollection;
@@ -395,7 +396,7 @@ class ProductController extends Controller
     public function freeShippingProduct()
     {
         return response()->json([
-            'products'=> \App\Models\Product::where('shipping_type','free')->latest()->limit(12)->get()
+            'products'=> FlashDealProductCollection::collection(\App\Models\Product::where('shipping_type','free')->latest()->limit(12)->get())
         ]);
     }
 }
