@@ -64,6 +64,12 @@
                     </div>
 
                     <div class="card">
+                        <div class="card-header">
+                            <a href="{{ route('seller.products.clone')}}" class="btn btn-primary d-inline-block">{{ translate('Clone Product')}}</a>
+                        </div>
+                    </div>
+
+                    <div class="card">
                         <div class="card-header row gutters-5">
                             <div class="col">
                                 <h5 class="mb-md-0 h6">{{ translate('All Products') }}</h5>

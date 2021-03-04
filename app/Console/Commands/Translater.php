@@ -79,7 +79,7 @@ class Translater extends Command
                 $item->{$this->option('key')}
             );
             $item->save();
-            sleep(rand(1,2));
+//            sleep(rand(1,2));
         }
 
         $this->info('Successfully translated');

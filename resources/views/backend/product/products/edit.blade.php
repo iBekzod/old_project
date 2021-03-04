@@ -42,7 +42,7 @@
                                     data-selected="{{ $product->category_id }}" data-live-search="true" required>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->getTranslation('name') }}</option>
-                                    @foreach ($category->children as $childCategory)
+                                    @foreach ($category->childrenCategories as $childCategory)
                                         @include('categories.child_category', ['child_category' => $childCategory])
                                     @endforeach
                                 @endforeach
