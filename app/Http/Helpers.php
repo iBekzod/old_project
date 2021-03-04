@@ -708,12 +708,18 @@ if (! function_exists('convertPrice')) {
 
 
 function translate($key, $lang = null){
-//    if($lang == null){
-//        $lang = App::getLocale();
-//    }
-//
-//    $obj = \App\HelperClasses\Translations::getInstance();
-//
+    if($lang == null){
+        $lang = App::getLocale();
+    }
+
+    $obj = \App\HelperClasses\Translations::getInstance();
+
+    if(isset($obj->translations[$lang][$key])) {
+        return $obj->translations[$lang][$key];
+    } else {
+        return $key;
+    }
+
 //    // TODO Обдумать
 //    $translation_def = $obj->translations->where('lang', env('DEFAULT_LANGUAGE', 'en'))->where('lang_key', $key)->first();
 //    if($translation_def == null){
@@ -734,7 +740,7 @@ function translate($key, $lang = null){
 //        return $translation_def->lang_value;
 //    }
 //    else{
-        return $key;
+//        return $key;
 //    }
 }
 

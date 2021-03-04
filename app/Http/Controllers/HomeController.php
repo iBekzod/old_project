@@ -320,7 +320,7 @@ class HomeController extends Controller
     {
         if(\App\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated){
      //       if(Auth::user()->seller->remaining_uploads > 0){
-        $categories = Category::where('parent_id', 0)
+        $categories = Category::where('parent_id', null)
             ->where('digital', 0)
             ->with('childrenCategories')
             ->get();
@@ -331,7 +331,7 @@ class HomeController extends Controller
      //           return back();
      //       }
         }
-        $categories = Category::where('parent_id', 0)
+        $categories = Category::where('parent_id', null)
             ->where('digital', 0)
             ->with('childrenCategories')
             ->get();
@@ -343,7 +343,7 @@ class HomeController extends Controller
         $product = Product::findOrFail($id);
         $lang = $request->lang;
         $tags = json_decode($product->tags);
-        $categories = Category::where('parent_id', 0)
+        $categories = Category::where('parent_id', null)
             ->where('digital', 0)
             ->with('childrenCategories')
             ->get();

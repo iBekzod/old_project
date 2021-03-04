@@ -40,7 +40,7 @@ class CustomerProductController extends Controller
      */
     public function create()
     {
-        $categories = Category::where('parent_id', 0)
+        $categories = Category::where('parent_id', null)
             ->where('digital', 0)
             ->with('childrenCategories')
             ->get();
@@ -133,7 +133,7 @@ class CustomerProductController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $categories = Category::where('parent_id', 0)
+        $categories = Category::where('parent_id', null)
             ->where('digital', 0)
             ->with('childrenCategories')
             ->get();
