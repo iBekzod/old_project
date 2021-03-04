@@ -207,7 +207,8 @@ class ProductController extends Controller
     public function create()
     {
         $data = [
-            'categories' => Category::where('parent_id', 0)
+            'categories' => Category::where('parent_id', null)
+                ->orWhere('parent_id', null)
                 ->where('digital', 0)
                 ->with('childrenCategories')
                 ->get(),
@@ -450,10 +451,7 @@ class ProductController extends Controller
         $selectedProductAttributes = $product->productAttributes->pluck('id')->toArray();
         $lang = $request->lang;
         $tags = json_decode($product->tags);
-        $categories = Category::where('parent_id', 0)
-            ->where('digital', 0)
-            ->with('childrenCategories')
-            ->get();
+        $categories = Category::all()->toTree();
 
         return view('backend.product.products.edit', compact('product', 'categories', 'tags', 'lang', 'productAttributes', 'selectedProductAttributes'));
     }

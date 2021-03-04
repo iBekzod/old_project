@@ -66,21 +66,19 @@
                             <input type="text" placeholder="{{ translate('Name') }}" id="name" name="name"
                                    class="form-control" required>
                         </div>
-                        <div class="form-group row" id="category">
-                            <label class="col-lg-3 col-from-label">{{translate('Category')}}</label>
-                            <div class="col-lg-8">
-                                <select multiple class="form-control aiz-selectpicker" name="category_id[]"
-                                        id="category_id"
-                                        data-live-search="true" required>
-                                    @foreach ($categories as $category)
-                                        <option
-                                            value="{{ $category->id }}">{{ $category->getTranslation('name') }}</option>
-                                        @foreach ($category->childrenCategories as $childCategory)
-                                            @include('categories.child_category', ['child_category' => $childCategory])
-                                        @endforeach
+                        <div class="form-group" id="category">
+                            <label class=" col-from-label">{{ translate('Category') }}</label>
+                            <select multiple class="form-control aiz-selectpicker" name="category_id[]"
+                                    id="category_id"
+                                    data-live-search="true" required>
+                                @foreach ($categories as $category)
+                                    <option
+                                        value="{{ $category->id }}">{{ $category->getTranslation('name') }}</option>
+                                    @foreach ($category->children as $childCategory)
+                                        @include('categories.child_category', ['child_category' => $childCategory])
                                     @endforeach
-                                </select>
-                            </div>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group mb-3 text-right">
                             <button type="submit" class="btn btn-primary">{{ translate('Save') }}</button>

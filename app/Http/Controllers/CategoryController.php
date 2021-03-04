@@ -37,7 +37,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $categories = Category::where('parent_id', 0)
+        $categories = Category::where('parent_id', null)
             ->with('childrenCategories')
             ->get();
 
@@ -108,7 +108,7 @@ class CategoryController extends Controller
     {
         $lang = $request->lang;
         $category = Category::findOrFail($id);
-        $categories = Category::where('parent_id', 0)
+        $categories = Category::where('parent_id', null)
             ->with('childrenCategories')
             ->whereNotIn('id', CategoryUtility::children_ids($category->id, true))->where('id', '!=' , $category->id)
             ->orderBy('name','asc')

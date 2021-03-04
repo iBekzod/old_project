@@ -33,7 +33,10 @@ class Translations
 
     public function getTranslations()
     {
-        static::getInstance()->translations = Translation::all();
+        static::getInstance()->translations = Translation::all()->groupBy('lang');
+        foreach (static::getInstance()->translations as $key => $item) {
+            static::getInstance()->translations[$key] = $item->pluck('lang_value', 'lang_key');
+        }
     }
 
     public function search($lang, $lang_key)
