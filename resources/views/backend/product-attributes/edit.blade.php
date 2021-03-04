@@ -134,7 +134,7 @@
                                         selected
                                         @endif
                                         value="{{ $category->id }}">{{ $category->getTranslation('name') }}</option>
-                                    @foreach ($category->childrenCategories as $childCategory)
+                                    @foreach ($category->children as $childCategory)
                                         @include('backend.product-attributes.components.child_category', ['child_category' => $childCategory,'selected_categories' => $selected_categories])
                                     @endforeach
                                 @endforeach
