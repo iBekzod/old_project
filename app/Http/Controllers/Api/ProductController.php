@@ -396,7 +396,7 @@ class ProductController extends Controller
     public function freeShippingProduct()
     {
         return response()->json([
-            'products'=> FlashDealProductCollection::collection(\App\Models\Product::where('shipping_type','free')->latest()->limit(12)->get())
+            'products'=> new FlashDealProductCollection(\App\Models\Product::where('shipping_type','free')->latest()->limit(12)->get())
         ]);
     }
 }
