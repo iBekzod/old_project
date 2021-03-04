@@ -100,9 +100,8 @@ class ShopController extends Controller
                     $user->save();
                 }
                 else {
-                    //$user->notify(new EmailVerificationNotification());
+                    //$user->notify(new EmailVerificationNotification());0
                 }
-
                 flash(translate('Your Shop has been created successfully!'))->success();
                 return redirect()->route('shops.index');
             }
