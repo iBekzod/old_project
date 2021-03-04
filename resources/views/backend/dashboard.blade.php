@@ -125,46 +125,46 @@
     </div>
 @endif
 
-<div class="card">
-    <div class="card-header">
-        <h6 class="mb-0">{{ translate('Top 12 Products') }}</h6>
-    </div>
-    <div class="card-body">
-        <div class="aiz-carousel gutters-10 half-outside-arrow" data-items="6" data-xl-items="5" data-lg-items="4" data-md-items="3" data-sm-items="2" data-arrows='true'>
-            @foreach (filter_products(\App\Product::where('published', 1)->with('product_translations')->orderBy('num_of_sale', 'desc'))->limit(12)->get() as $key => $product)
-                <div class="carousel-box">
-                    <div class="aiz-card-box border border-light rounded shadow-sm hov-shadow-md mb-2 has-transition bg-white">
-                        <div class="position-relative">
-                            <a href="{{ route('product', $product->slug) }}" class="d-block">
-                                <img
-                                    class="img-fit lazyload mx-auto h-210px"
-                                    src="{{ static_asset('assets/img/placeholder.jpg') }}"
-                                    data-src="{{ uploaded_asset($product->thumbnail_img) }}"
-                                    alt="{{  $product->getTranslation('name')  }}"
-                                    onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
-                                >
-                            </a>
-                        </div>
-                        <div class="p-md-3 p-2 text-left">
-                            <div class="fs-15">
-                                @if(home_base_price($product->id) != home_discounted_base_price($product->id))
-                                    <del class="fw-600 opacity-50 mr-1">{{ home_base_price($product->id) }}</del>
-                                @endif
-                                <span class="fw-700 text-primary">{{ home_discounted_base_price($product->id) }}</span>
-                            </div>
-                            <div class="rating rating-sm mt-1">
-                                {{ renderStarRating($product->rating) }}
-                            </div>
-                            <h3 class="fw-600 fs-13 text-truncate-2 lh-1-4 mb-0">
-                                <a href="{{ route('product', $product->slug) }}" class="d-block text-reset">{{ $product->getTranslation('name') }}</a>
-                            </h3>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </div>
-</div>
+{{--<div class="card">--}}
+{{--    <div class="card-header">--}}
+{{--        <h6 class="mb-0">{{ translate('Top 12 Products') }}</h6>--}}
+{{--    </div>--}}
+{{--    <div class="card-body">--}}
+{{--        <div class="aiz-carousel gutters-10 half-outside-arrow" data-items="6" data-xl-items="5" data-lg-items="4" data-md-items="3" data-sm-items="2" data-arrows='true'>--}}
+{{--            @foreach (filter_products(\App\Product::where('published', 1)->with('product_translations')->orderBy('num_of_sale', 'desc'))->limit(12)->get() as $key => $product)--}}
+{{--                <div class="carousel-box">--}}
+{{--                    <div class="aiz-card-box border border-light rounded shadow-sm hov-shadow-md mb-2 has-transition bg-white">--}}
+{{--                        <div class="position-relative">--}}
+{{--                            <a href="{{ route('product', $product->slug) }}" class="d-block">--}}
+{{--                                <img--}}
+{{--                                    class="img-fit lazyload mx-auto h-210px"--}}
+{{--                                    src="{{ static_asset('assets/img/placeholder.jpg') }}"--}}
+{{--                                    data-src="{{ uploaded_asset($product->thumbnail_img) }}"--}}
+{{--                                    alt="{{  $product->getTranslation('name')  }}"--}}
+{{--                                    onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"--}}
+{{--                                >--}}
+{{--                            </a>--}}
+{{--                        </div>--}}
+{{--                        <div class="p-md-3 p-2 text-left">--}}
+{{--                            <div class="fs-15">--}}
+{{--                                @if(home_base_price($product->id) != home_discounted_base_price($product->id))--}}
+{{--                                    <del class="fw-600 opacity-50 mr-1">{{ home_base_price($product->id) }}</del>--}}
+{{--                                @endif--}}
+{{--                                <span class="fw-700 text-primary">{{ home_discounted_base_price($product->id) }}</span>--}}
+{{--                            </div>--}}
+{{--                            <div class="rating rating-sm mt-1">--}}
+{{--                                {{ renderStarRating($product->rating) }}--}}
+{{--                            </div>--}}
+{{--                            <h3 class="fw-600 fs-13 text-truncate-2 lh-1-4 mb-0">--}}
+{{--                                <a href="{{ route('product', $product->slug) }}" class="d-block text-reset">{{ $product->getTranslation('name') }}</a>--}}
+{{--                            </h3>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            @endforeach--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--</div>--}}
 
 
 @endsection
@@ -268,44 +268,44 @@
     });
     var sfs = {
             labels: [
-                @foreach ($lvl0Categories as $key => $category)
-                '{{ $category->getTranslation('name') }}',
-                @endforeach
+{{--                @foreach ($lvl0Categories as $key => $category)--}}
+{{--                '{{ $category->getTranslation('name') }}',--}}
+{{--                @endforeach--}}
             ],
             datasets: [
-                @foreach ($lvl0Categories as $key => $category)
-                {{ \App\Product::where('category_id', $category->id)->sum('num_of_sale') }},
-                @endforeach
+{{--                @foreach ($lvl0Categories as $key => $category)--}}
+{{--                {{ \App\Product::where('category_id', $category->id)->sum('num_of_sale') }},--}}
+{{--                @endforeach--}}
             ]
     }
     AIZ.plugins.chart('#graph-1',{
         type: 'bar',
         data: {
             labels: [
-                @foreach ($lvl0Categories as $key => $category)
-                '{{ $category->getTranslation('name') }}',
-                @endforeach
+{{--                @foreach ($lvl0Categories as $key => $category)--}}
+{{--                '{{ $category->getTranslation('name') }}',--}}
+{{--                @endforeach--}}
             ],
             datasets: [{
                 label: '{{ translate('Number of sale') }}',
                 data: [
-                    @foreach ($lvl0Categories as $key => $category)
-                        @php
-                            $category_ids = \App\Utility\CategoryUtility::children_ids($category->id);
-                            $category_ids[] = $category->id;
-                        @endphp
-                    {{ \App\Product::whereIn('category_id', $category_ids)->sum('num_of_sale') }},
-                    @endforeach
+{{--                    @foreach ($lvl0Categories as $key => $category)--}}
+{{--                        @php--}}
+{{--                            $category_ids = \App\Utility\CategoryUtility::children_ids($category->id);--}}
+{{--                            $category_ids[] = $category->id;--}}
+{{--                        @endphp--}}
+{{--                    {{ \App\Product::whereIn('category_id', $category_ids)->sum('num_of_sale') }},--}}
+{{--                    @endforeach--}}
                 ],
                 backgroundColor: [
-                    @foreach ($lvl0Categories as $key => $category)
-                        'rgba(55, 125, 255, 0.4)',
-                    @endforeach
+{{--                    @foreach ($lvl0Categories as $key => $category)--}}
+{{--                        'rgba(55, 125, 255, 0.4)',--}}
+{{--                    @endforeach--}}
                 ],
                 borderColor: [
-                    @foreach ($lvl0Categories as $key => $category)
-                        'rgba(55, 125, 255, 1)',
-                    @endforeach
+{{--                    @foreach ($lvl0Categories as $key => $category)--}}
+{{--                        'rgba(55, 125, 255, 1)',--}}
+{{--                    @endforeach--}}
                 ],
                 borderWidth: 1
             }]
@@ -351,43 +351,43 @@
         type: 'bar',
         data: {
             labels: [
-                @foreach ($lvl0Categories as $key => $category)
-                '{{ $category->getTranslation('name') }}',
-                @endforeach
+{{--                @foreach ($lvl0Categories as $key => $category)--}}
+{{--                '{{ $category->getTranslation('name') }}',--}}
+{{--                @endforeach--}}
             ],
             datasets: [{
                 label: '{{ translate('Number of Stock') }}',
                 data: [
-                    @foreach ($lvl0Categories as $key => $category)
-                        @php
-                            $category_ids = \App\Utility\CategoryUtility::children_ids($category->id);
-                            $category_ids[] = $category->id;
+{{--                    @foreach ($lvl0Categories as $key => $category)--}}
+{{--                        @php--}}
+{{--                            $category_ids = \App\Utility\CategoryUtility::children_ids($category->id);--}}
+{{--                            $category_ids[] = $category->id;--}}
 
-                            $products = \App\Product::whereIn('category_id', $category_ids)->get();
-                            $qty = 0;
-                            foreach ($products as $key => $product) {
-                                if ($product->variant_product) {
-                                    foreach ($product->stocks as $key => $stock) {
-                                        $qty += $stock->qty;
-                                    }
-                                }
-                                else {
-                                    $qty = $product->current_stock;
-                                }
-                            }
-                        @endphp
-                        {{ $qty }},
-                    @endforeach
+{{--                            $products = \App\Product::whereIn('category_id', $category_ids)->get();--}}
+{{--                            $qty = 0;--}}
+{{--                            foreach ($products as $key => $product) {--}}
+{{--                                if ($product->variant_product) {--}}
+{{--                                    foreach ($product->stocks as $key => $stock) {--}}
+{{--                                        $qty += $stock->qty;--}}
+{{--                                    }--}}
+{{--                                }--}}
+{{--                                else {--}}
+{{--                                    $qty = $product->current_stock;--}}
+{{--                                }--}}
+{{--                            }--}}
+{{--                        @endphp--}}
+{{--                        {{ $qty }},--}}
+{{--                    @endforeach--}}
                 ],
                 backgroundColor: [
-                    @foreach ($lvl0Categories as $key => $category)
-                        'rgba(253, 57, 149, 0.4)',
-                    @endforeach
+{{--                    @foreach ($lvl0Categories as $key => $category)--}}
+{{--                        'rgba(253, 57, 149, 0.4)',--}}
+{{--                    @endforeach--}}
                 ],
                 borderColor: [
-                    @foreach ($lvl0Categories as $key => $category)
-                        'rgba(253, 57, 149, 1)',
-                    @endforeach
+{{--                    @foreach ($lvl0Categories as $key => $category)--}}
+{{--                        'rgba(253, 57, 149, 1)',--}}
+{{--                    @endforeach--}}
                 ],
                 borderWidth: 1
             }]
