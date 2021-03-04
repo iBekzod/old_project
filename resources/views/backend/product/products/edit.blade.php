@@ -41,7 +41,7 @@
                             <select class="form-control aiz-selectpicker" name="category_id" id="category_id"
                                     data-selected="{{ $product->category_id }}" data-live-search="true" required>
                                 @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    <option value="{{ $category->id }}">{{ $category->getTranslation('name') }}</option>
                                     @foreach ($category->children as $childCategory)
                                         @include('categories.child_category', ['child_category' => $childCategory])
                                     @endforeach
