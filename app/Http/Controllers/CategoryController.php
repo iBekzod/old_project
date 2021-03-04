@@ -37,9 +37,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $categories = Category::where('parent_id', null)
-            ->with('childrenCategories')
-            ->get();
+        $categories = Category::all()->toTree();
 
         return view('backend.product.categories.create', compact('categories'));
     }
