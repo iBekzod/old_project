@@ -20,10 +20,8 @@ class ProductAttributeController extends Controller
     public function index()
     {
         $attributes = ProductAttribute::latest()->get();
-        $categories = Category::where('parent_id', 0)
-            ->where('digital', 0)
-            ->with('childrenCategories')
-            ->get();
+        $categories = Category::all()->toTree();
+
         return view('backend.product-attributes.index', compact('attributes','categories'));
     }
 
@@ -163,10 +161,7 @@ class ProductAttributeController extends Controller
         $selected_categories = $attr->categories;
         $selected_categories = $selected_categories->pluck('id');
         $selected_categories = $selected_categories->toArray();
-        $categories = Category::where('parent_id', 0)
-            ->where('digital', 0)
-            ->with('childrenCategories')
-            ->get();
+        $categories = Category::all()->toTree();
 
         return view('backend.product-attributes.edit', compact('attr', 'attributes', 'lang', 'categories', 'selected_categories'));
     }

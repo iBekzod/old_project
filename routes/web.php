@@ -32,8 +32,11 @@ Route::get('/email_change/callback', 'HomeController@email_change_callback')->na
 Route::post('/password/reset/email/submit', 'HomeController@reset_password_with_code')->name('password.update');
 
 Route::get('/test', function () {
+    foreach (\App\Category::where('parent_id', 0)->get() as $category) {
+        $category->parent_id = null;
+        $category->save();
+    }
     \App\Category::fixTree();
-    dd(\App\Category::all()->toTree());
 });
 
 Route::post('/language', 'LanguageController@changeLanguage')->name('language.change');

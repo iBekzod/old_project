@@ -530,7 +530,7 @@
                                             <div class="col">
                                                 <div class="form-group">
                                                     <select class="form-control aiz-selectpicker" name="home_categories[]" data-live-search="true" data-selected={{ $value }} required>
-                                                        @foreach (\App\Category::where('parent_id', 0)->with('childrenCategories')->get() as $category)
+                                                        @foreach (\App\Category::where('parent_id', null)->with('childrenCategories')->get() as $category)
                                                             <option value="{{ $category->id }}">{{ $category->getTranslation('name') }}</option>
                                                             @foreach ($category->childrenCategories as $childCategory)
                                                                 @include('categories.child_category', ['child_category' => $childCategory])
@@ -677,7 +677,7 @@
                             <div class="col-md-10">
                                 <input type="hidden" name="types[]" value="top10_categories">
                                 <select name="top10_categories[]" class="form-control aiz-selectpicker" multiple data-max-options="10" data-live-search="true" data-selected={{ get_setting('top10_categories') }} required>
-                                    @foreach (\App\Category::where('parent_id', 0)->with('childrenCategories')->get() as $category)
+                                    @foreach (\App\Category::where('parent_id', null)->with('childrenCategories')->get() as $category)
                                         <option value="{{ $category->id }}">{{ $category->getTranslation('name') }}</option>
                                         @foreach ($category->childrenCategories as $childCategory)
                                             @include('categories.child_category', ['child_category' => $childCategory])
