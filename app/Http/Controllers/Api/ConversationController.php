@@ -16,7 +16,6 @@ class ConversationController extends Controller
     public function getConversations(Request $request)
     {
         $request->validate([
-            'seller_id' => 'required',
             'user_id' => 'required',
         ]);
         $conversation = Conversation::where('sender_id', $request->user_id)->orWhere('receiver_id', $request->user_id)->orderBy('created_at', 'desc')->get();
