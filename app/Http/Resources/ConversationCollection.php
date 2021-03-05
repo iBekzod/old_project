@@ -18,7 +18,8 @@ class ConversationCollection extends ResourceCollection
                     'sender_viewed' => $data->sender_viewed,
                     'receiver_viewed' => $data->receiver_viewed,
                     'created_at' => $data->created_at,
-                    'updated_at' => $data->updated_at
+                    'updated_at' => $data->updated_at,
+                    'messages'=> $data->messages()
                 ];
             })
         ];
