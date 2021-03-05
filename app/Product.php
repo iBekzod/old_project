@@ -88,14 +88,38 @@ class Product extends Model
     public function getCharacteristicValues2Attribute()
     {
         $arr = [];
-        foreach ($this->characteristicValues as $item) {
-            $arr[] = [
+
+        foreach ($this->characteristicValues as $key => $item) {
+            $attr = App\Models\ProductAttributeCharacteristics::where('id', $item->attr_id)->with('values')->first();
+
+            $arr[$key] = [
                 'attr_id' => $item->attr_id,
                 'parent_id' => $item->parent_id,
                 'key' => $item->name,
-                'value' => $item->values
+                'value' => $item->values,
+                'values' => array_map(function ($el) {
+                    return [
+                        'id' => $el,
+                        'text' => $el,
+                        'selected' => true
+                    ];
+                }, explode(' / ', $item->values))
             ];
+
+            if ($attr) {
+                if ($attr->values->count()) {
+                    foreach ($attr->values as $value) {
+                        if (!in_array($value->value, explode(' / ', $item->values))) {
+                            array_push($arr[$key]['values'], [
+                                'id' => $value->value,
+                                'text' => $value->value
+                            ]);
+                        }
+                    }
+                }
+            }
         }
+
         return $arr;
     }
 

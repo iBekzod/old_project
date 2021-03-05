@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Models\AttributeValue;
 use App\Models\ProductAttribute;
 use App\Models\ProductAttributeCharacteristics;
 use App\Models\ProductAttributeCharacteristicTranslation;
@@ -100,10 +101,27 @@ class ProductAttributeController extends Controller
 
     public function editAttr(Request $request, $id)
     {
-        $lang = $request->lang;
-        $attribute = ProductAttributeCharacteristics::findOrFail($id);
+        if ($request->method() == 'POST') {
 
-        return view('backend.product-attributes.edit_attr', compact('attribute', 'lang'));
+            $attribute = ProductAttributeCharacteristics::findOrFail($id);
+            $attribute->values()->delete();
+
+            foreach ($request->get('attr_values') as $item)
+            {
+                AttributeValue::create([
+                    'attribute_id'  => $id,
+                    'value'         => $item
+                ]);
+            }
+
+            flash(translate('Attribute values has been saved successfully'))->success();
+            return back();
+        } else {
+            $lang = $request->lang;
+            $attribute = ProductAttributeCharacteristics::findOrFail($id);
+
+            return view('backend.product-attributes.edit_attr', compact('attribute', 'lang'));
+        }
     }
 
     public function updateAttr(Request $request, $id)

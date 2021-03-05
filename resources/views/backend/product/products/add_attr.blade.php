@@ -7,7 +7,58 @@
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script type="text/x-template" id="select2-template">
+        <select class="form-control">
+            <slot></slot>
+        </select>
+    </script>
     <script>
+
+        Vue.component("select2", {
+            props: ["options", "value"],
+            template: "#select2-template",
+            mounted: function() {
+                var vm = this;
+                $(this.$el)
+                    // init select2
+                    .select2({
+                        data: this.options,
+                        tags: true,
+                        tokenSeparators: [',', ' ']
+                    })
+                    .trigger("change")
+                    // emit event on change.
+                    .on("change", function() {
+                        vm.$emit("input", this.value);
+                    });
+
+                // if(this.options) {
+                //     this.options.map(el => {
+                //         $(this.$el).val(el.text)
+                //     })
+                // }
+            },
+            watch: {
+                value: function(value) {
+                    // update value
+                    $(this.$el)
+                        .val(value)
+                        .trigger("change");
+                },
+                options: function(options) {
+                    // update options
+                    $(this.$el)
+                        .empty()
+                        .select2({ data: options });
+                }
+            },
+            destroyed: function() {
+                $(this.$el)
+                    .off()
+                    .select2("destroy");
+            }
+        });
+
         new Vue({
             el: '#app',
             data: () => ({
@@ -18,23 +69,25 @@
             }),
             mounted () {
                 this.values = JSON.parse(this.values)
+                // console.log(this.values)
                 this.options = JSON.parse(this.options)
-                console.log(this.options)
                 this.values.filter((val) => {
                     this.data.push({
                         id: val.attr_id,
                         parent_id: val.parent_id,
                         key: val.key,
-                        value: val.value
+                        value: val.value,
+                        values: val.values,
                     })
                 })
+                console.log(this.data)
             },
             template: `
             <div class="col-lg-12 mx-auto">
                 <div class="card">
                     <div class="card-body">
                         <label>Добавить готовую сетку</label>
-                        <select @change="changeSelect" v-model="option" name="bla_bla_bla" id="" class="form-control">
+                        <select @change="selectOnChange" v-model="option" name="bla_bla_bla" id="" class="form-control select2">
                             <option :value="false"></option>
                             @foreach($options as $option)
                                 <option disabled value="{{ $option->id }}">{{ $option->getTranslation('name') }}</option>
@@ -56,7 +109,8 @@
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group">
-                                        <input type="text" :name="'attr[' + index + '][value]'" :value="item.value" class="form-control">
+                                        <select2 multiple="multiple" :name="'attr[' + index + '][values][]'"
+                                        :options="item.values"></select2>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
@@ -76,18 +130,20 @@
             </div>
 `,
             methods: {
-                changeSelect() {
+                selectOnChange() {
                     this.options.filter((el) => {
-                        console.log(el)
                         if (el.attributes) {
                             el.attributes.filter((val) => {
                                 if (val.id === parseInt(this.option)) {
-                                    this.data.push({
+                                    var item = {
                                         id: val.id,
                                         parent_id: val.attribute_id,
                                         key: val.name,
+                                        values: val.values,
                                         value: ''
-                                    })
+                                    }
+                                    item.values = item.values.map(el => ({id: el.value, text: el.value}))
+                                    this.data.push(item)
                                 }
                             })
                         }
