@@ -8,9 +8,28 @@ use App\Mail\ConversationMailManager;
 use App\Message;
 use App\Product;
 use Illuminate\Http\Request;
+use App\Http\Resources\ConversationCollection;
+use Auth;
 
 class ConversationController extends Controller
 {
+    public function getConversations(Request $request)
+    {
+        $request->validate([
+            'seller_id' => 'required',
+            'user_id' => 'required',
+        ]);
+        $conversation = Conversation::where('sender_id', $request->user_id)->orWhere('receiver_id', $request->user_id)->orderBy('created_at', 'desc')->get();
+        // if ($conversation->sender_id == Auth::user()->id) {
+        //     $conversation->sender_viewed = 1;
+        // }
+        // elseif($conversation->receiver_id == Auth::user()->id) {
+        //     $conversation->receiver_viewed = 1;
+        // }
+        // $conversation->save();
+        return $conversation;//new ConversationCollection($conversation);
+    }
+
     public function store(Request $request)
     {
         $request->validate([

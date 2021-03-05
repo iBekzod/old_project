@@ -147,6 +147,8 @@ Route::prefix('v1')->group(function () {
     Route::get('wallet/history/{id}', 'Api\WalletController@walletRechargeHistory')->middleware('auth:api');
 
     Route::match(['get', 'post'], 'search', 'SearchController@search');
+
+    Route::get('conversation_messages','Api\ConversationController@getConversations');//->middleware('auth:api');
 });
 
 Route::fallback(function() {
