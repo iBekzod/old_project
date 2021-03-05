@@ -29,7 +29,7 @@ class ProductAttribute extends Model
 
     public function attributes()
     {
-        return $this->hasMany(ProductAttributeCharacteristics::class, 'attribute_id', 'id');
+        return $this->hasMany(ProductAttributeCharacteristics::class, 'attribute_id', 'id')->with('values');
     }
 
     public function categories()
