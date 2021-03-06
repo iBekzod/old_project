@@ -289,13 +289,13 @@
             datasets: [{
                 label: '{{ translate('Number of sale') }}',
                 data: [
-                    @foreach ($lvl0Categories as $key => $category)
-                        @php
-                            $category_ids = \App\Utility\CategoryUtility::children_ids($category->id);
-                            $category_ids[] = $category->id;
-                        @endphp
-                    {{ \App\Product::whereIn('category_id', $category_ids)->sum('num_of_sale') }},
-                    @endforeach
+{{--                    @foreach ($lvl0Categories as $key => $category)--}}
+{{--                        @php--}}
+{{--                            $category_ids = \App\Utility\CategoryUtility::children_ids($category->id);--}}
+{{--                            $category_ids[] = $category->id;--}}
+{{--                        @endphp--}}
+{{--                    {{ \App\Product::whereIn('category_id', $category_ids)->sum('num_of_sale') }},--}}
+{{--                    @endforeach--}}
                 ],
                 backgroundColor: [
                     @foreach ($lvl0Categories as $key => $category)
@@ -351,33 +351,33 @@
         type: 'bar',
         data: {
             labels: [
-                @foreach ($lvl0Categories as $key => $category)
-                '{{ $category->getTranslation('name') }}',
-                @endforeach
+{{--                @foreach ($lvl0Categories as $key => $category)--}}
+{{--                '{{ $category->getTranslation('name') }}',--}}
+{{--                @endforeach--}}
             ],
             datasets: [{
                 label: '{{ translate('Number of Stock') }}',
                 data: [
-                    @foreach ($lvl0Categories as $key => $category)
-                        @php
-                            $category_ids = \App\Utility\CategoryUtility::children_ids($category->id);
-                            $category_ids[] = $category->id;
+{{--                    @foreach ($lvl0Categories as $key => $category)--}}
+{{--                        @php--}}
+{{--                            $category_ids = \App\Utility\CategoryUtility::children_ids($category->id);--}}
+{{--                            $category_ids[] = $category->id;--}}
 
-                            $products = \App\Product::whereIn('category_id', $category_ids)->get();
-                            $qty = 0;
-                            foreach ($products as $key => $product) {
-                                if ($product->variant_product) {
-                                    foreach ($product->stocks as $key => $stock) {
-                                        $qty += $stock->qty;
-                                    }
-                                }
-                                else {
-                                    $qty = $product->current_stock;
-                                }
-                            }
-                        @endphp
-                        {{ $qty }},
-                    @endforeach
+{{--                            $products = \App\Product::whereIn('category_id', $category_ids)->get();--}}
+{{--                            $qty = 0;--}}
+{{--                            foreach ($products as $key => $product) {--}}
+{{--                                if ($product->variant_product) {--}}
+{{--                                    foreach ($product->stocks as $key => $stock) {--}}
+{{--                                        $qty += $stock->qty;--}}
+{{--                                    }--}}
+{{--                                }--}}
+{{--                                else {--}}
+{{--                                    $qty = $product->current_stock;--}}
+{{--                                }--}}
+{{--                            }--}}
+{{--                        @endphp--}}
+{{--                        {{ $qty }},--}}
+{{--                    @endforeach--}}
                 ],
                 backgroundColor: [
                     @foreach ($lvl0Categories as $key => $category)
