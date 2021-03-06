@@ -230,8 +230,7 @@
                         @if(Auth::user()->user_type == 'admin' || in_array('6', json_decode(Auth::user()->staff->role->permissions)))
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('pick_up_point.order_index') }}"
-                                   class="aiz-side-nav-link">
-                                                                        {{ areActiveRoutes(['pick_up_point.order_index','pick_up_point.order_show'])}}
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['pick_up_point.order_index','pick_up_point.order_show'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Pick-up Point Order')}}</span>
                                 </a>
                             </li>
