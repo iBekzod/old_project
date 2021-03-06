@@ -25,8 +25,8 @@
 @endphp
 
 <div class="aiz-sidebar-wrap">
-    <div class="aiz-sidebar left c-scrollbar">
-                <div class="aiz-side-nav-logo-wrap">
+    <div class="aiz-sidebar left c-scrollbar bg-light">
+                <div class="aiz-side-nav-logo-wrap bg-light">
                     <a href="{{ route('admin.dashboard') }}" class="d-block text-left">
                         @if(get_setting('system_logo_white') != null)
                             <img class="mw-100" src="{{ uploaded_asset(get_setting('system_logo_white')) }}" class="brand-icon"
