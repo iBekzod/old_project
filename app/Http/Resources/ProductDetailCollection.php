@@ -77,7 +77,7 @@ class ProductDetailCollection extends ResourceCollection
                     $arr['description'] = $lang->description;
                 }
 
-                if($flashDeal = FlashDealProduct::where('id',$data->id)->first())
+                if($flashDeal = FlashDealProduct::where('product_id',$data->id)->first())
                 {
                    $arr['flashDeal'] = $flashDeal;
                 }
