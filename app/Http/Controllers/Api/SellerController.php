@@ -68,7 +68,7 @@ class SellerController extends Controller
 
     public function seller($id)
     {
-        $seller = Seller::where('id', $id)->with(['products'])->firstOrFail();
+        $seller = Seller::where('id', $id)->or->with(['products'])->firstOrFail();
 
         return response()->json([
             'seller' => $seller

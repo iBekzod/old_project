@@ -6,18 +6,12 @@ use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ShopCollection;
 use App\Models\Product;
 use App\Models\Shop;
+use App\Seller;
 
 class ShopController extends Controller
 {
     public function index()
     {
-        $shops = Shop::with('user')->get();
-        $arr = [];
-        foreach ($shops as $shop) {
-            if($shop->user) {
-
-            }
-        }
         return new ShopCollection(Shop::all());
     }
 

@@ -52,32 +52,32 @@
                     </a>
                 </li>
 
-                <!-- POS Addon-->
-                            @if ($pos_system != null && $pos_system->activated)
-                                @if(Auth::user()->user_type == 'admin' || in_array('1', json_decode(Auth::user()->staff->role->permissions)))
-                                    <li class="aiz-side-nav-item">
-                                        <a href="#" class="aiz-side-nav-link">
-                                            <i class="las la-tasks aiz-side-nav-icon"></i>
-                                            <span class="aiz-side-nav-text">{{translate('POS System')}}</span>
-                                            <span class="aiz-side-nav-arrow"></span>
-                                        </a>
-                                        <ul class="aiz-side-nav-list level-2">
-                                            <li class="aiz-side-nav-item">
-                                                <a href="{{route('poin-of-sales.index')}}"
-                                                   class="aiz-side-nav-link">
-                                                    {{ areActiveRoutes(['poin-of-sales.index', 'poin-of-sales.create'])}}
-                                                    <span class="aiz-side-nav-text">{{translate('POS Manager')}}</span>
-                                                </a>
-                                            </li>
-                                            <li class="aiz-side-nav-item">
-                                                <a href="{{route('poin-of-sales.activation')}}" class="aiz-side-nav-link">
-                                                    <span class="aiz-side-nav-text">{{translate('POS Configuration')}}</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                @endif
-                            @endif
+            <!-- POS Addon-->
+            @if ($pos_system != null && $pos_system->activated)
+                @if(Auth::user()->user_type == 'admin' || in_array('1', json_decode(Auth::user()->staff->role->permissions)))
+                    <li class="aiz-side-nav-item">
+                        <a href="#" class="aiz-side-nav-link">
+                            <i class="las la-tasks aiz-side-nav-icon"></i>
+                            <span class="aiz-side-nav-text">{{translate('POS System')}}</span>
+                            <span class="aiz-side-nav-arrow"></span>
+                        </a>
+                        <ul class="aiz-side-nav-list level-2">
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('poin-of-sales.index')}}"
+                                   class="aiz-side-nav-link">
+                                    {{ areActiveRoutes(['poin-of-sales.index', 'poin-of-sales.create'])}}
+                                    <span class="aiz-side-nav-text">{{translate('POS Manager')}}</span>
+                                </a>
+                            </li>admin
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('poin-of-sales.activation')}}" class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('POS Configuration')}}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                @endif
+            @endif
 
             <!-- Product -->
                 @if(Auth::user()->user_type == 'admin' || in_array('2', json_decode(Auth::user()->staff->role->permissions)))
