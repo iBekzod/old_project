@@ -53,13 +53,19 @@ class ProductController extends Controller
             $product->characteristicValues()->delete();
             if ($request->get('attr')) {
                 foreach ($request->get('attr') as $item) {
-                    CharacteristicValues::create([
+
+                    $data = [
                         'product_id' => $product->id,
                         'parent_id' => $item['parent_id'],
                         'attr_id' => $item['id'],
                         'name' => $item['name'],
-                        'values' => $item['value']
-                    ]);
+                    ];
+
+                    if (isset($item['values'])) {
+                       $data['values'] = implode(' / ', $item['values']);
+                    }
+
+                    CharacteristicValues::create($data);
                 }
             }
 
@@ -443,7 +449,7 @@ class ProductController extends Controller
     public function admin_product_edit(Request $request, $id)
     {
         $product = Product::findOrFail($id);
-        $productAttributes = $product->category->productAttributes;
+        ($product->category)? $productAttributes = $product->category->productAttributes : $productAttributes = [];
         $selectedProductAttributes = $product->productAttributes->pluck('id')->toArray();
         $lang = $request->lang;
         $tags = json_decode($product->tags);

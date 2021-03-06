@@ -56,4 +56,42 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h5>{{ translate('Add new attribute values') }}</h5>
+                    <form action="{{ route('product-attributes.edit_attr', $attribute->id) }}" method="post">
+                        @csrf
+
+                        <div class="form-group">
+                            <label for="attr_values">{{ translate('Values') }}</label>
+                            <select class="form-control select2-attr" multiple name="attr_values[]" id="attr_values">
+                                @foreach($attribute->values as $item)
+                                    <option value="{{ $item->value }}" selected>{{ $item->value }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-outline-primary">{{ translate('Submit') }}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@endsection
+
+@section('script')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(function () {
+            $('.select2-attr').select2({
+                tags: true
+            })
+        })
+    </script>
 @endsection

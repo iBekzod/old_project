@@ -14,6 +14,8 @@ class ProductDetailCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection->map(function($data) {
+                $lang = ProductTranslation::where('product_id', $data->id)->where('lang', app()->getLocale())->first();
+
                 $arr = [
                     'id' => (integer) $data->id,
                     'name' => $data->name,
@@ -70,7 +72,12 @@ class ProductDetailCollection extends ResourceCollection
                     ]
                 ];
 
-                if($flashDeal = FlashDealProduct::where('id',$data->id)->first())
+                if ($lang) {
+                    $arr['name'] = $lang->name;
+                    $arr['description'] = $lang->description;
+                }
+
+                if($flashDeal = FlashDealProduct::where('product_id',$data->id)->first())
                 {
                    $arr['flashDeal'] = $flashDeal;
                 }

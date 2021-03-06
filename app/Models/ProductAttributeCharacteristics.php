@@ -18,6 +18,10 @@ class ProductAttributeCharacteristics extends Model
         return $this->hasOne(ProductAttribute::class, 'id', 'attribute_id');
     }
 
+    public function values()
+    {
+        return $this->hasMany(AttributeValue::class, 'attribute_id', 'id');
+    }
 
     public function getTranslation($field = '', $lang = false)
     {

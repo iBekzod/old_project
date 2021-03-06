@@ -11,12 +11,19 @@ class ShopController extends Controller
 {
     public function index()
     {
+        $shops = Shop::with('user')->get();
+        $arr = [];
+        foreach ($shops as $shop) {
+            if($shop->user) {
+
+            }
+        }
         return new ShopCollection(Shop::all());
     }
 
     public function info($id)
     {
-        return new ShopCollection(Shop::where('id', $id)->get());
+        return new ShopCollection(Shop::where('id', $id)->orWhere('slug', 'like', '%'.$id.'%')->get());
     }
 
     public function shopOfUser($id)

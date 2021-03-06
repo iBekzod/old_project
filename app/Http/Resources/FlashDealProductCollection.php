@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\ProductStock;
+use App\ProductTranslation;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class FlashDealProductCollection extends ResourceCollection
@@ -12,7 +13,8 @@ class FlashDealProductCollection extends ResourceCollection
         return [
             'data' => $this->collection->map(function($data) {
                 $product = $data->product;
-                return [
+                $lang = ProductTranslation::where('product_id', $product->id)->where('lang', app()->getLocale())->first();
+                $arr = [
                     'id'=>$product->id,
                     'slug'=>$product->slug,
                     'owner_id' => $product->user_id,
@@ -37,6 +39,12 @@ class FlashDealProductCollection extends ResourceCollection
                         'top_from_seller' => route('products.topFromSeller', $product->id)
                     ]
                 ];
+
+                if ($lang) {
+                    $arr['name'] = $lang->name;
+                }
+
+                return $arr;
             })
         ];
     }

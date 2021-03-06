@@ -34,14 +34,22 @@ class ProductBulkUploadController extends Controller
 
     public function pdf_download_category()
     {
-        $categories = Category::all();
-        $pdf = PDF::setOptions([
-                        'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true,
-                        'logOutputFile' => storage_path('logs/log.htm'),
-                        'tempDir' => storage_path('logs/')
-                    ])->loadView('backend.downloads.category', compact('categories'));
-
-        return $pdf->download('category.pdf');
+        $my_categories = Category::all();
+        $chunks = $my_categories->chunk(100);
+        $pdf=[];
+        foreach($chunks as $categories){
+            $pdf[] = PDF::setOptions([
+                            'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true,
+                            'logOutputFile' => storage_path('logs/log.htm'),
+                            'tempDir' => storage_path('logs/')
+                        ])->loadView('backend.downloads.category', compact('categories', $categories));
+            break;
+        }
+        $files=[];
+        foreach($pdf as $key=>$file){
+            return $file->download('category_'.($key+1).'.pdf');
+        }
+        return $files;
     }
 
     public function pdf_download_sub_category()

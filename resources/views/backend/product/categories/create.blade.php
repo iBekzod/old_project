@@ -20,10 +20,10 @@
                     <label class="col-md-3 col-form-label">{{translate('Parent Category')}}</label>
                     <div class="col-md-9">
                         <select class="select2 form-control aiz-selectpicker" name="parent_id" data-toggle="select2" data-placeholder="Choose ..." data-live-search="true">
-                            <option value="0">{{ translate('No Parent') }}</option>
+                            <option value="0" selected>{{ translate('No Parent') }}</option>
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}">{{ $category->getTranslation('name') }}</option>
-                                @foreach ($category->childrenCategories as $childCategory)
+                                @foreach ($category->children as $childCategory)
                                     @include('categories.child_category', ['child_category' => $childCategory])
                                 @endforeach
                             @endforeach
