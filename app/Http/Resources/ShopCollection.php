@@ -20,6 +20,7 @@ class ShopCollection extends ResourceCollection
                     'twitter' => $data->twitter,
                     'youtube' => $data->youtube,
                     'instagram' => $data->instagram,
+                    'slug' => $data->slug,
                     'links' => [
                         'featured' => route('shops.featuredProducts', $data->id),
                         'top' => route('shops.topSellingProducts',  $data->id),

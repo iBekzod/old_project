@@ -449,7 +449,7 @@ class ProductController extends Controller
     public function admin_product_edit(Request $request, $id)
     {
         $product = Product::findOrFail($id);
-        $productAttributes = $product->category->productAttributes;
+        ($product->category)? $productAttributes = $product->category->productAttributes : $productAttributes = [];
         $selectedProductAttributes = $product->productAttributes->pluck('id')->toArray();
         $lang = $request->lang;
         $tags = json_decode($product->tags);
