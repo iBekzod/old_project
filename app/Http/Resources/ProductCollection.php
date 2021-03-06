@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\ProductStock;
+use App\ProductTranslation;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class ProductCollection extends ResourceCollection
@@ -11,7 +12,9 @@ class ProductCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection->map(function($data) {
-                return [
+                $lang = ProductTranslation::where('product_id', $data->id)->where('lang', app()->getLocale())->first();
+
+                $arr =  [
                     'id'=>$data->id,
                     'slug'=>$data->slug,
                     'owner_id' => $data->user_id,
@@ -36,6 +39,12 @@ class ProductCollection extends ResourceCollection
                         'top_from_seller' => route('products.topFromSeller', $data->id)
                     ]
                 ];
+
+                if ($lang) {
+                    $arr['name'] = $lang->name;
+                }
+
+                return $arr;
             })
         ];
     }
