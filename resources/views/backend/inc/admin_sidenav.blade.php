@@ -173,7 +173,7 @@
                     </li>
                 @endif
             <!-- Warehouse -->
-                 <li class="aiz-side-nav-item">
+                 {{-- <li class="aiz-side-nav-item">
                     <a href="#" class="aiz-side-nav-link">
                         <i class="las la-money-bill aiz-side-nav-icon"></i>
                         <span class="aiz-side-nav-text">Warehouse</span>
@@ -190,7 +190,7 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
             <!-- Sale -->
                 <li class="aiz-side-nav-item">
                     <a href="#" class="aiz-side-nav-link">
