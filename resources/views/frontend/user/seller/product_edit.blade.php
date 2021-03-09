@@ -48,7 +48,7 @@
                                         <select class="form-control aiz-selectpicker" name="category_id" id="category_id" data-selected={{ $product->category_id }} required>
                                             @foreach ($categories as $category)
                                                 <option value="{{ $category->id }}">{{ $category->getTranslation('name') }}</option>
-                                                @foreach ($category->childrenCategories as $childCategory)
+                                                @foreach ($category->children as $childCategory)
                                                     @include('categories.child_category', ['child_category' => $childCategory])
                                                 @endforeach
                                             @endforeach

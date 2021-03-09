@@ -19,11 +19,13 @@ class CustomerProductController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
-        $products = CustomerProduct::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(10);
+        $products = CustomerProduct::where('user_id', Auth::user()->id)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
         return view('frontend.user.customer.products', compact('products'));
     }
 
@@ -36,7 +38,7 @@ class CustomerProductController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function create()
     {

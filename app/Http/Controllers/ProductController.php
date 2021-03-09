@@ -743,6 +743,7 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($request->id);
         $product->published = $request->status;
+        $product->on_moderation = 1;
 
         if ($product->added_by == 'seller' && \App\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated) {
             $seller = $product->user->seller;

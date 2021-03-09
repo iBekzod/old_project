@@ -10,7 +10,7 @@
                 </div>
 
                 @php
-                    $num_todays_deal = count(filter_products(\App\Product::where('published', 1)->where('todays_deal', 1 ))->get());
+                    $num_todays_deal = count(filter_products(\App\Product::where('published', 1)->where('on_moderation', 0)->where('todays_deal', 1 ))->get());
                     $featured_categories = \App\Category::where('featured', 1)->get();
                 @endphp
 

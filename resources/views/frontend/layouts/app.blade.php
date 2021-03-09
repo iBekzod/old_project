@@ -124,6 +124,9 @@
     @yield('js_pre')
     @yield('css_pre')
 
+
+    @yield('css')
+    @yield('js')
 </head>
 <body>
 
@@ -588,6 +591,5 @@
     @php
         echo get_setting('footer_script');
     @endphp
-
 </body>
 </html>

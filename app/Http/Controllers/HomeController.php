@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\HelperClasses\Translations;
+use App\Models\CharacteristicValues;
+use App\ProductTranslation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Session;
@@ -190,7 +192,7 @@ class HomeController extends Controller
     /**
      * Show the application frontend home.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
@@ -238,7 +240,7 @@ class HomeController extends Controller
     {
         $detailedProduct  = Product::where('slug', $slug)->first();
 
-        if($detailedProduct!=null && $detailedProduct->published){
+        if($detailedProduct!=null && $detailedProduct->published && !$detailedProduct->on_moderation){
             //updateCartSetup();
             if($request->has('product_referral_code')){
                 Cookie::queue('product_referral_code', $request->product_referral_code, 43200);
@@ -290,6 +292,43 @@ class HomeController extends Controller
         return view('frontend.all_brand', compact('categories'));
     }
 
+    public function characteristics(Request $request, $id)
+    {
+        if ($request->method() === 'POST') {
+            $product = Product::where('id', $id)->firstOrFail();
+            $product->characteristicValues()->delete();
+            if ($request->get('attr')) {
+                foreach ($request->get('attr') as $item) {
+
+                    $data = [
+                        'product_id' => $product->id,
+                        'parent_id' => $item['parent_id'],
+                        'attr_id' => $item['id'],
+                        'name' => $item['name'],
+                    ];
+
+                    if (isset($item['values'])) {
+                        $data['values'] = implode(' / ', $item['values']);
+                    }
+
+                    CharacteristicValues::create($data);
+                }
+            }
+
+            flash(translate('Saved successfully'))->success();
+            return back();
+        } else {
+            $product = Product::where('id', $id)
+                ->with(['characteristicValues'])
+                ->firstOrFail();
+            $options = $product->category->productAttributes;
+
+            return view('frontend.user.seller.add_attr', compact(
+                'product', 'options'
+            ));
+        }
+    }
+
     public function show_product_clone_form(Request $request)
     {
         if($request->method() == 'POST') {
@@ -298,6 +337,8 @@ class HomeController extends Controller
             ]);
 
             $product = Product::find($request->get('product_id'));
+            $product_translations = $product->product_translations;
+            $characteristics = CharacteristicValues::where('product_id', $product->id)->get();
             $product_new = $product->replicate();
             $product_new->slug = substr($product_new->slug, 0, -5).Str::random(5);
             $product_new->user_id = Auth::user()->id;
@@ -305,6 +346,22 @@ class HomeController extends Controller
             $product_new->on_moderation = 1;
 
             if($product_new->save()){
+                foreach ($product_translations as $translation) {
+                    ProductTranslation::create([
+                        'product_id' => $product_new->id,
+                        'name' => $translation->name,
+                        'lang' => $translation->lang
+                    ]);
+                }
+                foreach ($characteristics as $characteristic) {
+                    CharacteristicValues::create([
+                        'parent_id' => $characteristic->parent_id,
+                        'product_id' => $product_new->id,
+                        'attr_id' => $characteristic->attr_id,
+                        'name' => $characteristic->name,
+                        'values' => $characteristic->values
+                    ]);
+                }
                 return redirect()->route('seller.products.edit', [$product_new->id, 'lang' => 'en']);
             }
             else{
@@ -343,10 +400,7 @@ class HomeController extends Controller
         $product = Product::findOrFail($id);
         $lang = $request->lang;
         $tags = json_decode($product->tags);
-        $categories = Category::where('parent_id', null)
-            ->where('digital', 0)
-            ->with('childrenCategories')
-            ->get();
+        $categories = Category::all()->toTree();
         return view('frontend.user.seller.product_edit', compact('product', 'categories', 'tags', 'lang'));
     }
 
