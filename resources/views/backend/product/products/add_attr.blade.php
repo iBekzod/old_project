@@ -87,7 +87,7 @@
                 <div class="card">
                     <div class="card-body">
                         <label>Добавить готовую сетку</label>
-                        <select @change="selectOnChange" v-model="option" name="bla_bla_bla" id="" class="form-control select2">
+                        <select multiple @change="selectOnChange" v-model="option" name="bla_bla_bla" id="" class="form-control select2">
                             <option :value="false"></option>
                             @foreach($options as $option)
                                 <option disabled value="{{ $option->id }}">{{ $option->getTranslation('name') }}</option>
