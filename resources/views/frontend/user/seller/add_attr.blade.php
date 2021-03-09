@@ -17,6 +17,15 @@
                         </div>
                     </div>
 
+
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ translate('Dashboard') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('seller.products') }}">{{ translate('All Products') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('seller.products.edit', $product->id) }}">{{ $product->getTranslation('name') }}</a></li>
+                        </ol>
+                    </nav>
+
                     <div id="app"></div>
 
                 </div>
