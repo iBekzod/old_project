@@ -12,28 +12,28 @@
   			<ul class="nav nav-tabs nav-fill border-light">
   				@foreach (\App\Language::all() as $key => $language)
   					<li class="nav-item">
-  						<a class="nav-link text-reset @if ($language->code == $lang) active @else bg-soft-dark border-light border-left-0 @endif py-3" href="{{ route('categories.edit', ['id'=>$category->id, 'lang'=> $language->code] ) }}">
+  						<a class="nav-link text-reset @if ($language->code == $lang) active @else bg-soft-dark border-light border-left-0 @endif py-3" href="{{ route('categories.edit', ['id'=>$mainCategory->id, 'lang'=> $language->code] ) }}">
   							<img src="{{ static_asset('assets/img/flags/'.$language->code.'.png') }}" height="11" class="mr-1">
   							<span>{{$language->name}}</span>
   						</a>
   					</li>
   		        @endforeach
   			</ul>
-            <form class="p-4" action="{{ route('categories.update', $category->id) }}" method="POST" enctype="multipart/form-data">
+            <form class="p-4" action="{{ route('categories.update', $mainCategory->id) }}" method="POST" enctype="multipart/form-data">
                 <input name="_method" type="hidden" value="PATCH">
 	            <input type="hidden" name="lang" value="{{ $lang }}">
             	@csrf
                 <div class="form-group row">
                     <label class="col-md-3 col-form-label">{{translate('Name')}} <i class="las la-language text-danger" title="{{translate('Translatable')}}"></i></label>
                     <div class="col-md-9">
-                        <input type="text" name="name" value="{{ $category->getTranslation('name', $lang) }}" class="form-control" id="name" placeholder="{{translate('Name')}}" required>
+                        <input type="text" name="name" value="{{ $mainCategory->getTranslation('name', $lang) }}" class="form-control" id="name" placeholder="{{translate('Name')}}" required>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-md-3 col-form-label">{{translate('Parent Category')}}</label>
                     <div class="col-md-9">
-                        <select class="select2 form-control aiz-selectpicker" name="parent_id" data-toggle="select2" data-placeholder="Choose ..."data-live-search="true" data-selected="{{ $category->parent_id ? $category->parent_id : 0 }}">
-                            <option value="0" @if($category->level == 0) selected @endif>{{ translate('No Parent') }}</option>
+                        <select class="select2 form-control aiz-selectpicker" name="parent_id" data-toggle="select2" data-placeholder="Choose ..."data-live-search="true" data-selected="{{ $mainCategory->parent_id ? $mainCategory->parent_id : 0 }}">
+                            <option value="0" @if($mainCategory->level == 0) selected @endif>{{ translate('No Parent') }}</option>
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}">{{ $category->getTranslation('name') }}</option>
                                 @foreach ($category->children as $childCategory)
@@ -47,8 +47,8 @@
                     <label class="col-md-3 col-form-label">{{translate('Type')}}</label>
                     <div class="col-md-9">
                         <select name="digital" required class="form-control aiz-selectpicker mb-2 mb-md-0">
-                            <option value="0" @if ($category->digital == '0') selected @endif>{{translate('Physical')}}</option>
-                            <option value="1" @if ($category->digital == '1') selected @endif>{{translate('Digital')}}</option>
+                            <option value="0" @if ($mainCategory->digital == '0') selected @endif>{{translate('Physical')}}</option>
+                            <option value="1" @if ($mainCategory->digital == '1') selected @endif>{{translate('Digital')}}</option>
                         </select>
                     </div>
                 </div>
@@ -60,7 +60,9 @@
                                 <div class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse')}}</div>
                             </div>
                             <div class="form-control file-amount">{{ translate('Choose File') }}</div>
-                            <input type="hidden" name="banner" class="selected-files" value="{{ $category->banner }}">
+                            @if($mainCategory->banner !== null)
+                                <input type="hidden" name="banner" class="selected-files" value="{{ $mainCategory->banner }}">
+                            @endif
                         </div>
                         <div class="file-preview box sm">
                         </div>
@@ -74,7 +76,9 @@
                                 <div class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse')}}</div>
                             </div>
                             <div class="form-control file-amount">{{ translate('Choose File') }}</div>
-                            <input type="hidden" name="icon" class="selected-files" value="{{ $category->icon }}">
+                            @if($mainCategory->icon != null)
+                                <input type="hidden" name="icon" class="selected-files" value="{{ $mainCategory->icon }}">
+                            @endif
                         </div>
                         <div class="file-preview box sm">
                         </div>
@@ -83,26 +87,26 @@
                 <div class="form-group row">
                     <label class="col-md-3 col-form-label">{{translate('Meta Title')}}</label>
                     <div class="col-md-9">
-                        <input type="text" class="form-control" name="meta_title" value="{{ $category->meta_title }}" placeholder="{{translate('Meta Title')}}">
+                        <input type="text" class="form-control" name="meta_title" value="{{ $mainCategory->meta_title }}" placeholder="{{translate('Meta Title')}}">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-md-3 col-form-label">{{translate('Meta Description')}}</label>
                     <div class="col-md-9">
-                        <textarea name="meta_description" rows="5" class="form-control">{{ $category->meta_description }}</textarea>
+                        <textarea name="meta_description" rows="5" class="form-control">{{ $mainCategory->meta_description }}</textarea>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-md-3 col-form-label">{{translate('Slug')}}</label>
                     <div class="col-md-9">
-                        <input type="text" placeholder="{{translate('Slug')}}" id="slug" name="slug" value="{{ $category->slug }}" class="form-control">
+                        <input type="text" placeholder="{{translate('Slug')}}" id="slug" name="slug" value="{{ $mainCategory->slug }}" class="form-control">
                     </div>
                 </div>
                 @if (\App\BusinessSetting::where('type', 'category_wise_commission')->first()->value == 1)
                     <div class="form-group row">
                         <label class="col-md-3 col-form-label">{{translate('Commission Rate')}}</label>
                         <div class="col-md-9 input-group">
-                            <input type="number" lang="en" min="0" step="0.01" id="commision_rate" name="commision_rate" value="{{ $category->commision_rate }}" class="form-control">
+                            <input type="number" lang="en" min="0" step="0.01" id="commision_rate" name="commision_rate" value="{{ $mainCategory->commision_rate }}" class="form-control">
                             <div class="input-group-append">
                                 <span class="input-group-text">%</span>
                             </div>

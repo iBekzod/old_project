@@ -10,11 +10,12 @@ class PageController extends Controller
     public function page(Request $request)
     {
         $request->validate([
-            'type' => 'required'
+            'type' => 'sometimes',
+            'slug' => 'sometimes'
         ]);
 
         return response()->json([
-            'page' => Page::where('type', $request->get('type'))->first()
+            'page' => Page::where('type', $request->get('type'))->orWhere('slug')->first()
         ]);
     }
 }
