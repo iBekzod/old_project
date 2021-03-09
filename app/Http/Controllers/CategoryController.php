@@ -105,9 +105,9 @@ class CategoryController extends Controller
     public function edit(Request $request, $id)
     {
         $lang = $request->lang;
-        $category = Category::findOrFail($id);
+        $mainCategory = Category::findOrFail($id);
         $categories = Category::all()->toTree();
-        return view('backend.product.categories.edit', compact('category', 'categories', 'lang'));
+        return view('backend.product.categories.edit', compact('mainCategory', 'categories', 'lang'));
     }
 
     /**
