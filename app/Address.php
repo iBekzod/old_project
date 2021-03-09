@@ -9,6 +9,6 @@ class Address extends Model
 {
 
     protected $fillable = [
-        'user_id', 'address', 'country', 'city', 'postal_code', 'phone', 'set_default'
+        'user_id', 'address', 'country', 'city', 'postal_code', 'phone', 'set_default', 'longitude', 'latitude'
     ];
 }
