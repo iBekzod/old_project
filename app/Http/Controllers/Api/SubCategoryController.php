@@ -65,7 +65,7 @@ class SubCategoryController extends Controller
             ->with('products')
             ->first();
 
-        $category_collection = new CategorySubCategoryCollection($category->childrenCategories);
+        $category_collection = new CategorySubCategoryCollection($category);
 
         return $category_collection;
     }
