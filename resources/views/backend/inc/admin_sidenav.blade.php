@@ -64,8 +64,7 @@
                         <ul class="aiz-side-nav-list level-2">
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('poin-of-sales.index')}}"
-                                   class="aiz-side-nav-link">
-                                    {{ areActiveRoutes(['poin-of-sales.index', 'poin-of-sales.create'])}}
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['poin-of-sales.index', 'poin-of-sales.create'])}}">
                                     <span class="aiz-side-nav-text">{{translate('POS Manager')}}</span>
                                 </a>
                             </li>admin
@@ -203,8 +202,7 @@
                         @if(Auth::user()->user_type == 'admin' || in_array('3', json_decode(Auth::user()->staff->role->permissions)))
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('all_orders.index') }}"
-                                   class="aiz-side-nav-link">
-                                                                        {{ areActiveRoutes(['all_orders.index', 'all_orders.show'])}}
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['all_orders.index', 'all_orders.show'])}}">
                                     <span class="aiz-side-nav-text">{{translate('All Orders')}}</span>
                                 </a>
                             </li>
@@ -213,8 +211,7 @@
                         @if(Auth::user()->user_type == 'admin' || in_array('4', json_decode(Auth::user()->staff->role->permissions)))
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('inhouse_orders.index') }}"
-                                   class="aiz-side-nav-link">
-                                                                        {{ areActiveRoutes(['inhouse_orders.index', 'inhouse_orders.show'])}}
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['inhouse_orders.index', 'inhouse_orders.show'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Inhouse orders')}}</span>
                                 </a>
                             </li>
@@ -250,8 +247,8 @@
                             <ul class="aiz-side-nav-list level-2">
                                 <li class="aiz-side-nav-item">
                                     <a href="{{route('refund_requests_all')}}"
-                                       class="aiz-side-nav-link">
-                                                                                {{ areActiveRoutes(['refund_requests_all', 'reason_show'])}}
+                                       class="aiz-side-nav-link {{ areActiveRoutes(['refund_requests_all', 'reason_show'])}}">
+
                                         <span class="aiz-side-nav-text">{{translate('Refund Requests')}}</span>
                                     </a>
                                 </li>
@@ -293,8 +290,7 @@
                                 </li>
                                 <li class="aiz-side-nav-item">
                                     <a href="{{ route('customer_packages.index') }}"
-                                       class="aiz-side-nav-link">
-                                                                                {{ areActiveRoutes(['customer_packages.index', 'customer_packages.create', 'customer_packages.edit'])}}
+                                       class="aiz-side-nav-link {{ areActiveRoutes(['customer_packages.index', 'customer_packages.create', 'customer_packages.edit'])}}">
                                         <span class="aiz-side-nav-text">{{ translate('Classified Packages') }}</span>
                                     </a>
                                 </li>
@@ -314,8 +310,7 @@
                         <ul class="aiz-side-nav-list level-2">
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('sellers.index') }}"
-                                   class="aiz-side-nav-link">
-                                                                        {{ areActiveRoutes(['sellers.index', 'sellers.create', 'sellers.edit', 'sellers.payment_history','sellers.approved','sellers.profile_modal','sellers.show_verification_request'])}}
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['sellers.index', 'sellers.create', 'sellers.edit', 'sellers.payment_history','sellers.approved','sellers.profile_modal','sellers.show_verification_request'])}}">
                                     <span class="aiz-side-nav-text">{{ translate('All Seller') }}</span>
                                 </a>
                             </li>
@@ -337,8 +332,7 @@
                             @if ($seller_subscription != null && $seller_subscription->activated)
                                 <li class="aiz-side-nav-item">
                                     <a href="{{ route('seller_packages.index') }}"
-                                       class="aiz-side-nav-link">
-                                                                                {{ areActiveRoutes(['seller_packages.index', 'seller_packages.create', 'seller_packages.edit'])}}
+                                       class="aiz-side-nav-link {{ areActiveRoutes(['seller_packages.index', 'seller_packages.create', 'seller_packages.edit'])}}">
                                         <span class="aiz-side-nav-text">{{ translate('Seller Packages') }}</span>
                                     </a>
                                 </li>
@@ -371,36 +365,31 @@
                         <ul class="aiz-side-nav-list level-2">
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('in_house_sale_report.index') }}"
-                                   class="aiz-side-nav-link">
-                                                                        {{ areActiveRoutes(['in_house_sale_report.index'])}}
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['in_house_sale_report.index'])}}">
                                     <span class="aiz-side-nav-text">{{ translate('In House Product Sale') }}</span>
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('seller_sale_report.index') }}"
-                                   class="aiz-side-nav-link">
-                                                                        {{ areActiveRoutes(['seller_sale_report.index'])}}
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['seller_sale_report.index'])}}">
                                     <span class="aiz-side-nav-text">{{ translate('Seller Products Sale') }}</span>
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('stock_report.index') }}"
-                                   class="aiz-side-nav-link">
-                                                                        {{ areActiveRoutes(['stock_report.index'])}}
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['stock_report.index'])}}">
                                     <span class="aiz-side-nav-text">{{ translate('Products Stock') }}</span>
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('wish_report.index') }}"
-                                   class="aiz-side-nav-link">
-                                                                        {{ areActiveRoutes(['wish_report.index'])}}
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['wish_report.index'])}}">
                                     <span class="aiz-side-nav-text">{{ translate('Products wishlist') }}</span>
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('user_search_report.index') }}"
-                                   class="aiz-side-nav-link">
-                                                                        {{ areActiveRoutes(['user_search_report.index'])}}
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['user_search_report.index'])}}">
                                     <span class="aiz-side-nav-text">{{ translate('User Searches') }}</span>
                                 </a>
                             </li>
@@ -420,8 +409,7 @@
                             @if(Auth::user()->user_type == 'admin' || in_array('2', json_decode(Auth::user()->staff->role->permissions)))
                                 <li class="aiz-side-nav-item">
                                     <a href="{{ route('flash_deals.index') }}"
-                                       class="aiz-side-nav-link">
-                                                                                {{ areActiveRoutes(['flash_deals.index', 'flash_deals.create', 'flash_deals.edit'])}}
+                                       class="aiz-side-nav-link {{ areActiveRoutes(['flash_deals.index', 'flash_deals.create', 'flash_deals.edit'])}}">
                                         <span class="aiz-side-nav-text">{{ translate('Flash deals') }}</span>
                                                                                 @php
                                                                                 $var = \App\Models\FlashDeal::where('on_moderation', 1)->get();
@@ -453,8 +441,7 @@
                             </li>
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('coupon.index')}}"
-                                   class="aiz-side-nav-link">
-                                                                        {{ areActiveRoutes(['coupon.index','coupon.create','coupon.edit'])}}
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['coupon.index','coupon.create','coupon.edit'])}}">
                                     <span class="aiz-side-nav-text">{{ translate('Coupon') }}</span>
                                 </a>
                             </li>
@@ -472,35 +459,33 @@
                         </a>
                         <ul class="aiz-side-nav-list level-2">
                             @if(Auth::user()->user_type == 'admin' || in_array('13', json_decode(Auth::user()->staff->role->permissions)))
-                                                                @php
-                                                                    $support_ticket = DB::table('tickets')
-                                                                                ->where('viewed', 0)
-                                                                                ->select('id')
-                                                                                ->count();
-                                                                @endphp
+                                @php
+                                    $support_ticket = DB::table('tickets')
+                                                ->where('viewed', 0)
+                                                ->select('id')
+                                                ->count();
+                                @endphp
                                 <li class="aiz-side-nav-item">
                                     <a href="{{ route('support_ticket.admin_index') }}"
-                                       class="aiz-side-nav-link">
-                                                                                {{ areActiveRoutes(['support_ticket.admin_index', 'support_ticket.admin_show'])}}
+                                       class="aiz-side-nav-link {{ areActiveRoutes(['support_ticket.admin_index', 'support_ticket.admin_show'])}}">
                                         <span class="aiz-side-nav-text">{{translate('Ticket')}}</span>
-                                                                                @if($support_ticket > 0)<span
-                                                                                    class="badge badge-info">{{ $support_ticket }}</span>@endif
+                            @if($support_ticket > 0)<span
+                                class="badge badge-info">{{ $support_ticket }}</span>@endif
                                     </a>
                                 </li>
                             @endif
 
-                                                        @php
-                                                            $conversation = \App\Conversation::where('receiver_id', Auth::user()->id)->where('receiver_viewed', '1')->get();
-                                                        @endphp
+                            @php
+                                $conversation = \App\Conversation::where('receiver_id', Auth::user()->id)->where('receiver_viewed', '1')->get();
+                            @endphp
                             @if(Auth::user()->user_type == 'admin' || in_array('16', json_decode(Auth::user()->staff->role->permissions)))
                                 <li class="aiz-side-nav-item">
                                     <a href="{{ route('conversations.admin_index') }}"
-                                       class="aiz-side-nav-link">
-                                                                                {{ areActiveRoutes(['conversations.admin_index', 'conversations.admin_show'])}}
+                                       class="aiz-side-nav-link {{ areActiveRoutes(['conversations.admin_index', 'conversations.admin_show'])}}">
                                         <span class="aiz-side-nav-text">{{translate('Product Queries')}}</span>
-                                                                                @if (count($conversation) > 0)
-                                                                                    <span class="badge badge-info">{{ count($conversation) }}</span>
-                                                                                @endif
+                                        @if (count($conversation) > 0)
+                                            <span class="badge badge-info">{{ count($conversation) }}</span>
+                                        @endif
                                     </a>
                                 </li>
                             @endif
@@ -531,8 +516,7 @@
                                 </li>
                                 <li class="aiz-side-nav-item">
                                     <a href="{{route('affiliate.users')}}"
-                                       class="aiz-side-nav-link">
-                                                                                {{ areActiveRoutes(['affiliate.users', 'affiliate_users.show_verification_request', 'affiliate_user.payment_history'])}}
+                                       class="aiz-side-nav-link {{ areActiveRoutes(['affiliate.users', 'affiliate_users.show_verification_request', 'affiliate_user.payment_history'])}}">
                                         <span class="aiz-side-nav-text">{{translate('Affiliate Users')}}</span>
                                     </a>
                                 </li>
@@ -564,8 +548,7 @@
                             <ul class="aiz-side-nav-list level-2">
                                 <li class="aiz-side-nav-item">
                                     <a href="{{ route('manual_payment_methods.index') }}"
-                                       class="aiz-side-nav-link">
-                                                                                {{ areActiveRoutes(['manual_payment_methods.index', 'manual_payment_methods.create', 'manual_payment_methods.edit'])}}
+                                       class="aiz-side-nav-link {{ areActiveRoutes(['manual_payment_methods.index', 'manual_payment_methods.create', 'manual_payment_methods.edit'])}}">
                                         <span class="aiz-side-nav-text">{{translate('Manual Payment Methods')}}</span>
                                     </a>
                                 </li>
@@ -636,15 +619,13 @@
                                 </li>
                                 <li class="aiz-side-nav-item">
                                     <a href="{{route('set_product_points')}}"
-                                       class="aiz-side-nav-link">
-                                                                                {{ areActiveRoutes(['set_product_points', 'product_club_point.edit'])}}
+                                       class="aiz-side-nav-link {{ areActiveRoutes(['set_product_points', 'product_club_point.edit'])}}">
                                         <span class="aiz-side-nav-text">{{translate('Set Product Point')}}</span>
                                     </a>
                                 </li>
                                 <li class="aiz-side-nav-item">
                                     <a href="{{route('club_points.index')}}"
-                                       class="aiz-side-nav-link">
-                                                                                {{ areActiveRoutes(['club_points.index', 'club_point.details'])}}
+                                       class="aiz-side-nav-link {{ areActiveRoutes(['club_points.index', 'club_point.details'])}}">
                                         <span class="aiz-side-nav-text">{{translate('User Points')}}</span>
                                     </a>
                                 </li>
@@ -725,8 +706,7 @@
                             </li>
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('website.pages') }}"
-                                   class="aiz-side-nav-link">
-                                                                        {{ areActiveRoutes(['website.pages', 'custom-pages.create' ,'custom-pages.edit'])}}
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['website.pages', 'custom-pages.create' ,'custom-pages.edit'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Pages')}}</span>
                                 </a>
                             </li>
@@ -761,8 +741,7 @@
                             </li>
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('languages.index')}}"
-                                   class="aiz-side-nav-link">
-                                                                        {{ areActiveRoutes(['languages.index', 'languages.create', 'languages.store', 'languages.show', 'languages.edit'])}}
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['languages.index', 'languages.create', 'languages.store', 'languages.show', 'languages.edit'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Languages')}}</span>
                                 </a>
                             </li>
@@ -773,8 +752,7 @@
                             </li>
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('pick_up_points.index')}}"
-                                   class="aiz-side-nav-link">
-                                                                        {{ areActiveRoutes(['pick_up_points.index','pick_up_points.create','pick_up_points.edit'])}}
+                                   class="aiz-side-nav-link  {{ areActiveRoutes(['pick_up_points.index','pick_up_points.create','pick_up_points.edit'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Pickup point')}}</span>
                                 </a>
                             </li>
