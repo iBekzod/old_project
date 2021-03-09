@@ -65,7 +65,7 @@ class SubCategoryController extends Controller
             ->with('products')
             ->get();
 
-        $category_collection = new CategorySubCategoryCollection($category);
+        $category_collection = new CategorySubCategoryCollection($category->categories);
 
         return $category_collection;
     }
