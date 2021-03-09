@@ -101,6 +101,12 @@
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('products.manage')}}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{ translate('Mange Added Products') }}</span>
+                                    @php
+                                    $on_moderation = \App\Product::where('on_moderation', 1)->get();
+                                    @endphp
+                                    @if($on_moderation->count())
+                                        <span class="badge badge-info">{{ $on_moderation->count() }}</span>
+                                    @endif
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
