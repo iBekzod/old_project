@@ -2,16 +2,16 @@
     $vendor_system_activation = \App\BusinessSetting::where('type', 'vendor_system_activation')->first();
     $classified_product =       \App\BusinessSetting::where('type', 'classified_product')->first();
     $addons = \App\Addon::where(function ($query) {
-        $query->where('unique_identifier', 'african_pg');
-        $query->where('unique_identifier', 'pos_system');
-        $query->where('unique_identifier', 'refund_request');
-        $query->where('unique_identifier', 'otp_system');
-        $query->where('unique_identifier', 'affiliate_system');
-        $query->where('unique_identifier', 'offline_payment');
-        $query->where('unique_identifier', 'seller_subscription');
-        $query->where('unique_identifier', 'paytm');
-        $query->where('unique_identifier', 'club_point');
-        $query->where('unique_identifier', 'seller_subscription');
+        $query->orWhere('unique_identifier', 'african_pg');
+        $query->orWhere('unique_identifier', 'pos_system');
+        $query->orWhere('unique_identifier', 'refund_request');
+        $query->orWhere('unique_identifier', 'otp_system');
+        $query->orWhere('unique_identifier', 'affiliate_system');
+        $query->orWhere('unique_identifier', 'offline_payment');
+        $query->orWhere('unique_identifier', 'seller_subscription');
+        $query->orWhere('unique_identifier', 'paytm');
+        $query->orWhere('unique_identifier', 'club_point');
+        $query->orWhere('unique_identifier', 'seller_subscription');
     })->get();
     $afr_pg =               $addons->where('unique_identifier', 'african_pg')->first();
     $pos_system =           $addons->where('unique_identifier', 'pos_system')->first();
@@ -509,9 +509,6 @@
                 @endif
 
             <!-- Affiliate Addon -->
-                @php
-                dd($affiliate_system);
-                @endphp
                 @if ($affiliate_system && $affiliate_system->activated)
                     @if(Auth::user()->user_type == 'admin' || in_array('15', json_decode(Auth::user()->staff->role->permissions)))
                         <li class="aiz-side-nav-item">
