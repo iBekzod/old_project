@@ -92,7 +92,6 @@
                                         <th data-breakpoints="md">{{ translate('Current Qty')}}</th>
                                         <th>{{ translate('Base Price')}}</th>
                                         <th data-breakpoints="md">{{ translate('Published')}}</th>
-                                        <th data-breakpoints="md">{{ translate('Featured')}}</th>
                                         <th data-breakpoints="md" class="text-right">{{ translate('Options')}}</th>
                                     </tr>
                                 </thead>
@@ -132,13 +131,10 @@
                                                     <span class="slider round"></span>
                                                 </label>
                                             </td>
-                                            <td>
-                                                <label class="aiz-switch aiz-switch-success mb-0">
-                                                    <input onchange="update_featured(this)" value="{{ $product->id }}" type="checkbox" <?php if($product->seller_featured == 1) echo "checked";?> >
-                                                    <span class="slider round"></span>
-                                                </label>
-                                            </td>
                                             <td class="text-right">
+                                                <a class="btn btn-soft-info btn-icon btn-circle btn-sm" href="{{route('seller.products.characteristics', ['id'=>$product->id])}}" title="{{ translate('Characteristics') }}">
+                                                    <i class="las la-list"></i>
+                                                </a>
                 		                      <a class="btn btn-soft-info btn-icon btn-circle btn-sm" href="{{route('seller.products.edit', ['id'=>$product->id, 'lang'=>env('DEFAULT_LANGUAGE')])}}" title="{{ translate('Edit') }}">
                 		                          <i class="las la-edit"></i>
                 		                      </a>
