@@ -22,6 +22,8 @@ class AddressController extends Controller
         $address->city = $request->city;
         $address->postal_code = $request->postal_code;
         $address->phone = $request->phone;
+        $address->longitude = $request->longitude;
+        $address->latitude = $request->latitude;
         $address->save();
 
         return response()->json([
