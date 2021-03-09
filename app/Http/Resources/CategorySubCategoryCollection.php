@@ -10,7 +10,6 @@ class CategorySubCategoryCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection->map(function($data) {
-//                try {
                 return [
                     'id'=>$data->id,
                     'name' => $data->name,
@@ -24,9 +23,6 @@ class CategorySubCategoryCollection extends ResourceCollection
                         'sub_categories' => route('subCategories.index', $data->id)
                     ]
                 ];
-//                }catch (\Exception $e) {
-//                    return [];
-//                }
             })
         ];
     }
