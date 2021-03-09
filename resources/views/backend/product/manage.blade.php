@@ -68,18 +68,6 @@
                             @endphp
                         </td>
                         <td>{{ number_format($product->unit_price,2) }}</td>
-                        <td class="text-right">
-                            <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
-                               href="{{route('products.manage.change', $product->id  )}}"
-                               title="{{ translate('Accept') }}">
-                                <i class="las la-check"></i>
-                            </a>
-                            <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
-                               data-href="{{route('products.destroy', $product->id)}}"
-                               title="{{ translate('Delete') }}">
-                                <i class="las la-trash"></i>
-                            </a>
-                        </td>
                         <td>
                             <label class="aiz-switch aiz-switch-success mb-0">
                                 <input onchange="update_published(this)" value="{{ $product->id }}"
@@ -93,6 +81,18 @@
                                        type="checkbox" <?php if ($product->featured == 1) echo "checked";?> >
                                 <span class="slider round"></span>
                             </label>
+                        </td>
+                        <td class="text-right">
+                            <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
+                               href="{{route('products.manage.change', $product->id  )}}"
+                               title="{{ translate('Accept') }}">
+                                <i class="las la-check"></i>
+                            </a>
+                            <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
+                               data-href="{{route('products.destroy', $product->id)}}"
+                               title="{{ translate('Delete') }}">
+                                <i class="las la-trash"></i>
+                            </a>
                         </td>
                     </tr>
                 @endforeach
