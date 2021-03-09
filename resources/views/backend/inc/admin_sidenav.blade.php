@@ -509,7 +509,10 @@
                 @endif
 
             <!-- Affiliate Addon -->
-                @if ($affiliate_system != null && $affiliate_system->activated)
+                @php
+                dd($affiliate_system);
+                @endphp
+                @if ($affiliate_system && $affiliate_system->activated)
                     @if(Auth::user()->user_type == 'admin' || in_array('15', json_decode(Auth::user()->staff->role->permissions)))
                         <li class="aiz-side-nav-item">
                             <a href="#" class="aiz-side-nav-link">
