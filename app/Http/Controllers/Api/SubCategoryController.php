@@ -63,7 +63,7 @@ class SubCategoryController extends Controller
     {
         $category = MainCategory::where('slug', 'like', '%'. $id .'%')
             ->with('products')
-            ->get();
+            ->firstOrFail();
 
         $category_collection = new CategorySubCategoryCollection($category->categories);
 
