@@ -33,12 +33,12 @@ Route::post('/password/reset/email/submit', 'HomeController@reset_password_with_
 
 Route::get('/test', function () {
     $categories = \App\Category::all();
+    $categories = $categories->groupBy('slug');
     foreach ($categories as $category) {
         if($category->count() > 1) {
             dd($category);
         }
     }
-    dd($categories->groupBy('slug'));
 });
 
 Route::post('/language', 'LanguageController@changeLanguage')->name('language.change');
