@@ -240,7 +240,7 @@ class HomeController extends Controller
     {
         $detailedProduct  = Product::where('slug', $slug)->first();
 
-        if($detailedProduct!=null && $detailedProduct->published && $detailedProduct->is_accepted){
+        if($detailedProduct!=null && $detailedProduct->published){
             //updateCartSetup();
             if($request->has('product_referral_code')){
                 Cookie::queue('product_referral_code', $request->product_referral_code, 43200);
