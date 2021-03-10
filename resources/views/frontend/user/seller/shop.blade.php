@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app')
+@extends('frontend.layouts.seller')
 
 @section('content')
 
@@ -63,7 +63,7 @@
                                             <input type="number" lang="en" min="0" class="form-control mb-3" placeholder="{{ translate('Shipping Cost')}}" name="shipping_cost" value="{{ $shop->shipping_cost }}" required>
                                         </div>
                                     </div>
-                                @endif 
+                                @endif
                                 @if (\App\BusinessSetting::where('type', 'pickup_point')->first()->value == 1)
                                 <div class="row mb-3">
                                     <label class="col-md-2 col-form-label">{{ translate('Pickup Points') }}</label>
