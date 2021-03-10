@@ -36,7 +36,9 @@ Route::get('/test', function () {
     $categories = $categories->groupBy('slug');
     foreach ($categories as $category) {
         if($category->count() > 1) {
-            dd($category);
+            foreach ($category as $item) {
+                $item->save();
+            }
         }
     }
 });
