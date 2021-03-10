@@ -237,7 +237,8 @@ class AffiliateController extends Controller
     public function user_index(){
         $affiliate_user = Auth::user()->affiliate_user;
         $affiliate_payments = $affiliate_user->affiliate_payments();
-        return view('affiliate.frontend.index', compact('affiliate_payments'));
+        $affiliate_withdraw_requests = \App\AffiliateWithdrawRequest::where('id', $affiliate_user->id)->paginate(10);
+        return view('affiliate.frontend.index', compact('affiliate_payments', 'affiliate_withdraw_requests'));
     }
 
     public function payment_settings(){
