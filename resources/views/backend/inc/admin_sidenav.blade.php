@@ -67,7 +67,7 @@
                                    class="aiz-side-nav-link {{ areActiveRoutes(['poin-of-sales.index', 'poin-of-sales.create'])}}">
                                     <span class="aiz-side-nav-text">{{translate('POS Manager')}}</span>
                                 </a>
-                            </li>admin
+                            </li>
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('poin-of-sales.activation')}}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{translate('POS Configuration')}}</span>
