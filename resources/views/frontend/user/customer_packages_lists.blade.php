@@ -19,7 +19,7 @@
                     <div class="card overflow-hidden">
                         <div class="card-body">
                             <div class="text-center mb-4 mt-3">
-                                <img class="mw-100 mx-auto mb-4" src="{{ uploaded_asset($customer_package->logo) }}" height="100">
+                                <img class="mw-100 mx-auto mb-4" src="{{ uploaded_asset($customer_package->logo)??static_asset('assets/img/placeholder.jpg') }}" height="100">
                                 <h5 class="mb-3 h5 fw-600">{{$customer_package->getTranslation('name')}}</h5>
                             </div>
                             <ul class="list-group list-group-raw fs-20 mb-5">

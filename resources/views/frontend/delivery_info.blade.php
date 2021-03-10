@@ -82,7 +82,7 @@
                                     <div class="d-flex">
                                         <span class="mr-2">
                                             <img
-                                                src="{{ uploaded_asset($product->thumbnail_img) }}"
+                                                src="{{ uploaded_asset($product->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}"
                                                 class="img-fit size-60px rounded"
                                                 alt="{{  $product->getTranslation('name')  }}"
                                             >
@@ -179,7 +179,7 @@
                                             <div class="d-flex">
                                                 <span class="mr-2">
                                                     <img
-                                                        src="{{ uploaded_asset($product->thumbnail_img) }}"
+                                                        src="{{ uploaded_asset($product->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}"
                                                         class="img-fit size-60px rounded"
                                                         alt="{{  $product->getTranslation('name')  }}"
                                                     >

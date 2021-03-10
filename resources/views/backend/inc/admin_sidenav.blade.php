@@ -29,7 +29,7 @@
                 <div class="aiz-side-nav-logo-wrap bg-light">
                     <a href="{{ route('admin.dashboard') }}" class="d-block text-left">
                         @if(get_setting('system_logo_white') != null)
-                            <img class="mw-100" src="{{ uploaded_asset(get_setting('system_logo_white')) }}" class="brand-icon"
+                            <img class="mw-100" src="{{ uploaded_asset(get_setting('system_logo_white'))??static_asset('assets/img/placeholder.jpg') }}" class="brand-icon"
                                  alt="{{ get_setting('site_name') }}">
                         @else
                             <img class="mw-100" src="{{ static_asset('assets/img/logo.png') }}" class="brand-icon"

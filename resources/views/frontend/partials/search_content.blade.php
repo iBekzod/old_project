@@ -31,7 +31,7 @@
                     <a class="text-reset" href="{{ route('product', $product->slug) }}">
                         <div class="d-flex search-product align-items-center">
                             <div class="mr-3">
-                                <img class="size-40px img-fit rounded" src="{{ uploaded_asset($product->thumbnail_img) }}">
+                                <img class="size-40px img-fit rounded" src="{{ uploaded_asset($product->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}">
                             </div>
                             <div class="flex-grow-1 overflow--hidden minw-0">
                                 <div class="product-name text-truncate fs-14 mb-5px">
@@ -61,7 +61,7 @@
                         <a class="text-reset" href="{{ route('shop.visit', $shop->slug) }}">
                             <div class="d-flex search-product align-items-center">
                                 <div class="mr-3">
-                                    <img class="size-40px img-fit rounded" src="{{ uploaded_asset($shop->logo) }}">
+                                    <img class="size-40px img-fit rounded" src="{{ uploaded_asset($shop->logo)??static_asset('assets/img/placeholder.jpg') }}">
                                 </div>
                                 <div class="flex-grow-1 overflow--hidden">
                                     <div class="product-name text-truncate fs-14 mb-5px">

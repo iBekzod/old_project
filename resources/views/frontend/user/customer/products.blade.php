@@ -45,7 +45,7 @@
                         <div class="col-md-4">
                             <a href="{{ route('customer_packages_list_show') }}" class="text-center bg-white shadow-sm hov-shadow-lg text-center d-block p-3 rounded">
                                 @if($customer_package != null)
-                                    <img src="{{ uploaded_asset($customer_package->logo) }}" height="44" class="mw-100 mx-auto">
+                                    <img src="{{ uploaded_asset($customer_package->logo)??static_asset('assets/img/placeholder.jpg') }}" height="44" class="mw-100 mx-auto">
                                     <span class="d-block sub-title mb-2">{{ translate('Current Package')}}: {{ $customer_package->getTranslation('name') }}</span>
                                 @else
                                     <i class="la la-frown-o mb-1 la-3x"></i>

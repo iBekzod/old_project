@@ -11,7 +11,7 @@
             @endphp
             <a href="{{ route('admin.dashboard') }}" class="d-block">
                 @if($logo != null)
-                    <img src="{{ uploaded_asset($logo) }}" class="brand-icon" alt="{{ get_setting('website_name') }}">
+                    <img src="{{ uploaded_asset($logo)??static_asset('assets/img/placeholder.jpg') }}" class="brand-icon" alt="{{ get_setting('website_name') }}">
                 @else
                     <img src="{{ static_asset('assets/img/logo.png') }}" class="brand-icon" alt="{{ get_setting('website_name') }}">
                 @endif

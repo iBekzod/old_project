@@ -19,7 +19,7 @@
         <div class="col-lg-3 col-md-4 col-sm-12">
             <div class="card">
                 <div class="card-body text-center">
-                    <img alt="{{ translate('Package Logo')}}" src="{{ uploaded_asset($customer_package->logo) }}" class="mw-100 mx-auto mb-4" height="150px">
+                    <img alt="{{ translate('Package Logo')}}" src="{{ uploaded_asset($customer_package->logo)??static_asset('assets/img/placeholder.jpg') }}" class="mw-100 mx-auto mb-4" height="150px">
                     <p class="mb-3 h6 fw-600">{{$customer_package->getTranslation('name')}}</p>
                     <p class="h4">{{single_price($customer_package->amount)}}</p>
                     <p class="fs-15">{{translate('Product Upload') }}:

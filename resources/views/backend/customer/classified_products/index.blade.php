@@ -24,7 +24,7 @@
                     <tr>
                         <td>{{ ($key+1) + ($products->currentPage() - 1)*$products->perPage() }}</td>
                         <td><a href="{{ route('customer.product', $product->slug) }}" target="_blank">{{$product->getTranslation('name')}}</a></td>
-                        <td><img src="{{ uploaded_asset($product->thumbnail_img) }}" alt="{{translate('Product Image')}}" class="h-50px"></td>
+                        <td><img src="{{ uploaded_asset($product->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}" alt="{{translate('Product Image')}}" class="h-50px"></td>
                         <td>{{$product->added_by}}</td>
                         <td>
                             @if ($product->status == 1)

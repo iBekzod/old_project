@@ -27,7 +27,7 @@
                 <div class="pr-3">
                     <div class="block-image">
                         @if ($message->user->avatar_original != null)
-                            <img src="{{ uploaded_asset($message->user->avatar_original) }}" class="rounded-circle">
+                            <img src="{{ uploaded_asset($message->user->avatar_original)??static_asset('assets/img/placeholder.jpg')??static_asset('assets/img/placeholder.jpg') }}" class="rounded-circle">
                         @else
                             <img src="{{ static_asset('assets/img/avatar-place.png') }}" class="rounded-circle">
                         @endif

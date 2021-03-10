@@ -2,14 +2,14 @@
 
 @section('content')
 
-<div class="h-100 bg-cover bg-center py-5 d-flex align-items-center" style="background-image: url({{ uploaded_asset(get_setting('admin_login_background')) }})">
+<div class="h-100 bg-cover bg-center py-5 d-flex align-items-center" style="background-image: url({{ uploaded_asset(get_setting('admin_login_background'))??static_asset('assets/img/placeholder.jpg') }})">
     <div class="container">
         <div class="row">
             <div class="col-lg-6 col-xl-4 mx-auto">
                 <div class="card text-left">
                     <div class="card-body">
                         <div class="mb-5 text-center">
-                            <img src="{{ uploaded_asset(get_setting('system_logo_black')) }}" class="mw-100 mb-4" height="40">
+                            <img src="{{ uploaded_asset(get_setting('system_logo_black'))??static_asset('assets/img/placeholder.jpg') }}" class="mw-100 mb-4" height="40">
                             <h1 class="h3 text-primary mb-0">{{ translate('Welcome to') }} {{ env('APP_NAME') }}</h1>
                             <p>{{ translate('Login to your account.') }}</p>
                         </div>

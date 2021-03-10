@@ -45,7 +45,7 @@
                 <strong class="text-main">{{ translate('Payment Information') }}</strong><br>
                 {{ translate('Name') }}: {{ json_decode($order->manual_payment_data)->name }}, {{ translate('Amount') }}: {{ single_price(json_decode($order->manual_payment_data)->amount) }}, {{ translate('TRX ID') }}: {{ json_decode($order->manual_payment_data)->trx_id }}
                 <br>
-                <a href="{{ uploaded_asset(json_decode($order->manual_payment_data)->photo) }}" target="_blank"><img src="{{ uploaded_asset(json_decode($order->manual_payment_data)->photo) }}" alt="" height="100"></a>
+                <a href="{{ uploaded_asset(json_decode($order->manual_payment_data)->photo) }}" target="_blank"><img src="{{ uploaded_asset(json_decode($order->manual_payment_data)->photo)??static_asset('assets/img/placeholder.jpg') }}" alt="" height="100"></a>
             @endif
   				</div>
   				<div class="col-md-4 ml-auto">
@@ -107,7 +107,7 @@
                         <td>{{ $key+1 }}</td>
                         <td>
                           @if ($orderDetail->product != null)
-                            <a href="{{ route('product', $orderDetail->product->slug) }}" target="_blank"><img height="50" src="{{ uploaded_asset($orderDetail->product->thumbnail_img) }}"></a>
+                            <a href="{{ route('product', $orderDetail->product->slug) }}" target="_blank"><img height="50" src="{{ uploaded_asset($orderDetail->product->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}"></a>
                           @else
                             <strong>{{ translate('N/A') }}</strong>
                           @endif

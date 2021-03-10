@@ -51,7 +51,7 @@
                             <div class="media">
                                 <a class="media-left" href="#">
                                     @if($ticketreply->user->avatar_original != null)
-                                        <span class="avatar avatar-sm mr-3"><img src="{{ uploaded_asset($ticketreply->user->avatar_original) }}"></span>
+                                        <span class="avatar avatar-sm mr-3"><img src="{{ uploaded_asset($ticketreply->user->avatar_original)??static_asset('assets/img/placeholder.jpg') }}"></span>
                                     @else
                                         <span class="avatar avatar-sm mr-3"><img src="{{ static_asset('assets/img/avatar-place.png') }}"></span>
                                     @endif
@@ -84,7 +84,7 @@
                         <div class="media">
                             <a class="media-left" href="#">
                                 @if($ticket->user->avatar_original != null)
-                                    <span class="avatar avatar-sm m-3"><img src="{{ uploaded_asset($ticket->user->avatar_original) }}"></span>
+                                    <span class="avatar avatar-sm m-3"><img src="{{ uploaded_asset($ticket->user->avatar_original)??static_asset('assets/img/placeholder.jpg') }}"></span>
                                 @else
                                     <span class="avatar avatar-sm m-3"><img src="{{ static_asset('assets/img/avatar-place.png') }}"></span>
                                 @endif

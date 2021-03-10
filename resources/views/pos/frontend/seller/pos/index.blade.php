@@ -108,7 +108,7 @@
                                                 <tr>
                                                     <td>
                                                         <span class="media">
-                                                            <img class="mr-3" height="60" src="{{ uploaded_asset(\App\Product::find($cartItem['id'])->thumbnail_img) }}" >
+                                                            <img class="mr-3" height="60" src="{{ uploaded_asset(\App\Product::find($cartItem['id'])->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}" >
                                                             <div class="media-body">
                                                                 {{ \App\Product::find($cartItem['id'])->name }} ({{ $cartItem['variant'] }})
                                                             </div>

@@ -21,7 +21,7 @@
                                   <div class="card mb-2 shadow-sm">
                                       <div class="card-body">
                                           <a href="{{ route('product', $wishlist->product->slug) }}" class="d-block mb-3">
-                                              <img src="{{ uploaded_asset($wishlist->product->thumbnail_img) }}" class="img-fit h-140px h-md-200px">
+                                              <img src="{{ uploaded_asset($wishlist->product->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}" class="img-fit h-140px h-md-200px">
                                           </a>
 
                                           <h5 class="fs-14 mb-0 lh-1-5 fw-600 text-truncate-2">

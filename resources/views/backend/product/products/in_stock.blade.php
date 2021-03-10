@@ -31,7 +31,7 @@
                             <a href="{{ route('product', $product->product->slug) }}" target="_blank">
                                 <div class="form-group row">
                                     <div class="col-md-4">
-                                        <img src="{{ uploaded_asset($product->product->thumbnail_img)}}" alt="Image" class="w-50px">
+                                        <img src="{{ uploaded_asset($product->product->thumbnail_img)??static_asset('assets/img/placeholder.jpg')}}" alt="Image" class="w-50px">
                                     </div>
                                     <div class="col-md-8">
                                         <span class="text-muted">{{ $product->product->getTranslation('name') }} {{ $product->variant }}</span>

@@ -16,7 +16,7 @@
                         <div class="media mb-2">
 
                             @if($message->user->avatar_original != null)
-                                <span class="avatar avatar-sm mr-3"><img src="{{ uploaded_asset($message->user->avatar_original) }}"></span>
+                                <span class="avatar avatar-sm mr-3"><img src="{{ uploaded_asset($message->user->avatar_original)??static_asset('assets/img/placeholder.jpg') }}"></span>
                             @else
                                 <span class="avatar avatar-sm mr-3"><img src="{{ static_asset('assets/img/avatar-place.png') }}"></span>
                             @endif

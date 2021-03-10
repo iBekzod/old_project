@@ -174,7 +174,7 @@
                                   @endphp
                                   <div class="card-body text-center">
                                       @if($seller_package != null)
-                                        <img src="{{ uploaded_asset($seller_package->logo) }}" class="img-fluid mb-4 h-110px">
+                                        <img src="{{ uploaded_asset($seller_package->logo)??static_asset('assets/img/placeholder.jpg') }}" class="img-fluid mb-4 h-110px">
                                         <p class="mb-1 text-muted">{{ translate('Product Upload Remaining') }}: {{ Auth::user()->seller->remaining_uploads }} {{ translate('Times')}}</p>
                                         <p class="text-muted mb-1">{{ translate('Digital Product Upload Remaining') }}: {{ Auth::user()->seller->remaining_digital_uploads }} {{ translate('Times')}}</p>
                                         <p class="text-muted mb-4">{{ translate('Package Expires at') }}: {{ Auth::user()->seller->invalid_at }}</p>

@@ -139,7 +139,7 @@
                                 <img
                                     class="img-fit lazyload mx-auto h-210px"
                                     src="{{ static_asset('assets/img/placeholder.jpg') }}"
-                                    data-src="{{ uploaded_asset($product->thumbnail_img) }}"
+                                    data-src="{{ uploaded_asset($product->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}"
                                     alt="{{  $product->getTranslation('name')  }}"
                                     onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
                                 >
