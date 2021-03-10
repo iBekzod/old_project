@@ -10,6 +10,7 @@ use App\Language;
 use App\CategoryTranslation;
 use App\Utility\CategoryUtility;
 use Illuminate\Support\Str;
+use \Cviebrock\EloquentSluggable\Services\SlugService;
 
 class CategoryController extends Controller
 {
@@ -66,10 +67,14 @@ class CategoryController extends Controller
         }
 
         if ($request->slug != null) {
-            $category->slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->slug));
+            // $category->slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->slug));
+
+            $category->slug = SlugService::createSlug(Category::class, 'slug', $request->slug);
         }
         else {
-            $category->slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(5);
+            // $category->slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(5);
+
+            $category->slug = SlugService::createSlug(Category::class, 'slug', $request->name.'-'.Str::random(5));
         }
         if ($request->commision_rate != null) {
             $category->commision_rate = $request->commision_rate;
@@ -151,10 +156,14 @@ class CategoryController extends Controller
         }
 
         if ($request->slug != null) {
-            $category->slug = strtolower($request->slug);
+            // $category->slug = strtolower($request->slug);
+            if($category->slug!=$request->slug){
+                $category->slug = SlugService::createSlug(Category::class, 'slug', $request->slug);
+            }
         }
         else {
-            $category->slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(5);
+            // $category->slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(5);
+            $category->slug = SlugService::createSlug(Category::class, 'slug', $request->name.'-'.Str::random(5));
         }
 
 
