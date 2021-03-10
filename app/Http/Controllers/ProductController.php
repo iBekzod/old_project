@@ -17,7 +17,6 @@ use App\SubSubCategory;
 use Session;
 use ImageOptimizer;
 use DB;
-use CoreComponentRepository;
 use Illuminate\Support\Str;
 use Artisan;
 use App\Product_Warehouse;
@@ -25,11 +24,23 @@ use App\Warehouse;
 
 class ProductController extends Controller
 {
-    public function changeOnModeration(Request $request, $id)
+    public function changeOnModerationAccept(Request $request, $id)
     {
         $product = Product::findOrFail($id);
         $product->update([
-            'on_moderation' => 0
+            'on_moderation' => 0,
+            'is_accepted' => 1
+        ]);
+
+        return redirect()->route('products.manage');
+    }
+
+    public function changeOnModerationRefuse(Request $request, $id)
+    {
+        $product = Product::findOrFail($id);
+        $product->update([
+            'on_moderation' => 0,
+            'is_accepted' => 0
         ]);
 
         return redirect()->route('products.manage');

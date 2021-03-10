@@ -93,6 +93,7 @@
                                         <th>{{ translate('Base Price')}}</th>
                                         <th data-breakpoints="md">{{ translate('Published')}}</th>
                                         <th data-breakpoints="md" class="text-right">{{ translate('Options')}}</th>
+                                        <th data-breakpoints="md" class="text-right">{{ translate('Is Accepted?')}}</th>
                                     </tr>
                                 </thead>
 
@@ -145,6 +146,13 @@
                                                   <i class="las la-trash"></i>
                                               </a>
                                           </td>
+                                            <td>
+                                                @if($product->is_accepted)
+                                                    <span><i class="las la-check"></i></span>
+                                                @else
+                                                    <span><i class="las la-times"></i></span>
+                                                @endif
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>

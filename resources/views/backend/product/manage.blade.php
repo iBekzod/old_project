@@ -84,14 +84,14 @@
                         </td>
                         <td class="text-right">
                             <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
-                               href="{{route('products.manage.change', $product->id  )}}"
+                               href="{{ route('products.manage.change.accept', $product->id) }}"
                                title="{{ translate('Accept') }}">
                                 <i class="las la-check"></i>
                             </a>
-                            <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
-                               data-href="{{route('products.destroy', $product->id)}}"
-                               title="{{ translate('Delete') }}">
-                                <i class="las la-trash"></i>
+                            <a class="btn btn-soft-danger btn-icon btn-circle btn-sm"
+                               href="{{ route('products.manage.change.refuse', $product->id) }}"
+                               title="{{ translate('Cancel') }}">
+                                <i class="las la-times"></i>
                             </a>
                         </td>
                     </tr>
