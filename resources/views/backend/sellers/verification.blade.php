@@ -45,7 +45,8 @@
         <h6 class="mb-4">{{ translate('Verification Info') }}</h6>
           <table class="table table-striped table-bordered" cellspacing="0" width="100%">
               <tbody>
-                  @foreach (json_decode($seller->verification_info) as $key => $info)
+                  {{-- //TODO: finish --}}
+                  {{-- @foreach (json_decode($seller->verification_info, true) as $key => $info)
                       <tr>
                           <th class="text-muted">{{ $info->label }}</th>
                           @if ($info->type == 'text' || $info->type == 'select' || $info->type == 'radio')
@@ -60,7 +61,7 @@
                               </td>
                           @endif
                       </tr>
-                  @endforeach
+                  @endforeach --}}
               </tbody>
           </table>
           <div class="text-center">
