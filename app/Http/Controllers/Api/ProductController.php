@@ -210,7 +210,7 @@ class ProductController extends Controller
         $category_ids = CategoryUtility::children_ids($id);
         $category_ids[] = $id;
 
-        return new ProductCollection(Product::whereIn('category_id', $category_ids)->latest()->paginate(10));
+        return new ProductCollection(Product::whereIn('category_id', $category_ids)->where('is_accepted', 1)->latest()->paginate(10));
     }
 
     public function subSubCategory($id)
@@ -218,17 +218,17 @@ class ProductController extends Controller
         $category_ids = CategoryUtility::children_ids($id);
         $category_ids[] = $id;
 
-        return new ProductCollection(Product::whereIn('category_id', $category_ids)->latest()->paginate(10));
+        return new ProductCollection(Product::whereIn('category_id', $category_ids)->where('is_accepted', 1)->latest()->paginate(10));
     }
 
     public function brand($id)
     {
-        return new ProductCollection(Product::where('brand_id', $id)->latest()->paginate(10));
+        return new ProductCollection(Product::where('brand_id', $id)->where('is_accepted', 1)->latest()->paginate(10));
     }
 
     public function todaysDeal()
     {
-        return new ProductCollection(Product::where('todays_deal', 1)->latest()->get());
+        return new ProductCollection(Product::where('todays_deal', 1)->where('is_accepted', 1)->latest()->get());
     }
 
     public function flashDeal()
@@ -239,19 +239,19 @@ class ProductController extends Controller
 
     public function featured()
     {
-        return new ProductCollection(Product::where('featured', 1)->latest()->get());
+        return new ProductCollection(Product::where('featured', 1)->where('is_accepted', 1)->latest()->get());
     }
 
     public function bestSeller()
     {
-        return new ProductCollection(Product::orderBy('num_of_sale', 'desc')->limit(20)->get());
+        return new ProductCollection(Product::orderBy('num_of_sale', 'desc')->where('is_accepted', 1)->limit(20)->get());
     }
 
     public function related($id)
     {
         $product = Product::find($id);
         if($product)
-        return new ProductCollection(Product::where('category_id', $product->category_id)->where('id', '!=', $id)->limit(10)->get());
+        return new ProductCollection(Product::where('category_id', $product->category_id)->where('is_accepted', 1)->where('id', '!=', $id)->limit(10)->get());
 
         return response()->json([
             'error' => 'Такого продукта не существует.'
@@ -261,7 +261,7 @@ class ProductController extends Controller
     public function topFromSeller($id)
     {
         $product = Product::find($id);
-        return new ProductCollection(Product::where('user_id', $product->user_id)->orderBy('num_of_sale', 'desc')->limit(4)->get());
+        return new ProductCollection(Product::where('user_id', $product->user_id)->where('is_accepted', 1)->orderBy('num_of_sale', 'desc')->limit(4)->get());
     }
 
     public function search()
