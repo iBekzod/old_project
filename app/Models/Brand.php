@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Cviebrock\EloquentSluggable\Sluggable;
 /**
  * App\Models\Brand
  *
@@ -28,15 +27,6 @@ use Cviebrock\EloquentSluggable\Sluggable;
 
 class Brand extends Model
 {
-    use Sluggable;
-    public function sluggable(): array
-    {
-        return [
-            'slug' => [
-                'source' => 'name'
-            ]
-        ];
-    }
     protected static function boot()
     {
         parent::boot();
