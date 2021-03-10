@@ -96,7 +96,7 @@
                         <textarea name="meta_description" rows="5" class="form-control">{{ $mainCategory->meta_description }}</textarea>
                     </div>
                 </div>
-                <div class="form-group row">
+                <div class="form-group row" >
                     <label class="col-md-3 col-form-label">{{translate('Slug')}}</label>
                     <div class="col-md-9">
                         <input type="text" placeholder="{{translate('Slug')}}" id="slug" name="slug" value="{{ $mainCategory->slug }}" class="form-control">

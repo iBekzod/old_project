@@ -498,7 +498,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row" >
                         <label class="col-md-3 col-form-label">{{translate('Slug')}}</label>
                         <div class="col-md-8">
                             <input type="text" placeholder="{{translate('Slug')}}" id="slug" name="slug"

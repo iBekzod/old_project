@@ -16,7 +16,7 @@ use App\Utility\TranslationUtility;
 use App\Utility\CategoryUtility;
 use App\Utility\MimoUtility;
 use Twilio\Rest\Client;
-
+use Illuminate\Support\Str;
 //highlights the selected navigation on admin panel
 if (! function_exists('sendSMS')) {
     function sendSMS($to, $from, $text)
@@ -705,7 +705,19 @@ if (! function_exists('convertPrice')) {
         return $price;
     }
 }
-
+if (! function_exists('str_slug')) {
+    /**
+     * Generate a URL friendly "slug" from a given string.
+     *
+     * @param  string  $title
+     * @param  string  $separator
+     * @return string
+     */
+    function str_slug($title, $separator = '-')
+    {
+        return Str::slug($title, $separator);
+    }
+}
 if (! function_exists('translate')) {
     function translate($key, $lang = null){
         if($lang == null){
