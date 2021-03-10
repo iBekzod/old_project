@@ -12,6 +12,9 @@
 */
 // use App\Mail\SupportMailManager;
 //demo
+use Cviebrock\EloquentSluggable\Services\SlugService;
+use App\Category;
+
 Route::get('/demo/cron_1', 'DemoController@cron_1');
 Route::get('/demo/cron_2', 'DemoController@cron_2');
 Route::get('/convert_assets', 'DemoController@convert_assets');
@@ -36,7 +39,11 @@ Route::get('/test', function () {
     $categories = $categories->groupBy('slug');
     foreach ($categories as $category) {
         if($category->count() > 1) {
-            dd($category);
+//            dd($category);
+            foreach ($category as $item) {
+                $item->slug = SlugService::createSlug(Category::class, 'slug', $item->name);;
+                $item->save();
+            }
         }
     }
 });

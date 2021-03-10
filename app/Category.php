@@ -20,6 +20,7 @@ class Category extends Model
 
         return $instance;
     }
+
     public function sluggable(): array
     {
         return [
@@ -28,6 +29,7 @@ class Category extends Model
             ]
         ];
     }
+
     public function getTranslation($field = '', $lang = false){
         $lang = $lang == false ? App::getLocale() : $lang;
         $category_translation = $this->category_translations()->where('lang', $lang)->first();
