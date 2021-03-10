@@ -6,11 +6,28 @@ use Illuminate\Database\Eloquent\Model;
 use App;
 use Kalnoy\Nestedset\NodeTrait;
 use Rennokki\QueryCache\Traits\QueryCacheable;
-
+use Cviebrock\EloquentSluggable\Sluggable;
 class Category extends Model
 {
-    use NodeTrait;
+    use Sluggable , NodeTrait {
+        NodeTrait::replicate as replicateNode;
+        Sluggable::replicate as replicateSlug;
+    }
+    public function replicate(array $except = null)
+    {
+        $instance = $this->replicateNode($except);
+        (new SlugService())->slug($instance, true);
 
+        return $instance;
+    }
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
+    }
     public function getTranslation($field = '', $lang = false){
         $lang = $lang == false ? App::getLocale() : $lang;
         $category_translation = $this->category_translations()->where('lang', $lang)->first();
