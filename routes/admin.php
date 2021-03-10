@@ -32,7 +32,8 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::get('/products/seller','ProductController@seller_products')->name('products.seller');
 	Route::get('/products/all','ProductController@all_products')->name('products.all');
 	Route::get('/products/manage','ProductController@manageProducts')->name('products.manage');
-	Route::get('/products/manage/{id}','ProductController@changeOnModeration')->name('products.manage.change');
+	Route::get('/products/manage/{id}/accept','ProductController@changeOnModerationAccept')->name('products.manage.change.accept');
+	Route::get('/products/manage/{id}/refuse','ProductController@changeOnModerationRefuse')->name('products.manage.change.refuse');
 	Route::get('/products/create','ProductController@create')->name('products.create');
 	Route::get('/products/admin/{id}/edit','ProductController@admin_product_edit')->name('products.admin.edit');
 	Route::get('/products/seller/{id}/edit','ProductController@seller_product_edit')->name('products.seller.edit');
