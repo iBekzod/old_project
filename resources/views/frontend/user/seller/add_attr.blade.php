@@ -56,7 +56,7 @@
                     .select2({
                         data: this.options,
                         tags: true,
-                        tokenSeparators: [',', ' ']
+                        tokenSeparators: [',']
                     })
                     .trigger("change")
                     // emit event on change.
