@@ -101,7 +101,7 @@
                                         $customer_package = \App\CustomerPackage::find(Auth::user()->customer_package_id);
                                     @endphp
                                     @if($customer_package != null)
-                                        <img src="{{ uploaded_asset($customer_package->logo) }}" class="img-fluid mb-4 h-110px">
+                                        <img src="{{ uploaded_asset($customer_package->logo)??static_asset('assets/img/placeholder.jpg') }}" class="img-fluid mb-4 h-110px">
                                 		<p class="mb-1 text-muted">{{ translate('Product Upload') }}: {{ $customer_package->product_upload }} {{ translate('Times')}}</p>
                                 		<p class="text-muted mb-4">{{ translate('Product Upload Remaining') }}: {{ Auth::user()->remaining_uploads }} {{ translate('Times')}}</p>
                                         <h5 class="fw-600 mb-3 text-primary">{{ translate('Current Package') }}: {{ $customer_package->getTranslation('name') }}</h5>

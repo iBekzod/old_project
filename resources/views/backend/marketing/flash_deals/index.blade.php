@@ -50,7 +50,7 @@
                     <tr>
                         <td>{{ ($key+1) + ($flash_deals->currentPage() - 1)*$flash_deals->perPage() }}</td>
                         <td>{{ $flash_deal->getTranslation('title') }}</td>
-                        <td><img src="{{ uploaded_asset($flash_deal->banner)??asset('public/assets/img/placeholder.jpg')}} }}" alt="banner" class="h-50px"></td>
+                        <td><img src="{{ uploaded_asset($flash_deal->banner)??static_asset('assets/img/placeholder.jpg') }}" alt="banner" class="h-50px"></td>
                         <td>{{ date('d-m-Y H:i:s', $flash_deal->start_date) }}</td>
                         <td>{{ date('d-m-Y H:i:s', $flash_deal->end_date) }}</td>
                         <td>

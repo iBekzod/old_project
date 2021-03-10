@@ -27,7 +27,7 @@
               <td>
                 <div class="from-group row">
                   <div class="col-auto">
-                    <img class="size-60px img-fit" src="{{ uploaded_asset($product->thumbnail_img)}}">
+                    <img class="size-60px img-fit" src="{{ uploaded_asset($product->thumbnail_img)??static_asset('assets/img/placeholder.jpg')}}">
                   </div>
                   <div class="col">
                     <span>{{  $product->getTranslation('name')  }}</span>

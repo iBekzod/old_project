@@ -29,7 +29,7 @@
                     <tr>
                         <td>{{ ($key+1) }}</td>
                         <td>{{ $manual_payment_method->heading }}</td>
-                        <td><img class="w-50px" src="{{ uploaded_asset($manual_payment_method->photo) }}" alt="Logo"></td>
+                        <td><img class="w-50px" src="{{ uploaded_asset($manual_payment_method->photo)??static_asset('assets/img/placeholder.jpg') }}" alt="Logo"></td>
                         <td class="text-right">
                             <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{route('manual_payment_methods.edit', encrypt($manual_payment_method->id))}}" title="{{ translate('Edit') }}">
                                 <i class="las la-edit"></i>

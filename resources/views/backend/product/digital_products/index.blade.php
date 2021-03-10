@@ -47,7 +47,7 @@
                             <td><a href="{{ route('product', $product->slug) }}" class="text-muted" target="_blank"><b>{{ $product->getTranslation('name') }}</b></a></td>
                             <td>{{ ucfirst($product->added_by) }}</td>
                             <td>
-								<img src="{{ uploaded_asset($product->thumbnail_img)}}" alt="Image" class="w-50px">
+								<img src="{{ uploaded_asset($product->thumbnail_img)??static_asset('assets/img/placeholder.jpg')}}" alt="Image" class="w-50px">
 							</td>
                             <td>{{ number_format($product->unit_price,2) }}</td>
                             <td>

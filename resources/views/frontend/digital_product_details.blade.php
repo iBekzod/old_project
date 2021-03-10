@@ -131,7 +131,7 @@
 
                                 @if ($detailedProduct->brand != null)
                                     <div class="col-auto">
-                                        <img src="{{ uploaded_asset($detailedProduct->brand->logo) }}" alt="{{ $detailedProduct->brand->getTranslation('name') }}" height="30">
+                                        <img src="{{ uploaded_asset($detailedProduct->brand->logo)??static_asset('assets/img/placeholder.jpg') }}" alt="{{ $detailedProduct->brand->getTranslation('name') }}" height="30">
                                     </div>
                                 @endif
                             </div>
@@ -276,7 +276,7 @@
                                         <div class="opacity-50 mt-2">{{ translate('Refund')}}:</div>
                                     </div>
                                     <div class="col-10">
-                                        <a href="{{ route('returnpolicy') }}" target="_blank"> @if ($refund_sticker != null && $refund_sticker->value != null) <img src="{{ uploaded_asset($refund_sticker->value) }}" height="36"> @else <img src="{{ static_asset('assets/img/refund-sticker.jpg') }}" height="36"> @endif</a>
+                                        <a href="{{ route('returnpolicy') }}" target="_blank"> @if ($refund_sticker != null && $refund_sticker->value != null) <img src="{{ uploaded_asset($refund_sticker->value)??static_asset('assets/img/placeholder.jpg') }}" height="36"> @else <img src="{{ static_asset('assets/img/refund-sticker.jpg') }}" height="36"> @endif</a>
                                         <a href="{{ route('returnpolicy') }}" class="ml-2" target="_blank">View Policy</a>
                                     </div>
                                 </div>
@@ -487,9 +487,9 @@
                                                         src="{{ static_asset('assets/img/placeholder.jpg') }}"
                                                         onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
                                                         @if($review->user->avatar_original !=null)
-                                                            data-src="{{ uploaded_asset($review->user->avatar_original) }}"
+                                                            data-src="{{ uploaded_asset($review->user->avatar_original)??static_asset('assets/img/placeholder.jpg') }}"
                                                         @else
-                                                            data-src="{{ uploaded_asset('assets/img/placeholder.jpg') }}"
+                                                            data-src="{{ static_asset('assets/img/placeholder.jpg') }}"
                                                         @endif
                                                     >
                                                 </span>

@@ -8,7 +8,7 @@
                 <label class="aiz-megabox d-block mb-3">
                     <input value="{{ $method->heading }}" id="payment_option" type="radio" name="payment_option" onchange="toggleManualPaymentData({{ $method->id }})" checked>
                     <span class="d-block p-3 aiz-megabox-elem">
-                        <img src="{{ uploaded_asset($method->photo) }}" class="img-fluid mb-2">
+                        <img src="{{ uploaded_asset($method->photo)??static_asset('assets/img/placeholder.jpg') }}" class="img-fluid mb-2">
                         <span class="d-block text-center">
                             <span class="d-block fw-600 fs-15">{{ $method->heading }}</span>
                         </span>
