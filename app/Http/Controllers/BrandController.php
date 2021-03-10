@@ -112,7 +112,8 @@ class BrandController extends Controller
         $brand->meta_title = $request->meta_title;
         $brand->meta_description = $request->meta_description;
         if ($request->slug != null) {
-            $brand->slug = SlugService::createSlug(Brand::class, 'slug', $request->slug);
+            if($brand->slug!=$request->slug)
+                $brand->slug = SlugService::createSlug(Brand::class, 'slug', $request->slug);
             // $brand->slug = strtolower($request->slug);
         }
         else {

@@ -517,7 +517,8 @@ class ProductController extends Controller
             $product->name = $request->name;
             $product->unit = $request->unit;
             $product->description = $request->description;
-            $product->slug = strtolower($request->slug);
+            if($product->slug!=$request->slug)
+                $product->slug = SlugService::createSlug(Product::class, 'slug', $request->name);
         }
 
         $product->photos = $request->photos;
