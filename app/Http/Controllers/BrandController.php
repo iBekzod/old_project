@@ -49,10 +49,14 @@ class BrandController extends Controller
         $brand->meta_title = $request->meta_title;
         $brand->meta_description = $request->meta_description;
         if ($request->slug != null) {
-            $brand->slug = str_replace(' ', '-', $request->slug);
+            $brand->slug = Brand::createSlug(Brand::class, 'slug', $request->slug);
+
+            // $brand->slug = str_replace(' ', '-', $request->slug);
         }
         else {
-            $brand->slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(5);
+            $brand->slug = Brand::createSlug(Brand::class, 'slug', $request->name);
+
+            // $brand->slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(5);
         }
 
         $brand->logo = $request->logo;
@@ -107,10 +111,12 @@ class BrandController extends Controller
         $brand->meta_title = $request->meta_title;
         $brand->meta_description = $request->meta_description;
         if ($request->slug != null) {
-            $brand->slug = strtolower($request->slug);
+            $brand->slug = Brand::createSlug(Brand::class, 'slug', $request->slug);
+            // $brand->slug = strtolower($request->slug);
         }
         else {
-            $brand->slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(5);
+            $brand->slug = Brand::createSlug(Brand::class, 'slug', $request->name);
+            // $brand->slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(5);
         }
         $brand->logo = $request->logo;
         $brand->save();

@@ -4,9 +4,18 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App;
-
+use Cviebrock\EloquentSluggable\Sluggable;
 class Brand extends Model
 {
+  use Sluggable;
+  public function sluggable(): array
+  {
+      return [
+          'slug' => [
+              'source' => 'name'
+          ]
+      ];
+  }
   public function getTranslation($field = '', $lang = false){
       $lang = $lang == false ? App::getLocale() : $lang;
       $brand_translation = $this->hasMany(BrandTranslation::class)->where('lang', $lang)->first();

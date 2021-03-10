@@ -8,6 +8,8 @@ use App\Http\Resources\ProductCollection;
 use App\Models\FlashDeal;
 use Illuminate\Http\Request;
 
+use \Cviebrock\EloquentSluggable\Services\SlugService;
+
 class FlashDealController extends Controller
 {
     public function superDiscount()
