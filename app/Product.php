@@ -5,9 +5,19 @@ namespace App;
 use App\Models\ProductAttribute;
 use Illuminate\Database\Eloquent\Model;
 use App;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 class Product extends Model
 {
+  use Sluggable;
+  public function sluggable(): array
+  {
+      return [
+          'slug' => [
+              'source' => 'name'
+          ]
+      ];
+  }
     protected $fillable = [
         'name', 'added_by', 'user_id', 'category_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
         'purchase_price', 'unit', 'slug', 'colors', 'choice_options', 'variations', 'current_stock', 'on_moderation',

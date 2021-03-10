@@ -7,6 +7,7 @@ use App\FlashDeal;
 use App\FlashDealTranslation;
 use App\FlashDealProduct;
 use Illuminate\Support\Str;
+use \Cviebrock\EloquentSluggable\Services\SlugService;
 
 class FlashDealController extends Controller
 {
@@ -57,7 +58,8 @@ class FlashDealController extends Controller
         $flash_deal->end_date   = strtotime( $date_var[1]);
 
         $flash_deal->background_color = $request->background_color;
-        $flash_deal->slug = strtolower(str_replace(' ', '-', $request->title).'-'.Str::random(5));
+        // $flash_deal->slug = strtolower(str_replace(' ', '-', $request->title).'-'.Str::random(5));
+        $flash_deal->slug = SlugService::createSlug(FlashDeal::class, 'slug', $request->title);
         $flash_deal->banner = $request->banner;
         if($flash_deal->save()){
             foreach ($request->products as $key => $product) {
@@ -128,7 +130,9 @@ class FlashDealController extends Controller
         if($request->lang == env("DEFAULT_LANGUAGE")){
           $flash_deal->title = $request->title;
           if (($flash_deal->slug == null) || ($flash_deal->title != $request->title)) {
-              $flash_deal->slug = strtolower(str_replace(' ', '-', $request->title) . '-' . Str::random(5));
+              $flash_deal->slug = SlugService::createSlug(FlashDeal::class, 'slug', $request->title);
+
+            //   $flash_deal->slug = strtolower(str_replace(' ', '-', $request->title) . '-' . Str::random(5));
           }
         }
 

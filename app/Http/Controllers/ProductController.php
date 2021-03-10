@@ -21,6 +21,7 @@ use Illuminate\Support\Str;
 use Artisan;
 use App\Product_Warehouse;
 use App\Warehouse;
+use \Cviebrock\EloquentSluggable\Services\SlugService;
 
 class ProductController extends Controller
 {
@@ -313,7 +314,8 @@ class ProductController extends Controller
             $product->pdf = $request->pdf->store('uploads/products/pdf');
         }
 
-        $product->slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)) . '-' . Str::random(5);
+        // $product->slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)) . '-' . Str::random(5);
+        $product->slug = SlugService::createSlug(Product::class, 'slug', $request->name);
 
         if ($request->has('colors_active') && $request->has('colors') && count($request->colors) > 0) {
             $product->colors = json_encode($request->colors);
@@ -515,7 +517,8 @@ class ProductController extends Controller
             $product->name = $request->name;
             $product->unit = $request->unit;
             $product->description = $request->description;
-            $product->slug = strtolower($request->slug);
+            if($product->slug!=$request->slug)
+                $product->slug = SlugService::createSlug(Product::class, 'slug', $request->name);
         }
 
         $product->photos = $request->photos;
@@ -714,8 +717,7 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         $product_new = $product->replicate();
-        $product_new->slug = substr($product_new->slug, 0, -5) . Str::random(5);
-
+        // $product_new->slug = substr($product_new->slug, 0, -5) . Str::random(5);
         if ($product_new->save()) {
             flash(translate('Product has been duplicated successfully'))->success();
             if (Auth::user()->user_type == 'admin' || Auth::user()->user_type == 'staff') {

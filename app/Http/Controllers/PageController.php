@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Page;
 use App\PageTranslation;
 
+use \Cviebrock\EloquentSluggable\Services\SlugService;
 
 class PageController extends Controller
 {
@@ -40,7 +41,8 @@ class PageController extends Controller
         $page = new Page;
         $page->title = $request->title;
         if (Page::where('slug', preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->slug)))->first() == null) {
-            $page->slug             = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->slug));
+            // $page->slug             = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->slug));
+            $page->slug = SlugService::createSlug(Product::class, 'slug', $request->slug);
             $page->type             = "custom_page";
             $page->content          = $request->get('content');
             $page->meta_title       = $request->meta_title;
@@ -107,7 +109,9 @@ class PageController extends Controller
         $page = Page::findOrFail($id);
         if (Page::where('id','!=', $id)->where('slug', preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->slug)))->first() == null) {
             if($page->type == 'custom_page'){
-              $page->slug           = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->slug));
+              // $page->slug           = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->slug));
+              if($page->slug!=$request->slug)
+                $page->slug = SlugService::createSlug(Product::class, 'slug', $request->slug);
             }
             if($request->lang == env("DEFAULT_LANGUAGE")){
               $page->title          = $request->title;
