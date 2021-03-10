@@ -7,6 +7,7 @@ use App\Brand;
 use App\BrandTranslation;
 use App\Product;
 use Illuminate\Support\Str;
+use \Cviebrock\EloquentSluggable\Services\SlugService;
 
 class BrandController extends Controller
 {
