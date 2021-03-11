@@ -49,43 +49,45 @@ class FlashDealController extends Controller
      */
     public function store(Request $request)
     {
-        $flash_deal = new FlashDeal;
-        $flash_deal->title = $request->title;
-        $flash_deal->text_color = $request->text_color;
-
         try {
-            $date_var               = explode(" to ", $request->date_range);
-            $flash_deal->start_date = strtotime($date_var[0]);
-            $flash_deal->end_date   = strtotime( $date_var[1]);
+            $flash_deal = new FlashDeal;
+            $flash_deal->title = $request->title;
+            $flash_deal->text_color = $request->text_color;
+
+            
+                $date_var               = explode(" to ", $request->date_range);
+                $flash_deal->start_date = strtotime($date_var[0]);
+                $flash_deal->end_date   = strtotime( $date_var[1]);
+            
+        
+
+            $flash_deal->background_color = $request->background_color;
+            // $flash_deal->slug = strtolower(str_replace(' ', '-', $request->title).'-'.Str::random(5));
+            $flash_deal->slug = SlugService::createSlug(FlashDeal::class, 'slug', $request->title);
+            $flash_deal->banner = $request->banner;
+            if($flash_deal->save()){
+                foreach ($request->products as $key => $product) {
+                    $flash_deal_product = new FlashDealProduct;
+                    $flash_deal_product->flash_deal_id = $flash_deal->id;
+                    $flash_deal_product->product_id = $product;
+                    $flash_deal_product->discount = $request['discount_'.$product];
+                    $flash_deal_product->discount_type = $request['discount_type_'.$product];
+                    $flash_deal_product->save();
+                }
+
+                $flash_deal_translation = FlashDealTranslation::firstOrNew(['lang' => env('DEFAULT_LANGUAGE'), 'flash_deal_id' => $flash_deal->id]);
+                $flash_deal_translation->title = $request->title;
+                $flash_deal_translation->save();
+
+                flash(translate('Flash Deal has been inserted successfully'))->success();
+                return redirect()->route('flash_deals.index');
+            }
+            else{
+                flash(translate('Something went wrong'))->error();
+                return back();
+            }
         } catch (\Exception $e) {
             flash(translate('Please also select ending date'))->error();
-            return back();
-        }
-       
-
-        $flash_deal->background_color = $request->background_color;
-        // $flash_deal->slug = strtolower(str_replace(' ', '-', $request->title).'-'.Str::random(5));
-        $flash_deal->slug = SlugService::createSlug(FlashDeal::class, 'slug', $request->title);
-        $flash_deal->banner = $request->banner;
-        if($flash_deal->save()){
-            foreach ($request->products as $key => $product) {
-                $flash_deal_product = new FlashDealProduct;
-                $flash_deal_product->flash_deal_id = $flash_deal->id;
-                $flash_deal_product->product_id = $product;
-                $flash_deal_product->discount = $request['discount_'.$product];
-                $flash_deal_product->discount_type = $request['discount_type_'.$product];
-                $flash_deal_product->save();
-            }
-
-            $flash_deal_translation = FlashDealTranslation::firstOrNew(['lang' => env('DEFAULT_LANGUAGE'), 'flash_deal_id' => $flash_deal->id]);
-            $flash_deal_translation->title = $request->title;
-            $flash_deal_translation->save();
-
-            flash(translate('Flash Deal has been inserted successfully'))->success();
-            return redirect()->route('flash_deals.index');
-        }
-        else{
-            flash(translate('Something went wrong'))->error();
             return back();
         }
     }
