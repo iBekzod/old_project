@@ -21,13 +21,13 @@ class SubCategoryController extends Controller
 {
     public function index(Request $request, $id)
     {
-        $category = Category::where('slug', 'like', '%'. $id .'%')
+        $category = Category::where('slug', $id)
             ->with(['products', 'childrenCategories', 'parentCategoryHierarchy'])
             ->firstOrFail();
 
         $category_collection = new CategoryCollection($category->childrenCategories);
         $category_collection->additional['filter'] = $this->searchByAttrs($request, $id);
-        $category_collection->additional['category'] = Category::where('id', $id)->orWhere('slug', 'like', '%'. $id .'%')->with('parent')->first();
+        $category_collection->additional['category'] = Category::where('id', $id)->orWhere('slug', $id)->with('parent')->first();
         $category_collection->additional['category']['tag'] = $this->getTags($category->childrenCategories);
         $category_collection->additional['category']['brands'] = $this->getBrands($category->childrenCategories);
         $category_collection->additional['category']['min_price'] = filter_products(\App\Product::query())->get()->min('unit_price');
@@ -61,7 +61,7 @@ class SubCategoryController extends Controller
 
     public function subCategories($id)
     {
-        $category = MainCategory::where('slug', 'like', '%'. $id .'%')
+        $category = MainCategory::where('slug',  $id )
             ->with('products')
             ->firstOrFail();
 
@@ -121,7 +121,7 @@ class SubCategoryController extends Controller
 
     public function searchByAttrs($request, $id)
     {
-        $category = \App\Category::where('id', $id)->orWhere('slug', 'like', '%'. $id .'%')->first();
+        $category = \App\Category::where('id', $id)->orWhere('slug', $id)->first();
 
         if ($category != null) {
             return $this->search($request, $category->id);

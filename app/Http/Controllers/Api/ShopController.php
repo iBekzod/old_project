@@ -17,7 +17,7 @@ class ShopController extends Controller
 
     public function info($id)
     {
-        return new ShopCollection(Shop::where('id', $id)->orWhere('slug', 'like', '%'.$id.'%')->get());
+        return new ShopCollection(Shop::where('id', $id)->orWhere('slug', $id)->get());
     }
 
     public function shopOfUser($id)
@@ -33,7 +33,7 @@ class ShopController extends Controller
 
     public function topSellingProducts($id)
     {
-        $shop = Shop::findOrFail($id);
+        $shop = Shop::where('slug', $id)->firstOrFail($id);
         return new ProductCollection(Product::where('user_id', $shop->user_id)->orderBy('num_of_sale', 'desc')->limit(4)->get());
     }
 
