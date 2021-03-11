@@ -27,25 +27,25 @@ class ShopController extends Controller
 
     public function allProducts($id)
     {
-        $shop = Shop::findOrFail($id);
+        $shop = Shop::where('slug', $id)->firstOrFail();
         return new ProductCollection(Product::where('user_id', $shop->user_id)->latest()->paginate(10));
     }
 
     public function topSellingProducts($id)
     {
-        $shop = Shop::findOrFail($id);
+        $shop = Shop::where('slug', $id)->firstOrFail();
         return new ProductCollection(Product::where('user_id', $shop->user_id)->orderBy('num_of_sale', 'desc')->limit(4)->get());
     }
 
     public function featuredProducts($id)
     {
-        $shop = Shop::findOrFail($id);
+        $shop = Shop::where('slug', $id)->firstOrFail();
         return new ProductCollection(Product::where(['user_id' => $shop->user_id, 'featured'  => 1])->latest()->get());
     }
 
     public function newProducts($id)
     {
-        $shop = Shop::findOrFail($id);
+        $shop = Shop::where('slug', $id)->firstOrFail();
         return new ProductCollection(Product::where('user_id', $shop->user_id)->orderBy('created_at', 'desc')->limit(10)->get());
     }
 
