@@ -58,7 +58,7 @@ class ProductController extends Controller
             }
         }
 
-        $products = Product::where('id', $id)->orWhere('slug', 'like', '%'. $id .'%')->get();
+        $products = Product::where('id', $id)->orWhere('slug', $id)->get();
         $product = isset($products[0]) ? $products[0] : null;
         $breadcrumbs = [];
         if($product) {
