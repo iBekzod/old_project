@@ -88,7 +88,7 @@ Route::prefix('v1')->group(function () {
     Route::get('products/category/{id}', 'Api\ProductController@category')->name('api.products.category');
     Route::get('products/sub-category/{id}', 'Api\ProductController@subCategory')->name('products.subCategory');
     Route::get('products/sub-sub-category/{id}', 'Api\ProductController@subSubCategory')->name('products.subSubCategory');
-    Route::get('products/brand/{id}/{brand_id}', 'Api\ProductController@brand')->name('api.products.brand');
+    Route::get('products/brand/{id}', 'Api\ProductController@brand')->name('api.products.brand');
     Route::get('products/todays-deal', 'Api\ProductController@todaysDeal');
     Route::get('products/flash-deal', 'Api\ProductController@flashDeal');
     Route::get('products/featured', 'Api\ProductController@featured');
@@ -113,7 +113,7 @@ Route::prefix('v1')->group(function () {
     Route::get('shops/products/top/{id}', 'Api\ShopController@topSellingProducts')->name('shops.topSellingProducts');
     Route::get('shops/products/featured/{id}', 'Api\ShopController@featuredProducts')->name('shops.featuredProducts');
     Route::get('shops/products/new/{id}', 'Api\ShopController@newProducts')->name('shops.newProducts');
-    Route::get('shops/brands/{id}', 'Api\ShopController@brands')->name('shops.brands');
+    Route::get('shops/brands/{id}/{brand_id}', 'Api\ShopController@brands')->name('shops.brands');
     Route::apiResource('shops', 'Api\ShopController')->only('index');
 
     Route::apiResource('sliders', 'Api\SliderController')->only('index');
