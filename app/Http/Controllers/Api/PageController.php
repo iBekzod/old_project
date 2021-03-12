@@ -13,9 +13,9 @@ class PageController extends Controller
             'type' => 'sometimes',
             'slug' => 'sometimes'
         ]);
-
+        
         return response()->json([
-            'page' => Page::where('type', $request->get('type'))->orWhere('slug')->first()
+            'page' => Page::where('type', $request->get('type'))->orWhere('slug', $request->get('slug'))->first()
         ]);
     }
 }
