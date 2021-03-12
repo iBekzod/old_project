@@ -149,6 +149,7 @@ Route::prefix('v1')->group(function () {
     Route::match(['get', 'post'], 'search', 'SearchController@search');
 
     Route::get('conversation_messages','Api\ConversationController@getConversations');//->middleware('auth:api');
+    Route::post('send_conversation_message','Api\ConversationController@store');//->middleware('auth:api');
 });
 
 Route::fallback(function() {
