@@ -113,7 +113,7 @@ Route::prefix('v1')->group(function () {
     Route::get('shops/products/top/{id}', 'Api\ShopController@topSellingProducts')->name('shops.topSellingProducts');
     Route::get('shops/products/featured/{id}', 'Api\ShopController@featuredProducts')->name('shops.featuredProducts');
     Route::get('shops/products/new/{id}', 'Api\ShopController@newProducts')->name('shops.newProducts');
-    Route::get('shops/brands/{id}/{brand_id}', 'Api\ShopController@brands')->name('shops.brands');
+    Route::get('shops/brands/{id}', 'Api\ShopController@brands')->name('shops.brands');
     Route::apiResource('shops', 'Api\ShopController')->only('index');
 
     Route::apiResource('sliders', 'Api\SliderController')->only('index');
