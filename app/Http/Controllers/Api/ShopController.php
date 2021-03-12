@@ -49,8 +49,9 @@ class ShopController extends Controller
         return new ProductCollection(Product::where('user_id', $shop->user_id)->orderBy('created_at', 'desc')->limit(10)->get());
     }
 
-    public function brands($id)
+    public function brands($id, $brand_id)
     {
-
+        $shop = Shop::where('slug', $id)->firstOrFail();
+        return new ProductCollection(Product::where('user_id', $shop->user_id)->where('brand_id', $brand_id)->where('is_accepted', 1)->latest()->get());
     }
 }
