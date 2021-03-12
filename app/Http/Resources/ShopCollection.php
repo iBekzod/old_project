@@ -22,11 +22,11 @@ class ShopCollection extends ResourceCollection
                     'instagram' => $data->instagram,
                     'slug' => $data->slug,
                     'links' => [
-                        'featured' => route('shops.featuredProducts', $data->id),
-                        'top' => route('shops.topSellingProducts',  $data->id),
-                        'new' => route('shops.newProducts', $data->id),
-                        'all' => route('shops.allProducts', $data->id),
-                        'brands' => route('shops.brands', $data->id)
+                        'featured' => route('shops.featuredProducts', $data->slug),
+                        'top' => route('shops.topSellingProducts',  $data->slug),
+                        'new' => route('shops.newProducts', $data->slug),
+                        'all' => route('shops.allProducts', $data->slug),
+                        'brands' => route('shops.brands', $data->slug)
                     ]
                 ];
 
