@@ -71,8 +71,10 @@ class ConversationController extends Controller
             }
         }
 
-        flash(translate('Message has been send to seller'))->success();
-        return back();
+        //flash(translate('Message has been send to seller'))->success();
+        return response()->json([
+            'message' => translate('Message has been send to seller')
+        ]);
     }
 
     public function send_message_to_seller($conversation, $message, $user_type)
