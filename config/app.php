@@ -191,6 +191,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
+        // Napa\R19\SmsServiceProvider::class,
 //        \App\Providers\ViewServiceProvider::class
     ],
 
@@ -249,6 +250,7 @@ return [
         'Rave' => KingFlamez\Rave\Facades\Rave::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+        // 'sms' => Napa\R19\Sms::class,
     ],
 
 ];

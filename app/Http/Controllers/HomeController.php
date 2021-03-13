@@ -196,7 +196,12 @@ class HomeController extends Controller
      */
     public function index()
     {
+        // return redirect('https://teampro-marketplace.herokuapp.com/');
         return view('frontend.index');
+    }
+
+    public function home(){
+        return redirect('https://teampro-marketplace.herokuapp.com/');
     }
 
     public function flash_deal_details($slug)

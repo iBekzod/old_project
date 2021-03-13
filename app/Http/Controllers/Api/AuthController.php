@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\User;
 use App\Notifications\EmailVerificationNotification;
-
 use Napa\R19\Sms;
 use Illuminate\Support\Facades\DB;
 
