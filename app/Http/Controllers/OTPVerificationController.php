@@ -58,7 +58,7 @@ class OTPVerificationController extends Controller
 
     public function resend_verificcation_code(Request $request){
         $user = Auth::user();
-        $user->verification_code = rand(100000,999999);
+        $user->verification_code = rand(1000,9999);
         $user->save();
 
         sendSMS($user->phone, env("APP_NAME"), $user->verification_code.' is your verification code for '.env('APP_NAME'));

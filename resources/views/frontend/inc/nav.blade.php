@@ -3,7 +3,17 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-7 col">
-                <ul class="list-inline d-flex justify-content-between justify-content-lg-start mb-0">
+                <a class="d-block py-10px mr-3 ml-0" href="{{ route('home') }}">
+                    @php
+                        $header_logo = get_setting('header_logo');
+                    @endphp
+                    @if($header_logo != null)
+                        <img src="{{ uploaded_asset($header_logo) }}" alt="{{ env('APP_NAME') }}" class="mw-100 h-15px h-md-30px" height="20">
+                    @else
+                        <img src="{{ static_asset('assets/img/logo.png') }}" alt="{{ env('APP_NAME') }}" class="mw-100 h-15px h-md-30px" height="20">
+                    @endif
+                </a>
+                {{-- <ul class="list-inline d-flex justify-content-between justify-content-lg-start mb-0">
                     @if(get_setting('show_language_switcher') == 'on')
                     <li class="list-inline-item dropdown mr-3" id="lang-change">
                         @php
@@ -53,7 +63,7 @@
                         </ul>
                     </li>
                     @endif
-                </ul>
+                </ul> --}}
             </div>
 
             <div class="col-5 text-right d-none d-lg-block">
@@ -61,22 +71,22 @@
                     @auth
                         @if(isAdmin())
                             <li class="list-inline-item mr-3">
-                                <a href="{{ route('admin.dashboard') }}" class="text-reset py-2 d-inline-block opacity-60">{{ translate('My Panel')}}</a>
+                                <a href="{{ route('admin.dashboard') }}" class="text-reset py-2 d-inline-block opacity-60  h-15px h-md-30px">{{ translate('My Panel')}}</a>
                             </li>
                         @else
                             <li class="list-inline-item mr-3">
-                                <a href="{{ route('dashboard') }}" class="text-reset py-2 d-inline-block opacity-60">{{ translate('My Panel')}}</a>
+                                <a href="{{ route('dashboard') }}" class="text-reset py-2 d-inline-block opacity-60  h-15px h-md-30px">{{ translate('My Panel')}}</a>
                             </li>
                         @endif
                         <li class="list-inline-item">
-                            <a href="{{ route('logout') }}" class="text-reset py-2 d-inline-block opacity-60">{{ translate('Logout')}}</a>
+                            <a href="{{ route('logout') }}" class="text-reset py-2 d-inline-block opacity-60  h-15px h-md-30px">{{ translate('Logout')}}</a>
                         </li>
                     @else
                         <li class="list-inline-item mr-3">
-                            <a href="{{ route('user.login') }}" class="text-reset py-2 d-inline-block opacity-60">{{ translate('Login')}}</a>
+                            <a href="{{ route('user.login') }}" class="text-reset py-2 d-inline-block opacity-60  h-15px h-md-30px">{{ translate('Login')}}</a>
                         </li>
                         <li class="list-inline-item">
-                            <a href="{{ route('user.registration') }}" class="text-reset py-2 d-inline-block opacity-60">{{ translate('Registration')}}</a>
+                            <a href="{{ route('user.registration') }}" class="text-reset py-2 d-inline-block opacity-60  h-15px h-md-30px">{{ translate('Registration')}}</a>
                         </li>
                     @endauth
                 </ul>
@@ -85,7 +95,7 @@
     </div>
 </div>
 <!-- END Top Bar -->
-<header class="@if(get_setting('header_stikcy') == 'on') sticky-top @endif z-1020 bg-white border-bottom shadow-sm">
+{{-- <header class="@if(get_setting('header_stikcy') == 'on') sticky-top @endif z-1020 bg-white border-bottom shadow-sm">
     <div class="position-relative logo-bar-area">
         <div class="container">
             <div class="d-flex align-items-center">
@@ -189,4 +199,4 @@
         </div>
         @endif
     </div>
-</header>
+</header> --}}

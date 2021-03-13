@@ -15,6 +15,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Cookie;
 use Nexmo;
 use Twilio\Rest\Client;
+use App\Http\Controllers\OTPVerificationController;
 
 class RegisterController extends Controller
 {

@@ -138,7 +138,7 @@
 
         @yield('content')
 
-        @include('frontend.inc.footer')
+        {{-- @include('frontend.inc.footer') --}}
 
     </div>
 

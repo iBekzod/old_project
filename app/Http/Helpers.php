@@ -16,40 +16,48 @@ use App\Utility\TranslationUtility;
 use App\Utility\CategoryUtility;
 use App\Utility\MimoUtility;
 use Twilio\Rest\Client;
-
+use App\Utility\sms\EskizSmsClient;
+use App\Notifications\EmailVerificationNotification;
 //highlights the selected navigation on admin panel
 if (!function_exists('sendSMS')) {
     function sendSMS($to, $from, $text)
     {
         if (OtpConfiguration::where('type', 'nexmo')->first()->value == 1) {
-            $api_key = env("NEXMO_KEY"); //put ssl provided api_token here
-            $api_secret = env("NEXMO_SECRET"); // put ssl provided sid here
+            try {
+                $my_sms = new EskizSmsClient;
+                $response = $my_sms->send($to, $from." ".$text);
+            } catch (\Exception $e) {
+                //dd($e->getMessage());
+                // throw $th;
+            }
+            // $api_key = env("NEXMO_KEY"); //put ssl provided api_token here
+            // $api_secret = env("NEXMO_SECRET"); // put ssl provided sid here
 
-            $params = [
-                "api_key" => $api_key,
-                "api_secret" => $api_secret,
-                "from" => $from,
-                "text" => $text,
-                "to" => $to
-            ];
+            // $params = [
+            //     "api_key" => $api_key,
+            //     "api_secret" => $api_secret,
+            //     "from" => $from,
+            //     "text" => $text,
+            //     "to" => $to
+            // ];
 
-            $url = "https://rest.nexmo.com/sms/json";
-            $params = json_encode($params);
+            // $url = "https://rest.nexmo.com/sms/json";
+            // $params = json_encode($params);
 
-            $ch = curl_init(); // Initialize cURL
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                'Content-Type: application/json',
-                'Content-Length: ' . strlen($params),
-                'accept:application/json'
-            ));
-            $response = curl_exec($ch);
-            curl_close($ch);
+            // $ch = curl_init(); // Initialize cURL
+            // curl_setopt($ch, CURLOPT_URL, $url);
+            // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            // curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+            // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            // curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            // curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+            // curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            //     'Content-Type: application/json',
+            //     'Content-Length: ' . strlen($params),
+            //     'accept:application/json'
+            // ));
+            // $response = curl_exec($ch);
+            // curl_close($ch);
 
             return $response;
         } elseif (OtpConfiguration::where('type', 'twillo')->first()->value == 1) {

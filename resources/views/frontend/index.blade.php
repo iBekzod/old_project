@@ -2,7 +2,7 @@
 
 @section('content')
     {{-- Categories , Sliders . Today's deal --}}
-    <div class="home-banner-area mb-4 pt-3">
+    {{-- <div class="home-banner-area mb-4 pt-3">
         <div class="container">
             <div class="row gutters-10 position-relative">
                 <div class="col-lg-3 position-static d-none d-lg-block">
@@ -107,11 +107,11 @@
 
             </div>
         </div>
-    </div>
+    </div> --}}
 
 
     {{-- Banner section 1 --}}
-    @if (get_setting('home_banner1_images') != null)
+    {{-- @if (get_setting('home_banner1_images') != null)
     <div class="mb-4">
         <div class="container">
             <div class="row gutters-10">
@@ -128,11 +128,11 @@
             </div>
         </div>
     </div>
-    @endif
+    @endif --}}
 
 
     {{-- Flash Deal --}}
-    @php
+    {{-- @php
         $flash_deal = \App\FlashDeal::where('status', 1)->where('featured', 1)->first();
     @endphp
     @if($flash_deal != null && strtotime(date('Y-m-d H:i:s')) >= $flash_deal->start_date && strtotime(date('Y-m-d H:i:s')) <= $flash_deal->end_date)
@@ -206,22 +206,22 @@
             </div>
         </div>
     </section>
-    @endif
+    @endif --}}
 
 
     {{-- Featured Section --}}
-    <div id="section_featured">
+    {{-- <div id="section_featured">
 
-    </div>
+    </div> --}}
 
     {{-- Best Selling  --}}
-    <div id="section_best_selling">
+    {{-- <div id="section_best_selling">
 
-    </div>
+    </div> --}}
 
 
     {{-- Banner Section 2 --}}
-    @if (get_setting('home_banner2_images') != null)
+    {{-- @if (get_setting('home_banner2_images') != null)
     <div class="mb-4">
         <div class="container">
             <div class="row gutters-10">
@@ -238,15 +238,15 @@
             </div>
         </div>
     </div>
-    @endif
+    @endif --}}
 
     {{-- Category wise Products --}}
-    <div id="section_home_categories">
+    {{-- <div id="section_home_categories">
 
-    </div>
+    </div> --}}
 
     {{-- Classified Product --}}
-    @if(\App\BusinessSetting::where('type', 'classified_product')->first()->value == 1)
+    {{-- @if(\App\BusinessSetting::where('type', 'classified_product')->first()->value == 1)
         @php
             $customer_products = \App\CustomerProduct::where('status', '1')->where('published', '1')->take(10)->get();
         @endphp
@@ -298,10 +298,10 @@
                    </div>
                </section>
            @endif
-       @endif
+       @endif --}}
 
     {{-- Banner Section 2 --}}
-    @if (get_setting('home_banner3_images') != null)
+    {{-- @if (get_setting('home_banner3_images') != null)
     <div class="mb-4">
         <div class="container">
             <div class="row gutters-10">
@@ -318,17 +318,17 @@
             </div>
         </div>
     </div>
-    @endif
+    @endif --}}
 
     {{-- Best Seller --}}
-    @if (\App\BusinessSetting::where('type', 'vendor_system_activation')->first()->value == 1)
+    {{-- @if (\App\BusinessSetting::where('type', 'vendor_system_activation')->first()->value == 1)
     <div id="section_best_sellers">
 
     </div>
-    @endif
+    @endif --}}
 
     {{-- Top 10 categories and Brands --}}
-    <section class="mb-4">
+    {{-- <section class="mb-4">
         <div class="container">
             <div class="row gutters-10">
                 @if (get_setting('top10_categories') != null)
@@ -411,7 +411,7 @@
                 @endif
             </div>
         </div>
-    </section>
+    </section> --}}
 
 @endsection
 
