@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-7 col">
-                <a class="d-block py-10px mr-3 ml-0" href="{{ route('home') }}">
+                <a class="d-block py-10px mr-3 ml-0" href="{{ route('homePage') }}">
                     @php
                         $header_logo = get_setting('header_logo');
                     @endphp
