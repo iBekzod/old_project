@@ -53,7 +53,7 @@ class LanguageController extends Controller
             $sort_search = $request->search;
             $lang_keys = $lang_keys->where('lang_key', 'like', '%'.$sort_search.'%');
         }
-        $lang_keys = $lang_keys->paginate(50);
+        $lang_keys = $lang_keys->latest()->paginate(50);
         return view('backend.setup_configurations.languages.language_view', compact('language','lang_keys','sort_search'));
     }
 
@@ -121,5 +121,42 @@ class LanguageController extends Controller
             flash(translate('Language has been deleted successfully'))->success();
         }
         return redirect()->route('languages.index');
+    }
+
+    public function show_translations(Request $request=null)
+    {
+        // if($request){
+
+        // }
+        $sort_search = null;
+        $language = Language::findOrFail(1);
+        $lang_keys = Translation::where('lang', env('DEFAULT_LANGUAGE', 'en'));
+        if ($request->has('search')){
+            $sort_search = $request->search;
+            $lang_keys = $lang_keys->where('lang_key', 'like', '%'.$sort_search.'%');
+        }
+        $lang_keys = $lang_keys->latest()->paginate(50);
+        return view('backend.setup_configurations.translations.language_view', compact('language','lang_keys','sort_search'));
+    }
+
+    public function key_value_store_translations(Request $request)
+    {
+        $language = Language::findOrFail($request->id);
+        foreach ($request->values as $key => $value) {
+            $translation_def = Translation::where('lang_key', $key)->where('lang', $language->code)->first();
+            if($translation_def == null){
+                $translation_def = new Translation;
+                $translation_def->lang = $language->code;
+                $translation_def->lang_key = $key;
+                $translation_def->lang_value = $value;
+                $translation_def->save();
+            }
+            else {
+                $translation_def->lang_value = $value;
+                $translation_def->save();
+            }
+        }
+        flash(translate('Translations updated for ').$language->name)->success();
+        return back();
     }
 }

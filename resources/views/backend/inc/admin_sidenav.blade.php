@@ -27,7 +27,7 @@
 <div class="aiz-sidebar-wrap">
     <div class="aiz-sidebar left c-scrollbar bg-light">
                 <div class="aiz-side-nav-logo-wrap bg-light">
-                    <a href="{{ route('admin.dashboard') }}" class="d-block text-left">
+                    <a href="{{ route('admin.dashboard') }}" class="text-left d-block">
                         @if(get_setting('system_logo_white') != null)
                             <img class="mw-100" src="{{ uploaded_asset(get_setting('system_logo_white'))??static_asset('assets/img/logo.jpg') }}" class="brand-icon"
                                  alt="{{ get_setting('site_name') }}">
@@ -38,8 +38,8 @@
                     </a>
                 </div>
         <div class="aiz-side-nav-wrap">
-            <div class="px-20px mb-3">
-                <input class="form-control bg-soft-secondary border-0 form-control-sm text-white" type="text" name=""
+            <div class="mb-3 px-20px">
+                <input class="text-white border-0 form-control bg-soft-secondary form-control-sm" type="text" name=""
                        placeholder="{{ translate('Search in menu') }}" id="menu-search" onkeyup="menuSearch()">
             </div>
             <ul class="aiz-side-nav-list" id="search-menu">
@@ -751,6 +751,12 @@
                                     <span class="aiz-side-nav-text">{{translate('Languages')}}</span>
                                 </a>
                             </li>
+                            {{-- <li class="aiz-side-nav-item">
+                                <a href="{{route('languages.show_translations', [])}}"
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['languages.show_translations'])}}">
+                                    <span class="aiz-side-nav-text">{{translate('Translations')}}</span>
+                                </a>
+                            </li> --}}
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('currency.index')}}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{translate('Currency')}}</span>

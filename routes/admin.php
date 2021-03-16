@@ -99,8 +99,10 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::resource('/languages', 'LanguageController');
 	Route::post('/languages/{id}/update', 'LanguageController@update')->name('languages.update');
 	Route::get('/languages/destroy/{id}', 'LanguageController@destroy')->name('languages.destroy');
+	Route::get('/languages/show_translations', 'LanguageController@show_translations')->name('languages.show_translations');
 	Route::post('/languages/update_rtl_status', 'LanguageController@update_rtl_status')->name('languages.update_rtl_status');
 	Route::post('/languages/key_value_store', 'LanguageController@key_value_store')->name('languages.key_value_store');
+	Route::post('/languages/key_value_store_translations', 'LanguageController@key_value_store_translations')->name('languages.key_value_store_translations');
 
 	// website setting
 	Route::group(['prefix' => 'website'], function(){
