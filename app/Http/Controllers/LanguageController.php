@@ -125,9 +125,6 @@ class LanguageController extends Controller
 
     public function show_translations(Request $request=null)
     {
-        // if($request){
-
-        // }
         $sort_search = null;
         $language = Language::findOrFail(1);
         $lang_keys = Translation::where('lang', env('DEFAULT_LANGUAGE', 'en'));
