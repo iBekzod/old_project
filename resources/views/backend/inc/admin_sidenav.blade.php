@@ -725,6 +725,30 @@
                     </li>
                 @endif
 
+            <!-- Translations -->
+                @if(Auth::user()->user_type == 'admin' || in_array('14', json_decode(Auth::user()->staff->role->permissions)))
+                    <li class="aiz-side-nav-item">
+                        <a href="#" class="aiz-side-nav-link">
+                            <i class="las la-dharmachakra aiz-side-nav-icon"></i>
+                            <span class="aiz-side-nav-text">{{translate('Translations')}}</span>
+                            <span class="aiz-side-nav-arrow"></span>
+                        </a>
+                        <ul class="aiz-side-nav-list level-2">
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_product_translations', ['language_selected'=>'en'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Product translations')}}</span>
+                                </a>
+                            </li>
+                            {{-- <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_category_translations', ['language_selected'=>'en'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Category translations')}}</span>
+                                </a>
+                            </li> --}}
+                        </ul>
+                    </li>
+                @endif
             <!-- Setup & Configurations -->
                 @if(Auth::user()->user_type == 'admin' || in_array('14', json_decode(Auth::user()->staff->role->permissions)))
                     <li class="aiz-side-nav-item">
@@ -751,12 +775,7 @@
                                     <span class="aiz-side-nav-text">{{translate('Languages')}}</span>
                                 </a>
                             </li>
-                            {{-- <li class="aiz-side-nav-item">
-                                <a href="{{route('languages.show_translations', [])}}"
-                                   class="aiz-side-nav-link {{ areActiveRoutes(['languages.show_translations'])}}">
-                                    <span class="aiz-side-nav-text">{{translate('Translations')}}</span>
-                                </a>
-                            </li> --}}
+
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('currency.index')}}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{translate('Currency')}}</span>

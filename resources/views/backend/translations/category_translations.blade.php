@@ -5,7 +5,7 @@
     <div class="card">
         <div class="card-header row gutters-5">
          <div class="text-center col text-md-left">
-           <h5 class="mb-md-0 h6">{{ $language->name }}</h5>
+           <h5 class="mb-md-0 h6">{{ $language_selected }}</h5>
          </div>
          <div class="col-md-4">
            <form class="" id="sort_keys" action="" method="GET">
@@ -15,9 +15,9 @@
            </form>
          </div>
        </div>
-        <form class="form-horizontal" action="{{ route('languages.key_value_store_translations') }}" method="POST">
+        <form class="form-horizontal" action="{{ route('translations.key_value_store_translations') }}" method="POST">
             @csrf
-            <input type="hidden" name="id" value="{{ $language->id }}">
+            <input type="hidden" name="language_selected" value="{{ $language_selected }}">
             <div class="card-body">
                 <table class="table table-striped table-bordered demo-dt-basic" id="tranlation-table" cellspacing="0" width="100%">
                     <thead>
@@ -28,22 +28,23 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($lang_keys as $key => $translation)
+                        @foreach ($translations as $key => $translation)
                             <tr>
-                                <td>{{ ($key+1) + ($lang_keys->currentPage() - 1)*$lang_keys->perPage() }}</td>
-                                <td class="key">{{ $translation->lang_key }}</td>
+                                <td>{{ ($key+1) + ($translations->currentPage() - 1)*$translations->perPage() }}</td>
+                                <td class="key">{{ $translation->name }}</td>
                                 <td>
-                                    <input type="text" class="form-control value" style="width:100%" name="values[{{ $translation->lang_key }}]" 
-                                    @if (($traslate_lang = \App\Translation::where('lang', $language->code)->where('lang_key', $translation->lang_key)->first()) != null)
-                                        value="{{ $traslate_lang->lang_value }}"
-                                    @endif>
+                                    <input type="text" class="form-control value" style="width:100%" name="values[{{ $translation->name }}]"
+                                    {{-- @if (($traslate_lang = \App\Translation::where('lang', $language->code)->where('lang_key', $translation->lang_key)->first()) != null) --}}
+                                        value="{{ $translation->name }}"
+                                    {{-- @endif --}}
+                                    >
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
                 <div class="aiz-pagination">
-                   {{ $lang_keys->appends(request()->input())->links() }}
+                   {{ $translations->appends(request()->input())->links() }}
                 </div>
 
                 <div class="mb-0 text-right form-group">

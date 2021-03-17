@@ -241,9 +241,9 @@ class AuthController extends Controller
         }
         flash(translate('Something went wrong'))->error();
         return back();
-        
-    }  
-    
+
+    }
+
     public function loginSeller($id)
     {
         $seller = Seller::findOrFail(decrypt($id));
