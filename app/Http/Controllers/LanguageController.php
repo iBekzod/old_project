@@ -10,6 +10,7 @@ use App\Translation;
 use App\ProductTranslation as productTranslation;
 use App\CategoryTranslation as categoryTranslation;
 use DB;
+use View;
 
 class LanguageController extends Controller
 {
@@ -126,113 +127,80 @@ class LanguageController extends Controller
     {
         try {
             $sort_search = null;
-            $translations = [];
-            if ($request->has('database')) {
-                $database = $request->database;
-            } else {
-                $database = 'product_translations';
+            ($request->has('base_table'))? $base_table = $request->base_table : $base_table='products';
+            ($request->has('table_translations'))? $table_translations = $request->table_translations : $table_translations='product_translations';
+            ($request->has('relation_id'))? $relation_id = $request->relation_id : $relation_id='product_id';
+            ($request->has('language_selected'))? $language_selected = $request->language_selected : $language_selected=env('DEFAULT_LANGUAGE', 'en');
+
+            $translations=DB::table($base_table)
+            ->join($table_translations, $base_table.'.id', '=', $table_translations.'.'.$relation_id)
+            ->select([$base_table.'.id as id', $base_table.'.name as key', $table_translations.'.name as value', $table_translations.'.lang as lang', $base_table.'.created_at' ]);
+            if($language_selected!='all'){
+                $translations = $translations->where('lang', $language_selected);
             }
-            $translations = DB::table($database)->select(['id', 'name', 'lang', 'created_at']);
-            $languages = Language::select(['name', 'code'])->get();
-            $language_selected = 'en';
-            if ($request->has('language_selected')) {
-                $language_selected = $request->language_selected;
-            } else {
-                $language_selected = env('DEFAULT_LANGUAGE', 'en');
-            }
-            $translations = $translations->where('lang', $language_selected);
+            $translations = $translations->orderBy('created_at', 'desc');
+            // $languages = Language::select(['name', 'code'])->get();
             if ($request->has('search')) {
-                $translations = $translations->where('name', 'like', '%' . $request->search . '%');
+                $sort_search = $request->search;
+                $translations = $translations->where('key', 'like', '%' . $sort_search . '%')->orWhere('value', 'like', '%' . $sort_search . '%');
             }
-            //dd($translations);
             $translations = $translations->paginate(50);
-            // dd($languages);
-            return view('backend.translations.product_translations', ['language_selected' => $language_selected, 'translations' => $translations, compact('languages', 'sort_search')]);
-        } catch (\Exception $e) {
-            dd($e->getMessage());
-            // return back();
-        }
-    }
-
-    public function show_product_translations(Request $request)
-    {
-        try {
-
-
-
-            $myClass = ProductTranslation::class;
-            $relation = 'product';
-
-
-            $sort_search = null;
-            $translations = $myClass::with($relation)->select(['id', 'name', 'lang', 'created_at']);
-
-            $translations = $myClass::with($relation)->get();
-            $translations = ProductTranslation::with('product')->get();
-
-           // $translations->getakk();
-
-
-
-
-         //   echo "<pre>";
-            dd( $translations);
-
-
-
-            return view('backend.translations.product_translations', [
-                'language_selected' => $language_selected,
-                'translations' => $translations,
-                'relation' => $relation,
-               compact('languages', 'sort_search')
-            ]);
-        } catch (\Exception $e) {
-            dd($e->getMessage());
-            // return back();
-        }
-    }
-
-    public function show_category_translations(Request $request)
-    {
-        try {
-            $sort_search = null;
-            $translations = CategoryTranslation::with('category'); //->select(['id', 'name', 'lang', 'created_at']);
-            $languages = Language::select(['name', 'code'])->get();
-            $language_selected = 'en';
-            if ($request->has('language_selected')) {
-                $language_selected = $request->language_selected;
-            } else {
-                $language_selected = env('DEFAULT_LANGUAGE', 'en');
-            }
-            $translations = $translations->where('lang', $language_selected);
-            if ($request->has('search')) {
-                $translations = $translations->where('name', 'like', '%' . $request->search . '%');
-            }
-            $translations = $translations->latest()->paginate(50);
-            return view('backend.setup_configurations.translations.language_view', ['language_selected' => $language_selected, 'translations' => $translations, compact('languages', 'sort_search')]);
+            return view('backend.translations.translations',
+            compact(
+                'sort_search', 'language_selected', 'translations',
+                'base_table','table_translations', 'relation_id'
+                ));
         } catch (\Exception $e) {
             return back();
         }
     }
+    public function select_translation_language(Request $request){
+        try {
+            $sort_search = null;
+            ($request->has('base_table'))? $base_table = $request->base_table : $base_table='products';
+            ($request->has('table_translations'))? $table_translations = $request->table_translations : $table_translations='product_translations';
+            ($request->has('relation_id'))? $relation_id = $request->relation_id : $relation_id='product_id';
+            ($request->has('language_selected'))? $language_selected = $request->language_selected : $language_selected=env('DEFAULT_LANGUAGE', 'en');
 
-    public function key_value_store_product_translations(Request $request)
-    {
-        $language = Language::findOrFail($request->id);
-        foreach ($request->values as $key => $value) {
-            $translation_def = ProductTranslation::where('name', $key)->where('lang', $language->code)->first();
-            if ($translation_def == null) {
-                $translation_def = new ProductTranslation;
-                $translation_def->lang = $language->code;
-                $translation_def->name = $value;
-                // $translation_def->lang_key = $key;
-                // $translation_def->lang_value = $value;
-                $translation_def->save();
-            } else {
-                $translation_def->lang_value = $value;
-                $translation_def->save();
+            $translations=DB::table($base_table)
+            ->join($table_translations, $base_table.'.id', '=', $table_translations.'.'.$relation_id)
+            ->select([$base_table.'.id as id', $base_table.'.name as key', $table_translations.'.name as value', $table_translations.'.lang as lang', $base_table.'.created_at' ]);
+            if($language_selected!='all'){
+                $translations = $translations->where('lang', $language_selected);
             }
+            $translations = $translations->orderBy('created_at', 'desc');
+            // $languages = Language::select(['name', 'code'])->get();
+            if ($request->has('search')) {
+                $sort_search = $request->search;
+                $translations = $translations->where('key', 'like', '%' . $sort_search . '%')->orWhere('value', 'like', '%' . $sort_search . '%');
+            }
+            $translations = $translations->paginate(50);
+            return View::make('backend.translations.translations',
+            compact(
+                'sort_search', 'language_selected', 'translations',
+                'base_table','table_translations', 'relation_id'
+                ));
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            return back();
         }
-        flash(translate('Translations updated for ') . $language->name)->success();
-        return back();
+    }
+    public function key_value_store_translations(Request $request)
+    {
+        try {
+            ($request->has('base_table'))? $base_table = $request->base_table : $base_table='products';
+            ($request->has('table_translations'))? $table_translations = $request->table_translations : $table_translations='product_translations';
+            ($request->has('relation_id'))? $relation_id = $request->relation_id : $relation_id='product_id';
+            ($request->has('language_selected'))? $language_selected = $request->language_selected : $language_selected=env('DEFAULT_LANGUAGE', 'en');$language = Language::where('code', $language_selected)->first();
+            foreach ($request->values as $key => $value) {
+                $result = DB::table($table_translations)->updateOrInsert(
+                    [$relation_id=>$key,'lang'=>$language_selected],
+                    ['name'=>$value]);
+            }
+            flash(translate('Translations updated for ') . $language->name)->success();
+            return back();
+        } catch (\Exception $e) {
+            return back();
+        }
     }
 }

@@ -101,9 +101,11 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::get('/languages/destroy/{id}', 'LanguageController@destroy')->name('languages.destroy');
 	Route::post('/languages/update_rtl_status', 'LanguageController@update_rtl_status')->name('languages.update_rtl_status');
 	Route::post('/languages/key_value_store', 'LanguageController@key_value_store')->name('languages.key_value_store');
-	Route::get('/translations/show_category_translations', 'LanguageController@show_category_translations')->name('translations.show_category_translations');
-	Route::get('/translations/show_product_translations', 'LanguageController@show_product_translations')->name('translations.show_product_translations');
-	Route::post('/translations/key_value_store_product_translations', 'LanguageController@key_value_store_product_translations')->name('translations.key_value_store_product_translations');
+	Route::get('/translations/show_translation', 'LanguageController@show_translation')->name('translations.show_translation');
+	// Route::get('/translations/show_category_translations', 'LanguageController@show_category_translations')->name('translations.show_category_translations');
+	// Route::get('/translations/show_product_translations', 'LanguageController@show_product_translations')->name('translations.show_product_translations');
+	Route::post('/translations/key_value_store_translations', 'LanguageController@key_value_store_translations')->name('translations.key_value_store_translations');
+	Route::post('/translations/select_translation_language', 'LanguageController@select_translation_language')->name('translations.select_translation_language');
 
 	// website setting
 	Route::group(['prefix' => 'website'], function(){

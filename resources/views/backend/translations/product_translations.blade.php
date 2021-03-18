@@ -34,8 +34,6 @@
                     <tbody>
                         @foreach ($translations as $key => $translation)
                             <tr>
-                                <pre>
-                               {{  ///var_dump($translation)}}
 
                                 <td>{{ ($key+1) + ($translations->currentPage() - 1)*$translations->perPage() }}</td>
                                 <td class="key"> @if($translation->$relation !== null){{$translation->$relation->name}}@endif</td>

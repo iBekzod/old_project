@@ -735,9 +735,21 @@
                         </a>
                         <ul class="aiz-side-nav-list level-2">
                             <li class="aiz-side-nav-item">
-                                <a href="{{route('translations.show_product_translations', ['language_selected'=>'en'])}}"
+                                <a href="{{route('translations.show_translation', ['base_table'=>'products', 'table_translations'=>'product_translations', 'relation_id'=>'product_id', 'language_selected'=>'ru'])}}"
                                    class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{translate('Product translations')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'products', 'table_translations'=>'product_translations', 'relation_id'=>'product_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Category translations')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'products', 'table_translations'=>'product_translations', 'relation_id'=>'product_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Attribute translations')}}</span>
                                 </a>
                             </li>
                             {{-- <li class="aiz-side-nav-item">
