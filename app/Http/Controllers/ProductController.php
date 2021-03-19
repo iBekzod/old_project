@@ -225,7 +225,7 @@ class ProductController extends Controller
     public function create()
     {
         $data = [
-            'categories' => Category::all()->toTree(),
+            'categories' => Category::withDepth()->having('depth', '=', 1)->get(),
             'brands' => Brand::all()
         ];
 
