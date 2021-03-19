@@ -1,7 +1,7 @@
 @php
     $value = null;
     for ($i=0; $i < $child_category->level; $i++){
-        $value .= '--';
+        $value .= '  ';
     }
 @endphp
 <option
