@@ -68,9 +68,12 @@
                         </div>
                         <div class="form-group" id="category">
                             <label class=" col-from-label">{{ translate('Category') }}</label>
-                            <select multiple class="form-control aiz-selectpicker" name="category_id[]"
+                            <select multiple="multiple" class="form-control js-example-basic-multiple" name="category_id[]"
                                     id="category_id"
                                     data-live-search="true" required>
+                            {{-- <select multiple class="form-control aiz-selectpicker" name="category_id[]"
+                                    id="category_id"
+                                    data-live-search="true" required> --}}
                                 @foreach ($categories as $category)
                                     <option
                                         value="{{ $category->id }}">{{ $category->getTranslation('name') }}</option>
