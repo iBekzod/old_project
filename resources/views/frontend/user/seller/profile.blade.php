@@ -6,7 +6,7 @@
         <div class="d-flex align-items-start">
             @include('frontend.inc.user_side_nav')
             <div class="aiz-user-panel">
-                <div class="aiz-titlebar mt-2 mb-4">
+                <div class="mt-2 mb-4 aiz-titlebar">
                   <div class="row align-items-center">
                     <div class="col-md-6">
                         <h1 class="h3">{{ translate('Manage Profile') }}</h1>
@@ -73,7 +73,7 @@
                             <div class="row gutters-10">
                                 @foreach (Auth::user()->addresses as $key => $address)
                                     <div class="col-lg-6">
-                                        <div class="border p-3 pr-5 rounded mb-3 position-relative">
+                                        <div class="p-3 pr-5 mb-3 border rounded position-relative">
                                             <div>
                                                 <span class="w-50 fw-600">{{ translate('Address') }}:</span>
                                                 <span class="ml-2">{{ $address->address }}</span>
@@ -95,12 +95,12 @@
                                                 <span class="ml-2">{{ $address->phone }}</span>
                                             </div>
                                             @if ($address->set_default)
-                                                <div class="position-absolute right-0 bottom-0 pr-2 pb-3">
+                                                <div class="bottom-0 right-0 pb-3 pr-2 position-absolute">
                                                     <span class="badge badge-inline badge-primary">{{ translate('Default') }}</span>
                                                 </div>
                                             @endif
-                                            <div class="dropdown position-absolute right-0 top-0">
-                                                <button class="btn bg-gray px-2" type="button" data-toggle="dropdown">
+                                            <div class="top-0 right-0 dropdown position-absolute">
+                                                <button class="px-2 btn bg-gray" type="button" data-toggle="dropdown">
                                                     <i class="la la-ellipsis-v"></i>
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
@@ -113,8 +113,8 @@
                                         </div>
                                     </div>
                                 @endforeach
-                                <div class="col-lg-6 mx-auto" onclick="add_new_address()">
-                                    <div class="border p-3 rounded mb-3 c-pointer text-center bg-light">
+                                <div class="mx-auto col-lg-6" onclick="add_new_address()">
+                                    <div class="p-3 mb-3 text-center border rounded c-pointer bg-light">
                                         <i class="la la-plus la-2x"></i>
                                         <div class="alpha-7">{{ translate('Add New Address') }}</div>
                                     </div>
@@ -132,7 +132,7 @@
                         <div class="row">
                             <label class="col-md-3 col-form-label">{{ translate('Cash Payment') }}</label>
                             <div class="col-md-9">
-                                <label class="aiz-switch aiz-switch-success mb-3">
+                                <label class="mb-3 aiz-switch aiz-switch-success">
                                     <input value="1" name="cash_on_delivery_status" type="checkbox" @if (Auth::user()->seller->cash_on_delivery_status == 1) checked @endif>
                                     <span class="slider round"></span>
                                 </label>
@@ -141,7 +141,7 @@
                         <div class="row">
                             <label class="col-md-3 col-form-label">{{ translate('Bank Payment') }}</label>
                             <div class="col-md-9">
-                                <label class="aiz-switch aiz-switch-success mb-3">
+                                <label class="mb-3 aiz-switch aiz-switch-success">
                                     <input value="1" name="bank_payment_status" type="checkbox" @if (Auth::user()->seller->bank_payment_status == 1) checked @endif>
                                     <span class="slider round"></span>
                                 </label>
@@ -150,30 +150,30 @@
                         <div class="row">
                             <label class="col-md-3 col-form-label">{{ translate('Bank Name') }}</label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control mb-3" placeholder="{{ translate('Bank Name')}}" value="{{ Auth::user()->seller->bank_name }}" name="bank_name">
+                                <input type="text" class="mb-3 form-control" placeholder="{{ translate('Bank Name')}}" value="{{ Auth::user()->seller->bank_name }}" name="bank_name">
                             </div>
                         </div>
                         <div class="row">
                             <label class="col-md-3 col-form-label">{{ translate('Bank Account Name') }}</label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control mb-3" placeholder="{{ translate('Bank Account Name')}}" value="{{ Auth::user()->seller->bank_acc_name }}" name="bank_acc_name">
+                                <input type="text" class="mb-3 form-control" placeholder="{{ translate('Bank Account Name')}}" value="{{ Auth::user()->seller->bank_acc_name }}" name="bank_acc_name">
                             </div>
                         </div>
                         <div class="row">
                             <label class="col-md-3 col-form-label">{{ translate('Bank Account Number') }}</label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control mb-3" placeholder="{{ translate('Bank Account Number')}}" value="{{ Auth::user()->seller->bank_acc_no }}" name="bank_acc_no">
+                                <input type="text" class="mb-3 form-control" placeholder="{{ translate('Bank Account Number')}}" value="{{ Auth::user()->seller->bank_acc_no }}" name="bank_acc_no">
                             </div>
                         </div>
                         <div class="row">
                             <label class="col-md-3 col-form-label">{{ translate('Bank Routing Number') }}</label>
                             <div class="col-md-9">
-                                <input type="number" lang="en" class="form-control mb-3" placeholder="{{ translate('Bank Routing Number')}}" value="{{ Auth::user()->seller->bank_routing_no }}" name="bank_routing_no">
+                                <input type="number" lang="en" class="mb-3 form-control" placeholder="{{ translate('Bank Routing Number')}}" value="{{ Auth::user()->seller->bank_routing_no }}" name="bank_routing_no">
                             </div>
                         </div>
                       </div>
                   </div>
-                  <div class="form-group mb-0 text-right">
+                  <div class="mb-0 text-right form-group">
                       <button type="submit" class="btn btn-primary">{{translate('Update Profile')}}</button>
                   </div>
                 </form>
@@ -192,7 +192,7 @@
                                   <label>{{ translate('Your Email') }}</label>
                               </div>
                               <div class="col-md-10">
-                                  <div class="input-group mb-3">
+                                  <div class="mb-3 input-group">
                                     <input type="email" class="form-control" placeholder="{{ translate('Your Email')}}" name="email" value="{{ Auth::user()->email }}" />
                                     <div class="input-group-append">
                                        <button type="button" class="btn btn-outline-secondary new-email-verification">
@@ -203,7 +203,7 @@
                                        </button>
                                     </div>
                                   </div>
-                                  <div class="form-group mb-0 text-right">
+                                  <div class="mb-0 text-right form-group">
                                       <button type="submit" class="btn btn-primary">{{translate('Update Email')}}</button>
                                   </div>
                               </div>
@@ -240,7 +240,7 @@
                                 <label>{{ translate('Address')}}</label>
                             </div>
                             <div class="col-md-10">
-                                <textarea class="form-control mb-3" placeholder="{{ translate('Your Address')}}" rows="2" name="address" required></textarea>
+                                <textarea class="mb-3 form-control" placeholder="{{ translate('Your Address')}}" rows="2" name="address" required></textarea>
                             </div>
                         </div>
                         <div class="row">
@@ -257,13 +257,18 @@
                                 </div>
                             </div>
                         </div>
+                        <input type="hidden"  name="longitude" value="">
+                        <input type="hidden"  name="latitude" value="">
+                        <div id="map_canvas">
+                            
+                        </div>
                         @if (\App\BusinessSetting::where('type', 'shipping_type')->first()->value == 'area_wise_shipping')
                             <div class="row">
                                 <div class="col-md-2">
                                     <label>{{ translate('City')}}</label>
                                 </div>
                                 <div class="col-md-10">
-                                    <select class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="city" required>
+                                    <select class="mb-3 form-control aiz-selectpicker" data-live-search="true" name="city" required>
                                         @foreach (\App\City::get() as $key => $city)
                                             <option value="{{ $city->name }}">{{ $city->getTranslation('name') }}</option>
                                         @endforeach
@@ -276,7 +281,8 @@
                                     <label>{{ translate('City')}}</label>
                                 </div>
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control mb-3" placeholder="{{ translate('Your City')}}" name="city" value="" required>
+                                    <input type="text" class="mb-3 form-control" placeholder="{{ translate('Your City')}}" name="city" value="" required>
+                                    
                                 </div>
                             </div>
                         @endif
@@ -285,7 +291,7 @@
                                 <label>{{ translate('Postal code')}}</label>
                             </div>
                             <div class="col-md-10">
-                                <input type="text" class="form-control mb-3" placeholder="{{ translate('Your Postal Code')}}" name="postal_code" value="" required>
+                                <input type="text" class="mb-3 form-control" placeholder="{{ translate('Your Postal Code')}}" name="postal_code" value="" required>
                             </div>
                         </div>
                         <div class="row">
@@ -293,10 +299,10 @@
                                 <label>{{ translate('Phone')}}</label>
                             </div>
                             <div class="col-md-10">
-                                <input type="text" class="form-control mb-3" placeholder="{{ translate('+880')}}" name="phone" value="" required>
+                                <input type="text" class="mb-3 form-control" placeholder="{{ translate('+998')}}" name="phone" value="" required>
                             </div>
                         </div>
-                        <div class="form-group text-right">
+                        <div class="text-right form-group">
                             <button type="submit" class="btn btn-sm btn-primary">{{translate('Save')}}</button>
                         </div>
                     </div>
@@ -331,5 +337,36 @@
                     AIZ.plugins.notify('danger', data.message);
             });
         });
+
+        function initialize() {
+
+            var map_canvas = document.getElementById('map_canvas');
+
+            // Initialise the map
+            var map_options = {
+                center: location,
+                zoom: 10,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            }
+            var map = new google.maps.Map(map_canvas, map_options)
+
+            // Put all locations into array
+            var locations = [
+            @foreach($addresses as $location)
+                [ {{ $location->latitude }}, {{ $location->longitude }} ]     
+            @endforeach
+            ];
+
+            for (i = 0; i < locations.length; i++) {
+                var location = new google.maps.LatLng(locations[i][0], locations[i][1]);
+                var marker = new google.maps.Marker({
+                    position: location,
+                    map: map,
+                }); 
+            }
+
+            // marker.setMap(map); // Probably not necessary since you set the map above
+
+        }
     </script>
 @endsection

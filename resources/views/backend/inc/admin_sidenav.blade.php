@@ -27,7 +27,7 @@
 <div class="aiz-sidebar-wrap">
     <div class="aiz-sidebar left c-scrollbar bg-light">
                 <div class="aiz-side-nav-logo-wrap bg-light">
-                    <a href="{{ route('admin.dashboard') }}" class="d-block text-left">
+                    <a href="{{ route('admin.dashboard') }}" class="text-left d-block">
                         @if(get_setting('system_logo_white') != null)
                             <img class="mw-100" src="{{ uploaded_asset(get_setting('system_logo_white'))??static_asset('assets/img/logo.jpg') }}" class="brand-icon"
                                  alt="{{ get_setting('site_name') }}">
@@ -38,8 +38,8 @@
                     </a>
                 </div>
         <div class="aiz-side-nav-wrap">
-            <div class="px-20px mb-3">
-                <input class="form-control bg-soft-secondary border-0 form-control-sm text-white" type="text" name=""
+            <div class="mb-3 px-20px">
+                <input class="text-white border-0 form-control bg-soft-secondary form-control-sm" type="text" name=""
                        placeholder="{{ translate('Search in menu') }}" id="menu-search" onkeyup="menuSearch()">
             </div>
             <ul class="aiz-side-nav-list" id="search-menu">
@@ -725,6 +725,48 @@
                     </li>
                 @endif
 
+            <!-- Translations -->
+                @if(Auth::user()->user_type == 'admin' || in_array('14', json_decode(Auth::user()->staff->role->permissions)))
+                    <li class="aiz-side-nav-item">
+                        <a href="#" class="aiz-side-nav-link">
+                            <i class="las la-dharmachakra aiz-side-nav-icon"></i>
+                            <span class="aiz-side-nav-text">{{translate('Translations')}}</span>
+                            <span class="aiz-side-nav-arrow"></span>
+                        </a>
+                        <ul class="aiz-side-nav-list level-2">
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'products', 'table_translations'=>'product_translations', 'relation_id'=>'product_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Products')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'categories', 'table_translations'=>'category_translations', 'relation_id'=>'category_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Categories')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'attributes', 'table_translations'=>'attribute_translations', 'relation_id'=>'attribute_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Attributes')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'brands', 'table_translations'=>'brand_translations', 'relation_id'=>'brand_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Brands')}}</span>
+                                </a>
+                            </li>
+                            {{-- <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_category_translations', ['language_selected'=>'en'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Category translations')}}</span>
+                                </a>
+                            </li> --}}
+                        </ul>
+                    </li>
+                @endif
             <!-- Setup & Configurations -->
                 @if(Auth::user()->user_type == 'admin' || in_array('14', json_decode(Auth::user()->staff->role->permissions)))
                     <li class="aiz-side-nav-item">
@@ -751,6 +793,7 @@
                                     <span class="aiz-side-nav-text">{{translate('Languages')}}</span>
                                 </a>
                             </li>
+
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('currency.index')}}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{translate('Currency')}}</span>

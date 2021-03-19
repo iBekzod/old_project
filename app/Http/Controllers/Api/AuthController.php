@@ -11,6 +11,8 @@ use App\User;
 use App\Notifications\EmailVerificationNotification;
 use Napa\R19\Sms;
 use Illuminate\Support\Facades\DB;
+use App\Seller;
+use App\Shop;
 
 class AuthController extends Controller
 {
@@ -210,5 +212,46 @@ class AuthController extends Controller
             )->toDateTimeString(),
             'user' => $user
         ]);
+    }
+
+
+    public function registerSeller(Request $request)
+    {
+        if(User::where('email', $request->email)->first() != null){
+            flash(translate('Email already exists!'))->error();
+            return back();
+        }
+        $user = new User;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->user_type = "seller";
+        $user->email_verified_at = now();
+        $user->password = Hash::make($request->password);
+        if($user->save()){
+            $seller = new Seller;
+            $seller->user_id = $user->id;
+            if($seller->save()){
+                $shop = new Shop;
+                $shop->user_id = $user->id;
+                $shop->slug = 'demo-shop-'.$user->id;
+                $shop->save();
+                auth()->login($user, true);
+                return redirect()->route('dashboard');
+            }
+        }
+        flash(translate('Something went wrong'))->error();
+        return back();
+
+    }
+
+    public function loginSeller($id)
+    {
+        $seller = Seller::findOrFail(decrypt($id));
+
+        $user  = $seller->user;
+
+        auth()->login($user, true);
+
+        return redirect()->route('dashboard');
     }
 }

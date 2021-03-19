@@ -26,7 +26,7 @@ class FlashDealController extends Controller
             $flash_deals = $flash_deals->where('title', 'like', '%'.$sort_search.'%');
         }
 
-        $flash_deals = $flash_deals->paginate(15);
+        $flash_deals = $flash_deals->latest()->paginate(15);
 
         return view('backend.marketing.flash_deals.index', compact('flash_deals', 'sort_search'));
     }
@@ -54,12 +54,12 @@ class FlashDealController extends Controller
             $flash_deal->title = $request->title;
             $flash_deal->text_color = $request->text_color;
 
-            
+
                 $date_var               = explode(" to ", $request->date_range);
                 $flash_deal->start_date = strtotime($date_var[0]);
                 $flash_deal->end_date   = strtotime( $date_var[1]);
-            
-        
+
+
 
             $flash_deal->background_color = $request->background_color;
             // $flash_deal->slug = strtolower(str_replace(' ', '-', $request->title).'-'.Str::random(5));

@@ -48,6 +48,10 @@ class AddressController extends Controller
         $address->city = $request->city;
         $address->postal_code = $request->postal_code;
         $address->phone = $request->phone;
+        // if($request->has('longitude') && $request->has('latitude')){
+        //     $address->longitude = $request->longitude;
+        //     $address->latitude = $request->latitude;
+        // }
         $address->save();
 
         return back();
@@ -61,7 +65,13 @@ class AddressController extends Controller
      */
     public function show($id)
     {
-        //
+        if($id){
+            $user_id=$id;
+        }else{
+            $user_id = Auth::user()->id;
+        }        
+        $addresses = Address::where('user_id',$user_id)->get();
+        return $addresses;
     }
 
     /**
