@@ -129,11 +129,11 @@
                                     id="category_id"
                                     data-live-search="true" required>
                                 @foreach ($categories as $category)
-                                    <option
+                                    {{-- <option disabled
                                         @if(in_array($category->id, $selected_categories))
                                         selected
                                         @endif
-                                        value="{{ $category->id }}">{{ $category->getTranslation('name') }}</option>
+                                        value="{{ $category->id }}">{{ $category->getTranslation('name') }}</option> --}}
                                     @foreach ($category->children as $childCategory)
                                         @include('backend.product-attributes.components.child_category', ['child_category' => $childCategory,'selected_categories' => $selected_categories])
                                     @endforeach
