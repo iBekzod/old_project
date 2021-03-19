@@ -12,13 +12,15 @@
                 <div class="align-items-stretch d-flex dropdown " id="trans-lang-changes">
                     <a class="dropdown-toggle no-arrow" data-toggle="dropdown" href="javascript:void(0);" role="button" aria-haspopup="false" aria-expanded="false">
                         <span class="btn btn-icon">
-                            <img src="{{ static_asset('assets/img/flags/'.$language_selected.'.png') }}" height="11">
+                            @if($language_selected=='all')<img src="{{ static_asset('assets/img/placeholder.jpg') }}" height="11">
+                            @else<img src="{{ static_asset('assets/img/flags/'.$language_selected.'.png') }}" height="11">
+                            @endif
                         </span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-xs">
                         <li>
-                            <a href="javascript:void(0)" data-flag="all" class="dropdown-item @if($language_selected == 'all') active @endif">
-                                {{-- <img src="{{ static_asset('assets/img/flags/'.$language->code.'.png') }}" class="mr-2"> --}}
+                            <a href="{{route('translations.show_translation', ['base_table'=>$base_table, 'table_translations'=>$table_translations, 'relation_id'=>$relation_id, 'language_selected'=>'all'])}}" data-flag="all" class="dropdown-item @if($language_selected == 'all') active @endif">
+                                <img src="{{ static_asset('assets/img/placeholder.jpg') }}" height="11" class="mr-2">
                                 <span class="language">All</span>
                             </a>
                         </li>

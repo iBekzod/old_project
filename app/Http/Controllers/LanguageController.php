@@ -193,9 +193,11 @@ class LanguageController extends Controller
             ($request->has('relation_id'))? $relation_id = $request->relation_id : $relation_id='product_id';
             ($request->has('language_selected'))? $language_selected = $request->language_selected : $language_selected=env('DEFAULT_LANGUAGE', 'en');$language = Language::where('code', $language_selected)->first();
             foreach ($request->values as $key => $value) {
-                $result = DB::table($table_translations)->updateOrInsert(
-                    [$relation_id=>$key,'lang'=>$language_selected],
-                    ['name'=>$value]);
+                if($language_selected!='all'){
+                    $result = DB::table($table_translations)->updateOrInsert(
+                        [$relation_id=>$key,'lang'=>$language_selected],
+                        ['name'=>$value]);
+                }
             }
             flash(translate('Translations updated for ') . $language->name)->success();
             return back();
