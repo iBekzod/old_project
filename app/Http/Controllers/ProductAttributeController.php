@@ -179,8 +179,7 @@ class ProductAttributeController extends Controller
         $selected_categories = $attr->categories;
         $selected_categories = $selected_categories->pluck('id');
         $selected_categories = $selected_categories->toArray();
-        $categories = Category::all()->toTree();
-
+        $categories = Category::withDepth()->having('depth', '=', 1)->get();
         return view('backend.product-attributes.edit', compact('attr', 'attributes', 'lang', 'categories', 'selected_categories'));
     }
 
