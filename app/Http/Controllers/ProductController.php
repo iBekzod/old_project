@@ -65,7 +65,6 @@ class ProductController extends Controller
             $product->characteristicValues()->delete();
             if ($request->get('attr')) {
                 foreach ($request->get('attr') as $item) {
-
                     $data = [
                         'product_id' => $product->id,
                         'parent_id' => $item['parent_id'],
@@ -73,10 +72,11 @@ class ProductController extends Controller
                         'name' => $item['name'],
                     ];
 
+
                     if (isset($item['values'])) {
                        $data['values'] = implode(' / ', $item['values']);
                     }
-
+                    // dd($data);
                     CharacteristicValues::create($data);
                 }
             }
@@ -86,7 +86,7 @@ class ProductController extends Controller
         } else {
             $product = Product::where('id', $id)->with(['characteristicValues'])->firstOrFail();
             $options = $product->category->productAttributes;
-
+            // dd($product->characteristicValues2);
             return view('backend.product.products.add_attr', compact(
                 'product', 'options'
             ));
