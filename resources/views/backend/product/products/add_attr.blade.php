@@ -1,11 +1,11 @@
 @extends('backend.layouts.app')
 
-@section('css')
+{{-- @section('css')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-@endsection
+@endsection --}}
 
 @section('js')
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
     <script type="text/x-template" id="select2-template">
         <select class="form-control">
@@ -108,7 +108,7 @@
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group">
-                                        <select2 multiple="multiple" :name="'attr[' + index + '][values][]'"
+                                        <select2 multiple="multiple" class="js-example-basic-multiple" :name="'attr[' + index + '][values][]'"
                                         :options="item.values"></select2>
                                     </div>
                                 </div>
@@ -131,6 +131,7 @@
             methods: {
                 selectOnChange() {
                     this.options.filter((el) => {
+                        console.log(el)
                         if (el.attributes) {
                             el.attributes.filter((val) => {
                                 if (val.id === parseInt(this.option)) {
@@ -152,11 +153,14 @@
                 removeItem(index) {
                     this.data.splice(index, 1)
                 }
+            },
+            created(){
+                this.selectOnChange()
             }
         })
     </script>
     <script type="text/x-template" id="form-template">
-    </script>
+    </script> --}}
 @endsection
 
 @section('content')
@@ -178,6 +182,50 @@
 
     <div class="row">
         <div id="app"></div>
+        <div class="col-lg-12 mx-auto">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="mt-3 mb-3"></div>
+                        <form action="{{ route('products.characteristics', $product->id) }}" method="post">
+                            @csrf
+                            @foreach($options as $option)
+                            {{-- {{ dd($option) }} --}}
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="mb-0 h6">{{ $option->getTranslation('name') }}</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        @foreach($option->attributes as $attr)
+                                            <input type="hidden" name="attr[{{ $attr->id }}][parent_id]" value="{{ $attr->attribute_id }}">
+                                            <input type="hidden" name="attr[{{ $attr->id }}][name]" value="{{ $attr->name }}">
+                                            <input type="hidden" name="attr[{{ $attr->id }}][id]" value="{{ $attr->id }}">
+                                            <input type="hidden" name="attr[{{ $attr->id }}][key]" value="{{ $attr->name }}">
+                                            <input type="hidden" name="attr[{{ $attr->id }}][value]" value="">
+                                            <div class="form-group row">
+                                                <label class="col-md-3 col-form-label"
+                                                    for="signinSrEmail">{{ $attr->getTranslation('name') }}</label>
+                                                <div class="col-md-8">
+                                                    {{-- {{ dd($product->characteristicValues()) }} --}}
+                                                    <select class="form-control js-example-basic-multiple" multiple name="attr[{{ $attr->id }}][values][]">
+                                                        @foreach(\App\Models\ProductAttributeCharacteristics::where('id', $attr->id)->with('values')->first() as $item)
+                                                            {{-- <option value="{{ ($item->name) }}" selected>{{ ($item->name) }}</option> --}}
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        @endforeach
+
+
+                                    </div>
+                                </div>
+                            @endforeach
+                            <div class="form-group mb-0 text-right">
+                                <button type="submit" class="btn btn-primary form-control">{{translate('Save')}}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
     </div>
 
 @endsection
