@@ -116,7 +116,7 @@
                     var base_table=$("#base_table").val();
                     var table_translations=$("#table_translations").val();
                     var relation_id=$("#relation_id").val();
-                    $.post('{{ route('translations.select_translation_language') }}',
+                    $.post('{{ route('translations.show_translation') }}',
                         {_token:'{{ csrf_token() }}',
                         language_selected:language_selected,
                         base_table:base_table,
