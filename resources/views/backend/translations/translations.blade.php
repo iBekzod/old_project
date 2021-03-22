@@ -5,10 +5,10 @@
     <div class="card">
         <div class="card-header row gutters-5">
          <div class="col text-md-right">
-            @php
+            {{-- @php
                 $language_selected = $language_selected;
-            @endphp
-            <div class="aiz-topbar-item ml-2">
+            @endphp --}}
+            <div class="ml-2 aiz-topbar-item">
                 <div class="align-items-stretch d-flex dropdown " id="trans-lang-changes">
                     <a class="dropdown-toggle no-arrow" data-toggle="dropdown" href="javascript:void(0);" role="button" aria-haspopup="false" aria-expanded="false">
                         <span class="btn btn-icon">
@@ -18,12 +18,12 @@
                         </span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-xs">
-                        <li>
+                        {{-- <li>
                             <a href="{{route('translations.show_translation', ['base_table'=>$base_table, 'table_translations'=>$table_translations, 'relation_id'=>$relation_id, 'language_selected'=>'all'])}}" data-flag="all" class="dropdown-item @if($language_selected == 'all') active @endif">
                                 <img src="{{ static_asset('assets/img/placeholder.jpg') }}" height="11" class="mr-2">
-                                <span class="language">All</span>
+                                <span class="language">{{translate('All')}}</span>
                             </a>
-                        </li>
+                        </li> --}}
                         @foreach (\App\Language::all() as $key => $language)
                             <li>
                                 <a href="{{route('translations.show_translation', ['base_table'=>$base_table, 'table_translations'=>$table_translations, 'relation_id'=>$relation_id, 'language_selected'=>$language->code])}}" data-flag="{{ $language->code }}" class="dropdown-item @if($language_selected == $language->code) active @endif">
@@ -124,7 +124,7 @@
                         relation_id:relation_id
                     }, function(data){
                             // alert(data);
-                            location.reload();
+                            //location.reload();
                         });
 
                     });
