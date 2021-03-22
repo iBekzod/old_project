@@ -8,6 +8,7 @@ use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductDetailCollection;
 use App\Http\Resources\SearchProductCollection;
 use App\Http\Resources\FlashDealCollection;
+use App\Http\Resources\FlashDealsCollection;
 use App\Models\Attribute;
 use App\Models\Brand;
 use App\Models\Category;
@@ -233,7 +234,13 @@ class ProductController extends Controller
 
     public function flashDeal()
     {
-        $flash_deals = FlashDeal::where('status', 1)->where('featured', 1)->where('start_date', '<=', strtotime(date('d-m-Y')))->where('end_date', '>=', strtotime(date('d-m-Y')))->get();
+        $flash_deals = FlashDeal::where('status', 1)->where('start_date', '<=', strtotime(date('d-m-Y')))->where('end_date', '>=', strtotime(date('d-m-Y')))->get();
+        return new FlashDealsCollection($flash_deals);
+    }
+
+    public function singleFlashDeal($id)
+    {
+        $flash_deals = FlashDeal::findOrFail($id);
         return new FlashDealCollection($flash_deals);
     }
 

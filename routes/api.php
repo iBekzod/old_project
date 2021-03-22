@@ -91,7 +91,8 @@ Route::prefix('v1')->group(function () {
     Route::get('products/sub-sub-category/{id}', 'Api\ProductController@subSubCategory')->name('products.subSubCategory');
     Route::get('products/brand/{id}', 'Api\ProductController@brand')->name('api.products.brand');
     Route::get('products/todays-deal', 'Api\ProductController@todaysDeal');
-    Route::get('products/flash-deal', 'Api\ProductController@flashDeal');
+    Route::get('products/flash-deals', 'Api\ProductController@flashDeal');
+    Route::get('products/flash-deal/{id}', 'Api\ProductController@singleFlashDeal');
     Route::get('products/featured', 'Api\ProductController@featured');
     Route::get('products/best-seller', 'Api\ProductController@bestSeller');
     Route::get('products/related/{id}', 'Api\ProductController@related')->name('products.related');
