@@ -1,11 +1,6 @@
 @extends('backend.layouts.app')
 
-{{-- @section('css')
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-@endsection --}}
-
 @section('js')
-    {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
     <script type="text/x-template" id="select2-template">
         <select class="form-control">
@@ -86,7 +81,7 @@
                 <div class="card">
                     <div class="card-body">
                         <label>Добавить готовую сетку</label>
-                        <select multiple @change="selectOnChange" v-model="option" name="bla_bla_bla" id="" class="form-control select2">
+                        <select multiple @change="selectOnChange" v-model="option" name="bla_bla_bla" id="" class="form-control select2  js-example-basic-multiple">
                             <option :value="false"></option>
                             @foreach($options as $option)
                                 <option disabled value="{{ $option->id }}">{{ $option->getTranslation('name') }}</option>
@@ -112,11 +107,7 @@
                                         :options="item.values"></select2>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <input type="button" @click="removeItem(index)" class="btn btn-danger form-control" value="delete">
-                                    </div>
-                                </div>
+
                             </div>
 
 
@@ -160,7 +151,7 @@
         })
     </script>
     <script type="text/x-template" id="form-template">
-    </script> --}}
+    </script>
 @endsection
 
 @section('content')
@@ -184,14 +175,13 @@
 
     <div class="row">
         <div id="app"></div>
-        <div class="col-lg-12 mx-auto">
+        {{-- <div class="col-lg-12 mx-auto">
                 <div class="card">
                     <div class="card-body">
                         <div class="mt-3 mb-3"></div>
                         <form action="{{ route('products.characteristics', $product->id) }}" method="post">
                             @csrf
                             @foreach($options as $option)
-                            {{-- {{ dd($option) }} --}}
                                 <div class="card">
                                     <div class="card-header">
                                         <h5 class="mb-0 h6">{{ $option->getTranslation('name') }}</h5>
@@ -207,7 +197,6 @@
                                                 <label class="col-md-3 col-form-label"
                                                     for="signinSrEmail">{{ $attr->getTranslation('name') }}</label>
                                                 <div class="col-md-8">
-                                                    {{-- {{ dd($product->characteristicValues) }} --}}
                                                     <select class="form-control js-example-basic-multiple" multiple name="attr[{{ $attr->id }}][values][]">
                                                         @foreach ($product->characteristicValues as $item)
                                                             {{ dd($item) }}
@@ -244,7 +233,7 @@
                         </form>
                     </div>
                 </div>
-            </div>
+            </div> --}}
     </div>
 
 @endsection
