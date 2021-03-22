@@ -205,10 +205,10 @@
                                                 <label class="col-md-3 col-form-label"
                                                     for="signinSrEmail">{{ $attr->getTranslation('name') }}</label>
                                                 <div class="col-md-8">
-                                                    {{-- {{ dd($product->characteristicValues()) }} --}}
+                                                    {{ dd($product->characteristicValues2) }}
                                                     <select class="form-control js-example-basic-multiple" multiple name="attr[{{ $attr->id }}][values][]">
                                                         @foreach(\App\Models\ProductAttributeCharacteristics::where('id', $attr->id)->with('values')->first() as $item)
-                                                            {{-- <option value="{{ ($item->name) }}" selected>{{ ($item->name) }}</option> --}}
+                                                            <option value="{{ ($item->name) }}" selected>{{ ($item->name) }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>

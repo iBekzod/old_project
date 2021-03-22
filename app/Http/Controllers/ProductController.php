@@ -86,7 +86,7 @@ class ProductController extends Controller
         } else {
             $product = Product::where('id', $id)->with(['characteristicValues'])->firstOrFail();
             $options = $product->category->productAttributes;
-            // dd($product->characteristicValues2);
+            dd($product->characteristicValues2);
             return view('backend.product.products.add_attr', compact(
                 'product', 'options'
             ));
