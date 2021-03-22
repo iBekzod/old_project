@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use App\Seller;
 use App\Shop;
 use Illuminate\Support\Facades\Hash;
+use \Cviebrock\EloquentSluggable\Services\SlugService;
 
 class AuthController extends Controller
 {
@@ -242,14 +243,17 @@ class AuthController extends Controller
                 $shop->user_id = $user->id;
                 $shop->name = $request->shop_name;
                 $shop->meta_title = $request->shop_name;
-                $shop->slug = $request->shop_name.$user->id;
+                $shop->slug =SlugService::createSlug(Shop::class, 'slug', $request->shop_name).'-'.$shop->id;
                 $shop->save();
-                auth()->login($user, true);
-                return $user;
+                // auth()->login($user, true);
+                $tokenResult = $user->createToken('Personal Access Token');
+                return $this->loginSuccess($tokenResult, $user);
             }
         }
-        return false;
-
+        return response()->json([
+            'message' => 'Not verified',
+            'user'=>NULL
+        ], 401);
     }
 
     public function loginSeller($id)
