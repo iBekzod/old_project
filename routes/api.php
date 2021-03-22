@@ -94,6 +94,7 @@ Route::prefix('v1')->group(function () {
     Route::get('products/flash-deals', 'Api\ProductController@flashDeal');
     Route::get('products/flash-deal/{id}', 'Api\ProductController@singleFlashDeal');
     Route::get('products/featured', 'Api\ProductController@featured');
+    Route::get('products/featuredFlashDeals', 'Api\ProductController@featuredFlashDeals');
     Route::get('products/best-seller', 'Api\ProductController@bestSeller');
     Route::get('products/related/{id}', 'Api\ProductController@related')->name('products.related');
     Route::get('products/top-from-seller/{id}', 'Api\ProductController@topFromSeller')->name('products.topFromSeller');

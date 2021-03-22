@@ -249,6 +249,22 @@ class ProductController extends Controller
         return new ProductCollection(Product::where('featured', 1)->where('is_accepted', 1)->latest()->get());
     }
 
+    public function featuredFlashDeals()
+    {
+        $flash_deals = FlashDeal::where('featured', 1)->where('status', 1)->get();
+        $products = collect();
+        foreach ($flash_deals as $flash_deal) {
+            foreach ($flash_deal->flashDealProducts as $key => $flash_deal_product) {
+                if(Product::find($flash_deal_product->product_id) != null){
+                        $products->push(Product::find($flash_deal_product->product_id));
+                }
+            }
+        }
+        return [
+            'products' => new ProductCollection($products)
+        ];
+    }
+
     public function bestSeller()
     {
         return new ProductCollection(Product::orderBy('num_of_sale', 'desc')->where('is_accepted', 1)->limit(20)->get());
