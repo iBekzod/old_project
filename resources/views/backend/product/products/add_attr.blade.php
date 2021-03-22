@@ -209,19 +209,23 @@
                                                 <div class="col-md-8">
                                                     {{-- {{ dd($product->characteristicValues) }} --}}
                                                     <select class="form-control js-example-basic-multiple" multiple name="attr[{{ $attr->id }}][values][]">
-                                                        @foreach($product->characteristicValues as $key => $item)
-                                                            @php
-                                                                $values= array_map(function ($el) {
-                                                                        return [
-                                                                            'id'=>$item->attr_id,
-                                                                            'text' => $el,
-                                                                            'selected' => true
-                                                                        ];
-                                                                    }, explode(' / ', $item->values));
-                                                            @endphp
-                                                            @foreach($values as $value)
-                                                                <option value="{{ ($value->id) }}" @if($value->selected) selected @endif>{{ ($value->text) }}</option>
-                                                            @endforeach
+                                                        @foreach ($product->characteristicValues as $item)
+                                                            @if ($item['attr_id'] == $attr->id)
+                                                                @php
+                                                                    $values=[];
+                                                                    dd($item);
+                                                                    $values = array_map(function ($el) {
+                                                                            return [
+                                                                                'id'=>$item->attr_id,
+                                                                                'text' => $el,
+                                                                                'selected' => true
+                                                                            ];
+                                                                        }, explode(' / ', $item->values));
+                                                                @endphp
+                                                                @foreach($values as $value)
+                                                                    <option value="{{ ($value->id) }}" @if($value->selected) selected @endif>{{ ($value->text) }}</option>
+                                                                @endforeach
+                                                            @endif
                                                         @endforeach
                                                     </select>
                                                 </div>
