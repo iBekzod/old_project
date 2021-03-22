@@ -217,12 +217,18 @@ class AuthController extends Controller
 
     public function registerSeller(Request $request)
     {
-        if(User::where('email', $request->email)->first() != null){
-            flash(translate('Email already exists!'))->error();
-            return back();
-        }
+        $request->validate([
+            'email' => 'required|unique:users|max:255',
+            'name' => 'required',
+            'surname' => 'required',
+            'shop_name' => 'required',
+            'phone' => 'required',
+            'terms' => 'required',
+            'password' => 'required'
+        ]);
         $user = new User;
         $user->name = $request->name;
+        $user->name = $request->name.' '.$request->surname;
         $user->email = $request->email;
         $user->user_type = "seller";
         $user->email_verified_at = now();
@@ -233,20 +239,21 @@ class AuthController extends Controller
             if($seller->save()){
                 $shop = new Shop;
                 $shop->user_id = $user->id;
-                $shop->slug = 'demo-shop-'.$user->id;
+                $shop->name = $request->shop_name;
+                $shop->meta_title = $request->shop_name;
+                $shop->slug = $request->shop_name.$user->id;
                 $shop->save();
                 auth()->login($user, true);
-                return redirect()->route('dashboard');
+                return $user;
             }
         }
-        flash(translate('Something went wrong'))->error();
-        return back();
+        return false;
 
     }
 
     public function loginSeller($id)
     {
-        $seller = Seller::findOrFail(decrypt($id));
+        $seller = Seller::findOrFail($id);
 
         $user  = $seller->user;
 
