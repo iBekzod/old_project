@@ -210,9 +210,10 @@
                                                     {{-- {{ dd($product->characteristicValues) }} --}}
                                                     <select class="form-control js-example-basic-multiple" multiple name="attr[{{ $attr->id }}][values][]">
                                                         @foreach ($product->characteristicValues as $item)
-                                                            @if ($item->attr_id == $attr->id)
+                                                            {{ dd($item) }}
+                                                            @if ($item['attr_id'] == $attr->id)
                                                                 @php
-                                                                    $values=[];
+                                                                    $values=[]
                                                                     //dd($item);
                                                                     $values = array_map(function ($el) {
                                                                             return [
@@ -236,6 +237,7 @@
                                     </div>
                                 </div>
                             @endforeach
+
                             <div class="form-group mb-0 text-right">
                                 <button type="submit" class="btn btn-primary form-control">{{translate('Save')}}</button>
                             </div>
