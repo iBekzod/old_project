@@ -229,7 +229,7 @@ class ProductController extends Controller
 
     public function todaysDeal()
     {
-        return new ProductCollection(Product::where('todays_deal', 1)->where('is_accepted', 1)->inRandomOrder()->get());
+        return new ProductCollection(Product::where('todays_deal', 1)->where('is_accepted', 1)->latest()->get());
     }
 
     public function flashDeal()
