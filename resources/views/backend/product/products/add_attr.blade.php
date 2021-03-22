@@ -213,7 +213,7 @@
                                                             {{ dd($item) }}
                                                             @if ($item['attr_id'] == $attr->id)
                                                                 @php
-                                                                    $values=[]
+                                                                    $values=[];
                                                                     //dd($item);
                                                                     $values = array_map(function ($el) {
                                                                             return [
@@ -221,7 +221,7 @@
                                                                                 'text' => $el,
                                                                                 'selected' => true
                                                                             ];
-                                                                        }, explode(' / ', $item->values));
+                                                                        }, explode(' / ', $item['values']));
                                                                 @endphp
                                                                 @foreach($values as $value)
                                                                     <option value="{{ ($value->id) }}" @if($value->selected) selected @endif>{{ ($value->text) }}</option>
