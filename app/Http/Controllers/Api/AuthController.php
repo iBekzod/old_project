@@ -13,6 +13,7 @@ use Napa\R19\Sms;
 use Illuminate\Support\Facades\DB;
 use App\Seller;
 use App\Shop;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
