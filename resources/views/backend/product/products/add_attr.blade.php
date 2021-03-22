@@ -164,7 +164,9 @@
 @endsection
 
 @section('content')
-
+    @php
+     $attribute_values=$product->characteristicValues2;
+    @endphp
     <div class="aiz-titlebar text-left mt-2 mb-3">
         <h5 class="mb-0 h6">{{translate('Add attributes')}}</h5>
     </div>
@@ -205,10 +207,21 @@
                                                 <label class="col-md-3 col-form-label"
                                                     for="signinSrEmail">{{ $attr->getTranslation('name') }}</label>
                                                 <div class="col-md-8">
-                                                    {{ dd($product->characteristicValues2) }}
+                                                    {{-- {{ dd($product->characteristicValues) }} --}}
                                                     <select class="form-control js-example-basic-multiple" multiple name="attr[{{ $attr->id }}][values][]">
-                                                        @foreach(\App\Models\ProductAttributeCharacteristics::where('id', $attr->id)->with('values')->first() as $item)
-                                                            <option value="{{ ($item->name) }}" selected>{{ ($item->name) }}</option>
+                                                        @foreach($product->characteristicValues as $key => $item)
+                                                            @php
+                                                                $values= array_map(function ($el) {
+                                                                        return [
+                                                                            'id'=>$item->attr_id,
+                                                                            'text' => $el,
+                                                                            'selected' => true
+                                                                        ];
+                                                                    }, explode(' / ', $item->values));
+                                                            @endphp
+                                                            @foreach($values as $value)
+                                                                <option value="{{ ($value->id) }}" @if($value->selected) selected @endif>{{ ($value->text) }}</option>
+                                                            @endforeach
                                                         @endforeach
                                                     </select>
                                                 </div>
