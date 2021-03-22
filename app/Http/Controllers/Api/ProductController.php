@@ -46,7 +46,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        return new ProductCollection(Product::latest()->paginate(10));
+        return new ProductCollection(Product::inRandomOrder()->paginate(10));
     }
 
     public function show($id)
@@ -83,12 +83,12 @@ class ProductController extends Controller
 
     public function admin()
     {
-        return new ProductCollection(Product::where('added_by', 'admin')->latest()->paginate(10));
+        return new ProductCollection(Product::where('added_by', 'admin')->inRandomOrder()->paginate(10));
     }
 
     public function seller()
     {
-        return new ProductCollection(Product::where('added_by', 'seller')->latest()->paginate(10));
+        return new ProductCollection(Product::where('added_by', 'seller')->inRandomOrder()->paginate(10));
     }
 
     public function category(Request $request, $id)
@@ -201,7 +201,7 @@ class ProductController extends Controller
 
         return new ProductCollection(
             Product::whereIn('category_id', $category_ids)
-                ->latest()
+                ->inRandomOrder()
                 ->paginate(10)
         );
     }
@@ -211,7 +211,7 @@ class ProductController extends Controller
         $category_ids = CategoryUtility::children_ids($id);
         $category_ids[] = $id;
 
-        return new ProductCollection(Product::whereIn('category_id', $category_ids)->where('is_accepted', 1)->latest()->paginate(10));
+        return new ProductCollection(Product::whereIn('category_id', $category_ids)->where('is_accepted', 1)->inRandomOrder()->paginate(10));
     }
 
     public function subSubCategory($id)
@@ -219,17 +219,17 @@ class ProductController extends Controller
         $category_ids = CategoryUtility::children_ids($id);
         $category_ids[] = $id;
 
-        return new ProductCollection(Product::whereIn('category_id', $category_ids)->where('is_accepted', 1)->latest()->paginate(10));
+        return new ProductCollection(Product::whereIn('category_id', $category_ids)->where('is_accepted', 1)->inRandomOrder()->paginate(10));
     }
 
     public function brand($id)
     {
-        return new ProductCollection(Product::where('brand_id', $id)->where('is_accepted', 1)->latest()->paginate(10));
+        return new ProductCollection(Product::where('brand_id', $id)->where('is_accepted', 1)->inRandomOrder()->paginate(10));
     }
 
     public function todaysDeal()
     {
-        return new ProductCollection(Product::where('todays_deal', 1)->where('is_accepted', 1)->latest()->get());
+        return new ProductCollection(Product::where('todays_deal', 1)->where('is_accepted', 1)->inRandomOrder()->get());
     }
 
     public function flashDeal()
@@ -246,7 +246,7 @@ class ProductController extends Controller
 
     public function featured()
     {
-        return new ProductCollection(Product::where('featured', 1)->where('is_accepted', 1)->latest()->get());
+        return new ProductCollection(Product::where('featured', 1)->where('is_accepted', 1)->inRandomOrder()->get());
     }
 
     public function featuredFlashDeals()
@@ -274,7 +274,7 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         if($product)
-        return new ProductCollection(Product::where('category_id', $product->category_id)->where('is_accepted', 1)->where('id', '!=', $id)->limit(10)->get());
+        return new ProductCollection(Product::where('category_id', $product->category_id)->where('is_accepted', 1)->where('id', '!=', $id)->inRandomOrder()->limit(10)->get());
 
         return response()->json([
             'error' => 'Такого продукта не существует.'
@@ -420,7 +420,7 @@ class ProductController extends Controller
     public function freeShippingProduct()
     {
         return response()->json([
-            'products'=> new ProductCollection(\App\Models\Product::where('shipping_type','free')->latest()->limit(12)->get())
+            'products'=> new ProductCollection(\App\Models\Product::where('shipping_type','free')->inRandomOrder()->limit(12)->get())
         ]);
     }
 }
