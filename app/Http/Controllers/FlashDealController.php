@@ -219,10 +219,10 @@ class FlashDealController extends Controller
 
     public function update_featured(Request $request)
     {
-        foreach (FlashDeal::all() as $key => $flash_deal) {
-            $flash_deal->featured = 0;
-            $flash_deal->save();
-        }
+        // foreach (FlashDeal::all() as $key => $flash_deal) {
+        //     $flash_deal->featured = 0;
+        //     $flash_deal->save();
+        // }
         $flash_deal = FlashDeal::findOrFail($request->id);
         $flash_deal->featured = $request->featured;
         if($flash_deal->save()){
