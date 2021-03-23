@@ -24,10 +24,14 @@ class FlashDealCollection extends ResourceCollection
                     $products->push(Product::find($flash_deal_product->product_id));
             }
         }
+        $min_price = ($products)->min('unit_price');
+        $max_price = ($products)->max('unit_price');
         return [
             'title' => $flash_deal->title,
             'end_date' => $flash_deal->end_date,
-            'products' => new ProductCollection($products)
+            'products' => new ProductCollection($products),
+            'min_price'=>$min_price,
+            'max_price'=>$max_price
         ];
     }
 
