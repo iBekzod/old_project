@@ -55,13 +55,13 @@
                     $delivery_viewed = App\Order::where('user_id', Auth::user()->id)->where('delivery_viewed', 0)->get()->count();
                     $payment_status_viewed = App\Order::where('user_id', Auth::user()->id)->where('payment_status_viewed', 0)->get()->count();
                 @endphp
-                <li class="aiz-side-nav-item">
+                {{-- <li class="aiz-side-nav-item">
                     <a href="{{ route('purchase_history.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['purchase_history.index'])}}">
                         <i class="las la-file-alt aiz-side-nav-icon"></i>
                         <span class="aiz-side-nav-text">{{ translate('Purchase History') }}</span>
                         @if($delivery_viewed > 0 || $payment_status_viewed > 0)<span class="badge badge-inline badge-success">{{ translate('New') }}</span>@endif
                     </a>
-                </li>
+                </li> --}}
 
                 <li class="aiz-side-nav-item">
                     <a href="{{ route('digital_purchase_history.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['digital_purchase_history.index'])}}">
@@ -83,12 +83,12 @@
                     </li>
                 @endif
 
-                <li class="aiz-side-nav-item">
+                {{-- <li class="aiz-side-nav-item">
                     <a href="{{ route('wishlists.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['wishlists.index'])}}">
                         <i class="la la-heart-o aiz-side-nav-icon"></i>
                         <span class="aiz-side-nav-text">{{ translate('Wishlist') }}</span>
                     </a>
-                </li>
+                </li> --}}
 
                 @if(Auth::user()->user_type == 'seller')
                     <li class="aiz-side-nav-item">
@@ -121,7 +121,7 @@
                 @endif
 
                 @if(Auth::user()->user_type == 'seller')
-                    @if (\App\Addon::where('unique_identifier', 'pos_system')->first() != null && \App\Addon::where('unique_identifier', 'pos_system')->first()->activated)
+                    {{-- @if (\App\Addon::where('unique_identifier', 'pos_system')->first() != null && \App\Addon::where('unique_identifier', 'pos_system')->first()->activated)
                         @if (\App\BusinessSetting::where('type', 'pos_activation_for_seller')->first() != null && \App\BusinessSetting::where('type', 'pos_activation_for_seller')->first()->value != 0)
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('poin-of-sales.seller_index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['poin-of-sales.seller_index'])}}">
@@ -130,7 +130,7 @@
                                 </a>
                             </li>
                         @endif
-                    @endif
+                    @endif --}}
 
                     @php
                         $orders = DB::table('orders')

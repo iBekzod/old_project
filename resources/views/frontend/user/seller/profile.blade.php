@@ -216,10 +216,6 @@
         </div>
     </div>
 </section>
-
-
-
-
 @endsection
 
 @section('modal')
@@ -312,7 +308,6 @@
         </div>
     </div>
 </div>
-
 @endsection
 
 @section('script')

@@ -1,9 +1,106 @@
+@extends('frontend.layouts.seller')
+
+@section('content')
 <input type="hidden"  name="longitude" value="">
 <input type="hidden"  name="latitude" value="">
 <div id="map_canvas">
 
 </div>
+@endsection
 
+@section('modal')
+<div class="modal fade" id="new-address-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{ translate('New Address') }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form class="form-default" role="form" action="{{ route('addresses.store') }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="p-3">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>{{ translate('Address')}}</label>
+                            </div>
+                            <div class="col-md-10">
+                                <textarea class="mb-3 form-control" placeholder="{{ translate('Your Address')}}" rows="2" name="address" required></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>{{ translate('Country')}}</label>
+                            </div>
+                            <div class="col-md-10">
+                                <div class="mb-3">
+                                    <select class="form-control aiz-selectpicker" data-live-search="true" data-placeholder="{{ translate('Select your country')}}" name="country" required>
+                                        @foreach (\App\Country::where('status', 1)->get() as $key => $country)
+                                            <option value="{{ $country->name }}">{{ $country->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden"  name="longitude" value="">
+                        <input type="hidden"  name="latitude" value="">
+                        <div id="map_canvas" >
+
+                        </div>
+                        @if (\App\BusinessSetting::where('type', 'shipping_type')->first()->value == 'area_wise_shipping')
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label>{{ translate('City')}}</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <select class="mb-3 form-control aiz-selectpicker" data-live-search="true" name="city" required>
+                                        @foreach (\App\City::get() as $key => $city)
+                                            <option value="{{ $city->name }}">{{ $city->getTranslation('name') }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        @else
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label>{{ translate('City')}}</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <input type="text" class="mb-3 form-control" placeholder="{{ translate('Your City')}}" name="city" value="" required>
+
+                                </div>
+                            </div>
+                        @endif
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>{{ translate('Postal code')}}</label>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="text" class="mb-3 form-control" placeholder="{{ translate('Your Postal Code')}}" name="postal_code" value="" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>{{ translate('Phone')}}</label>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="text" class="mb-3 form-control" placeholder="{{ translate('+998')}}" name="phone" value="" required>
+                            </div>
+                        </div>
+                        <div class="text-right form-group">
+                            <button type="submit" class="btn btn-sm btn-primary">{{translate('Save')}}</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('script')
 <script type="text/javascript">
     function add_new_address(){
         $('#new-address-modal').modal('show');
@@ -59,3 +156,4 @@
 
     }
 </script>
+@endsection
