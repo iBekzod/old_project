@@ -34,7 +34,17 @@
 					<input type="text" class="form-control" placeholder="Title" name="title" value="{{ $page->getTranslation('title',$lang) }}" required>
 				</div>
 			</div>
-
+            <div class="form-group row">
+				<label class="col-sm-2 col-from-label" for="name">{{translate('Type')}} <span class="text-danger">*</span></label>
+				<div class="col-sm-10">
+                    <select class="form-control aiz-selectpicker" name="type" id="type" data-live-search="true">
+                        <option value="" disabled>{{ ('Select type') }}</option>
+                        @foreach ($types as $key=>$type)
+                            <option value="{{ $key }}">{{ translate($type) }}</option>
+                        @endforeach
+                    </select>
+				</div>
+			</div>
 
 				<div class="form-group row">
 					<label class="col-sm-2 col-from-label" for="name">{{translate('Link')}} <span class="text-danger">*</span></label>

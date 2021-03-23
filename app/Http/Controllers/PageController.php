@@ -27,7 +27,19 @@ class PageController extends Controller
      */
     public function create()
     {
-        return view('backend.website_settings.pages.create');
+        $types=$this->page_types();
+        return view('backend.website_settings.pages.create', compact('types'));
+    }
+
+    public function page_types(){
+        return [
+            'footer_1'=>translate('footer_1'),
+            'footer_2'=>translate('footer_2'),
+            'footer_3'=>translate('footer_3'),
+            'footer_4'=>translate('footer_4'),
+            'custom_page'=>translate('custom_page'),
+        ];
+
     }
 
     /**
@@ -43,7 +55,7 @@ class PageController extends Controller
         if (Page::where('slug', preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->slug)))->first() == null) {
             // $page->slug             = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->slug));
             $page->slug = SlugService::createSlug(Page::class, 'slug', $request->slug);
-            $page->type             = "custom_page";
+            $page->type             = $request->type??"custom_page";
             $page->content          = $request->get('content');
             $page->meta_title       = $request->meta_title;
             $page->meta_description = $request->meta_description;
@@ -86,12 +98,13 @@ class PageController extends Controller
         $lang = $request->lang;
         $page_name = $request->page;
         $page = Page::where('slug', $id)->first();
+        $types=$this->page_types();
         if($page != null){
           if ($page_name == 'home') {
-            return view('backend.website_settings.pages.home_page_edit', compact('page','lang'));
+            return view('backend.website_settings.pages.home_page_edit', compact('page','lang', 'types'));
           }
           else{
-            return view('backend.website_settings.pages.edit', compact('page','lang'));
+            return view('backend.website_settings.pages.edit', compact('page','lang', 'types'));
           }
         }
         abort(404);
@@ -117,6 +130,7 @@ class PageController extends Controller
               $page->title          = $request->title;
               $page->content        = $request->get('content');
             }
+            $page->type             = $request->type??"custom_page";
             $page->meta_title       = $request->meta_title;
             $page->meta_description = $request->meta_description;
             $page->keywords         = $request->keywords;
