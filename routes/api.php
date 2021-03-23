@@ -10,6 +10,7 @@ Route::prefix('v1/auth')->group(function () {
     Route::post('signinByPhoneNumber', 'Api\AuthController@signinByPhoneNumber');
     Route::post('registerPhoneNumber', 'Api\AuthController@registerPhoneNumber');
     Route::post('registerSeller', 'Api\AuthController@registerSeller');
+    Route::post('loginSeller/{id}', 'Api\AuthController@loginSeller');
     Route::post('signup', 'Api\AuthController@signup');
     Route::post('social-login', 'Api\AuthController@socialLogin');
     Route::post('password/create', 'Api\PasswordResetController@create');

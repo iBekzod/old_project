@@ -65,13 +65,14 @@
                     </div>
 
                     <!-- Address -->
+                    {{-- @if(Auth::user()->has('addresses')) --}}
                     <div class="card">
                         <div class="card-header">
                             <h5 class="mb-0 h6">{{ translate('Address')}}</h5>
                         </div>
                         <div class="card-body">
                             <div class="row gutters-10">
-                                @foreach (Auth::user()->addresses as $key => $address)
+                                @foreach ($addresses=Auth::user()->addresses as $key => $address)
                                     <div class="col-lg-6">
                                         <div class="p-3 pr-5 mb-3 border rounded position-relative">
                                             <div>
@@ -122,7 +123,7 @@
                             </div>
                         </div>
                     </div>
-
+                    {{-- @endif --}}
                     <!-- Payment System -->
                     <div class="card">
                       <div class="card-header">
@@ -260,7 +261,7 @@
                         <input type="hidden"  name="longitude" value="">
                         <input type="hidden"  name="latitude" value="">
                         <div id="map_canvas">
-                            
+
                         </div>
                         @if (\App\BusinessSetting::where('type', 'shipping_type')->first()->value == 'area_wise_shipping')
                             <div class="row">
@@ -282,7 +283,7 @@
                                 </div>
                                 <div class="col-md-10">
                                     <input type="text" class="mb-3 form-control" placeholder="{{ translate('Your City')}}" name="city" value="" required>
-                                    
+
                                 </div>
                             </div>
                         @endif
@@ -352,9 +353,10 @@
 
             // Put all locations into array
             var locations = [
-            @foreach($addresses as $location)
-                [ {{ $location->latitude }}, {{ $location->longitude }} ]     
-            @endforeach
+                @foreach($addresses as $location)
+                    [ {{ $location->latitude }}, {{ $location->longitude }} ]
+                @endforeach
+
             ];
 
             for (i = 0; i < locations.length; i++) {
@@ -362,10 +364,10 @@
                 var marker = new google.maps.Marker({
                     position: location,
                     map: map,
-                }); 
+                });
             }
 
-            // marker.setMap(map); // Probably not necessary since you set the map above
+            marker.setMap(map); // Probably not necessary since you set the map above
 
         }
     </script>
