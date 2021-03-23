@@ -89,7 +89,7 @@
                                           </span>
                                       </span>
                                   </a>
-                                  <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-xs">
+                                  <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-md" >
                                       <a href="#" onclick="show_seller_profile('{{$seller->id}}');"  class="dropdown-item">
                                         {{translate('Profile')}}
                                       </a>
