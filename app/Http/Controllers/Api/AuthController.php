@@ -224,7 +224,7 @@ class AuthController extends Controller
             'name' => 'required',
             'surname' => 'required',
             'shop_name' => 'required',
-            'phone' => 'required',
+            'phone' => 'required|unique:users',
             'terms' => 'required',
             'password' => 'required'
         ]);
@@ -245,6 +245,7 @@ class AuthController extends Controller
                 $shop->meta_title = $request->shop_name;
                 $shop->slug =SlugService::createSlug(Shop::class, 'slug', $request->shop_name).'-'.$shop->id;
                 $shop->save();
+                // $user->id=encrypt($user->id);
                 // auth()->login($user, true);
                 $tokenResult = $user->createToken('Personal Access Token');
                 return $this->loginSuccess($tokenResult, $user);
@@ -259,11 +260,12 @@ class AuthController extends Controller
     public function loginSeller($id)
     {
         $seller = Seller::findOrFail($id);
-
+        // $seller = Seller::findOrFail(decrypt($id));
         $user  = $seller->user;
-
         auth()->login($user, true);
-
-        return redirect()->route('dashboard');
+        return return response()->json([
+            'message' => 'Not verified',
+            'url'=>route('dashboard')
+        ], 200);
     }
 }
