@@ -104,11 +104,12 @@ class HomeController extends Controller
         if(Auth::user()->user_type == 'seller'){
             return view('frontend.user.seller.dashboard');
         }
-        elseif(Auth::user()->user_type == 'customer'){
-            return view('frontend.user.customer.dashboard');
-        }
+        // elseif(Auth::user()->user_type == 'customer'){
+        //     return view('frontend.user.customer.dashboard');
+        // }
         else {
-            abort(404);
+            return $this->home();
+            // abort(404);
         }
     }
 
@@ -200,6 +201,9 @@ class HomeController extends Controller
     {
         // return redirect('https://marketpro.vercel.app/');
         // return view('frontend.index');
+        if(auth()->user() != null){
+            return $this->dashboard();
+        }
         return redirect()->route('login');
     }
 

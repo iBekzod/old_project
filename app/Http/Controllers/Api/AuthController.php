@@ -263,7 +263,7 @@ class AuthController extends Controller
         // $seller = Seller::findOrFail(decrypt($id));
         $user  = $seller->user;
         auth()->login($user, true);
-        return return response()->json([
+        return response()->json([
             'message' => 'Not verified',
             'url'=>route('dashboard')
         ], 200);
