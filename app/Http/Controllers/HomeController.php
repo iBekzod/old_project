@@ -339,46 +339,87 @@ class HomeController extends Controller
     public function show_product_clone_form(Request $request)
     {
         if($request->method() == 'POST') {
-            $request->validate([
-                'product_id' => 'required'
-            ]);
-
-            $product = Product::find($request->get('product_id'));
-            $product_translations = $product->product_translations;
-            $characteristics = CharacteristicValues::where('product_id', $product->id)->get();
-            $product_new = $product->replicate();
-            $product_new->slug = substr($product_new->slug, 0, -5).Str::random(5);
-            $product_new->user_id = Auth::user()->id;
-            $product_new->added_by = 'seller';
-            $product_new->on_moderation = 1;
-            $product_new->is_accepted = 0;
-
-            if($product_new->save()){
-                foreach ($product_translations as $translation) {
-                    ProductTranslation::create([
-                        'product_id' => $product_new->id,
-                        'name' => $translation->name,
-                        'lang' => $translation->lang
-                    ]);
+            if($request->has('product_ids')){
+                $request->validate([
+                    'product_ids' => 'required'
+                ]);
+                foreach ($product_ids=$request->product_ids as $product_id) {
+                    $product = Product::find($product_id);
+                    $product_translations = $product->product_translations;
+                    $characteristics = CharacteristicValues::where('product_id', $product->id)->get();
+                    $product_new = $product->replicate();
+                    $product_new->slug = substr($product_new->slug, 0, -5).Str::random(5);
+                    $product_new->user_id = Auth::user()->id;
+                    $product_new->added_by = 'seller';
+                    $product_new->on_moderation = 1;
+                    $product_new->is_accepted = 0;
+                    if($product_new->save()){
+                        foreach ($product_translations as $translation) {
+                            ProductTranslation::create([
+                                'product_id' => $product_new->id,
+                                'name' => $translation->name,
+                                'lang' => $translation->lang
+                            ]);
+                        }
+                        foreach ($characteristics as $characteristic) {
+                            CharacteristicValues::create([
+                                'parent_id' => $characteristic->parent_id,
+                                'product_id' => $product_new->id,
+                                'attr_id' => $characteristic->attr_id,
+                                'name' => $characteristic->name,
+                                'values' => $characteristic->values
+                            ]);
+                        }
+                    }
                 }
-                foreach ($characteristics as $characteristic) {
-                    CharacteristicValues::create([
-                        'parent_id' => $characteristic->parent_id,
-                        'product_id' => $product_new->id,
-                        'attr_id' => $characteristic->attr_id,
-                        'name' => $characteristic->name,
-                        'values' => $characteristic->values
-                    ]);
-                }
-                return redirect()->route('seller.products.edit', [$product_new->id, 'lang' => 'en']);
-            }
-            else{
-                flash(translate('Something went wrong'))->error();
+                flash(translate('All done'))->success();
                 return back();
-            }
-        }
+            }else{
+                $request->validate([
+                    'product_id' => 'required'
+                ]);
+                $product = Product::find($request->get('product_id'));
+                $product_translations = $product->product_translations;
+                $characteristics = CharacteristicValues::where('product_id', $product->id)->get();
+                $product_new = $product->replicate();
+                $product_new->slug = substr($product_new->slug, 0, -5).Str::random(5);
+                $product_new->user_id = Auth::user()->id;
+                $product_new->added_by = 'seller';
+                $product_new->on_moderation = 1;
+                $product_new->is_accepted = 0;
 
-        return view('frontend.user.seller.product_clone');
+                if($product_new->save()){
+                    foreach ($product_translations as $translation) {
+                        ProductTranslation::create([
+                            'product_id' => $product_new->id,
+                            'name' => $translation->name,
+                            'lang' => $translation->lang
+                        ]);
+                    }
+                    foreach ($characteristics as $characteristic) {
+                        CharacteristicValues::create([
+                            'parent_id' => $characteristic->parent_id,
+                            'product_id' => $product_new->id,
+                            'attr_id' => $characteristic->attr_id,
+                            'name' => $characteristic->name,
+                            'values' => $characteristic->values
+                        ]);
+                    }
+                    return redirect()->route('seller.products.edit', [$product_new->id, 'lang' => 'en']);
+                }
+                else{
+                    flash(translate('Something went wrong'))->error();
+                    return back();
+                }
+            }
+
+        }
+        // dd("ok");
+        $products = Product::where('digital', 0)->orderBy('created_at', 'desc')->get();
+        // dd($products);
+        return view('frontend.user.seller.product_clone', compact('products'));
+        // $this->clone_from_all_product_list();
+        // return view('frontend.user.seller.product_clone');
     }
 
     public function show_product_upload_form(Request $request)
@@ -422,6 +463,12 @@ class HomeController extends Controller
         }
         $products = $products->paginate(10);
         return view('frontend.user.seller.products', compact('products', 'search'));
+    }
+
+    public function clone_from_all_product_list()
+    {
+        $products = Product::where('digital', 0)->orderBy('created_at', 'desc');
+        return view('frontend.user.seller.product_clone', compact('products'));
     }
 
     public function ajax_search(Request $request)

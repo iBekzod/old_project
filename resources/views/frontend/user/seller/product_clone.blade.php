@@ -1,36 +1,38 @@
 @extends('frontend.layouts.seller')
 
-@section('css_pre')
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@section('css')
+ <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endsection
 
 @section('script')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
-        $(function () {
-            $('#cloneProduct').select2({
-                ajax: {
-                    url: '/api/v1/get/all/products',
-                    dataType: 'json',
-                    processResults: function (data) {
-                        console.log(data)
-                        let items = data.products.map((el) => {
-                            return {
-                                id: el.id,
-                                text: el.name
-                            }
-                        })
+        $(document).ready(function() {
+            $('#cloneProduct').select2(
+                // {
+                // ajax: {
+                //     url: '/get/all/products',
+                //     dataType: 'json',
+                //     processResults: function (data) {
+                //         console.log(data)
+                //         let items = data.products.map((el) => {
+                //             return {
+                //                 id: el.id,
+                //                 text: el.name
+                //             }
+                //         })
 
-                        return {
-                            results: items
-                            // pagination: {
-                            //     "more": true
-                            // }
-                        };
-                    }
-                }
-            })
-        })
+                //         return {
+                //             results: items
+                //             // pagination: {
+                //             //     "more": true
+                //             // }
+                //         };
+                //     }
+                // }
+                // }
+            );
+        });
     </script>
 @endsection
 
@@ -54,8 +56,13 @@
                         <form action="{{ route('seller.products.clone') }}" method="post">
                             @csrf
                             <div class="form-group">
-                                <label>Products</label>
-                                <select class="form-control" name="product_id" id="cloneProduct"></select>
+                                <label>{{ translate('Products') }}</label>
+                                <select class="form-control selection" name="product_ids[]" multiple="multiple" id="cloneProduct">
+                                    @foreach($products as $product)
+                                    
+                                        <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                    @endforeach
+                                </select>
                                 @error('product_id')
                                     <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror

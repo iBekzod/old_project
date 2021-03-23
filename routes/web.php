@@ -198,6 +198,7 @@ Route::group(['prefix' =>'seller', 'middleware' => ['seller', 'verified', 'user'
 	Route::get('/product/upload', 'HomeController@show_product_upload_form')->name('seller.products.upload');
 	Route::get('/product/clone', 'HomeController@show_product_clone_form')->name('seller.products.clone');
 	Route::post('/product/clone', 'HomeController@show_product_clone_form')->name('seller.products.clone');
+	// Route::post('/product/clone-from-all', 'HomeController@show_product_clone_form')->name('seller.products.clone');
 	Route::get('/product/{id}/edit', 'HomeController@show_product_edit_form')->name('seller.products.edit');
 	Route::get('/product/{id}/characteristics', 'HomeController@characteristics')->name('seller.products.characteristics');
 	Route::post('/product/{id}/characteristics', 'HomeController@characteristics')->name('seller.products.characteristics');
@@ -324,6 +325,7 @@ Route::get('/nagad/callback', 'NagadController@verify')->name('nagad.callback');
 
 //Custom page
 Route::get('/{slug}', 'PageController@show_custom_page')->name('custom-pages.show_custom_page');
+Route::get('map', 'Test\MapController@index');
 
 
 

@@ -40,7 +40,8 @@ class ProductController extends Controller
                 'products' => Product::where('name', 'like', '%'. $query .'%')->get()
             ];
         } else {
-            return [];
+            return [
+            ];
         }
     }
 

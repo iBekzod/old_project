@@ -6,9 +6,14 @@ use App\Http\Resources\AddressCollection;
 use App\Address;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Auth;
 
 class MapController extends Controller
 {
+    public function index(){
+        $addresses=Auth::user()->addresses;
+        return view('test.map', compact('addresses'));
+    }
     public function addresses($id)
     {
         return new AddressCollection(Address::where('user_id', $id)->get());
