@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app')
+@extends('backend.layouts.blank')
 
 @section('content')
 <section class="text-center py-6">
