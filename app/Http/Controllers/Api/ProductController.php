@@ -240,7 +240,7 @@ class ProductController extends Controller
 
     public function singleFlashDeal($id)
     {
-        $flash_deals = FlashDeal::findOrFail($id);
+        $flash_deals = FlashDeal::where('slug', $id)->firstOrFail();
         return new FlashDealCollection($flash_deals);
     }
 

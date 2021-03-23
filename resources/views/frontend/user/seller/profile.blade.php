@@ -260,7 +260,7 @@
                         </div>
                         <input type="hidden"  name="longitude" value="">
                         <input type="hidden"  name="latitude" value="">
-                        <div id="map_canvas">
+                        <div id="map_canvas" >
 
                         </div>
                         @if (\App\BusinessSetting::where('type', 'shipping_type')->first()->value == 'area_wise_shipping')
