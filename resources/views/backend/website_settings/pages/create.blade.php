@@ -20,6 +20,12 @@
 					<input type="text" class="form-control" placeholder="Title" name="title" required>
 				</div>
 			</div>
+            <div class="form-group row">
+				<label class="col-sm-2 col-from-label" for="name">{{translate('Type')}} <span class="text-danger">*</span></label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" placeholder="{{translate('Type')}}" name="type" required>
+				</div>
+			</div>
 			<div class="form-group row">
 				<label class="col-sm-2 col-from-label" for="name">{{translate('Link')}} <span class="text-danger">*</span></label>
 				<div class="col-sm-10">

@@ -119,7 +119,7 @@
                             <div class="card-body">
 
                                 <div class="form-group row">
-                                    <label class="col-md-3 col-form-label" for="signinSrEmail">{{translate('Gallery Images')}}</label>
+                                    <label class="col-md-3 col-form-label" for="signinSrEmail">{{translate('Gallery Images')}}<small>{{ translate('(600x600)')}}</small></label>
                                     <div class="col-md-8">
                                         <div class="input-group" data-toggle="aizuploader" data-type="image" data-multiple="true">
                                             <div class="input-group-prepend">

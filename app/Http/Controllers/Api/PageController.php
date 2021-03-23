@@ -13,9 +13,16 @@ class PageController extends Controller
             'type' => 'sometimes',
             'slug' => 'sometimes'
         ]);
-        
+
         return response()->json([
             'page' => Page::where('type', $request->get('type'))->orWhere('slug', $request->get('slug'))->first()
+        ]);
+    }
+
+    public function pages()
+    {
+        return response()->json([
+            'page' => Page::select(['id', 'type', 'title', 'slug'])
         ]);
     }
 }
