@@ -2,13 +2,13 @@
 
 @section('content')
 
-<div class="aiz-titlebar text-left mt-2 mb-3">
+<div class="mt-2 mb-3 text-left aiz-titlebar">
     <h5 class="mb-0 h6">{{translate('Category Information')}}</h5>
 </div>
 
-<div class="col-lg-8 mx-auto">
+<div class="mx-auto col-lg-8">
     <div class="card">
-        <div class="card-body p-0">
+        <div class="p-0 card-body">
   			<ul class="nav nav-tabs nav-fill border-light">
   				@foreach (\App\Language::all() as $key => $language)
   					<li class="nav-item">
@@ -46,7 +46,7 @@
                 <div class="form-group row">
                     <label class="col-md-3 col-form-label">{{translate('Type')}}</label>
                     <div class="col-md-9">
-                        <select name="digital" required class="form-control aiz-selectpicker mb-2 mb-md-0">
+                        <select name="digital" required class="mb-2 form-control aiz-selectpicker mb-md-0">
                             <option value="0" @if ($mainCategory->digital == '0') selected @endif>{{translate('Physical')}}</option>
                             <option value="1" @if ($mainCategory->digital == '1') selected @endif>{{translate('Digital')}}</option>
                         </select>
@@ -60,9 +60,9 @@
                                 <div class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse')}}</div>
                             </div>
                             <div class="form-control file-amount">{{ translate('Choose File') }}</div>
-                            @if($mainCategory->banner !== null)
-                                <input type="hidden" name="banner" class="selected-files" value="{{ $mainCategory->banner }}">
-                            @endif
+                            {{-- @if($mainCategory->banner !== null) --}}
+                                <input type="hidden" name="banner" class="selected-files" value="{{ $mainCategory->banner??'' }}">
+                            {{-- @endif --}}
                         </div>
                         <div class="file-preview box sm">
                         </div>
@@ -76,9 +76,9 @@
                                 <div class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse')}}</div>
                             </div>
                             <div class="form-control file-amount">{{ translate('Choose File') }}</div>
-                            @if($mainCategory->icon != null)
-                                <input type="hidden" name="icon" class="selected-files" value="{{ $mainCategory->icon }}">
-                            @endif
+                            {{-- @if($mainCategory->icon != null) --}}
+                                <input type="hidden" name="icon" class="selected-files" value="{{ $mainCategory->icon??'' }}">
+                            {{-- @endif --}}
                         </div>
                         <div class="file-preview box sm">
                         </div>
@@ -113,7 +113,7 @@
                         </div>
                     </div>
                 @endif
-                <div class="form-group mb-0 text-right">
+                <div class="mb-0 text-right form-group">
                     <button type="submit" class="btn btn-primary">{{translate('Save')}}</button>
                 </div>
             </form>
