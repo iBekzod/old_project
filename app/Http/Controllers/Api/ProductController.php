@@ -252,18 +252,27 @@ class ProductController extends Controller
 
     public function featuredFlashDeals()
     {
-        $flash_deals = FlashDeal::where('featured', 1)->where('status', 1)->get();
-        $products = collect();
-        foreach ($flash_deals as $flash_deal) {
-            foreach ($flash_deal->flashDealProducts as $key => $flash_deal_product) {
-                if(Product::find($flash_deal_product->product_id) != null){
-                        $products->push(Product::find($flash_deal_product->product_id));
-                }
-            }
-        }
-        return [
-            'products' => new ProductCollection($products)
-        ];
+        $flash_deals = FlashDeal::where('featured', 1)->where('status', 1)->where('start_date', '<=', strtotime(date('d-m-Y')))->where('end_date', '>=', strtotime(date('d-m-Y')))->get();
+        return new FlashDealsCollection($flash_deals);
+
+        // $flash_deals = FlashDeal::where('featured', 1)->where('status', 1)->get();
+        // $products = collect();
+        // foreach ($flash_deals as $flash_deal) {
+        //     foreach ($flash_deal->flashDealProducts as $key => $flash_deal_product) {
+        //         if(Product::find($flash_deal_product->product_id) != null){
+        //                 $products->push(Product::find($flash_deal_product->product_id));
+        //         }
+        //     }
+        // }
+        // return [
+        //     'products' => new ProductCollection($products)
+        // ];
+    }
+
+    public function singleFeaturedFlashDeal($id)
+    {
+        $flash_deals = FlashDeal::where('featured', 1)->where('status', 1)->where('slug', $id)->firstOrFail();
+        return new FlashDealCollection($flash_deals);
     }
 
     public function bestSeller()

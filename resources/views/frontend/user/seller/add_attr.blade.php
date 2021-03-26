@@ -1,5 +1,31 @@
 @extends('frontend.layouts.seller')
 
+@section('css')
+    <style>
+        .select2-selection__rendered li{
+            background-color: transparent !important;
+            border: none;
+            border-right: 1px solid #aaa;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+            color: gray;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            padding: 0 4px;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        .select2-selection__rendered li button:hover{
+            background: rgba(255, 0, 0, 0.5) !important;
+        }
+        .select2-selection__rendered li:hover {
+            background: rgba(255, 0, 0, 0.3) !important;
+        }
+    </style>
+@endsection
+
 @section('content')
 
     <section class="py-5">
@@ -66,7 +92,7 @@
                                                                             }
                                                                         @endphp
                                                                             @foreach($values as $value)
-                                                                                <option value="{{ $value['text'] }}" @if($value['selected']) selected @endif>{{ ($value['text']) }}</option>
+                                                                                <option class="select2_tag" value="{{ $value['text'] }}" @if($value['selected']) selected @endif>{{ ($value['text']) }}</option>
                                                                             @endforeach
                                                                     </select>
                                                                 </div>
@@ -75,7 +101,7 @@
                                                     </div>
                                                 </div>
                                             @endforeach
-                
+
                                             <div class="form-group mb-0 text-right">
                                                 <button type="submit" class="btn btn-primary form-control">{{translate('Save')}}</button>
                                             </div>
@@ -88,7 +114,7 @@
             </div>
         </div>
     </section>
-    
+
 
     {{-- <div class="row">
         <div class="col-md-12">
@@ -101,7 +127,7 @@
         </div>
     </div> --}}
 
-    
+
 @endsection
 @section('js')
     <script>
@@ -110,6 +136,8 @@
                 tags: true
             });
         });
+
+
     </script>
 @endsection
 {{-- @section('script')

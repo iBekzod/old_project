@@ -323,7 +323,7 @@ class HomeController extends Controller
                         $data['values'] = implode(' / ', $item['values']);
                     }
 
-                    CharacteristicValues::updateOrCreate($data);
+                    CharacteristicValues::create($data);
                 }
             }
 
