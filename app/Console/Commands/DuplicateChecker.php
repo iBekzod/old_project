@@ -5,14 +5,14 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class SlugChecker extends Command
+class DuplicateChecker extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'check:slug {--table=} {--column=slug}';
+    protected $signature = 'check:duplicate {--table=} {--column=slug}';
 
     /**
      * The console command description.
@@ -56,17 +56,20 @@ class SlugChecker extends Command
         $column=$this->option('column');
         $rows=DB::table($table)
             ->select('id','slug',DB::raw('COUNT('.$column.') as count'))
+            ->groupBy($column)
+            ->orderBy('count', 'DESC')
+            ->having('count', '>', 1)
             ->get();
-            print_r($rows);
+        print_r($rows);
 
-            foreach ($rows as $row) {
-                // print_r("Before: ".$row['slug']);
-               if($row['count']>1){
-                // print_r("Before: ".$row);
-                   DB::update('update '.$table.' set '.$column.' = '.slugify($column).' where '.$column.' = ?', [$row[$column]]);
-                //    print_r("After: ".$row);
-               }
-            }
+        foreach ($rows as $row) {
+            print_r("Before: ".$row['slug']);
+           if($row['count']>1){
+            print_r("Before: ".$row);
+               DB::update('update '.$table.' set '.$column.' = CONCAT('.$column.',FLOOR(RAND()*(1000-5+1)+5)) where id = ?', [$row['id']]);
+               print_r("After: ".$row);
+           }
+        }
 
 
         $this->info('Successfully syncronized and changed to unique');

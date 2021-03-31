@@ -138,7 +138,7 @@ class FlashDealController extends Controller
         if($request->lang == env("DEFAULT_LANGUAGE")){
           $flash_deal->title = $request->title;
           if (($flash_deal->slug == null) || ($flash_deal->title != $request->title)) {
-              $flash_deal->slug = SlugService::createSlug(FlashDeal::class, 'slug', $request->title);
+              $flash_deal->slug = slugify(SlugService::createSlug(FlashDeal::class, 'slug', $request->title));
 
             //   $flash_deal->slug = strtolower(str_replace(' ', '-', $request->title) . '-' . Str::random(5));
           }
