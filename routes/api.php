@@ -64,6 +64,7 @@ Route::prefix('v1')->group(function () {
     Route::get('brands/top', 'Api\BrandController@top');
     Route::apiResource('brands', 'Api\BrandController')->only('index');
 
+
     Route::apiResource('business-settings', 'Api\BusinessSettingController')->only('index');
 
     Route::get('categories/featured', 'Api\CategoryController@featured');
@@ -106,6 +107,9 @@ Route::prefix('v1')->group(function () {
     Route::post('products/variant/price', 'Api\ProductController@variantPrice');
     Route::get('products/home', 'Api\ProductController@home');
     Route::apiResource('products', 'Api\ProductController')->except(['store', 'update', 'destroy']);
+    Route::get('brand/{name}','Api\ProductController@byBrand');
+//    Route::get('products/byBrand/{name}','Api\ProductController');
+
 
     Route::get('carts/{id}', 'Api\CartController@index')->middleware('auth:api');
     Route::post('carts/add', 'Api\CartController@add')->middleware('auth:api');

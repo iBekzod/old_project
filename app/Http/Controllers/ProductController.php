@@ -882,4 +882,5 @@ class ProductController extends Controller
         return ['product_warehouse' => $product_warehouse, 'product_variant_warehouse' => $product_variant_warehouse];
     }
 
+
 }

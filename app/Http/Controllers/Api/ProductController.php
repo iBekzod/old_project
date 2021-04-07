@@ -37,7 +37,7 @@ class ProductController extends Controller
 
         if ($query) {
             return [
-                'products' => Product::where('name', 'like', '%'. $query .'%')->get()
+                'products' => Product::where('name', 'like', '%' . $query . '%')->get()
             ];
         } else {
             return [
@@ -55,7 +55,7 @@ class ProductController extends Controller
         function innerCategory($category, &$breadcrumbs)
         {
             $breadcrumbs[] = $category;
-            if($category->parentCategoryHierarchy) {
+            if ($category->parentCategoryHierarchy) {
                 innerCategory($category->parentCategoryHierarchy, $breadcrumbs);
             }
         }
@@ -63,10 +63,10 @@ class ProductController extends Controller
         $products = Product::where('id', $id)->orWhere('slug', $id)->get();
         $product = isset($products[0]) ? $products[0] : null;
         $breadcrumbs = [];
-        if($product) {
+        if ($product) {
             $categories = $product->parentHierarchy;
             $breadcrumbs[] = $categories;
-            if($categories->parentCategoryHierarchy) {
+            if ($categories->parentCategoryHierarchy) {
                 innerCategory($categories->parentCategoryHierarchy, $breadcrumbs);
             }
             foreach ($breadcrumbs as $item) {
@@ -116,7 +116,7 @@ class ProductController extends Controller
 
         $products = $products->whereIn('category_id', $category_ids);
 
-        if($sort_by != null){
+        if ($sort_by != null) {
             switch ($sort_by) {
                 case 'newest':
                     $products->orderBy('created_at', 'desc');
@@ -142,33 +142,32 @@ class ProductController extends Controller
         $attributes = array();
 
         foreach ($non_paginate_products as $key => $product) {
-            if($product->attributes != null && is_array(json_decode($product->attributes))){
+            if ($product->attributes != null && is_array(json_decode($product->attributes))) {
                 foreach (json_decode($product->attributes) as $key => $value) {
                     $flag = false;
                     $pos = 0;
                     foreach ($attributes as $key => $attribute) {
-                        if($attribute['id'] == $value){
+                        if ($attribute['id'] == $value) {
                             $flag = true;
                             $pos = $key;
                             break;
                         }
                     }
-                    if(!$flag){
+                    if (!$flag) {
                         $item['id'] = $value;
                         $item['values'] = array();
                         foreach (json_decode($product->choice_options) as $key => $choice_option) {
-                            if($choice_option->attribute_id == $value){
+                            if ($choice_option->attribute_id == $value) {
                                 $item['values'] = $choice_option->values;
                                 break;
                             }
                         }
                         array_push($attributes, $item);
-                    }
-                    else {
+                    } else {
                         foreach (json_decode($product->choice_options) as $key => $choice_option) {
-                            if($choice_option->attribute_id == $value){
+                            if ($choice_option->attribute_id == $value) {
                                 foreach ($choice_option->values as $key => $value) {
-                                    if(!in_array($value, $attributes[$pos]['values'])){
+                                    if (!in_array($value, $attributes[$pos]['values'])) {
                                         array_push($attributes[$pos]['values'], $value);
                                     }
                                 }
@@ -179,22 +178,21 @@ class ProductController extends Controller
             }
         }
 
-        foreach ($attributes as $key => $attribute)
-        {
+        foreach ($attributes as $key => $attribute) {
             $attributes[$key]['attr'] = Attribute::find($attribute['id']);
         }
 
         $selected_attributes = array();
 
         foreach ($attributes as $key => $attribute) {
-            if($request->has('attribute_'.$attribute['id'])){
-                foreach ($request['attribute_'.$attribute['id']] as $key => $value) {
-                    $str = '"'.$value.'"';
-                    $products = $products->where('choice_options', 'like', '%'.$str.'%');
+            if ($request->has('attribute_' . $attribute['id'])) {
+                foreach ($request['attribute_' . $attribute['id']] as $key => $value) {
+                    $str = '"' . $value . '"';
+                    $products = $products->where('choice_options', 'like', '%' . $str . '%');
                 }
 
                 $item['id'] = $attribute['id'];
-                $item['values'] = $request['attribute_'.$attribute['id']];
+                $item['values'] = $request['attribute_' . $attribute['id']];
                 array_push($selected_attributes, $item);
             }
         }
@@ -283,8 +281,8 @@ class ProductController extends Controller
     public function related($id)
     {
         $product = Product::find($id);
-        if($product)
-        return new ProductCollection(Product::where('category_id', $product->category_id)->where('is_accepted', 1)->where('id', '!=', $id)->inRandomOrder()->limit(10)->get());
+        if ($product)
+            return new ProductCollection(Product::where('category_id', $product->category_id)->where('is_accepted', 1)->where('id', '!=', $id)->inRandomOrder()->limit(10)->get());
 
         return response()->json([
             'error' => 'Такого продукта не существует.'
@@ -306,27 +304,27 @@ class ProductController extends Controller
 
             case 'price_low_to_high':
                 $collection = new SearchProductCollection(Product::where('name', 'like', "%{$key}%")->orWhere('tags', 'like', "%{$key}%")->orderBy('unit_price', 'asc')->paginate(10));
-                $collection->appends(['key' =>  $key, 'scope' => $scope]);
+                $collection->appends(['key' => $key, 'scope' => $scope]);
                 return $collection;
 
             case 'price_high_to_low':
                 $collection = new SearchProductCollection(Product::where('name', 'like', "%{$key}%")->orWhere('tags', 'like', "%{$key}%")->orderBy('unit_price', 'desc')->paginate(10));
-                $collection->appends(['key' =>  $key, 'scope' => $scope]);
+                $collection->appends(['key' => $key, 'scope' => $scope]);
                 return $collection;
 
             case 'new_arrival':
                 $collection = new SearchProductCollection(Product::where('name', 'like', "%{$key}%")->orWhere('tags', 'like', "%{$key}%")->orderBy('created_at', 'desc')->paginate(10));
-                $collection->appends(['key' =>  $key, 'scope' => $scope]);
+                $collection->appends(['key' => $key, 'scope' => $scope]);
                 return $collection;
 
             case 'popularity':
                 $collection = new SearchProductCollection(Product::where('name', 'like', "%{$key}%")->orWhere('tags', 'like', "%{$key}%")->orderBy('num_of_sale', 'desc')->paginate(10));
-                $collection->appends(['key' =>  $key, 'scope' => $scope]);
+                $collection->appends(['key' => $key, 'scope' => $scope]);
                 return $collection;
 
             case 'top_rated':
                 $collection = new SearchProductCollection(Product::where('name', 'like', "%{$key}%")->orWhere('tags', 'like', "%{$key}%")->orderBy('rating', 'desc')->paginate(10));
-                $collection->appends(['key' =>  $key, 'scope' => $scope]);
+                $collection->appends(['key' => $key, 'scope' => $scope]);
                 return $collection;
 
             // case 'category':
@@ -352,7 +350,7 @@ class ProductController extends Controller
 
             default:
                 $collection = new SearchProductCollection(Product::where('name', 'like', "%{$key}%")->orWhere('tags', 'like', "%{$key}%")->orderBy('num_of_sale', 'desc')->paginate(10));
-                $collection->appends(['key' =>  $key, 'scope' => $scope]);
+                $collection->appends(['key' => $key, 'scope' => $scope]);
                 return $collection;
         }
     }
@@ -369,15 +367,14 @@ class ProductController extends Controller
         }
 
         foreach (json_decode($request->choice) as $option) {
-            $str .= $str != '' ?  '-'.str_replace(' ', '', $option->name) : str_replace(' ', '', $option->name);
+            $str .= $str != '' ? '-' . str_replace(' ', '', $option->name) : str_replace(' ', '', $option->name);
         }
 
-        if($str != null && $product->variant_product){
+        if ($str != null && $product->variant_product) {
             $product_stock = $product->stocks->where('variant', $str)->first();
             $price = $product_stock->price;
             $stockQuantity = $product_stock->qty;
-        }
-        else{
+        } else {
             $price = $product->unit_price;
             $stockQuantity = $product->current_stock;
         }
@@ -388,10 +385,9 @@ class ProductController extends Controller
         foreach ($flash_deals as $key => $flash_deal) {
             if ($flash_deal != null && $flash_deal->status == 1 && strtotime(date('d-m-Y')) >= $flash_deal->start_date && strtotime(date('d-m-Y')) <= $flash_deal->end_date && FlashDealProduct::where('flash_deal_id', $flash_deal->id)->where('product_id', $product->id)->first() != null) {
                 $flash_deal_product = FlashDealProduct::where('flash_deal_id', $flash_deal->id)->where('product_id', $product->id)->first();
-                if($flash_deal_product->discount_type == 'percent'){
-                    $price -= ($price*$flash_deal_product->discount)/100;
-                }
-                elseif($flash_deal_product->discount_type == 'amount'){
+                if ($flash_deal_product->discount_type == 'percent') {
+                    $price -= ($price * $flash_deal_product->discount) / 100;
+                } elseif ($flash_deal_product->discount_type == 'amount') {
                     $price -= $flash_deal_product->discount;
                 }
                 $inFlashDeal = true;
@@ -399,25 +395,23 @@ class ProductController extends Controller
             }
         }
         if (!$inFlashDeal) {
-            if($product->discount_type == 'percent'){
-                $price -= ($price*$product->discount)/100;
-            }
-            elseif($product->discount_type == 'amount'){
+            if ($product->discount_type == 'percent') {
+                $price -= ($price * $product->discount) / 100;
+            } elseif ($product->discount_type == 'amount') {
                 $price -= $product->discount;
             }
         }
 
         if ($product->tax_type == 'percent') {
-            $price += ($price*$product->tax) / 100;
-        }
-        elseif ($product->tax_type == 'amount') {
+            $price += ($price * $product->tax) / 100;
+        } elseif ($product->tax_type == 'amount') {
             $price += $product->tax;
         }
 
         return response()->json([
             'product_id' => $product->id,
             'variant' => $str,
-            'price' => (double) $price,
+            'price' => (double)$price,
             'in_stock' => $stockQuantity < 1 ? false : true
         ]);
     }
@@ -430,7 +424,23 @@ class ProductController extends Controller
     public function freeShippingProduct()
     {
         return response()->json([
-            'products'=> new ProductCollection(\App\Models\Product::where('shipping_type','free')->inRandomOrder()->limit(12)->get())
+            'products' => new ProductCollection(\App\Models\Product::where('shipping_type', 'free')->inRandomOrder()->limit(12)->get())
         ]);
+    }
+
+    public function byBrand($name)
+    {
+        $brand = Brand::select('*')->where('name', $name)->get();
+        $products = Product::select('*')->where('brand_id', $brand[0]['id'])->orderBy('num_of_sale', 'desc')->limit(10)->get();
+        $minPrice = Product::select('purchase_price')->where('purchase_price', '>=', 0)->min('purchase_price');
+        $maxPrice = Product::select('purchase_price')->where('purchase_price', '>=', 0)->max('purchase_price');
+
+        return json_encode(array(
+            'id' => $brand[0]['id'],
+            'name' => $brand[0]['name'],
+            'min' => $minPrice,
+            'max' => $maxPrice,
+            'products' => new ProductCollection($products)
+        ));
     }
 }
