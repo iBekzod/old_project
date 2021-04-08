@@ -436,8 +436,8 @@ class ProductController extends Controller
     {
         $brand = Brand::select('*')->where('name', $name)->get();
         $products = Product::select('*')->where('brand_id', $brand[0]['id'])->orderBy('num_of_sale', 'desc')->limit(12)->get();
-        $minPrice = Product::select('purchase_price')->where('purchase_price', '>=', 0)->min('purchase_price');
-        $maxPrice = Product::select('purchase_price')->where('purchase_price', '>=', 0)->max('purchase_price');
+        $minPrice = Product::select('unit_price')->where('unit_price', '>=', 0)->min('unit_price');
+        $maxPrice = Product::select('unit_price')->where('unit_price', '>=', 0)->max('unit_price');
 
         return json_encode(array(
             'id' => $brand[0]['id'],
