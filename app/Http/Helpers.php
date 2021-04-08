@@ -235,6 +235,13 @@ if (!function_exists('filter_products')) {
     }
 }
 
+if (!function_exists('slugify')) {
+    function slugify($string) {
+        $string = transliterator_transliterate("Any-Latin; NFD; [:Nonspacing Mark:] Remove; NFC; [:Punctuation:] Remove; Lower();", $string);
+        $string = preg_replace('/[-\s]+/', '-', $string);
+        return trim($string, '-');
+    }
+}
 //cache products based on category
 if (!function_exists('get_cached_products')) {
     function get_cached_products($category_id = null)
