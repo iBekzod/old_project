@@ -594,12 +594,14 @@ class ProductController extends Controller
             $products = filter_products($products)->paginate(12)->appends(request()->query());
             return json_encode(array(
                 'products' => new ProductCollection($products),
-                'attributes' => $attributes
+                'attributes' => $attributes,
+                'type' => $type
             ));
         }else {
             return json_encode(array(
                 'products' => [],
-                'attributes' => []
+                'attributes' => [],
+                'type' => $type
             ));
         }
 
