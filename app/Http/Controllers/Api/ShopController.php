@@ -31,8 +31,8 @@ class ShopController extends Controller
         $minPrice = Product::select('purchase_price')->where('purchase_price', '>=', 0)->where('user_id','=',$shop->user_id)->min('purchase_price');
         $maxPrice = Product::select('purchase_price')->where('purchase_price', '>=', 0)->where('user_id','=',$shop->user_id)->max('purchase_price');
         return json_encode(array(
-            'min' => $minPrice,
-            'max' => $maxPrice,
+            'min_price' => $minPrice,
+            'max_price' => $maxPrice,
             'products' => new ProductCollection(Product::where('user_id', $shop->user_id)->latest()->paginate(10))
         ));
     }
