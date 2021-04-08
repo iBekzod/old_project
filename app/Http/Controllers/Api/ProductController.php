@@ -453,7 +453,7 @@ class ProductController extends Controller
         switch ($type){
             case "category" :
                 $r = Category::select('id')->where('slug',$id)->get();
-                    $response = $this->searchPr($type,$r,$request);
+                $response = $this->searchPr($type,$r,$request);
                 break;
             case "brand" :
                 $r = Brand::select('id')->where('name',$id)->get();
