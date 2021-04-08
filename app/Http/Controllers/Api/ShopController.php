@@ -28,8 +28,8 @@ class ShopController extends Controller
     public function allProducts($id)
     {
         $shop = Shop::where('slug', $id)->firstOrFail();
-        $minPrice = Product::select('purchase_price')->where('purchase_price', '>=', 0)->where('user_id','=',$shop->user_id)->min('purchase_price');
-        $maxPrice = Product::select('purchase_price')->where('purchase_price', '>=', 0)->where('user_id','=',$shop->user_id)->max('purchase_price');
+        $minPrice = Product::select('unit_price')->where('unit_price', '>=', 0)->where('user_id','=',$shop->user_id)->min('unit_price');
+        $maxPrice = Product::select('unit_price')->where('unit_price', '>=', 0)->where('user_id','=',$shop->user_id)->max('unit_price');
         return json_encode(array(
             'min_price' => $minPrice,
             'max_price' => $maxPrice,
