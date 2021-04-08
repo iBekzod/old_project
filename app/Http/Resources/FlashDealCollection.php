@@ -31,7 +31,8 @@ class FlashDealCollection extends ResourceCollection
             'end_date' => $flash_deal->end_date,
             'products' => new ProductCollection($products),
             'min_price'=>$min_price,
-            'max_price'=>$max_price
+            'max_price'=>$max_price,
+            'slug'=>$flash_deal->slug,
         ];
     }
 
