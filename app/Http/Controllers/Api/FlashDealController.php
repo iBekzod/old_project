@@ -54,6 +54,7 @@ class FlashDealController extends Controller
         $products = new FlashDealProductCollection($arr);
 
         return response()->json($products);
+
     }
 
     public function discountEndDate()
