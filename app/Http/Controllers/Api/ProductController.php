@@ -453,7 +453,7 @@ class ProductController extends Controller
         switch ($type){
             case "category" :
                 $r = Category::select('id')->where('slug',$id)->get();
-                $response = $this->searchPr($type,$r,$request);
+                $response = $this->searchPr($type,$r[0]['id'],$request);
                 break;
             case "brand" :
                 $r = Brand::select('id')->where('name',$id)->get();
@@ -495,65 +495,67 @@ class ProductController extends Controller
 
         $products = Product::where($conditions);
 
-        if($min_price != null && $max_price != null){
-            $products = $products->where('unit_price', '>=', $min_price)->where('unit_price', '<=', $max_price);
-        }
-
-        if($sort_by != null){
-            switch ($sort_by) {
-                case 'newest':
-                    $products->orderBy('created_at', 'desc');
-                    break;
-                case 'oldest':
-                    $products->orderBy('created_at', 'asc');
-                    break;
-                case 'price-asc':
-                    $products->orderBy('unit_price', 'asc');
-                    break;
-                case 'price-desc':
-                    $products->orderBy('unit_price', 'desc');
-                    break;
-                default:
-                    // code...
-                    break;
+        if ($products != null){
+            if($min_price != null && $max_price != null){
+                $products = $products->where('unit_price', '>=', $min_price)->where('unit_price', '<=', $max_price);
             }
-        }
+
+            if($sort_by != null){
+                switch ($sort_by) {
+                    case 'newest':
+                        $products->orderBy('created_at', 'desc');
+                        break;
+                    case 'oldest':
+                        $products->orderBy('created_at', 'asc');
+                        break;
+                    case 'price-asc':
+                        $products->orderBy('unit_price', 'asc');
+                        break;
+                    case 'price-desc':
+                        $products->orderBy('unit_price', 'desc');
+                        break;
+                    default:
+                        // code...
+                        break;
+                }
+            }
 
 
-        $non_paginate_products = filter_products($products)->get();
+            $non_paginate_products = filter_products($products)->get();
 
-        //Attribute Filter
+            //Attribute Filter
 
-        $attributes = array();
-        foreach ($non_paginate_products as $key => $product) {
-            if($product->attributes != null && is_array(json_decode($product->attributes))){
-                foreach (json_decode($product->attributes) as $key => $value) {
-                    $flag = false;
-                    $pos = 0;
-                    foreach ($attributes as $key => $attribute) {
-                        if($attribute['id'] == $value){
-                            $flag = true;
-                            $pos = $key;
-                            break;
-                        }
-                    }
-                    if(!$flag){
-                        $item['id'] = $value;
-                        $item['values'] = array();
-                        foreach (json_decode($product->choice_options) as $key => $choice_option) {
-                            if($choice_option->attribute_id == $value){
-                                $item['values'] = $choice_option->values;
+            $attributes = array();
+            foreach ($non_paginate_products as $key => $product) {
+                if($product->attributes != null && is_array(json_decode($product->attributes))){
+                    foreach (json_decode($product->attributes) as $key => $value) {
+                        $flag = false;
+                        $pos = 0;
+                        foreach ($attributes as $key => $attribute) {
+                            if($attribute['id'] == $value){
+                                $flag = true;
+                                $pos = $key;
                                 break;
                             }
                         }
-                        array_push($attributes, $item);
-                    }
-                    else {
-                        foreach (json_decode($product->choice_options) as $key => $choice_option) {
-                            if($choice_option->attribute_id == $value){
-                                foreach ($choice_option->values as $key => $value) {
-                                    if(!in_array($value, $attributes[$pos]['values'])){
-                                        array_push($attributes[$pos]['values'], $value);
+                        if(!$flag){
+                            $item['id'] = $value;
+                            $item['values'] = array();
+                            foreach (json_decode($product->choice_options) as $key => $choice_option) {
+                                if($choice_option->attribute_id == $value){
+                                    $item['values'] = $choice_option->values;
+                                    break;
+                                }
+                            }
+                            array_push($attributes, $item);
+                        }
+                        else {
+                            foreach (json_decode($product->choice_options) as $key => $choice_option) {
+                                if($choice_option->attribute_id == $value){
+                                    foreach ($choice_option->values as $key => $value) {
+                                        if(!in_array($value, $attributes[$pos]['values'])){
+                                            array_push($attributes[$pos]['values'], $value);
+                                        }
                                     }
                                 }
                             }
@@ -561,40 +563,46 @@ class ProductController extends Controller
                     }
                 }
             }
-        }
 
-        $selected_attributes = array();
-        foreach ($attributes as $key => $attribute) {
-            $attr = Attribute::find($attribute['id']);
-            if ($attr != null)
-            {
-                $attributes[$key]['attr'] = $attr;
-            }else{
-                unset($attributes[$key]);
+            $selected_attributes = array();
+            foreach ($attributes as $key => $attribute) {
+                $attr = Attribute::find($attribute['id']);
+                if ($attr != null)
+                {
+                    $attributes[$key]['attr'] = $attr;
+                }else{
+                    unset($attributes[$key]);
+                }
             }
-        }
 
 
 
-        //Color Filter
-        $all_colors = array();
+            //Color Filter
+            $all_colors = array();
 
-        foreach ($non_paginate_products as $key => $product) {
-            if ($product->colors != null) {
-                foreach (json_decode($product->colors) as $key => $color) {
-                    if(!in_array($color, $all_colors)){
-                        array_push($all_colors, $color);
+            foreach ($non_paginate_products as $key => $product) {
+                if ($product->colors != null) {
+                    foreach (json_decode($product->colors) as $key => $color) {
+                        if(!in_array($color, $all_colors)){
+                            array_push($all_colors, $color);
+                        }
                     }
                 }
             }
+
+
+            $products = filter_products($products)->paginate(12)->appends(request()->query());
+            return json_encode(array(
+                'products' => new ProductCollection($products),
+                'attributes' => $attributes
+            ));
+        }else {
+            return json_encode(array(
+                'products' => [],
+                'attributes' => []
+            ));
         }
 
 
-        $products = filter_products($products)->paginate(12)->appends(request()->query());
-
-        return json_encode(array(
-            'products' => new ProductCollection($products),
-            'attributes' => $attributes
-        ));
     }
 }
