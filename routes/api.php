@@ -67,6 +67,8 @@ Route::prefix('v1')->group(function () {
 
     Route::apiResource('business-settings', 'Api\BusinessSettingController')->only('index');
 
+    Route::get('filter/all/{type}/{id}', 'Api\ProductController@getAllBySlug');
+
     Route::get('categories/featured', 'Api\CategoryController@featured');
     Route::get('categories/home', 'Api\CategoryController@home');
     Route::apiResource('categories', 'Api\CategoryController')->only('index');
