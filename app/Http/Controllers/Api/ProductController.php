@@ -234,7 +234,8 @@ class ProductController extends Controller
     public function flashDeal()
     {
         $flash_deals = FlashDeal::where('status', 1)->where('start_date', '<=', strtotime(date('d-m-Y')))->where('end_date', '>=', strtotime(date('d-m-Y')))->get();
-        return new FlashDealsCollection($flash_deals);
+        return $flash_deals;
+//        return new FlashDealsCollection($flash_deals);
     }
 
     public function singleFlashDeal($id)
