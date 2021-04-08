@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\SearchController;
+use App\Http\Resources\CategoryCollection;
 use App\Http\Resources\FlashDealProductCollection;
 use App\Http\Resources\FreeShippingProductsCollection;
 use App\Http\Resources\ProductCollection;
@@ -17,8 +19,10 @@ use App\Models\FlashDealProduct;
 use App\Product;
 use App\Models\Shop;
 use App\Models\Color;
+use App\Seller;
 use Illuminate\Http\Request;
 use App\Utility\CategoryUtility;
+use phpDocumentor\Reflection\Types\Integer;
 
 class ProductController extends Controller
 {
@@ -431,7 +435,7 @@ class ProductController extends Controller
     public function byBrand($name)
     {
         $brand = Brand::select('*')->where('name', $name)->get();
-        $products = Product::select('*')->where('brand_id', $brand[0]['id'])->orderBy('num_of_sale', 'desc')->limit(10)->get();
+        $products = Product::select('*')->where('brand_id', $brand[0]['id'])->orderBy('num_of_sale', 'desc')->limit(12)->get();
         $minPrice = Product::select('purchase_price')->where('purchase_price', '>=', 0)->min('purchase_price');
         $maxPrice = Product::select('purchase_price')->where('purchase_price', '>=', 0)->max('purchase_price');
 
@@ -441,6 +445,156 @@ class ProductController extends Controller
             'min' => $minPrice,
             'max' => $maxPrice,
             'products' => new ProductCollection($products)
+        ));
+    }
+
+    public function getAllBySlug($type,$id,Request $request){
+        $response = "";
+        switch ($type){
+            case "category" :
+                $r = Category::select('id')->where('slug',$id)->get();
+                    $response = $this->searchPr($type,$r,$request);
+                break;
+            case "brand" :
+                $r = Brand::select('id')->where('name',$id)->get();
+                $response = $this->searchPr($type,$r[0]['id'],$request);
+                break;
+            case "seller" :
+                $r = Shop::select('user_id')->where('slug',$id)->get();
+                $response = $this->searchPr($type,$r[0]['user_id'],$request);
+                break;
+        }
+
+        return $response;
+    }
+
+    public function searchPr($type,$id,$request)
+    {
+        $sort_by = $request->sort_by;
+        $min_price = $request->min_price;
+        $max_price = $request->max_price;
+
+        $conditions = [];
+
+        switch ($type){
+            case "seller" :
+                $conditions = ['published' => 1,'user_id' => $id];
+                break;
+            case "brand" :
+                $conditions = ['published' => 1,'brand_id' => $id];
+                break;
+            case "category" :
+                $conditions = ['published' => 1,'category_id' => $id];
+                break;
+            default :
+
+                break;
+        }
+
+
+
+        $products = Product::where($conditions);
+
+        if($min_price != null && $max_price != null){
+            $products = $products->where('unit_price', '>=', $min_price)->where('unit_price', '<=', $max_price);
+        }
+
+        if($sort_by != null){
+            switch ($sort_by) {
+                case 'newest':
+                    $products->orderBy('created_at', 'desc');
+                    break;
+                case 'oldest':
+                    $products->orderBy('created_at', 'asc');
+                    break;
+                case 'price-asc':
+                    $products->orderBy('unit_price', 'asc');
+                    break;
+                case 'price-desc':
+                    $products->orderBy('unit_price', 'desc');
+                    break;
+                default:
+                    // code...
+                    break;
+            }
+        }
+
+
+        $non_paginate_products = filter_products($products)->get();
+
+        //Attribute Filter
+
+        $attributes = array();
+        foreach ($non_paginate_products as $key => $product) {
+            if($product->attributes != null && is_array(json_decode($product->attributes))){
+                foreach (json_decode($product->attributes) as $key => $value) {
+                    $flag = false;
+                    $pos = 0;
+                    foreach ($attributes as $key => $attribute) {
+                        if($attribute['id'] == $value){
+                            $flag = true;
+                            $pos = $key;
+                            break;
+                        }
+                    }
+                    if(!$flag){
+                        $item['id'] = $value;
+                        $item['values'] = array();
+                        foreach (json_decode($product->choice_options) as $key => $choice_option) {
+                            if($choice_option->attribute_id == $value){
+                                $item['values'] = $choice_option->values;
+                                break;
+                            }
+                        }
+                        array_push($attributes, $item);
+                    }
+                    else {
+                        foreach (json_decode($product->choice_options) as $key => $choice_option) {
+                            if($choice_option->attribute_id == $value){
+                                foreach ($choice_option->values as $key => $value) {
+                                    if(!in_array($value, $attributes[$pos]['values'])){
+                                        array_push($attributes[$pos]['values'], $value);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        $selected_attributes = array();
+        foreach ($attributes as $key => $attribute) {
+            $attr = Attribute::find($attribute['id']);
+            if ($attr != null)
+            {
+                $attributes[$key]['attr'] = $attr;
+            }else{
+                unset($attributes[$key]);
+            }
+        }
+
+
+
+        //Color Filter
+        $all_colors = array();
+
+        foreach ($non_paginate_products as $key => $product) {
+            if ($product->colors != null) {
+                foreach (json_decode($product->colors) as $key => $color) {
+                    if(!in_array($color, $all_colors)){
+                        array_push($all_colors, $color);
+                    }
+                }
+            }
+        }
+
+
+        $products = filter_products($products)->paginate(12)->appends(request()->query());
+
+        return json_encode(array(
+            'products' => new ProductCollection($products),
+            'attributes' => $attributes
         ));
     }
 }
