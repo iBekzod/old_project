@@ -442,8 +442,8 @@ class ProductController extends Controller
         return json_encode(array(
             'id' => $brand[0]['id'],
             'name' => $brand[0]['name'],
-            'min' => $minPrice,
-            'max' => $maxPrice,
+            'min_price' => $minPrice,
+            'max_price' => $maxPrice,
             'products' => new ProductCollection($products)
         ));
     }
