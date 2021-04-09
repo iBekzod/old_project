@@ -453,7 +453,14 @@ class ProductController extends Controller
         switch ($type){
             case "category" :
                 $r = Category::select('id')->where('slug',$id)->get();
-                $response = $this->searchPr($type,$r[0]['id'],$request);
+
+                $category_ids = CategoryUtility::children_ids($r[0]['id']);
+                if ($category_ids != null){
+                    $category_ids[] = $id;
+                    $response =  new ProductCollection(Product::whereIn('category_id', $category_ids)->where('is_accepted', 1)->inRandomOrder()->paginate(10));
+                }else {
+                    $response = $this->searchPr($type,$r[0]['id'],$request);
+                }
                 break;
             case "brand" :
                 $r = Brand::select('id')->where('name',$id)->get();

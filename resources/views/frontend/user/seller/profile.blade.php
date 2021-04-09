@@ -49,9 +49,39 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <label class="col-md-2 col-form-label">{{ translate('Legal name') }}</label>
+                                <div class="col-md-10">
+                                    <input type="password" class="form-control" placeholder="{{ translate('Legal name') }}" name="new_password">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">{{ translate('Full name of the director') }}</label>
+                                <div class="col-md-10">
+                                    <input type="password" class="form-control" placeholder="{{ translate('Full name of the director') }}" name="new_password">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">{{ translate('Phone number') }}</label>
+                                <div class="col-md-10">
+                                    <input type="password" class="form-control" placeholder="{{ translate('Phone number') }}" name="new_password">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">{{ translate('Name of the responsible manager') }}</label>
+                                <div class="col-md-10">
+                                    <input type="password" class="form-control" placeholder="{{ translate('Name of the responsible manager') }}" name="new_password">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">{{ translate('Phone number') }}</label>
+                                <div class="col-md-10">
+                                    <input type="password" class="form-control" placeholder="{{ translate('Phone number') }}" name="new_password">
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label class="col-md-2 col-form-label">{{ translate('Your Password') }}</label>
                                 <div class="col-md-10">
-                                    <input type="password" class="form-control" placeholder="{{ translate('New Password') }}" name="new_password">
+                                    <input type="password" class="form-control" placeholder="{{ translate('Your Password') }}" name="new_password">
                                 </div>
                             </div>
                             <div class="form-group row">
