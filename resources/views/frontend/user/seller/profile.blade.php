@@ -167,6 +167,13 @@
                             </div>
                         </div>
                     {{-- @endif --}}
+                        <style>
+                            .inner{
+                                position: relative;
+                                bottom: 10px;
+                                border-bottom: 0.8px solid #e8ebf1;
+                            }
+                        </style>
                     <!-- Payment System -->
                         <div class="card">
                             <div class="card-header">
@@ -218,85 +225,93 @@
                                                name="bank_routing_no">
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <label class="col-md-3 col-form-label">{{ translate('Cash Payment') }}</label>
-                                    <div class="col-md-9">
-                                        <label class="mb-3 aiz-switch aiz-switch-success">
-                                            <input value="1" name="cash_on_delivery_status" type="checkbox"
-                                                   @if (Auth::user()->seller->cash_on_delivery_status == 1) checked @endif>
-                                            <span class="slider round"></span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <label class="col-md-3 col-form-label">{{ translate('Bank Payment') }}</label>
-                                    <div class="col-md-9">
-                                        <label class="mb-3 aiz-switch aiz-switch-success">
-                                            <input value="1" name="bank_payment_status" type="checkbox"
-                                                   @if (Auth::user()->seller->bank_payment_status == 1) checked @endif>
-                                            <span class="slider round"></span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="mb-0 h6">{{ translate('Set up payments')}}</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <label class="col-md-3 col-form-label">{{ translate('Cash') }}</label>
-                                    <div class="col-md-9">
-                                        <label class="mb-3 aiz-switch aiz-switch-success">
-                                            <input value="1" name="bank_payment_status" type="checkbox"
-                                                   @if (Auth::user()->seller->bank_payment_status == 1) checked @endif>
-                                            <span class="slider round"></span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="row pt-4">
-                                    <label class="col-md-3 col-form-label">{{ translate('Online Payment') }}</label>
-                                    <div class="col-md-9">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label class="mb-3 aiz-switch aiz-switch-success ml-5"><span class="h5">UZS</span>
-                                                    <input value="1" name="bank_payment_status" type="checkbox"
-                                                           @if (Auth::user()->seller->bank_payment_status == 1) checked @endif>
-                                                    <span class="slider round"></span>
-                                                </label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="mb-3 aiz-switch aiz-switch-success"><span class="h5">USD</span>
-                                                    <input value="1" name="bank_payment_status" type="checkbox"
-                                                           @if (Auth::user()->seller->bank_payment_status == 1) checked @endif>
-                                                    <span class="slider round"></span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row pt-4">
-                                    <label class="col-md-3 col-form-label">{{ translate('Terminals') }}</label>
-                                    <div class="col-md-9">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label class="mb-3 aiz-switch aiz-switch-success"><img class="w-80px" src="data:image/jpeg;base64,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" alt="">
-                                                    <input value="1" name="bank_payment_status" type="checkbox"
-                                                           @if (Auth::user()->seller->bank_payment_status == 1) checked @endif>
-                                                    <span class="slider round"></span>
-                                                </label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="mb-3 aiz-switch aiz-switch-success"><img class="w-80px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMhbVxB7d2elNmXfZD1WZDQsr80RH0uDhwbrELrShJceF8kuVy7D6sAGe4_c33OtNuyCo&usqp=CAU" alt="">
-                                                    <input value="1" name="bank_payment_status" type="checkbox"
-                                                           @if (Auth::user()->seller->bank_payment_status == 1) checked @endif>
-                                                    <span class="slider round"></span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                               <div class="mt-3">
+                                   <div class="row inner">
+                                       <h5 class="h6  ml-2">{{ translate('Payment Setting')}}</h5>
+                                   </div>
+                                   <div class="row">
+                                       <label class="col-md-3 col-form-label">{{ translate('Cash Payment') }}</label>
+                                       <div class="col-md-9">
+                                           <label class="mb-3 aiz-switch aiz-switch-success">
+                                               <input value="1" name="cash_on_delivery_status" type="checkbox"
+                                                      @if (Auth::user()->seller->cash_on_delivery_status == 1) checked @endif>
+                                               <span class="slider round"></span>
+                                           </label>
+                                       </div>
+                                   </div>
+                                   <div class="row">
+                                       <label class="col-md-3 col-form-label">{{ translate('Bank Payment') }}</label>
+                                       <div class="col-md-9">
+                                           <label class="mb-3 aiz-switch aiz-switch-success">
+                                               <input value="1" name="bank_payment_status" type="checkbox"
+                                                      @if (Auth::user()->seller->bank_payment_status == 1) checked @endif>
+                                               <span class="slider round"></span>
+                                           </label>
+                                       </div>
+                                   </div>
+                                   <div class="row pt-4">
+                                       <label class="col-md-3 col-form-label">{{ translate('Online Payment') }}</label>
+                                       <div class="col-md-9">
+                                           <div class="row">
+                                               <div class="col-md-2">
+                                                   <div class="form-check">
+                                                       <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                                       <label class="form-check-label" for="flexCheckDefault">
+                                                           <span class="h5">UZS</span>
+                                                       </label>
+                                                   </div>
+                                               </div>
+                                               <div class="col-md-2">
+                                                   <div class="form-check">
+                                                       <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                                       <label class="form-check-label" for="flexCheckDefault">
+                                                           <span class="h5">USD</span>
+                                                       </label>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="row pt-4">
+                                       <label class="col-md-3 col-form-label">{{ translate('Terminals') }}</label>
+                                       <div class="col-md-9">
+                                           <div class="row">
+                                               <div class="col-md-3">
+                                                   <div class="form-check">
+                                                       <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                                       <label class="form-check-label" for="flexCheckDefault">
+                                                           <img class="w-50px" src="data:image/png;base64,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" alt="">
+                                                       </label>
+                                                   </div>
+                                               </div>
+                                               <div class="col-md-3">
+                                                   <div class="form-check">
+                                                       <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                                       <label class="form-check-label" for="flexCheckDefault">
+                                                           <img class=" w-50px" src="public/assets/img/Humo-01.png" alt="">
+                                                       </label>
+                                                   </div>
+                                               </div>
+                                               <div class="col-md-3">
+                                                   <div class="form-check">
+                                                       <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                                       <label class="form-check-label" for="flexCheckDefault">
+                                                           <img class=" w-50px" src="public/assets/img/credit+card+debit+payment+visa+icon-1320162799182509645.png" alt="">
+                                                       </label>
+                                                   </div>
+                                               </div>
+                                               <div class="col-md-3">
+                                                   <div class="form-check">
+                                                       <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                                       <label class="form-check-label" for="flexCheckDefault">
+                                                           <img class=" w-50px" src="public/assets/img/Master-Card-Blue-icon.png" alt="">
+                                                       </label>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div>
                             </div>
                         </div>
                         <div class="mb-0 text-right form-group">
