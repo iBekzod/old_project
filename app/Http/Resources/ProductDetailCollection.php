@@ -115,7 +115,7 @@ class ProductDetailCollection extends ResourceCollection
         $result = array();
         foreach ($data as $key => $choice) {
             $attr = Attribute::find($choice->attribute_id);
-            if($attr)
+            if($attr && $choice->values)
             {
                 $item['name'] = $choice->attribute_id;
                 $item['title'] = Attribute::find($choice->attribute_id)->name;
