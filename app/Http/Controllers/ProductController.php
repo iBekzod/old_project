@@ -224,8 +224,13 @@ class ProductController extends Controller
      */
     public function create()
     {
+//        dd(Category::withDepth()->having('depth', '=', 3)->get());
+//        $data = [
+//            'categories' => Category::where('level', '>=', 2)->get(),
+//            'brands' => Brand::all()
+//        ];
         $data = [
-            'categories' => Category::withDepth()->having('depth', '=', 1)->get(),
+            'categories' => Category::withDepth()->having('depth', '=', 2)->get(),
             'brands' => Brand::all()
         ];
 
