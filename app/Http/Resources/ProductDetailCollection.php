@@ -115,12 +115,15 @@ class ProductDetailCollection extends ResourceCollection
         $result = array();
         foreach ($data as $key => $choice) {
             $attr = Attribute::find($choice->attribute_id);
-            if($attr && $choice->values)
+            if($attr && $choice->values!=null)
             {
                 $item['name'] = $choice->attribute_id;
                 $item['title'] = Attribute::find($choice->attribute_id)->name;
                 $item['options'] = $choice->values;
-                array_push($result, $item);
+                if($item['name']!=null && $item['title']!=null){
+                    array_push($result, $item);
+                }
+
             }
         }
         return $result;
