@@ -616,6 +616,8 @@ class ProductController extends Controller
             return response()->json([
                 'products' => new ProductCollection($products),
                 'attributes' => $attributes,
+                'min_price'=>$products->min('unit_price'),
+                'max_price'=>$products->max('unit_price'),
                 'type' => $type
             ]);
         }else {
