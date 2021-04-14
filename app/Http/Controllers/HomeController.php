@@ -208,7 +208,7 @@ class HomeController extends Controller
     }
 
     public function home(){
-        return redirect('https://marketpro.vercel.app/');
+        return redirect('https://marketproo.vercel.app/');
     }
 
     public function flash_deal_details($slug)
