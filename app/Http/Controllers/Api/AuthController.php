@@ -244,7 +244,7 @@ class AuthController extends Controller
                 $shop->user_id = $user->id;
                 $shop->name = $request->shop_name;
                 $shop->meta_title = $request->shop_name;
-                $shop->slug =SlugService::createSlug(Shop::class, 'slug', $request->shop_name).'-'.$shop->id;
+                $shop->slug =slugify(SlugService::createSlug(Shop::class, 'slug', $request->shop_name)).'-'.$shop->id;
                 $shop->save();
                 // $user->id=encrypt($user->id);
                 // auth()->login($user, true);

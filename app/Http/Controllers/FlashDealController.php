@@ -63,8 +63,8 @@ class FlashDealController extends Controller
 
             $flash_deal->background_color = $request->background_color;
             // $flash_deal->slug = strtolower(str_replace(' ', '-', $request->title).'-'.Str::random(5));
-//            $flash_deal->slug = SlugService::createSlug(FlashDeal::class, 'slug', $request->title);
-            $flash_deal->slug = Str::random(10);
+            $flash_deal->slug = slugify(SlugService::createSlug(FlashDeal::class, 'slug', $request->title));
+//            $flash_deal->slug = Str::random(10);
             $flash_deal->banner = $request->banner;
             if($flash_deal->save()){
                 foreach ($request->products as $key => $product) {

@@ -96,7 +96,7 @@ class CustomerProductController extends Controller
         $customer_product->meta_description     = $request->meta_description;
         $customer_product->meta_img             = $request->meta_img;
         $customer_product->pdf                  = $request->pdf;
-        $customer_product->slug = SlugService::createSlug(CustomerProduct::class, 'slug', $request->name);
+        $customer_product->slug = slugify(SlugService::createSlug(CustomerProduct::class, 'slug', $request->name));
 
         // $customer_product->slug                 = strtolower(preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(5));
         if($customer_product->save()){
