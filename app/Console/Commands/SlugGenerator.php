@@ -49,39 +49,39 @@ class SlugGenerator extends Command
     {
         $items = FlashDeal::all();//
         foreach ($items as $item) {
-            $item->slug = slugify(SlugService::createSlug(FlashDeal::class, 'slug', $item->title));
+            $item->slug = SlugService::createSlug(FlashDeal::class, 'slug', slugify($item->title));
             $item->save();
         }
-        $items = Product::all();//
-        foreach ($items as $item) {
-            $item->slug = slugify(SlugService::createSlug(Product::class, 'slug', $item->name));
-            $item->save();
-        }
-        $items = Page::all();//
-        foreach ($items as $item) {
-            $item->slug = slugify(SlugService::createSlug(Page::class, 'slug', $item->title));
-            $item->save();
-        }
-        $items = Shop::all();//
-        foreach ($items as $item) {
-            $item->slug = slugify(SlugService::createSlug(Shop::class, 'slug', $item->name));
-            $item->save();
-        }
-        $items = Category::all();//
-        foreach ($items as $item) {
-            $item->slug = slugify(SlugService::createSlug(Category::class, 'slug', $item->name));
-            $item->save();
-        }
-        $items = CustomerProduct::all();//
-        foreach ($items as $item) {
-            $item->slug = slugify(SlugService::createSlug(CustomerProduct::class, 'slug', $item->name));
-            $item->save();
-        }
-        $items = Brand::all();//
-        foreach ($items as $item) {
-            $item->slug = slugify(SlugService::createSlug(Brand::class, 'slug', $item->name));
-            $item->save();
-        }
+         $items = Product::all();//
+         foreach ($items as $item) {
+             $item->slug = SlugService::createSlug(Product::class, 'slug', slugify($item->name));
+             $item->save();
+         }
+         $items = Page::all();//
+         foreach ($items as $item) {
+             $item->slug = SlugService::createSlug(Page::class, 'slug', slugify($item->title));
+             $item->save();
+         }
+         $items = Shop::all();//
+         foreach ($items as $item) {
+             $item->slug = SlugService::createSlug(Shop::class, 'slug', slugify($item->name));
+             $item->save();
+         }
+         $items = Category::all();//
+         foreach ($items as $item) {
+             $item->slug = SlugService::createSlug(Category::class, 'slug', slugify($item->name));
+             $item->save();
+         }
+         $items = CustomerProduct::all();//
+         foreach ($items as $item) {
+             $item->slug = SlugService::createSlug(CustomerProduct::class, 'slug', slugify($item->name));
+             $item->save();
+         }
+         $items = Brand::all();//
+         foreach ($items as $item) {
+             $item->slug = SlugService::createSlug(Brand::class, 'slug', slugify($item->name));
+             $item->save();
+         }
         $this->info('Successfully generated successfully');
     }
 }
