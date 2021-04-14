@@ -93,6 +93,7 @@ Route::prefix('v1')->group(function () {
     Route::get('products/admin', 'Api\ProductController@admin');
     Route::get('products/seller', 'Api\ProductController@seller');
     Route::get('products/category/{id}', 'Api\ProductController@category')->name('api.products.category');
+    Route::get('products/featured/category/{id}', 'Api\ProductController@featuredCategoryProducts');
     Route::get('products/sub-category/{id}', 'Api\ProductController@subCategory')->name('products.subCategory');
     Route::get('products/sub-sub-category/{id}', 'Api\ProductController@subSubCategory')->name('products.subSubCategory');
     Route::get('products/brand/{id}', 'Api\ProductController@brand')->name('api.products.brand');
