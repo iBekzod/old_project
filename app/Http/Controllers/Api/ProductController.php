@@ -211,11 +211,11 @@ class ProductController extends Controller
         return new ProductCollection($products->inRandomOrder()->paginate(10));
     }
 
-    public function featuredCategoryProducts($id){
-        if (!$id) {
-            abort(404);
-        }
-        $categoryA = Category::where('slug', $id)->firstOrFail();
+    public function featuredCategoryProducts($slug){
+//        if (!$id) {
+//            abort(404);
+//        }
+        $categoryA = Category::where('slug', $slug)->firstOrFail();
         $ids = Category::descendantsAndSelf($categoryA->id)->where('level','=', 2)->map(function ($category) {
             return $category->id;
         });
