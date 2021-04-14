@@ -22,6 +22,7 @@ use App\Models\Color;
 use App\Seller;
 use Illuminate\Http\Request;
 use App\Utility\CategoryUtility;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use phpDocumentor\Reflection\Types\Integer;
 
 class ProductController extends Controller
@@ -449,67 +450,67 @@ class ProductController extends Controller
     }
 
     public function getAllBySlug($type,Request $request){
+//        switch ($type){
+//            case "seller" :
+//                $conditions = ['published' => 1,'user_id' => $id];
+//                break;
+//            case "brand" :
+//                $conditions = ['published' => 1,'brand_id' => $id];
+//                break;
+//            case "category" :
+//                $conditions = ['published' => 1,'subsubcategory_id' => $id];
+//                break;
+//            default :
+//
+//                break;
+//        }
+
         $response = "";
         switch ($type){
             case "category" :
-                if(!$category = Category::select('id')->where('slug',$request->id)->firstOrFail()){
+                if(!$category = Category::select(['id','level'])->where('slug',$request->id)->firstOrFail()){
                     break;
                 }
-                if(!$category_ids = CategoryUtility::children_ids($category->id)){
-                    break;
-                }
+                $allProducts = [];
+//                if ($category->level == 2){
+//                    $products = Product::where('subsubcategory_id',$category->id)->get();
+//                    if (count($products)>0){
+//                        array_push($allProducts, new ProductCollection($products));
+//                    }
+//                }
 
-                if ($category_ids != null){
-                    $category_ids[] = $request->id;
-                    $response =  new ProductCollection(Product::whereIn('category_id', $category_ids)->where('is_accepted', 1)->inRandomOrder()->paginate(10));
-                }else {
-                    $response = $this->searchPr($type,$category->id,$request);
-                }
+//                $categories = Category::descendantsAndSelf($category->id)->where('level','=', 2);
+                $ids = Category::descendantsAndSelf($category->id)->where('level','=', 2)->map(function ($category) {
+                    return $category->id;
+                });
+                $products = Product::whereIn('subsubcategory_id',$ids);
+
+                $response = $this->searchPr($type,$products,$request);
                 break;
             case "brand" :
-                if(!$brand = Brand::select('id')->where('name',$request->id)->firstOrFail()){
+                if(!$brand = Brand::select('id')->where('slug',$request->id)->firstOrFail()){
                     break;
                 }
-                $response = $this->searchPr($type,$brand->id,$request);
+                $products = Product::where('brand_id',$brand->id);
+                $response = $this->searchPr($type,$products,$request);
                 break;
             case "seller" :
                 if(!$seller = Shop::select('user_id')->where('slug',$request->id)->firstOrFail()){
                     break;
                 }
-
-                $response = $this->searchPr($type,$seller->user_id,$request);
+                $products = Product::where('brand_id',$seller->id);
+                $response = $this->searchPr($type,$products,$request);
                 break;
         }
 
         return $response;
     }
 
-    public function searchPr($type,$id,$request)
+    public function searchPr($type,$products,$request)
     {
         $sort_by = $request->sort_by;
         $min_price = $request->min_price;
         $max_price = $request->max_price;
-
-        $conditions = [];
-
-        switch ($type){
-            case "seller" :
-                $conditions = ['published' => 1,'user_id' => $id];
-                break;
-            case "brand" :
-                $conditions = ['published' => 1,'brand_id' => $id];
-                break;
-            case "category" :
-                $conditions = ['published' => 1,'category_id' => $id];
-                break;
-            default :
-
-                break;
-        }
-
-
-
-        $products = Product::where($conditions);
 
         if ($products != null){
             if($min_price != null){
