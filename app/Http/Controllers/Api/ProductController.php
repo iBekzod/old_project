@@ -103,23 +103,28 @@ class ProductController extends Controller
             abort(404);
         }
         $categoryA = Category::where('slug', $id)->firstOrFail();
+        $ids = Category::descendantsAndSelf($categoryA->id)->where('level','=', 2)->map(function ($category) {
+            return $category->id;
+        });
+        $conditions = ['published' => 1, 'featured'=>1];
+        $products = Product::where($conditions)->whereIn('subsubcategory_id',$ids);
 //        $category_ids = CategoryUtility::children_ids($id);
 //        $category_ids[] = $id;
         $sort_by = $request->sort_by;
 
-        $conditions = ['published' => 1];
+//        $conditions = ['published' => 1];
 
 //        if ($request->brand != null) {
 //            $brand_id = (\App\Brand::where('slug', $request->brand)->first() != null) ? Brand::where('slug', $request->brand)->first()->id : null;
 //            $conditions = array_merge($conditions, ['brand_id' => $brand_id]);
 //        }
 
-        $products = \App\Product::where($conditions);
+//        $products = \App\Product::where($conditions);
 
-        $category_ids = CategoryUtility::children_ids($categoryA->id);
-        $category_ids[] = $id;
-
-        $products = $products->whereIn('category_id', $category_ids);
+//        $category_ids = CategoryUtility::children_ids($categoryA->id);
+//        $category_ids[] = $id;
+//
+//        $products = $products->whereIn('category_id', $category_ids);
 
         if ($sort_by != null) {
             switch ($sort_by) {
@@ -203,11 +208,7 @@ class ProductController extends Controller
         }
 
 
-        return new ProductCollection(
-            Product::whereIn('category_id', $category_ids)
-                ->inRandomOrder()
-                ->paginate(10)
-        );
+        return new ProductCollection($products->inRandomOrder()->paginate(10));
     }
 
     public function featuredCategoryProducts($id){
@@ -581,6 +582,16 @@ class ProductController extends Controller
                 if ($attr != null)
                 {
                     $attributes[$key]['attr'] = $attr;
+                    if ($request->has('attribute_' . $attribute['id'])) {
+                        foreach ($request['attribute_' . $attribute['id']] as $key => $value) {
+                            $str = '"' . $value . '"';
+                            $products = $products->where('choice_options', 'like', '%' . $str . '%');
+                        }
+
+                        $item['id'] = $attribute['id'];
+                        $item['values'] = $request['attribute_' . $attribute['id']];
+                        array_push($selected_attributes, $item);
+                    }
                 }else{
                     unset($attributes[$key]);
                 }
