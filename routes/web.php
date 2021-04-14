@@ -41,7 +41,7 @@ Route::get('/test', function () {
         if($category->count() > 1) {
 //            dd($category);
             foreach ($category as $item) {
-                $item->slug = slugify(SlugService::createSlug(Category::class, 'slug', $item->name));
+                $item->slug = SlugService::createSlug(Category::class, 'slug', slugify($item->name));
                 $item->save();
             }
         }
