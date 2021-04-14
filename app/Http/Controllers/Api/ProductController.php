@@ -491,6 +491,16 @@ class ProductController extends Controller
                 $products = Product::where('user_id',$seller->id);
                 $response = $this->searchPr($type,$products,$request);
                 break;
+            case "flashdeals" :
+                if(!$flashdeal = FlashDeal::select(['id'])->where('slug',$request->id)->firstOrFail()){
+                    break;
+                }
+                $ids = FlashDealProduct::where('flash_deal_id',$flashdeal->id)->map(function ($flashdeal2) {
+                    return $flashdeal2->id;
+                });
+                $products = Product::whereIn('id',$ids);
+                $response = $this->searchPr($type,$products,$request);
+                break;
         }
 
         return $response;
