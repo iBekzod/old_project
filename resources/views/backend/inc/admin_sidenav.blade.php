@@ -53,7 +53,7 @@
                 </li>
 
             <!-- POS Addon-->
-            @if ($pos_system != null && $pos_system->activated)
+            {{--@if ($pos_system != null && $pos_system->activated)
                 @if(Auth::user()->user_type == 'admin' || in_array('1', json_decode(Auth::user()->staff->role->permissions)))
                     <li class="aiz-side-nav-item">
                         <a href="#" class="aiz-side-nav-link">
@@ -76,7 +76,7 @@
                         </ul>
                     </li>
                 @endif
-            @endif
+            @endif--}}
 
             <!-- Product -->
                 @if(Auth::user()->user_type == 'admin' || in_array('2', json_decode(Auth::user()->staff->role->permissions)))

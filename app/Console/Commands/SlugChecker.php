@@ -60,11 +60,11 @@ class SlugChecker extends Command
             print_r($rows);
 
             foreach ($rows as $row) {
-                // print_r("Before: ".$row['slug']);
-               if($row['count']>1){
-                // print_r("Before: ".$row);
-                   DB::update('update '.$table.' set '.$column.' = '.slugify($column).' where '.$column.' = ?', [$row[$column]]);
-                //    print_r("After: ".$row);
+                 print_r("Before: ".$row->$column);
+               if($row->count>1){
+                 print_r("Before: ".$row->$column);
+                   DB::update('update '.$table.' set '.$column.' = '.slugify($column).' where '.$column.' = ?', [$row->$column]);
+                    print_r("After: ".$row->$column);
                }
             }
 

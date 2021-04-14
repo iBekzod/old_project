@@ -93,7 +93,7 @@ class ShopController extends Controller
             $shop->name = $request->name;
             $shop->address = $request->address;
             // $shop->slug = preg_replace('/\s+/', '-', $request->name).'-'.$shop->id;
-            $shop->slug = SlugService::createSlug(Shop::class, 'slug', $request->name).'-'.$shop->id;
+            $shop->slug = SlugService::createSlug(Shop::class, 'slug', slugify($request->name));
             if($shop->save()){
                 auth()->login($user, false);
                 if(BusinessSetting::where('type', 'email_verification')->first()->value != 1){
@@ -158,7 +158,7 @@ class ShopController extends Controller
             $shop->address = $request->address;
             // $shop->slug = preg_replace('/\s+/', '-', $request->name).'-'.$shop->id;
             if($shop->slug!=$request->name)
-                $shop->slug = SlugService::createSlug(Shop::class, 'slug', $request->name).'-'.$shop->id;
+                $shop->slug = SlugService::createSlug(Shop::class, 'slug', slugify($request->name));
             $shop->meta_title = $request->meta_title;
             $shop->meta_description = $request->meta_description;
             $shop->logo = $request->logo;

@@ -320,7 +320,7 @@ class ProductController extends Controller
         }
 
         // $product->slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)) . '-' . Str::random(5);
-        $product->slug = SlugService::createSlug(Product::class, 'slug', $request->name);
+        $product->slug = SlugService::createSlug(Product::class, 'slug', slugify($request->name));
 
         if ($request->has('colors_active') && $request->has('colors') && count($request->colors) > 0) {
             $product->colors = json_encode($request->colors);
@@ -523,7 +523,7 @@ class ProductController extends Controller
             $product->unit = $request->unit;
             $product->description = $request->description;
             if($product->slug!=$request->slug)
-                $product->slug = SlugService::createSlug(Product::class, 'slug', $request->name);
+                $product->slug = SlugService::createSlug(Product::class, 'slug', slugify($request->name));
         }
 
         $product->photos = $request->photos;

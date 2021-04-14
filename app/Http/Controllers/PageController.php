@@ -54,7 +54,7 @@ class PageController extends Controller
         $page->title = $request->title;
         if (Page::where('slug', preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->slug)))->first() == null) {
             // $page->slug             = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->slug));
-            $page->slug = SlugService::createSlug(Page::class, 'slug', $request->slug);
+            $page->slug = SlugService::createSlug(Page::class, 'slug', slugify($request->slug));
             $page->type             = $request->type??"custom_page";
             $page->content          = $request->get('content');
             $page->meta_title       = $request->meta_title;
@@ -124,7 +124,7 @@ class PageController extends Controller
             if($page->type == 'custom_page'){
               // $page->slug           = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->slug));
               if($page->slug!=$request->slug)
-                $page->slug = SlugService::createSlug(Page::class, 'slug', $request->slug);
+                $page->slug =SlugService::createSlug(Page::class, 'slug',  slugify($request->slug));
             }
             if($request->lang == env("DEFAULT_LANGUAGE")){
               $page->title          = $request->title;
