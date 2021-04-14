@@ -12,6 +12,7 @@ class BrandCollection extends ResourceCollection
             'data' => $this->collection->map(function($data) {
                 return [
                     'name' => $data->name,
+                    'slug' => $data->slug,
                     'logo' => api_asset($data->logo),
                     'links' => [
                         'products' => route('api.products.brand', $data->id)

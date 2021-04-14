@@ -488,7 +488,7 @@ class ProductController extends Controller
                 $response = $this->searchPr($type,$products,$request);
                 break;
             case "brand" :
-                if(!$brand = Brand::select('id')->where('name',$request->id)->firstOrFail()){
+                if(!$brand = Brand::select('id')->where('slug',$request->id)->firstOrFail()){
                     break;
                 }
                 $products = Product::where('brand_id',$brand->id);
