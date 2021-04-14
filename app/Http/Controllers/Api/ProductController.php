@@ -611,7 +611,30 @@ class ProductController extends Controller
                     }
                 }
             }
-
+            //Новинки
+            if ($request->has('new') && $request->new) {
+                $products = $products->where('todays_deal', 1);
+            }
+            //Популярные
+            if ($request->has('popular') && $request->popular) {
+                $products = $products->where('featured', 1);
+            }
+            //Рекомендуемые
+            if ($request->has('recommendation') && $request->recommendation) {
+                $products = $products->where('seller_featured', 1);
+            }
+            //Акции
+            if ($request->has('stock') && $request->stock) {
+                $products = $products->where('discount','>', 0);
+            }
+            //Бесплатная доставка
+            if ($request->has('freeDelevery') && $request->freeDelevery) {
+                $products = $products->where('shipping_type', 'free');
+            }
+            //Доступно в рассрочку
+            if ($request->has('installment') && $request->installment) {
+//                $products = $products->where('shipping_type', 'free');
+            }
 
             $products = filter_products($products)->paginate(12)->appends(request()->query());
             return response()->json([
