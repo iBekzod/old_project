@@ -27,6 +27,7 @@
         "maatwebsite/excel": "^3.1",
         "mehedi-iitdu/laravel-paystack": "dev-master",
         "mehedi-iitdu/paypal": "dev-master",
+        "napaeduhub/eskiz-sms-client": "^1.0",
         "nexmo/laravel": "^2.2",
         "predis/predis": "^1.1",
         "razorpay/razorpay": "2.0.0",

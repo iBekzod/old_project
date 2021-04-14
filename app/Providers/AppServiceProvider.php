@@ -17,6 +17,7 @@ class AppServiceProvider extends ServiceProvider
     {
         // \Debugbar::disable();
         Translations::getInstance()->getTranslations();
+        \Debugbar::disable();
         Schema::defaultStringLength(191);
     }
 
