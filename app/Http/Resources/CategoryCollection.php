@@ -17,6 +17,7 @@ class CategoryCollection extends ResourceCollection
                     'slug' => $data->slug,
                     'banner' => $data->banner ? api_asset($data->banner) : 'public/images/default-image.jpg',
                     'icon' => api_asset($data->icon),
+                    'featured'=>$data->featured,
                     // 'brands' => brandsOfCategory($data->id),
                     'links' => [
                         'products' => route('api.products.category', $data->id),
