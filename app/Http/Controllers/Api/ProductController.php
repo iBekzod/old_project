@@ -435,7 +435,7 @@ class ProductController extends Controller
 
     public function byBrand($name)
     {
-        $brand = Brand::select('*')->where('name', $name)->get();
+        $brand = Brand::select('*')->where('slug', $name)->get();
         $products = Product::select('*')->where('brand_id', $brand[0]['id'])->orderBy('num_of_sale', 'desc')->limit(12)->get();
         $minPrice = Product::select('unit_price')->where('unit_price', '>=', 0)->where('brand_id',$brand[0]['id'])->min('unit_price');
         $maxPrice = Product::select('unit_price')->where('unit_price', '>=', 0)->where('brand_id',$brand[0]['id'])->max('unit_price');
@@ -450,36 +450,12 @@ class ProductController extends Controller
     }
 
     public function getAllBySlug($type,Request $request){
-//        switch ($type){
-//            case "seller" :
-//                $conditions = ['published' => 1,'user_id' => $id];
-//                break;
-//            case "brand" :
-//                $conditions = ['published' => 1,'brand_id' => $id];
-//                break;
-//            case "category" :
-//                $conditions = ['published' => 1,'subsubcategory_id' => $id];
-//                break;
-//            default :
-//
-//                break;
-//        }
-
         $response = "";
         switch ($type){
             case "category" :
                 if(!$category = Category::select(['id','level'])->where('slug',$request->id)->firstOrFail()){
                     break;
                 }
-                $allProducts = [];
-//                if ($category->level == 2){
-//                    $products = Product::where('subsubcategory_id',$category->id)->get();
-//                    if (count($products)>0){
-//                        array_push($allProducts, new ProductCollection($products));
-//                    }
-//                }
-
-//                $categories = Category::descendantsAndSelf($category->id)->where('level','=', 2);
                 $ids = Category::descendantsAndSelf($category->id)->where('level','=', 2)->map(function ($category) {
                     return $category->id;
                 });
@@ -498,7 +474,7 @@ class ProductController extends Controller
                 if(!$seller = Shop::select('user_id')->where('slug',$request->id)->firstOrFail()){
                     break;
                 }
-                $products = Product::where('brand_id',$seller->id);
+                $products = Product::where('user_id',$seller->id);
                 $response = $this->searchPr($type,$products,$request);
                 break;
         }
@@ -511,7 +487,8 @@ class ProductController extends Controller
         $sort_by = $request->sort_by;
         $min_price = $request->min_price;
         $max_price = $request->max_price;
-
+        $original_min_price=$products->min('unit_price');
+        $original_max_price=$products->max('unit_price');
         if ($products != null){
             if($min_price != null){
                 $products = $products->where('unit_price', '>=', $min_price);
@@ -616,14 +593,16 @@ class ProductController extends Controller
             return response()->json([
                 'products' => new ProductCollection($products),
                 'attributes' => $attributes,
-                'min_price'=>$products->min('unit_price'),
-                'max_price'=>$products->max('unit_price'),
+                'min_price'=>$original_min_price,
+                'max_price'=>$original_max_price,
                 'type' => $type
             ]);
         }else {
             return response()->json([
                 'products' => [],
                 'attributes' => [],
+                'min_price'=>null,
+                'max_price'=>null,
                 'type' => $type
             ]);
         }
