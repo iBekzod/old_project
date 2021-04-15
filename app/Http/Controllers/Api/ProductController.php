@@ -502,7 +502,8 @@ class ProductController extends Controller
                 if(!$seller = Shop::select('user_id')->where('slug',$request->id)->firstOrFail()){
                     break;
                 }
-                $products = Product::where('user_id',$seller->id);
+
+                $products = Product::where('user_id',$seller->user_id);
                 $response = $this->searchPr($type,$products,$request);
                 break;
             case "flashdeals" :
@@ -664,6 +665,7 @@ class ProductController extends Controller
             }
 
             $products = filter_products($products)->paginate(12)->appends(request()->query());
+
             return response()->json([
                 'products' => new ProductCollection($products),
                 'attributes' => $attributes,
