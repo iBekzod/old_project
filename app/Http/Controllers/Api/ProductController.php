@@ -663,6 +663,11 @@ class ProductController extends Controller
             if ($request->has('installment') && $request->installment) {
 //                $products = $products->where('shipping_type', 'free');
             }
+            //Brand
+            if ($request->has('brand') && $name=$request->brand) {
+                $brand = Brand::select('*')->where('slug', $name)->firstOrFail();
+                $products =$products->where('brand_id', $brand->id);
+            }
 
             $products = filter_products($products)->paginate(12)->appends(request()->query());
 
