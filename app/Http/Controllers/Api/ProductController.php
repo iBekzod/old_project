@@ -531,6 +531,7 @@ class ProductController extends Controller
         $max_price = $request->max_price;
         $original_min_price=$products->min('unit_price');
         $original_max_price=$products->max('unit_price');
+//        $query = $request->q;
         if ($products != null){
             if($min_price != null){
                 $products = $products->where('unit_price', '>=', $min_price);
@@ -559,8 +560,16 @@ class ProductController extends Controller
                         break;
                 }
             }
+//            if($query != null){
+//                $searchController = new SearchController;
+//                $searchController->store($request);
+//                $products = $products->where('name', 'like', '%'.$query.'%')->orWhere('tags', 'like', '%'.$query.'%');
+//            }
 
-
+            if ($request->brand != null) {
+                $brand_id = (\App\Brand::where('slug', $request->brand)->first() != null) ? Brand::where('slug', $request->brand)->first()->id : null;
+                if($brand_id)$products = $products->where('brand_id', $brand_id);
+            }
             $non_paginate_products = filter_products($products)->get();
 
             //Attribute Filter
@@ -664,10 +673,10 @@ class ProductController extends Controller
 //                $products = $products->where('shipping_type', 'free');
             }
             //Brand
-            if ($request->has('brand') && $name=$request->brand) {
-                $brand = Brand::select('*')->where('slug', $name)->firstOrFail();
-                $products =$products->where('brand_id', $brand->id);
-            }
+//            if ($request->has('brand') && $name=$request->brand) {
+//                $brand = Brand::select('*')->where('slug', $name)->firstOrFail();
+//                $products =$products->where('brand_id', $brand->id);
+//            }
 
             $products = filter_products($products)->paginate(12)->appends(request()->query());
 
