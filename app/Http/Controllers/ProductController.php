@@ -255,7 +255,7 @@ class ProductController extends Controller
         } else {
             $product->user_id = \App\User::where('user_type', 'admin')->first()->id;
         }
-        $product->category_id = $request->category_id;
+        $product->subsubcategory_id = $request->category_id;
         $product->brand_id = $request->brand_id;
         $product->current_stock = $request->current_stock;
         $product->barcode = $request->barcode;
@@ -504,7 +504,7 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $product->productAttributes()->detach();
         $product->productAttributes()->attach($request->get('attrs'));
-        $product->category_id = $request->category_id;
+        $product->subsubcategory_id = $request->category_id;
         $product->brand_id = $request->brand_id;
         $product->current_stock = $request->current_stock;
         $product->barcode = $request->barcode;
