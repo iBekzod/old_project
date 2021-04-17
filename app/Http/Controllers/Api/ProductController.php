@@ -258,11 +258,9 @@ class ProductController extends Controller
 
     public function singleFlashDeal($id)
     {
-        $flash_deal = \App\FlashDeal::where('slug', $id)->firstOrFail();
-        $ids = \App\FlashDealProduct::where('flash_deal_id',$flash_deal->id)->map(function ($flash_deal) {
-            return $flash_deal->id;
-        });
-        $products = \App\Product::whereIn('id',$ids);
+        $flash_deal = FlashDeal::where('slug', $id)->firstOrFail();
+        $ids = FlashDealProduct::where('flash_deal_id',$flash_deal->id)->pluck('product_id');
+        $products = Product::whereIn('id',$ids)->get();
         $min_price = ($products)->min('unit_price');
         $max_price = ($products)->max('unit_price');
         return [
