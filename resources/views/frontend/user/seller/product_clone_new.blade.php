@@ -82,6 +82,17 @@ window.addEventListener('keyup', (e) => {
                     <option value="4">NIKE</option>
                 </select>
             </div>
+            <div class="col-md-12 mt-4">
+                <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">Special title treatment</h5>
+                      <p class="card-text">
+                        With supporting text below as a natural lead-in to additional content.
+                      </p>
+                      <button type="button" class="btn btn-lg btn-primary">Primary button</button>
+                    </div>
+                  </div>
+            </div>
         </div>
     </div>
     </div>
