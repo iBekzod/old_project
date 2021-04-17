@@ -3,6 +3,9 @@
 @section('css')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="https://kit-pro.fontawesome.com/releases/v5.15.1/css/pro.min.css" rel="stylesheet">
+    <style>
+        .hoverEffect
+    </style>
 @endsection
 
 @section('script')
@@ -16,32 +19,38 @@
             $select2.html($options.filter('[value="' + this.value + '"]'));
         }).trigger('change');
         const searchFocus = document.getElementById('search-focus');
-const keys = [
-  { keyCode: 'AltLeft', isTriggered: false },
-  { keyCode: 'ControlLeft', isTriggered: false },
-];
+        const keys = [{
+                keyCode: 'AltLeft',
+                isTriggered: false
+            },
+            {
+                keyCode: 'ControlLeft',
+                isTriggered: false
+            },
+        ];
 
-window.addEventListener('keydown', (e) => {
-  keys.forEach((obj) => {
-    if (obj.keyCode === e.code) {
-      obj.isTriggered = true;
-    }
-  });
+        window.addEventListener('keydown', (e) => {
+            keys.forEach((obj) => {
+                if (obj.keyCode === e.code) {
+                    obj.isTriggered = true;
+                }
+            });
 
-  const shortcutTriggered = keys.filter((obj) => obj.isTriggered).length === keys.length;
+            const shortcutTriggered = keys.filter((obj) => obj.isTriggered).length === keys.length;
 
-  if (shortcutTriggered) {
-    searchFocus.focus();
-  }
-});
+            if (shortcutTriggered) {
+                searchFocus.focus();
+            }
+        });
 
-window.addEventListener('keyup', (e) => {
-  keys.forEach((obj) => {
-    if (obj.keyCode === e.code) {
-      obj.isTriggered = false;
-    }
-  });
-});
+        window.addEventListener('keyup', (e) => {
+            keys.forEach((obj) => {
+                if (obj.keyCode === e.code) {
+                    obj.isTriggered = false;
+                }
+            });
+        });
+
     </script>
 @endsection
 
@@ -51,11 +60,11 @@ window.addEventListener('keyup', (e) => {
             <div class="col-md-4 offset-8">
                 <div class="input-group rounded">
                     <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
-                      aria-describedby="search-addon" />
+                        aria-describedby="search-addon" />
                     <button class="input-group-text border-2 btn btn-primary" id="search-addon">
-                      <i class="fas fa-search"></i>
+                        <i class="fas fa-search"></i>
                     </button>
-                  </div>
+                </div>
             </div>
         </div>
         <div class="row mt-5 mb-4">
@@ -82,16 +91,18 @@ window.addEventListener('keyup', (e) => {
                     <option value="4">NIKE</option>
                 </select>
             </div>
-            <div class="col-md-12 mt-4">
+        </div>
+        <div class="row">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                      <h5 class="card-title">Special title treatment</h5>
-                      <p class="card-text">
-                        With supporting text below as a natural lead-in to additional content.
-                      </p>
-                      <button type="button" class="btn btn-lg btn-primary">Primary button</button>
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">
+                            With supporting text below as a natural lead-in to additional content.
+                        </p>
+                        <button type="button" class="btn btn-lg btn-primary">Primary button</button>
                     </div>
-                  </div>
+                </div>
             </div>
         </div>
     </div>
