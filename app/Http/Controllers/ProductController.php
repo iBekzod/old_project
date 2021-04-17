@@ -406,6 +406,7 @@ class ProductController extends Controller
                     $product_stock->product_id = $product->id;
                 }
 
+                $product_stock->user_id=Auth::user()->id;
                 $product_stock->variant = $str;
                 $product_stock->price = $request['price_' . str_replace('.', '_', $str)];
                 $product_stock->sku = $request['sku_' . str_replace('.', '_', $str)];
