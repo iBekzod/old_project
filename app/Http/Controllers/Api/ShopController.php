@@ -6,13 +6,16 @@ use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ShopCollection;
 use App\Models\Product;
 use App\Models\Shop;
-use App\Seller;
+use App\Models\Seller;
 
 class ShopController extends Controller
 {
     public function index()
     {
-        return new ShopCollection(Shop::all());
+        $shops=Shop::all()->reject(function ($shop) {
+            return !$shop->user->seller->verification_status;
+        });
+        return new ShopCollection($shops);
     }
 
     public function info($id)
