@@ -105,11 +105,11 @@
                             <td>
                                 <a href="{{ route('product', $product->slug) }}" target="_blank">
                                     <div class="form-group row">
-                                        <div class="col-md-4">
+                                        <div class="col-lg-4">
                                             <img src="{{ uploaded_asset($product->thumbnail_img)??static_asset('assets/img/placeholder.jpg')}}" alt="Image"
                                                  class="w-50px">
                                         </div>
-                                        <div class="col-md-8">
+                                        <div class="col-lg-8">
                                             <span class="text-muted">{{ $product->getTranslation('name') }}</span>
                                         </div>
                                     </div>
