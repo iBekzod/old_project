@@ -76,7 +76,7 @@ class FlashDealController extends Controller
                     $flash_deal_product->save();
                 }
 
-                $flash_deal_translation = FlashDealTranslation::firstOrNew(['lang' => env('DEFAULT_LANGUAGE'), 'flash_deal_id' => $flash_deal->id]);
+                $flash_deal_translation = FlashDealTranslation::firstOrNew(['lang' => default_language(), 'flash_deal_id' => $flash_deal->id]);
                 $flash_deal_translation->title = $request->title;
                 $flash_deal_translation->save();
 
@@ -112,7 +112,7 @@ class FlashDealController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $lang           = $request->lang;
+        $lang           = $request->lang??default_language();
         $flash_deal = FlashDeal::findOrFail($id);
         return view('backend.marketing.flash_deals.edit', compact('flash_deal','lang'));
     }
@@ -138,13 +138,11 @@ class FlashDealController extends Controller
 
         if($request->lang == env("DEFAULT_LANGUAGE")){
           $flash_deal->title = $request->title;
-          if (($flash_deal->slug == null) || ($flash_deal->title != $request->title)) {
-              $flash_deal->slug = SlugService::createSlug(FlashDeal::class, 'slug', slugify($request->title));
-
-            //   $flash_deal->slug = strtolower(str_replace(' ', '-', $request->title) . '-' . Str::random(5));
-          }
+//          if (($flash_deal->slug == null) || ($flash_deal->title != $request->title)) {
+//              $flash_deal->slug = SlugService::createSlug(FlashDeal::class, 'slug', slugify($request->title));
+//          }
         }
-
+        $flash_deal->slug = SlugService::createSlug(FlashDeal::class, 'slug', slugify($request->title));
         $flash_deal->banner = $request->banner;
         foreach ($flash_deal->flash_deal_products as $key => $flash_deal_product) {
             $flash_deal_product->delete();

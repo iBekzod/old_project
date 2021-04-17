@@ -188,7 +188,7 @@ if (!function_exists('areActiveRoutesHome')) {
 if (!function_exists('default_language')) {
     function default_language()
     {
-        return env("DEFAULT_LANGUAGE");
+        return env("DEFAULT_LANGUAGE", 'ru');
     }
 }
 

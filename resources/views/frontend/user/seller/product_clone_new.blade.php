@@ -37,7 +37,8 @@
 @endsection
 
 @section('content')
-    <div class="container mt-4">
+    NEW
+    {{-- <div class="container mt-4">
         <div class="row">
             <div class="col-md-12">
                 <nav aria-label="breadcrumb">
@@ -75,6 +76,34 @@
                         </form>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div> --}}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-3">
+                <div class="input-group rounded">
+                    <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+                      aria-describedby="search-addon" />
+                    <span class="input-group-text border-0" id="search-addon">
+                      <i class="fas fa-search"></i>
+                    </span>
+                  </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <select name="course" id="course" class="form-control input-lg">
+                 <option value="">Select course</option>
+                </select>
+                <div class="col-md-6 offset-3">
+                    <button type="button" class="btn btn-info btn-block">Button</button>
+                </div>
+            </div>
+
+               <div class="container" id="dropdowns">
+
+               </div>
             </div>
         </div>
     </div>

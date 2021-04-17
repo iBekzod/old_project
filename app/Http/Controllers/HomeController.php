@@ -422,7 +422,7 @@ class HomeController extends Controller
         // dd("ok");
         $products = Product::where('digital', 0)->orderBy('created_at', 'desc')->get();
         // dd($products);
-        return view('frontend.user.seller.product_clone', compact('products'));
+        return view('frontend.user.seller.product_clone_new', compact('products'));
         // $this->clone_from_all_product_list();
         // return view('frontend.user.seller.product_clone');
     }
