@@ -48,7 +48,7 @@
                 </nav>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="offset-md-3"></div>
             <div class="col-md-6">

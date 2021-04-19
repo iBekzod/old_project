@@ -405,7 +405,10 @@ class ProductController extends Controller
                     $product_stock = new ProductStock;
                     $product_stock->product_id = $product->id;
                 }
-
+                //TODO: Adding delivery logic
+                $product_stock->delivery_group_id=1;
+                //TODO: Adding currency logic
+                $product_stock->currency_id=1;
                 $product_stock->user_id=Auth::user()->id;
                 $product_stock->variant = $str;
                 $product_stock->price = $request['price_' . str_replace('.', '_', $str)];
@@ -416,6 +419,13 @@ class ProductController extends Controller
         } else {
             $product_stock = new ProductStock;
             $product_stock->product_id = $product->id;
+
+            //TODO: Adding delivery logic
+            $product_stock->delivery_group_id=1;
+            //TODO: Adding currency logic
+            $product_stock->currency_id=1;
+            $product_stock->user_id=Auth::user()->id;
+
             $product_stock->price = $request->unit_price;
             $product_stock->qty = $request->current_stock;
             $product_stock->save();
@@ -650,7 +660,11 @@ class ProductController extends Controller
                     $product_stock = new ProductStock;
                     $product_stock->product_id = $product->id;
                 }
-
+                //TODO: Adding delivery logic
+                $product_stock->delivery_group_id=1;
+                //TODO: Adding currency logic
+                $product_stock->currency_id=1;
+                $product_stock->user_id=Auth::user()->id;
                 $product_stock->variant = $str;
                 $product_stock->price = $request['price_' . str_replace('.', '_', $str)];
                 $product_stock->sku = $request['sku_' . str_replace('.', '_', $str)];
@@ -660,6 +674,11 @@ class ProductController extends Controller
             }
         } else {
             $product_stock = new ProductStock;
+            //TODO: Adding delivery logic
+            $product_stock->delivery_group_id=1;
+            //TODO: Adding currency logic
+            $product_stock->currency_id=1;
+            $product_stock->user_id=Auth::user()->id;
             $product_stock->product_id = $product->id;
             $product_stock->price = $request->unit_price;
             $product_stock->qty = $request->current_stock;

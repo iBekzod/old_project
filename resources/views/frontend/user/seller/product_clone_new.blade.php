@@ -132,11 +132,11 @@
                                     0 </td>
                                 <td style="display: table-cell;">250.00</td>
                                 <td style="display: table-cell;">
-                                    <label class="aiz-switch aiz-switch-success mb-0">
-                                        <input onchange="update_todays_deal(this)" value="70" type="checkbox" checked="">
-                                        <span class="slider round"></span>
-                                    </label>
-                                </td>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                        </label>
+                                      </div>                                </td>
                                 <td style="display: table-cell;">0</td>
                                 <td style="display: table-cell;">
                                     <label class="aiz-switch aiz-switch-success mb-0">

@@ -37,7 +37,7 @@ class ProductDetailCollection extends ResourceCollection
                         ]
                     ],
                     'translations' => ProductTranslation::where('product_id', $data->id)->get(),
-                    'variations' => ProductStock::where('product_id', $data->id)->get(),
+                    'variations' => ProductStock::where('product_id', $data->id)->groupBy('user_id', true)->get(),
                     'photos' => $this->convertPhotos(explode(',', $data->photos)),
                     'thumbnail_image' => api_asset($data->thumbnail_img),
                     'tag' => explode(',', $data->tags),
