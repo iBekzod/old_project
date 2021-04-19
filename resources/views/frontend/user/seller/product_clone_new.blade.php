@@ -91,203 +91,51 @@
                 </select>
             </div>
         </div>
+        <div class="row form-check ml-md-2">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+            <label class="form-check-label" for="flexCheckDefault">
+                <h6>Select All</h6>
+            </label>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="card-body bg-white">
                     <table class="table aiz-table mb-0 footable footable-1 breakpoint-lg" style="">
                         <thead>
                             <tr class="footable-header">
-                                <th class="footable-first-visible" style="display: table-cell;">#</th>
                                 <th width="20%" style="display: table-cell;">Name</th>
-                                <th style="display: table-cell;">Added By</th>
-                                <th style="display: table-cell;">Num of Sale</th>
-                                <th style="display: table-cell;">Total Stock</th>
-                                <th style="display: table-cell;">Base Price</th>
+                                <th style="display: table-cell;">Description</th>
+                                <th style="display: table-cell;">Cherecter</th>
                                 <th style="display: table-cell;">Todays Deal</th>
-                                <th style="display: table-cell;">Rating</th>
-                                <th style="display: table-cell;">Published</th>
-                                <th style="display: table-cell;">Featured</th>
-                                <th class="text-right footable-last-visible" style="display: table-cell;">Options</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="footable-first-visible" style="display: table-cell;">1</td>
                                 <td style="display: table-cell;">
                                     <a href="http://estore-one.com/product/samsung-galaxy-a51-464gb-3" target="_blank">
                                         <div class="form-group row">
                                             <div class="col-lg-4">
                                                 <img src="http://estore-one.com/public/uploads/all/FumFBUGNDYPozjV6xdjvMCUD21ZTbPibjIvLkT6q.jpg"
-                                                    alt="Image" class="w-50px">
-                                            </div>
-                                            <div class="col-lg-8">
-                                                <span class="text-muted">Samsung Galaxy A51 4/64GB</span>
+                                                    alt="Image" class="w-60px">
                                             </div>
                                         </div>
                                     </a>
                                 </td>
-                                <td style="display: table-cell;">Ilyos</td>
-                                <td style="display: table-cell;">1 times</td>
                                 <td style="display: table-cell;">
-                                    0 </td>
-                                <td style="display: table-cell;">250.00</td>
+                                    <textarea class="form-control" aria-label="With textarea"></textarea>
+                                </td>
                                 <td style="display: table-cell;">
-                                    <div class="form-check">
+                                    <div class="">
+                                        <span class="text-muted">Samsung Galaxy A51 4/64GB</span>
+                                    </div>
+                                </td>
+                                <td style="display: table-cell;">
+                                    <div class="form-check ml-md-3">
                                         <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                         </label>
-                                      </div>                                </td>
-                                <td style="display: table-cell;">0</td>
-                                <td style="display: table-cell;">
-                                    <label class="aiz-switch aiz-switch-success mb-0">
-                                        <input onchange="update_published(this)" value="70" type="checkbox" checked="">
-                                        <span class="slider round"></span>
-                                    </label>
+                                    </div>
                                 </td>
-                                <td style="display: table-cell;">
-                                    <label class="aiz-switch aiz-switch-success mb-0">
-                                        <input onchange="update_featured(this)" value="70" type="checkbox" checked="">
-                                        <span class="slider round"></span>
-                                    </label>
-                                </td>
-                                <td class="text-right footable-last-visible" style="display: table-cell;">
-                                    <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
-                                        href="http://estore-one.com/admin/products/70/characteristics?type=All"
-                                        title="Product Attributes">
-                                        <i class="las la-list"></i>
-                                    </a>
-                                    <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                        href="http://estore-one.com/admin/products/admin/70/edit" title="Edit">
-                                        <i class="las la-edit"></i>
-                                    </a>
-                                    <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
-                                        href="http://estore-one.com/products/duplicate/70?type=All" title="Duplicate">
-                                        <i class="las la-copy"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
-                                        data-href="http://estore-one.com/products/destroy/70" title="Delete">
-                                        <i class="las la-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="footable-first-visible" style="display: table-cell;">2</td>
-                                <td style="display: table-cell;">
-                                    <a href="http://estore-one.com/product/samsung-galaxy-a51-464gb-2" target="_blank">
-                                        <div class="form-group row">
-                                            <div class="col-lg-4">
-                                                <img src="http://estore-one.com/public/uploads/all/FumFBUGNDYPozjV6xdjvMCUD21ZTbPibjIvLkT6q.jpg"
-                                                    alt="Image" class="w-50px">
-                                            </div>
-                                            <div class="col-lg-8">
-                                                <span class="text-muted">Samsung Galaxy A51 4/64GB</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </td>
-                                <td style="display: table-cell;">Ilyos</td>
-                                <td style="display: table-cell;">1 times</td>
-                                <td style="display: table-cell;">
-                                    0 </td>
-                                <td style="display: table-cell;">250.00</td>
-                                <td style="display: table-cell;">
-                                    <label class="aiz-switch aiz-switch-success mb-0">
-                                        <input onchange="update_todays_deal(this)" value="68" type="checkbox" checked="">
-                                        <span class="slider round"></span>
-                                    </label>
-                                </td>
-                                <td style="display: table-cell;">0</td>
-                                <td style="display: table-cell;">
-                                    <label class="aiz-switch aiz-switch-success mb-0">
-                                        <input onchange="update_published(this)" value="68" type="checkbox" checked="">
-                                        <span class="slider round"></span>
-                                    </label>
-                                </td>
-                                <td style="display: table-cell;">
-                                    <label class="aiz-switch aiz-switch-success mb-0">
-                                        <input onchange="update_featured(this)" value="68" type="checkbox" checked="">
-                                        <span class="slider round"></span>
-                                    </label>
-                                </td>
-                                <td class="text-right footable-last-visible" style="display: table-cell;">
-                                    <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
-                                        href="http://estore-one.com/admin/products/68/characteristics?type=All"
-                                        title="Product Attributes">
-                                        <i class="las la-list"></i>
-                                    </a>
-                                    <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                        href="http://estore-one.com/admin/products/admin/68/edit" title="Edit">
-                                        <i class="las la-edit"></i>
-                                    </a>
-                                    <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
-                                        href="http://estore-one.com/products/duplicate/68?type=All" title="Duplicate">
-                                        <i class="las la-copy"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
-                                        data-href="http://estore-one.com/products/destroy/68" title="Delete">
-                                        <i class="las la-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="footable-first-visible" style="display: table-cell;">3</td>
-                                <td style="display: table-cell;">
-                                    <a href="http://estore-one.com/product/odekolon-dior-homme-cologne-2" target="_blank">
-                                        <div class="form-group row">
-                                            <div class="col-lg-4">
-                                                <img src="http://estore-one.com/public/uploads/all/D5Uibc8P6dLqSTHd78YqeKj9riLatVnMslg5DqHm.jpg"
-                                                    alt="Image" class="w-50px">
-                                            </div>
-                                            <div class="col-lg-8">
-                                                <span class="text-muted">Одеколон "Dior Homme Cologne"</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </td>
-                                <td style="display: table-cell;">Ilyos</td>
-                                <td style="display: table-cell;">2 times</td>
-                                <td style="display: table-cell;">
-                                    0 </td>
-                                <td style="display: table-cell;">100.00</td>
-                                <td style="display: table-cell;">
-                                    <label class="aiz-switch aiz-switch-success mb-0">
-                                        <input onchange="update_todays_deal(this)" value="67" type="checkbox" checked="">
-                                        <span class="slider round"></span>
-                                    </label>
-                                </td>
-                                <td style="display: table-cell;">0</td>
-                                <td style="display: table-cell;">
-                                    <label class="aiz-switch aiz-switch-success mb-0">
-                                        <input onchange="update_published(this)" value="67" type="checkbox" checked="">
-                                        <span class="slider round"></span>
-                                    </label>
-                                </td>
-                                <td style="display: table-cell;">
-                                    <label class="aiz-switch aiz-switch-success mb-0">
-                                        <input onchange="update_featured(this)" value="67" type="checkbox" checked="">
-                                        <span class="slider round"></span>
-                                    </label>
-                                </td>
-                                <td class="text-right footable-last-visible" style="display: table-cell;">
-                                    <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
-                                        href="http://estore-one.com/admin/products/67/characteristics?type=All"
-                                        title="Product Attributes">
-                                        <i class="las la-list"></i>
-                                    </a>
-                                    <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                        href="http://estore-one.com/admin/products/admin/67/edit" title="Edit">
-                                        <i class="las la-edit"></i>
-                                    </a>
-                                    <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
-                                        href="http://estore-one.com/products/duplicate/67?type=All" title="Duplicate">
-                                        <i class="las la-copy"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
-                                        data-href="http://estore-one.com/products/destroy/67" title="Delete">
-                                        <i class="las la-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
                     <div class="aiz-pagination">
