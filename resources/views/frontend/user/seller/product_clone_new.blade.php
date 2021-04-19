@@ -112,26 +112,25 @@
                         <tbody>
                             <tr>
                                 <td scope="col">
-                                    <a href="http://estore-one.com/product/samsung-galaxy-a51-464gb-3" target="_blank">
-                                        <div class="form-group row">
-                                            <div class="col-lg-4">
-                                                <img src="http://estore-one.com/public/uploads/all/FumFBUGNDYPozjV6xdjvMCUD21ZTbPibjIvLkT6q.jpg"
-                                                    alt="Image" class="w-60px">
-                                            </div>
+                                    <div class="form-group row">
+                                         <div class="col-lg-4">
+                                            <img src="http://estore-one.com/public/uploads/all/FumFBUGNDYPozjV6xdjvMCUD21ZTbPibjIvLkT6q.jpg"
+                                                alt="Image" class="w-60px">
                                         </div>
-                                    </a>
+                                    </div>
                                 </td>
                                 <td scope="col">
                                     <p>Hello world!</p>
                                 </td>
                                 <td scope="col">
-                                    <div class="">
-                                        <span class="text-muted">Samsung Galaxy A51 4/64GB</span>
+                                    <div>
+                                        <p class="text-muted">Samsung Galaxy A51 4/64GB</p>
                                     </div>
                                 </td>
                                 <td scope="col">
                                     <div class="form-check">
-                                        <input class="form-check-input w-50px" type="checkbox" value="" id="flexCheckDefault">
+                                        <input class="form-check-input w-50px" type="checkbox" value=""
+                                            id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                         </label>
                                     </div>
@@ -141,19 +140,16 @@
                     <div class="aiz-pagination">
                         <nav>
                             <ul class="pagination">
-                                <li class="page-item disabled" aria-disabled="true" aria-label="« Previous">
+                                <li class="page-item" aria-label="« Previous">
                                     <span class="page-link" aria-hidden="true">‹</span>
                                 </li>
                                 <li class="page-item active" aria-current="page"><span class="page-link">1</span></li>
-                                <li class="page-item"><a class="page-link"
-                                        href="http://estore-one.com/admin/products/all?page=2">2</a></li>
-                                <li class="page-item"><a class="page-link"
-                                        href="http://estore-one.com/admin/products/all?page=3">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
 
 
                                 <li class="page-item">
-                                    <a class="page-link" href="http://estore-one.com/admin/products/all?page=2" rel="next"
-                                        aria-label="Next »">›</a>
+                                    <a class="page-link" href="#" rel="next" aria-label="Next »">›</a>
                                 </li>
                             </ul>
                         </nav>
