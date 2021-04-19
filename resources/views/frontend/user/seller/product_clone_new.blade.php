@@ -99,19 +99,19 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="card-body bg-white">
+                <div class="card-body bg-white overflow-auto mb-md-5">
                     <table class="table aiz-table mb-0 footable footable-1 breakpoint-lg" style="">
                         <thead>
                             <tr class="footable-header">
-                                <th width="20%" style="display: table-cell;">Name</th>
-                                <th style="display: table-cell;">Description</th>
-                                <th style="display: table-cell;">Cherecter</th>
-                                <th style="display: table-cell;">Todays Deal</th>
+                                <th scope="row">Name</th>
+                                <th scope="row">Description</th>
+                                <th scope="row">Cherecter</th>
+                                <th scope="row">Select</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td style="display: table-cell;">
+                                <td scope="col">
                                     <a href="http://estore-one.com/product/samsung-galaxy-a51-464gb-3" target="_blank">
                                         <div class="form-group row">
                                             <div class="col-lg-4">
@@ -121,17 +121,17 @@
                                         </div>
                                     </a>
                                 </td>
-                                <td style="display: table-cell;">
-                                    <textarea class="form-control" aria-label="With textarea"></textarea>
+                                <td scope="col">
+                                    <p>Hello world!</p>
                                 </td>
-                                <td style="display: table-cell;">
+                                <td scope="col">
                                     <div class="">
                                         <span class="text-muted">Samsung Galaxy A51 4/64GB</span>
                                     </div>
                                 </td>
-                                <td style="display: table-cell;">
-                                    <div class="form-check ml-md-3">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <td scope="col">
+                                    <div class="form-check">
+                                        <input class="form-check-input w-50px" type="checkbox" value="" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                         </label>
                                     </div>
