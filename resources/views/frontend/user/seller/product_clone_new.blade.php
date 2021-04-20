@@ -115,12 +115,14 @@
                                     <div class="form-group row">
                                          <div class="col-lg-4">
                                             <img src="http://estore-one.com/public/uploads/all/FumFBUGNDYPozjV6xdjvMCUD21ZTbPibjIvLkT6q.jpg"
-                                                alt="Image" class="w-60px">
+                                                alt="Image" class="w-70px">
                                         </div>
                                     </div>
                                 </td>
                                 <td scope="col">
-                                    <p>Hello world!</p>
+                                    <p>
+                                        8GB RAM, 128GB memory, 120px camera,<br> 7000 M/A Battary
+                                    </p>
                                 </td>
                                 <td scope="col">
                                     <div>
