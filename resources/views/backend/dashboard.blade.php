@@ -131,7 +131,7 @@
     </div>
     <div class="card-body">
         <div class="aiz-carousel gutters-10 half-outside-arrow" data-items="6" data-xl-items="5" data-lg-items="4" data-md-items="3" data-sm-items="2" data-arrows='true'>
-            @foreach (filter_products(\App\Element::where('published', 1)->with('product_translations')->orderBy('num_of_sale', 'desc'))->limit(12)->get() as $key => $product)
+            @foreach (filter_products(\App\Element::where('published', 1)->orderBy('num_of_sale', 'desc'))->limit(12)->get() as $key => $product)
                 <div class="carousel-box">
                     <div class="aiz-card-box border border-light rounded shadow-sm hov-shadow-md mb-2 has-transition bg-white">
                         <div class="position-relative">
@@ -140,7 +140,7 @@
                                     class="img-fit lazyload mx-auto h-210px"
                                     src="{{ static_asset('assets/img/placeholder.jpg') }}"
                                     data-src="{{ uploaded_asset($product->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}"
-                                    alt="{{  $product->getTranslation('name')  }}"
+                                    alt="{{  $product->name  }}"
                                     onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
                                 >
                             </a>
@@ -156,7 +156,7 @@
                                 {{ renderStarRating($product->rating) }}
                             </div>
                             <h3 class="fw-600 fs-13 text-truncate-2 lh-1-4 mb-0">
-                                <a href="{{ route('product', $product->slug) }}" class="d-block text-reset">{{ $product->getTranslation('name') }}</a>
+                                <a href="{{ route('product', $product->slug) }}" class="d-block text-reset">{{ $product->name }}</a>
                             </h3>
                         </div>
                     </div>

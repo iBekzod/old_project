@@ -434,14 +434,18 @@ if (!function_exists('home_discounted_price')) {
 if (!function_exists('home_base_price')) {
     function home_base_price($id)
     {
-        $product = Product::findOrFail($id);
-        $price = $product->unit_price;
-        if ($product->tax_type == 'percent') {
-            $price += ($price * $product->tax) / 100;
-        } elseif ($product->tax_type == 'amount') {
-            $price += $product->tax;
+        if($product = Product::findOrFail($id)){
+            $price = $product->unit_price;
+            if ($product->tax_type == 'percent') {
+                $price += ($price * $product->tax) / 100;
+            } elseif ($product->tax_type == 'amount') {
+                $price += $product->tax;
+            }
+            return format_price(convert_price($price));
+        }else{
+            return 0;
         }
-        return format_price(convert_price($price));
+
     }
 }
 
@@ -449,39 +453,42 @@ if (!function_exists('home_base_price')) {
 if (!function_exists('home_discounted_base_price')) {
     function home_discounted_base_price($id)
     {
-        $product = Product::findOrFail($id);
-        $price = $product->unit_price;
+        if($product = Product::findOrFail($id)){
+            $price = $product->unit_price;
 
-        $flash_deals = \App\FlashDeal::where('status', 1)->get();
-        $inFlashDeal = false;
-        foreach ($flash_deals as $flash_deal) {
-            if ($flash_deal != null && $flash_deal->status == 1 && strtotime(date('d-m-Y')) >= $flash_deal->start_date && strtotime(date('d-m-Y')) <= $flash_deal->end_date && FlashDealProduct::where('flash_deal_id', $flash_deal->id)->where('product_id', $id)->first() != null) {
-                $flash_deal_product = FlashDealProduct::where('flash_deal_id', $flash_deal->id)->where('product_id', $id)->first();
-                if ($flash_deal_product->discount_type == 'percent') {
-                    $price -= ($price * $flash_deal_product->discount) / 100;
-                } elseif ($flash_deal_product->discount_type == 'amount') {
-                    $price -= $flash_deal_product->discount;
+            $flash_deals = \App\FlashDeal::where('status', 1)->get();
+            $inFlashDeal = false;
+            foreach ($flash_deals as $flash_deal) {
+                if ($flash_deal != null && $flash_deal->status == 1 && strtotime(date('d-m-Y')) >= $flash_deal->start_date && strtotime(date('d-m-Y')) <= $flash_deal->end_date && FlashDealProduct::where('flash_deal_id', $flash_deal->id)->where('product_id', $id)->first() != null) {
+                    $flash_deal_product = FlashDealProduct::where('flash_deal_id', $flash_deal->id)->where('product_id', $id)->first();
+                    if ($flash_deal_product->discount_type == 'percent') {
+                        $price -= ($price * $flash_deal_product->discount) / 100;
+                    } elseif ($flash_deal_product->discount_type == 'amount') {
+                        $price -= $flash_deal_product->discount;
+                    }
+                    $inFlashDeal = true;
+                    break;
                 }
-                $inFlashDeal = true;
-                break;
             }
-        }
 
-        if (!$inFlashDeal) {
-            if ($product->discount_type == 'percent') {
-                $price -= ($price * $product->discount) / 100;
-            } elseif ($product->discount_type == 'amount') {
-                $price -= $product->discount;
+            if (!$inFlashDeal) {
+                if ($product->discount_type == 'percent') {
+                    $price -= ($price * $product->discount) / 100;
+                } elseif ($product->discount_type == 'amount') {
+                    $price -= $product->discount;
+                }
             }
-        }
 
-        if ($product->tax_type == 'percent') {
-            $price += ($price * $product->tax) / 100;
-        } elseif ($product->tax_type == 'amount') {
-            $price += $product->tax;
-        }
+            if ($product->tax_type == 'percent') {
+                $price += ($price * $product->tax) / 100;
+            } elseif ($product->tax_type == 'amount') {
+                $price += $product->tax;
+            }
 
-        return format_price(convert_price($price));
+            return format_price(convert_price($price));
+        }
+        return 0;
+
     }
 }
 
