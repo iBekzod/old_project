@@ -29,5 +29,6 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         //
+//        $app->register(\KitLoong\MigrationsGenerator\MigrationsGeneratorServiceProvider::class);
     }
 }
