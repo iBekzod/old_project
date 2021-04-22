@@ -14,7 +14,7 @@ class CreateElementsTable extends Migration
     public function up()
     {
         Schema::create('elements', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->string('name', 200)->index('name');
             $table->string('added_by', 6)->default('admin');
             $table->integer('user_id');

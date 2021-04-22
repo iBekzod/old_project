@@ -14,7 +14,7 @@ class CreateFlashDealProductsTable extends Migration
     public function up()
     {
         Schema::create('flash_deal_products', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->integer('flash_deal_id');
             $table->integer('product_id');
             $table->double('discount', 20, 2)->nullable()->default(0.00);

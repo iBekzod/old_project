@@ -14,7 +14,7 @@ class CreateAffiliateWithdrawRequestsTable extends Migration
     public function up()
     {
         Schema::create('affiliate_withdraw_requests', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->integer('user_id');
             $table->double('amount', 10, 2);
             $table->integer('status');

@@ -14,7 +14,7 @@ class CreatePoliciesTable extends Migration
     public function up()
     {
         Schema::create('policies', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->string('name', 35);
             $table->longText('content')->nullable();
             $table->timestamp('created_at')->useCurrent();

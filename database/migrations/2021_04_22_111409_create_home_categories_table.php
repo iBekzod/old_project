@@ -14,7 +14,7 @@ class CreateHomeCategoriesTable extends Migration
     public function up()
     {
         Schema::create('home_categories', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->integer('category_id');
             $table->string('subsubcategories', 1000)->nullable();
             $table->integer('status')->default(1);

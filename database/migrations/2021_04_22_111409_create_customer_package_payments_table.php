@@ -14,7 +14,7 @@ class CreateCustomerPackagePaymentsTable extends Migration
     public function up()
     {
         Schema::create('customer_package_payments', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->integer('user_id');
             $table->integer('customer_package_id');
             $table->string('payment_method', 255);

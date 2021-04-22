@@ -14,7 +14,7 @@ class CreateManualPaymentMethodsTable extends Migration
     public function up()
     {
         Schema::create('manual_payment_methods', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->string('type', 255)->nullable();
             $table->string('heading', 255)->nullable();
             $table->text('description')->nullable();

@@ -14,7 +14,7 @@ class CreateSellersTable extends Migration
     public function up()
     {
         Schema::create('sellers', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->integer('user_id')->unique('user_id');
             $table->integer('seller_package_id')->nullable();
             $table->integer('remaining_uploads')->default(0);

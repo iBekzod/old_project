@@ -14,7 +14,7 @@ class CreateTicketRepliesTable extends Migration
     public function up()
     {
         Schema::create('ticket_replies', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->integer('ticket_id');
             $table->integer('user_id');
             $table->longText('reply');

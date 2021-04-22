@@ -14,7 +14,7 @@ class CreateCustomerProductsTable extends Migration
     public function up()
     {
         Schema::create('customer_products', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->string('name', 255)->nullable();
             $table->integer('published')->default(0);
             $table->integer('status')->default(0);

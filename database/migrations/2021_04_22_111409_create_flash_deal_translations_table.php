@@ -14,7 +14,7 @@ class CreateFlashDealTranslationsTable extends Migration
     public function up()
     {
         Schema::create('flash_deal_translations', function (Blueprint $table) {
-            $table->bigInteger('id', true);
+            $table->bigIncrements('id');
             $table->bigInteger('flash_deal_id');
             $table->string('title', 50);
             $table->string('lang', 100);

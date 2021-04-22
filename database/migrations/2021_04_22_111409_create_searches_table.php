@@ -14,7 +14,7 @@ class CreateSearchesTable extends Migration
     public function up()
     {
         Schema::create('searches', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->string('query', 1000);
             $table->integer('count')->default(1);
             $table->timestamp('created_at')->useCurrent();

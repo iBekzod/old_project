@@ -2,170 +2,178 @@
 
 namespace App;
 
-use App\Models\ProductAttribute;
 use Illuminate\Database\Eloquent\Model;
-use App;
-use Cviebrock\EloquentSluggable\Sluggable;
-
 class Product extends Model
 {
-  use Sluggable;
-  public function sluggable(): array
-  {
-      return [
-          'slug' => [
-              'source' => 'name'
-          ]
-      ];
-  }
     protected $fillable = [
-        'name', 'added_by', 'user_id', 'category_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
-        'purchase_price', 'unit', 'slug', 'colors', 'choice_options', 'variations', 'current_stock', 'on_moderation',
-        'is_accepted'
+        'id',
+        'user_id',
+        'added_by',
+        'currency_id',
+        'price',
+        'discoune',
+        'discount_type',
+        'variation_id',
+        'todays_deal',
+        'product_id',
+        'delivery_group_id',
+        'qty',
+        'num_of_sale',
+        'created_at',
+        'updated_at',
+        'tax',
+        'tax_type',
+        'published'
     ];
 
-    public $appends = [
-        'thumbnaile_image', 'characteristicValues2'
-    ];
+    // protected $fillable = [
+    //     'name', 'added_by', 'user_id', 'category_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
+    //     'purchase_price', 'unit', 'slug', 'colors', 'choice_options', 'variations', 'current_stock', 'on_moderation',
+    //     'is_accepted'
+    // ];
 
-    public function characteristicValues()
-    {
-        return $this->hasMany(App\Models\CharacteristicValues::class, 'product_id', 'id');
-    }
+    // public $appends = [
+    //     'thumbnaile_image', 'characteristicValues2'
+    // ];
 
-    public function getTranslation($field = '', $lang = false)
-    {
-        $lang = $lang == false ? App::getLocale() : $lang;
+    // public function characteristicValues()
+    // {
+    //     return $this->hasMany(App\Models\CharacteristicValues::class, 'product_id', 'id');
+    // }
 
-        $product_translations = $this->product_translations()->where('lang', $lang)->get();
+    // public function getTranslation($field = '', $lang = false)
+    // {
+    //     $lang = $lang == false ? App::getLocale() : $lang;
 
-        if ((int)$product_translations->count()) {
-            return isset($product_translations[0]) ? $product_translations[0]->{$field} : $this->{$field};
-        } else {
-            return $this->{$field};
-        }
-    }
+    //     $product_translations = $this->product_translations()->where('lang', $lang)->get();
+
+    //     if ((int)$product_translations->count()) {
+    //         return isset($product_translations[0]) ? $product_translations[0]->{$field} : $this->{$field};
+    //     } else {
+    //         return $this->{$field};
+    //     }
+    // }
 
     public function product_translations()
     {
         return $this->hasMany(ProductTranslation::class);
     }
 
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
+    // public function category()
+    // {
+    //     return $this->belongsTo(Category::class);
+    // }
 
-    public function parentHierarchy()
-    {
-        return $this->hasOne(Category::class, 'id', 'category_id')->with('parentCategoryHierarchy');
-    }
+    // public function parentHierarchy()
+    // {
+    //     return $this->hasOne(Category::class, 'id', 'category_id')->with('parentCategoryHierarchy');
+    // }
 
-    public function brand()
-    {
-        return $this->belongsTo(Brand::class);
-    }
+    // public function brand()
+    // {
+    //     return $this->belongsTo(Brand::class);
+    // }
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    // public function user()
+    // {
+    //     return $this->belongsTo(User::class);
+    // }
 
-    public function orderDetails()
-    {
-        return $this->hasMany(OrderDetail::class);
-    }
+    // public function orderDetails()
+    // {
+    //     return $this->hasMany(OrderDetail::class);
+    // }
 
-    public function reviews()
-    {
-        return $this->hasMany(Review::class)->where('status', 1);
-    }
+    // public function reviews()
+    // {
+    //     return $this->hasMany(Review::class)->where('status', 1);
+    // }
 
-    public function wishlists()
-    {
-        return $this->hasMany(Wishlist::class);
-    }
+    // public function wishlists()
+    // {
+    //     return $this->hasMany(Wishlist::class);
+    // }
 
-    public function stocks()
-    {
-        return $this->hasMany(ProductStock::class)->with('product');
-    }
+    // public function stocks()
+    // {
+    //     return $this->hasMany(ProductStock::class)->with('product');
+    // }
 
-    public function getThumbnaileImageAttribute()
-    {
-        return api_asset($this->thumbnail_img);
-    }
+    // public function getThumbnaileImageAttribute()
+    // {
+    //     return api_asset($this->thumbnail_img);
+    // }
 
-    public function getCharacteristicValues2Attribute()
-    {
-        $arr = [];
+    // public function getCharacteristicValues2Attribute()
+    // {
+    //     $arr = [];
 
-        foreach ($this->characteristicValues as $key => $item) {
-            $attr = App\Models\ProductAttributeCharacteristics::where('id', $item->attr_id)->with('values')->first();
+    //     foreach ($this->characteristicValues as $key => $item) {
+    //         $attr = App\Models\ProductAttributeCharacteristics::where('id', $item->attr_id)->with('values')->first();
 
-            $arr[$key] = [
-                'attr_id' => $item->attr_id,
-                'parent_id' => $item->parent_id,
-                'key' => $item->name,
-                'value' => $item->values,
-                'values' => array_map(function ($el) {
-                    return [
-                        'id' => $el,
-                        'text' => $el,
-                        'selected' => true
-                    ];
-                }, explode(' / ', $item->values))
-            ];
+    //         $arr[$key] = [
+    //             'attr_id' => $item->attr_id,
+    //             'parent_id' => $item->parent_id,
+    //             'key' => $item->name,
+    //             'value' => $item->values,
+    //             'values' => array_map(function ($el) {
+    //                 return [
+    //                     'id' => $el,
+    //                     'text' => $el,
+    //                     'selected' => true
+    //                 ];
+    //             }, explode(' / ', $item->values))
+    //         ];
 
-            if ($attr) {
-                if ($attr->values->count()) {
-                    foreach ($attr->values as $value) {
-                        if (!in_array($value->value, explode(' / ', $item->values))) {
-                            array_push($arr[$key]['values'], [
-                                'id' => $value->value,
-                                'text' => $value->value
-                            ]);
-                        }
-                    }
-                }
-            }
-        }
+    //         if ($attr) {
+    //             if ($attr->values->count()) {
+    //                 foreach ($attr->values as $value) {
+    //                     if (!in_array($value->value, explode(' / ', $item->values))) {
+    //                         array_push($arr[$key]['values'], [
+    //                             'id' => $value->value,
+    //                             'text' => $value->value
+    //                         ]);
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
 
-        return $arr;
-    }
+    //     return $arr;
+    // }
 
-    public function productAttributes()
-    {
-        return $this->belongsToMany(ProductAttribute::class,
-            'product_product_attributes',
-            'product_id',
-            'product_attribute_id'
-        );
-    }
+    // public function productAttributes()
+    // {
+    //     return $this->belongsToMany(ProductAttribute::class,
+    //         'product_product_attributes',
+    //         'product_id',
+    //         'product_attribute_id'
+    //     );
+    // }
 
-    public function getCharacteristicValuesForDetailProductAttribute()
-    {
-        $arr = collect();
+    // public function getCharacteristicValuesForDetailProductAttribute()
+    // {
+    //     $arr = collect();
 
-        foreach ($this->characteristicValues as $item) {
-            $arr->push([
-                'parent_id' => $item->parent_id,
-                'attribute_id' => $item->attr_id,
-                'attribute' => App\Models\ProductAttributeCharacteristics::where('id', $item->attr_id)->first(),
-                'key' => $item->name,
-                'value' => $item->values
-            ]);
-        }
+    //     foreach ($this->characteristicValues as $item) {
+    //         $arr->push([
+    //             'parent_id' => $item->parent_id,
+    //             'attribute_id' => $item->attr_id,
+    //             'attribute' => App\Models\ProductAttributeCharacteristics::where('id', $item->attr_id)->first(),
+    //             'key' => $item->name,
+    //             'value' => $item->values
+    //         ]);
+    //     }
 
-        $parents = collect();
+    //     $parents = collect();
 
-        foreach ($arr->groupBy('parent_id') as $key => $val) {
-            $parents[] = App\Models\ProductAttribute::where('id', $key)->first();
-        }
+    //     foreach ($arr->groupBy('parent_id') as $key => $val) {
+    //         $parents[] = App\Models\ProductAttribute::where('id', $key)->first();
+    //     }
 
-        return [
-            'attrs' => $arr,
-            'parents' => $parents
-        ];
-    }
+    //     return [
+    //         'attrs' => $arr,
+    //         'parents' => $parents
+    //     ];
+    // }
 }
