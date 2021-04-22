@@ -14,7 +14,7 @@ class CreateBrandTranslationsTable extends Migration
     public function up()
     {
         Schema::create('brand_translations', function (Blueprint $table) {
-            $table->bigInteger('id', true);
+            $table->bigIncrements('id');
             $table->bigInteger('brand_id');
             $table->string('name', 50);
             $table->string('lang', 100);

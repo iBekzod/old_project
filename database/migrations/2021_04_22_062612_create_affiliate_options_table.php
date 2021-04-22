@@ -14,7 +14,7 @@ class CreateAffiliateOptionsTable extends Migration
     public function up()
     {
         Schema::create('affiliate_options', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->string('type', 255)->nullable();
             $table->longText('details')->nullable();
             $table->double('percentage')->default(0);

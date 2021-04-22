@@ -14,7 +14,7 @@ class CreateSellerPackagesTable extends Migration
     public function up()
     {
         Schema::create('seller_packages', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->string('name', 255)->nullable();
             $table->double('amount', 11, 2)->default(0.00);
             $table->integer('product_upload')->default(0);

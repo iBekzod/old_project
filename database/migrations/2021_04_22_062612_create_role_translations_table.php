@@ -14,7 +14,7 @@ class CreateRoleTranslationsTable extends Migration
     public function up()
     {
         Schema::create('role_translations', function (Blueprint $table) {
-            $table->bigInteger('id', true);
+            $table->bigIncrements('id');
             $table->bigInteger('role_id');
             $table->string('name', 50);
             $table->string('lang', 100);

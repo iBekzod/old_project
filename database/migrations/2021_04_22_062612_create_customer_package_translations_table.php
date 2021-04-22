@@ -14,7 +14,7 @@ class CreateCustomerPackageTranslationsTable extends Migration
     public function up()
     {
         Schema::create('customer_package_translations', function (Blueprint $table) {
-            $table->bigInteger('id', true);
+            $table->bigIncrements('id');
             $table->bigInteger('customer_package_id');
             $table->string('name', 50);
             $table->string('lang', 100);

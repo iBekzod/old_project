@@ -14,7 +14,7 @@ class CreateRefundRequestsTable extends Migration
     public function up()
     {
         Schema::create('refund_requests', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->integer('user_id');
             $table->integer('order_id');
             $table->integer('order_detail_id');

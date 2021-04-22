@@ -14,7 +14,7 @@ class CreateProductAttributesTable extends Migration
     public function up()
     {
         Schema::create('product_attributes', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
             $table->text('name');
             $table->timestamps();
             $table->unsignedBigInteger('category_id')->nullable();

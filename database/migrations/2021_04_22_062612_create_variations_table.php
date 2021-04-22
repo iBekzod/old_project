@@ -14,7 +14,7 @@ class CreateVariationsTable extends Migration
     public function up()
     {
         Schema::create('variations', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->integer('product_id');
             $table->string('name', 255)->nullable();
             $table->integer('todays_deal')->nullable();

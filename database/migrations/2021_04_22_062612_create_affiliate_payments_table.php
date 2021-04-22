@@ -14,7 +14,7 @@ class CreateAffiliatePaymentsTable extends Migration
     public function up()
     {
         Schema::create('affiliate_payments', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->integer('affiliate_user_id');
             $table->double('amount', 8, 2);
             $table->string('payment_method', 255);

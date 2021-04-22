@@ -14,7 +14,7 @@ class CreateConversationsTable extends Migration
     public function up()
     {
         Schema::create('conversations', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->integer('sender_id');
             $table->integer('receiver_id');
             $table->string('title', 1000)->nullable();

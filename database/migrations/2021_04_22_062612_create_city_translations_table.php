@@ -14,7 +14,7 @@ class CreateCityTranslationsTable extends Migration
     public function up()
     {
         Schema::create('city_translations', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->integer('city_id');
             $table->string('name', 255);
             $table->string('lang', 10);

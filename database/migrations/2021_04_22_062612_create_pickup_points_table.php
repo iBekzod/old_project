@@ -14,7 +14,7 @@ class CreatePickupPointsTable extends Migration
     public function up()
     {
         Schema::create('pickup_points', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->integer('staff_id');
             $table->string('name', 255);
             $table->text('address');
