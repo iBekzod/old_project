@@ -369,6 +369,7 @@ if (!function_exists('home_price')) {
 if (!function_exists('home_discounted_price')) {
     function home_discounted_price($id)
     {
+        return 0;
         $product = Product::findOrFail($id);
         $lowest_price = $product->unit_price;
         $highest_price = $product->unit_price;
@@ -434,17 +435,17 @@ if (!function_exists('home_discounted_price')) {
 if (!function_exists('home_base_price')) {
     function home_base_price($id)
     {
+        return 0;
         if($product = Product::findOrFail($id)){
-            $price = $product->unit_price;
+            $price = $product->price;
             if ($product->tax_type == 'percent') {
                 $price += ($price * $product->tax) / 100;
             } elseif ($product->tax_type == 'amount') {
                 $price += $product->tax;
             }
             return format_price(convert_price($price));
-        }else{
-            return 0;
         }
+        return 0;
 
     }
 }
@@ -453,6 +454,7 @@ if (!function_exists('home_base_price')) {
 if (!function_exists('home_discounted_base_price')) {
     function home_discounted_base_price($id)
     {
+        return 0;
         if($product = Product::findOrFail($id)){
             $price = $product->unit_price;
 
@@ -529,6 +531,7 @@ if (!function_exists('renderStarRating')) {
 if (!function_exists('homeBasePrice')) {
     function homeBasePrice($id)
     {
+        return 0;
         $product = Product::findOrFail($id);
         $price = $product->unit_price;
         if ($product->tax_type == 'percent') {
@@ -543,6 +546,7 @@ if (!function_exists('homeBasePrice')) {
 if (!function_exists('homeDiscountedBasePrice')) {
     function homeDiscountedBasePrice($id)
     {
+        return 0;
         $product = Product::findOrFail($id);
         $price = $product->unit_price;
 
@@ -581,6 +585,7 @@ if (!function_exists('homeDiscountedBasePrice')) {
 if (!function_exists('homePrice')) {
     function homePrice($id)
     {
+        return 0;
         $product = Product::findOrFail($id);
         $lowest_price = $product->unit_price;
         $highest_price = $product->unit_price;
@@ -614,6 +619,7 @@ if (!function_exists('homePrice')) {
 if (!function_exists('homeDiscountedPrice')) {
     function homeDiscountedPrice($id)
     {
+        return 0;
         $product = Product::findOrFail($id);
         $lowest_price = $product->unit_price;
         $highest_price = $product->unit_price;
