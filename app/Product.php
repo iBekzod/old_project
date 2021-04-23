@@ -54,10 +54,10 @@ class Product extends Model
     //     }
     // }
 
-    public function product_translations()
-    {
-        return $this->hasMany(ProductTranslation::class);
-    }
+    // public function product_translations()
+    // {
+    //     return $this->hasMany(ProductTranslation::class);
+    // }
 
     // public function category()
     // {

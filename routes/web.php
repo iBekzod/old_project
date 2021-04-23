@@ -88,6 +88,7 @@ Route::get('/search?q={search}', 'HomeController@search')->name('suggestion.sear
 Route::post('/ajax-search', 'HomeController@ajax_search')->name('search.ajax');
 
 Route::get('/product/{slug}', 'HomeController@product')->name('product');
+Route::get('/element/{slug}', 'HomeController@element')->name('element');
 Route::get('/category/{category_slug}', 'HomeController@listingByCategory')->name('products.category');
 Route::get('/brand/{brand_slug}', 'HomeController@listingByBrand')->name('products.brand');
 Route::post('/product/variant_price', 'HomeController@variant_price')->name('products.variant_price');
@@ -195,6 +196,7 @@ Route::group(['prefix' =>'seller', 'middleware' => ['seller', 'verified', 'user'
     Route::post('/marketing/update/status', 'MarketingController@updateStatus')->name('marketing.update_status');
     Route::post('/marketing/update_featured', 'MarketingController@updateFeatured')->name('marketing.update_featured');
 	Route::get('/products', 'HomeController@seller_product_list')->name('seller.products');
+	Route::get('/elements', 'HomeController@seller_product_list')->name('seller.elements');
 	Route::get('/product/upload', 'HomeController@show_product_upload_form')->name('seller.products.upload');
 	Route::get('/product/clone', 'HomeController@show_product_clone_form')->name('seller.products.clone');
 	Route::post('/product/clone', 'HomeController@show_product_clone_form')->name('seller.products.clone');
@@ -224,6 +226,15 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('/products/sku_combination_edit', 'ProductController@sku_combination_edit')->name('products.sku_combination_edit');
 	Route::post('/products/seller/featured', 'ProductController@updateSellerFeatured')->name('products.seller.featured');
 	Route::post('/products/published', 'ProductController@updatePublished')->name('products.published');
+
+    Route::post('/elements/store/','ElementController@store')->name('elements.store');
+	Route::post('/elements/update/{id}','ElementController@update')->name('elements.update');
+	Route::get('/elements/destroy/{id}', 'ElementController@destroy')->name('elements.destroy');
+	Route::get('/elements/duplicate/{id}', 'ElementController@duplicate')->name('elements.duplicate');
+	Route::post('/elements/sku_combination', 'ElementController@sku_combination')->name('elements.sku_combination');
+	Route::post('/elements/sku_combination_edit', 'ElementController@sku_combination_edit')->name('elements.sku_combination_edit');
+	Route::post('/elements/seller/featured', 'ElementController@updateSellerFeatured')->name('elements.seller.featured');
+	Route::post('/elements/published', 'ElementController@updatePublished')->name('elements.published');
 
 	Route::get('invoice/customer/{order_id}', 'InvoiceController@customer_invoice_download')->name('customer.invoice.download');
 	Route::get('invoice/seller/{order_id}', 'InvoiceController@seller_invoice_download')->name('seller.invoice.download');

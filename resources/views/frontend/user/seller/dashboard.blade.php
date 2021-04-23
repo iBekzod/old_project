@@ -145,14 +145,14 @@
                                       </tr>
                                   </thead>
                                   <tbody>
-                                    @foreach (\App\Category::all() as $key => $category)
+                                    {{-- @foreach (\App\Category::all() as $key => $category)
                                         @if(count($category->products->where('user_id', Auth::user()->id))>0)
                                           <tr>
                                               <td>{{ $category->getTranslation('name') }}</td>
                                               <td>{{ count($category->products->where('user_id', Auth::user()->id)) }}</td>
                                           </tr>
                                       @endif
-                                  @endforeach
+                                  @endforeach --}}
                                 </table>
                                 <br>
                                 <div class="text-center">

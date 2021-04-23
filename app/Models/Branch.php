@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 
-class ProductAttribute extends Model
+class Branch extends Model
 {
-    protected $table = 'product_attributes';
+    protected $table = 'branches';
 
     protected $fillable = [
         'name'

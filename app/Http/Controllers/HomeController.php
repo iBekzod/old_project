@@ -23,6 +23,7 @@ use App\Shop;
 use App\Color;
 use App\Order;
 use App\BusinessSetting;
+use App\Element;
 use App\Http\Controllers\SearchController;
 use ImageOptimizer;
 use Cookie;
@@ -269,6 +270,26 @@ class HomeController extends Controller
         abort(404);
     }
 
+    public function element(Request $request, $slug)
+    {
+        $detailedProduct  = Element::where('slug', $slug)->first();
+
+        if($detailedProduct!=null && $detailedProduct->published){
+            //updateCartSetup();
+            if($request->has('product_referral_code')){
+                Cookie::queue('product_referral_code', $request->product_referral_code, 43200);
+                Cookie::queue('referred_product_id', $detailedProduct->id, 43200);
+            }
+            if($detailedProduct->digital == 1){
+                return view('frontend.digital_product_details', compact('detailedProduct'));
+            }
+            else {
+                return view('frontend.product_details', compact('detailedProduct'));
+            }
+            // return view('frontend.product_details', compact('detailedProduct'));
+        }
+        abort(404);
+    }
     public function shop($slug)
     {
         $shop  = Shop::where('slug', $slug)->first();
@@ -461,7 +482,7 @@ class HomeController extends Controller
     public function seller_product_list(Request $request)
     {
         $search = null;
-        $products = Product::where('user_id', Auth::user()->id)->where('digital', 0)->orderBy('created_at', 'desc');
+        $products = Product::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc');
         if ($request->has('search')) {
             $search = $request->search;
             $products = $products->where('name', 'like', '%'.$search.'%');

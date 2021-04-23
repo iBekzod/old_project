@@ -71,9 +71,9 @@ class Category extends Model
     public function productAttributes()
     {
         return $this->belongsToMany(\App\Models\ProductAttribute::class,
-            'product_attribute_category',
+            'attribute_category',
             'category_id',
-            'product_attribute_id'
+            'attribute_id'
         )->with('attributes');
     }
 }

@@ -99,7 +99,7 @@
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
-                                <a href="{{route('products.all')}}" class="aiz-side-nav-link">
+                                <a href="{{route('elements.all')}}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{ translate('All Elements') }}</span>
                                 </a>
                             </li>
