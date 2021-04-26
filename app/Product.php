@@ -17,6 +17,7 @@ class Product extends Model
         'variation_id',
         'element_id',
         'todays_deal',
+        'num_of_sale',
         'delivery_group_id',
         'qty',
         'published',

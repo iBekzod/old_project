@@ -553,24 +553,24 @@ class ElementController extends Controller
 
         $element->video_provider = $request->video_provider;
         $element->video_link = $request->video_link;
-        $element->unit_price = $request->unit_price;
-        $element->purchase_price = $request->purchase_price;
-        $element->tax = $request->tax;
-        $element->tax_type = $request->tax_type;
-        $element->discount = $request->discount;
-        $element->shipping_type = $request->shipping_type;
-        if ($request->has('shipping_type')) {
-            if ($request->shipping_type == 'free') {
-                $element->shipping_cost = 0;
-            } elseif ($request->shipping_type == 'flat_rate') {
-                $element->shipping_cost = $request->flat_shipping_cost;
-            }
-        }
-        $element->discount_type = $request->discount_type;
+        // $element->unit_price = $request->unit_price;
+        // $element->purchase_price = $request->purchase_price;
+        // $element->tax = $request->tax;
+        // $element->tax_type = $request->tax_type;
+        // $element->discount = $request->discount;
+        // $element->shipping_type = $request->shipping_type;
+        // if ($request->has('shipping_type')) {
+        //     if ($request->shipping_type == 'free') {
+        //         $element->shipping_cost = 0;
+        //     } elseif ($request->shipping_type == 'flat_rate') {
+        //         $element->shipping_cost = $request->flat_shipping_cost;
+        //     }
+        // }
+        // $element->discount_type = $request->discount_type;
         $element->meta_title = $request->meta_title;
         $element->meta_description = $request->meta_description;
         $element->meta_img = $request->meta_img;
-
+        $element->added_by=Auth::user()->id;
         if ($element->meta_title == null) {
             $element->meta_title = $element->name;
         }
@@ -663,9 +663,9 @@ class ElementController extends Controller
                     $element_stock->element_id = $element->id;
                 }
                 //TODO: Adding delivery logic
-                $element_stock->delivery_group_id=1;
+                // $element_stock->delivery_group_id=1;
                 //TODO: Adding currency logic
-                $element_stock->currency_id=1;
+                // $element_stock->currency_id=1;
                 $element_stock->user_id=Auth::user()->id;
                 $element_stock->variant = $str;
                 $element_stock->price = $request['price_' . str_replace('.', '_', $str)];
@@ -675,16 +675,16 @@ class ElementController extends Controller
                 $element_stock->save();
             }
         } else {
-            $element_stock = new ProductStock;
-            //TODO: Adding delivery logic
-            $element_stock->delivery_group_id=1;
-            //TODO: Adding currency logic
-            $element_stock->currency_id=1;
-            $element_stock->user_id=Auth::user()->id;
-            $element_stock->element_id = $element->id;
-            $element_stock->price = $request->unit_price;
-            $element_stock->qty = $request->current_stock;
-            $element_stock->save();
+            // $element_stock = new ProductStock;
+            // //TODO: Adding delivery logic
+            // $element_stock->delivery_group_id=1;
+            // //TODO: Adding currency logic
+            // $element_stock->currency_id=1;
+            // $element_stock->user_id=Auth::user()->id;
+            // $element_stock->element_id = $element->id;
+            // $element_stock->price = $request->unit_price;
+            // $element_stock->qty = $request->current_stock;
+            // $element_stock->save();
         }
 
         $element->save();

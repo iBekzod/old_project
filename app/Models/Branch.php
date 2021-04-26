@@ -16,20 +16,15 @@ class Branch extends Model
     public function getTranslation($field = '', $lang = false)
     {
         $lang = $lang == false ? App::getLocale() : $lang;
-        $attribute_translation = $this->hasMany(ProductAttributeTranslation::class, 'attribute_id', 'id')
+        $branch_translation = $this->hasMany(BranchTranslation::class, 'attribute_id', 'id')
             ->where('lang', $lang)
             ->first();
-        return $attribute_translation != null ? $attribute_translation->{$field} : $this->{$field};
+        return $branch_translation != null ? $branch_translation->{$field} : $this->{$field};
     }
 
-    public function attribute_translations()
+    public function branch_translations()
     {
-        return $this->hasMany(AttributeTranslation::class, 'attribute_id', 'id');
-    }
-
-    public function attributes()
-    {
-        return $this->hasMany(ProductAttributeCharacteristics::class, 'attribute_id', 'id');
+        return $this->hasMany(BranchTranslation::class, 'branch_id', 'id');
     }
 
     public function categories()
