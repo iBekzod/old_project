@@ -14,7 +14,7 @@ class CreateUploadsTable extends Migration
     public function up()
     {
         Schema::create('uploads', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->string('file_original_name', 255)->nullable();
             $table->string('file_name', 255)->nullable();
             $table->integer('user_id')->nullable();

@@ -14,7 +14,7 @@ class CreateAffiliateUsersTable extends Migration
     public function up()
     {
         Schema::create('affiliate_users', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->string('paypal_email', 255)->nullable();
             $table->text('bank_information')->nullable();
             $table->integer('user_id');

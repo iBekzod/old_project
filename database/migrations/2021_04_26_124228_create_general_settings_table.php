@@ -14,7 +14,7 @@ class CreateGeneralSettingsTable extends Migration
     public function up()
     {
         Schema::create('general_settings', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->string('frontend_color', 255)->default('default');
             $table->string('logo', 255)->nullable();
             $table->string('footer_logo', 255)->nullable();

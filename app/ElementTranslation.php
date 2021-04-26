@@ -9,6 +9,6 @@ class ElementTranslation extends Model
     protected $fillable = ['element_id','name', 'lang'];
 
     public function element(){
-      return $this->belongsTo(Element::class);
+        return $this->belongsTo(Element::class);
     }
 }

@@ -29,48 +29,26 @@ class Variation extends Model
         'updated_at',
     ];
 
-//    public $appends = [
-//        'thumbnaile_image', 'characteristicValues2'
-//    ];
-
     public function getTranslation($field = '', $lang = false)
     {
         $lang = $lang == false ? App::getLocale() : $lang;
 
-        $product_translations = $this->product_translations()->where('lang', $lang)->get();
+        $variation_translations = $this->variation_translations()->where('lang', $lang)->get();
 
-        if ((int)$product_translations->count()) {
-            return isset($product_translations[0]) ? $product_translations[0]->{$field} : $this->{$field};
+        if ((int)$variation_translations->count()) {
+            return isset($variation_translations[0]) ? $variation_translations[0]->{$field} : $this->{$field};
         } else {
             return $this->{$field};
         }
     }
     public function variation_translations()
     {
-        return $this->hasMany(ProductTranslation::class, 'product_id', 'id');
+        return $this->hasMany(VariationTranslation::class, 'variation_id', 'id');
     }
     public function element()
     {
         return $this->belongsTo(Element::class);
     }
 
-    public function parentHierarchy()
-    {
-        return $this->hasOne(Category::class, 'id', 'category_id')->with('parentCategoryHierarchy');
-    }
-
-    public function brand()
-    {
-        return $this->belongsTo(Brand::class);
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-    public function getThumbnaileImageAttribute()
-    {
-        return api_asset($this->thumbnail_img);
-    }
 
 }

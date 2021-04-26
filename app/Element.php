@@ -31,6 +31,7 @@ class Element extends Model
         'description',
         'attributes',
         'choice_options',
+        'characteristics',
         'colors',
         'todays_deal',
         'published',
@@ -56,35 +57,35 @@ class Element extends Model
         'is_accepted',
     ];
 
-//    public $appends = [
-//        'thumbnaile_image', 'characteristicValues2'
-//    ];
+    public $appends = [
+        'thumbnaile_image'//, 'characteristicValues2'
+    ];
 
     public function getTranslation($field = '', $lang = false)
     {
         $lang = $lang == false ? App::getLocale() : $lang;
 
-        $product_translations = $this->product_translations()->where('lang', $lang)->get();
+        $element_translations = $this->element_translations()->where('lang', $lang)->get();
 
-        if ((int)$product_translations->count()) {
-            return isset($product_translations[0]) ? $product_translations[0]->{$field} : $this->{$field};
+        if ((int)$element_translations->count()) {
+            return isset($element_translations[0]) ? $element_translations[0]->{$field} : $this->{$field};
         } else {
             return $this->{$field};
         }
     }
-    public function product_translations()
+    public function element_translations()
     {
-        return $this->hasMany(ProductTranslation::class, 'product_id', 'id');
+        return $this->hasMany(ElementTranslation::class, 'element_id', 'id');
     }
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
-    public function parentHierarchy()
-    {
-        return $this->hasOne(Category::class, 'id', 'category_id')->with('parentCategoryHierarchy');
-    }
+//    public function parentHierarchy()
+//    {
+//        return $this->hasOne(Category::class, 'id', 'category_id')->with('parentCategoryHierarchy');
+//    }
 
     public function brand()
     {

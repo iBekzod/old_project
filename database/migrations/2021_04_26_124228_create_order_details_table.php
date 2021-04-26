@@ -14,7 +14,7 @@ class CreateOrderDetailsTable extends Migration
     public function up()
     {
         Schema::create('order_details', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->integer('order_id');
             $table->integer('seller_id')->nullable();
             $table->integer('product_id')->nullable();

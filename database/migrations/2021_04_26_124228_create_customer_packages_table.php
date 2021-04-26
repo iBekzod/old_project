@@ -14,7 +14,7 @@ class CreateCustomerPackagesTable extends Migration
     public function up()
     {
         Schema::create('customer_packages', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->string('name', 255)->nullable();
             $table->double('amount', 20, 2)->nullable();
             $table->integer('product_upload')->nullable();

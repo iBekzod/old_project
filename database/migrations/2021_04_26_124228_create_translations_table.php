@@ -14,7 +14,7 @@ class CreateTranslationsTable extends Migration
     public function up()
     {
         Schema::create('translations', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->string('lang', 10)->nullable();
             $table->text('lang_key')->nullable();
             $table->text('lang_value')->nullable();

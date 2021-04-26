@@ -14,7 +14,7 @@ class CreateClubPointsTable extends Migration
     public function up()
     {
         Schema::create('club_points', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->integer('user_id');
             $table->double('points', 18, 2);
             $table->integer('convert_status');

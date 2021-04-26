@@ -15,7 +15,6 @@ class Product extends Model
         'discount',
         'discount_type',
         'variation_id',
-        'element_id',
         'todays_deal',
         'num_of_sale',
         'delivery_group_id',
@@ -42,23 +41,23 @@ class Product extends Model
     //     return $this->hasMany(App\Models\CharacteristicValues::class, 'product_id', 'id');
     // }
 
-    // public function getTranslation($field = '', $lang = false)
-    // {
-    //     $lang = $lang == false ? App::getLocale() : $lang;
+     public function getTranslation($field = '', $lang = false)
+     {
+         $lang = $lang == false ? App::getLocale() : $lang;
 
-    //     $product_translations = $this->product_translations()->where('lang', $lang)->get();
+         $product_translations = $this->product_translations()->where('lang', $lang)->get();
 
-    //     if ((int)$product_translations->count()) {
-    //         return isset($product_translations[0]) ? $product_translations[0]->{$field} : $this->{$field};
-    //     } else {
-    //         return $this->{$field};
-    //     }
-    // }
+         if ((int)$product_translations->count()) {
+             return isset($product_translations[0]) ? $product_translations[0]->{$field} : $this->{$field};
+         } else {
+             return $this->{$field};
+         }
+     }
 
-    // public function product_translations()
-    // {
-    //     return $this->hasMany(ProductTranslation::class);
-    // }
+     public function product_translations()
+     {
+         return $this->hasMany(ProductTranslation::class);
+     }
 
     // public function category()
     // {
@@ -75,10 +74,20 @@ class Product extends Model
     //     return $this->belongsTo(Brand::class);
     // }
 
-    // public function user()
-    // {
-    //     return $this->belongsTo(User::class);
-    // }
+     public function user()
+     {
+         return $this->belongsTo(User::class);
+     }
+
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
+    }
+
+    public function variation()
+    {
+        return $this->belongsTo(Variation::class);
+    }
 
     // public function orderDetails()
     // {

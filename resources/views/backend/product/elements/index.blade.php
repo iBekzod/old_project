@@ -176,11 +176,11 @@
                                         <i class="las la-edit"></i>
                                     </a>
                                 @endif
-                                <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
+                                {{-- <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
                                    href="{{route('elements.duplicate', ['id'=>$element->id, 'type'=>$type]  )}}"
                                    title="{{ translate('Duplicate') }}">
                                     <i class="las la-copy"></i>
-                                </a>
+                                </a> --}}
                                 <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
                                    data-href="{{route('elements.destroy', $element->id)}}"
                                    title="{{ translate('Delete') }}">

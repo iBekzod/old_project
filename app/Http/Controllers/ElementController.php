@@ -666,13 +666,13 @@ class ElementController extends Controller
                 // $element_stock->delivery_group_id=1;
                 //TODO: Adding currency logic
                 // $element_stock->currency_id=1;
-                $element_stock->user_id=Auth::user()->id;
-                $element_stock->variant = $str;
-                $element_stock->price = $request['price_' . str_replace('.', '_', $str)];
-                $element_stock->sku = $request['sku_' . str_replace('.', '_', $str)];
-                $element_stock->qty = $request['qty_' . str_replace('.', '_', $str)];
-
-                $element_stock->save();
+//                $element_stock->user_id=Auth::user()->id;
+//                $element_stock->variant = $str;
+//                $element_stock->price = $request['price_' . str_replace('.', '_', $str)];
+//                $element_stock->sku = $request['sku_' . str_replace('.', '_', $str)];
+//                $element_stock->qty = $request['qty_' . str_replace('.', '_', $str)];
+//
+//                $element_stock->save();
             }
         } else {
             // $element_stock = new ProductStock;
