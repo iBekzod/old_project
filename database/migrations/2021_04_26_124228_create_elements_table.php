@@ -28,6 +28,7 @@ class CreateElementsTable extends Migration
             $table->longText('description')->nullable();
             $table->string('attributes', 1000)->default('[]');
             $table->mediumText('choice_options')->nullable();
+            $table->mediumText('characteristics')->nullable();
             $table->mediumText('colors')->nullable();
             $table->integer('todays_deal')->default(0);
             $table->integer('published')->default(1);

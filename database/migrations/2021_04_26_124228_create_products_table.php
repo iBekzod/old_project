@@ -24,7 +24,6 @@ class CreateProductsTable extends Migration
             $table->double('discount', 20, 2)->nullable();
             $table->string('discount_type', 10)->nullable();
             $table->integer('variation_id')->nullable();
-            $table->integer('element_id')->nullable();
             $table->integer('todays_deal')->nullable();
             $table->integer('num_of_sale')->nullable();
             $table->integer('delivery_group_id')->nullable();
