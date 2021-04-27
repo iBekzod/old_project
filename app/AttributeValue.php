@@ -19,5 +19,9 @@ class AttributeValue extends Model
         return $this->hasMany(AttributeValueTranslation::class);
     }
 
+    public function attribute()
+    {
+        return $this->hasOne(Attribute::class);
+    }
 
 }

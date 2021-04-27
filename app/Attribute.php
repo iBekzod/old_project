@@ -23,4 +23,9 @@ class Attribute extends Model
     {
         return $this->belongsToMany(Category::class, 'attribute_category');
     }
+
+    public function branch()
+    {
+        return $this->hasOne(Branch::class);
+    }
 }

@@ -17,4 +17,9 @@ class Branch extends Model
     {
         return $this->hasMany(BranchTranslation::class);
     }
+
+    public function attributes()
+    {
+        return $this->hasMany(Attribute::class);
+    }
 }

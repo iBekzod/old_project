@@ -7,6 +7,7 @@ use App;
 use Kalnoy\Nestedset\NodeTrait;
 use Rennokki\QueryCache\Traits\QueryCacheable;
 use Cviebrock\EloquentSluggable\Sluggable;
+
 class Category extends Model
 {
     use Sluggable , NodeTrait {
