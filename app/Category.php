@@ -68,12 +68,16 @@ class Category extends Model
         return $this->hasOne(Category::class, 'id', 'parent_id')->with('parentCategoryHierarchy');
     }
 
-    public function productAttributes()
+    public function attributes()
     {
-        return $this->belongsToMany(\App\Models\ProductAttribute::class,
-            'attribute_category',
-            'category_id',
-            'attribute_id'
-        )->with('attributes');
+        return $this->belongsToMany(Attribute::class, 'attribute_category');
     }
+//    public function productAttributes()
+//    {
+//        return $this->belongsToMany(\App\Models\ProductAttribute::class,
+//            'attribute_category',
+//            'category_id',
+//            'attribute_id'
+//        )->with('attributes');
+//    }
 }

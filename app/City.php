@@ -14,7 +14,7 @@ class City extends Model
 
     public function getTranslation($field = '', $lang = false){
         $lang = $lang == false ? App::getLocale() : $lang;
-        $city_translation = $this->hasMany(CityTranslation::class)->where('lang', $lang)->first();
+        $city_translation = $this->city_translations()->where('lang', $lang)->first();
         return $city_translation != null ? $city_translation->$field : $this->$field;
     }
 

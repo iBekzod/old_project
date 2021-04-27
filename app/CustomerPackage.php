@@ -9,8 +9,8 @@ class CustomerPackage extends Model
 {
     public function getTranslation($field = '', $lang = false){
       $lang = $lang == false ? App::getLocale() : $lang;
-      $brand_translation = $this->hasMany(CustomerPackageTranslation::class)->where('lang', $lang)->first();
-      return $brand_translation != null ? $brand_translation->$field : $this->$field;
+      $customer_package_translation = $this->customer_package_translations()->where('lang', $lang)->first();
+      return $customer_package_translation != null ? $customer_package_translation->$field : $this->$field;
     }
 
     public function customer_package_translations(){

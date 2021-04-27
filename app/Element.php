@@ -61,17 +61,10 @@ class Element extends Model
         'thumbnaile_image'//, 'characteristicValues2'
     ];
 
-    public function getTranslation($field = '', $lang = false)
-    {
+    public function getTranslation($field = '', $lang = false){
         $lang = $lang == false ? App::getLocale() : $lang;
-
-        $element_translations = $this->element_translations()->where('lang', $lang)->get();
-
-        if ((int)$element_translations->count()) {
-            return isset($element_translations[0]) ? $element_translations[0]->{$field} : $this->{$field};
-        } else {
-            return $this->{$field};
-        }
+        $element_translations = $this->element_translations()->where('lang', $lang)->first();
+        return $element_translations != null ? $element_translations->$field : $this->$field;
     }
     public function element_translations()
     {

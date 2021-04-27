@@ -135,7 +135,7 @@
                 <div class="carousel-box">
                     <div class="aiz-card-box border border-light rounded shadow-sm hov-shadow-md mb-2 has-transition bg-white">
                         <div class="position-relative">
-                            <a href="{{ route('product', $product->slug) }}" class="d-block">
+{{--                            <a href="{{ route('product', $product->slug??"") }}" class="d-block">--}}
                                 <img
                                     class="img-fit lazyload mx-auto h-210px"
                                     src="{{ static_asset('assets/img/placeholder.jpg') }}"
@@ -143,7 +143,7 @@
                                     alt="{{  $product->name  }}"
                                     onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
                                 >
-                            </a>
+{{--                            </a>--}}
                         </div>
                         <div class="p-md-3 p-2 text-left">
                             <div class="fs-15">
@@ -156,7 +156,9 @@
                                 {{ renderStarRating($product->rating) }}
                             </div>
                             <h3 class="fw-600 fs-13 text-truncate-2 lh-1-4 mb-0">
-                                <a href="{{ route('product', $product->slug) }}" class="d-block text-reset">{{ $product->name }}</a>
+{{--                                <a href="{{ route('product', $product->slug) }}" class="d-block text-reset">--}}
+                                    {{ $product->name }}
+{{--                                </a>--}}
                             </h3>
                         </div>
                     </div>

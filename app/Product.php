@@ -41,18 +41,12 @@ class Product extends Model
     //     return $this->hasMany(App\Models\CharacteristicValues::class, 'product_id', 'id');
     // }
 
-     public function getTranslation($field = '', $lang = false)
-     {
-         $lang = $lang == false ? App::getLocale() : $lang;
 
-         $product_translations = $this->product_translations()->where('lang', $lang)->get();
-
-         if ((int)$product_translations->count()) {
-             return isset($product_translations[0]) ? $product_translations[0]->{$field} : $this->{$field};
-         } else {
-             return $this->{$field};
-         }
-     }
+    public function getTranslation($field = '', $lang = false){
+        $lang = $lang == false ? App::getLocale() : $lang;
+        $product_translations = $this->product_translations()->where('lang', $lang)->first();
+        return $product_translations != null ? $product_translations->$field : $this->$field;
+    }
 
      public function product_translations()
      {
