@@ -1,7 +1,9 @@
 @extends('backend.layouts.app')
 
 @section('content')
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+        crossorigin="anonymous" />
     <div class="aiz-titlebar text-left mt-2 mb-3">
         <h5 class="mb-0 h6">{{ translate('Attribute Information') }}</h5>
     </div>
@@ -57,9 +59,9 @@
                 </div>
             </div>
         </div> --}}
-        
+
         <!-- Add Attribute Button -->
-        <div class="col-md-5">
+        <div class="col-md-12 offset-10 pb-2">
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
                 Add Attribute
             </button>
@@ -98,9 +100,6 @@
         </div>
 
     </div>
-
-
-
     <div class="row">
         <div class="col-md-7">
             <div class="card">
@@ -121,62 +120,76 @@
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $attribute->getTranslation('name') }}
-                                        <div>
-                                            <a href="#" type="button" data-toggle="modal" data-target="#ModalOne">
-                                                <i class="las la-language text-danger" title="Translatable"></i>
-                                            </a>
-
-                                            <!-- Modal -->
-                                            <div class="modal fade" id="ModalOne" tabindex="-1" role="dialog"
-                                                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLongTitle">Modal title
-                                                            </h5>
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <ul class="nav nav-tabs nav-fill border-light">
-                                                                @foreach (\App\Language::all() as $key => $language)
-                                                                    <li class="nav-item">
-
-                                                                    </li>
-                                                                @endforeach
-                                                            </ul>
-                                                            <form class="p-4"
-                                                                action="{{ route('product-attributes.update', $attr->id) }}"
-                                                                method="POST">
-                                                                <input name="_method" type="hidden" value="PATCH">
-                                                                <input type="hidden" name="lang"
-                                                                    value="{{ $lang }}">
-                                                                @csrf
-                                                                <div class="form-group row">
-                                                                    <label class="col-sm-3 col-from-label"
-                                                                        for="name">{{ translate('Name') }} <i
-                                                                            class="las la-language text-danger"
-                                                                            title="{{ translate('Translatable') }}"></i></label>
-                                                                    <div class="col-sm-9">
-                                                                        <input type="text"
-                                                                            placeholder="{{ translate('Name') }}"
-                                                                            id="name" name="name" class="form-control"
-                                                                            required
-                                                                            value="{{ $attr->getTranslation('name', $lang) }}">
-                                                                    </div>
+                                        <a href="#" type="button" data-toggle="modal" data-target="#ModalOne">
+                                            <i class="las la-language text-danger" title="Translatable"></i>
+                                        </a>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="ModalOne" tabindex="-1" role="dialog"
+                                            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title
+                                                        </h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <ul class="nav nav-tabs nav-fill border-light">
+                                                            <li class="nav-item">
+                                                                <a class="nav-link text-reset  active  py-3"
+                                                                    href="http://cms.asrorztg.beget.tech/admin/product-attributes/43/edit?lang=en">
+                                                                    <img src="http://cms.asrorztg.beget.tech/public/assets/img/flags/en.png"
+                                                                        height="11" class="mr-1">
+                                                                    <span>English</span>
+                                                                </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link text-reset  bg-soft-dark border-light border-left-0  py-3"
+                                                                    href="http://cms.asrorztg.beget.tech/admin/product-attributes/43/edit?lang=ru">
+                                                                    <img src="http://cms.asrorztg.beget.tech/public/assets/img/flags/ru.png"
+                                                                        height="11" class="mr-1">
+                                                                    <span>Russian</span>
+                                                                </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link text-reset  bg-soft-dark border-light border-left-0  py-3"
+                                                                    href="http://cms.asrorztg.beget.tech/admin/product-attributes/43/edit?lang=uz">
+                                                                    <img src="http://cms.asrorztg.beget.tech/public/assets/img/flags/uz.png"
+                                                                        height="11" class="mr-1">
+                                                                    <span>Uzbek</span>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                        <form class="p-4"
+                                                            action="{{ route('product-attributes.update', $attr->id) }}"
+                                                            method="POST">
+                                                            <input name="_method" type="hidden" value="PATCH">
+                                                            <input type="hidden" name="lang" value="{{ $lang }}">
+                                                            @csrf
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-3 col-from-label"
+                                                                    for="name">{{ translate('Name') }} <i
+                                                                        class="las la-language text-danger"
+                                                                        title="{{ translate('Translatable') }}"></i></label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="text"
+                                                                        placeholder="{{ translate('Name') }}" id="name"
+                                                                        name="name" class="form-control" required
+                                                                        value="{{ $attr->getTranslation('name', $lang) }}">
                                                                 </div>
+                                                            </div>
 
-                                                            </form>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-dismiss="modal">Close</button>
-                                                                <div class="form-group text-right">
-                                                                    <button type="submit"
-                                                                        class="btn btn-primary">{{ translate('Save') }}</button>
-                                                                </div>
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close</button>
+                                                        <div class="form-group text-right">
+                                                            <button type="submit"
+                                                                class="btn btn-primary">{{ translate('Save') }}</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -188,6 +201,10 @@
                                             href="{{ route('product-attributes.edit_attr', [$attribute->id, 'lang' => env('DEFAULT_LANGUAGE')]) }}"
                                             title="{{ translate('Edit') }}">
                                             <i class="las la-edit"></i>
+                                        </a>
+                                        <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
+                                            href="#">
+                                            <i class="fa fa-list-alt" aria-hidden="true"></i>
                                         </a>
                                         <form action="{{ route('product-attributes.destroy_attr', $attribute->id) }}"
                                             method="post">
