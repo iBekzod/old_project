@@ -61,7 +61,7 @@
         </div> --}}
 
         <!-- Add Attribute Button -->
-        <div class="col-md-12 offset-10 pb-2">
+        <div class="col-md-12 offset-9 mr-4 pb-2">
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
                 Add Attribute
             </button>
@@ -101,7 +101,7 @@
 
     </div>
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-10 offset-1">
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0 h6">{{ translate('Attributes') }}</h5>
@@ -202,10 +202,62 @@
                                             title="{{ translate('Edit') }}">
                                             <i class="las la-edit"></i>
                                         </a>
-                                        <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                            href="#">
+                                        <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="#"
+                                            data-toggle="modal" data-target="#exampleModalTwo">
                                             <i class="fa fa-list-alt" aria-hidden="true"></i>
                                         </a>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="exampleModalTwo" tabindex="-1" role="dialog"
+                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">{{ translate('Change categories') }}</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="{{ route('product-attributes.change_categories', $attr->id) }}" method="POST">
+                                                            <input type="hidden" name="attribute_id" value="{{ $attr->id }}">
+                                                            @csrf
+                                                            <div class="form-group" id="category">
+                                                                <label>{{ translate('Category') }}</label>
+                                                                <select multiple="multiple" class="form-control js-example-basic-multiple" name="category_id[]"
+                                                                    id="category_id" data-live-search="true" required>
+                                                                    {{-- <select multiple class="form-control aiz-selectpicker" name="category_id[]"
+                                                                        id="category_id"
+                                                                        data-live-search="true" required> --}}
+                                                                    @foreach ($categories as $category)
+                                                                        {{-- <option disabled
+                                                                            @if (in_array($category->id, $selected_categories))
+                                                                            selected
+                                                                            @endif
+                                                                            value="{{ $category->id }}">{{ $category->getTranslation('name') }}</option> --}}
+                                                                        @foreach ($category->children as $childCategory)
+                                                                            @include('backend.product-attributes.components.child_category', ['child_category'
+                                                                            => $childCategory,'selected_categories' => $selected_categories])
+                                                                        @endforeach
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group mb-3 text-right">
+                                                                <button type="submit" class="btn btn-primary">{{ translate('Save') }}</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close</button>
+                                                            <div class="form-group text-right">
+                                                                <button type="submit" class="btn btn-primary">{{ translate('Save') }}</button>
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <form action="{{ route('product-attributes.destroy_attr', $attribute->id) }}"
                                             method="post">
                                             @csrf
@@ -225,44 +277,7 @@
             </div>
         </div>
 
-        <div class="col-md-5">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0 h6">{{ translate('Change categories') }}</h5>
-                </div>
-                <div class="card-body">
-                    <form action="{{ route('product-attributes.change_categories', $attr->id) }}" method="POST">
-                        <input type="hidden" name="attribute_id" value="{{ $attr->id }}">
-                        @csrf
-                        <div class="form-group" id="category">
-                            <label>{{ translate('Category') }}</label>
 
-                            <select multiple="multiple" class="form-control js-example-basic-multiple" name="category_id[]"
-                                id="category_id" data-live-search="true" required>
-                                {{-- <select multiple class="form-control aiz-selectpicker" name="category_id[]"
-                                    id="category_id"
-                                    data-live-search="true" required> --}}
-                                @foreach ($categories as $category)
-
-                                    {{-- <option disabled
-                                        @if (in_array($category->id, $selected_categories))
-                                        selected
-                                        @endif
-                                        value="{{ $category->id }}">{{ $category->getTranslation('name') }}</option> --}}
-                                    @foreach ($category->children as $childCategory)
-                                        @include('backend.product-attributes.components.child_category', ['child_category'
-                                        => $childCategory,'selected_categories' => $selected_categories])
-                                    @endforeach
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group mb-3 text-right">
-                            <button type="submit" class="btn btn-primary">{{ translate('Save') }}</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
     </div>
 
 @endsection
