@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Brand;
 use App\Http\HelperClasses\Combinations;
-use App\Models\CharacteristicValues;
-use App\Models\ProductAttribute;
+use App\AttributeValue;
+use App\Attribute;
 use Illuminate\Http\Request;
 use App\Product;
 use App\Element;
@@ -23,6 +23,7 @@ use Artisan;
 use App\Product_Warehouse;
 use App\Warehouse;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
+
 
 class ElementController extends Controller
 {
@@ -86,7 +87,7 @@ class ElementController extends Controller
             return back();
         } else {
             $element = Element::where('id', $id)->with(['characteristicValues'])->firstOrFail();
-            $options = $element->category->elementAttributes;
+            $options = $element->category->attributes;
             // dd($element->characteristicValues);
             return view('backend.product.elements.add_attr', compact(
                 'element', 'options'
@@ -479,14 +480,13 @@ class ElementController extends Controller
     public function admin_element_edit(Request $request, $id)
     {
         $element = Element::findOrFail($id);
-        // ($element->category)? $elementAttributes = $element->category->elementAttributes : $elementAttributes = [];
-        // $selectedProductAttributes = $element->elementAttributes->pluck('id')->toArray();
+        ($element->category)? $element_attributes = $element->category->attributes : $element_attributes = [];
         $lang = $request->lang;
         $tags = json_decode($element->tags);
         $categories = Category::all()->toTree();
 
         // return view('backend.product.elements.edit', compact('element', 'categories', 'tags', 'lang', 'elementAttributes', 'selectedProductAttributes'));
-        return view('backend.product.elements.edit', compact('element', 'categories', 'tags', 'lang'));
+        return view('backend.product.elements.edit', compact('element', 'categories', 'tags', 'lang', 'element_attributes'));
     }
 
     /**

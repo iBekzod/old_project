@@ -127,10 +127,7 @@ class LanguageController extends Controller
     {
         try {
             $sort_search = null;
-            // $col_arr=$request->columns_arr;
-            //  for($col_arr){
-
-            //  }
+            $col_arr=$request->columns_arr;
             ($request->has('base_table'))? $base_table = $request->base_table : $base_table='products';
             ($request->has('table_translations'))? $table_translations = $request->table_translations : $table_translations='product_translations';
             ($request->has('relation_id'))? $relation_id = $request->relation_id : $relation_id='product_id';

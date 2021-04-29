@@ -15,7 +15,7 @@
                 </div>
                 <div class="card-body">
                     <div class="form-group row">
-                        <label class="col-md-3 col-from-label">{{translate('Product Name')}} <span
+                        <label class="col-md-3 col-from-label">{{translate('Element Name')}} <span
                                 class="text-danger">*</span></label>
                         <div class="col-md-8">
                             <input type="text" class="form-control" name="name"
