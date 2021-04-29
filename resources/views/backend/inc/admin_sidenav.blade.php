@@ -26,17 +26,19 @@
 
 <div class="aiz-sidebar-wrap">
     <div class="aiz-sidebar left c-scrollbar bg-light">
-                <div class="aiz-side-nav-logo-wrap bg-light">
-                    <a href="{{ route('admin.dashboard') }}" class="text-left d-block">
-                        @if(get_setting('system_logo_white') != null)
-                            <img class="mw-100" src="{{ uploaded_asset(get_setting('system_logo_white'))??static_asset('assets/img/logo.jpg') }}" class="brand-icon"
-                                 alt="{{ get_setting('site_name') }}">
-                        @else
-                            <img class="mw-100" src="{{ static_asset('assets/img/logo.png') }}" class="brand-icon"
-                                 alt="{{ get_setting('site_name') }}">
-                        @endif
-                    </a>
-                </div>
+        <div class="aiz-side-nav-logo-wrap bg-light">
+            <a href="{{ route('admin.dashboard') }}" class="text-left d-block">
+                @if(get_setting('system_logo_white') != null)
+                    <img class="mw-100"
+                         src="{{ uploaded_asset(get_setting('system_logo_white'))??static_asset('assets/img/logo.jpg') }}"
+                         class="brand-icon"
+                         alt="{{ get_setting('site_name') }}">
+                @else
+                    <img class="mw-100" src="{{ static_asset('assets/img/logo.png') }}" class="brand-icon"
+                         alt="{{ get_setting('site_name') }}">
+                @endif
+            </a>
+        </div>
         <div class="aiz-side-nav-wrap">
             <div class="mb-3 px-20px">
                 <input class="text-white border-0 form-control bg-soft-secondary form-control-sm" type="text" name=""
@@ -52,7 +54,7 @@
                     </a>
                 </li>
 
-            <!-- POS Addon-->
+                <!-- POS Addon-->
             {{--@if ($pos_system != null && $pos_system->activated)
                 @if(Auth::user()->user_type == 'admin' || in_array('1', json_decode(Auth::user()->staff->role->permissions)))
                     <li class="aiz-side-nav-item">
@@ -102,7 +104,7 @@
                                 <a href="{{route('products.manage')}}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{ translate('Mange Added Products') }}</span>
                                     @php
-                                    $on_moderation = \App\Product::where('on_moderation', 1)->get();
+                                        $on_moderation = \App\Product::where('on_moderation', 1)->get();
                                     @endphp
                                     @if($on_moderation->count())
                                         <span class="badge badge-info">{{ $on_moderation->count() }}</span>
@@ -178,24 +180,24 @@
                     </li>
                 @endif
             <!-- Warehouse -->
-                 {{-- <li class="aiz-side-nav-item">
-                    <a href="#" class="aiz-side-nav-link">
-                        <i class="las la-money-bill aiz-side-nav-icon"></i>
-                        <span class="aiz-side-nav-text">Warehouse</span>
-                        <span class="aiz-side-nav-arrow"></span>
-                    </a>
+                {{-- <li class="aiz-side-nav-item">
+                   <a href="#" class="aiz-side-nav-link">
+                       <i class="las la-money-bill aiz-side-nav-icon"></i>
+                       <span class="aiz-side-nav-text">Warehouse</span>
+                       <span class="aiz-side-nav-arrow"></span>
+                   </a>
 
-                    <!--Submenu-->
-                    <ul class="aiz-side-nav-list level-2">
-                        <li class="aiz-side-nav-item">
-                            <a href="{{ route('warehouse.index') }}"
-                                class="aiz-side-nav-link">
-                               {{ areActiveRoutes(['warehouse.index', 'warehouse.show'])}}
-                                <span class="aiz-side-nav-text">All warehouses</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li> --}}
+                   <!--Submenu-->
+                   <ul class="aiz-side-nav-list level-2">
+                       <li class="aiz-side-nav-item">
+                           <a href="{{ route('warehouse.index') }}"
+                               class="aiz-side-nav-link">
+                              {{ areActiveRoutes(['warehouse.index', 'warehouse.show'])}}
+                               <span class="aiz-side-nav-text">All warehouses</span>
+                           </a>
+                       </li>
+                   </ul>
+               </li> --}}
             <!-- Sale -->
                 <li class="aiz-side-nav-item">
                     <a href="#" class="aiz-side-nav-link">
@@ -417,12 +419,12 @@
                                     <a href="{{ route('flash_deals.index') }}"
                                        class="aiz-side-nav-link {{ areActiveRoutes(['flash_deals.index', 'flash_deals.create', 'flash_deals.edit'])}}">
                                         <span class="aiz-side-nav-text">{{ translate('Flash deals') }}</span>
-                                                                                @php
-                                                                                $var = \App\Models\FlashDeal::where('on_moderation', 1)->get();
-                                                                                @endphp
-                                                                                @if (count($var) > 0)
-                                                                                    <span class="badge badge-info">{{ count($var) }}</span>
-                                                                                @endif
+                                        @php
+                                            $var = \App\Models\FlashDeal::where('on_moderation', 1)->get();
+                                        @endphp
+                                        @if (count($var) > 0)
+                                            <span class="badge badge-info">{{ count($var) }}</span>
+                                        @endif
                                     </a>
                                 </li>
                             @endif
@@ -475,8 +477,8 @@
                                     <a href="{{ route('support_ticket.admin_index') }}"
                                        class="aiz-side-nav-link {{ areActiveRoutes(['support_ticket.admin_index', 'support_ticket.admin_show'])}}">
                                         <span class="aiz-side-nav-text">{{translate('Ticket')}}</span>
-                            @if($support_ticket > 0)<span
-                                class="badge badge-info">{{ $support_ticket }}</span>@endif
+                                        @if($support_ticket > 0)<span
+                                            class="badge badge-info">{{ $support_ticket }}</span>@endif
                                     </a>
                                 </li>
                             @endif
@@ -641,29 +643,29 @@
                 @endif
 
             <!--OTP addon -->
-                                @if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null && \App\Addon::where('unique_identifier', 'otp_system')->first()->activated)
-                                    @if(Auth::user()->user_type == 'admin' || in_array('19', json_decode(Auth::user()->staff->role->permissions)))
-                                        <li class="aiz-side-nav-item">
-                                            <a href="#" class="aiz-side-nav-link">
-                                                <i class="las la-phone aiz-side-nav-icon"></i>
-                                                <span class="aiz-side-nav-text">{{translate('OTP System')}}</span>
-                                                <span class="aiz-side-nav-arrow"></span>
-                                            </a>
-                                            <ul class="aiz-side-nav-list level-2">
-                                                <li class="aiz-side-nav-item">
-                                                    <a href="{{ route('otp.configconfiguration') }}" class="aiz-side-nav-link">
-                                                        <span class="aiz-side-nav-text">{{translate('OTP Configurations')}}</span>
-                                                    </a>
-                                                </li>
-                                                <li class="aiz-side-nav-item">
-                                                    <a href="{{route('otp_credentials.index')}}" class="aiz-side-nav-link">
-                                                        <span class="aiz-side-nav-text">{{translate('Set OTP Credentials')}}</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    @endif
-                                @endif
+                @if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null && \App\Addon::where('unique_identifier', 'otp_system')->first()->activated)
+                    @if(Auth::user()->user_type == 'admin' || in_array('19', json_decode(Auth::user()->staff->role->permissions)))
+                        <li class="aiz-side-nav-item">
+                            <a href="#" class="aiz-side-nav-link">
+                                <i class="las la-phone aiz-side-nav-icon"></i>
+                                <span class="aiz-side-nav-text">{{translate('OTP System')}}</span>
+                                <span class="aiz-side-nav-arrow"></span>
+                            </a>
+                            <ul class="aiz-side-nav-list level-2">
+                                <li class="aiz-side-nav-item">
+                                    <a href="{{ route('otp.configconfiguration') }}" class="aiz-side-nav-link">
+                                        <span class="aiz-side-nav-text">{{translate('OTP Configurations')}}</span>
+                                    </a>
+                                </li>
+                                <li class="aiz-side-nav-item">
+                                    <a href="{{route('otp_credentials.index')}}" class="aiz-side-nav-link">
+                                        <span class="aiz-side-nav-text">{{translate('Set OTP Credentials')}}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endif
+                @endif
 
                 @if($afr_pg != null && $afr_pg->activated)
                     @if(Auth::user()->user_type == 'admin' || in_array('19', json_decode(Auth::user()->staff->role->permissions)))
@@ -888,38 +890,38 @@
                     </li>
                 @endif
 
-{{--                @if(!env('DISABLE_ADDONS', true))--}}
-{{--                    <li class="aiz-side-nav-item">--}}
-{{--                        <a href="#" class="aiz-side-nav-link">--}}
-{{--                            <i class="las la-user-tie aiz-side-nav-icon"></i>--}}
-{{--                            <span class="aiz-side-nav-text">{{translate('System')}}</span>--}}
-{{--                            <span class="aiz-side-nav-arrow"></span>--}}
-{{--                        </a>--}}
-{{--                        <ul class="aiz-side-nav-list level-2">--}}
-{{--                            <li class="aiz-side-nav-item">--}}
-{{--                                <a href="{{ route('system_update') }}" class="aiz-side-nav-link">--}}
-{{--                                    <span class="aiz-side-nav-text">{{translate('Update')}}</span>--}}
-{{--                                </a>--}}
-{{--                            </li>--}}
-{{--                            <li class="aiz-side-nav-item">--}}
-{{--                                <a href="{{route('system_server')}}" class="aiz-side-nav-link">--}}
-{{--                                    <span class="aiz-side-nav-text">{{translate('Server status')}}</span>--}}
-{{--                                </a>--}}
-{{--                            </li>--}}
-{{--                        </ul>--}}
-{{--                    </li>--}}
+                {{--                @if(!env('DISABLE_ADDONS', true))--}}
+                {{--                    <li class="aiz-side-nav-item">--}}
+                {{--                        <a href="#" class="aiz-side-nav-link">--}}
+                {{--                            <i class="las la-user-tie aiz-side-nav-icon"></i>--}}
+                {{--                            <span class="aiz-side-nav-text">{{translate('System')}}</span>--}}
+                {{--                            <span class="aiz-side-nav-arrow"></span>--}}
+                {{--                        </a>--}}
+                {{--                        <ul class="aiz-side-nav-list level-2">--}}
+                {{--                            <li class="aiz-side-nav-item">--}}
+                {{--                                <a href="{{ route('system_update') }}" class="aiz-side-nav-link">--}}
+                {{--                                    <span class="aiz-side-nav-text">{{translate('Update')}}</span>--}}
+                {{--                                </a>--}}
+                {{--                            </li>--}}
+                {{--                            <li class="aiz-side-nav-item">--}}
+                {{--                                <a href="{{route('system_server')}}" class="aiz-side-nav-link">--}}
+                {{--                                    <span class="aiz-side-nav-text">{{translate('Server status')}}</span>--}}
+                {{--                                </a>--}}
+                {{--                            </li>--}}
+                {{--                        </ul>--}}
+                {{--                    </li>--}}
 
-{{--                    <!-- Addon Manager -->--}}
-{{--                    @if(Auth::user()->user_type == 'admin' || in_array('21', json_decode(Auth::user()->staff->role->permissions)))--}}
-{{--                        <li class="aiz-side-nav-item">--}}
-{{--                            <a href="{{route('addons.index')}}"--}}
-{{--                               class="aiz-side-nav-link {{ areActiveRoutes(['addons.index', 'addons.create'])}}">--}}
-{{--                                <i class="las la-wrench aiz-side-nav-icon"></i>--}}
-{{--                                <span class="aiz-side-nav-text">{{translate('Addon Manager')}}</span>--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
-{{--                    @endif--}}
-{{--                @endif--}}
+                {{--                    <!-- Addon Manager -->--}}
+                {{--                    @if(Auth::user()->user_type == 'admin' || in_array('21', json_decode(Auth::user()->staff->role->permissions)))--}}
+                {{--                        <li class="aiz-side-nav-item">--}}
+                {{--                            <a href="{{route('addons.index')}}"--}}
+                {{--                               class="aiz-side-nav-link {{ areActiveRoutes(['addons.index', 'addons.create'])}}">--}}
+                {{--                                <i class="las la-wrench aiz-side-nav-icon"></i>--}}
+                {{--                                <span class="aiz-side-nav-text">{{translate('Addon Manager')}}</span>--}}
+                {{--                            </a>--}}
+                {{--                        </li>--}}
+                {{--                    @endif--}}
+                {{--                @endif--}}
             </ul><!-- .aiz-side-nav -->
         </div><!-- .aiz-side-nav-wrap -->
     </div><!-- .aiz-sidebar -->
