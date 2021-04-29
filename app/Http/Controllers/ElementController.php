@@ -60,6 +60,55 @@ class ElementController extends Controller
         ]);
     }
 
+    public function make_choice_options(Request $request, $id){
+        try {
+            if($request->method()=='POST'){
+                $element = Element::where('id', $id)->firstOrFail();
+                $choice_options=json_decode($request->choice_options, true);
+                $element->attributes->sync([]);
+                $element->characteristics->sync([]);
+                $element->choice_options->sync([]);
+                foreach($choice_options as $attribute=>$values){
+                    $element->attributes->attach($attribute);
+                    foreach ($values as $value){
+                        $element->characteristics->attach($value);
+                    }
+                    $element->choice_options=$request->choice_options;
+                }
+                flash(translate('Saved successfully'))->success();
+                return response()->json(['success'=>true, 'message'=>'post']);
+            }else if($request->method()=='GET'){
+                $element = Element::where('id', $id)->firstOrFail();
+                $options = $element->choice_options;
+                return response()->json(['success'=>true, 'message'=>'get']);
+            }
+        }catch (\Exception $exception){
+            return response()->json(['success'=>false, 'message'=>$exception->getMessage()]);
+        }
+        return response()->json(['success'=>false, 'message'=>'server']);
+    }
+
+    public function getAttributesByCategory($id){
+        $category = Category::firstOrFail($id);
+        if($category!=mull){
+            $attrinutes=$category->attributes;
+        }
+        return response()->json([
+            'attributes'=>$attrinutes
+        ]);
+    }
+//    public function getAttributes(Request $request){
+//        try {
+//            $element = Element::where('category_id', $request->id)->firstOrFail();
+//            $choice_options= $element->choice_options;
+//            return response()->json(['success'=>false, 'choice_options'=>$choice_options]);
+//
+//        }catch (\Exception $exception){
+//            return response()->json(['success'=>false, 'message'=>$exception->getMessage()]);
+//        }
+//        return response()->json(['success'=>false, 'message'=>'server']);
+//    }
+
     public function characteristics(Request $request, $id)
     {
         if ($request->method() == 'POST') {

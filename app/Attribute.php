@@ -26,6 +26,11 @@ class Attribute extends Model
 
     public function branch()
     {
-        return $this->hasOne(Branch::class);
+        return $this->hasOne(Branch::class, 'id', 'branch_id');
+    }
+
+    public function values()
+    {
+        return $this->hasMany(AttributeValue::class);
     }
 }

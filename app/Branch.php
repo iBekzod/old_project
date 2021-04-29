@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App;
 class Branch extends Model
 {
     public function getTranslation($field = '', $lang = false)

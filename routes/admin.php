@@ -58,6 +58,8 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::post('/elements/featured', 'ElementController@updateFeatured')->name('elements.featured');
     Route::get('/elements/{id}/characteristics', 'ElementController@characteristics')->name('elements.characteristics');
     Route::post('/elements/{id}/characteristics', 'ElementController@characteristics')->name('elements.characteristics');
+    Route::get('/elements/{id}/make_choice_options', 'ElementController@make_choice_options')->name('elements.make_choice_options');
+    Route::post('/elements/{id}/make_choice_options', 'ElementController@make_choice_options')->name('elements.make_choice_options');
     Route::post('/elements/get_elements_by_subcategory', 'ElementController@get_elements_by_subcategory')->name('elements.get_elements_by_subcategory');
     Route::get('/elements/{id}/in-stock', 'ElementController@inStock')->name('elements.in_stock');
 	Route::get('/elements/{id}/in-stock/add/attrs', 'ElementController@addInStockElementAttrs')->name('elements.in_stock_add_attrs');
