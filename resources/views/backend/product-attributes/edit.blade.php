@@ -9,64 +9,11 @@
     </div>
 
     <div class="row">
-    {{-- <div class="col-lg-7">
-        <div class="card">
-            <div class="card-body p-0">
-                <ul class="nav nav-tabs nav-fill border-light">
-                    @foreach (\App\Language::all() as $key => $language)
-                        <li class="nav-item">
-
-                        </li>
-                    @endforeach
-                </ul>
-                <form class="p-4" action="{{ route('product-attributes.update', $attr->id) }}" method="POST">
-                    <input name="_method" type="hidden" value="PATCH">
-                    <input type="hidden" name="lang" value="{{ $lang }}">
-                    @csrf
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-from-label" for="name">{{ translate('Name') }} <i
-                                class="las la-language text-danger" title="{{ translate('Translatable') }}"></i></label>
-                        <div class="col-sm-9">
-                            <input type="text" placeholder="{{ translate('Name') }}" id="name" name="name"
-                                class="form-control" required value="{{ $attr->getTranslation('name', $lang) }}">
-                        </div>
-                    </div>
-                    <div class="form-group mb-0 text-right">
-                        <button type="submit" class="btn btn-primary">{{ translate('Save') }}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div> --}}
-    {{-- <div class="col-md-5">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0 h6">{{ translate('Add Attribute') }}</h5>
-            </div>
-            <div class="card-body">
-                <form action="{{ route('product-attributes.add_attr') }}" method="POST">
-                    <input type="hidden" name="attribute_id" value="{{ $attr->id }}">
-                    @csrf
-                    <div class="form-group mb-3">
-                        <label for="name">{{ translate('Name') }}</label>
-                        <input type="text" placeholder="{{ translate('Name') }}" id="name" name="name"
-                            class="form-control" required>
-                    </div>
-                    <div class="form-group mb-3 text-right">
-                        <button type="submit" class="btn btn-primary">{{ translate('Save') }}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div> --}}
-
-    <!-- Add Attribute Button -->
         <div class="col-md-12 offset-9 mr-4 pb-2">
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
                 Add Attribute
             </button>
         </div>
-        <!-- Add Attribute Modal -->
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
              aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -98,7 +45,6 @@
                 </div>
             </div>
         </div>
-
     </div>
     <div class="row">
         <div class="col-md-10 offset-1">
@@ -123,7 +69,6 @@
                                     <a href="#" type="button" data-toggle="modal" data-target="#ModalOne">
                                         <i class="las la-language text-danger" title="Translatable"></i>
                                     </a>
-                                    <!-- Modal -->
                                     <div class="modal fade" id="ModalOne" tabindex="-1" role="dialog"
                                          aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
