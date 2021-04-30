@@ -39,7 +39,7 @@
                     <div class="modal-footer">
                         <div class="form-group mb-3 text-right">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">{{ translate('Save') }}</button>
+                            <button type="submit" class="btn btn-primary" data-dismiss="modal">{{ translate('Save') }}</button>
                         </div>
                     </div>
                 </div>
@@ -138,7 +138,7 @@
                                                     </button>
                                                     <div class="form-group text-right">
                                                         <button type="submit"
-                                                                class="btn btn-primary">{{ translate('Save') }}</button>
+                                                                class="btn btn-primary" data-dismiss="modal">{{ translate('Save') }}</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -206,7 +206,7 @@
                                                     </button>
                                                     <div class="form-group text-right">
                                                         <button type="submit"
-                                                                class="btn btn-primary">{{ translate('Save') }}</button>
+                                                                class="btn btn-primary" data-dismiss="modal">{{ translate('Save') }}</button>
                                                     </div>
                                                 </div>
                                             </div>

@@ -99,7 +99,16 @@
                     </div>
                 @endif
             @endif
-
+            <div class="aiz-topbar-item m-md-4">
+                <a href="#" class="text-primary">
+                    <h6>Договора</h6>
+                </a>
+            </div>
+            <div class="aiz-topbar-item m-md-4">
+                <a href="#" class="text-primary">
+                    <h6>Инструкция</h6>
+                </a>
+            </div>
             {{-- language --}}
             @php
                 if(Session::has('locale')){
