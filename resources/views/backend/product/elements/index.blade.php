@@ -158,11 +158,11 @@
                                 </label>
                             </td>
                             <td class="text-right">
-                                <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
-                                   href="{{route('elements.characteristics', ['id'=>$element->id, 'type'=>$type]  )}}"
-                                   title="{{ translate('Element Attributes') }}">
-                                    <i class="las la-list"></i>
-                                </a>
+{{--                                <a class="btn btn-soft-success btn-icon btn-circle btn-sm"--}}
+{{--                                   href="{{route('elements.characteristics', ['id'=>$element->id, 'type'=>$type]  )}}"--}}
+{{--                                   title="{{ translate('Element Attributes') }}">--}}
+{{--                                    <i class="las la-list"></i>--}}
+{{--                                </a>--}}
                                 @if ($type == 'Seller')
                                     <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
                                        href="{{route('elements.seller.edit', ['id'=>$element->id, 'lang'=>env('DEFAULT_LANGUAGE')] )}}"

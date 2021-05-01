@@ -127,9 +127,9 @@
                                         data-selected="{{ $element->category_id }}" data-live-search="true" required>
                                     @foreach ($categories as $category)
                                         <option value="{{ $category->id }}">{{ $category->getTranslation('name') }}</option>
-                                        @foreach ($category->children as $childCategory)
-                                            @include('categories.child_category', ['child_category' => $childCategory])
-                                        @endforeach
+{{--                                        @foreach ($category->children as $childCategory)--}}
+{{--                                            @include('categories.child_category', ['child_category' => $childCategory])--}}
+{{--                                        @endforeach--}}
                                     @endforeach
                                 </select>
                             </div>
@@ -137,10 +137,9 @@
 
                         <div id="attribute_div">
                             @foreach($element_attributes as $branch=>$attributes)
-
                                     <div class="card">
                                         <div class="card-header">
-                                            <h5 class="mb-0 h6">{{ \App\Branch::firstOrFail('id', $branch)->getTranslation('name') }}</h5>
+                                            <h5 class="mb-0 h6">{{ App\Branch::where('id', $branch)->first()->getTranslation('name') }}</h5>
                                         </div>
                                         <div class="card-body">
                                             @foreach($attributes as $attribute)
@@ -366,7 +365,7 @@
         $('#colors').on('change', function () {
             update_sku();
         });
-        // $('.attribute_selection').select2();
+
         $('#category_id').on('change', function () {
             $.ajax({
                 type:'GET',
@@ -381,29 +380,6 @@
                 }
             });
         });
-
-        $('#save_attributes').on('click', function () {
-            $.ajax({
-                type:'POST',
-                url:'{{ route('elements.make_choice_options') }}',
-                data:{
-                    id: '<?php echo $element->id?>',
-                    choice_options: ''
-                },
-                success:function(data){
-                    alert('Done: ');
-                }
-            });
-        });
-
-        function delete_row(em) {
-            $(em).closest('.form-group').remove();
-            update_sku();
-        }
-
-        function delete_variant(em) {
-            $(em).closest('.variant').remove();
-        }
 
         function update_sku() {
             {{--$.ajax({--}}

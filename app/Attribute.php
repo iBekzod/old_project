@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App;
+
 class Attribute extends Model
 {
     protected $table="attributes";
@@ -26,7 +27,7 @@ class Attribute extends Model
 
     public function branch()
     {
-        return $this->hasOne(Branch::class, 'id', 'branch_id');
+        return $this->hasOne(Branch::class);
     }
 
     public function characteristics()

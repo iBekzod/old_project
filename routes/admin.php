@@ -51,18 +51,14 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::get('/elements/manage','ElementController@manageElements')->name('elements.manage');
 	Route::get('/elements/manage/{id}/accept','ElementController@changeOnModerationAccept')->name('elements.manage.change.accept');
 	Route::get('/elements/manage/{id}/refuse','ElementController@changeOnModerationRefuse')->name('elements.manage.change.refuse');
-	Route::get('/elements/create','ElementController@create')->name('elements.create');
+    Route::get('/elements/create','ElementController@create')->name('elements.create');
+    Route::post('/elements/store','ElementController@store')->name('elements.store');
 	Route::get('/elements/admin/{id}/edit','ElementController@admin_element_edit')->name('elements.admin.edit');
-	Route::get('/elements/seller/{id}/edit','ElementController@seller_product_edit')->name('elements.seller.edit');
+	Route::get('/elements/seller/{id}/edit','ElementController@seller_element_edit')->name('elements.seller.edit');
 	Route::post('/elements/todays_deal', 'ElementController@updateTodaysDeal')->name('elements.todays_deal');
 	Route::post('/elements/featured', 'ElementController@updateFeatured')->name('elements.featured');
-    Route::get('/elements/{id}/characteristics', 'ElementController@characteristics')->name('elements.characteristics');
-    Route::post('/elements/{id}/characteristics', 'ElementController@characteristics')->name('elements.characteristics');
     Route::get('/elements/make_choice_options', 'ElementController@make_choice_options')->name('elements.make_choice_options');
     Route::post('/elements/make_choice_options', 'ElementController@make_choice_options')->name('elements.make_choice_options');
-    Route::post('/elements/get_elements_by_subcategory', 'ElementController@get_elements_by_subcategory')->name('elements.get_elements_by_subcategory');
-    Route::get('/elements/{id}/in-stock', 'ElementController@inStock')->name('elements.in_stock');
-	Route::get('/elements/{id}/in-stock/add/attrs', 'ElementController@addInStockElementAttrs')->name('elements.in_stock_add_attrs');
 
 	Route::resource('sellers','SellerController');
 	Route::get('sellers_ban/{id}','SellerController@ban')->name('sellers.ban');
