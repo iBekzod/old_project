@@ -34,18 +34,9 @@ Route::get('/verification-confirmation/{code}', 'Auth\VerificationController@ver
 Route::get('/email_change/callback', 'HomeController@email_change_callback')->name('email_change.callback');
 Route::post('/password/reset/email/submit', 'HomeController@reset_password_with_code')->name('password.update');
 
-Route::get('/test', function () {
-    $categories = \App\Category::all();
-    $categories = $categories->groupBy('slug');
-    foreach ($categories as $category) {
-        if($category->count() > 1) {
-//            dd($category);
-            foreach ($category as $item) {
-                $item->slug = SlugService::createSlug(Category::class, 'slug', slugify($item->name));
-                $item->save();
-            }
-        }
-    }
+Route::get('/test', function (Request $request) {
+    $data=$request->all();
+    return view('test', compact('data'));
 });
 
 Route::post('/language', 'LanguageController@changeLanguage')->name('language.change');

@@ -10,7 +10,7 @@
 
     <div class="row">
         <div class="col-md-12 offset-9 mr-4 pb-2">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+            <button type="button" class="btn btn-primary" id="attr" data-toggle="modal" data-target="#exampleModalCenter">
                 Add Attribute
             </button>
         </div>
@@ -83,32 +83,6 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <ul class="nav nav-tabs nav-fill border-light">
-                                                            <li class="nav-item">
-                                                                <a class="nav-link text-reset  active  py-3"
-                                                                    href="http://cms.asrorztg.beget.tech/admin/product-attributes/43/edit?lang=en">
-                                                                    <img src="http://cms.asrorztg.beget.tech/public/assets/img/flags/en.png"
-                                                                        height="11" class="mr-1">
-                                                                    <span>English</span>
-                                                                </a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link text-reset  bg-soft-dark border-light border-left-0  py-3"
-                                                                    href="http://cms.asrorztg.beget.tech/admin/product-attributes/43/edit?lang=ru">
-                                                                    <img src="http://cms.asrorztg.beget.tech/public/assets/img/flags/ru.png"
-                                                                        height="11" class="mr-1">
-                                                                    <span>Russian</span>
-                                                                </a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link text-reset  bg-soft-dark border-light border-left-0  py-3"
-                                                                    href="http://cms.asrorztg.beget.tech/admin/product-attributes/43/edit?lang=uz">
-                                                                    <img src="http://cms.asrorztg.beget.tech/public/assets/img/flags/uz.png"
-                                                                        height="11" class="mr-1">
-                                                                    <span>Uzbek</span>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
                                                         <form class="p-4"
                                                             action="{{ route('product-attributes.update', $attr->id) }}"
                                                             method="POST">
@@ -117,14 +91,11 @@
                                                             @csrf
                                                             <div class="form-group row">
                                                                 <label class="col-sm-3 col-from-label"
-                                                                    for="name">{{ translate('Name') }} <i
-                                                                        class="las la-language text-danger"
-                                                                        title="{{ translate('Translatable') }}"></i></label>
+                                                                    for="name">{{ translate('Name') }} </label>
                                                                 <div class="col-sm-9">
                                                                     <input type="text"
-                                                                        placeholder="{{ translate('Name') }}" id="name"
-                                                                        name="name" class="form-control" required
-                                                                        value="{{ $attr->getTranslation('name', $lang) }}">
+                                                                        placeholder="{{ translate('Name') }}"
+                                                                        class="form-control" id="getName">
                                                                 </div>
                                                             </div>
 
@@ -136,7 +107,8 @@
                                                         </button>
                                                         <div class="form-group text-right">
                                                             <button type="submit" class="btn btn-primary"
-                                                                data-dismiss="modal">{{ translate('Save') }}</button>
+                                                                data-dismiss="modal"
+                                                                id="getBtn">{{ translate('Save') }}</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -233,5 +205,38 @@
 
 
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        // $(document).ready(function() {
+        //     $("#getBtn").click(function(event) {
+        //         var Data = {
+        //                name : $("#getName").val(),
+        //         };
 
+        //         $.ajax({
+        //             type: "POST",
+        //             url: "\test",
+        //             data: Data,
+        //             dataType: "json",
+        //             encode: true,
+        //         }).done(function(data) {
+        //             alert(data);
+        //         });
+        //         event.preventDefault();
+        //     });
+        // });
+        $(document).ready(function(){
+    $("form").on("submit", function(event){
+        event.preventDefault();
+
+        var formValues= $(this).serialize();
+        var actionUrl = $(this).attr("action");
+
+        $.post(actionUrl, formValues, function(data){
+            // Display the returned data in browser
+            console.log(data)
+        });
+    });
+})
+    </script>
 @endsection
