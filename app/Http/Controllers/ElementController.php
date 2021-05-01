@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Branch;
 use App\ElementTranslation;
 use App\Models\Brand;
 use App\Http\HelperClasses\Combinations;
@@ -63,54 +64,40 @@ class ElementController extends Controller
 
     public function make_choice_options(Request $request){
         try {
-//            if($request->method()=='POST'){
-//                $element = Element::where('id', $request->id)->firstOrFail();
-//                $choice_options=json_decode($request->choice_options, true);
-//                $element->attributes->sync([]);
-//                $element->characteristics->sync([]);
-//                $element->choice_options->sync([]);
-//                foreach($choice_options as $attribute=>$values){
-//                    $element->attributes->attach($attribute);
-//                    foreach ($values as $value){
-//                        $element->characteristics->attach($value);
-//                    }
-//                    $element->choice_options=$request->choice_options;
-//                }
-//                flash(translate('Saved successfully'))->success();
-//                return response()->json(['success'=>true, 'message'=>'post']);
-//            }else
                 if($request->method()=='GET'){
                 $element = Element::where('id', $request->id)->firstOrFail();
                 $category=Category::findOrFail($request->category_id);
-                $attributes=$category->attributes;
-                if($element->category && $element->category->id==$category->id){
-                    $options = $element->choice_options;
-                }
+                $element_attributes=$category->attributes->groupBy('branch_id');
                 $data=null;
-                foreach($attributes as $attribute){
-
-                    $content=null;
-                    $data=$data.
-                        '<div class="card">
-                                    <div class="card-header">
-                                        <h5 class="mb-0 h6">' .$attribute->branch->name. '</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <input type="hidden" name="choice_options[' .$attribute->id . ']" value="' .$attribute->id . '">
-                                        <div class="form-group row">
-                                            <label class="col-md-3 col-form-label"  for="signinSrEmail">' . $attribute->getTranslation('name'). '</label>
-                                            <div class="col-md-8">
-                                                <select class="form-control js-example-basic-multiple"  multiple name="choice_options[' .$attribute->id. '][]">';
-                                                    foreach($attribute->characteristics as $value){
-                                                        $content=$content.'<option value="' .$value->id . '">'. $value->getTranslation('name').'</option>';
-                                                    }
-                    $data=$data.$content.'      </select>
-                                            </div>
+                foreach($element_attributes as $branch=>$attributes){
+                    $data=$data.'<div class="card">
+                                        <div class="card-header">
+                                            <h5 class="mb-0 h6">'. Branch::firstOrFail("id", $branch)->getTranslation('name') .'</h5>
                                         </div>
-                                    </div>
+                                        <div class="card-body">';
+                        $content=null;
+                        foreach($attributes as $attribute) {
+                            $content=$content.'<input type="hidden" name="choice_options[' . $attribute->id . ']" value="' . $attribute->id . '">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label"  for="signinSrEmail">' . $attribute->getTranslation('name') . '</label>
+                                <div class="col-md-8">
+                                    <select class="form-control js-example-basic-multiple"  multiple name="choice_options[' . $attribute->id . '][]">';
+
+                                        $options=null;
+                                        foreach($attribute->characteristics as $value) {
+                                            $options=$options.'<option';
+                                            if($element->characteristics != null && in_array($value->id, json_decode($element->characteristics, true)))
+                                            { $options=$options.'selected'; }
+                                            $options=$options.'value = "' . $value->id . '" > ' . $value->getTranslation('name') . ' </option >';
+                                        }
+
+                            $content=$content.$options.'</select>
+                                </div>
+                            </div>';
+                        }
+                    $data=$data.$content.'</div>
                                 </div>';
                 }
-
                 return response()->json(['success'=>true, 'message'=>'get', 'data'=>$data]);
             }
         }catch (\Exception $exception){
@@ -560,13 +547,15 @@ class ElementController extends Controller
     public function admin_element_edit(Request $request, $id)
     {
         $element = Element::findOrFail($id);
-        ($element->category)? $element_attributes = $element->category->attributes : $element_attributes = [];
+        ($element->category)? $element_attributes = $element->category->attributes->groupBy('branch_id') : $element_attributes = [];
         $lang = $request->lang;
         $tags = json_decode($element->tags);
         $colors = json_decode($element->colors);
         $choice_options = json_decode($element->choice_options);
-
+//        dd($element->category->attributes->groupBy('branch_id'));
         $categories = Category::all()->toTree();
+
+//        dd(Branch::firstOrFail('id', 2));
 
 
         return view('backend.product.elements.edit', compact('element', 'colors', 'choice_options', 'categories', 'tags', 'lang', 'element_attributes'));

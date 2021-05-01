@@ -41,7 +41,7 @@
                     @foreach (\App\Language::all() as $key => $language)
                         <li class="nav-item">
                             <a class="nav-link text-reset @if ($language->code == $lang) active @else bg-soft-dark border-light border-left-0 @endif py-3"
-                               href="{{ route('products.admin.edit', ['id'=>$element->id, 'lang'=> $language->code] ) }}">
+                               href="{{ route('elements.admin.edit', ['id'=>$element->id, 'lang'=> $language->code] ) }}">
                                 <img src="{{ static_asset('assets/img/flags/'.$language->code.'.png') }}" height="11"
                                      class="mr-1">
                                 <span>{{$language->name}}</span>
@@ -136,29 +136,31 @@
                         </div>
 
                         <div id="attribute_div">
-                            @if($element->category)
-                                @foreach($element->category->attributes as $attribute)
+                            @foreach($element_attributes as $branch=>$attributes)
+
                                     <div class="card">
                                         <div class="card-header">
-                                            <h5 class="mb-0 h6">{{ $attribute->branch->name }}</h5>
+                                            <h5 class="mb-0 h6">{{ \App\Branch::firstOrFail('id', $branch)->getTranslation('name') }}</h5>
                                         </div>
                                         <div class="card-body">
+                                            @foreach($attributes as $attribute)
                                             <input type="hidden" name="choice_options[{{ $attribute->id }}]" value="{{ $attribute->id }}">
                                             <div class="form-group row">
                                                 <label class="col-md-3 col-form-label"  for="signinSrEmail">{{ $attribute->getTranslation('name') }}</label>
                                                 <div class="col-md-8">
                                                     <select class="form-control js-example-basic-multiple"  multiple name="choice_options[{{ $attribute->id }}][]">
                                                         @foreach($attribute->characteristics as $value)
-                                                            <option @if($element->characteristics != null && in_array($value, json_decode($element->characteristics, true))) selected @endif
+                                                            <option @if($element->characteristics != null && in_array($value->id, json_decode($element->characteristics, true))) selected @endif
                                                                 value="{{ $value->id }}">{{ $value->getTranslation('name') }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                             </div>
+                                            @endforeach
                                         </div>
                                     </div>
-                                @endforeach
-                            @endif
+
+                            @endforeach
                         </div>
 
                         <div class="form-group row">
