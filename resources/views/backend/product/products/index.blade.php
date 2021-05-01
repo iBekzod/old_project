@@ -103,20 +103,20 @@
                         <tr>
                             <td>{{ ($key+1) + ($products->currentPage() - 1)*$products->perPage() }}</td>
                             <td>
-                                <a href="{{ route('product', $product->slug) }}" target="_blank">
-                                    <div class="form-group row">
-                                        <div class="col-lg-4">
-                                            <img src="{{ uploaded_asset($product->thumbnail_img)??static_asset('assets/img/placeholder.jpg')}}" alt="Image"
-                                                 class="w-50px">
-                                        </div>
-                                        <div class="col-lg-8">
-                                            <span class="text-muted">{{ $product->getTranslation('name') }}</span>
-                                        </div>
-                                    </div>
-                                </a>
+{{--                                <a href="{{ route('product', $product->slug) }}" target="_blank">--}}
+{{--                                    <div class="form-group row">--}}
+{{--                                        <div class="col-lg-4">--}}
+{{--                                            <img src="{{ uploaded_asset($product->thumbnail_img)??static_asset('assets/img/placeholder.jpg')}}" alt="Image"--}}
+{{--                                                 class="w-50px">--}}
+{{--                                        </div>--}}
+{{--                                        <div class="col-lg-8">--}}
+{{--                                            <span class="text-muted">{{ $product->getTranslation('name') }}</span>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </a>--}}
                             </td>
                             @if($type == 'Seller' || $type == 'All')
-                                <td>{{ $product->user->name }}</td>
+                                <td>{{ $product->user->name??null }}</td>
                             @endif
                             <td>{{ $product->num_of_sale }} {{translate('times')}}</td>
                             <td>

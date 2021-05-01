@@ -32,9 +32,9 @@ class Product extends Model
     //     'is_accepted'
     // ];
 
-    // public $appends = [
-    //     'thumbnaile_image', 'characteristicValues2'
-    // ];
+     public $appends = [
+         'thumbnaile_image'
+     ];
 
     // public function characteristicValues()
     // {

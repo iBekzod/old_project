@@ -3,68 +3,41 @@
 		<thead>
 			<tr>
 				<td class="text-center">
-					<label for="" class="control-label">{{translate('Variant')}}</label>
+					<label for="" class="control-label">{{translate('Slug')}}</label>
 				</td>
 				<td class="text-center">
-					<label for="" class="control-label">{{translate('Variant Price')}}</label>
-				</td>
-				<td class="text-center">
-					<label for="" class="control-label">{{translate('SKU')}}</label>
+					<label for="" class="control-label">{{translate('Price')}}</label>
 				</td>
 				<td class="text-center">
 					<label for="" class="control-label">{{translate('Quantity')}}</label>
 				</td>
+                <td class="text-center">
+                    <label for="" class="control-label">{{translate('Discount')}}</label>
+                </td>
 				<td></td>
 			</tr>
 		</thead>
 		<tbody>
 
 
-@foreach ($combinations as $key => $combination)
-	@php
-		$sku = '';
-		foreach (explode(' ', $product_name) as $key => $value) {
-			$sku .= substr($value, 0, 1);
-		}
-
-		$str = '';
-		foreach ($combination as $key => $item){
-			if($key > 0 ){
-				$str .= '-'.str_replace(' ', '', $item);
-				$sku .='-'.str_replace(' ', '', $item);
-			}
-			else{
-				if($colors_active == 1){
-					$color_name = \App\Color::where('code', $item)->first()->name;
-					$str .= $color_name;
-					$sku .='-'.$color_name;
-				}
-				else{
-					$str .= str_replace(' ', '', $item);
-					$sku .='-'.str_replace(' ', '', $item);
-				}
-			}
-		}
-	@endphp
-	@if(strlen($str) > 0)
+@foreach ($combinations as $combination)
 			<tr class="variant">
 				<td>
-					<label for="" class="control-label">{{ $str }}</label>
+					<label for="" class="control-label">{{ $combination->slug }}</label>
 				</td>
 				<td>
-					<input type="number" lang="en" name="price_{{ $str }}" value="{{ $unit_price }}" min="0" step="0.01" class="form-control" required>
+					<input type="number" lang="en" name="price_{{ $combination->id }}" value="{{ $combination->price }}" min="0" step="0.01" class="form-control" required>
 				</td>
 				<td>
-					<input type="text" name="sku_{{ $str }}" value="" class="form-control">
+					<input type="text" name="sku_{{ $combination->id }}" value="" class="form-control">
 				</td>
 				<td>
-					<input type="number" lang="en" name="qty_{{ $str }}" value="10" min="0" step="1" class="form-control" required>
+					<input type="number" lang="en" name="qty_{{ $combination->id }}" value="10" min="0" step="1" class="form-control" required>
 				</td>
 				<td>
 					<button type="button" class="btn btn-icon btn-sm btn-danger" onclick="delete_variant(this)"><i class="las la-trash"></i></button>
 				</td>
 			</tr>
-	@endif
 @endforeach
 	</tbody>
 </table>

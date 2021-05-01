@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Brand;
+use App\Characteristic;
+use App\Color;
+use App\Element;
 use App\Http\HelperClasses\Combinations;
 use App\Models\CharacteristicValues;
 use App\Models\ProductAttribute;
@@ -147,7 +150,7 @@ class ProductController extends Controller
             $sort_search = $request->search;
         }
 
-        $products = $products->where('digital', 0)->orderBy('created_at', 'desc')->paginate(15);
+        $products = $products->orderBy('created_at', 'desc')->paginate(15);
 
         return view('backend.product.products.index', compact('products', 'type', 'col_name', 'query', 'sort_search'));
     }
@@ -181,7 +184,7 @@ class ProductController extends Controller
             $sort_type = $request->type;
         }
 
-        $products = $products->where('digital', 0)->orderBy('created_at', 'desc')->paginate(15);
+        $products = $products->orderBy('created_at', 'desc')->paginate(15);
         $type = 'Seller';
 
         return view('backend.product.products.index', compact('products', 'type', 'col_name', 'query', 'seller_id', 'sort_search'));
@@ -224,17 +227,9 @@ class ProductController extends Controller
      */
     public function create()
     {
-//        dd(Category::withDepth()->having('depth', '=', 3)->get());
-//        $data = [
-//            'categories' => Category::where('level', '>=', 2)->get(),
-//            'brands' => Brand::all()
-//        ];
-        $data = [
-            'categories' => Category::withDepth()->having('depth', '=', 2)->get(),
-            'brands' => Brand::all()
-        ];
+        $elements = Element::all();
 
-        return view('backend.product.products.create', $data);
+        return view('backend.product.products.create', compact('elements'));
     }
 
     /**
@@ -842,6 +837,22 @@ class ProductController extends Controller
         return view('backend.product.products.sku_combinations', compact('combinations', 'unit_price', 'colors_active', 'product_name'));
     }
 
+    public function make_combination($id){
+        $element = Element::findOrFail($id);
+        $characteristic_list = json_decode($element->characteristics);
+        $color_list = json_decode($element->colors);
+
+        if($characteristic_list!=null && is_array($characteristic_list)){
+            $characteristics=Characteristic::whereIn('id', $characteristic_list)->pluck('slug')->toArray();
+        }
+        if($color_list!=null && is_array($color_list)){
+            $colors=Color::whereIn('code', $color_list)->pluck('name')->toArray();
+        }
+        $options = array_merge($characteristics, $colors);
+
+        $combinations = Combinations::makeCombinations($options);
+        return view('backend.product.products.sku_combinations_edit', compact('combinations'));
+    }
     public function sku_combination_edit(Request $request)
     {
         $product = Product::findOrFail($request->id);
