@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -29,9 +29,9 @@ class Element extends Model
         'video_link',
         'tags',
         'description',
-        'attribute_list',
+        'attributes',
         'choice_options',
-        'characteristic_list',
+        'characteristics',
         'colors',
         'todays_deal',
         'published',

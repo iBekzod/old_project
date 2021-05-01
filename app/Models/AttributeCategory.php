@@ -10,4 +10,6 @@ class AttributeCategory extends Model
     protected $fillable = [
         'category_id', 'attribute_id'
     ];
+
+
 }

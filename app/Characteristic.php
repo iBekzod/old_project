@@ -5,18 +5,20 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App;
 
-class AttributeValue extends Model
+class Characteristic extends Model
 {
+    protected $table= "characteristics";
+    protected $fillable = ['attribute_id', 'name', 'slug'];
     public function getTranslation($field = '', $lang = false)
     {
         $lang = $lang == false ? App::getLocale() : $lang;
-        $attribute_value_translation = $this->attribute_value_translations()->where('lang', $lang)->first();
+        $attribute_value_translation = $this->characteristic_translations()->where('lang', $lang)->first();
         return $attribute_value_translation != null ? $attribute_value_translation->$field : $this->$field;
     }
 
-    public function attribute_value_translations()
+    public function characteristic_translations()
     {
-        return $this->hasMany(AttributeValueTranslation::class);
+        return $this->hasMany(CharacteristicTranslation::class);
     }
 
     public function attribute()

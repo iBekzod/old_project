@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Brand;
+use App\ElementTranslation;
+use App\Models\Brand;
 use App\Http\HelperClasses\Combinations;
-use App\AttributeValue;
-use App\Attribute;
+use App\Models\AttributeValue;
+use App\Models\Attribute;
 use Illuminate\Http\Request;
-use App\Product;
+use App\Models\Product;
 use App\Element;
 use App\ProductTranslation;
 use App\ProductStock;
@@ -60,27 +61,57 @@ class ElementController extends Controller
         ]);
     }
 
-    public function make_choice_options(Request $request, $id){
+    public function make_choice_options(Request $request){
         try {
-            if($request->method()=='POST'){
-                $element = Element::where('id', $id)->firstOrFail();
-                $choice_options=json_decode($request->choice_options, true);
-                $element->attributes->sync([]);
-                $element->characteristics->sync([]);
-                $element->choice_options->sync([]);
-                foreach($choice_options as $attribute=>$values){
-                    $element->attributes->attach($attribute);
-                    foreach ($values as $value){
-                        $element->characteristics->attach($value);
-                    }
-                    $element->choice_options=$request->choice_options;
+//            if($request->method()=='POST'){
+//                $element = Element::where('id', $request->id)->firstOrFail();
+//                $choice_options=json_decode($request->choice_options, true);
+//                $element->attributes->sync([]);
+//                $element->characteristics->sync([]);
+//                $element->choice_options->sync([]);
+//                foreach($choice_options as $attribute=>$values){
+//                    $element->attributes->attach($attribute);
+//                    foreach ($values as $value){
+//                        $element->characteristics->attach($value);
+//                    }
+//                    $element->choice_options=$request->choice_options;
+//                }
+//                flash(translate('Saved successfully'))->success();
+//                return response()->json(['success'=>true, 'message'=>'post']);
+//            }else
+                if($request->method()=='GET'){
+                $element = Element::where('id', $request->id)->firstOrFail();
+                $category=Category::findOrFail($request->category_id);
+                $attributes=$category->attributes;
+                if($element->category && $element->category->id==$category->id){
+                    $options = $element->choice_options;
                 }
-                flash(translate('Saved successfully'))->success();
-                return response()->json(['success'=>true, 'message'=>'post']);
-            }else if($request->method()=='GET'){
-                $element = Element::where('id', $id)->firstOrFail();
-                $options = $element->choice_options;
-                return response()->json(['success'=>true, 'message'=>'get']);
+                $data=null;
+                foreach($attributes as $attribute){
+
+                    $content=null;
+                    $data=$data.
+                        '<div class="card">
+                                    <div class="card-header">
+                                        <h5 class="mb-0 h6">' .$attribute->branch->name. '</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <input type="hidden" name="choice_options[' .$attribute->id . ']" value="' .$attribute->id . '">
+                                        <div class="form-group row">
+                                            <label class="col-md-3 col-form-label"  for="signinSrEmail">' . $attribute->getTranslation('name'). '</label>
+                                            <div class="col-md-8">
+                                                <select class="form-control js-example-basic-multiple"  multiple name="choice_options[' .$attribute->id. '][]">';
+                                                    foreach($attribute->characteristics as $value){
+                                                        $content=$content.'<option value="' .$value->id . '">'. $value->getTranslation('name').'</option>';
+                                                    }
+                    $data=$data.$content.'      </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>';
+                }
+
+                return response()->json(['success'=>true, 'message'=>'get', 'data'=>$data]);
             }
         }catch (\Exception $exception){
             return response()->json(['success'=>false, 'message'=>$exception->getMessage()]);
@@ -524,7 +555,7 @@ class ElementController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
     public function admin_element_edit(Request $request, $id)
     {
@@ -532,18 +563,15 @@ class ElementController extends Controller
         ($element->category)? $element_attributes = $element->category->attributes : $element_attributes = [];
         $lang = $request->lang;
         $tags = json_decode($element->tags);
+        $colors = json_decode($element->colors);
+        $choice_options = json_decode($element->choice_options);
+
         $categories = Category::all()->toTree();
 
-        // return view('backend.product.elements.edit', compact('element', 'categories', 'tags', 'lang', 'elementAttributes', 'selectedProductAttributes'));
-        return view('backend.product.elements.edit', compact('element', 'categories', 'tags', 'lang', 'element_attributes'));
+
+        return view('backend.product.elements.edit', compact('element', 'colors', 'choice_options', 'categories', 'tags', 'lang', 'element_attributes'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function seller_element_edit(Request $request, $id)
     {
         $element = Element::findOrFail($id);
@@ -562,24 +590,32 @@ class ElementController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
+
         $element = Element::findOrFail($id);
-        $element->elementAttributes()->detach();
-        $element->elementAttributes()->attach($request->get('attrs'));
-        $element->subsubcategory_id = $request->category_id;
+        $element->category_id = $request->category_id;
         $element->brand_id = $request->brand_id;
-        $element->current_stock = $request->current_stock;
+//        $element->current_stock = $request->current_stock;
         $element->barcode = $request->barcode;
+        $choice_options=$request->choice_options;
 
-
-        if ($refund_request_addon != null && $refund_request_addon->activated == 1) {
-            if ($request->refundable != null) {
-                $element->refundable = 1;
-            } else {
-                $element->refundable = 0;
+        $my_attributes=array();
+        $my_characteristics=array();
+        $my_choice_options=array();
+        if($choice_options){
+            foreach($choice_options as $attribute=>$values){
+                array_push($my_attributes, $attribute);
+                if(is_array($values)){
+                    foreach ($values as $value){
+                        array_push($my_characteristics, $value);
+                    }
+                    array_push($my_choice_options, array($attribute=>$values));
+                }
             }
         }
-
+        $element->choice_options=json_encode($my_choice_options??array());
+        $element->attributes=json_encode($my_attributes??array());
+        $element->characteristics=json_encode($my_characteristics??array());
+        $element->colors=json_encode($request->colors??array());
         if ($request->lang == env("DEFAULT_LANGUAGE")) {
             $element->name = $request->name;
             $element->unit = $request->unit;
@@ -602,20 +638,6 @@ class ElementController extends Controller
 
         $element->video_provider = $request->video_provider;
         $element->video_link = $request->video_link;
-        // $element->unit_price = $request->unit_price;
-        // $element->purchase_price = $request->purchase_price;
-        // $element->tax = $request->tax;
-        // $element->tax_type = $request->tax_type;
-        // $element->discount = $request->discount;
-        // $element->shipping_type = $request->shipping_type;
-        // if ($request->has('shipping_type')) {
-        //     if ($request->shipping_type == 'free') {
-        //         $element->shipping_cost = 0;
-        //     } elseif ($request->shipping_type == 'flat_rate') {
-        //         $element->shipping_cost = $request->flat_shipping_cost;
-        //     }
-        // }
-        // $element->discount_type = $request->discount_type;
         $element->meta_title = $request->meta_title;
         $element->meta_description = $request->meta_description;
         $element->meta_img = $request->meta_img;
@@ -629,117 +651,117 @@ class ElementController extends Controller
         }
         $element->pdf = $request->pdf;
 
-        if ($request->has('colors_active') && $request->has('colors') && count($request->colors) > 0) {
-            $element->colors = json_encode($request->colors);
-        } else {
-            $colors = array();
-            $element->colors = json_encode($colors);
-        }
+//        if ($request->has('colors') && count($request->colors) > 0) {
+//            $element->colors = json_encode($request->colors);
+//        } else {
+//            $colors = array();
+//            $element->colors = json_encode($colors);
+//        }
 
-        $choice_options = array();
+//        $choice_options = array();
 
-        if ($request->has('choice_no')) {
-            foreach ($request->choice_no as $key => $no) {
-                $str = 'choice_options_' . $no;
+//        if ($request->has('choice_no')) {
+//            foreach ($request->choice_no as $key => $no) {
+//                $str = 'choice_options_' . $no;
+//
+//                $item['attribute_id'] = $no;
+//
+//                $data = array();
+//                if ($request[$str][0]) {
+//                    foreach (json_decode($request[$str][0]) as $key => $eachValue) {
+//                        array_push($data, $eachValue->value);
+//                    }
+//                    $item['values'] = $data;
+//                    array_push($choice_options, $item);
+//                }
+//
+//
+//            }
+//        }
 
-                $item['attribute_id'] = $no;
+//        foreach ($element->stocks as $key => $stock) {
+//            $stock->delete();
+//        }
 
-                $data = array();
-                if ($request[$str][0]) {
-                    foreach (json_decode($request[$str][0]) as $key => $eachValue) {
-                        array_push($data, $eachValue->value);
-                    }
-                    $item['values'] = $data;
-                    array_push($choice_options, $item);
-                }
-
-
-            }
-        }
-
-        foreach ($element->stocks as $key => $stock) {
-            $stock->delete();
-        }
-
-        if (!empty($request->choice_no)) {
-            $element->attributes = json_encode($request->choice_no);
-        } else {
-            $element->attributes = json_encode(array());
-        }
-
-        $element->choice_options = json_encode($choice_options);
+//        if (!empty($request->choice_no)) {
+//            $element->attributes = json_encode($request->choice_no);
+//        } else {
+//            $element->attributes = json_encode(array());
+//        }
+//
+//        $element->choice_options = json_encode($choice_options);
 
 
         //combinations start
-        $options = array();
-        if ($request->has('colors_active') && $request->has('colors') && count($request->colors) > 0) {
-            $colors_active = 1;
-            array_push($options, $request->colors);
-        }
-
-        if ($request->has('choice_no')) {
-            foreach ($request->choice_no as $key => $no) {
-                $name = 'choice_options_' . $no;
-                $data = array();
-                foreach (json_decode($request[$name][0]) as $key => $item) {
-                    array_push($data, $item->value);
-                }
-                array_push($options, $data);
-            }
-        }
-
-        $combinations = Combinations::makeCombinations($options);
-        if (count($combinations[0]) > 0) {
-            $element->variant_element = 1;
-            foreach ($combinations as $key => $combination) {
-                $str = '';
-                foreach ($combination as $key => $item) {
-                    if ($key > 0) {
-                        $str .= '-' . str_replace(' ', '', $item);
-                    } else {
-                        if ($request->has('colors_active') && $request->has('colors') && count($request->colors) > 0) {
-                            $color_name = \App\Color::where('code', $item)->first()->name;
-                            $str .= $color_name;
-                        } else {
-                            $str .= str_replace(' ', '', $item);
-                        }
-                    }
-                }
-
-                $element_stock = ProductStock::where('element_id', $element->id)->where('variant', $str)->first();
-                if ($element_stock == null) {
-                    $element_stock = new ProductStock;
-                    $element_stock->element_id = $element->id;
-                }
-                //TODO: Adding delivery logic
-                // $element_stock->delivery_group_id=1;
-                //TODO: Adding currency logic
-                // $element_stock->currency_id=1;
-//                $element_stock->user_id=Auth::user()->id;
-//                $element_stock->variant = $str;
-//                $element_stock->price = $request['price_' . str_replace('.', '_', $str)];
-//                $element_stock->sku = $request['sku_' . str_replace('.', '_', $str)];
-//                $element_stock->qty = $request['qty_' . str_replace('.', '_', $str)];
+//        $options = array();
+//        if ($request->has('colors_active') && $request->has('colors') && count($request->colors) > 0) {
+//            $colors_active = 1;
+//            array_push($options, $request->colors);
+//        }
 //
-//                $element_stock->save();
-            }
-        } else {
-            // $element_stock = new ProductStock;
-            // //TODO: Adding delivery logic
-            // $element_stock->delivery_group_id=1;
-            // //TODO: Adding currency logic
-            // $element_stock->currency_id=1;
-            // $element_stock->user_id=Auth::user()->id;
-            // $element_stock->element_id = $element->id;
-            // $element_stock->price = $request->unit_price;
-            // $element_stock->qty = $request->current_stock;
-            // $element_stock->save();
-        }
+//        if ($request->has('choice_no')) {
+//            foreach ($request->choice_no as $key => $no) {
+//                $name = 'choice_options_' . $no;
+//                $data = array();
+//                foreach (json_decode($request[$name][0]) as $key => $item) {
+//                    array_push($data, $item->value);
+//                }
+//                array_push($options, $data);
+//            }
+//        }
+
+//        $combinations = Combinations::makeCombinations($options);
+//        if (count($combinations[0]) > 0) {
+//            $element->variant_element = 1;
+//            foreach ($combinations as $key => $combination) {
+//                $str = '';
+//                foreach ($combination as $key => $item) {
+//                    if ($key > 0) {
+//                        $str .= '-' . str_replace(' ', '', $item);
+//                    } else {
+//                        if ($request->has('colors_active') && $request->has('colors') && count($request->colors) > 0) {
+//                            $color_name = \App\Color::where('code', $item)->first()->name;
+//                            $str .= $color_name;
+//                        } else {
+//                            $str .= str_replace(' ', '', $item);
+//                        }
+//                    }
+//                }
+//
+//                $element_stock = ProductStock::where('element_id', $element->id)->where('variant', $str)->first();
+//                if ($element_stock == null) {
+//                    $element_stock = new ProductStock;
+//                    $element_stock->element_id = $element->id;
+//                }
+//                //TODO: Adding delivery logic
+//                // $element_stock->delivery_group_id=1;
+//                //TODO: Adding currency logic
+//                // $element_stock->currency_id=1;
+////                $element_stock->user_id=Auth::user()->id;
+////                $element_stock->variant = $str;
+////                $element_stock->price = $request['price_' . str_replace('.', '_', $str)];
+////                $element_stock->sku = $request['sku_' . str_replace('.', '_', $str)];
+////                $element_stock->qty = $request['qty_' . str_replace('.', '_', $str)];
+////
+////                $element_stock->save();
+//            }
+//        } else {
+//            // $element_stock = new ProductStock;
+//            // //TODO: Adding delivery logic
+//            // $element_stock->delivery_group_id=1;
+//            // //TODO: Adding currency logic
+//            // $element_stock->currency_id=1;
+//            // $element_stock->user_id=Auth::user()->id;
+//            // $element_stock->element_id = $element->id;
+//            // $element_stock->price = $request->unit_price;
+//            // $element_stock->qty = $request->current_stock;
+//            // $element_stock->save();
+//        }
 
         $element->save();
 
         // Element Translations
-        $element_translation = ProductTranslation::firstOrNew(['lang' => $request->lang, 'element_id' => $element->id]);
+        $element_translation = ElementTranslation::firstOrNew(['lang' => $request->lang, 'element_id' => $element->id]);
         $element_translation->name = $request->name;
         $element_translation->unit = $request->unit;
         $element_translation->description = $request->description;

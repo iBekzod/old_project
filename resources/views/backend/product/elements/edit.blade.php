@@ -1,4 +1,29 @@
 @extends('backend.layouts.app')
+@section('css')
+    <style>
+        .select2-selection__rendered li{
+            background-color: transparent !important;
+            border: none;
+            border-right: 1px solid #aaa;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+            color: gray;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            padding: 0 4px;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        .select2-selection__rendered li button:hover{
+            background: rgba(255, 0, 0, 0.5) !important;
+        }
+        .select2-selection__rendered li:hover {
+            background: rgba(255, 0, 0, 0.3) !important;
+        }
+    </style>
+@endsection
 
 @section('content')
     <div class="aiz-titlebar text-left mt-2 mb-3">
@@ -87,22 +112,6 @@
                             </div>
                         </div>
                     @endif
-
-                    {{-- @php
-                        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
-                    @endphp
-                    @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-from-label">{{translate('Refundable')}}</label>
-                            <div class="col-lg-8">
-                                <label class="aiz-switch aiz-switch-success mb-0" style="margin-top:5px;">
-                                    <input type="checkbox" name="refundable"
-                                           @if ($element->refundable == 1) checked @endif>
-                                    <span class="slider round"></span></label>
-                                </label>
-                            </div>
-                        </div>
-                    @endif --}}
                 </div>
             </div>
             <div class="card">
@@ -126,83 +135,32 @@
                             </div>
                         </div>
 
-
-{{--                        <div class="form-group row">--}}
-{{--                            <div class="col-lg-3">--}}
-{{--                                <input type="text" class="form-control" value="{{translate('Attributes')}}" disabled>--}}
-{{--                            </div>--}}
-{{--                            <div class="col-lg-8">--}}
-{{--                                <select name="choice_attributes[]" id="choice_attributes" data-selected-text-format="count"--}}
-{{--                                        data-live-search="true" class="form-control aiz-selectpicker" multiple--}}
-{{--                                        data-placeholder="{{ translate('Choose Attributes') }}">--}}
-{{--                                    @foreach (\App\Attribute::all() as $key => $attribute)--}}
-{{--                                        <option value="{{ $attribute->id }}"--}}
-{{--                                                @if($element->attributes != null && in_array($attribute->id, json_decode($element->attributes, true)))--}}
-{{--                                                selected @endif>{{ $attribute->getTranslation('name') }}</option>--}}
-{{--                                    @endforeach--}}
-{{--                                </select>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-
-{{--                        <div class="">--}}
-{{--                            <p>{{ translate('Choose the attributes of this product and then input values of each attribute') }}</p>--}}
-{{--                            <br>--}}
-{{--                        </div>--}}
-
-
-
-
-
-{{--                        <div class="customer_choice_options" id="customer_choice_options">--}}
-{{--                            @foreach(json_decode($element->choice_options, true) as $attribute_id => $value_ids)--}}
-{{--                                @php--}}
-{{--                                    $attribute = \App\Attribute::find($attribute_id);--}}
-{{--                                    $value = \App\AttributeValue::find($value_id);--}}
-{{--                                @endphp--}}
-{{--                                <div class="form-group row">--}}
-{{--                                    <div class="col-lg-3">--}}
-{{--                                        <input type="hidden" name="choice_no[]" value="{{ $choice_option->attribute_id }}">--}}
-
-
-
-{{--                                        <input type="text" class="form-control" name="choice[]" value="{{ $name  }}"--}}
-{{--                                               placeholder="{{ translate('Choice Title') }}" disabled>--}}
-{{--                                    </div>--}}
-{{--                                    <div class="col-lg-8">--}}
-{{--                                        <input type="text" class="form-control aiz-tag-input"--}}
-{{--                                               name="choice_options_{{ $choice_option->attribute_id }}[]"--}}
-{{--                                               placeholder="{{ translate('Enter choice values') }}"--}}
-{{--                                               value="{{ implode(',', $choice_option->values) }}"--}}
-{{--                                               data-on-change="update_sku">--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            @endforeach--}}
-{{--                        </div>--}}.
-                        @if($element->category)
-                            @foreach($element->category->attributes as $attribute)
-                                <div class="card">
-                                    <div class="card-header">
-{{--                                        @dd($attribute->branch)--}}
-                                        <h5 class="mb-0 h6">{{ $attribute->branch->name }}</h5>
-{{--                                        <h5 class="mb-0 h6">{{ $attribute->branch->getTranslation('name') }}</h5>--}}
-                                    </div>
-                                    <div class="card-body">
-                                        <input type="hidden" name="choice_options[{{ $attribute->id }}]" value="{{ $attribute->id }}">
-                                        <div class="form-group row">
-                                            <label class="col-md-3 col-form-label"  for="signinSrEmail">{{ $attribute->getTranslation('name') }}</label>
-                                            <div class="col-md-8">
-                                                <select class="form-control selection"  multiple name="choice_options[{{ $attribute->id }}][]">
-                                                    @foreach($attribute->values as $value)
-                                                        <option value="{{ $value->id }}">{{ $value->getTranslation('name') }}</option>
-                                                    @endforeach
-                                                </select>
+                        <div id="attribute_div">
+                            @if($element->category)
+                                @foreach($element->category->attributes as $attribute)
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="mb-0 h6">{{ $attribute->branch->name }}</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <input type="hidden" name="choice_options[{{ $attribute->id }}]" value="{{ $attribute->id }}">
+                                            <div class="form-group row">
+                                                <label class="col-md-3 col-form-label"  for="signinSrEmail">{{ $attribute->getTranslation('name') }}</label>
+                                                <div class="col-md-8">
+                                                    <select class="form-control js-example-basic-multiple"  multiple name="choice_options[{{ $attribute->id }}][]">
+                                                        @foreach($attribute->characteristics as $value)
+                                                            <option @if($element->characteristics != null && in_array($value, json_decode($element->characteristics, true))) selected @endif
+                                                                value="{{ $value->id }}">{{ $value->getTranslation('name') }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                @endforeach
+                            @endif
+                        </div>
 
-                            @endforeach
-                        @endif
                         <div class="form-group row">
                             <div class="col-lg-3">
                                 <input type="text" class="form-control" value="{{translate('Colors')}}" disabled>
@@ -210,8 +168,9 @@
                             <div class="col-lg-8">
                                 <select class="form-control aiz-selectpicker" data-live-search="true"
                                         data-selected-text-format="count" name="colors[]" id="colors" multiple>
+
                                     @foreach (\App\Color::orderBy('name', 'asc')->get() as $key => $color)
-                                        <option
+                                        <option @if(in_array($color->code, $colors)) selected @endif
                                             value="{{ $color->code }}"
                                             data-content="<span><span class='size-15px d-inline-block mr-2 rounded border' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"
                                         ></option>
@@ -264,40 +223,6 @@
                             </div>
                         </div>
                     </div>
-                    {{-- <div class="form-group row">
-                        <label class="col-lg-3 col-from-label">{{translate('Gallery Images')}}</label>
-                        <div class="col-lg-8">
-                            <div id="photos">
-                                @if(is_array(json_decode($element->photos)))
-                                    @foreach (json_decode($element->photos) as $key => $photo)
-                                        <div class="col-md-4 col-sm-4 col-xs-6">
-                                            <div class="img-upload-preview">
-                                                <img loading="lazy"  src="{{ uploaded_asset($photo)??static_asset('assets/img/placeholder.jpg') }}" alt="" class="img-responsive">
-                                                <input type="hidden" name="previous_photos[]" value="{{ $photo }}">
-                                                <button type="button" class="btn btn-danger close-btn remove-files"><i class="fa fa-times"></i></button>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                @endif
-                            </div>
-                        </div>
-                    </div> --}}
-                    {{-- <div class="form-group row">
-                        <label class="col-lg-3 col-from-label">{{translate('Thumbnail Image')}} <small>(290x300)</small></label>
-                        <div class="col-lg-8">
-                            <div id="thumbnail_img">
-                                @if ($element->thumbnail_img != null)
-                                    <div class="col-md-4 col-sm-4 col-xs-6">
-                                        <div class="img-upload-preview">
-                                            <img loading="lazy"  src="{{ uploaded_asset($element->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}" alt="" class="img-responsive">
-                                            <input type="hidden" name="previous_thumbnail_img" value="{{ $element->thumbnail_img }}">
-                                            <button type="button" class="btn btn-danger close-btn remove-files"><i class="fa fa-times"></i></button>
-                                        </div>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    </div> --}}
                 </div>
             </div>
             <div class="card">
@@ -327,103 +252,6 @@
                     </div>
                 </div>
             </div>
-{{--            <div class="card">--}}
-{{--                <div class="card-header">--}}
-{{--                    <h5 class="mb-0 h6">{{translate('Element Variation')}}</h5>--}}
-{{--                </div>--}}
-{{--                <div class="card-body">--}}
-{{--                    <div class="form-group row" id="category">--}}
-{{--                        <label class="col-lg-3 col-from-label">{{translate('Category')}}</label>--}}
-{{--                        <div class="col-lg-8">--}}
-{{--                            <select class="form-control aiz-selectpicker" name="category_id" id="category_id"--}}
-{{--                                    data-selected="{{ $element->category_id }}" data-live-search="true" required>--}}
-{{--                                @foreach ($categories as $category)--}}
-{{--                                    <option value="{{ $category->id }}">{{ $category->getTranslation('name') }}</option>--}}
-{{--                                    @foreach ($category->children as $childCategory)--}}
-{{--                                        @include('categories.child_category', ['child_category' => $childCategory])--}}
-{{--                                    @endforeach--}}
-{{--                                @endforeach--}}
-{{--                            </select>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <div class="form-group row">--}}
-{{--                        <div class="col-lg-3">--}}
-{{--                            <input type="text" class="form-control" value="{{translate('Colors')}}" disabled>--}}
-{{--                        </div>--}}
-{{--                        <div class="col-lg-8">--}}
-{{--                            <select class="form-control aiz-selectpicker" data-live-search="true"--}}
-{{--                                    data-selected-text-format="count" name="colors[]" id="colors" multiple>--}}
-{{--                                @foreach (\App\Color::orderBy('name', 'asc')->get() as $key => $color)--}}
-{{--                                    <option--}}
-{{--                                        value="{{ $color->code }}"--}}
-{{--                                        data-content="<span><span class='size-15px d-inline-block mr-2 rounded border' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"--}}
-{{--                                     if (in_array($color->code, json_decode($element->colors))) echo 'selected'?>--}}
-{{--                                    ></option>--}}
-{{--                                @endforeach--}}
-{{--                            </select>--}}
-{{--                        </div>--}}
-{{--                        <div class="col-lg-1">--}}
-{{--                            <label class="aiz-switch aiz-switch-success mb-0">--}}
-{{--                                <input value="1" type="checkbox"--}}
-{{--                                       name="colors_active"   if (count(json_decode($element->colors)) > 0) echo "checked"; >--}}
-{{--                                <span></span>--}}
-{{--                            </label>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-
-{{--                    <div class="form-group row">--}}
-{{--                        <div class="col-lg-3">--}}
-{{--                            <input type="text" class="form-control" value="{{translate('Attributes')}}" disabled>--}}
-{{--                        </div>--}}
-{{--                        <div class="col-lg-8">--}}
-{{--                            <select name="choice_attributes[]" id="choice_attributes" data-selected-text-format="count"--}}
-{{--                                    data-live-search="true" class="form-control aiz-selectpicker" multiple--}}
-{{--                                    data-placeholder="{{ translate('Choose Attributes') }}">--}}
-{{--                                @foreach (\App\Attribute::all() as $key => $attribute)--}}
-{{--                                    <option value="{{ $attribute->id }}"--}}
-{{--                                            @if($element->attributes != null && in_array($attribute->id, json_decode($element->attributes, true)))--}}
-{{--                                            selected @endif>{{ $attribute->getTranslation('name') }}</option>--}}
-{{--                                @endforeach--}}
-{{--                            </select>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-
-{{--                    <div class="">--}}
-{{--                        <p>{{ translate('Choose the attributes of this product and then input values of each attribute') }}</p>--}}
-{{--                        <br>--}}
-{{--                    </div>--}}
-
-{{--                    <div class="customer_choice_options" id="customer_choice_options">--}}
-{{--                        @foreach (json_decode($element->choice_options) as $key => $choice_option)--}}
-{{--                            <div class="form-group row">--}}
-{{--                                <div class="col-lg-3">--}}
-{{--                                    <input type="hidden" name="choice_no[]" value="{{ $choice_option->attribute_id }}">--}}
-
-{{--                                    @php--}}
-
-{{--                                        $attr = \App\Attribute::find($choice_option->attribute_id);--}}
-{{--                                        $name = null;--}}
-{{--                                        if ($attr !== null)--}}
-{{--                                        $name =    $attr->getTranslation('name');--}}
-
-
-{{--                                    @endphp--}}
-
-{{--                                    <input type="text" class="form-control" name="choice[]" value="{{ $name  }}"--}}
-{{--                                           placeholder="{{ translate('Choice Title') }}" disabled>--}}
-{{--                                </div>--}}
-{{--                                <div class="col-lg-8">--}}
-{{--                                    <input type="text" class="form-control aiz-tag-input"--}}
-{{--                                           name="choice_options_{{ $choice_option->attribute_id }}[]"--}}
-{{--                                           placeholder="{{ translate('Enter choice values') }}"--}}
-{{--                                           value="{{ implode(',', $choice_option->values) }}"--}}
-{{--                                           data-on-change="update_sku">--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        @endforeach--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0 h6">{{translate('Element Description')}}</h5>
@@ -514,7 +342,6 @@
     </div>
 
 @endsection
-
 @section('script')
 
     <script type="text/javascript">
@@ -537,24 +364,34 @@
         $('#colors').on('change', function () {
             update_sku();
         });
-
+        // $('.attribute_selection').select2();
         $('#category_id').on('change', function () {
+            $.ajax({
+                type:'GET',
+                url:'{{ route('elements.make_choice_options') }}',
+                data:{
+                    id: '<?php echo $element->id?>',
+                    category_id: $('#category_id option:selected').val()
+                },
+                success:function(data){
+                        $('#attribute_div').html(data.data)
+                        $('.js-example-basic-multiple').select2();
+                }
+            });
+        });
 
-                {{--$element->category_id="<script>document.write($('#category_id option:selected').val())</script>";--}}
-
-            {{--$.ajax({--}}
-            {{--    type: "POST",--}}
-            {{--    url: '{{ route('elements.make_choice_options') }}',--}}
-            {{--    data: $('#choice_form').serialize(),--}}
-            {{--    success: function (data) {--}}
-            {{--        $('#sku_combination').html(data);--}}
-            {{--        if (data.length > 1) {--}}
-            {{--            $('#quantity').hide();--}}
-            {{--        } else {--}}
-            {{--            $('#quantity').show();--}}
-            {{--        }--}}
-            {{--    }--}}
-            {{--});--}}
+        $('#save_attributes').on('click', function () {
+            $.ajax({
+                type:'POST',
+                url:'{{ route('elements.make_choice_options') }}',
+                data:{
+                    id: '<?php echo $element->id?>',
+                    choice_options: ''
+                },
+                success:function(data){
+                    alert('Done: ');
+                }
+            });
         });
 
         function delete_row(em) {
@@ -567,19 +404,19 @@
         }
 
         function update_sku() {
-            $.ajax({
-                type: "POST",
-                url: '{{ route('products.sku_combination_edit') }}',
-                data: $('#choice_form').serialize(),
-                success: function (data) {
-                    $('#sku_combination').html(data);
-                    if (data.length > 1) {
-                        $('#quantity').hide();
-                    } else {
-                        $('#quantity').show();
-                    }
-                }
-            });
+            {{--$.ajax({--}}
+            {{--    type: "POST",--}}
+            {{--    url: '{{ route('products.sku_combination_edit') }}',--}}
+            {{--    data: $('#choice_form').serialize(),--}}
+            {{--    success: function (data) {--}}
+            {{--        $('#sku_combination').html(data);--}}
+            {{--        if (data.length > 1) {--}}
+            {{--            $('#quantity').hide();--}}
+            {{--        } else {--}}
+            {{--            $('#quantity').show();--}}
+            {{--        }--}}
+            {{--    }--}}
+            {{--});--}}
         }
 
         AIZ.plugins.tagify();
@@ -591,37 +428,6 @@
                 $(this).parents(".col-md-4").remove();
             });
         });
-
-        // $('#choice_attributes').on('change', function () {
-        //     $.each($("#choice_attributes option:selected"), function (j, attribute) {
-        //         flag = false;
-        //         $('input[name="choice_no[]"]').each(function (i, choice_no) {
-        //             if ($(attribute).val() == $(choice_no).val()) {
-        //                 flag = true;
-        //             }
-        //         });
-        //         if (!flag) {
-        //             add_more_customer_choice_option($(attribute).val(), $(attribute).text());
-        //         }
-        //     });
-
-{{--        //     var str = @php echo $element->attributes @endphp;--}}
-
-        //     $.each(str, function (index, value) {
-        //         flag = false;
-        //         $.each($("#choice_attributes option:selected"), function (j, attribute) {
-        //             if (value == $(attribute).val()) {
-        //                 flag = true;
-        //             }
-        //         });
-        //         if (!flag) {
-        //             $('input[name="choice_no[]"][value="' + value + '"]').parent().parent().remove();
-        //         }
-        //     });
-
-        //     update_sku();
-        // });
-
     </script>
 
 @endsection
