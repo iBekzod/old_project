@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Branch;
+use App\BranchTranslation;
 use Illuminate\Http\Request;
-use App\Attribute;
-use App\AttributeTranslation;
-use CoreComponentRepository;
 
-class AttributeController extends Controller
+class BranchController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +15,8 @@ class AttributeController extends Controller
      */
     public function index()
     {
-        // CoreComponentRepository::instantiateShopRepository();
-        $attributes = Attribute::orderBy('created_at', 'desc')->get();
-        return view('backend.product.attribute.index', compact('attributes'));
+        $branches = Branch::orderBy('created_at', 'desc')->get();
+        return view('backend.product.branches.index', compact('branches'));
     }
 
     /**
@@ -38,16 +36,16 @@ class AttributeController extends Controller
      */
     public function store(Request $request)
     {
-        $attribute = new Attribute;
-        $attribute->name = $request->name;
-        $attribute->save();
+        $branch = new Branch();
+        $branch->name = $request->name;
+        $branch->save();
 
-        $attribute_translation = AttributeTranslation::firstOrNew(['lang' => env('DEFAULT_LANGUAGE'), 'attribute_id' => $attribute->id]);
-        $attribute_translation->name = $request->name;
-        $attribute_translation->save();
+        $branch_translation = BranchTranslation::firstOrNew(['lang' => env('DEFAULT_LANGUAGE'), 'branch_id' => $branch->id]);
+        $branch_translation->name = $request->name;
+        $branch_translation->save();
 
-        flash(translate('Attribute has been inserted successfully'))->success();
-        return redirect()->route('attributes.index');
+        flash(translate('Branch has been inserted successfully'))->success();
+        return redirect()->route('branches.index');
     }
 
     /**
@@ -70,8 +68,8 @@ class AttributeController extends Controller
     public function edit(Request $request, $id)
     {
         $lang      = $request->lang;
-        $attribute = Attribute::findOrFail($id);
-        return view('backend.product.attribute.edit', compact('attribute','lang'));
+        $branch = Branch::findOrFail($id);
+        return view('backend.product.branches.edit', compact('branch','lang'));
     }
 
     /**
@@ -83,17 +81,17 @@ class AttributeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $attribute = Attribute::findOrFail($id);
+        $branch = Branch::findOrFail($id);
         if($request->lang == env("DEFAULT_LANGUAGE")){
-          $attribute->name = $request->name;
+          $branch->name = $request->name;
         }
-        $attribute->save();
+        $branch->save();
 
-        $attribute_translation = AttributeTranslation::firstOrNew(['lang' => $request->lang, 'attribute_id' => $attribute->id]);
-        $attribute_translation->name = $request->name;
-        $attribute_translation->save();
+        $branch_translation = BranchTranslation::firstOrNew(['lang' => $request->lang, 'branch_id' => $branch->id]);
+        $branch_translation->name = $request->name;
+        $branch_translation->save();
 
-        flash(translate('Attribute has been updated successfully'))->success();
+        flash(translate('Branch has been updated successfully'))->success();
         return back();
     }
 
@@ -105,14 +103,14 @@ class AttributeController extends Controller
      */
     public function destroy($id)
     {
-        $attribute = Attribute::findOrFail($id);
+        $branch = Branch::findOrFail($id);
 
-        foreach ($attribute->attribute_translations as $key => $attribute_translation) {
-            $attribute_translation->delete();
+        foreach ($branch->branch_translations as $key => $branch_translation) {
+            $branch_translation->delete();
         }
 
-        Attribute::destroy($id);
-        flash(translate('Attribute has been deleted successfully'))->success();
-        return redirect()->route('attributes.index');
+        Branch::destroy($id);
+        flash(translate('branch has been deleted successfully'))->success();
+        return redirect()->route('branches.index');
     }
 }

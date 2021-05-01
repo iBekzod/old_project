@@ -19,7 +19,7 @@
               </li>
              @endforeach
           </ul>
-          <form class="p-4" action="{{ route('attributes.update', $branch->id) }}" method="POST">
+          <form class="p-4" action="{{ route('branches.update', $branch->id) }}" method="POST">
               <input name="_method" type="hidden" value="PATCH">
               <input type="hidden" name="lang" value="{{ $lang }}">
               @csrf

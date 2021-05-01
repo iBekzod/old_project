@@ -157,23 +157,24 @@
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
+                                <a href="{{route('branches.index')}}" class="aiz-side-nav-link {{ areActiveRoutes([
+                                                                        'branches.index',
+                                                                        'branches.create',
+                                                                        'branches.edit'
+                                                                    ])}}">
+
+                                    <span class="aiz-side-nav-text">
+                                        {{ translate('Branches') }}
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
                                 <a href="{{route('attributes.index')}}"
                                    class="aiz-side-nav-link {{ areActiveRoutes(['attributes.index','attributes.create','attributes.edit'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Attribute')}}</span>
                                 </a>
                             </li>
-                            <li class="aiz-side-nav-item">
-                                <a href="{{route('product-attributes.index')}}" class="aiz-side-nav-link {{ areActiveRoutes([
-                                                                        'product-attributes.index',
-                                                                        'product-attributes.create',
-                                                                        'product-attributes.edit'
-                                                                    ])}}">
 
-                                    <span class="aiz-side-nav-text">
-                                        {{ translate('Product Attributes') }}
-                                    </span>
-                                </a>
-                            </li>
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('reviews.index')}}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{translate('Product Reviews')}}</span>

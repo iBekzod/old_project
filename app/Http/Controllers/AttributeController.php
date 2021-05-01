@@ -28,6 +28,7 @@ class AttributeController extends Controller
      */
     public function create()
     {
+
     }
 
     /**

@@ -213,14 +213,19 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
     Route::post('/sellers/profile_modal', 'SellerController@profile_modal')->name('sellers.profile_modal');
     Route::post('/sellers/approved', 'SellerController@updateApproved')->name('sellers.approved');
 
-	Route::resource('product-attributes','ProductAttributeController');
+//	Route::resource('branches','BranchController');
+    Route::get('/branches', 'BranchController@index')->name('branches.index');
+    Route::get('/branches/edit/{id}', 'BranchController@edit')->name('branches.edit');
+    Route::get('/branches/destroy/{id}', 'BranchController@destroy')->name('branches.destroy');
+	Route::patch('/branches/{id}/update','BranchController@update')->name('branches.update');
+    Route::post('/branches/store','BranchController@store')->name('branches.store');
 	// Route::resource('product-attribute-sets','ProductAttributeSetController');
-	Route::post('product-attributes/add/attr','ProductAttributeController@createAttr')->name('product-attributes.add_attr');
-	Route::get('product-attributes/{id}/attr/edit','ProductAttributeController@editAttr')->name('product-attributes.edit_attr');
-	Route::post('product-attributes/{id}/attr/edit','ProductAttributeController@editAttr')->name('product-attributes.edit_attr');
-	Route::patch('product-attributes/{id}/attr/update','ProductAttributeController@updateAttr')->name('product-attributes.update_attr');
-	Route::delete('product-attributes/{id}/attr/destoy','ProductAttributeController@destroyAttr')->name('product-attributes.destroy_attr');
-	Route::post('product-attributes/{id}/change/categories','ProductAttributeController@changeCategories')->name('product-attributes.change_categories');
+//	Route::post('product-attributes/add/attr','ProductAttributeController@createAttr')->name('product-attributes.add_attr');
+//	Route::get('product-attributes/{id}/attr/edit','ProductAttributeController@editAttr')->name('product-attributes.edit_attr');
+//	Route::post('product-attributes/{id}/attr/edit','ProductAttributeController@editAttr')->name('product-attributes.edit_attr');
+//	Route::patch('product-attributes/{id}/attr/update','ProductAttributeController@updateAttr')->name('product-attributes.update_attr');
+//	Route::delete('product-attributes/{id}/attr/destoy','ProductAttributeController@destroyAttr')->name('product-attributes.destroy_attr');
+//	Route::post('product-attributes/{id}/change/categories','ProductAttributeController@changeCategories')->name('product-attributes.change_categories');
 
 	Route::resource('attributes','AttributeController');
 	Route::get('/attributes/edit/{id}', 'AttributeController@edit')->name('attributes.edit');
