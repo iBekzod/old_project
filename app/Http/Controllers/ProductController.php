@@ -861,7 +861,8 @@ class ProductController extends Controller
                 $variations[]=$colors;
             }
             $combinations = Combinations::makeCombinations($variations);
-            return view('backend.product.products.design_make_combination', compact('combinations', 'element'));
+            $lang=default_language();
+            return view('backend.product.products.design_make_combination', compact('combinations', 'element', 'lang'));
 
         }catch (\Exception $e){
 
