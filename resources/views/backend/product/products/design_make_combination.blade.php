@@ -10,7 +10,7 @@
                 <label for="" class="control-label">{{ translate('Price') }}</label>
             </td>
             <td class="text-center">
-                <label for="" class="control-label">{{ translate('crwd') }}</label>
+                <label for="" class="control-label">{{ translate('Currency') }}</label>
             </td>
             <td class="text-center">
                 <label for="" class="control-label">{{ translate('Quantity') }}</label>
@@ -42,11 +42,12 @@
         <tbody>
         @foreach ($combinations as $index=>$combination)
         <tr class="variant">
-            <td> <label for="" class="control-label">{{implode ("-", $combination)}}</label>
-                <input type="hidden" name="slug_{{$index}}" value="{{implode ("-", $combination)}}" class="form-control"></td>
             <td>
-
-
+                <label for="" class="control-label">{{implode ("-", $combination)}}</label>
+                <input type="hidden" name="variation[{{ $index }}][slug]" value="{{implode ("-", $combination)}}" class="form-control">
+            </td>
+            <td>
+                <input type="number" lang="en" name="variation[{{ $index }}][price]" value="0" min="0" step="0.01" class="form-control" required>
             </td>
             <td>
                 <select class="form-control aiz-selectpicker" name="select1" id="select1">

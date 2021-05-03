@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Attribute;
 use App\Brand;
 use App\Characteristic;
 use App\Color;
@@ -845,9 +846,13 @@ class ProductController extends Controller
             $variations=array();
             if($choice_option_list!=null && is_array($choice_option_list)){
                 foreach ($choice_option_list as $index=>$attributes){
-                    foreach ($attributes as $attribute=>$values) {
-                        $characteristics = Characteristic::whereIn('id', $values)->pluck('name')->toArray();
-                        $variations[] = $characteristics;
+                    foreach ($attributes as $attribute_id=>$values) {
+                        if($attribute = Attribute::find($attribute_id)){
+                            if($attribute->combination==true){
+                                $characteristics = Characteristic::whereIn('id', $values)->pluck('name')->toArray();
+                                $variations[] = $characteristics;
+                            }
+                        }
                     }
                 }
             }

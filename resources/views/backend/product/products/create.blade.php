@@ -4,7 +4,7 @@
     <div class="aiz-titlebar text-left mt-2 mb-3">
         <h5 class="mb-0 h6">{{translate('Add New Product')}}</h5>
     </div>
-    <div class="col-md-10 mx-auto">
+    <div class="col-md-12 mx-auto">
         <form class="form form-horizontal mar-top" action="{{route('products.store')}}" method="POST"
               enctype="multipart/form-data" id="choice_form">
             @csrf
