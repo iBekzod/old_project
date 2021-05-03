@@ -809,50 +809,77 @@ class ProductController extends Controller
         return 0;
     }
 
-    public function sku_combination(Request $request)
-    {
-        $options = array();
-        if ($request->has('colors_active') && $request->has('colors') && count($request->colors) > 0) {
-            $colors_active = 1;
-            array_push($options, $request->colors);
-        } else {
-            $colors_active = 0;
-        }
+//    public function sku_combination(Request $request)
+//    {
+//        $options = array();
+//        if ($request->has('colors_active') && $request->has('colors') && count($request->colors) > 0) {
+//            $colors_active = 1;
+//            array_push($options, $request->colors);
+//        } else {
+//            $colors_active = 0;
+//        }
+//
+//        $unit_price = $request->unit_price;
+//        $product_name = $request->name;
+//
+//        if ($request->has('choice_no')) {
+//            foreach ($request->choice_no as $key => $no) {
+//                $name = 'choice_options_' . $no;
+//                $data = array();
+//                foreach (json_decode($request[$name][0]) as $key => $item) {
+//                    array_push($data, $item->value);
+//                }
+//                array_push($options, $data);
+//            }
+//        }
+//
+//        $combinations = Combinations::makeCombinations($options);
+//        return view('backend.product.products.sku_combinations', compact('combinations', 'unit_price', 'colors_active', 'product_name'));
+//    }
 
-        $unit_price = $request->unit_price;
-        $product_name = $request->name;
-
-        if ($request->has('choice_no')) {
-            foreach ($request->choice_no as $key => $no) {
-                $name = 'choice_options_' . $no;
-                $data = array();
-                foreach (json_decode($request[$name][0]) as $key => $item) {
-                    array_push($data, $item->value);
+    public function make_combination(Request $request){
+        try{
+            $element = Element::findOrFail($request->element_id);
+            $choice_option_list = json_decode($element->choice_options, true);
+            $color_list = json_decode($element->colors, true);
+            $variations=array();
+            if($choice_option_list!=null && is_array($choice_option_list)){
+                foreach ($choice_option_list as $index=>$attributes){
+                    foreach ($attributes as $attribute=>$values) {
+                        $characteristics = Characteristic::whereIn('id', $values)->pluck('name')->toArray();
+                        $variations[] = $characteristics;
+                    }
                 }
-                array_push($options, $data);
             }
-        }
+            if($color_list!=null && is_array($color_list)){
+                $colors=Color::whereIn('code', $color_list)->pluck('name')->toArray();
+                $variations[]=$colors;
+            }
+            $combinations = Combinations::makeCombinations($variations);
+            return view('backend.product.products.design_make_combination', compact('combinations', 'element'));
 
-        $combinations = Combinations::makeCombinations($options);
-        return view('backend.product.products.sku_combinations', compact('combinations', 'unit_price', 'colors_active', 'product_name'));
+        }catch (\Exception $e){
+
+        }
+        return null;
     }
-
-    public function make_combination($id){
-        $element = Element::findOrFail($id);
-        $characteristic_list = json_decode($element->characteristics);
-        $color_list = json_decode($element->colors);
-
-        if($characteristic_list!=null && is_array($characteristic_list)){
-            $characteristics=Characteristic::whereIn('id', $characteristic_list)->pluck('slug')->toArray();
-        }
-        if($color_list!=null && is_array($color_list)){
-            $colors=Color::whereIn('code', $color_list)->pluck('name')->toArray();
-        }
-        $options = array_merge($characteristics, $colors);
-
-        $combinations = Combinations::makeCombinations($options);
-        return view('backend.product.products.sku_combinations_edit', compact('combinations'));
-    }
+//    public function make_combination($id){
+//        $element = Element::findOrFail($id);
+//        $characteristic_list = json_decode($element->characteristics);
+//        $color_list = json_decode($element->colors);
+//
+//        if($characteristic_list!=null && is_array($characteristic_list)){
+//            $characteristics=Characteristic::whereIn('id', $characteristic_list)->pluck('slug')->toArray();
+//        }
+//        if($color_list!=null && is_array($color_list)){
+//            $colors=Color::whereIn('code', $color_list)->pluck('name')->toArray();
+//        }
+//        //$options = array_merge($characteristics, $colors);
+////        cartesian($colors);
+////        $combinations = Combinations::cartesian($characteristics);
+//        $combinations = Combinations::makeCombinations($characteristics);
+//        return view('backend.product.products.sku_combinations_edit', compact('combinations', 'element'));
+//    }
     public function sku_combination_edit(Request $request)
     {
         $product = Product::findOrFail($request->id);

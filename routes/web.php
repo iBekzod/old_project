@@ -35,17 +35,20 @@ Route::get('/email_change/callback', 'HomeController@email_change_callback')->na
 Route::post('/password/reset/email/submit', 'HomeController@reset_password_with_code')->name('password.update');
 
 Route::get('/test', function () {
-    $categories = \App\Category::all();
-    $categories = $categories->groupBy('slug');
-    foreach ($categories as $category) {
-        if($category->count() > 1) {
-//            dd($category);
-            foreach ($category as $item) {
-                $item->slug = SlugService::createSlug(Category::class, 'slug', slugify($item->name));
-                $item->save();
-            }
-        }
-    }
+       $variations= new \App\Http\Controllers\ProductController();
+
+       dd($variations->make_variation(78));
+//    $categories = \App\Category::all();
+//    $categories = $categories->groupBy('slug');
+//    foreach ($categories as $category) {
+//        if($category->count() > 1) {
+////            dd($category);
+//            foreach ($category as $item) {
+//                $item->slug = SlugService::createSlug(Category::class, 'slug', slugify($item->name));
+//                $item->save();
+//            }
+//        }
+//    }
 });
 
 Route::post('/language', 'LanguageController@changeLanguage')->name('language.change');
@@ -222,6 +225,8 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('/products/update/{id}','ProductController@update')->name('products.update');
 	Route::get('/products/destroy/{id}', 'ProductController@destroy')->name('products.destroy');
 	Route::get('/products/duplicate/{id}', 'ProductController@duplicate')->name('products.duplicate');
+    Route::get('/products/make_combination', 'ProductController@make_combination')->name('products.make_combination');
+//    Route::post('/products/edit_combination', 'ProductController@edit_combination')->name('products.edit_combination');
 	Route::post('/products/sku_combination', 'ProductController@sku_combination')->name('products.sku_combination');
 	Route::post('/products/sku_combination_edit', 'ProductController@sku_combination_edit')->name('products.sku_combination_edit');
 	Route::post('/products/seller/featured', 'ProductController@updateSellerFeatured')->name('products.seller.featured');
