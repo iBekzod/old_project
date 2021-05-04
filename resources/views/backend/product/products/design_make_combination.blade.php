@@ -9,23 +9,24 @@
             </td>
             <td class="text-center">
                 <label for="" class="control-label">{{ translate('Price') }}</label>
-                <input type="number" name="price" value="0" min="0" step="0.01" class="form-control" >
+                <input type="number" onkeyup="change_input(this.value, 'price_change')" name="price" value="0" min="0" step="0.01" class="form-control" >
             </td>
             <td class="text-center">
                 <label for="" class="control-label">{{ translate('Currency') }}</label>
-                <select class="form-control aiz-selectpicker" name="currency">
+                <select class="form-control aiz-selectpicker"  name="currency" onchange="change_selection(this.value, 'currency_change')" >
                     <option value="no">{{translate('Selected value')}}</option>
-                    <option value="amount">{{translate('Som')}}</option>
-                    <option value="percent">{{translate('USD')}}</option>
+                    @foreach($currencies as $currency)
+                        <option  value="{{$currency->code}}">{{$currency->code}}</option>
+                    @endforeach
                 </select>
             </td>
             <td class="text-center">
                 <label for="" class="control-label">{{ translate('Quantity') }}</label>
-                <input type="number" name="quantity" value="0" min="0" step="1" class="form-control" >
+                <input type="number" onkeyup="change_input(this.value, 'quantity_change')" name="quantity" value="0" min="0" step="1" class="form-control" >
             </td>
             <td class="text-center">
                 <label for="" class="control-label">{{ translate('Discount') }}</label>
-                <input type="number" name="price" value="0" min="0" step="0.01" class="form-control" >
+                <input type="number" onkeyup="change_input(this.value, 'discount_change')" name="discount" value="0" min="0" step="0.01" class="form-control" >
             </td>
             <td class="text-center">
                 <label for="" class="control-label">{{ translate('Discount Type') }}</label>
@@ -44,7 +45,7 @@
 
             <td class="text-center">
                 <label for="" class="control-label">{{ translate('Tax') }}</label>
-                <input type="number" name="tax" value="0" min="0" step="0.01" class="form-control" >
+                <input type="number" name="tax" onkeyup="change_input(this.value, 'tax_change')" value="0" min="0" step="0.01" class="form-control" >
             </td>
             <td class="text-center">
                 <label for="" class="control-label">{{ translate('Tax type') }}</label>
@@ -57,14 +58,14 @@
             <td class="text-center">
                 <label for="" class="control-label">{{ translate('Todays deals') }}</label>
                 <label class="aiz-switch aiz-switch-success mb-0">
-                    <input type="checkbox" name="todays_deal" checked>
+                    <input type="checkbox" onchange="change_switch(this.checked, 'todays_deal_change')" name="todays_deal" checked>
                     <span></span>
                 </label>
             </td>
             <td class="text-center">
                 <label for="" class="control-label">{{ translate('Published') }}</label>
                 <label class="aiz-switch aiz-switch-success mb-0">
-                    <input type="checkbox" name="published" checked>
+                    <input type="checkbox" onchange="change_switch(this.checked, 'published_change')" name="published" checked>
                     <span></span>
                 </label>
             </td>
@@ -78,50 +79,51 @@
                 <input type="hidden" name="variation[{{ $index }}][slug]" value="{{implode("-", $combination)}}" class="form-control">
             </td>
             <td>
-                <input type="number" name="variation[{{ $index }}][price]" value="0" min="0" step="0.01" class="form-control" required>
+                <input type="number"  name="variation[{{ $index }}][price]" value="0" min="0" step="0.01" class="form-control price_change" required>
             </td>
             <td>
-                <select class="form-control aiz-selectpicker" name="variation[{{ $index }}][currency]">
-                    <option value="amount">{{translate('Som')}}</option>
-                    <option value="percent">{{translate('USD')}}</option>
+                <select class="form-control aiz-selectpicker " name="variation[{{ $index }}][currency]">
+                    @foreach($currencies as $currency)
+                        <option class="currency_change" value="{{$currency->code}}">{{$currency->code}}</option>
+                    @endforeach
                 </select>
             </td>
             <td>
-                <input type="number" name="variation[{{ $index }}][quantity]" value="0" min="0" step="0.01" class="form-control" required>
+                <input type="number" name="variation[{{ $index }}][quantity]" value="0" min="0" step="0.01" class="form-control quantity_change" required>
             </td>
             <td>
-                <input type="number" name="variation[{{ $index }}][discount]" value="0" min="0" step="0.01" class="form-control" required>
+                <input type="number" name="variation[{{ $index }}][discount]" value="0" min="0" step="0.01" class="form-control discount_change" required>
             </td>
             <td>
-                <select class="form-control aiz-selectpicker" name="variation[{{ $index }}][discount_type]">
+                <select class="form-control aiz-selectpicker discount_type_change" name="variation[{{ $index }}][discount_type]">
                     <option value="amount">{{translate('Flat')}}</option>
                     <option value="percent" selected>{{translate('Percent')}}</option>
                 </select>
             </td>
             <td>
-                <select class="form-control aiz-selectpicker" name="variation[{{ $index }}][delivery_type]">
+                <select class="form-control aiz-selectpicker delivery_type_change" name="variation[{{ $index }}][delivery_type]">
                     <option value="amount">{{translate('Tinfis')}}</option>
                     <option value="percent" selected>{{translate('Free')}}</option>
                 </select>
             </td>
             <td>
-                <input type="number" name="variation[{{ $index }}][tax]" value="0" min="0" step="0.01" class="form-control" required>
+                <input type="number" name="variation[{{ $index }}][tax]" value="0" min="0" step="0.01" class="form-control tax_change" required>
             </td>
             <td>
-                <select class="form-control aiz-selectpicker" name="variation[{{ $index }}][tax_type]">
+                <select class="form-control aiz-selectpicker tax_type_change" name="variation[{{ $index }}][tax_type]">
                     <option value="amount">{{translate('Flat')}}</option>
                     <option value="percent" selected>{{translate('Percent')}}</option>
                 </select>
             </td>
             <td>
                 <label class="aiz-switch aiz-switch-success mb-0">
-                    <input type="checkbox" name="variation[{{ $index }}][todays_deal]" checked>
+                    <input type="checkbox" name="variation[{{ $index }}][todays_deal]" class="todays_deal_change" checked>
                     <span></span>
                 </label>
             </td>
             <td>
-                <label class="aiz-switch aiz-switch-success mb-0">
-                    <input type="checkbox" name="variation[{{ $index }}][published]" checked>
+                <label class="aiz-switch aiz-switch-success mb-0 ">
+                    <input type="checkbox" name="variation[{{ $index }}][published]" class="published_change" checked>
                     <span></span>
                 </label>
             </td>

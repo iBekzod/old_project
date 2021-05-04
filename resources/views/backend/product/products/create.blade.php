@@ -47,6 +47,27 @@
 
 @section('script')
     <script type="text/javascript">
+        function change_input(value, class_name){
+            document.querySelectorAll("."+class_name).forEach(el=>{
+                el.value = value
+            })
+        }
+        function change_selection(value, class_name){
+
+            document.querySelectorAll("."+class_name).forEach(el=>{
+                console.log(el)
+                // if(el.value === value){
+                //     el.selected = true
+                // } else {
+                //     el.seleted = false
+                // }
+            })
+        }
+        function change_switch(value, class_name){
+            document.querySelectorAll("."+class_name).forEach(el=>{
+                el.checked = value
+            })
+        }
         function delete_variant(em) {
             $(em).closest('.variant').remove();
         }

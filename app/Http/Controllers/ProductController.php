@@ -6,6 +6,7 @@ use App\Attribute;
 use App\Brand;
 use App\Characteristic;
 use App\Color;
+use App\Currency;
 use App\Element;
 use App\Http\HelperClasses\Combinations;
 use App\Models\CharacteristicValues;
@@ -250,8 +251,11 @@ class ProductController extends Controller
         $slug = SlugService::createSlug(Product::class, 'slug', slugify($name));
         $added_by = Auth::user()->user_type;
         $all_products = array();
+        $minimum_price=0;
+        $product_price=0;
         if ($request->has('variation')) {
             foreach ($request->variation as $variation) {
+
 //                if($variation["quantity"] > 0 ){
                     $product = new Product;
                     $product->name=$name;
@@ -271,6 +275,10 @@ class ProductController extends Controller
                     $product->tax=$variation["tax"];
                     $product->tax_type=$variation["tax_type"];
                     //$product->save();
+                    $product_price=$variation["price"];
+                    if($minimum_price>$product_price){
+                        $minimum_price=$product_price;
+                    }
                     $all_products[]=$product;
 //                }
             }
@@ -706,7 +714,9 @@ class ProductController extends Controller
             }
             $combinations = Combinations::makeCombinations($variations);
             $lang=default_language();
-            return view('backend.product.products.design_make_combination', compact('combinations', 'element', 'lang'));
+            $currencies=Currency::where('status', true)->get();
+
+            return view('backend.product.products.design_make_combination', compact('combinations', 'element', 'lang', 'currencies'));
 
         }catch (\Exception $e){
 
