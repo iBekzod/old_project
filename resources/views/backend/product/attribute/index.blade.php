@@ -5,7 +5,7 @@
 <div class="aiz-titlebar text-left mt-2 mb-3">
 	<div class="align-items-center d-flex justify-content-between">
 		<h1 class="h3">{{translate('All Attributes')}}</h1>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#OpenModals">
             Add New Branch
         </button>
 	</div>
@@ -32,7 +32,7 @@
 								<td>{{$key+1}}</td>
 								<td>{{$attribute->getTranslation('name')}}</td>
 								<td class="text-right">
-									<a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="#" title="{{ translate('Edit') }}" data-toggle="modal" data-target="#OpenModal">
+									<a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="#" title="{{ translate('Edit') }}" data-toggle="modal" data-target="#EditModals">
 										<i class="las la-edit"></i>
 									</a>
 									<a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete" data-href="{{route('attributes.destroy', $attribute->id)}}" title="{{ translate('Delete') }}">
@@ -47,7 +47,7 @@
 		</div>
 	</div>
 </div>
-<div class="modal fade" id="OpenModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+<div class="modal fade" id="OpenModals" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -73,7 +73,7 @@
     </div>
   </div>
 
-  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal fade" id="EditModals" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -92,14 +92,11 @@
                         <input type="text" placeholder="{{ translate('Name')}}" id="name" name="name" class="form-control">
                     </div>
                 </div>
-                <div class="form-group mb-0 text-right">
-                    <button type="submit" class="btn btn-primary">{{translate('Save')}}</button>
-                </div>
               </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-primary">Save</button>
         </div>
       </div>
     </div>
