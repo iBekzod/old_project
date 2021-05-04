@@ -111,87 +111,6 @@ class ElementController extends Controller
         return response()->json(['success' => false, 'message' => 'server']);
     }
 
-    public function getAttributesByCategory($id)
-    {
-        $category = Category::firstOrFail($id);
-        if ($category != mull) {
-            $attrinutes = $category->attributes;
-        }
-        return response()->json([
-            'attributes' => $attrinutes
-        ]);
-    }
-//    public function getAttributes(Request $request){
-//        try {
-//            $element = Element::where('category_id', $request->id)->firstOrFail();
-//            $choice_options= $element->choice_options;
-//            return response()->json(['success'=>false, 'choice_options'=>$choice_options]);
-//
-//        }catch (\Exception $exception){
-//            return response()->json(['success'=>false, 'message'=>$exception->getMessage()]);
-//        }
-//        return response()->json(['success'=>false, 'message'=>'server']);
-//    }
-
-    public function characteristics(Request $request, $id)
-    {
-        if ($request->method() == 'POST') {
-            $element = Element::where('id', $id)->firstOrFail();
-            $element->characteristicValues()->delete();
-            if ($request->get('attr')) {
-                foreach ($request->get('attr') as $item) {
-                    $data = [
-                        'element_id' => $element->id,
-                        'parent_id' => $item['parent_id'],
-                        'attr_id' => $item['id'],
-                        'name' => $item['name'],
-                    ];
-
-
-                    if (isset($item['values'])) {
-                        $data['values'] = implode(' / ', $item['values']);
-                    }
-                    // dd($data);
-                    CharacteristicValues::create($data);
-                }
-            }
-
-            flash(translate('Saved successfully'))->success();
-            return back();
-        } else {
-            $element = Element::where('id', $id)->with(['characteristicValues'])->firstOrFail();
-            $options = $element->category->attributes;
-            // dd($element->characteristicValues);
-            return view('backend.product.elements.add_attr', compact(
-                'element', 'options'
-            ));
-        }
-    }
-
-    public function addInStockProductAttrs(Request $request, $id)
-    {
-        $element = ProductStock::where('id', $id)->firstOrFail();
-        $lang = $request->get('lang');
-        $options = ProductAttribute::all();
-
-        return view('backend.product.elements.add_attr', [
-            'element' => $element,
-            'lang' => $lang,
-            'options' => $options
-        ]);
-    }
-
-    public function inStock($id)
-    {
-        $element = Element::where('id', $id)->firstOrFail();
-        $type = 'All';
-
-        return view('backend.product.elements.in_stock', [
-            'element' => $element,
-            'elements' => $element->stocks()->paginate(15),
-            'type' => $type
-        ]);
-    }
 
     /**
      * Display a listing of the resource.
@@ -221,9 +140,7 @@ class ElementController extends Controller
                 ->where('name', 'like', '%' . $request->search . '%');
             $sort_search = $request->search;
         }
-
         $elements = $elements->where('digital', 0)->orderBy('created_at', 'desc')->paginate(15);
-
         return view('backend.product.elements.index', compact('elements', 'type', 'col_name', 'query', 'sort_search'));
     }
 
@@ -312,10 +229,15 @@ class ElementController extends Controller
      */
     public function store(Request $request)
     {
-//        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
-//        dd($request);
         $element = new Element;
-//        $element->name = $request->name;
+        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
+        if ($refund_request_addon != null && $refund_request_addon->activated == 1) {
+            if ($request->refundable != null) {
+                $element->refundable = 1;
+            } else {
+                $element->refundable = 0;
+            }
+        }
         $element->added_by = $request->added_by;
         $element->category_id = $request->category_id;
         $element->brand_id = $request->brand_id;
@@ -431,12 +353,6 @@ class ElementController extends Controller
     public function seller_element_edit(Request $request, $id)
     {
         $this->admin_element_edit($request, $id);
-//        $element = Element::findOrFail($id);
-//        $lang = $request->lang;
-//        $tags = json_decode($element->tags);
-//        $categories = Category::all()->toTree();
-//
-//        return view('backend.product.elements.edit', compact('element', 'categories', 'tags', 'lang'));
     }
 
     /**
@@ -450,6 +366,14 @@ class ElementController extends Controller
     {
         $element = Element::findOrFail($id);
 //        $element->name = $request->name;
+        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
+        if ($refund_request_addon != null && $refund_request_addon->activated == 1) {
+            if ($request->refundable != null) {
+                $element->refundable = 1;
+            } else {
+                $element->refundable = 0;
+            }
+        }
         $element->category_id = $request->category_id;
         $element->brand_id = $request->brand_id;
         $element->barcode = $request->barcode;
@@ -560,29 +484,6 @@ class ElementController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function duplicate(Request $request, $id)
-    {
-        $element = Element::find($id);
-        $element_new = $element->replicate();
-        // $element_new->slug = substr($element_new->slug, 0, -5) . Str::random(5);
-        if ($element_new->save()) {
-            flash(translate('Element has been duplicated successfully'))->success();
-            if (Auth::user()->user_type == 'admin' || Auth::user()->user_type == 'staff') {
-                if ($request->type == 'In House')
-                    return redirect()->route('elements.admin');
-                elseif ($request->type == 'Seller')
-                    return redirect()->route('elements.seller');
-                elseif ($request->type == 'All')
-                    return redirect()->route('elements.all');
-            } else {
-                return redirect()->route('seller.elements');
-            }
-        } else {
-            flash(translate('Something went wrong'))->error();
-            return back();
-        }
-    }
-
     public function get_elements_by_brand(Request $request)
     {
         $elements = Element::where('brand_id', $request->brand_id)->get();
@@ -625,109 +526,4 @@ class ElementController extends Controller
         }
         return 0;
     }
-
-    public function updateSellerFeatured(Request $request)
-    {
-        $element = Element::findOrFail($request->id);
-        $element->seller_featured = $request->status;
-        if ($element->save()) {
-            return 1;
-        }
-        return 0;
-    }
-
-    public function sku_combination(Request $request)
-    {
-        $options = array();
-        if ($request->has('colors_active') && $request->has('colors') && count($request->colors) > 0) {
-            $colors_active = 1;
-            array_push($options, $request->colors);
-        } else {
-            $colors_active = 0;
-        }
-
-        $unit_price = $request->unit_price;
-        $element_name = $request->name;
-
-        if ($request->has('choice_no')) {
-            foreach ($request->choice_no as $key => $no) {
-                $name = 'choice_options_' . $no;
-                $data = array();
-                foreach (json_decode($request[$name][0]) as $key => $item) {
-                    array_push($data, $item->value);
-                }
-                array_push($options, $data);
-            }
-        }
-
-        $combinations = Combinations::makeCombinations($options);
-        return view('backend.product.elements.sku_combinations', compact('combinations', 'unit_price', 'colors_active', 'element_name'));
-    }
-
-    public function sku_combination_edit(Request $request)
-    {
-        $element = Element::findOrFail($request->id);
-
-        $options = array();
-        if ($request->has('colors_active') && $request->has('colors') && count($request->colors) > 0) {
-            $colors_active = 1;
-            array_push($options, $request->colors);
-        } else {
-            $colors_active = 0;
-        }
-
-        $element_name = $request->name;
-        $unit_price = $request->unit_price;
-
-        if ($request->has('choice_no')) {
-            foreach ($request->choice_no as $key => $no) {
-                $name = 'choice_options_' . $no;
-                $data = array();
-                foreach (json_decode($request[$name][0]) as $key => $item) {
-                    array_push($data, $item->value);
-                }
-                array_push($options, $data);
-            }
-        }
-
-        $combinations = Combinations::makeCombinations($options);
-        return view('backend.product.elements.sku_combinations_edit', compact('combinations', 'unit_price', 'colors_active', 'element_name', 'element'));
-    }
-
-    public function elementWarehouseData($id)
-    {
-        $warehouse = [];
-        $qty = [];
-        $warehouse_name = [];
-        $variant_name = [];
-        $variant_qty = [];
-        $element_warehouse = [];
-        $element_variant_warehouse = [];
-        $lims_element_data = Element::select('id', 'is_variant')->find($id);
-        // if($lims_element_data->is_variant) {
-        //     $lims_element_variant_warehouse_data = Product_Warehouse::where('element_id', $lims_element_data->id)->orderBy('warehouse_id')->get();
-        //     $lims_element_warehouse_data = Product_Warehouse::select('warehouse_id', DB::raw('sum(qty) as qty'))->where('element_id', $id)->groupBy('warehouse_id')->get();
-        //     foreach ($lims_element_variant_warehouse_data as $key => $element_variant_warehouse_data) {
-        //         $lims_warehouse_data = Warehouse::find($element_variant_warehouse_data->warehouse_id);
-        //         $lims_variant_data = Variant::find($element_variant_warehouse_data->variant_id);
-        //         $warehouse_name[] = $lims_warehouse_data->name;
-        //         $variant_name[] = $lims_variant_data->name;
-        //         $variant_qty[] = $element_variant_warehouse_data->qty;
-        //     }
-        // }
-        // else{
-        $lims_element_warehouse_data = Product_Warehouse::where('element_id', $id)->get();
-        // }
-        foreach ($lims_element_warehouse_data as $key => $element_warehouse_data) {
-            $lims_warehouse_data = Warehouse::find($element_warehouse_data->warehouse_id);
-            $warehouse[] = $lims_warehouse_data->name;
-            $qty[] = $element_warehouse_data->qty;
-        }
-
-        $element_warehouse = [$warehouse, $qty];
-        $element_variant_warehouse = [$warehouse_name, $variant_name, $variant_qty];
-        return ['element_warehouse' => $element_warehouse, 'element_variant_warehouse' => $element_variant_warehouse];
-    }
-
-
 }

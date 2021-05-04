@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
@@ -26,15 +27,24 @@ class Product extends Model
         'updated_at',
     ];
 
+    use Sluggable;
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
+    }
     // protected $fillable = [
     //     'name', 'added_by', 'user_id', 'category_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
     //     'purchase_price', 'unit', 'slug', 'colors', 'choice_options', 'variations', 'current_stock', 'on_moderation',
     //     'is_accepted'
     // ];
 
-     public $appends = [
-         'thumbnaile_image'
-     ];
+//     public $appends = [
+//         'thumbnaile_image'
+//     ];
 
     // public function characteristicValues()
     // {

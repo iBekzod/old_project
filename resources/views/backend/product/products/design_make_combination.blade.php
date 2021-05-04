@@ -1,5 +1,5 @@
 @if(count($combinations[0]) > 0)
-<input type="hidden" lang="{{$lang}}" name="lang" class="form-control" >
+<input type="hidden" lang="{{$lang}}" name="lang" class="form-control">
 <div style="overflow-y: scroll; ">
     <table class="table table-bordered" style="width:1800px">
         <thead>
@@ -68,27 +68,14 @@
                     <span></span>
                 </label>
             </td>
-            @php
-                $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
-            @endphp
-            @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
-                <td class="text-center">
-                    <label for="" class="control-label">{{ translate('Refundable') }}</label>
-                    <label class="aiz-switch aiz-switch-success mb-0">
-                        <input type="checkbox" name="refundable" checked>
-                        <span></span>
-                    </label>
-                </td>
-            @endif
-
         </tr>
         </thead>
         <tbody>
         @foreach ($combinations as $index=>$combination)
         <tr class="variant">
             <td>
-                <label for="" class="control-label">{{implode ("-", $combination)}}</label>
-                <input type="hidden" name="variation[{{ $index }}][slug]" value="{{implode ("-", $combination)}}" class="form-control">
+                <label for="" class="control-label">{{implode (",", $combination)}}</label>
+                <input type="hidden" name="variation[{{ $index }}][slug]" value="{{implode("-", $combination)}}" class="form-control">
             </td>
             <td>
                 <input type="number" name="variation[{{ $index }}][price]" value="0" min="0" step="0.01" class="form-control" required>
@@ -138,19 +125,6 @@
                     <span></span>
                 </label>
             </td>
-
-
-            @php
-                $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
-            @endphp
-            @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
-            <td>
-                <label class="aiz-switch aiz-switch-success mb-0">
-                    <input type="checkbox" name="variation[{{ $index }}][refundable]" checked>
-                    <span></span>
-                </label>
-            </td>
-            @endif
             <td>
                 <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="delete_variant(this)"><i class="las la-trash"></i></button>
             </td>
@@ -160,65 +134,4 @@
     </table>
 </div>
 
-<style>
-    .switch {
-        position: relative;
-        display: inline-block;
-        width: 60px;
-        height: 34px;
-    }
-
-    .switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
-
-    .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #ccc;
-        -webkit-transition: .4s;
-        transition: .4s;
-    }
-
-    .slider:before {
-        position: absolute;
-        content: "";
-        height: 26px;
-        width: 26px;
-        left: 4px;
-        bottom: 4px;
-        background-color: white;
-        -webkit-transition: .4s;
-        transition: .4s;
-    }
-
-    input:checked + .slider {
-        background-color: #2196F3;
-    }
-
-    input:focus + .slider {
-        box-shadow: 0 0 1px #2196F3;
-    }
-
-    input:checked + .slider:before {
-        -webkit-transform: translateX(26px);
-        -ms-transform: translateX(26px);
-        transform: translateX(26px);
-    }
-
-    /* Rounded sliders */
-    .slider.round {
-        border-radius: 34px;
-    }
-
-    .slider.round:before {
-        border-radius: 50%;
-    }
-</style>
 @endif

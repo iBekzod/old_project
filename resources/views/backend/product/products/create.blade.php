@@ -19,7 +19,7 @@
                                 class="text-danger">*</span></label>
                         <div class="col-md-8">
                             <input type="text" class="form-control" name="name"
-                                   placeholder="{{ translate('Product Name') }}" onchange="update_sku()" required>
+                                   placeholder="{{ translate('Product Name') }}" required>
                         </div>
                     </div>
                     <div class="form-group row" id="element">
@@ -50,8 +50,8 @@
         function delete_variant(em) {
             $(em).closest('.variant').remove();
         }
-        $('#element_id').on('change', function () {
-            $('#customer_choice_options').html(null);
+        function update_variation(){
+            $('#sku_combination').html(null);
             $.ajax({
                 type: "GET",
                 url: '{{ route('products.make_combination') }}',
@@ -60,6 +60,9 @@
                     $('#sku_combination').html(data);
                 }
             });
+        }
+        $('#element_id').on('change', function () {
+            update_variation();
         });
     </script>
 @endsection

@@ -1,7 +1,7 @@
 @extends('backend.layouts.app')
 
 @section('content')
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
 <div class="aiz-titlebar text-left mt-2 mb-3">
 	<div class="align-items-center d-flex justify-content-between">
 		<h1 class="h3">{{translate('All Branches')}}</h1>
@@ -38,6 +38,9 @@
 									</a>
 									<a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete" data-href="{{route('branches.destroy', $branch->id)}}" title="{{ translate('Delete') }}">
 										<i class="las la-trash"></i>
+									</a>
+									<a href="http://bekzod.estore.com/admin/attributes" class="btn btn-soft-warning btn-icon btn-circle btn-sm " title="{{ translate('Attributes') }}">
+										<i class="fas fa-link"></i>
 									</a>
 								</td>
 							</tr>

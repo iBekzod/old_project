@@ -100,6 +100,20 @@
                             </div>
                         </div>
                     @endif
+                    @php
+                        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
+                    @endphp
+                    @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
+                        <div class="form-group row">
+                            <label class="col-md-3 col-from-label">{{translate('Refundable')}}</label>
+                            <div class="col-md-8">
+                                <label class="aiz-switch aiz-switch-success mb-0">
+                                    <input type="checkbox" name="refundable" checked>
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
             <div class="card">
@@ -131,10 +145,7 @@
                                     data-selected-text-format="count" name="colors[]" id="colors" multiple>
 
                                 @foreach (\App\Color::orderBy('name', 'asc')->get() as $key => $color)
-                                    <option
-                                    value=""
-                                            data-content="<span><span class='size-15px d-inline-block mr-2 rounded border' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"
-                                    ></option>
+                                    <option value="" data-content="<span><span class='size-15px d-inline-block mr-2 rounded border' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"></option>
                                 @endforeach
                             </select>
                         </div>
@@ -301,10 +312,8 @@
             </div>
         </form>
     </div>
-
 @endsection
 @section('script')
-
     <script type="text/javascript">
 
         function add_more_customer_choice_option(i, name) {
@@ -366,5 +375,4 @@
             });
         });
     </script>
-
 @endsection
