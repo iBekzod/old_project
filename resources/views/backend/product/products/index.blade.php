@@ -270,6 +270,11 @@
         function sort_products(el) {
             $('#sort_products').submit();
         }
+        let newValue = '';
+        function onChange(e) {
+            newValue = e.target.value;
+            document.querySelector("#change").value = newValue;
+        }
 
     </script>
 @endsection
