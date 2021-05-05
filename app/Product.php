@@ -4,7 +4,7 @@ namespace App;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
-
+use App;
 class Product extends Model
 {
     protected $fillable = [
@@ -24,6 +24,13 @@ class Product extends Model
         'published',
         'tax',
         'tax_type',
+        'featured',
+        'seller_featured',
+        'on_moderation',
+        'is_accepted',
+        'rating',
+        'barcode',
+        'earn_point',
         'created_at',
         'updated_at',
     ];

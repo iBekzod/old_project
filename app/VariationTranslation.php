@@ -4,11 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ProductTranslation extends Model
+class VariationTranslation extends Model
 {
-    protected $fillable = ['product_id','name', 'lang'];
+    protected $fillable = ['variation_id','name', 'lang'];
 
-    public function product(){
-      return $this->belongsTo(Product::class);
+    public function variation(){
+      return $this->belongsTo(Variation::class);
     }
 }
