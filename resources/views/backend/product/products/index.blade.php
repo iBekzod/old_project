@@ -90,15 +90,17 @@
                         <th>{{translate('Num of Sale')}}</th>
                         <th>{{translate('Total Stock')}}</th>
                         <th>{{translate('Base Price')}}</th>
-{{--                        <th>{{translate('Currency')}}</th>--}}
-{{--                        <th>{{translate('Todays Deal')}}</th>--}}
                         <th>{{translate('Rating')}}</th>
-{{--                        <th>{{translate('Published')}}</th>--}}
-{{--                        <th>{{translate('Featured')}}</th>--}}
+{{--                        <th>{{translate('Currency')}}</th>--}}
+                        <th>{{translate('Todays Deal')}}</th>
+
+                        <th>{{translate('Published')}}</th>
+                        <th>{{translate('Featured')}}</th>
                         <th class="text-right">{{translate('Options')}}</th>
                     </tr>
                     </thead>
                     <tbody>
+{{--                    @dd($variations)--}}
                     @foreach($variations as $key => $variation)
                         <tr>
                             <td>{{ ($key+1) + ($variations->currentPage() - 1)*$variations->perPage() }}</td>
@@ -110,7 +112,7 @@
                                                  class="w-50px">
                                         </div>
                                         <div class="col-lg-8">
-                                            <span class="text-muted">{{ $variation->product->getTranslation('name') }}</span>
+                                            <span class="text-muted">{{ ($variation->has('product'))?$variation->product->getTranslation('name'):null }}</span>
                                         </div>
                                     </div>
 {{--                                </a>--}}
@@ -118,50 +120,51 @@
                             @if($type == 'Seller' || $type == 'All')
                                 <td>{{ $variation->product->user->name??null }}</td>
                             @endif
-                            <td>{{ $variation->num_of_sale }} {{translate('times')}}</td>
+                            <td>{{ $variation->num_of_sale??0 }} {{translate('times')}}</td>
                             <td>
-                                {{$variation->product->qty}}
+                                {{$variation->product->qty??0}}
                             </td>
                             <td>{{ number_format($variation->product->price, 2) }}</td>
+                            <td>{{ $variation->rating??0 }}</td>
 {{--                            <td>{{ $variation->product->currency->code }}</td>--}}
-{{--                            <td>--}}
-{{--                                <label class="aiz-switch aiz-switch-success mb-0">--}}
-{{--                                    <input onchange="update_todays_deal(this)" value="{{ $variation->product->id }}"--}}
-{{--                                           type="checkbox" ?php if ($variation->product->todays_deal == 1) echo "checked";?> >--}}
-{{--                                    <span class="slider round"></span>--}}
-{{--                                </label>--}}
-{{--                            </td>--}}
-                            <td>{{ $variation->rating }}</td>
-{{--                            <td>--}}
-{{--                                <label class="aiz-switch aiz-switch-success mb-0">--}}
-{{--                                    <input onchange="update_published(this)" value="{{ $variation->product->id }}"--}}
-{{--                                           type="checkbox" ?php if ($variation->product->published == 1) echo "checked";?> >--}}
-{{--                                    <span class="slider round"></span>--}}
-{{--                                </label>--}}
-{{--                            </td>--}}
-{{--                            <td>--}}
-{{--                                <label class="aiz-switch aiz-switch-success mb-0">--}}
-{{--                                    <input onchange="update_featured(this)" value="{{ $variation->product->id }}"--}}
-{{--                                           type="checkbox" ?php if ($variation->product->featured == 1) echo "checked";?> >--}}
-{{--                                    <span class="slider round"></span>--}}
-{{--                                </label>--}}
-{{--                            </td>--}}
+                            <td>
+                                <label class="aiz-switch aiz-switch-success mb-0">
+                                    <input onchange="update_todays_deal(this)" value="{{ $variation->id }}"
+                                           type="checkbox" @if($variation->product->todays_deal == 1) checked @endif >
+                                    <span class="slider round"></span>
+                                </label>
+                            </td>
+
+                            <td>
+                                <label class="aiz-switch aiz-switch-success mb-0">
+                                    <input onchange="update_published(this)" value="{{ $variation->id }}"
+                                           type="checkbox" @if($variation->product->published == 1) checked @endif >
+                                    <span class="slider round"></span>
+                                </label>
+                            </td>
+                            <td>
+                                <label class="aiz-switch aiz-switch-success mb-0">
+                                    <input onchange="update_featured(this)" value="{{ $variation->id }}"
+                                           type="checkbox" @if($variation->product->featured == 1) checked @endif>
+                                    <span class="slider round"></span>
+                                </label>
+                            </td>
                             <td class="text-right">
                                 @if ($type == 'Seller')
                                     <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                       href="{{route('products.seller.edit', ['id'=>$variation->id, 'lang'=>env('DEFAULT_LANGUAGE')] )}}"
+                                       href="{{route('products.seller.edit', $variation->id )}}"
                                        title="{{ translate('Edit') }}">
                                         <i class="las la-edit"></i>
                                     </a>
                                 @else
                                     <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                       href="{{route('products.admin.edit', ['id'=>$variation->id, 'lang'=>env('DEFAULT_LANGUAGE')] )}}"
+                                       href="{{route('products.admin.edit', ['id'=>$variation->id] )}}"
                                        title="{{ translate('Edit') }}">
                                         <i class="las la-edit"></i>
                                     </a>
                                 @endif
                                 <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
-                                   data-href="{{route('products.destroy', $variation->id)}}"
+                                   data-href="{{route('products.destroy', ['id'=>$variation->id])}}"
                                    title="{{ translate('Delete') }}">
                                     <i class="las la-trash"></i>
                                 </a>

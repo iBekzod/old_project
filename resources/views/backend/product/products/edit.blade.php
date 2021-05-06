@@ -5,7 +5,7 @@
         <h5 class="mb-0 h6">{{translate('Add New Product')}}</h5>
     </div>
     <div class="col-md-12 mx-auto">
-        <form class="form form-horizontal mar-top" action="{{route('products.store')}}" method="POST"
+        <form class="form form-horizontal mar-top" action="{{route('products.update', $variation->id)}}" method="POST"
               enctype="multipart/form-data" id="choice_form">
             @csrf
             <input type="hidden" name="added_by" value="admin">
@@ -25,7 +25,7 @@
                     </div>
                     @if(count($products) > 0)
                         <input type="hidden" value="{{$lang}}" name="lang" class="form-control">
-                        <input type="hidden" name="element_id" value="{{$element->id}}" class="form-control">
+
                         <div style="overflow-y: scroll; ">
                             <table class="table table-bordered" style="width:1800px">
                                 <thead>
@@ -109,11 +109,11 @@
                                 @foreach ($products as $product)
                                     <tr class="variant">
                                         <td>
-                                            <label for="" class="control-label">{{implode (",", $product)}}</label>
+                                            <label for="" class="control-label">{{$product->getTranslation('name')}}</label>
                                             <input type="hidden" name="variation[{{ $product->id }}][slug]"
                                                    value="{{$product->slug??null}}" class="form-control">
                                             <input type="hidden" name="variation[{{ $product->id }}][name]"
-                                                   value="{{$product->getTranslation('name')??null}}"
+                                                   value="{{$product->name??null}}"
                                                    class="form-control">
                                         </td>
                                         <td>
@@ -197,7 +197,7 @@
                     @endif
                 </div>
                 <div class="mb-3 text-right">
-                    <button type="submit" name="button" class="btn btn-primary">{{ translate('Save Product') }}</button>
+                    <button type="submit" name="button" class="btn btn-primary">{{ translate('Update Product') }}</button>
                 </div>
             </div>
         </form>

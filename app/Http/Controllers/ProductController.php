@@ -363,16 +363,13 @@ class ProductController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function admin_product_edit(Request $request, $id)
+    public function admin_product_edit($id)
     {
-        $product = Product::findOrFail($id);
-        ($product->category)? $productAttributes = $product->category->productAttributes : $productAttributes = [];
-        $selectedProductAttributes = $product->productAttributes->pluck('id')->toArray();
-        $lang = $request->lang;
-        $tags = json_decode($product->tags);
-        $categories = Category::all()->toTree();
-
-        return view('backend.product.products.edit', compact('product', 'categories', 'tags', 'lang', 'productAttributes', 'selectedProductAttributes'));
+        $variation = Variation::findOrFail($id);
+        $lang = default_language();
+        $currencies=Currency::where('status', true)->get();
+        $products = $variation->products;
+        return view('backend.product.products.edit', compact('variation', 'products', 'currencies', 'lang'));
     }
 
     /**
@@ -381,13 +378,9 @@ class ProductController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function seller_product_edit(Request $request, $id)
+    public function seller_product_edit($id)
     {
-        $product = Product::findOrFail($id);
-        $lang = $request->lang;
-        $tags = json_decode($product->tags);
-        $categories = Category::all()->toTree();
-        return view('backend.product.products.edit', compact('product', 'categories', 'tags', 'lang'));
+        $this->admin_product_edit($id);
     }
 
     /**
@@ -399,7 +392,6 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $variation=Variation::findOrFail($id);
         if (Auth::user()->user_type == 'seller') {
             $user_id = Auth::user()->id;
         } else {
@@ -412,18 +404,19 @@ class ProductController extends Controller
         $product_price=0;
         $product_id=0;
         $total_stock=0;
-        $variation= new Variation;
+        $variation=Variation::findOrFail($id);
+
         $variation->name=$name;
         $variation->save();
         $product_ids=array();
         if ($request->has('variation')) {
-            foreach ($request->variation as $variant) {
-
-                $product = new Product;
+            foreach ($request->variation as $key=>$variant) {
+                $product = Product::findOrFail($key);
                 $product->name=$variant["name"];
                 $product->added_by=$added_by;
                 $product->user_id=$user_id;
-                $product->slug=SlugService::createSlug(Product::class, 'slug', slugify($variant["slug"]));
+                if($product->slug!=SlugService::createSlug(Product::class, 'slug', slugify($variant["slug"])))
+                    $product->slug=SlugService::createSlug(Product::class, 'slug', slugify($variant["slug"]));
                 $product->currency_id= (int)$variant["currency"];
                 $product->price=(double)$variant["price"];
                 $product->discount=(double)$variant["discount"];
@@ -442,7 +435,7 @@ class ProductController extends Controller
                 $product->qty=(int)$variant["quantity"];
                 $product->tax=(double)$variant["tax"];
                 $product->tax_type=$variant["tax_type"];
-                $product->rating=0;
+//                $product->rating=0;
                 $product->barcode=rand(10000, 999999);
                 $product->earn_point=0;
                 $product->num_of_sale=0;
@@ -471,14 +464,14 @@ class ProductController extends Controller
             }
         }
         if($product_id!=0 && $product=Product::findOrFail($product_id) ){
-            if($element=Element::findOrFail($request->element_id)){
+//            if($element=Element::findOrFail($request->element_id)){
                 $variation->lowest_price_id=$product->id;
                 $variation->slug=$slug;
-                $variation->element_id=$element->id;
+//                $variation->element_id=$element->id;
                 $variation->prices=json_encode($product_ids);
                 $variation->variant=$product->slug;
                 $variation->sku=$product->slug;
-                $variation->num_of_sale=0;
+//                $variation->num_of_sale=0;
                 $variation->qty=$total_stock;
                 $variation->rating=0;
                 $variation->user_id=$user_id;
@@ -489,7 +482,7 @@ class ProductController extends Controller
                     $variation_translation->save();
                 }
 
-            }
+//            }
         }
 
         flash(translate('Product has been updated successfully'))->success();
@@ -508,13 +501,17 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $product = Product::findOrFail($id);
-        foreach ($product->product_translations as $key => $product_translations) {
-            $product_translations->delete();
-        }
-        if (Product::destroy($id)) {
-
-            flash(translate('Product has been deleted successfully'))->success();
+         try {
+            $variation = Variation::findOrFail($id);
+            $products = $variation->products;
+            foreach ($products as $product){
+                foreach ($product->product_translations as $product_translation) {
+                    $product_translation->delete();
+                }
+                $product->delete();
+            }
+             $variation->delete();
+            flash(translate('Variation has been deleted successfully'))->success();
 
             Artisan::call('view:clear');
             Artisan::call('cache:clear');
@@ -524,9 +521,9 @@ class ProductController extends Controller
             } else {
                 return redirect()->route('seller.products');
             }
-        } else {
-            flash(translate('Something went wrong'))->error();
-            return back();
+        }catch (\Exception $e){
+             flash(translate('Something went wrong'))->error();
+             return back();
         }
     }
 
@@ -606,9 +603,11 @@ class ProductController extends Controller
     public function updateTodaysDeals(Request $request)
     {
         try {
-            $product = Product::findOrFail($request->id);
-            $variation = Variation::findOrFail('id', $product->variation_id);
-            $products = Product::where('variation_id', $variation->id)->get();
+            $variation = Variation::findOrFail($request->id);
+            $products = $variation->products;
+//            $product = Product::findOrFail($request->id);
+//            $variation = Variation::findOrFail('id', $product->variation_id);
+//            $products = Product::where('variation_id', $variation->id)->get();
             foreach ($products as $product){
                 $product->todays_deal = $request->status;
                 $product->save();
@@ -622,9 +621,11 @@ class ProductController extends Controller
     public function updatePublisheds(Request $request)
     {
         try {
-            $product = Product::findOrFail($request->id);
-            $variation = Variation::findOrFail('id', $product->variation_id);
-            $products = Product::where('variation_id', $variation->id)->get();
+            $variation = Variation::findOrFail($request->id);
+            $products = $variation->products;
+//            $product = Product::findOrFail($request->id);
+//            $variation = Variation::findOrFail('id', $product->variation_id);
+//            $products = Product::where('variation_id', $variation->id)->get();
             foreach ($products as $product){
                 $product->published = $request->status;
                 $product->on_moderation = 1;
@@ -645,9 +646,11 @@ class ProductController extends Controller
     public function updateFeatureds(Request $request)
     {
         try {
-            $product = Product::findOrFail($request->id);
-            $variation = Variation::findOrFail('id', $product->variation_id);
-            $products = Product::where('variation_id', $variation->id)->get();
+            $variation = Variation::findOrFail($request->id);
+            $products = $variation->products;
+//            $product = Product::findOrFail($request->id);
+//            $variation = Variation::findOrFail('id', $product->variation_id);
+//            $products = Product::where('variation_id', $variation->id)->get();
             foreach ($products as $product){
                 $product->featured = $request->status;
                 $product->save();
@@ -661,9 +664,11 @@ class ProductController extends Controller
     public function updateSellerFeatureds(Request $request)
     {
         try {
-            $product = Product::findOrFail($request->id);
-            $variation = Variation::findOrFail('id', $product->variation_id);
-            $products = Product::where('variation_id', $variation->id)->get();
+            $variation = Variation::findOrFail($request->id);
+            $products = $variation->products;
+//            $product = Product::findOrFail($request->id);
+//            $variation = Variation::findOrFail('id', $product->variation_id);
+//            $products = Product::where('variation_id', $variation->id)->get();
             foreach ($products as $product){
                 $product->seller_featured = $request->status;
                 $product->save();

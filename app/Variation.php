@@ -53,4 +53,9 @@ class Variation extends Model
     {
         return $this->hasOne(Product::class, 'id','lowest_price_id');
     }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }
