@@ -128,14 +128,16 @@ class LanguageController extends Controller
         try {
             $sort_search = null;
             $col_arr=$request->columns_arr;
+            ($request->has('fields'))? $fields = $request->fields : $fields=['name'];
+            ($request->has('selected_field'))? $selected_field = $request->selected_field : $selected_field=0;
             ($request->has('base_table'))? $base_table = $request->base_table : $base_table='products';
             ($request->has('table_translations'))? $table_translations = $request->table_translations : $table_translations='product_translations';
             ($request->has('relation_id'))? $relation_id = $request->relation_id : $relation_id='product_id';
             ($request->has('language_selected'))? $language_selected = $request->language_selected : $language_selected=env('DEFAULT_LANGUAGE', 'en');
-
+            $my_column=$fields[$selected_field];
             $translations=DB::table($base_table)
             ->join($table_translations, $base_table.'.id', '=', $table_translations.'.'.$relation_id)
-            ->select([$base_table.'.id as id', $base_table.'.name as key', $table_translations.'.name as value', $table_translations.'.lang as lang', $base_table.'.created_at' ]);
+            ->select([$base_table.'.id as id', $base_table.'.'.$my_column.' as key', $table_translations.'.'.$my_column.' as value', $table_translations.'.lang as lang', $base_table.'.created_at' ]);
             if($language_selected!='all'){
                 $translations = $translations->where('lang', $language_selected);
             }
@@ -149,7 +151,7 @@ class LanguageController extends Controller
             return view('backend.translations.translations',
             compact(
                 'sort_search', 'language_selected', 'translations',
-                'base_table','table_translations', 'relation_id'
+                'base_table','table_translations', 'relation_id', 'fields', 'selected_field'
                 ));
         } catch (\Exception $e) {
             return back();
@@ -189,20 +191,23 @@ class LanguageController extends Controller
     public function key_value_store_translations(Request $request)
     {
         try {
+            ($request->has('fields'))? $fields = $request->fields : $fields=['name'];
+            ($request->has('selected_field'))? $selected_field = $request->selected_field : $selected_field=0;
             ($request->has('base_table'))? $base_table = $request->base_table : $base_table='products';
             ($request->has('table_translations'))? $table_translations = $request->table_translations : $table_translations='product_translations';
             ($request->has('relation_id'))? $relation_id = $request->relation_id : $relation_id='product_id';
             ($request->has('language_selected'))? $language_selected = $request->language_selected : $language_selected=env('DEFAULT_LANGUAGE', 'en');
+            $my_column=$fields[$selected_field];
              $language = Language::where('code', $language_selected)->first();
             foreach ($request->values as $key => $value) {
                 if($language_selected!='all'){
                     $result = DB::table($table_translations)->updateOrInsert(
                         [$relation_id=>$key,'lang'=>$language_selected],
-                        ['name'=>$value]);
+                        [$my_column=>$value]);
                 }else{
                     $result = DB::table($table_translations)->updateOrInsert(
                         [$relation_id=>$key],
-                        ['name'=>$value]);
+                        [$my_column=>$value]);
                 }
             }
             flash(translate('Translations updated for ') . $language->name)->success();

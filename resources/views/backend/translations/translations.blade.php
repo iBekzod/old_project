@@ -14,7 +14,7 @@
                         <span class="btn btn-icon">
                             @if($language_selected=='all')<img src="{{ static_asset('assets/img/placeholder.jpg') }}" height="11">
                             @else<img src="{{ static_asset('assets/img/flags/'.$language_selected.'.png') }}" height="11">
-                            @endif
+                            @endif {{$language_selected}}
                         </span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-xs">
@@ -26,9 +26,29 @@
                         </li> --}}
                         @foreach (\App\Language::all() as $key => $language)
                             <li>
-                                <a href="{{route('translations.show_translation', ['base_table'=>$base_table, 'table_translations'=>$table_translations, 'relation_id'=>$relation_id, 'language_selected'=>$language->code])}}" data-flag="{{ $language->code }}" class="dropdown-item @if($language_selected == $language->code) active @endif">
+                                <a href="{{route('translations.show_translation', ['base_table'=>$base_table, 'fields'=>$fields, 'selected_field'=>$selected_field, 'table_translations'=>$table_translations, 'relation_id'=>$relation_id, 'language_selected'=>$language->code])}}" data-flag="{{ $language->code }}" class="dropdown-item @if($language_selected == $language->code) active @endif">
                                     <img src="{{ static_asset('assets/img/flags/'.$language->code.'.png') }}" class="mr-2">
                                     <span class="language">{{ $language->name }}</span>
+                                </a>
+                            </li>
+                        @endforeach
+
+
+                    </ul>
+                </div>
+            </div>
+            <div class="ml-2 aiz-topbar-item">
+                <div class="align-items-stretch d-flex dropdown " id="trans-field-changes">
+                    <a class="dropdown-toggle no-arrow" data-toggle="dropdown" href="javascript:void(0);" role="button" aria-haspopup="false" aria-expanded="false">
+                        <span class="btn btn-icon">
+                            {{$fields[$selected_field]}}
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-xs">
+                        @foreach ($fields as $index=>$field)
+                            <li>
+                                <a href="{{route('translations.show_translation', ['base_table'=>$base_table, 'fields'=>$fields, 'selected_field'=>$index, 'table_translations'=>$table_translations, 'relation_id'=>$relation_id, 'language_selected'=>$language_selected])}}" data-selected="{{ $index }}" class="dropdown-item @if($selected_field == $index) active @endif">
+                                    <span class="field">{{ $field }}</span>
                                 </a>
                             </li>
                         @endforeach
@@ -48,7 +68,12 @@
         <form class="form-horizontal" action="{{ route('translations.key_value_store_translations') }}" method="POST">
             @csrf
             <input type="hidden" id="language_selected" name="language_selected" value="{{ $language_selected }}">
+            <input type="hidden" id="selected_field" name="selected_field" value="{{ $selected_field }}">
             <input type="hidden" id="base_table" name="base_table" value="{{ $base_table }}">
+            @foreach ($fields as $field )
+            <input type="hidden" id="fields" name="fields[]" value="{{ $field }}">
+            @endforeach
+
             <input type="hidden" id="table_translations" name="table_translations" value="{{ $table_translations }}">
             <input type="hidden" id="relation_id" name="relation_id" value="{{ $relation_id }}">
             <div class="card-body">
@@ -106,29 +131,61 @@
         function sort_keys(el){
             $('#sort_keys').submit();
         }
-
         if ($('#trans-lang-change').length > 0) {
             $('#trans-lang-change .dropdown-menu a').each(function() {
                 $(this).on('click', function(e){
                     e.preventDefault();
                     var $this = $(this);
                     var language_selected=$this.data('flag');
+                    var fields=$("#fields").val();
                     var base_table=$("#base_table").val();
+                    var selected_field=$("#selected_field").val();
                     var table_translations=$("#table_translations").val();
                     var relation_id=$("#relation_id").val();
                     $.post('{{ route('translations.show_translation') }}',
                         {_token:'{{ csrf_token() }}',
                         language_selected:language_selected,
+                        fields:fields,
+                        selected_field:selected_field,
                         base_table:base_table,
                         table_translations:table_translations,
                         relation_id:relation_id
                     }, function(data){
-                            // alert(data);
+                            alert(data);
                             //location.reload();
                         });
 
                     });
             });
         }
+
+        if ($('#trans-field-change').length > 0) {
+            $('#trans-field-change .dropdown-menu a').each(function() {
+                $(this).on('click', function(e){
+                    e.preventDefault();
+                    var $this = $(this);
+                    var language_selected=$("#language_selected").val();
+                    var fields=$("#fields").val();
+                    var base_table=$("#base_table").val();
+                    var selected_field=$this.data('selected');
+                    var table_translations=$("#table_translations").val();
+                    var relation_id=$("#relation_id").val();
+                    $.post('{{ route('translations.show_translation') }}',
+                        {_token:'{{ csrf_token() }}',
+                        language_selected:language_selected,
+                        fields:fields,
+                        selected_field:selected_field,
+                        base_table:base_table,
+                        table_translations:table_translations,
+                        relation_id:relation_id
+                    }, function(data){
+                            alert(data);
+                            //location.reload();
+                        });
+
+                    });
+            });
+        }
+
     </script>
 @endsection

@@ -741,27 +741,106 @@
                         </a>
                         <ul class="aiz-side-nav-list level-2">
                             <li class="aiz-side-nav-item">
-                                <a href="{{route('translations.show_translation', ['base_table'=>'products', 'table_translations'=>'product_translations', 'relation_id'=>'product_id', 'language_selected'=>'ru'])}}"
-                                   class="aiz-side-nav-link">
-                                    <span class="aiz-side-nav-text">{{translate('Products')}}</span>
-                                </a>
-                            </li>
-                            <li class="aiz-side-nav-item">
-                                <a href="{{route('translations.show_translation', ['base_table'=>'categories', 'table_translations'=>'category_translations', 'relation_id'=>'category_id', 'language_selected'=>'ru'])}}"
-                                   class="aiz-side-nav-link">
-                                    <span class="aiz-side-nav-text">{{translate('Categories')}}</span>
-                                </a>
-                            </li>
-                            <li class="aiz-side-nav-item">
-                                <a href="{{route('translations.show_translation', ['base_table'=>'attributes', 'table_translations'=>'attribute_translations', 'relation_id'=>'attribute_id', 'language_selected'=>'ru'])}}"
+                                <a href="{{route('translations.show_translation', ['base_table'=>'attributes', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'attribute_translations', 'relation_id'=>'attribute_id', 'language_selected'=>'ru'])}}"
                                    class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{translate('Attributes')}}</span>
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
-                                <a href="{{route('translations.show_translation', ['base_table'=>'brands', 'table_translations'=>'brand_translations', 'relation_id'=>'brand_id', 'language_selected'=>'ru'])}}"
+                                <a href="{{route('translations.show_translation', ['base_table'=>'branches', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'branch_translations', 'relation_id'=>'branch_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Branches')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'brands', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'brand_translations', 'relation_id'=>'brand_id', 'language_selected'=>'ru'])}}"
                                    class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{translate('Brands')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'categories', 'fields'=>['name'], 'selected_field'=>0,  'table_translations'=>'category_translations', 'relation_id'=>'category_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Categories')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'characteristics', 'fields'=>['name'], 'selected_field'=>0,  'table_translations'=>'characteristic_translations', 'relation_id'=>'characteristic_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Characteristics')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'cities', 'fields'=>['name'], 'selected_field'=>0,  'table_translations'=>'city_translations', 'relation_id'=>'city_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Cities')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'countries', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'country_translations', 'relation_id'=>'country_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Countries')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'customer_packages', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'customer_package_translations', 'relation_id'=>'customer_package_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Customer_packages')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'customer_products', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'customer_product_translations', 'relation_id'=>'customer_product_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Customer_products')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'elements', 'fields'=>['name', 'unit', 'description'], 'selected_field'=>0, 'table_translations'=>'element_translations', 'relation_id'=>'element_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Elements')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'flash_deals', 'fields'=>['title'], 'selected_field'=>0, 'table_translations'=>'flash_deal_translations', 'relation_id'=>'flash_deal_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Flash_deals')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'languages', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'language_translations', 'relation_id'=>'language_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Languages')}}</span>
+                                </a>
+                            </li>
+
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'pages', 'fields'=>['title','content'], 'selected_field'=>0, 'table_translations'=>'page_translations', 'relation_id'=>'page_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Pages')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'pickup_points', 'fields'=>['title','content'], 'selected_field'=>0, 'table_translations'=>'pickup_point_translations', 'pickup_point_id'=>'page_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('pickup_points')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'products', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'product_translations', 'relation_id'=>'product_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Products')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'roles', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'role_translations', 'relation_id'=>'role_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Roles')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'variations', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'variation_translations', 'relation_id'=>'variation_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Variations')}}</span>
                                 </a>
                             </li>
                             {{-- <li class="aiz-side-nav-item">
