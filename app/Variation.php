@@ -4,7 +4,7 @@ namespace App;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
-
+use App;
 class Variation extends Model
 {
     protected $fillable = [
@@ -15,6 +15,10 @@ class Variation extends Model
         'prices',
         'variant',
         'sku',
+        'user_id',
+        'num_of_sale',
+        'qty',
+        'rating',
         'created_at',
         'updated_at',
     ];
@@ -37,17 +41,16 @@ class Variation extends Model
 
      public function variation_translations()
      {
-         return $this->hasMany(ProductTranslation::class);
+         return $this->hasMany(VariationTranslation::class);
      }
 
      public function element()
      {
-         return $this->belongsTo(Element::class, 'element_id');
+         return $this->hasOne(Element::class, 'id', 'element_id');
      }
 
     public function product()
     {
-        return $this->belongsTo(Product::class, 'lowest_price_id');
+        return $this->hasOne(Product::class, 'id','lowest_price_id');
     }
-
 }

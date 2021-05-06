@@ -85,7 +85,7 @@ class AttributeController extends Controller
     public function update(Request $request, $id)
     {
         $attribute = Attribute::findOrFail($id);
-        if($request->lang == env("DEFAULT_LANGUAGE")){
+        if($request->lang == default_language()){
           $attribute->name = $request->name;
         }
         $attribute->save();

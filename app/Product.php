@@ -4,7 +4,7 @@ namespace App;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
-
+use App;
 class Product extends Model
 {
     protected $fillable = [
@@ -24,6 +24,13 @@ class Product extends Model
         'published',
         'tax',
         'tax_type',
+        'featured',
+        'seller_featured',
+        'on_moderation',
+        'is_accepted',
+        'rating',
+        'barcode',
+        'earn_point',
         'created_at',
         'updated_at',
     ];
@@ -64,21 +71,6 @@ class Product extends Model
          return $this->hasMany(ProductTranslation::class);
      }
 
-    // public function category()
-    // {
-    //     return $this->belongsTo(Category::class);
-    // }
-
-    // public function parentHierarchy()
-    // {
-    //     return $this->hasOne(Category::class, 'id', 'category_id')->with('parentCategoryHierarchy');
-    // }
-
-    // public function brand()
-    // {
-    //     return $this->belongsTo(Brand::class);
-    // }
-
      public function user()
      {
          return $this->belongsTo(User::class);
@@ -94,101 +86,18 @@ class Product extends Model
         return $this->belongsTo(Variation::class);
     }
 
-    // public function orderDetails()
-    // {
-    //     return $this->hasMany(OrderDetail::class);
-    // }
+     public function orderDetails()
+     {
+         return $this->hasMany(OrderDetail::class);
+     }
 
-    // public function reviews()
-    // {
-    //     return $this->hasMany(Review::class)->where('status', 1);
-    // }
+     public function reviews()
+     {
+         return $this->hasMany(Review::class)->where('status', 1);
+     }
 
-    // public function wishlists()
-    // {
-    //     return $this->hasMany(Wishlist::class);
-    // }
-
-    // public function stocks()
-    // {
-    //     return $this->hasMany(ProductStock::class)->with('product');
-    // }
-
-    // public function getThumbnaileImageAttribute()
-    // {
-    //     return api_asset($this->thumbnail_img);
-    // }
-
-    // public function getCharacteristicValues2Attribute()
-    // {
-    //     $arr = [];
-
-    //     foreach ($this->characteristicValues as $key => $item) {
-    //         $attr = App\Models\ProductAttributeCharacteristics::where('id', $item->attr_id)->with('values')->first();
-
-    //         $arr[$key] = [
-    //             'attr_id' => $item->attr_id,
-    //             'parent_id' => $item->parent_id,
-    //             'key' => $item->name,
-    //             'value' => $item->values,
-    //             'values' => array_map(function ($el) {
-    //                 return [
-    //                     'id' => $el,
-    //                     'text' => $el,
-    //                     'selected' => true
-    //                 ];
-    //             }, explode(' / ', $item->values))
-    //         ];
-
-    //         if ($attr) {
-    //             if ($attr->values->count()) {
-    //                 foreach ($attr->values as $value) {
-    //                     if (!in_array($value->value, explode(' / ', $item->values))) {
-    //                         array_push($arr[$key]['values'], [
-    //                             'id' => $value->value,
-    //                             'text' => $value->value
-    //                         ]);
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     return $arr;
-    // }
-
-    // public function productAttributes()
-    // {
-    //     return $this->belongsToMany(ProductAttribute::class,
-    //         'product_product_attributes',
-    //         'product_id',
-    //         'product_attribute_id'
-    //     );
-    // }
-
-    // public function getCharacteristicValuesForDetailProductAttribute()
-    // {
-    //     $arr = collect();
-
-    //     foreach ($this->characteristicValues as $item) {
-    //         $arr->push([
-    //             'parent_id' => $item->parent_id,
-    //             'attribute_id' => $item->attr_id,
-    //             'attribute' => App\Models\ProductAttributeCharacteristics::where('id', $item->attr_id)->first(),
-    //             'key' => $item->name,
-    //             'value' => $item->values
-    //         ]);
-    //     }
-
-    //     $parents = collect();
-
-    //     foreach ($arr->groupBy('parent_id') as $key => $val) {
-    //         $parents[] = App\Models\ProductAttribute::where('id', $key)->first();
-    //     }
-
-    //     return [
-    //         'attrs' => $arr,
-    //         'parents' => $parents
-    //     ];
-    // }
+     public function wishlists()
+     {
+         return $this->hasMany(Wishlist::class);
+     }
 }

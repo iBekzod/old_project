@@ -8,6 +8,7 @@ use App\BrandTranslation;
 use App\Product;
 use Illuminate\Support\Str;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
+use App\Language;
 
 class BrandController extends Controller
 {
@@ -63,9 +64,12 @@ class BrandController extends Controller
         $brand->logo = $request->logo;
         $brand->save();
 
-        $brand_translation = BrandTranslation::firstOrNew(['lang' => env('DEFAULT_LANGUAGE'), 'brand_id' => $brand->id]);
-        $brand_translation->name = $request->name;
-        $brand_translation->save();
+        foreach (Language::all() as $language){
+            $brand_translation = BrandTranslation::firstOrNew(['lang' => $language->code, 'brand_id' => $brand->id]);
+            $brand_translation->name = $request->name;
+            $brand_translation->save();
+        }
+
 
         flash(translate('Brand has been inserted successfully'))->success();
         return redirect()->route('brands.index');
@@ -123,9 +127,13 @@ class BrandController extends Controller
         $brand->logo = $request->logo;
         $brand->save();
 
-        $brand_translation = BrandTranslation::firstOrNew(['lang' => $request->lang, 'brand_id' => $brand->id]);
-        $brand_translation->name = $request->name;
-        $brand_translation->save();
+        if(BrandTranslation::where('brand_id' , $brand->id)->where('lang' , $request->lang)->first()){
+            foreach (Language::all() as $language){
+                $brand_translation = BrandTranslation::firstOrNew(['lang' => $language->code, 'brand_id' => $brand->id]);
+                $brand_translation->name = $request->name;
+                $brand_translation->save();
+            }
+        }
 
         flash(translate('Brand has been updated successfully'))->success();
         return back();
