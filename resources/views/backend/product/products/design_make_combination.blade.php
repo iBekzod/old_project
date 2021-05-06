@@ -78,6 +78,7 @@
                 <td>
                     <label for="" class="control-label">{{implode (",", $combination)}}</label>
                     <input type="hidden" name="variation[{{ $index }}][slug]" value="{{implode("-", $combination)}}" class="form-control">
+                    <input type="hidden" name="variation[{{ $index }}][name]" value="{{implode(",", $combination)}}" class="form-control">
                 </td>
                 <td>
                     <input type="number"  name="variation[{{ $index }}][price]" value="0" min="0" step="0.01" class="form-control price_change" required>
@@ -85,7 +86,11 @@
                 <td>
                     <select class="form-control aiz-selectpicker " name="variation[{{ $index }}][currency]">
                         @foreach($currencies as $currency)
-                            <option class="currency_change" value="{{$currency->code}}">{{$currency->code}}</option>
+                            @if($currency->code=='UZB')
+                                <option class="currency_change" value="{{$currency->id}}" selected>{{$currency->code}}</option>
+                            @else
+                                <option class="currency_change" value="{{$currency->id}}">{{$currency->code}}</option>
+                            @endif
                         @endforeach
                     </select>
                 </td>

@@ -17,6 +17,8 @@ class Variation extends Model
         'sku',
         'user_id',
         'num_of_sale',
+        'qty',
+        'rating',
         'created_at',
         'updated_at',
     ];

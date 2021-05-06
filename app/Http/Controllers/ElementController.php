@@ -297,12 +297,14 @@ class ElementController extends Controller
         }
         $element->pdf = $request->pdf;
         $element->save();
-        // Element Translations
-        $element_translation = ElementTranslation::firstOrNew(['lang' => env('DEFAULT_LANGUAGE', 'en'), 'element_id' => $element->id]);
-        $element_translation->name = $request->name;
-        $element_translation->unit = $request->unit;
-        $element_translation->description = $request->description;
-        $element_translation->save();
+        foreach (Language::all() as $language){
+            // Element Translations
+            $element_translation = ElementTranslation::firstOrNew(['lang' => $language->code, 'element_id' => $element->id]);
+            $element_translation->name = $request->name;
+            $element_translation->unit = $request->unit;
+            $element_translation->description = $request->description;
+            $element_translation->save();
+        }
 
         flash(translate('Element has been inserted successfully'))->success();
 
@@ -433,12 +435,14 @@ class ElementController extends Controller
         }
         $element->pdf = $request->pdf;
         $element->save();
-        // Element Translations
-        $element_translation = ElementTranslation::firstOrNew(['lang' => $request->lang, 'element_id' => $element->id]);
-        $element_translation->name = $request->name;
-        $element_translation->unit = $request->unit;
-        $element_translation->description = $request->description;
-        $element_translation->save();
+        foreach (Language::all() as $language){
+            // Element Translations
+            $element_translation = ElementTranslation::firstOrNew(['lang' => $language->code, 'element_id' => $element->id]);
+            $element_translation->name = $request->name;
+            $element_translation->unit = $request->unit;
+            $element_translation->description = $request->description;
+            $element_translation->save();
+        }
 
         flash(translate('Element has been updated successfully'))->success();
 

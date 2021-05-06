@@ -37,8 +37,10 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::get('/products/create','ProductController@create')->name('products.create');
 	Route::get('/products/admin/{id}/edit','ProductController@admin_product_edit')->name('products.admin.edit');
 	Route::get('/products/seller/{id}/edit','ProductController@seller_product_edit')->name('products.seller.edit');
-	Route::post('/products/todays_deal', 'ProductController@updateTodaysDeal')->name('products.todays_deal');
-	Route::post('/products/featured', 'ProductController@updateFeatured')->name('products.featured');
+    Route::post('/products/todays_deal', 'ProductController@updateTodaysDeal')->name('products.todays_deal');
+    Route::post('/products/todays_deals', 'ProductController@updateTodaysDeals')->name('products.todays_deals');
+    Route::post('/products/featured', 'ProductController@updateFeatured')->name('products.featured');
+    Route::post('/products/featureds', 'ProductController@updateFeatureds')->name('products.featureds');
     Route::get('/products/{id}/characteristics', 'ProductController@characteristics')->name('products.characteristics');
     Route::post('/products/{id}/characteristics', 'ProductController@characteristics')->name('products.characteristics');
     Route::post('/products/get_products_by_subcategory', 'ProductController@get_products_by_subcategory')->name('products.get_products_by_subcategory');
@@ -194,7 +196,8 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 
 	//Reviews
 	Route::get('/reviews', 'ReviewController@index')->name('reviews.index');
-	Route::post('/reviews/published', 'ReviewController@updatePublished')->name('reviews.published');
+    Route::post('/reviews/published', 'ReviewController@updatePublished')->name('reviews.published');
+//    Route::post('/reviews/publisheds', 'ReviewController@updatePublisheds')->name('reviews.publisheds');
 
 	//Support_Ticket
 	Route::get('support_ticket/','SupportTicketController@admin_index')->name('support_ticket.admin_index');

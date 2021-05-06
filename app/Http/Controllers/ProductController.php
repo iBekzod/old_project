@@ -235,7 +235,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-//        dd($request);
+        //dd($request);
         if (Auth::user()->user_type == 'seller') {
             $user_id = Auth::user()->id;
         } else {
@@ -244,87 +244,92 @@ class ProductController extends Controller
         $name = $request->name;
         $slug = SlugService::createSlug(Product::class, 'slug', slugify($name));
         $added_by = Auth::user()->user_type;
-        $all_products = array();
         $minimum_price=0;
         $product_price=0;
         $product_id=0;
+        $total_stock=0;
+        $variation= new Variation;
+        $variation->name=$name;
+        $variation->save();
+        $product_ids=array();
         if ($request->has('variation')) {
-            foreach ($request->variation as $variation) {
+            foreach ($request->variation as $variant) {
+
                 $product = new Product;
-                $product->name=$name;
+                $product->name=$variant["name"];
                 $product->added_by=$added_by;
                 $product->user_id=$user_id;
-                $product->slug=SlugService::createSlug(Product::class, 'slug', slugify($variation["slug"]));
-                $product->currency_id=$variation["currency"];
-                $product->price=$variation["price"];
-                $product->discount=$variation["discount"];
-                $product->discount_type=$variation["discount_type"];
-                if($request->has('todays_deal')){
-                    if($product->todays_deal=="on" || $product->todays_deal==true){
-                        $product->todays_deal=true;
-                    }else{
-                        $product->todays_deal=false;
-                    }
+                $product->slug=SlugService::createSlug(Product::class, 'slug', slugify($variant["slug"]));
+                $product->currency_id= (int)$variant["currency"];
+                $product->price=(double)$variant["price"];
+                $product->discount=(double)$variant["discount"];
+                $product->discount_type=$variant["discount_type"];
+                if(array_key_exists('todays_deal', $variant)){
+                    ($variant["todays_deal"]=="on" )?$product->todays_deal=true:$product->todays_deal=false;
                 }else{
                     $product->todays_deal=false;
                 }
-                if($request->has('published')){
-                    if($product->published=="on" || $product->todays_deal==true){
-                        $product->published=true;
-                    }else{
-                        $product->published=false;
-                    }
+                if(array_key_exists('published', $variant)){
+                    ($variant["published"]=="on" )?$product->published=true:$product->published=false;
                 }else{
                     $product->published=false;
                 }
-                $product->num_of_sale=0;
-                $product->delivery_group_id=$variation["delivery_type"];
-                $product->qty=$variation["quantity"];
-                $product->tax=$variation["tax"];
-                $product->tax_type=$variation["tax_type"];
-
-                $product->featured=$variation["featured"];
-                $product->seller_featured=$variation["seller_featured"];
-                $product->on_moderation=$variation["on_moderation"];
-//                $product->is_accepted=$variation["is_accepted"];
+                $product->delivery_group_id=$variant["delivery_type"];
+                $product->qty=(int)$variant["quantity"];
+                $product->tax=(double)$variant["tax"];
+                $product->tax_type=$variant["tax_type"];
                 $product->rating=0;
-                $product->barcode=$variation["barcode"];
-                $product->earn_point=$variation["earn_point"];
-
+                $product->barcode=rand(10000, 999999);
+                $product->earn_point=0;
+                $product->num_of_sale=0;
+                $product->variation_id=$variation->id;
                 $product->save();
-//                dd($product);
-                $product_price=$variation["price"];
+                $product_price=$product->price;
+                $total_stock=$total_stock+$product->qty;
+                if($currency=Currency::findOrFail($product->currency_id)){
+                    $product_price=$product_price/$currency->exchange_rate;
+                }
                 if($minimum_price>$product_price || $minimum_price==0){
                     $minimum_price=$product_price;
                     $product_id=$product->id;
+                    $product_ids=array();
+                    $product_ids[]=$product->id;
+                }else if($minimum_price==$product_price){
+                    $product_ids[]=$product->id;
                 }
-                $all_products[]=$product;
+                foreach (Language::all() as $language){
+                    // Product Translations
+                    $product_translation = ProductTranslation::firstOrNew(['lang' => $language->code, 'product_id' => $product->id]);
+                    $product_translation->name = $name;
+                    $product_translation->save();
+                }
             }
         }
         if($product_id!=0 && $product=Product::findOrFail($product_id) ){
             if($element=Element::findOrFail($request->element_id)){
-                $variation= new Variation;
-                $variation->name=$element->name.' '.$product->name;
                 $variation->lowest_price_id=$product->id;
-                $variation->slug=$product->slug;
+                $variation->slug=$slug;
                 $variation->element_id=$element->id;
-                $variation->prices=$product->price;
+                $variation->prices=json_encode(
+                    ['product_ids'=>[$product_ids], 'price'=> $product->price]
+                );
                 $variation->variant=$product->slug;
                 $variation->sku=$product->slug;
                 $variation->num_of_sale=0;
+                $variation->qty=$total_stock;
+                $variation->rating=0;
                 $variation->user_id=$user_id;
                 $variation->save();
-                // Variation Translations
-                $variation_translation = VariationTranslation::firstOrNew(['lang' => env('DEFAULT_LANGUAGE'), 'variation_id' => $variation->id]);
-                $variation_translation->name = $name;
-                $variation_translation->save();
+                foreach (Language::all() as $language){
+                    $variation_translation = VariationTranslation::firstOrNew(['lang' => $language->code, 'variation_id' => $variation->id]);
+                    $variation_translation->name = $name;
+                    $variation_translation->save();
+                }
+
             }
         }
 
-        // Product Translations
-        $product_translation = ProductTranslation::firstOrNew(['lang' => env('DEFAULT_LANGUAGE'), 'product_id' => $product->id]);
-        $product_translation->name = $name;
-        $product_translation->save();
+
 
         flash(translate('Product has been inserted successfully'))->success();
 
@@ -652,6 +657,7 @@ class ProductController extends Controller
         return view('partials.product_select', compact('products'));
     }
 
+
     public function updateTodaysDeal(Request $request)
     {
         $product = Product::findOrFail($request->id);
@@ -689,6 +695,77 @@ class ProductController extends Controller
         return 0;
     }
 
+    public function updateTodaysDeals(Request $request)
+    {
+        try {
+            $product = Product::findOrFail($request->id);
+            $variation = Variation::findOrFail('id', $product->variation_id);
+            $products = Product::where('variation_id', $variation->id)->get();
+            foreach ($products as $product){
+                $product->todays_deal = $request->status;
+                $product->save();
+            }
+            return 1;
+        }catch (\Exception $e){
+            return 0;
+        }
+    }
+
+    public function updatePublisheds(Request $request)
+    {
+        try {
+            $product = Product::findOrFail($request->id);
+            $variation = Variation::findOrFail('id', $product->variation_id);
+            $products = Product::where('variation_id', $variation->id)->get();
+            foreach ($products as $product){
+                $product->published = $request->status;
+                $product->on_moderation = 1;
+                if ($product->added_by == 'seller' && \App\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated) {
+                    $seller = $product->user->seller;
+                    if ($seller->invalid_at != null && Carbon::now()->diffInDays(Carbon::parse($seller->invalid_at), false) <= 0) {
+                        continue;
+                    }
+                }
+                $product->save();
+            }
+            return 1;
+        }catch (\Exception $e){
+            return 0;
+        }
+    }
+
+    public function updateFeatureds(Request $request)
+    {
+        try {
+            $product = Product::findOrFail($request->id);
+            $variation = Variation::findOrFail('id', $product->variation_id);
+            $products = Product::where('variation_id', $variation->id)->get();
+            foreach ($products as $product){
+                $product->featured = $request->status;
+                $product->save();
+            }
+            return 1;
+        }catch (\Exception $e){
+            return 0;
+        }
+    }
+
+    public function updateSellerFeatureds(Request $request)
+    {
+        try {
+            $product = Product::findOrFail($request->id);
+            $variation = Variation::findOrFail('id', $product->variation_id);
+            $products = Product::where('variation_id', $variation->id)->get();
+            foreach ($products as $product){
+                $product->seller_featured = $request->status;
+                $product->save();
+            }
+            return 1;
+        }catch (\Exception $e){
+            return 0;
+        }
+
+    }
     public function updateSellerFeatured(Request $request)
     {
         $product = Product::findOrFail($request->id);
