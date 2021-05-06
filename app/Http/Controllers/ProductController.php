@@ -287,9 +287,11 @@ class ProductController extends Controller
 
                 $product_price=$product->price;
                 $total_stock=$total_stock+$product->qty;
+                var_dump($product_price);
                 if($currency=Currency::findOrFail($product->currency_id)){
                     $product_price=$product_price/$currency->exchange_rate;
                 }
+                dd($product_price);
                 if($minimum_price>$product_price || $minimum_price==0){
                     $minimum_price=$product_price;
                     $product_id=$product->id;
