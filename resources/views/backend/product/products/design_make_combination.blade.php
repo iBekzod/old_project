@@ -77,8 +77,8 @@
             <tr class="variant">
                 <td>
                     <label for="" class="control-label">{{implode (",", $combination)}}</label>
-                    <input type="hidden" name="variation[{{ $index }}][slug]" value="{{implode("-", $combination)}}" class="form-control">
-                    <input type="hidden" name="variation[{{ $index }}][name]" value="{{implode(",", $combination)}}" class="form-control">
+                    <input type="hidden" name="variation[{{ $index }}][slug]" value="{{implode(" ", $combination)}}" class="form-control">
+                    <input type="hidden" name="variation[{{ $index }}][name]" value="{{implode("/", $combination)}}" class="form-control">
                 </td>
                 <td>
                     <input type="number"  name="variation[{{ $index }}][price]" value="0" min="0" step="0.01" class="form-control price_change" required>

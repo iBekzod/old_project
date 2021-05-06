@@ -235,14 +235,14 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request);
+//        dd($request);
         if (Auth::user()->user_type == 'seller') {
             $user_id = Auth::user()->id;
         } else {
             $user_id = \App\User::where('user_type', 'admin')->first()->id;
         }
         $name = $request->name;
-        $slug = SlugService::createSlug(Product::class, 'slug', slugify($name));
+        $slug = SlugService::createSlug(Variation::class, 'slug', slugify($name));
         $added_by = Auth::user()->user_type;
         $minimum_price=0;
         $product_price=0;
@@ -284,6 +284,7 @@ class ProductController extends Controller
                 $product->num_of_sale=0;
                 $product->variation_id=$variation->id;
                 $product->save();
+
                 $product_price=$product->price;
                 $total_stock=$total_stock+$product->qty;
                 if($currency=Currency::findOrFail($product->currency_id)){
@@ -294,13 +295,13 @@ class ProductController extends Controller
                     $product_id=$product->id;
                     $product_ids=array();
                     $product_ids[]=$product->id;
-                }else if($minimum_price==$product_price){
+                }else if($minimum_price==$product_price && $product_price!=0){
                     $product_ids[]=$product->id;
                 }
                 foreach (Language::all() as $language){
                     // Product Translations
                     $product_translation = ProductTranslation::firstOrNew(['lang' => $language->code, 'product_id' => $product->id]);
-                    $product_translation->name = $name;
+                    $product_translation->name = $product->name;
                     $product_translation->save();
                 }
             }
@@ -310,9 +311,7 @@ class ProductController extends Controller
                 $variation->lowest_price_id=$product->id;
                 $variation->slug=$slug;
                 $variation->element_id=$element->id;
-                $variation->prices=json_encode(
-                    ['product_ids'=>[$product_ids], 'price'=> $product->price]
-                );
+                $variation->prices=json_encode($product_ids);
                 $variation->variant=$product->slug;
                 $variation->sku=$product->slug;
                 $variation->num_of_sale=0;
