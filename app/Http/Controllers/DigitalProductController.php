@@ -156,7 +156,7 @@ class DigitalProductController extends Controller
     public function update(Request $request, $id)
     {
         $product                    = Product::findOrFail($id);
-        if($request->lang == env("DEFAULT_LANGUAGE")){
+        if($request->lang == default_language()){
             $product->name          = $request->name;
             $product->description   = $request->description;
         }

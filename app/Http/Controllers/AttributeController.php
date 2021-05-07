@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Attribute;
 use App\AttributeTranslation;
 use CoreComponentRepository;
-
+use App\Language;
 class AttributeController extends Controller
 {
     /**
@@ -47,8 +47,17 @@ class AttributeController extends Controller
         $attribute_translation->name = $request->name;
         $attribute_translation->save();
 
+        foreach (Language::all() as $language){
+            //  Attribute  Translation
+            $attribute_translation = c::firstOrNew(['lang' => $language->code, 'product_id' => $attribute->id]);
+            $attribute_translation->name = $attribute->name;
+            $attribute_translation->save();
+        }
+
         flash(translate('Attribute has been inserted successfully'))->success();
         return redirect()->route('attributes.index');
+
+
     }
 
     /**
@@ -94,8 +103,16 @@ class AttributeController extends Controller
         $attribute_translation->name = $request->name;
         $attribute_translation->save();
 
+        if(AttributeTranslation::where('attribute_id' , $attribute->id)->where('lang' , $request->lang)->first()){
+            foreach (Language::all() as $language){
+                $attribute_translation = AttributeTranslation::firstOrNew(['lang' => $language->code, 'attribute_id' => $attribute->id]);
+                $attribute_translation->name = $request->name;
+                $attribute_translation->save();
+        }
+
         flash(translate('Attribute has been updated successfully'))->success();
         return back();
+
     }
 
     /**

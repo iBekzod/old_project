@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Country;
-
+use App\Language;
 class CountryController extends Controller
 {
     /**
@@ -36,7 +36,12 @@ class CountryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       // foreach (Language::all() as $language){
+                    // Country Translations
+                    $country_translations = CountryTranslation::firstOrNew(['lang' => $language->code, 'country_id' => $country->id]);
+                    $country_translations->name = $country->name;
+                    $country_translations->save();
+                }
     }
 
     /**
@@ -70,7 +75,13 @@ class CountryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+       // if(CountryTranslations::where('country_id' , $country->id)->where('lang' , $request->lang)->first()){
+            foreach (Language::all() as $language){
+                $country_translations = BrandTranslation::firstOrNew(['lang' => $language->code, 'country_id' => $country->id]);
+                $country_translations->name = $request->name;
+                $country_translations->save();
+            }
+        }
     }
 
     /**
@@ -92,4 +103,5 @@ class CountryController extends Controller
         }
         return 0;
     }
+
 }
