@@ -300,9 +300,9 @@ class ElementController extends Controller
         foreach (Language::all() as $language){
             // Element Translations
             $element_translation = ElementTranslation::firstOrNew(['lang' => $language->code, 'element_id' => $element->id]);
-            $element_translation->name = $request->name;
-            $element_translation->unit = $request->unit;
-            $element_translation->description = $request->description;
+            $element_translation->name = $element->name;
+            $element_translation->unit = $element->unit;
+            $element_translation->description = $element->description;
             $element_translation->save();
         }
 
