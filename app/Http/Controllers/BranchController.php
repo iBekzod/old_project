@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Attribute;
 use App\Branch;
 use App\BranchTranslation;
 use Illuminate\Http\Request;
@@ -16,7 +17,8 @@ class BranchController extends Controller
     public function index()
     {
         $branches = Branch::orderBy('created_at', 'desc')->get();
-        return view('backend.product.branches.index', compact('branches'));
+        $attribute_selections = Attribute::orderBy('name', 'desc')->get();
+        return view('backend.product.branches.index', compact('branches', 'attribute_selections'));
     }
 
     /**
@@ -86,9 +88,7 @@ class BranchController extends Controller
     public function update(Request $request, $id)
     {
         $branch = Branch::findOrFail($id);
-        if($request->lang ==default_language()){
-          $branch->name = $request->name;
-        }
+        $branch->name = $request->name;
         $branch->save();
 
         if(BranchTranslation::where('branch_id' , $branch->id)->where('lang' , default_language())->first()){
@@ -131,11 +131,12 @@ class BranchController extends Controller
         return redirect()->route('branches.index');
     }
 
-    public function updateAttributes(Request $request, $id)
-    {
-        $branch = Branch::findOrFail($id);
-        $branch->attributes()->detach();
-        $branch->attributes()->attach($request->get('attribute_id'));
-        return back();
-    }
+//    public function updateAttributes(Request $request, $id)
+//    {
+//        $branch = Branch::findOrFail($id);
+//
+//        $branch->attributes->detach();
+//        $branch->attributes->attach($request->get('attribute_id'));
+//        return back();
+//    }
 }
