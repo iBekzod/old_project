@@ -54,13 +54,11 @@
         </div>
         <div class="modal-body">
               <form class="p-4" action="{{ route('branches.update', $branch->id) }}" method="POST">
-                <input name="_method" type="hidden" value="PATCH">
-                <input type="hidden" name="lang" value="{{ $lang }}">
                 @csrf
                 <div class="form-group row">
                     <label class="col-sm-3 col-from-label" for="name">{{ translate('Name')}} <i class="las la-language text-danger" title="{{translate('Translatable')}}"></i></label>
                     <div class="col-sm-9">
-                        <input type="text" placeholder="{{ translate('Name')}}" id="name" name="name" class="form-control" required value="{{ $branch->getTranslation('name', $lang) }}">
+                        <input type="text" placeholder="{{ translate('Name')}}" id="name" name="name" class="form-control" required value="{{ $branch->getTranslation('name') }}">
                     </div>
                 </div>
               </form>

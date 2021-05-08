@@ -219,8 +219,10 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 //	Route::resource('branches','BranchController');
     Route::get('/branches', 'BranchController@index')->name('branches.index');
     Route::get('/branches/edit/{id}', 'BranchController@edit')->name('branches.edit');
+    Route::get('/branches/{id}/attributes', 'BranchController@arribute_index')->name('branches.arributes');
+    Route::get('/branches/{id}/update/attributes', 'BranchController@updateAttributes')->name('branches.update.arributes');
     Route::get('/branches/destroy/{id}', 'BranchController@destroy')->name('branches.destroy');
-	Route::patch('/branches/{id}/update','BranchController@update')->name('branches.update');
+	Route::post('/branches/{id}/update','BranchController@update')->name('branches.update');
     Route::post('/branches/store','BranchController@store')->name('branches.store');
 	// Route::resource('product-attribute-sets','ProductAttributeSetController');
 //	Route::post('product-attributes/add/attr','ProductAttributeController@createAttr')->name('product-attributes.add_attr');
@@ -233,7 +235,8 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::resource('attributes','AttributeController');
 	Route::get('/attributes/edit/{id}', 'AttributeController@edit')->name('attributes.edit');
 	Route::get('/attributes/destroy/{id}', 'AttributeController@destroy')->name('attributes.destroy');
-
+    Route::post('attributes/{id}/update/categories','AttributeController@updateCategories')->name('attributes.categories.update');
+    Route::post('attributes/{id}/update/characteristics','AttributeController@updateCharacteristics')->name('attributes.characteristics.update');
 	Route::resource('addons','AddonController');
 	Route::post('/addons/activation', 'AddonController@activation')->name('addons.activation');
 

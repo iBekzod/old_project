@@ -33,16 +33,75 @@
 								<td>{{$key+1}}</td>
 								<td>{{$branch->getTranslation('name')}}</td>
 								<td class="text-right">
-									<a data-toggle="modal" data-target="#EditModal" class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{route('branches.edit', ['id'=>$branch->id, 'lang'=>env('DEFAULT_LANGUAGE')] )}}" title="{{ translate('Edit') }}">
+									<a data-toggle="modal" data-target="#EditModal_{{$branch->id}}" class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{route('branches.edit', ['id'=>$branch->id, 'lang'=>env('DEFAULT_LANGUAGE')] )}}" title="{{ translate('Edit') }}">
 										<i class="las la-edit"></i>
 									</a>
 									<a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete" data-href="{{route('branches.destroy', $branch->id)}}" title="{{ translate('Delete') }}">
 										<i class="las la-trash"></i>
 									</a>
-									<a href="http://bekzod.estore.com/admin/attributes" class="btn btn-soft-warning btn-icon btn-circle btn-sm " title="{{ translate('Attributes') }}">
+									<a href="{{route('branches.arributes', $branch->id)}}" class="btn btn-soft-warning btn-icon btn-circle btn-sm " title="{{ translate('View Attributes') }}">
 										<i class="fas fa-link"></i>
 									</a>
-								</td>
+
+                                    <a href="#" class="btn btn-soft-info btn-icon btn-circle btn-sm " data-toggle="modal" data-target="#AttributesModal_{{$branch->id}}}" title="{{ translate('Attributes') }}">
+                                        <i class="fa fa-list-alt"></i>
+                                    </a>
+                                    <form class="p-4" action="{{ route('branches.update', $branch->id) }}" method="POST">
+                                        @csrf
+                                        <div class="modal fade" id="EditModal_{{$branch->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">{{translate('Branch Information')}}</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-group row">
+                                                            <label class="col-sm-3 col-from-label" for="name">{{translate('Name')}} <i class="las la-language text-danger" title="{{translate('Translatable')}}"></i></label>
+                                                            <div class="col-sm-9">
+                                                                <input type="text" placeholder="{{translate('Name')}}" id="name" name="name" class="form-control" required value="{{ $branch->getTranslation('name') }}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{translate('Close')}}</button>
+                                                        <button type="submit" class="btn btn-primary" >{{translate('Save')}}</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+{{--                                    <form action="{{ route('branches.update.arributes') }}" method="POST">--}}
+{{--                                        @csrf--}}
+{{--                                        <div class="modal fade" id="AttributesModal_{{$branch->id}}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">--}}
+{{--                                        <div class="modal-dialog modal-dialog-centered" role="document">--}}
+{{--                                            <div class="modal-content">--}}
+{{--                                                <div class="modal-header">--}}
+{{--                                                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>--}}
+{{--                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
+{{--                                                        <span aria-hidden="true">&times;</span>--}}
+{{--                                                    </button>--}}
+{{--                                                </div>--}}
+{{--                                                <div class="modal-body">--}}
+{{--                                                    <div class="modal-body">--}}
+{{--                                                            <div class="form-group mb-3">--}}
+{{--                                                                <label for="name">{{translate('Name')}}</label>--}}
+{{--                                                                <input type="text" placeholder="{{ translate('Name')}}" id="name" name="name" class="form-control" required>--}}
+{{--                                                            </div>--}}
+{{--                                                    </div>--}}
+{{--                                                    <div class="modal-footer">--}}
+{{--                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>--}}
+{{--                                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>--}}
+{{--                                                    </div>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+
+{{--                                    </div>--}}
+{{--                                    </form>--}}
+                                </td>
 							</tr>
 						@endforeach
 					</tbody>
@@ -51,64 +110,32 @@
 		</div>
 	</div>
     <!-- Modal -->
-  <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-              <form class="p-4" method="POST">
-                <input name="_method" type="hidden">
-                <input type="hidden" name="lang">
-
-                <div class="form-group row">
-                    <label class="col-sm-3 col-from-label" for="name">{{ translate('Name')}} <i class="las la-language text-danger" title="{{translate('Translatable')}}"></i></label>
-                    <div class="col-sm-9">
-                        <input type="text" placeholder="{{ translate('Name')}}" id="name" name="name" class="form-control">
-                    </div>
+    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">{{ translate('Add New Branch') }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-              </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">{{ translate('Add New Branch') }}</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-            <form action="{{ route('branches.store') }}" method="POST">
-                @csrf
-                <div class="form-group mb-3">
-                        <label for="name">{{translate('Name')}}</label>
-                        <input type="text" placeholder="{{ translate('Name')}}" id="name" name="name" class="form-control" required>
+                <div class="modal-body">
+                    <form action="{{ route('branches.store') }}" method="POST">
+                        @csrf
+                        @method('PATCH')
+                        <div class="form-group mb-3">
+                            <label for="name">{{translate('Name')}}</label>
+                            <input type="text" placeholder="{{ translate('Name')}}" id="name" name="name" class="form-control" required>
+                        </div>
+                    </form>
                 </div>
-        </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary"  data-dismiss="modal">Add</button>
+                </div>
+            </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary"  data-dismiss="modal">Add</button>
-        </div>
-      </div>
     </div>
-  </div>
-</div>
-
-
 @endsection
 
 @section('modal')
