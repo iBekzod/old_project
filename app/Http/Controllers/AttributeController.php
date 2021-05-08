@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Attribute;
 use App\AttributeTranslation;
-use CoreComponentRepository;
 use App\Language;
 class AttributeController extends Controller
 {
@@ -98,15 +97,15 @@ class AttributeController extends Controller
 
 
         if(AttributeTranslation::where('attribute_id' , $attribute->id)->where('lang' , default_language())->first()){
-            foreach (Language::all() as $language){
+            foreach (Language::all() as $language) {
                 $attribute_translation = AttributeTranslation::firstOrNew(['lang' => $language->code, 'attribute_id' => $attribute->id]);
                 $attribute_translation->name = $request->name;
                 $attribute_translation->save();
+            }
         }
 
         flash(translate('Attribute has been updated successfully'))->success();
         return back();
-
     }
 
     /**

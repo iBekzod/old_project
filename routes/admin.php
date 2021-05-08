@@ -234,10 +234,12 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 
 	Route::resource('attributes','AttributeController');
 	Route::get('/attributes/edit/{id}', 'AttributeController@edit')->name('attributes.edit');
+    Route::post('/attributes/{id}/update','AttributeController@update')->name('attributes.update');
 	Route::get('/attributes/destroy/{id}', 'AttributeController@destroy')->name('attributes.destroy');
-    Route::post('attributes/{id}/update/categories','AttributeController@updateCategories')->name('attributes.categories.update');
-    Route::post('attributes/{id}/update/characteristics','AttributeController@updateCharacteristics')->name('attributes.characteristics.update');
-	Route::resource('addons','AddonController');
+    Route::post('attributes/{id}/update/categories','AttributeController@updateCategories')->name('attributes.update.categories');
+    Route::post('attributes/{id}/update/characteristics','AttributeController@updateCharacteristics')->name('attributes.update.characteristics');
+
+    Route::resource('addons','AddonController');
 	Route::post('/addons/activation', 'AddonController@activation')->name('addons.activation');
 
 	Route::get('/customer-bulk-upload/index', 'CustomerBulkUploadController@index')->name('customer_bulk_upload.index');
