@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Branch;
 use App\BranchTranslation;
 use Illuminate\Http\Request;
-
+use App\Language;
 class BranchController extends Controller
 {
     /**
@@ -43,6 +43,13 @@ class BranchController extends Controller
         $branch_translation = BranchTranslation::firstOrNew(['lang' => env('DEFAULT_LANGUAGE'), 'branch_id' => $branch->id]);
         $branch_translation->name = $request->name;
         $branch_translation->save();
+
+        foreach (Language::all() as $language){
+            // Branch  Translation
+            $branch_translation = BranchTranslation::firstOrNew(['lang' => $language->code, 'branch_id' => $branch->id]);
+            $branch_translation->name = $branch->name;
+            $branch_translation->save();
+        }
 
         flash(translate('Branch has been inserted successfully'))->success();
         return redirect()->route('branches.index');
@@ -82,7 +89,7 @@ class BranchController extends Controller
     public function update(Request $request, $id)
     {
         $branch = Branch::findOrFail($id);
-        if($request->lang == env("DEFAULT_LANGUAGE")){
+        if($request->lang ==default_language()){
           $branch->name = $request->name;
         }
         $branch->save();
@@ -90,6 +97,14 @@ class BranchController extends Controller
         $branch_translation = BranchTranslation::firstOrNew(['lang' => $request->lang, 'branch_id' => $branch->id]);
         $branch_translation->name = $request->name;
         $branch_translation->save();
+
+        if(BranchTranslation::where('brand_id' , $branch->id)->where('lang' , $request->lang)->first()){
+            foreach (Language::all() as $language){
+                $branch_translation = BranchTranslation::firstOrNew(['lang' => $language->code, 'branch_id' => $branch->id]);
+                $branch_translation->name = $request->name;
+                $branch_translation->save();
+            }
+        }
 
         flash(translate('Branch has been updated successfully'))->success();
         return back();

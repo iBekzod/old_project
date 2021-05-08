@@ -86,6 +86,13 @@ class CategoryController extends Controller
         $category_translation->name = $request->name;
         $category_translation->save();
 
+        foreach (Language::all() as $language){
+            // Category Translations
+            $category_translation = CategoryTranslation::firstOrNew(['lang' => $language->code, 'category_id' => $category->id]);
+            $category_translation->name = $category->name;
+            $category_translation->save();
+        }
+
         flash(translate('Category has been inserted successfully'))->success();
         return redirect()->route('categories.index');
     }
@@ -126,7 +133,7 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         $category = Category::findOrFail($id);
-        if($request->lang == env("DEFAULT_LANGUAGE")){
+        if($request->lang ==default_language()){
             $category->name = $request->name;
         }
         $category->digital = $request->digital;
@@ -176,6 +183,14 @@ class CategoryController extends Controller
         $category_translation = CategoryTranslation::firstOrNew(['lang' => $request->lang, 'category_id' => $category->id]);
         $category_translation->name = $request->name;
         $category_translation->save();
+
+        if(CategoryTranslation::where('cotegory_id' , $category->id)->where('lang' , $request->lang)->first()){
+            foreach (Language::all() as $language){
+                $cotegory_translation = CategoryTranslation::firstOrNew(['lang' => $language->code, 'cotegory_id' => $category->id]);
+                $cotegory_translation->name = $request->name;
+                $cotegory_translation->save();
+            }
+        }
 
         flash(translate('Category has been updated successfully'))->success();
         return back();

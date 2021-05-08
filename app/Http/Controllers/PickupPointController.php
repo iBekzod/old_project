@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\PickupPoint;
 use App\PickupPointTranslation;
-
+use App\Language;
 class PickupPointController extends Controller
 {
     /**
@@ -56,6 +56,13 @@ class PickupPointController extends Controller
             $pickup_point_translation->address = $request->address;
             $pickup_point_translation->save();
 
+            foreach (Language::all() as $language){
+                // PickupPoint  Translation
+                $pickup_point_translation = PickupPointTranslation::firstOrNew(['lang' => $language->code, 'pickup_point_id' => $pickup_point->id]);
+                $pickup_point_translation->name = $pickup_point->name;
+                $pickup_point_translation->save();
+            }
+
             flash(translate('PicupPoint has been inserted successfully'))->success();
             return redirect()->route('pick_up_points.index');
 
@@ -100,7 +107,7 @@ class PickupPointController extends Controller
     public function update(Request $request, $id)
     {
         $pickup_point = PickupPoint::findOrFail($id);
-        if($request->lang == env("DEFAULT_LANGUAGE")){
+        if($request->lang == default_language()){
             $pickup_point->name = $request->name;
             $pickup_point->address = $request->address;
         }
@@ -115,6 +122,13 @@ class PickupPointController extends Controller
             $pickup_point_translation->address = $request->address;
             $pickup_point_translation->save();
 
+            if(PickupPointTranslation::where('pickup_point_id' , $pickup_point->id)->where('lang' , $request->lang)->first()){
+                foreach (Language::all() as $language){
+                    $pickup_point_translation = PickupPointTranslation::firstOrNew(['lang' => $language->code, 'pickup_point_id' => $pickup_point->id]);
+                    $pickup_point_translation->name = $request->name;
+                    $pickup_point_translation->save();
+                }
+            }
             flash(translate('PicupPoint has been updated successfully'))->success();
             return redirect()->route('pick_up_points.index');
         }

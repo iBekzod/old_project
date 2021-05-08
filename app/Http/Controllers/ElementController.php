@@ -321,6 +321,7 @@ class ElementController extends Controller
             }
             return redirect()->route('seller.elements');
         }
+
     }
 
     /**

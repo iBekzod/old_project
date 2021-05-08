@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\City;
 use App\Country;
 use App\CityTranslation;
-
+use App\Language;
 class CityController extends Controller
 {
     /**
@@ -46,6 +46,13 @@ class CityController extends Controller
 
         $city->save();
 
+        foreach (Language::all() as $language){
+            // City Translations
+            $city_translation = CityTranslation::firstOrNew(['lang' => $language->code, 'city_id' => $city->id]);
+            $city_translation->name = $city->name;
+            $city_translation->save();
+        }
+
         flash(translate('City has been inserted successfully'))->success();
 
         return back();
@@ -76,7 +83,7 @@ class CityController extends Controller
     public function update(Request $request, $id)
     {
         $city = City::findOrFail($id);
-        if($request->lang == env("DEFAULT_LANGUAGE")){
+        if($request->lang == default_language()){
             $city->name = $request->name;
         }
 
@@ -85,9 +92,13 @@ class CityController extends Controller
 
         $city->save();
 
-        $city_translation = CityTranslation::firstOrNew(['lang' => $request->lang, 'city_id' => $city->id]);
-        $city_translation->name = $request->name;
-        $city_translation->save();
+        if(CityTranslation::where('city_id' , $city->id)->where('lang' , $request->lang)->first()){
+            foreach (Language::all() as $language){
+                $city_translation = CityTranslation::firstOrNew(['lang' => $language->code, 'cotegory_id' => $city->id]);
+                $city_translation->name = $request->name;
+                $city_translation->save();
+            }
+        }
 
         flash(translate('City has been updated successfully'))->success();
         return back();

@@ -110,7 +110,7 @@ class BrandController extends Controller
     public function update(Request $request, $id)
     {
         $brand = Brand::findOrFail($id);
-        if($request->lang == env("DEFAULT_LANGUAGE")){
+        if($request->lang ==default_language()){
             $brand->name = $request->name;
         }
         $brand->meta_title = $request->meta_title;
@@ -134,7 +134,6 @@ class BrandController extends Controller
                 $brand_translation->save();
             }
         }
-
         flash(translate('Brand has been updated successfully'))->success();
         return back();
 

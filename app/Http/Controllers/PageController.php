@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Page;
 use App\PageTranslation;
-
+use App\Language;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
 
 class PageController extends Controller
@@ -63,10 +63,18 @@ class PageController extends Controller
             $page->meta_image       = $request->meta_image;
             $page->save();
 
-            $page_translation           = PageTranslation::firstOrNew(['lang' => env('DEFAULT_LANGUAGE'), 'page_id' => $page->id]);
-            $page_translation->title    = $request->title;
-            $page_translation->content  = $request->get('content');
-            $page_translation->save();
+            // $page_translation           = PageTranslation::firstOrNew(['lang' => env('DEFAULT_LANGUAGE'), 'page_id' => $page->id]);
+            // $page_translation->title    = $request->title;
+            // $page_translation->content  = $request->get('content');
+            // $page_translation->save();
+
+            foreach (Language::all() as $language){
+                // Page Translations
+                $page_translations = PageTranslation::firstOrNew(['lang' => $language->code, 'page_id' => $page->id]);
+                $page_translations->title = $page->title;
+                $page_translations->content = $page->content;
+                $page_translations->save();
+            }
 
             flash(translate('New page has been created successfully'))->success();
             return redirect()->route('website.pages');
@@ -126,7 +134,7 @@ class PageController extends Controller
               if($page->slug!=$request->slug)
                 $page->slug =SlugService::createSlug(Page::class, 'slug',  slugify($request->slug));
             }
-            if($request->lang == env("DEFAULT_LANGUAGE")){
+            if($request->lang == default_language()){
               $page->title          = $request->title;
               $page->content        = $request->get('content');
             }
@@ -137,10 +145,19 @@ class PageController extends Controller
             $page->meta_image       = $request->meta_image;
             $page->save();
 
-            $page_translation           = PageTranslation::firstOrNew(['lang' => $request->lang, 'page_id' => $page->id]);
-            $page_translation->title    = $request->title;
-            $page_translation->content  = $request->get('content');
-            $page_translation->save();
+            // $page_translation           = PageTranslation::firstOrNew(['lang' => $request->lang, 'page_id' => $page->id]);
+            // $page_translation->title    = $request->title;
+            // $page_translation->content  = $request->get('content');
+            // $page_translation->save();
+
+            if(PageTranslation::where('page_id' , $page->id)->where('lang' , $request->lang)->first()){
+                foreach (Language::all() as $language){
+                    $page_translation = PageTranslation::firstOrNew(['lang' => $language->code, 'page_id' =>$page->id]);
+                    $page_translation->title = $request->title;
+                    $page_translation->content = $request->content;
+                    $page_translation->save();
+                }
+            }
 
             flash(translate('Page has been updated successfully'))->success();
             return redirect()->route('website.pages');

@@ -127,7 +127,7 @@ class ProductAttributeController extends Controller
     public function updateAttr(Request $request, $id)
     {
         $attribute = ProductAttributeCharacteristics::findOrFail($id);
-        if ($request->lang == env("DEFAULT_LANGUAGE")) {
+        if ($request->lang == default_language()) {
             $attribute->name = $request->name;
         }
         $attribute->save();
@@ -193,7 +193,7 @@ class ProductAttributeController extends Controller
     public function update(Request $request, $id)
     {
         $attribute = ProductAttribute::findOrFail($id);
-        if ($request->lang == env("DEFAULT_LANGUAGE")) {
+        if ($request->lang == default_language()) {
             $attribute->name = $request->name;
         }
         $attribute->save();
