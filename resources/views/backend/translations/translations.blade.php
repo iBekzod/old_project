@@ -8,49 +8,51 @@
             {{-- @php
                 $language_selected = $language_selected;
             @endphp --}}
-            <div class="ml-2 aiz-topbar-item">
-                <div class="align-items-stretch d-flex dropdown " id="trans-lang-changes">
-                    <a class="dropdown-toggle no-arrow" data-toggle="dropdown" href="javascript:void(0);" role="button" aria-haspopup="false" aria-expanded="false">
-                        <span class="btn btn-icon">
-                            @if($language_selected=='all')<img src="{{ static_asset('assets/img/placeholder.jpg') }}" height="11">
-                            @else<img src="{{ static_asset('assets/img/flags/'.$language_selected.'.png') }}" height="11">
-                            @endif {{$language_selected}}
-                        </span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-xs">
-                        {{-- <li>
-                            <a href="{{route('translations.show_translation', ['base_table'=>$base_table, 'table_translations'=>$table_translations, 'relation_id'=>$relation_id, 'language_selected'=>'all'])}}" data-flag="all" class="dropdown-item @if($language_selected == 'all') active @endif">
-                                <img src="{{ static_asset('assets/img/placeholder.jpg') }}" height="11" class="mr-2">
-                                <span class="language">{{translate('All')}}</span>
-                            </a>
-                        </li> --}}
-                        @foreach (\App\Language::all() as $key => $language)
-                            <li>
-                                <a href="{{route('translations.show_translation', ['base_table'=>$base_table, 'fields'=>$fields, 'selected_field'=>$selected_field, 'table_translations'=>$table_translations, 'relation_id'=>$relation_id, 'language_selected'=>$language->code])}}" data-flag="{{ $language->code }}" class="dropdown-item @if($language_selected == $language->code) active @endif">
-                                    <img src="{{ static_asset('assets/img/flags/'.$language->code.'.png') }}" class="mr-2">
-                                    <span class="language">{{ $language->name }}</span>
+            <div class="d-flex">
+                <div class="ml-2 aiz-topbar-item border pr-md-3 rounded h-md-25" style="padding:0.1rem;">
+                    <div class="align-items-stretch d-flex dropdown " id="trans-lang-changes">
+                        <a class="dropdown-toggle no-arrow" data-toggle="dropdown" href="javascript:void(0);" role="button" aria-haspopup="false" aria-expanded="false">
+                            <span class="btn btn-icon">
+                                @if($language_selected=='all')<img src="{{ static_asset('assets/img/placeholder.jpg') }}" height="11">
+                                @else<img src="{{ static_asset('assets/img/flags/'.$language_selected.'.png') }}" height="11">
+                                @endif {{$language_selected}}
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-xs">
+                            {{-- <li>
+                                <a href="{{route('translations.show_translation', ['base_table'=>$base_table, 'table_translations'=>$table_translations, 'relation_id'=>$relation_id, 'language_selected'=>'all'])}}" data-flag="all" class="dropdown-item @if($language_selected == 'all') active @endif">
+                                    <img src="{{ static_asset('assets/img/placeholder.jpg') }}" height="11" class="mr-2">
+                                    <span class="language">{{translate('All')}}</span>
                                 </a>
-                            </li>
-                        @endforeach
-                    </ul>
+                            </li> --}}
+                            @foreach (\App\Language::all() as $key => $language)
+                                <li>
+                                    <a href="{{route('translations.show_translation', ['base_table'=>$base_table, 'fields'=>$fields, 'selected_field'=>$selected_field, 'table_translations'=>$table_translations, 'relation_id'=>$relation_id, 'language_selected'=>$language->code])}}" data-flag="{{ $language->code }}" class="dropdown-item @if($language_selected == $language->code) active @endif">
+                                        <img src="{{ static_asset('assets/img/flags/'.$language->code.'.png') }}" class="mr-2">
+                                        <span class="language">{{ $language->name }}</span>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <div class="ml-2 aiz-topbar-item">
-                <div class="align-items-stretch d-flex dropdown " id="trans-field-changes">
-                    <a class="dropdown-toggle no-arrow" data-toggle="dropdown" href="javascript:void(0);" role="button" aria-haspopup="false" aria-expanded="false">
-                        <span class="btn btn-icon">
-                            {{$fields[$selected_field]}}
-                        </span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-xs">
-                        @foreach ($fields as $index=>$field)
-                            <li>
-                                <a href="{{route('translations.show_translation', ['base_table'=>$base_table, 'fields'=>$fields, 'selected_field'=>$index, 'table_translations'=>$table_translations, 'relation_id'=>$relation_id, 'language_selected'=>$language_selected])}}" data-selected="{{ $index }}" class="dropdown-item @if($selected_field == $index) active @endif">
-                                    <span class="field">{{ $field }}</span>
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
+                <div class="ml-2 aiz-topbar-item border pr-md-4 rounded ">
+                    <div class="align-items-stretch d-flex dropdown " id="trans-field-changes">
+                        <a class="dropdown-toggle no-arrow" data-toggle="dropdown" href="javascript:void(0);" role="button" aria-haspopup="false" aria-expanded="false">
+                            <span class="btn btn-icon">
+                                {{$fields[$selected_field]}}
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-xs">
+                            @foreach ($fields as $index=>$field)
+                                <li>
+                                    <a href="{{route('translations.show_translation', ['base_table'=>$base_table, 'fields'=>$fields, 'selected_field'=>$index, 'table_translations'=>$table_translations, 'relation_id'=>$relation_id, 'language_selected'=>$language_selected])}}" data-selected="{{ $index }}" class="dropdown-item @if($selected_field == $index) active @endif">
+                                        <span class="field">{{ $field }}</span>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </div>
             </div>
            {{-- <h5 class="mb-md-0 h6">{{ $language_selected }}</h5> --}}
