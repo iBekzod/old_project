@@ -39,12 +39,12 @@ class LanguageController extends Controller
         $language->code = $request->code;
         if ($language->save()) {
 
-            foreach (Language::all() as $language){
-                // Language Translations
-                $language_translations = LanguageTranslation::firstOrNew(['lang' => $language->code, 'language_id' => $language->id]);
-                $language_translations->name = $language->name;
-                $language_translations->save();
-            }
+            // foreach (Language::all() as $language){
+            //     // Language Translations
+            //     $language_translations = LanguageTranslation::firstOrNew(['lang' => $language->code, 'language_id' => $language->id]);
+            //     $language_translations->name = $language->name;
+            //     $language_translations->save();
+            // }
 
 
             flash(translate('Language has been inserted successfully'))->success();
@@ -81,13 +81,13 @@ class LanguageController extends Controller
         $language->code = $request->code;
         if ($language->save()) {
 
-            if(LanguageTranslation::where('language_id' , $language->id)->where('lang' , $request->lang)->first()){
-                foreach (Language::all() as $language){
-                    $language_translations = LanguageTranslation::firstOrNew(['lang' => $language->code, 'language_id' => $language->id]);
-                    $language_translations->name = $request->name;
-                    $language_translations->save();
-                }
-            }
+            // if(LanguageTranslation::where('language_id' , $language->id)->where('lang' ,default_language())->first()){
+            //     foreach (Language::all() as $language){
+            //         $language_translations = LanguageTranslation::firstOrNew(['lang' => $language->code, 'language_id' => $language->id]);
+            //         $language_translations->name = $request->name;
+            //         $language_translations->save();
+            //     }
+            // }
             flash(translate('Language has been updated successfully'))->success();
             return redirect()->route('languages.index');
         } else {

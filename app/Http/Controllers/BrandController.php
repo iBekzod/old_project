@@ -66,7 +66,7 @@ class BrandController extends Controller
 
         foreach (Language::all() as $language){
             $brand_translation = BrandTranslation::firstOrNew(['lang' => $language->code, 'brand_id' => $brand->id]);
-            $brand_translation->name = $request->name;
+            $brand_translation->name = $brand->name;
             $brand_translation->save();
         }
 
@@ -127,7 +127,7 @@ class BrandController extends Controller
         $brand->logo = $request->logo;
         $brand->save();
 
-        if(BrandTranslation::where('brand_id' , $brand->id)->where('lang' , $request->lang)->first()){
+        if(BrandTranslation::where('brand_id' , $brand->id)->where('lang' , default_language())->first()){
             foreach (Language::all() as $language){
                 $brand_translation = BrandTranslation::firstOrNew(['lang' => $language->code, 'brand_id' => $brand->id]);
                 $brand_translation->name = $request->name;

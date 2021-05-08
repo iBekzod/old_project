@@ -145,12 +145,7 @@ class PageController extends Controller
             $page->meta_image       = $request->meta_image;
             $page->save();
 
-            // $page_translation           = PageTranslation::firstOrNew(['lang' => $request->lang, 'page_id' => $page->id]);
-            // $page_translation->title    = $request->title;
-            // $page_translation->content  = $request->get('content');
-            // $page_translation->save();
-
-            if(PageTranslation::where('page_id' , $page->id)->where('lang' , $request->lang)->first()){
+            if(PageTranslation::where('page_id' , $page->id)->where('lang' , default_language())->first()){
                 foreach (Language::all() as $language){
                     $page_translation = PageTranslation::firstOrNew(['lang' => $language->code, 'page_id' =>$page->id]);
                     $page_translation->title = $request->title;

@@ -82,10 +82,6 @@ class CategoryController extends Controller
 
         $category->save();
 
-        $category_translation = CategoryTranslation::firstOrNew(['lang' => env('DEFAULT_LANGUAGE'), 'category_id' => $category->id]);
-        $category_translation->name = $request->name;
-        $category_translation->save();
-
         foreach (Language::all() as $language){
             // Category Translations
             $category_translation = CategoryTranslation::firstOrNew(['lang' => $language->code, 'category_id' => $category->id]);
@@ -180,11 +176,7 @@ class CategoryController extends Controller
 
         $category->save();
 
-        $category_translation = CategoryTranslation::firstOrNew(['lang' => $request->lang, 'category_id' => $category->id]);
-        $category_translation->name = $request->name;
-        $category_translation->save();
-
-        if(CategoryTranslation::where('cotegory_id' , $category->id)->where('lang' , $request->lang)->first()){
+        if(CategoryTranslation::where('cotegory_id' , $category->id)->where('lang' ,default_language())->first()){
             foreach (Language::all() as $language){
                 $cotegory_translation = CategoryTranslation::firstOrNew(['lang' => $language->code, 'cotegory_id' => $category->id]);
                 $cotegory_translation->name = $request->name;

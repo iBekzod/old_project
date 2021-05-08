@@ -100,7 +100,7 @@ class RoleController extends Controller
             $role->permissions = json_encode($request->permissions);
             $role->save();
 
-            if(RoleTranslation::where('role_id' , $role->id)->where('lang' , $request->lang)->first()){
+            if(RoleTranslation::where('role_id' , $role->id)->where('lang' , default_language())->first()){
                 foreach (Language::all() as $language){
                     $role_translation = RoleTranslation::firstOrNew(['lang' => $language->code, 'role_id' => $role->id]);
                     $role_translation->name = $request->name;

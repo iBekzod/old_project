@@ -112,7 +112,7 @@ class CustomerPackageController extends Controller
 
         $customer_package->save();
 
-        if(CustomerPackageTranslation::where('customer_package_id' , $customer_package->id)->where('lang' , $request->lang)->first()){
+        if(CustomerPackageTranslation::where('customer_package_id' , $customer_package->id)->where('lang' , default_language())->first()){
             foreach (Language::all() as $language){
                 $customer_package = CustomerPackageTranslation::firstOrNew(['lang' => $language->code, 'customer_package_id' => $customer_package->id]);
                 $customer_package->name = $request->name;

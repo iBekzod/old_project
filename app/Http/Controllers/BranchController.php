@@ -40,9 +40,6 @@ class BranchController extends Controller
         $branch->name = $request->name;
         $branch->save();
 
-        $branch_translation = BranchTranslation::firstOrNew(['lang' => env('DEFAULT_LANGUAGE'), 'branch_id' => $branch->id]);
-        $branch_translation->name = $request->name;
-        $branch_translation->save();
 
         foreach (Language::all() as $language){
             // Branch  Translation
