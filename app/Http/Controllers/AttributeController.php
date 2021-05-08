@@ -43,13 +43,10 @@ class AttributeController extends Controller
         $attribute->name = $request->name;
         $attribute->save();
 
-        $attribute_translation = AttributeTranslation::firstOrNew(['lang' => env('DEFAULT_LANGUAGE'), 'attribute_id' => $attribute->id]);
-        $attribute_translation->name = $request->name;
-        $attribute_translation->save();
 
         foreach (Language::all() as $language){
             //  Attribute  Translation
-            $attribute_translation = c::firstOrNew(['lang' => $language->code, 'product_id' => $attribute->id]);
+            $attribute_translation = c::firstOrNew(['lang' => $language->code, 'attribute_id' => $attribute->id]);
             $attribute_translation->name = $attribute->name;
             $attribute_translation->save();
         }
@@ -99,11 +96,8 @@ class AttributeController extends Controller
         }
         $attribute->save();
 
-        $attribute_translation = AttributeTranslation::firstOrNew(['lang' => $request->lang, 'attribute_id' => $attribute->id]);
-        $attribute_translation->name = $request->name;
-        $attribute_translation->save();
 
-        if(AttributeTranslation::where('attribute_id' , $attribute->id)->where('lang' , $request->lang)->first()){
+        if(AttributeTranslation::where('attribute_id' , $attribute->id)->where('lang' , default_language())->first()){
             foreach (Language::all() as $language){
                 $attribute_translation = AttributeTranslation::firstOrNew(['lang' => $language->code, 'attribute_id' => $attribute->id]);
                 $attribute_translation->name = $request->name;

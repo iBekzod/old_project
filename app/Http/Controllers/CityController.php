@@ -92,9 +92,9 @@ class CityController extends Controller
 
         $city->save();
 
-        if(CityTranslation::where('city_id' , $city->id)->where('lang' , $request->lang)->first()){
+        if(CityTranslation::where('city_id' , $city->id)->where('lang' ,default_language())->first()){
             foreach (Language::all() as $language){
-                $city_translation = CityTranslation::firstOrNew(['lang' => $language->code, 'cotegory_id' => $city->id]);
+                $city_translation = CityTranslation::firstOrNew(['lang' => $language->code, 'city_id' => $city->id]);
                 $city_translation->name = $request->name;
                 $city_translation->save();
             }

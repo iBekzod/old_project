@@ -122,7 +122,7 @@ class PickupPointController extends Controller
             $pickup_point_translation->address = $request->address;
             $pickup_point_translation->save();
 
-            if(PickupPointTranslation::where('pickup_point_id' , $pickup_point->id)->where('lang' , $request->lang)->first()){
+            if(PickupPointTranslation::where('pickup_point_id' , $pickup_point->id)->where('lang' , default_language())->first()){
                 foreach (Language::all() as $language){
                     $pickup_point_translation = PickupPointTranslation::firstOrNew(['lang' => $language->code, 'pickup_point_id' => $pickup_point->id]);
                     $pickup_point_translation->name = $request->name;
