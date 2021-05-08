@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
 <div class="aiz-titlebar text-left mt-2 mb-3">
 	<div class="align-items-center d-flex justify-content-between">
-		<h1 class="h3">{{translate('All Attributes')}}</h1>
+		<h1 class="h3">@if($branch){{$branch->getTranslation('name')}}@else{{translate('All Attributes')}}@endif</h1>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#OpenModals">
             Add New Branch
         </button>

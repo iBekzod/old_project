@@ -113,4 +113,21 @@ class BranchController extends Controller
         flash(translate('branch has been deleted successfully'))->success();
         return redirect()->route('branches.index');
     }
+
+    public function arribute_index($id){
+        $branch = Branch::findOrFail($id);
+        if($attributes=$branch->attributes){
+            return view('backend.product.attribute.index', compact('attributes', 'branch'));
+        }
+        flash(translate('Branch has no attributes'))->message();
+        return redirect()->route('branches.index');
+    }
+
+    public function updateAttributes(Request $request, $id)
+    {
+        $branch = Branch::findOrFail($id);
+        $branch->attributes()->detach();
+        $branch->attributes()->attach($request->get('attribute_id'));
+        return back();
+    }
 }

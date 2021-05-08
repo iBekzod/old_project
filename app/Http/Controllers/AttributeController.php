@@ -116,4 +116,18 @@ class AttributeController extends Controller
         flash(translate('Attribute has been deleted successfully'))->success();
         return redirect()->route('attributes.index');
     }
+
+
+    public function updateCategories(Request $request, $id){
+        $attribute = Attribute::findOrFail($id);
+        $attribute->categories()->detach();
+        $attribute->categories()->attach($request->get('category_id'));
+        return back();
+    }
+    public function updateCharacteristics(Request $request, $id){
+        $attribute = Attribute::findOrFail($id);
+        $attribute->characteristics()->detach();
+        $attribute->characteristics()->attach($request->get('characteristic_id'));
+        return back();
+    }
 }
