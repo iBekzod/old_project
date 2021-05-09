@@ -269,7 +269,7 @@ class ElementController extends Controller
 //        }
         $element->photos = $request->photos;
         $element->thumbnail_img = $request->thumbnail_img;
-        $element->min_qty = $request->min_qty;
+        // $element->min_qty = $request->min_qty;
         $tags = array();
         if ($request->tags[0] != null) {
             foreach (json_decode($request->tags[0]) as $key => $tag) {
@@ -408,7 +408,7 @@ class ElementController extends Controller
 //        }
         $element->photos = $request->photos;
         $element->thumbnail_img = $request->thumbnail_img;
-        $element->min_qty = $request->min_qty;
+        // $element->min_qty = $request->min_qty;
         $tags = array();
         if ($request->tags[0] != null) {
             foreach (json_decode($request->tags[0]) as $key => $tag) {

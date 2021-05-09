@@ -26,10 +26,10 @@
 @endsection
 
 @section('content')
-    <div class="aiz-titlebar text-left mt-2 mb-3">
+    <div class="mt-2 mb-3 text-left aiz-titlebar">
         <h1 class="mb-0 h6">{{ translate('Create Element') }}</h5>
     </div>
-    <div class="col-lg-8 mx-auto">
+    <div class="mx-auto col-lg-8">
         <form class="form form-horizontal mar-top" action="{{route('elements.store')}}" method="POST"
               enctype="multipart/form-data" id="choice_form">
             @csrf
@@ -72,14 +72,14 @@
                                    value="" required>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    {{-- <div class="form-group row">
                         <label class="col-lg-3 col-from-label">{{translate('Minimum Qty')}}</label>
                         <div class="col-lg-8">
                             <input type="number" lang="en" class="form-control" name="min_qty"
                                    value="1" min="1"
                                    required>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="form-group row">
                         <label class="col-lg-3 col-from-label">{{translate('Tags')}}</label>
                         <div class="col-lg-8">
@@ -107,7 +107,7 @@
                         <div class="form-group row">
                             <label class="col-md-3 col-from-label">{{translate('Refundable')}}</label>
                             <div class="col-md-8">
-                                <label class="aiz-switch aiz-switch-success mb-0">
+                                <label class="mb-0 aiz-switch aiz-switch-success">
                                     <input type="checkbox" name="refundable" checked>
                                     <span></span>
                                 </label>
@@ -145,7 +145,7 @@
                                     data-selected-text-format="count" name="colors[]" id="colors" multiple>
 
                                 @foreach (\App\Color::orderBy('name', 'asc')->get() as $key => $color)
-                                    <option value="" data-content="<span><span class='size-15px d-inline-block mr-2 rounded border' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"></option>
+                                    <option value="" data-content="<span><span class='mr-2 border rounded size-15px d-inline-block' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"></option>
                                 @endforeach
                             </select>
                         </div>
