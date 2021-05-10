@@ -118,7 +118,7 @@
             </div>
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0 h6">{{translate('Element Variation')}}</h5>
+                    <h5 class="mb-0 h6">{{translate('Element Category')}}</h5>
                 </div>
                 <div class="card-body">
                     <div class="form-group row" id="category">
@@ -132,9 +132,13 @@
                             </select>
                         </div>
                     </div>
-
-                    <div id="attribute_div">
-                    </div>
+                </div>
+            </div>       
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0 h6">{{translate('Element Characteristics')}}</h5>
+                </div>
+                <div class="card-body">                   
 
                     <div class="form-group row">
                         <div class="col-lg-3">
@@ -150,6 +154,56 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <div class="col-lg-3">
+                            <input type="text" class="form-control" value="{{translate('Attributes')}}" disabled>
+                        </div>
+                        <div class="col-lg-8">
+                            <select class="form-control aiz-selectpicker" data-live-search="true"
+                                    data-selected-text-format="count" name="selected_attribute_ids[]" id="selected_attribute_id" multiple>
+                                    {{-- <option value="" disabled>{{translate('Select Attribute')}}</option> --}}
+                            </select>
+                        </div>
+                    </div>
+                    <div id="attribute_div">
+                    </div>                    
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0 h6">{{translate('Element Variation')}}</h5>
+                </div>
+                <div class="card-body">                   
+
+                    <div class="form-group row">
+                        <div class="col-lg-3">
+                            <input type="text" class="form-control" value="{{translate('Colors')}}" disabled>
+                        </div>
+                        <div class="col-lg-8">
+                            <select class="form-control aiz-selectpicker" data-live-search="true"
+                                    data-selected-text-format="count" name="selected_colors[]" id="selected_colors" multiple>
+                                {{-- @foreach (\App\Color::orderBy('name', 'asc')->get() as $key => $color)
+                                    <option value="" data-content="<span><span class='mr-2 border rounded size-15px d-inline-block' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"></option>
+                                @endforeach --}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-3">
+                            <input type="text" class="form-control" value="{{translate('Attributes')}}" disabled>
+                        </div>
+                        <div class="col-lg-8">
+                            <select class="form-control aiz-selectpicker" data-live-search="true"
+                                    data-selected-text-format="count" name="selected_variations[]" id="selected_variations" multiple>
+                                    {{-- <option value="" disabled>{{translate('Select Attribute')}}</option> --}}
+                                {{-- @foreach (\App\Color::orderBy('name', 'asc')->get() as $key => $color)
+                                    <option value="" data-content="<span><span class='mr-2 border rounded size-15px d-inline-block' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"></option>
+                                @endforeach --}}
+                            </select>
+                        </div>
+                    </div>
+                    <div id="variation_div">
+                    </div>                    
                 </div>
             </div>
             <div class="card">
@@ -338,11 +392,28 @@
         $('#category_id').on('change', function () {
             $.ajax({
                 type:'GET',
-                url:'{{ route('elements.make_choice_options') }}',
+                url:'{{ route('elements.make_attribute_options') }}',
                 data:{
                     category_id: $('#category_id option:selected').val()
                 },
                 success:function(data){
+                    alert("Selected attribute id: "+data.message);
+                    $('#selected_attribute_id').html(data.data)
+                    $('.selected_attribute_id').trigger('change');
+                    // $('.js-example-basic-multiple').select2();
+                }
+            });
+        });
+
+        $('#selected_attribute_id').on('change', function () {
+            $.ajax({
+                type:'GET',
+                url:'{{ route('elements.make_selected_attribute_options') }}',
+                data:{
+                    selected_attribute_ids: $('#selected_attribute_id').val()
+                },
+                success:function(data){
+                    alert("Selected attribute options: "+data.message);
                     $('#attribute_div').html(data.data)
                     $('.js-example-basic-multiple').select2();
                 }

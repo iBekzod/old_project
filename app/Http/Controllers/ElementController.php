@@ -62,6 +62,75 @@ class ElementController extends Controller
         ]);
     }
 
+    public function make_attribute_options(Request $request)
+    {
+        try {            
+            if ($request->method() == 'GET') {
+                $data=null;
+                if ($request->has('id')) {
+                    $element = Element::where('id', $request->id)->firstOrFail();
+                }
+
+                $category = Category::findOrFail($request->category_id);
+                $element_attributes = $category->attributes;
+                $data = null;
+                $options = null;
+                foreach ($element_attributes as $attribute) {                    
+                        $options = $options . ' <option';
+                        // if ($request->has('id') && $element->characteristics != null && in_array($value->id, json_decode($element->characteristics, true))) {
+                        //     $options = $options . 'selected';
+                        // }
+                        $options = $options . ' value = "' . $attribute->id . '" > ' . $attribute->getTranslation('name') . ' </option >';
+                }
+                $data = $options;
+            }
+        } catch (\Exception $exception) {
+            return response()->json(['success' => false, 'message' => $exception->getMessage()]);
+        }
+        return response()->json(['success' => false, 'message' => 'server']);
+    }
+    public function make_selected_attribute_options(Request $request)
+    {
+        try {            
+            if ($request->method() == 'GET') {
+                $data=null;
+                if ($request->has('selected_attribute_ids')) {
+                    $selected_attribute_ids=$request->selected_attribute_ids;
+                    $selected_attributes= Attribute::whereIn('id', $selected_attribute_ids)->get();
+                    $content = null;
+                    foreach($selected_attributes as $attribute){
+                        $content = $content . '<input type="hidden" name="choice_options[' . $attribute->id . ']" value="' . $attribute->id . '">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label"  for="signinSrEmail">' . $attribute->getTranslation('name') . '</label>
+                                <div class="col-md-8">
+                                    <select class="form-control js-example-basic-multiple"  multiple name="choice_options[' . $attribute->id . '][]">';
+
+                        $options = null;
+                        foreach ($attribute->characteristics as $value) {
+                            $options = $options . '<option';
+                            // if ($request->has('id') && $element->characteristics != null && in_array($value->id, json_decode($element->characteristics, true))) {
+                            //     $options = $options . 'selected';
+                            // }
+                            $options = $options . ' value = "' . $value->id . '" > ' . $value->getTranslation('name') . ' </option >';
+                        }
+
+                        $content = $content . $options . '</select>
+                                </div>
+                            </div>';
+                    }
+
+                    $data=$content;
+                }                
+                return response()->json(['success' => true, 'message' => 'get', 'data' => $data]);
+            }
+        } catch (\Exception $exception) {
+            return response()->json(['success' => false, 'message' => $exception->getMessage()]);
+        }
+        return response()->json(['success' => false, 'message' => 'server']);
+    }
+
+    
+    
     public function make_choice_options(Request $request)
     {
         try {

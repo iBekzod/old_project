@@ -59,6 +59,8 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::get('/elements/seller/{id}/edit','ElementController@seller_element_edit')->name('elements.seller.edit');
 	Route::post('/elements/todays_deal', 'ElementController@updateTodaysDeal')->name('elements.todays_deal');
 	Route::post('/elements/featured', 'ElementController@updateFeatured')->name('elements.featured');
+    Route::get('/elements/make_selected_attribute_options', 'ElementController@make_selected_attribute_options')->name('elements.make_selected_attribute_options');
+    Route::get('/elements/make_attribute_options', 'ElementController@make_attribute_options')->name('elements.make_attribute_options');
     Route::get('/elements/make_choice_options', 'ElementController@make_choice_options')->name('elements.make_choice_options');
     Route::post('/elements/make_choice_options', 'ElementController@make_choice_options')->name('elements.make_choice_options');
 
