@@ -15,13 +15,13 @@
                 </div>
                 <div class="card-body">
                     <div class="form-group row">
-                        <label class="col-md-3 col-from-label">{{translate('Product Name')}} <span
+                        <label class="col-md-3 col-from-label">{{$variation->getTranslation('name')}} <span
                                 class="text-danger">*</span></label>
-                        <div class="col-md-8">
-                            <input type="text" class="form-control" name="name"
-                                   placeholder="{{ translate('Product Name') }}" required
-                                   value="{{$variation->getTranslation('name')}}">
-                        </div>
+{{--                        <div class="col-md-8">--}}
+{{--                            <input type="text" class="form-control" name="name"--}}
+{{--                                   placeholder="{{ translate('Product Name') }}" required--}}
+{{--                                   value="{{$variation->getTranslation('name')}}">--}}
+{{--                        </div>--}}
                     </div>
                     @if(count($products) > 0)
                         <input type="hidden" value="{{$lang}}" name="lang" class="form-control">

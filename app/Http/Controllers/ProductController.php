@@ -240,7 +240,8 @@ class ProductController extends Controller
         } else {
             $user_id = \App\User::where('user_type', 'admin')->first()->id;
         }
-        $name = $request->name;
+        $element = Element::findOrFail($request->element_id);
+        $name = $element->name;
         $slug = SlugService::createSlug(Variation::class, 'slug', slugify($name));
         $added_by = Auth::user()->user_type;
         $minimum_price=0;
@@ -305,8 +306,9 @@ class ProductController extends Controller
                 }
             }
         }
-        if($product_id!=0 && $product=Product::findOrFail($product_id) ){
+        if($product_id!=0 && $product=Product::findOrFail($product_id)){
             if($element=Element::findOrFail($request->element_id)){
+                $variation->name=$element->name." ".$product->name." ".$product->user_id;
                 $variation->lowest_price_id=$product->id;
                 $variation->slug=$slug;
                 $variation->element_id=$element->id;
@@ -482,7 +484,7 @@ class ProductController extends Controller
                     $variation_translation->name = $name;
                     $variation_translation->save();
                 }
-                
+
 
 //            }
         }

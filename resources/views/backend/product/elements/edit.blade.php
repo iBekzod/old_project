@@ -26,10 +26,10 @@
 @endsection
 
 @section('content')
-    <div class="aiz-titlebar text-left mt-2 mb-3">
+    <div class="mt-2 mb-3 text-left aiz-titlebar">
         <h1 class="mb-0 h6">{{ translate('Edit Element') }}</h5>
     </div>
-    <div class="col-lg-8 mx-auto">
+    <div class="mx-auto col-lg-8">
         <form class="form form-horizontal mar-top" action="{{route('elements.update', $element->id)}}" method="POST"
               enctype="multipart/form-data" id="choice_form">
             <input name="_method" type="hidden" value="POST">
@@ -84,14 +84,14 @@
                                    value="{{$element->getTranslation('unit', $lang)}}" required>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    {{-- <div class="form-group row">
                         <label class="col-lg-3 col-from-label">{{translate('Minimum Qty')}}</label>
                         <div class="col-lg-8">
                             <input type="number" lang="en" class="form-control" name="min_qty"
                                    value="@if($element->min_qty <= 1){{1}}@else{{$element->min_qty}}@endif" min="1"
                                    required>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="form-group row">
                         <label class="col-lg-3 col-from-label">{{translate('Tags')}}</label>
                         <div class="col-lg-8">
@@ -120,7 +120,7 @@
                         <div class="form-group row">
                             <label class="col-lg-3 col-from-label">{{translate('Refundable')}}</label>
                             <div class="col-lg-8">
-                                <label class="aiz-switch aiz-switch-success mb-0" style="margin-top:5px;">
+                                <label class="mb-0 aiz-switch aiz-switch-success" style="margin-top:5px;">
                                     <input type="checkbox" name="refundable"  @if ($element->refundable == 1) checked @endif>
                                     <span class="slider round"></span>
                                 </label>
@@ -188,7 +188,7 @@
                                     @foreach (\App\Color::orderBy('name', 'asc')->get() as $key => $color)
                                         <option @if(in_array($color->code, $colors)) selected @endif
                                             value="{{ $color->code }}"
-                                            data-content="<span><span class='size-15px d-inline-block mr-2 rounded border' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"
+                                            data-content="<span><span class='mr-2 border rounded size-15px d-inline-block' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"
                                         ></option>
                                     @endforeach
                                 </select>

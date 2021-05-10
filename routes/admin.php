@@ -59,6 +59,8 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::get('/elements/seller/{id}/edit','ElementController@seller_element_edit')->name('elements.seller.edit');
 	Route::post('/elements/todays_deal', 'ElementController@updateTodaysDeal')->name('elements.todays_deal');
 	Route::post('/elements/featured', 'ElementController@updateFeatured')->name('elements.featured');
+    Route::get('/elements/make_selected_attribute_options', 'ElementController@make_selected_attribute_options')->name('elements.make_selected_attribute_options');
+    Route::get('/elements/make_attribute_options', 'ElementController@make_attribute_options')->name('elements.make_attribute_options');
     Route::get('/elements/make_choice_options', 'ElementController@make_choice_options')->name('elements.make_choice_options');
     Route::post('/elements/make_choice_options', 'ElementController@make_choice_options')->name('elements.make_choice_options');
 
@@ -233,11 +235,13 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 //	Route::post('product-attributes/{id}/change/categories','ProductAttributeController@changeCategories')->name('product-attributes.change_categories');
 
 	Route::resource('attributes','AttributeController');
-	Route::get('/attributes/edit/{id}', 'AttributeController@edit')->name('attributes.edit');
+//	Route::get('/attributes/edit/{id}', 'AttributeController@edit')->name('attributes.edit');
     Route::post('/attributes/{id}/update','AttributeController@update')->name('attributes.update');
 	Route::get('/attributes/destroy/{id}', 'AttributeController@destroy')->name('attributes.destroy');
     Route::post('attributes/{id}/update/categories','AttributeController@updateCategories')->name('attributes.update.categories');
+    Route::get('attributes/edit/categories/{id}','AttributeController@editCategories')->name('attributes.edit.categories');
     Route::post('attributes/{id}/update/characteristics','AttributeController@updateCharacteristics')->name('attributes.update.characteristics');
+    Route::get('attributes/edit/characteristics/{id}','AttributeController@editCharacteristics')->name('attributes.edit.characteristics');
 
     Route::resource('addons','AddonController');
 	Route::post('/addons/activation', 'AddonController@activation')->name('addons.activation');
