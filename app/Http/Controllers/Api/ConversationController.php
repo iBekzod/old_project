@@ -35,6 +35,7 @@ class ConversationController extends Controller
                     'sender_id' => $data->sender_id,
                     'receiver_id' => $data->receiver_id,
                     'title' => $data->title,
+                    'type' => $data->type,
                     'sender_viewed' => $data->sender_viewed,
                     'receiver_viewed' => $data->receiver_viewed,
                     'created_at' => $data->created_at,
@@ -44,7 +45,25 @@ class ConversationController extends Controller
             })
         ];
     }
+    public function postConversations(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required',
+            'title' => 'required',
+            'type'=>'required',
 
+        ]);
+        $support_ticket = new Conversation;
+        $support_ticket->sender_id = Auth::user()->id;
+        $support_ticket->receiver_id = Product::findOrFail($request->product_id)->user->id;
+        $support_ticket->title = $request->title;
+        $support_ticket->type = $request->type;
+        $support_ticket->save();
+        //flash(translate('Message has been send to seller'))->success();
+        return response()->json([
+            'message' => translate('Message has been send to seller')
+        ]);
+    }
     public function store(Request $request)
     {
         $request->validate([
@@ -100,3 +119,4 @@ class ConversationController extends Controller
         }
     }
 }
+

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Attribute;
 use App\Characteristic;
 use App\AttributeTranslation;
+use CoreComponentRepository;
 use App\Language;
 class AttributeController extends Controller
 {

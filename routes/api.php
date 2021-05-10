@@ -3,7 +3,7 @@
 use App\Http\Controllers\Api\V2\HomePageController;
 use \App\Http\Controllers\Api\SearchController;
 use \App\Models\Category;
-
+use Illuminate\Routing\Route;
 
 Route::prefix('v1/auth')->group(function () {
     Route::post('login', 'Api\AuthController@login');
@@ -154,6 +154,7 @@ Route::prefix('v1')->group(function () {
     Route::post('payments/pay/paypal', 'Api\PaypalController@processPayment')->middleware('auth:api');
     Route::post('payments/pay/wallet', 'Api\WalletController@processPayment')->middleware('auth:api');
     Route::post('payments/pay/cod', 'Api\PaymentController@cashOnDelivery')->middleware('auth:api');
+    Route::post('admin/support_ticket','Api\ConversationController@postConversations');
 
     Route::post('order/store', 'Api\OrderController@store')->middleware('auth:api');
 
