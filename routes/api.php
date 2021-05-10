@@ -3,7 +3,7 @@
 use App\Http\Controllers\Api\V2\HomePageController;
 use \App\Http\Controllers\Api\SearchController;
 use \App\Models\Category;
-use Illuminate\Routing\Route;
+// use Illuminate\Routing\Route;
 
 Route::prefix('v1/auth')->group(function () {
     Route::post('login', 'Api\AuthController@login');

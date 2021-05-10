@@ -121,10 +121,17 @@
                             </select>
                         </div>
                     </div>
-                    <div id="variation_div">
-                    </div>
+                    <div id="variation_div"></div>
                 </div>
             </div>
+{{--            <div class="card">--}}
+{{--                <div class="card-header">--}}
+{{--                    <h5 class="mb-0 h6">{{translate('Generated Variation')}}</h5>--}}
+{{--                </div>--}}
+{{--                <div class="card-body">--}}
+{{--                    <div id="variation_div"></div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0 h6">{{translate('Element Information')}}</h5>

@@ -196,6 +196,11 @@ class ElementController extends Controller
                     <table class="table table-bordered" >
                         <thead>
                         <tr>
+
+                            <td class="text-center">
+                                <label class="col-form-label" for="signinSrEmails">'.translate('Variation Image').'
+                                        <small>(290x300)</small></label>
+                            </td>
                             <td class="text-center">
                                 <label for="" class="control-label">'.translate('Name').'</label>
                             </td>
@@ -205,12 +210,28 @@ class ElementController extends Controller
                             <td class="text-center">
                                 <label for="" class="control-label">'.translate('Delete').'</label>
                             </td>
+
                         </tr>
                         </thead>
                         <tbody>';
                 foreach ($combinations as $index=>$combination){
                     $content=$content.'
                         <tr class="variant">
+                            <td>
+                                <div class="form-group">
+                                        <div class="input-group" data-toggle="aizuploader" data-type="image">
+                                            <div class="input-group-prepend">
+                                                <div
+                                                    class="input-group-text bg-soft-secondary font-weight-medium">'.translate('Browse').'</div>
+                                            </div>
+                                            <div class="form-control file-amount"></div>
+                                            <input type="hidden" name="combination['.$index.'][thumbnail_img]" value=""
+                                                   class="selected-files">
+                                        </div>
+                                        <div class="file-preview box sm">
+                                        </div>
+                                </div>
+                            </td>
                             <td>
                                 <label for="" class="control-label">'.implode ("/", $combination).'</label>
                                 <input type="hidden" name="combination['.$index.'][slug]" value="'.implode ("/", $combination).'" class="form-control">
