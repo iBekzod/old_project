@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Attribute;
 use App\AttributeTranslation;
+use CoreComponentRepository;
 use App\Language;
 class AttributeController extends Controller
 {

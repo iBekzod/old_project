@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="card">
-    <form class="" id="sort_support" action="" method="GET">
+    <form class="" id="sort_support" action="" method="">
         <div class="card-header row gutters-5">
             <div class="col text-center text-md-left">
                 <h5 class="mb-md-0 h6">{{ translate('Support Desk') }}</h5>
@@ -14,9 +14,9 @@
                 </div>
             </div>
         </div>
-    </from>
+    </form>
 
-    <div class="card-body">
+     <div class="card-body">
         <table class="aiz-table" cellspacing="0" width="100%">
             <thead>
                 <tr>
