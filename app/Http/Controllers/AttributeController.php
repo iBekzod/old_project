@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use Illuminate\Http\Request;
 use App\Attribute;
+use App\Characteristic;
 use App\AttributeTranslation;
 use App\Language;
 class AttributeController extends Controller
@@ -16,7 +18,7 @@ class AttributeController extends Controller
     public function index()
     {
         // CoreComponentRepository::instantiateShopRepository();
-        $attributes = Attribute::orderBy('created_at', 'desc')->get();
+        $attributes = Attribute::orderBy('created_at', 'desc')->paginate(15);
         return view('backend.product.attribute.index', compact('attributes'));
     }
 
@@ -45,13 +47,13 @@ class AttributeController extends Controller
 
         foreach (Language::all() as $language){
             //  Attribute  Translation
-            $attribute_translation = c::firstOrNew(['lang' => $language->code, 'attribute_id' => $attribute->id]);
+            $attribute_translation = AttributeTranslation::firstOrNew(['lang' => $language->code, 'attribute_id' => $attribute->id]);
             $attribute_translation->name = $attribute->name;
             $attribute_translation->save();
         }
 
         flash(translate('Attribute has been inserted successfully'))->success();
-        return redirect()->route('attributes.index');
+        return back();
 
 
     }
@@ -90,12 +92,8 @@ class AttributeController extends Controller
     public function update(Request $request, $id)
     {
         $attribute = Attribute::findOrFail($id);
-        if($request->lang == default_language()){
-          $attribute->name = $request->name;
-        }
+        $attribute->name = $request->name;
         $attribute->save();
-
-
         if(AttributeTranslation::where('attribute_id' , $attribute->id)->where('lang' , default_language())->first()){
             foreach (Language::all() as $language) {
                 $attribute_translation = AttributeTranslation::firstOrNew(['lang' => $language->code, 'attribute_id' => $attribute->id]);
@@ -124,9 +122,14 @@ class AttributeController extends Controller
 
         Attribute::destroy($id);
         flash(translate('Attribute has been deleted successfully'))->success();
-        return redirect()->route('attributes.index');
+        return redirect()->route('backend.product.attributes.index');
     }
 
+    public function editCategories($id){
+        $attribute = Attribute::findOrFail($id);
+        $categories = Category::withDepth()->having('depth', '=', 2)->get();
+        return view('backend.product.attribute.edit_categories', compact('attribute','categories'));
+    }
 
     public function updateCategories(Request $request, $id){
         $attribute = Attribute::findOrFail($id);
@@ -134,6 +137,13 @@ class AttributeController extends Controller
         $attribute->categories()->attach($request->get('category_id'));
         return back();
     }
+
+    public function editCharacteristics($id){
+        $attribute = Attribute::findOrFail($id);
+        $characteristics = Characteristic::orderBy('created_at', 'desc')->get();
+        return view('backend.product.attribute.edit_characteristics', compact('attribute','characteristics'));
+    }
+
     public function updateCharacteristics(Request $request, $id){
         $attribute = Attribute::findOrFail($id);
         $attribute->characteristics()->detach();

@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Attribute;
 use App\Branch;
 use App\BranchTranslation;
+use App\Category;
 use Illuminate\Http\Request;
 use App\Language;
+use App\Characteristic;
 class BranchController extends Controller
 {
     /**
@@ -41,7 +43,6 @@ class BranchController extends Controller
         $branch = new Branch();
         $branch->name = $request->name;
         $branch->save();
-
 
         foreach (Language::all() as $language){
             // Branch  Translation
@@ -124,7 +125,7 @@ class BranchController extends Controller
 
     public function arribute_index($id){
         $branch = Branch::findOrFail($id);
-        if($attributes=$branch->attributes){
+        if($attributes=$branch->attributes()->paginate(15)){
             return view('backend.product.attribute.index', compact('attributes', 'branch'));
         }
         flash(translate('Branch has no attributes'))->message();

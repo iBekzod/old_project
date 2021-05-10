@@ -14,14 +14,14 @@
                     <h5 class="mb-0 h6">{{translate('Product Information')}}</h5>
                 </div>
                 <div class="card-body">
-                    <div class="form-group row">
-                        <label class="col-md-3 col-from-label">{{translate('Product Name')}} <span
-                                class="text-danger">*</span></label>
-                        <div class="col-md-8">
-                            <input type="text" class="form-control" name="name"
-                                   placeholder="{{ translate('Product Name') }}" required>
-                        </div>
-                    </div>
+{{--                    <div class="form-group row">--}}
+{{--                        <label class="col-md-3 col-from-label">{{translate('Product Name')}} <span--}}
+{{--                                class="text-danger">*</span></label>--}}
+{{--                        <div class="col-md-8">--}}
+{{--                            <input type="text" class="form-control" name="name"--}}
+{{--                                   placeholder="{{ translate('Product Name') }}" required>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
                     <div class="form-group row" id="element">
                         <label class="col-md-3 col-from-label">{{translate('Element')}} <span
                                 class="text-danger">*</span></label>
