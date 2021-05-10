@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Branch;
+use App\Color;
 use App\ElementTranslation;
 use App\Brand;
 use App\Http\HelperClasses\Combinations;
@@ -64,25 +65,26 @@ class ElementController extends Controller
 
     public function make_attribute_options(Request $request)
     {
-        try {            
+        try {
             if ($request->method() == 'GET') {
-                $data=null;
-                if ($request->has('id')) {
-                    $element = Element::where('id', $request->id)->firstOrFail();
-                }
+//                $data=null;
+//                if ($request->has('id')) {
+//                    $element = Element::where('id', $request->id)->firstOrFail();
+//                }
 
                 $category = Category::findOrFail($request->category_id);
                 $element_attributes = $category->attributes;
                 $data = null;
                 $options = null;
-                foreach ($element_attributes as $attribute) {                    
-                        $options = $options . ' <option';
+                foreach ($element_attributes as $attribute) {
+                        $options = $options . ' <option selected';
                         // if ($request->has('id') && $element->characteristics != null && in_array($value->id, json_decode($element->characteristics, true))) {
                         //     $options = $options . 'selected';
                         // }
                         $options = $options . ' value = "' . $attribute->id . '" > ' . $attribute->getTranslation('name') . ' </option >';
                 }
                 $data = $options;
+                return response()->json(['success' => true, 'message' => 'done', 'data' => $data]);
             }
         } catch (\Exception $exception) {
             return response()->json(['success' => false, 'message' => $exception->getMessage()]);
@@ -91,7 +93,7 @@ class ElementController extends Controller
     }
     public function make_selected_attribute_options(Request $request)
     {
-        try {            
+        try {
             if ($request->method() == 'GET') {
                 $data=null;
                 if ($request->has('selected_attribute_ids')) {
@@ -107,7 +109,7 @@ class ElementController extends Controller
 
                         $options = null;
                         foreach ($attribute->characteristics as $value) {
-                            $options = $options . '<option';
+                            $options = $options . '<option selected';
                             // if ($request->has('id') && $element->characteristics != null && in_array($value->id, json_decode($element->characteristics, true))) {
                             //     $options = $options . 'selected';
                             // }
@@ -120,17 +122,124 @@ class ElementController extends Controller
                     }
 
                     $data=$content;
-                }                
-                return response()->json(['success' => true, 'message' => 'get', 'data' => $data]);
+                }
+                return response()->json(['success' => true, 'message' => 'done', 'data' => $data]);
             }
         } catch (\Exception $exception) {
             return response()->json(['success' => false, 'message' => $exception->getMessage()]);
         }
         return response()->json(['success' => false, 'message' => 'server']);
     }
+    public function make_color_options(Request $request)
+    {
+        try {
+            if ($request->method() == 'GET'){
+                $data=null;
+                if ($request->has('colors')){
+                    $color_ids=$request->colors;
+                    $selected_colors= Color::whereIn('id', $color_ids)->get();
+                    $options = null;
+                    foreach($selected_colors as $color){
+                        $options = $options .'<option selected value="'.$color->id.'" data-id="'.$color->id.'" value="" data-content="<span><span class=\'mr-2 border rounded size-15px d-inline-block\' style=\'background:'.$color->code.'\'></span><span>'.$color->name.'</span></span>"></option>';
+                    }
+                    $data=$options;
+                }
+                return response()->json(['success' => true, 'message' => 'done', 'data' => $data]);
+            }
+        } catch (\Exception $exception) {
+            return response()->json(['success' => false, 'message' => $exception->getMessage()]);
+        }
+        return response()->json(['success' => false, 'message' => 'server']);
+    }
+    public function make_attribute_variations(Request $request)
+    {
+        try {
+            if ($request->method() == 'GET'){
+                $data=null;
+                if ($request->has('selected_attribute_ids')){
+                    $selected_attribute_ids=$request->selected_attribute_ids;
+                    $selected_attributes= Attribute::whereIn('id', $selected_attribute_ids)->where('combination','=', 1)->get();
+                    $options = null;
+                    foreach($selected_attributes as $attribute){
+                        $options = $options .'<option selected value="'.$attribute->id.'" data-id="'.$attribute->id.'" >'.$attribute->getTranslation('name').'</option>';
+                    }
+                    $data=$options;
+                }
+                return response()->json(['success' => true, 'message' => 'done', 'data' => $data]);
+            }
+        } catch (\Exception $exception) {
+            return response()->json(['success' => false, 'message' => $exception->getMessage()]);
+        }
+        return response()->json(['success' => false, 'message' => 'server']);
+    }
+    public function make_all_combination(Request $request)
+    {
+//        try {
+            if ($request->method() == 'GET'){
+                $data=null;
+                $variations=[];
+                if ($request->has('selected_attribute_ids')){
+                    $selected_attribute_ids=$request->selected_attribute_ids;
+                    $selected_attributes = Attribute::whereIn('id', $selected_attribute_ids)->pluck('name')->toArray();
+                    $variations[]=$selected_attributes;
+                }
+                if ($request->has('color_ids')){
+                    $color_ids=$request->color_ids;
+                    $selected_colors = Color::whereIn('id', $color_ids)->pluck('name')->toArray();
+                    $variations[]=$selected_colors;
+                }
+                $combinations = Combinations::makeCombinations($variations);
+//                dd(json_encode($combinations[0], true));
+                $content=null;
+                $content=$content.'
+                <div style="overflow-y: scroll; ">
+                    <table class="table table-bordered" >
+                        <thead>
+                        <tr>
+                            <td class="text-center">
+                                <label for="" class="control-label">'.translate('Name').'</label>
+                            </td>
+                            <td class="text-center">
+                                <label for="" class="control-label">'.translate('Artikul').'</label>
+                            </td>
+                            <td class="text-center">
+                                <label for="" class="control-label">'.translate('Delete').'</label>
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody>';
+                foreach ($combinations as $index=>$combination){
+                    $content=$content.'
+                        <tr class="variant">
+                            <td>
+                                <label for="" class="control-label">'.implode ("/", $combination).'</label>
+                                <input type="hidden" name="combination['.$index.'][slug]" value="'.implode ("/", $combination).'" class="form-control">
+                            </td>
+                            <td>
+                                <input type="text" name="combination['.$index.'][artikul]" value="'.implode (",", $combination).'" class="form-control">
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="delete_variant(this)"><i class="las la-trash"></i></button>
+                            </td>
+                        </tr>
+                        ';
+                }
+                $content=$content.'</tbody>
+                    </table>
+                </div>
+                ';
+                $data=$content;
+                return response()->json(['success' => true, 'message' => $combinations, 'data' => $data]);
+            }
+//        } catch (\Exception $exception) {
+//            return response()->json(['success' => false, 'message' => $exception->getMessage()]);
+//        }
+        return response()->json(['success' => false, 'message' => 'server']);
+    }
 
-    
-    
+
+
+
     public function make_choice_options(Request $request)
     {
         try {

@@ -3,14 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App;
-class CharacteristicTranslation extends Model
-{
-  protected $fillable = ['name', 'lang', 'characteristic_id'];
 
-  public function characteristic()
+class ColorTranslation extends Model
+{
+  protected $fillable = ['name', 'lang', 'color_id'];
+
+  public function color()
   {
-    return $this->belongsTo(Characteristic::class);
+    return $this->belongsTo(Color::class);
   }
 
 }
