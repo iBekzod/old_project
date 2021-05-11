@@ -483,6 +483,18 @@
             $('#selected_variations option:selected').each(function (index, val){
                 attribute_ids.push(val.getAttribute('data-id'))
             })
+            choice_groups = [];
+            $.each(attribute_ids, function( index, value ) {
+                choice_options = [];
+                $('#choice_option_'+attribute_ids[index]+' option:selected').each(function (index, val){
+                    choice_options.push(val.getAttribute('data-id'))
+                })
+                // if(choice_options.length > 0){
+                    choice_groups[index]=choice_options
+                // }
+            });
+            // console.log(choice_groups);
+
             color_ids = []
             $('#selected_colors option:selected').each(function (index, val){
                 color_ids.push(val.getAttribute('data-id'))
@@ -493,11 +505,13 @@
                 url:'{{ route('elements.make_all_combination') }}',
                 data:{
                     selected_attribute_ids: attribute_ids,
+                    choice_groups: choice_groups,
                     color_ids: color_ids
                 },
                 success:function(data){
                     $('#variation_div').html(" ")
                     // alert("Combinations: "+data.message)
+                    // console.log(data.message);
                     if(data.success){
                         $('#variation_div').html(data.data)
                         $('.js-example-basic-multiple').select2();

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Branch;
+use App\Characteristic;
 use App\Color;
 use App\ElementTranslation;
 use App\Brand;
@@ -105,11 +106,11 @@ class ElementController extends Controller
                             <div class="form-group row">
                                 <label class="col-md-3 col-form-label"  for="signinSrEmail">' . $attribute->getTranslation('name') . '</label>
                                 <div class="col-md-8">
-                                    <select class="form-control js-example-basic-multiple"  multiple name="choice_options[' . $attribute->id . '][]">';
+                                    <select class="form-control js-example-basic-multiple" onchange="update_attribute_combination()" id="choice_option_' . $attribute->id . '" multiple name="choice_options[' . $attribute->id . '][]">';
 
                         $options = null;
                         foreach ($attribute->characteristics as $value) {
-                            $options = $options . '<option selected';
+                            $options = $options . '<option selected  data-id="'.$value->id.'" ';
                             // if ($request->has('id') && $element->characteristics != null && in_array($value->id, json_decode($element->characteristics, true))) {
                             //     $options = $options . 'selected';
                             // }
@@ -178,10 +179,16 @@ class ElementController extends Controller
             if ($request->method() == 'GET'){
                 $data=null;
                 $variations=[];
-                if ($request->has('selected_attribute_ids')){
-                    $selected_attribute_ids=$request->selected_attribute_ids;
-                    $selected_attributes = Attribute::whereIn('id', $selected_attribute_ids)->pluck('name')->toArray();
-                    $variations[]=$selected_attributes;
+//                if ($request->has('selected_attribute_ids')){
+//                    $selected_attribute_ids=$request->selected_attribute_ids;
+//                    $selected_attributes = Attribute::whereIn('id', $selected_attribute_ids)->pluck('name')->toArray();
+//                    $variations[]=$selected_attributes;
+//                }
+                if ($request->has('choice_groups')){
+                    foreach ($request->choice_groups as $value_ids){
+                        $selected_attributes = Characteristic::whereIn('id', $value_ids)->pluck('name')->toArray();
+                        $variations[]=$selected_attributes;
+                    }
                 }
                 if ($request->has('color_ids')){
                     $color_ids=$request->color_ids;
@@ -196,7 +203,9 @@ class ElementController extends Controller
                     <table class="table table-bordered" >
                         <thead>
                         <tr>
-
+                            <td class="text-center">
+                                <label for="" class="control-label">'.translate('#').'</label>
+                            </td>
                             <td class="text-center">
                                 <label class="col-form-label" for="signinSrEmails">'.translate('Variation Image').'
                                         <small>(290x300)</small></label>
@@ -217,6 +226,9 @@ class ElementController extends Controller
                 foreach ($combinations as $index=>$combination){
                     $content=$content.'
                         <tr class="variant">
+                            <td>
+                                <label for="" class="control-label">'.($index+1).'</label>
+                            </td>
                             <td>
                                 <div class="form-group">
                                         <div class="input-group" data-toggle="aizuploader" data-type="image">
