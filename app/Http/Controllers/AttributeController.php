@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Element;
 use Illuminate\Http\Request;
 use App\Attribute;
 use App\Characteristic;
@@ -94,6 +95,7 @@ class AttributeController extends Controller
     {
         $attribute = Attribute::findOrFail($id);
         $attribute->name = $request->name;
+
         $attribute->save();
         if(AttributeTranslation::where('attribute_id' , $attribute->id)->where('lang' , default_language())->first()){
             foreach (Language::all() as $language) {
@@ -150,5 +152,15 @@ class AttributeController extends Controller
         $attribute->characteristics()->detach();
         $attribute->characteristics()->attach($request->get('characteristic_id'));
         return back();
+    }
+
+    public function update_combination_status(Request $request)
+    {
+        $attribute = Attribute::findOrFail($request->id);
+        $attribute->combination = $request->status;
+        if ($attribute->save()) {
+            return 1;
+        }
+        return 0;
     }
 }

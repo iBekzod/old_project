@@ -25,6 +25,7 @@
                         <tr>
                             <th>#</th>
                             <th>{{ translate('Name')}}</th>
+                            <th>{{ translate('Combination')}}</th>
                             <th class="text-right">{{ translate('Options')}}</th>
                         </tr>
                         </thead>
@@ -34,6 +35,13 @@
                                 <td>{{ ($key+1) + ($attributes->currentPage() - 1)*$attributes->perPage() }}</td>
                                 {{--                                <td>{{$key+1}}</td>--}}
                                 <td>{{$attribute->getTranslation('name')}}</td>
+                                <td>
+                                    <label class="aiz-switch aiz-switch-success mb-0">
+                                        <input onchange="update_combination_status(this)" value="{{ $attribute->id }}"
+                                               type="checkbox" @if($attribute->combination == 1) checked @endif>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </td>
                                 <td class="text-right">
                                     <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="#"
                                        title="{{ translate('Edit') }}" data-toggle="modal"
@@ -100,4 +108,27 @@
 
 @section('modal')
     @include('modals.delete_modal')
+@endsection
+
+@section('script')
+    <script type="text/javascript">
+        function update_combination_status(el) {
+            if (el.checked) {
+                var status = 1;
+            } else {
+                var status = 0;
+            }
+            $.post('{{ route('attributes.combination') }}', {
+                _token: '{{ csrf_token() }}',
+                id: el.value,
+                status: status
+            }, function (data) {
+                if (data == 1) {
+                    AIZ.plugins.notify('success', '{{ translate('Attribute combination updated successfully') }}');
+                } else {
+                    AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
+                }
+            });
+        }
+    </script>
 @endsection
