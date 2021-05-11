@@ -48,18 +48,20 @@ class ConversationController extends Controller
     public function postConversations(Request $request)
     {
         $request->validate([
+             'user_id'=>'required',
             'product_id' => 'required',
-            'title' => 'required',
             'type'=>'required',
+            'title' => 'required',
 
         ]);
         $support_ticket = new Conversation;
-        $support_ticket->sender_id = Auth::user()->id;
+         $support_ticket->sender_id =$request->user_id;
         $support_ticket->receiver_id = Product::findOrFail($request->product_id)->user->id;
-        $support_ticket->title = $request->title;
         $support_ticket->type = $request->type;
+        $support_ticket->title = $request->title;
+
         $support_ticket->save();
-        //flash(translate('Message has been send to seller'))->success();
+        flash(translate('Message has been send to seller'))->success();
         return response()->json([
             'message' => translate('Message has been send to seller')
         ]);
