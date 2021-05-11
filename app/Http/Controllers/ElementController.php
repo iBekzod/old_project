@@ -245,11 +245,11 @@ class ElementController extends Controller
                                 </div>
                             </td>
                             <td>
-                                <label for="" class="control-label">'.implode ("/", $combination).'</label>
-                                <input type="hidden" name="combination['.$index.'][slug]" value="'.implode ("/", $combination).'" class="form-control">
+                                <label for="" class="control-label">'.implode (",", $combination).'</label>
+                                <input type="hidden" name="combination['.$index.'][slug]" value="'.implode (",", $combination).'" class="form-control">
                             </td>
                             <td>
-                                <input type="text" name="combination['.$index.'][artikul]" value="'.implode (",", $combination).'" class="form-control">
+                                <input type="text" name="combination['.$index.'][artikul]" value="" class="form-control">
                             </td>
                             <td>
                                 <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="delete_variant(this)"><i class="las la-trash"></i></button>
@@ -441,14 +441,14 @@ class ElementController extends Controller
     public function store(Request $request)
     {
         $element = new Element;
-        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
-        if ($refund_request_addon != null && $refund_request_addon->activated == 1) {
-            if ($request->refundable != null) {
-                $element->refundable = 1;
-            } else {
-                $element->refundable = 0;
-            }
-        }
+//        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
+//        if ($refund_request_addon != null && $refund_request_addon->activated == 1) {
+//            if ($request->refundable != null) {
+//                $element->refundable = 1;
+//            } else {
+//                $element->refundable = 0;
+//            }
+//        }
         $element->added_by = $request->added_by;
         $element->category_id = $request->category_id;
         $element->brand_id = $request->brand_id;
@@ -580,14 +580,14 @@ class ElementController extends Controller
     {
         $element = Element::findOrFail($id);
 //        $element->name = $request->name;
-        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
-        if ($refund_request_addon != null && $refund_request_addon->activated == 1) {
-            if ($request->refundable != null) {
-                $element->refundable = 1;
-            } else {
-                $element->refundable = 0;
-            }
-        }
+//        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
+//        if ($refund_request_addon != null && $refund_request_addon->activated == 1) {
+//            if ($request->refundable != null) {
+//                $element->refundable = 1;
+//            } else {
+//                $element->refundable = 0;
+//            }
+//        }
         $element->category_id = $request->category_id;
         $element->brand_id = $request->brand_id;
         $element->barcode = $request->barcode;

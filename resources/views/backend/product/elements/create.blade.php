@@ -29,7 +29,7 @@
     <div class="mt-2 mb-3 text-left aiz-titlebar">
         <h1 class="mb-0 h6">{{ translate('Create Element') }}</h5>
     </div>
-    <div class="mx-auto col-lg-8">
+    <div class="mx-auto col-lg-12">
         <form class="form form-horizontal mar-top" action="{{route('elements.store')}}" method="POST"
               enctype="multipart/form-data" id="choice_form">
             @csrf
@@ -59,20 +59,7 @@
                 </div>
                 <div class="card-body">
 
-                    <div class="form-group row">
-                        <div class="col-lg-3">
-                            <input type="text" class="form-control" value="{{translate('Colors')}}" disabled>
-                        </div>
-                        <div class="col-lg-8">
-                            <select class="form-control aiz-selectpicker" data-live-search="true"
-                                    data-selected-text-format="count" name="colors[]" id="colors" multiple>
 
-                                @foreach (\App\Color::orderBy('name', 'asc')->get() as $key => $color)
-                                    <option data-id="{{$color->id}}"  data-content="<span><span class='mr-2 border rounded size-15px d-inline-block' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"></option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
                     <div class="form-group row">
                         <div class="col-lg-3">
                             <input type="text" class="form-control" value="{{translate('Attributes')}}" disabled>
@@ -93,20 +80,33 @@
                     <h5 class="mb-0 h6">{{translate('Element Variation')}}</h5>
                 </div>
                 <div class="card-body">
-
                     <div class="form-group row">
                         <div class="col-lg-3">
                             <input type="text" class="form-control" value="{{translate('Colors')}}" disabled>
                         </div>
                         <div class="col-lg-8">
                             <select class="form-control aiz-selectpicker" data-live-search="true"
-                                    data-selected-text-format="count" name="selected_colors[]" id="selected_colors" multiple>
-                                {{-- @foreach (\App\Color::orderBy('name', 'asc')->get() as $key => $color)
-                                    <option value="" data-content="<span><span class='mr-2 border rounded size-15px d-inline-block' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"></option>
-                                @endforeach --}}
+                                    data-selected-text-format="count" name="colors[]" id="colors" multiple>
+
+                                @foreach (\App\Color::orderBy('name', 'asc')->get() as $key => $color)
+                                    <option data-id="{{$color->id}}"  data-content="<span><span class='mr-2 border rounded size-15px d-inline-block' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"></option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
+{{--                    <div class="form-group row">--}}
+{{--                        <div class="col-lg-3">--}}
+{{--                            <input type="text" class="form-control" value="{{translate('Colors')}}" disabled>--}}
+{{--                        </div>--}}
+{{--                        <div class="col-lg-8">--}}
+{{--                            <select class="form-control aiz-selectpicker" data-live-search="true"--}}
+{{--                                    data-selected-text-format="count" name="selected_colors[]" id="selected_colors" multiple>--}}
+{{--                                --}}{{-- @foreach (\App\Color::orderBy('name', 'asc')->get() as $key => $color)--}}
+{{--                                    <option value="" data-content="<span><span class='mr-2 border rounded size-15px d-inline-block' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"></option>--}}
+{{--                                @endforeach --}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
                     <div class="form-group row">
                         <div class="col-lg-3">
                             <input type="text" class="form-control" value="{{translate('Attributes')}}" disabled>
@@ -198,20 +198,20 @@
                             </div>
                         </div>
                     @endif
-                    @php
-                        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
-                    @endphp
-                    @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
-                        <div class="form-group row">
-                            <label class="col-md-3 col-from-label">{{translate('Refundable')}}</label>
-                            <div class="col-md-8">
-                                <label class="mb-0 aiz-switch aiz-switch-success">
-                                    <input type="checkbox" name="refundable" checked>
-                                    <span></span>
-                                </label>
-                            </div>
-                        </div>
-                    @endif
+{{--                    @php--}}
+{{--                        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();--}}
+{{--                    @endphp--}}
+{{--                    @if ($refund_request_addon != null && $refund_request_addon->activated == 1)--}}
+{{--                        <div class="form-group row">--}}
+{{--                            <label class="col-md-3 col-from-label">{{translate('Refundable')}}</label>--}}
+{{--                            <div class="col-md-8">--}}
+{{--                                <label class="mb-0 aiz-switch aiz-switch-success">--}}
+{{--                                    <input type="checkbox" name="refundable" checked>--}}
+{{--                                    <span></span>--}}
+{{--                                </label>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    @endif--}}
                 </div>
             </div>
             <div class="card">
@@ -397,36 +397,36 @@
             update_category_attribute();
         });
         $('#colors').on('change', function () {
-            update_color()
-        });
-        $('#selected_colors').on('change', function () {
             update_attribute_combination()
         });
+        // $('#selected_colors').on('change', function () {
+        //     update_attribute_combination()
+        // });
         $('#selected_variations').on('change', function () {
             update_attribute_combination()
         });
-        function update_color(){
-            color_ids = []
-            $('#colors option:selected').each(function (index, val){
-                color_ids.push(val.getAttribute('data-id'))
-            })
-            // alert(color_ids);
-            $.ajax({
-                type:'GET',
-                url:'{{ route('elements.make_color_options') }}',
-                data:{
-                    colors: color_ids
-                },
-                success:function(data){
-                    // alert("Selected attribute id: "+data.message);
-                    $('#selected_colors').html(" ")
-                    if(data.success){
-                        $('#selected_colors').append(data.data)
-                    }
-                    update_attribute_combination();
-                }
-            });
-        }
+        {{--function update_color(){--}}
+        {{--    color_ids = []--}}
+        {{--    $('#colors option:selected').each(function (index, val){--}}
+        {{--        color_ids.push(val.getAttribute('data-id'))--}}
+        {{--    })--}}
+        {{--    // alert(color_ids);--}}
+        {{--    $.ajax({--}}
+        {{--        type:'GET',--}}
+        {{--        url:'{{ route('elements.make_color_options') }}',--}}
+        {{--        data:{--}}
+        {{--            colors: color_ids--}}
+        {{--        },--}}
+        {{--        success:function(data){--}}
+        {{--            // alert("Selected attribute id: "+data.message);--}}
+        {{--            $('#selected_colors').html(" ")--}}
+        {{--            if(data.success){--}}
+        {{--                $('#selected_colors').append(data.data)--}}
+        {{--            }--}}
+        {{--            update_attribute_combination();--}}
+        {{--        }--}}
+        {{--    });--}}
+        {{--}--}}
         function update_attribute(){
             $.ajax({
                 type:'GET',
@@ -496,7 +496,7 @@
             // console.log(choice_groups);
 
             color_ids = []
-            $('#selected_colors option:selected').each(function (index, val){
+            $('#colors option:selected').each(function (index, val){
                 color_ids.push(val.getAttribute('data-id'))
             })
             // alert("Colors: "+color_ids)
