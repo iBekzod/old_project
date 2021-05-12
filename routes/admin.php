@@ -241,10 +241,10 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 //	Route::get('/attributes/edit/{id}', 'AttributeController@edit')->name('attributes.edit');
     Route::post('/attributes/{id}/update','AttributeController@update')->name('attributes.update');
 	Route::get('/attributes/destroy/{id}', 'AttributeController@destroy')->name('attributes.destroy');
-    Route::post('attributes/{id}/update/categories','AttributeController@updateCategories')->name('attributes.update.categories');
-    Route::get('attributes/edit/categories/{id}','AttributeController@editCategories')->name('attributes.edit.categories');
-    Route::post('attributes/{id}/update/characteristics','AttributeController@updateCharacteristics')->name('attributes.update.characteristics');
-    Route::get('attributes/edit/characteristics/{id}','AttributeController@editCharacteristics')->name('attributes.edit.characteristics');
+//    Route::post('attributes/{id}/update/categories','AttributeController@updateCategories')->name('attributes.update.categories');
+//    Route::get('attributes/edit/categories/{id}','AttributeController@editCategories')->name('attributes.edit.categories');
+    Route::post('attributes/edit/characteristics','AttributeController@updateCharacteristics')->name('attributes.edit.characteristics');
+    Route::get('attributes/edit/characteristics','AttributeController@editCharacteristics')->name('attributes.edit.characteristics');
     Route::post('attributes/update/combination','AttributeController@update_combination_status')->name('attributes.combination');
 //
     Route::resource('addons','AddonController');

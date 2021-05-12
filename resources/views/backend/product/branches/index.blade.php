@@ -51,6 +51,46 @@
                                        title="{{ translate('View Attributes') }}">
                                         <i class="fas fa-link"></i>
                                     </a>
+                                    <form class="p-4" action="{{ route('branches.update', $branch->id) }}"
+                                          method="POST">
+                                        @csrf
+                                        <div class="modal fade" id="EditModal_{{$branch->id}}" tabindex="-1"
+                                             role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title"
+                                                            id="exampleModalLabel">{{translate('Branch Information')}}</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-group row">
+                                                            <label class="col-sm-3 col-from-label"
+                                                                   for="name">{{translate('Name')}} <i
+                                                                    class="las la-language text-danger"
+                                                                    title="{{translate('Translatable')}}"></i></label>
+                                                            <div class="col-sm-9">
+                                                                <input type="text" placeholder="{{translate('Name')}}"
+                                                                       id="name" name="name" class="form-control"
+                                                                       required
+                                                                       value="{{ $branch->getTranslation('name') }}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">{{translate('Close')}}</button>
+                                                        <button type="submit"
+                                                                class="btn btn-primary">{{translate('Save')}}</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+
                                 </td>
                             </tr>
                         @endforeach

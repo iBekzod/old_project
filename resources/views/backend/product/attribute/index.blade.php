@@ -48,20 +48,65 @@
                                        data-target="#EditModal_{{$attribute->id}}">
                                         <i class="las la-edit"></i>
                                     </a>
+
                                     <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
                                        data-href="{{route('attributes.destroy', $attribute->id)}}"
                                        title="{{ translate('Delete') }}">
                                         <i class="las la-trash"></i>
                                     </a>
-                                    <a href="{{route('attributes.edit.categories', $attribute->id)}}" class="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                       title="{{ translate('Categories') }}">
-                                        <i class="las la-asterisk"></i>
-                                    </a>
+{{--                                    <a href="{{route('attributes.edit.categories', $attribute->id)}}" class="btn btn-soft-primary btn-icon btn-circle btn-sm"--}}
+{{--                                       title="{{ translate('Categories') }}">--}}
+{{--                                        <i class="las la-asterisk"></i>--}}
+{{--                                    </a>--}}
 
-                                    <a href="{{route('attributes.edit.characteristics', $attribute->id)}}" class="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                       title="{{ translate('Characteristics') }}">
+{{--                                    <a href="{{route('attributes.edit.characteristics', $attribute->id)}}" class="btn btn-soft-primary btn-icon btn-circle btn-sm"--}}
+{{--                                       title="{{ translate('Characteristics') }}">--}}
+{{--                                        <i class="las la-link"></i>--}}
+{{--                                    </a>--}}
+                                    <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="#"
+                                       title="{{ translate('Characteristics') }}" data-toggle="modal"
+                                       data-target="#AttributesModal" onclick="update_attribute_characteristics({{$attribute->id}})">
                                         <i class="las la-link"></i>
                                     </a>
+
+                                    <form class="p-4" action="{{ route('attributes.update', $attribute->id) }}"
+                                          method="POST">
+                                        @csrf
+                                        <div class="modal fade" id="EditModal_{{$attribute->id}}" tabindex="-1"
+                                             role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">{{translate('Attribute Information')}}</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-group row">
+                                                            <label class="col-sm-3 col-from-label"
+                                                                   for="name">{{translate('Name')}} <i
+                                                                    class="las la-language text-danger"
+                                                                    title="{{translate('Translatable')}}"></i></label>
+                                                            <div class="col-sm-9">
+                                                                <input type="text" placeholder="{{translate('Name')}}"
+                                                                       name="name" class="form-control"
+                                                                       required
+                                                                       value="{{ $attribute->getTranslation('name') }}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">{{translate('Close')}}</button>
+                                                        <button type="submit"
+                                                                class="btn btn-primary">{{translate('Save')}}</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach
@@ -104,6 +149,41 @@
         </div>
     </form>
 
+    <form action="{{ route('attributes.edit.characteristics') }}" method="POST">
+        @csrf
+        @method('POST')
+        <div class="modal fade" id="AttributesModal" tabindex="-1"
+             role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"
+                            id="exampleModalLongTitle">{{translate('Characteristics')}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <input type="hidden" name="id" id="attribute_id" value="">
+                                <select class="form-control js-example-basic-multiple"
+                                        multiple name="characteristics[]"
+                                        id="characteristics">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                    data-dismiss="modal">{{translate('Close')}}</button>
+                            <button type="submit"
+                                    class="btn btn-primary">{{translate('Save')}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 @endsection
 
 @section('modal')
@@ -127,6 +207,31 @@
                     AIZ.plugins.notify('success', '{{ translate('Attribute combination updated successfully') }}');
                 } else {
                     AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
+                }
+            });
+        }
+        function onCloseModal(){
+            $('#characteristic_id').html(" ")
+        }
+        function update_attribute_characteristics(id){
+            $('#attribute_id').val(id)
+            $.ajax({
+                type:'GET',
+                url:'{{ route('attributes.edit.characteristics') }}',
+                data:{
+                    attribute_id: id
+                },
+                success:function(data){
+                    // console.log(data)
+                    $('#characteristics').html(" ")
+                    if(data.success){
+                        $('#characteristics').html(data.data)
+                        $('#attribute_id').val(id)
+                        // alert($('#attribute_id').val())
+                        $('.js-example-basic-multiple').select2({
+                            tags: true
+                        });
+                    }
                 }
             });
         }

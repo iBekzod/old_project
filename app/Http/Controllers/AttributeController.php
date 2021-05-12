@@ -128,30 +128,66 @@ class AttributeController extends Controller
         return redirect()->route('backend.product.attributes.index');
     }
 
-    public function editCategories($id){
-        $attribute = Attribute::findOrFail($id);
-        $categories = Category::withDepth()->having('depth', '=', 2)->get();
-        return view('backend.product.attribute.edit_categories', compact('attribute','categories'));
-    }
+//    public function editCategories($id){
+//        $attribute = Attribute::findOrFail($id);
+//        $categories = Category::withDepth()->having('depth', '=', 2)->get();
+//        return view('backend.product.attribute.edit_categories', compact('attribute','categories'));
+//    }
 
-    public function updateCategories(Request $request, $id){
-        $attribute = Attribute::findOrFail($id);
-        $attribute->categories()->detach();
-        $attribute->categories()->attach($request->get('category_id'));
+//    public function updateCategories(Request $request, $id){
+//        $attribute = Attribute::findOrFail($id);
+//        $attribute->categories()->detach();
+//        $attribute->categories()->attach($request->get('category_id'));
+//        return back();
+//    }
+
+//    public function editCharacteristics($id){
+//        $attribute = Attribute::findOrFail($id);
+//        $characteristics = Characteristic::orderBy('created_at', 'desc')->get();
+//        return view('backend.product.attribute.edit_characteristics', compact('attribute','characteristics'));
+//    }
+
+    public function updateCharacteristics(Request $request){
+//        dd($request);
+        $attribute = Attribute::findOrFail($request->id);
+        $attribute->characteristics()->delete();
+        $values=$request->get('characteristics');
+        if($values){
+            foreach ($values as $value){
+                Characteristic::create([
+                    'name'=>$value,
+                    'attribute_id'=>$attribute->id
+                ]);
+            }
+        }
+
         return back();
     }
 
-    public function editCharacteristics($id){
-        $attribute = Attribute::findOrFail($id);
-        $characteristics = Characteristic::orderBy('created_at', 'desc')->get();
-        return view('backend.product.attribute.edit_characteristics', compact('attribute','characteristics'));
-    }
-
-    public function updateCharacteristics(Request $request, $id){
-        $attribute = Attribute::findOrFail($id);
-        $attribute->characteristics()->detach();
-        $attribute->characteristics()->attach($request->get('characteristic_id'));
-        return back();
+    public function editCharacteristics(Request $request)
+    {
+        try {
+            if ($request->method() == 'GET'){
+                $data=null;
+                if ($request->has('attribute_id')){
+                    $attribute_id=$request->attribute_id;
+                    $attribute = Attribute::findOrFail($attribute_id);
+                    $options = null;
+                    foreach ($attribute->characteristics as $value) {
+                        $options = $options . '<option selected';
+//                        if ($request->has('id') && $element->characteristics != null && in_array($value->id, json_decode($element->characteristics, true))) {
+//                            $options = $options . 'selected';
+//                        }
+                        $options = $options . ' value = "' . $value->id . '" > ' . $value->getTranslation('name') . ' </option >';
+                    }
+                    $data=$options;
+                }
+                return response()->json(['success' => true, 'message' => 'done', 'data' => $data]);
+            }
+        } catch (\Exception $exception) {
+            return response()->json(['success' => false, 'message' => $exception->getMessage()]);
+        }
+        return response()->json(['success' => false, 'message' => 'server']);
     }
 
     public function update_combination_status(Request $request)
