@@ -94,4 +94,8 @@ class Element extends Model
         return api_asset($this->thumbnail_img);
     }
 
+    public function variations()
+    {
+        return $this->hasMany(Variation::class, 'element_id', 'id');
+    }
 }

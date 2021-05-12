@@ -7,6 +7,7 @@ use App\Characteristic;
 use App\Color;
 use App\ElementTranslation;
 use App\Brand;
+use App\Variation;
 use App\Http\HelperClasses\Combinations;
 use App\AttributeValue;
 use App\Attribute;
@@ -271,8 +272,6 @@ class ElementController extends Controller
     }
 
 
-
-
     public function make_choice_options(Request $request)
     {
         try {
@@ -440,6 +439,7 @@ class ElementController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request);
         $element = new Element;
 //        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
 //        if ($refund_request_addon != null && $refund_request_addon->activated == 1) {
@@ -507,14 +507,33 @@ class ElementController extends Controller
             $element->meta_description = $element->description;
         }
         $element->pdf = $request->pdf;
-        $element->save();
-        foreach (Language::all() as $language){
-            // Element Translations
-            $element_translation = ElementTranslation::firstOrNew(['lang' => $language->code, 'element_id' => $element->id]);
-            $element_translation->name = $element->name;
-            $element_translation->unit = $element->unit;
-            $element_translation->description = $element->description;
-            $element_translation->save();
+        if($element->save()){
+            if ($request->has('combination')) {
+                foreach ($request->combination as $variant) {
+                    if(Variation::where('name', $variant['name'])->where('element_id', $variant['element_id'])->first())
+                    {
+                        continue;
+                    }
+                    $variation= new Variation;
+                    $variation->element_id=$element->id;
+                    $variation->name=$variant['name'];
+                    $variation->slug = SlugService::createSlug(Element::class, 'slug', slugify($variant['name']));
+//                $variation->sku=$variant['artikul'];
+                    $variation->num_of_sale=0;
+//                $variation->qty=$total_stock;
+                    $variation->rating=0;
+                    $variation->user_id=Auth::user()->id;
+                    $variation->save();
+                }
+            }
+            foreach (Language::all() as $language){
+                // Element Translations
+                $element_translation = ElementTranslation::firstOrNew(['lang' => $language->code, 'element_id' => $element->id]);
+                $element_translation->name = $request->name;
+                $element_translation->unit = $request->unit;
+                $element_translation->description = $request->description;
+                $element_translation->save();
+            }
         }
 
         flash(translate('Element has been inserted successfully'))->success();
@@ -578,6 +597,7 @@ class ElementController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         $element = Element::findOrFail($id);
 //        $element->name = $request->name;
 //        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
@@ -588,6 +608,7 @@ class ElementController extends Controller
 //                $element->refundable = 0;
 //            }
 //        }
+
         $element->category_id = $request->category_id;
         $element->brand_id = $request->brand_id;
         $element->barcode = $request->barcode;
@@ -646,15 +667,35 @@ class ElementController extends Controller
             $element->meta_description = $element->description;
         }
         $element->pdf = $request->pdf;
-        $element->save();
-        foreach (Language::all() as $language){
-            // Element Translations
-            $element_translation = ElementTranslation::firstOrNew(['lang' => $language->code, 'element_id' => $element->id]);
-            $element_translation->name = $request->name;
-            $element_translation->unit = $request->unit;
-            $element_translation->description = $request->description;
-            $element_translation->save();
+        if($element->save()){
+            if ($request->has('combination')) {
+                foreach ($request->combination as $variant) {
+                    if(Variation::where('name', $variant['name'])->where('element_id', $variant['element_id'])->first())
+                    {
+                        continue;
+                    }
+                    $variation= new Variation;
+                    $variation->element_id=$element->id;
+                    $variation->name=$variant['name'];
+                    $variation->slug = SlugService::createSlug(Element::class, 'slug', slugify($variant['name']));
+//                $variation->sku=$variant['artikul'];
+                    $variation->num_of_sale=0;
+//                $variation->qty=$total_stock;
+                    $variation->rating=0;
+                    $variation->user_id=Auth::user()->id;
+                    $variation->save();
+                }
+            }
+            foreach (Language::all() as $language){
+                // Element Translations
+                $element_translation = ElementTranslation::firstOrNew(['lang' => $language->code, 'element_id' => $element->id]);
+                $element_translation->name = $request->name;
+                $element_translation->unit = $request->unit;
+                $element_translation->description = $request->description;
+                $element_translation->save();
+            }
         }
+
 
         flash(translate('Element has been updated successfully'))->success();
 
