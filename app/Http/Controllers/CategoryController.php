@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Attribute;
 use Illuminate\Http\Request;
 use App\Category;
 use App\HomeCategory;
@@ -59,6 +60,23 @@ class CategoryController extends Controller
         $category->meta_title = $request->meta_title;
         $category->meta_description = $request->meta_description;
 
+        if($request->has('attribute_ids')){
+            $attribute_ids=$request->attribute_ids;
+//            $attributes=Attribute::whereIn('id', $attribute_ids);
+//            $category->attributes()->detach();
+            $category->attributes()->attach($attribute_ids);
+            if($category->level==0 || $category->level==1){
+                foreach ($category->childrenCategories as $children){
+                    $children->attributes()->attach($attribute_ids);
+                    if($children->level==1) {
+                        foreach ($children->childrenCategories as $child) {
+                            $child->attributes()->attach($attribute_ids);
+                        }
+                    }
+                }
+            }
+
+        }
         if ($request->parent_id != "0") {
             $category->parent_id = $request->parent_id;
 
@@ -114,9 +132,10 @@ class CategoryController extends Controller
     {
         $lang = $request->lang;
         $mainCategory = Category::findOrFail($id);
+        $category_attribute_ids=$mainCategory->attributes->pluck('id')->toArray();
         $categories = Category::all()->toTree();
 
-        return view('backend.product.categories.edit', compact('mainCategory', 'categories', 'lang'));
+        return view('backend.product.categories.edit', compact('mainCategory', 'categories', 'lang', 'category_attribute_ids'));
     }
 
     /**
@@ -139,6 +158,25 @@ class CategoryController extends Controller
         $category->meta_description = $request->meta_description;
 
         $previous_level = $category->level;
+
+        if($request->has('attribute_ids')){
+            $attribute_ids=$request->attribute_ids;
+//            $attributes=Attribute::whereIn('id', $attribute_ids);
+            $category->attributes()->detach();
+            $category->attributes()->attach($attribute_ids);
+            if($category->level==0 || $category->level==1){
+                foreach ($category->childrenCategories as $children){
+                    $children->attributes()->detach();
+                    $children->attributes()->attach($attribute_ids);
+                    if($children->level==1) {
+                        foreach ($children->childrenCategories as $child) {
+                            $child->attributes()->detach();
+                            $child->attributes()->attach($attribute_ids);
+                        }
+                    }
+                }
+            }
+        }
 
         if ($request->parent_id != "0") {
             $category->parent_id = $request->parent_id;
@@ -176,9 +214,9 @@ class CategoryController extends Controller
 
         $category->save();
 
-        if(CategoryTranslation::where('cotegory_id' , $category->id)->where('lang' ,default_language())->first()){
+        if(CategoryTranslation::where('category_id' , $category->id)->where('lang' ,default_language())->first()){
             foreach (Language::all() as $language){
-                $cotegory_translation = CategoryTranslation::firstOrNew(['lang' => $language->code, 'cotegory_id' => $category->id]);
+                $cotegory_translation = CategoryTranslation::firstOrNew(['lang' => $language->code, 'category_id' => $category->id]);
                 $cotegory_translation->name = $request->name;
                 $cotegory_translation->save();
             }

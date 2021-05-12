@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="col-lg-8 mx-auto">
+<div class="col-lg-12 mx-auto">
     <div class="card">
         <div class="card-header">
             <h5 class="mb-0 h6">{{translate('Category Information')}}</h5>
@@ -91,6 +91,21 @@
                         </div>
                     </div>
                 @endif
+                <div class="form-group row">
+                    <label class="col-sm-3 col-from-label" for="name">{{ translate('Attributes')}} </label>
+                    <div class="col-sm-9">
+                        <select
+                            class="form-control js-example-basic-multiple"
+                            multiple name="attribute_ids[]"
+                            id="attribute_ids">
+                            @foreach (\App\Attribute::all() as $attribute)
+                                <option value="{{ $attribute->id }}"
+                                    {{--                                        @if($category->attribute_id==$attribute->id) selected @endif--}}
+                                >{{ $attribute->getTranslation('name') }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
                 <div class="form-group mb-0 text-right">
                     <button type="submit" class="btn btn-primary">{{translate('Save')}}</button>
                 </div>
