@@ -44,6 +44,7 @@ Route::prefix('v1')->group(function () {
     Route::match(['get', 'post'], '/sellers/{id}/top-selling', 'Api\SellerController@topSelling');
     Route::match(['get', 'post'], '/sellers/{id}/featured-products', 'Api\SellerController@featuredProducts');
     Route::match(['get', 'post'], '/sellers/{id}/all-products', 'Api\SellerController@allProducts');
+   // Route::get('get/seller', 'Api\SellerController@sellers');
 
     Route::match(['get', 'post'], '/user/addresses', 'Api\OrderController@getUserAddress');
     Route::match(['get', 'post'], '/store/user/addresses', 'Api\OrderController@storeUserAddress')->middleware('auth:api');
