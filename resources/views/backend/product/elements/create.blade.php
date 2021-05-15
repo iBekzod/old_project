@@ -87,9 +87,8 @@
                         <div class="col-lg-8">
                             <select class="form-control aiz-selectpicker" data-live-search="true"
                                     data-selected-text-format="count" name="colors[]" id="colors" multiple>
-
                                 @foreach (\App\Color::orderBy('name', 'asc')->get() as $key => $color)
-                                    <option data-id="{{$color->id}}"  data-content="<span><span class='mr-2 border rounded size-15px d-inline-block' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"></option>
+                                    <option data-id="{{$color->id}}" value="{{$color->id}}"  data-content="<span><span class='mr-2 border rounded size-15px d-inline-block' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"></option>
                                 @endforeach
                             </select>
                         </div>
@@ -122,16 +121,9 @@
                         </div>
                     </div>
                     <div id="variation_div"></div>
+                    <input type="hidden" name="collected_variations[]" id="collected_variations" >
                 </div>
             </div>
-{{--            <div class="card">--}}
-{{--                <div class="card-header">--}}
-{{--                    <h5 class="mb-0 h6">{{translate('Generated Variation')}}</h5>--}}
-{{--                </div>--}}
-{{--                <div class="card-body">--}}
-{{--                    <div id="variation_div"></div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0 h6">{{translate('Element Information')}}</h5>
@@ -500,6 +492,8 @@
                 color_ids.push(val.getAttribute('data-id'))
             })
             // alert("Colors: "+color_ids)
+
+            $('#collected_variations').val(choice_groups);
             $.ajax({
                 type:'GET',
                 url:'{{ route('elements.make_all_combination') }}',

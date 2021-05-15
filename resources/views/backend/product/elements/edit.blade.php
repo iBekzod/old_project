@@ -84,14 +84,6 @@
                                    value="{{$element->getTranslation('unit', $lang)}}" required>
                         </div>
                     </div>
-                    {{-- <div class="form-group row">
-                        <label class="col-lg-3 col-from-label">{{translate('Minimum Qty')}}</label>
-                        <div class="col-lg-8">
-                            <input type="number" lang="en" class="form-control" name="min_qty"
-                                   value="@if($element->min_qty <= 1){{1}}@else{{$element->min_qty}}@endif" min="1"
-                                   required>
-                        </div>
-                    </div> --}}
                     <div class="form-group row">
                         <label class="col-lg-3 col-from-label">{{translate('Tags')}}</label>
                         <div class="col-lg-8">
@@ -112,93 +104,143 @@
                             </div>
                         </div>
                     @endif
-
-                    @php
-                        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
-                    @endphp
-                    @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-from-label">{{translate('Refundable')}}</label>
-                            <div class="col-lg-8">
-                                <label class="mb-0 aiz-switch aiz-switch-success" style="margin-top:5px;">
-                                    <input type="checkbox" name="refundable"  @if ($element->refundable == 1) checked @endif>
-                                    <span class="slider round"></span>
-                                </label>
-                            </div>
-                        </div>
-                    @endif
                 </div>
             </div>
             <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0 h6">{{translate('Element Category')}}</h5>
+                </div>
                 <div class="card-body">
-                    <div class="card-header">
-                        <h5 class="mb-0 h6">{{translate('Element Variation')}}</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-group row" id="category">
-                            <label class="col-lg-3 col-from-label">{{translate('Category')}}</label>
-                            <div class="col-lg-8">
-                                <select class="form-control aiz-selectpicker" name="category_id" id="category_id"
-                                        data-selected="{{ $element->category_id }}" data-live-search="true" required>
-                                    @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->getTranslation('name') }}</option>
-{{--                                        @foreach ($category->children as $childCategory)--}}
-{{--                                            @include('categories.child_category', ['child_category' => $childCategory])--}}
-{{--                                        @endforeach--}}
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div id="attribute_div">
-                            @foreach($element_attributes as $branch=>$attributes)
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5 class="mb-0 h6">{{ App\Branch::where('id', $branch)->first()->getTranslation('name') }}</h5>
-                                        </div>
-                                        <div class="card-body">
-                                            @foreach($attributes as $attribute)
-                                            <input type="hidden" name="choice_options[{{ $attribute->id }}]" value="{{ $attribute->id }}">
-                                            <div class="form-group row">
-                                                <label class="col-md-3 col-form-label"  for="signinSrEmail">{{ $attribute->getTranslation('name') }}</label>
-                                                <div class="col-md-8">
-                                                    <select class="form-control js-example-basic-multiple"  multiple name="choice_options[{{ $attribute->id }}][]">
-                                                        @foreach($attribute->characteristics as $value)
-                                                            <option @if($element->characteristics != null && in_array($value->id, json_decode($element->characteristics, true))) selected @endif
-                                                                value="{{ $value->id }}">{{ $value->getTranslation('name') }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-
-                            @endforeach
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-lg-3">
-                                <input type="text" class="form-control" value="{{translate('Colors')}}" disabled>
-                            </div>
-                            <div class="col-lg-8">
-                                <select class="form-control aiz-selectpicker" data-live-search="true"
-                                        data-selected-text-format="count" name="colors[]" id="colors" multiple>
-
-                                    @foreach (\App\Color::orderBy('name', 'asc')->get() as $key => $color)
-                                        <option @if(in_array($color->code, $colors)) selected @endif
-                                            value="{{ $color->code }}"
-                                            data-content="<span><span class='mr-2 border rounded size-15px d-inline-block' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"
-                                        ></option>
-                                    @endforeach
-                                </select>
-                            </div>
+                    <div class="form-group row" id="category">
+                        <label class="col-lg-3 col-from-label">{{translate('Category')}}</label>
+                        <div class="col-lg-8">
+                            <select class="form-control aiz-selectpicker" name="category_id" id="category_id"
+                                    data-selected="" data-live-search="true" required>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}" @if($element->category_id==$category->id) selected @endif>{{ $category->getTranslation('name') }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0 h6">{{translate('Element Characteristics')}}</h5>
+                </div>
+                <div class="card-body">
 
 
+                    <div class="form-group row">
+                        <div class="col-lg-3">
+                            <input type="text" class="form-control" value="{{translate('Attributes')}}" disabled>
+                        </div>
+                        <div class="col-lg-8">
+                            <select class="form-control aiz-selectpicker" data-live-search="true"
+                                    data-selected-text-format="count" name="selected_attribute_ids[]" id="selected_attribute_id" multiple>
+                                {{-- <option value="" disabled>{{translate('Select Attribute')}}</option> --}}
+                            </select>
+                        </div>
+                    </div>
+                    <div id="attribute_div">
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0 h6">{{translate('Element Variation')}}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-lg-3">
+                            <input type="text" class="form-control" value="{{translate('Colors')}}" disabled>
+                        </div>
+                        <div class="col-lg-8">
+                            <select class="form-control aiz-selectpicker" data-live-search="true"
+                                    data-selected-text-format="count" name="colors[]" id="colors" multiple>
+                                @foreach (\App\Color::orderBy('name', 'asc')->get() as $key => $color)
+                                    <option @if(in_array($color->code, $colors)) selected @endif data-id="{{$color->id}}" value="{{$color->id}}"  data-content="<span><span class='mr-2 border rounded size-15px d-inline-block' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"></option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-3">
+                            <input type="text" class="form-control" value="{{translate('Attributes')}}" disabled>
+                        </div>
+                        <div class="col-lg-8">
+                            <select class="form-control aiz-selectpicker" data-live-search="true"
+                                    data-selected-text-format="count" name="selected_variations[]" id="selected_variations" multiple>
+                                {{-- <option value="" disabled>{{translate('Select Attribute')}}</option> --}}
+                                {{-- @foreach (\App\Color::orderBy('name', 'asc')->get() as $key => $color)
+                                    <option value="" data-content="<span><span class='mr-2 border rounded size-15px d-inline-block' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"></option>
+                                @endforeach --}}
+                            </select>
+                        </div>
+                    </div>
+                    <div id="variation_div">
+                        <div style="overflow-y: scroll; ">
+                            <table class="table table-bordered" >
+                                <thead>
+                                <tr>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{translate('#')}}</label>
+                                    </td>
+                                    <td class="text-center">
+                                        <label class="col-form-label" for="signinSrEmails">{{translate('Variation Image')}}
+                                                <small>(290x300)</small></label>
+                                    </td>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{translate('Name')}}</label>
+                                    </td>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{translate('Artikul')}}</label>
+                                    </td>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{translate('Delete')}}</label>
+                                    </td>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($selected_variations as $index=>$combination)
+                                <tr class="variant">
+                                    <td>
+                                        <label for="" class="control-label">{{($index+1)}}</label>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                                <div class="input-group" data-toggle="aizuploader" data-type="image">
+                                                    <div class="input-group-prepend">
+                                                        <div
+                                                            class="input-group-text bg-soft-secondary font-weight-medium">{{translate('Browse')}}</div>
+                                                    </div>
+                                                    <div class="form-control file-amount"></div>
+                                                    <input type="hidden" name="combination[{{$index}}][thumbnail_img]" value=""
+                                                           class="selected-files">
+                                                </div>
+                                                <div class="file-preview box sm">
+                                                </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <label for="" class="control-label">{{implode (",", $combination)}}</label>
+                                        <input type="hidden" name="combination[{{$index}}][name]" value="{{implode (",", $combination)}}" class="form-control">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="combination[{{$index}}][artikul]" value="" class="form-control">
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="delete_variant(this)"><i class="las la-trash"></i></button>
+                                    </td>
+                                </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0 h6">{{translate('Element Images')}}</h5>
@@ -356,18 +398,14 @@
             </div>
         </form>
     </div>
-
 @endsection
 @section('script')
-
     <script type="text/javascript">
-
         function add_more_customer_choice_option(i, name) {
             $('#customer_choice_options').append('<div class="form-group row"><div class="col-md-3"><input type="hidden" name="choice_no[]" value="' + i + '"><input type="text" class="form-control" name="choice[]" value="' + name + '" placeholder="{{ translate('Choice Title') }}" readonly></div><div class="col-md-8"><input type="text" class="form-control aiz-tag-input" name="choice_options_' + i + '[]" placeholder="{{ translate('Enter choice values') }}" data-on-change="update_sku"></div></div>');
 
             AIZ.plugins.tagify();
         }
-
         $('input[name="colors_active"]').on('change', function () {
             if (!$('input[name="colors_active"]').is(':checked')) {
                 $('#colors').prop('disabled', true);
@@ -376,44 +414,119 @@
             }
             update_sku();
         });
-
-        $('#colors').on('change', function () {
-            update_sku();
-        });
-
         $('#category_id').on('change', function () {
+            update_attribute();
+        });
+        $('#selected_attribute_id').on('change', function () {
+            update_category_attribute();
+        });
+        $('#colors').on('change', function () {
+            update_attribute_combination()
+        });
+        $('#selected_variations').on('change', function () {
+            update_attribute_combination()
+        });
+        function update_attribute(){
             $.ajax({
                 type:'GET',
-                url:'{{ route('elements.make_choice_options') }}',
+                url:'{{ route('elements.make_attribute_options') }}',
                 data:{
-                    id: '<?php echo $element->id?>',
                     category_id: $('#category_id option:selected').val()
                 },
                 success:function(data){
-                        $('#attribute_div').html(data.data)
-                        $('.js-example-basic-multiple').select2();
+                    // alert("Selected attribute id: "+data.message);
+                    $('#selected_attribute_id').html(" ")
+                    if(data.success){
+                        $('#selected_attribute_id').html(data.data)
+                    }
+                    update_category_attribute();
                 }
             });
-        });
-
-        function update_sku() {
-            {{--$.ajax({--}}
-            {{--    type: "POST",--}}
-            {{--    url: '{{ route('products.sku_combination_edit') }}',--}}
-            {{--    data: $('#choice_form').serialize(),--}}
-            {{--    success: function (data) {--}}
-            {{--        $('#sku_combination').html(data);--}}
-            {{--        if (data.length > 1) {--}}
-            {{--            $('#quantity').hide();--}}
-            {{--        } else {--}}
-            {{--            $('#quantity').show();--}}
-            {{--        }--}}
-            {{--    }--}}
-            {{--});--}}
         }
+        function update_category_attribute(){
+            $.ajax({
+                type:'GET',
+                url:'{{ route('elements.make_selected_attribute_options') }}',
+                data:{
+                    selected_attribute_ids: $('#selected_attribute_id').val()
+                },
+                success:function(data){
+                    $('#attribute_div').html(" ")
+                    if(data.success){
+                        $('#attribute_div').html(data.data)
+                        $('.js-example-basic-multiple').select2();
+                    }
+                    update_attribute_variation();
+                }
+            });
+        }
+        function update_attribute_variation(){
+            $.ajax({
+                type:'GET',
+                url:'{{ route('elements.make_attribute_variations') }}',
+                data:{
+                    selected_attribute_ids: $('#selected_attribute_id').val()
+                },
+                success:function(data){
+                    $('#selected_variations').html(" ")
+                    if(data.success){
+                        $('#selected_variations').html(data.data)
+                        $('.js-example-basic-multiple').select2();
+                    }
+                    update_attribute_combination();
+                }
+            });
+        }
+        function update_attribute_combination(){
+            attribute_ids = []
+            $('#selected_variations option:selected').each(function (index, val){
+                attribute_ids.push(val.getAttribute('data-id'))
+            })
+            choice_groups = [];
+            $.each(attribute_ids, function( index, value ) {
+                choice_options = [];
+                $('#choice_option_'+attribute_ids[index]+' option:selected').each(function (index, val){
+                    choice_options.push(val.getAttribute('data-id'))
+                })
+                // if(choice_options.length > 0){
+                choice_groups[index]=choice_options
+                // }
+            });
+            // console.log(choice_groups);
 
+            color_ids = []
+            $('#colors option:selected').each(function (index, val){
+                color_ids.push(val.getAttribute('data-id'))
+            })
+            // alert("Colors: "+color_ids)
+
+            // $('#collected_variations').val(choice_groups);
+            $.ajax({
+                type:'GET',
+                url:'{{ route('elements.make_all_combination') }}',
+                data:{
+                    selected_attribute_ids: attribute_ids,
+                    choice_groups: choice_groups,
+                    color_ids: color_ids
+                },
+                success:function(data){
+                    $('#variation_div').html(" ")
+                    // alert("Combinations: "+data.message)
+                    // console.log(data.message);
+                    if(data.success){
+                        $('#variation_div').html(data.data)
+                        $('.js-example-basic-multiple').select2();
+                    }
+                }
+            });
+        }
+        // selected_variations
+        function update_sku() {
+        }
+        function delete_variant(em) {
+            $(em).closest('.variant').remove();
+        }
         AIZ.plugins.tagify();
-
         $(document).ready(function () {
             update_sku();
 
@@ -422,5 +535,4 @@
             });
         });
     </script>
-
 @endsection
