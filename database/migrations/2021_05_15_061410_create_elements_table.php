@@ -26,7 +26,8 @@ class CreateElementsTable extends Migration
             $table->string('video_link', 100)->nullable();
             $table->string('tags', 1000)->nullable()->index('tags');
             $table->longText('description')->nullable();
-            $table->string('attributes', 1000)->default('[]');
+            $table->string('attribute_characteristics', 1000)->default('[]');
+            $table->string('attribute_variations', 255)->nullable();
             $table->mediumText('choice_options')->nullable();
             $table->mediumText('characteristics')->nullable();
             $table->mediumText('colors')->nullable();

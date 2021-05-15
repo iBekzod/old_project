@@ -442,7 +442,6 @@ class ElementController extends Controller
      */
     public function store(Request $request)
     {
-
         $element = new Element;
         $element->added_by = $request->added_by;
         $element->category_id = $request->category_id;
@@ -523,7 +522,7 @@ class ElementController extends Controller
                     $variation->element_id=$element->id;
                     $variation->name=$variant['name'];
                     $variation->thumbnail_img = $variant['thumbnail_img'];
-                    $variation->slug = SlugService::createSlug(Element::class, 'slug', slugify($variant['name']));
+                    $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
                     $variation->sku=$variant['artikul'];
                     $variation->num_of_sale=0;
                     $variation->qty=0;
@@ -605,26 +604,16 @@ class ElementController extends Controller
     {
 
         $element = Element::findOrFail($id);
-//        $element->name = $request->name;
-//        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
-//        if ($refund_request_addon != null && $refund_request_addon->activated == 1) {
-//            if ($request->refundable != null) {
-//                $element->refundable = 1;
-//            } else {
-//                $element->refundable = 0;
-//            }
-//        }
-
+//        $element->added_by = $request->added_by;
         $element->category_id = $request->category_id;
         $element->brand_id = $request->brand_id;
         $element->barcode = $request->barcode;
         $choice_options = $request->choice_options;
-        $my_attributes = array();
-        $my_characteristics = array();
+        $generated_variations = array();
         $my_choice_options = array();
+        $my_characteristics = array();
         if ($choice_options) {
             foreach ($choice_options as $attribute => $values) {
-                array_push($my_attributes, $attribute);
                 if (is_array($values)) {
                     foreach ($values as $value) {
                         array_push($my_characteristics, $value);
@@ -633,20 +622,30 @@ class ElementController extends Controller
                 }
             }
         }
+        if ($request->has('combination')) {
+            foreach ($request->combination as $variant) {
+                $generated_variations[]=[
+                    "image"=>$variant["thumbnail_img"],
+                    "name"=>$variant["name"],
+                    "artikul"=>$variant["name"],
+                ];
+            }
+        }
+        $element->attribute_characteristics = json_encode($my_choice_options ?? array());
+        $element->variations = json_encode($generated_variations ?? array());
+
+
         $element->choice_options = json_encode($my_choice_options ?? array());
-        $element->attributes = json_encode($my_attributes ?? array());
-        $element->characteristics = json_encode($my_characteristics ?? array());
+        $element->variations = json_encode($my_characteristics ?? array());
+        $element->attribute_variations = json_encode($request->selected_variations ?? array());
         $element->colors = json_encode($request->colors ?? array());
-//        if ($request->lang == env("DEFAULT_LANGUAGE", 'ru')) {
-            $element->name = $request->name;
-            $element->unit = $request->unit;
-            $element->description = $request->description;
-            if ($element->slug != $request->slug)
-                $element->slug = SlugService::createSlug(Element::class, 'slug', slugify($request->name));
-//        }
+
+        $element->name = $request->name;
+        $element->unit = $request->unit;
+        $element->description = $request->description;
+        $element->slug = SlugService::createSlug(Element::class, 'slug', slugify($request->name));
         $element->photos = $request->photos;
         $element->thumbnail_img = $request->thumbnail_img;
-        // $element->min_qty = $request->min_qty;
         $tags = array();
         if ($request->tags[0] != null) {
             foreach (json_decode($request->tags[0]) as $key => $tag) {
@@ -654,17 +653,17 @@ class ElementController extends Controller
             }
         }
         $element->tags = implode(',', $tags);
-        if (Auth::user()->user_type == 'seller') {
-            $element->user_id = Auth::user()->id;
-        } else {
-            $element->user_id = \App\User::where('user_type', 'admin')->first()->id;
-        }
-
         $element->video_provider = $request->video_provider;
         $element->video_link = $request->video_link;
         $element->meta_title = $request->meta_title;
         $element->meta_description = $request->meta_description;
         $element->meta_img = $request->meta_img;
+
+        if (Auth::user()->user_type == 'seller') {
+            $element->user_id = Auth::user()->id;
+        } else {
+            $element->user_id = \App\User::where('user_type', 'admin')->first()->id;
+        }
         if ($element->meta_title == null) {
             $element->meta_title = $element->name;
         }
@@ -676,17 +675,14 @@ class ElementController extends Controller
         if($element->save()){
             if ($request->has('combination')) {
                 foreach ($request->combination as $variant) {
-                    if(Variation::where('name', $variant['name'])->where('element_id', $variant['element_id'])->first())
-                    {
-                        continue;
-                    }
-                    $variation= new Variation;
+                    $variation= Variation::where('name', $variant['name'])->where('element_id', $element->id)->first();
                     $variation->element_id=$element->id;
                     $variation->name=$variant['name'];
+                    $variation->thumbnail_img = $variant['thumbnail_img'];
                     $variation->slug = SlugService::createSlug(Element::class, 'slug', slugify($variant['name']));
-//                $variation->sku=$variant['artikul'];
+                    $variation->sku=$variant['artikul'];
                     $variation->num_of_sale=0;
-//                $variation->qty=$total_stock;
+                    $variation->qty=0;
                     $variation->rating=0;
                     $variation->user_id=Auth::user()->id;
                     $variation->save();

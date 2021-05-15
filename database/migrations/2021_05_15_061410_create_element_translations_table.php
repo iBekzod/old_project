@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAttributeTranslationsTable extends Migration
+class CreateElementTranslationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateAttributeTranslationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('attribute_translations', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('attribute_id');
-            $table->string('name', 50);
+        Schema::create('element_translations', function (Blueprint $table) {
+            $table->bigincrements('id');
+            $table->bigInteger('element_id');
+            $table->string('name', 200)->nullable();
+            $table->string('unit', 20)->nullable();
+            $table->longText('description')->nullable();
             $table->string('lang', 100);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
@@ -30,6 +32,6 @@ class CreateAttributeTranslationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('attribute_translations');
+        Schema::dropIfExists('element_translations');
     }
 }

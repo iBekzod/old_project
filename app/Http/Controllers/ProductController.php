@@ -241,8 +241,9 @@ class ProductController extends Controller
             $user_id = \App\User::where('user_type', 'admin')->first()->id;
         }
         $element = Element::findOrFail($request->element_id);
+
         $name = $element->name;
-        $slug = SlugService::createSlug(Variation::class, 'slug', slugify($name));
+
         $added_by = Auth::user()->user_type;
         $minimum_price=0;
         $product_price=0;
@@ -724,26 +725,27 @@ class ProductController extends Controller
     public function make_combination(Request $request){
         try{
             $element = Element::findOrFail($request->element_id);
-            $choice_option_list = json_decode($element->choice_options, true);
-            $color_list = json_decode($element->colors, true);
-            $variations=array();
-            if($choice_option_list!=null && is_array($choice_option_list)){
-                foreach ($choice_option_list as $index=>$attributes){
-                    foreach ($attributes as $attribute_id=>$values) {
-                        if($attribute = Attribute::find($attribute_id)){
-                            if($attribute->combination==true){
-                                $characteristics = Characteristic::whereIn('id', $values)->pluck('name')->toArray();
-                                $variations[] = $characteristics;
-                            }
-                        }
-                    }
-                }
-            }
-            if($color_list!=null && is_array($color_list)){
-                $colors=Color::whereIn('code', $color_list)->pluck('name')->toArray();
-                $variations[]=$colors;
-            }
-            $combinations = Combinations::makeCombinations($variations);
+            $combinations = $element->variations;
+//            $choice_option_list = json_decode($element->choice_options, true);
+//            $color_list = json_decode($element->colors, true);
+//            $variations=array();
+//            if($choice_option_list!=null && is_array($choice_option_list)){
+//                foreach ($choice_option_list as $index=>$attributes){
+//                    foreach ($attributes as $attribute_id=>$values) {
+//                        if($attribute = Attribute::find($attribute_id)){
+//                            if($attribute->combination==true){
+//                                $characteristics = Characteristic::whereIn('id', $values)->pluck('name')->toArray();
+//                                $variations[] = $characteristics;
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            if($color_list!=null && is_array($color_list)){
+//                $colors=Color::whereIn('code', $color_list)->pluck('name')->toArray();
+//                $variations[]=$colors;
+//            }
+//            $combinations = Combinations::makeCombinations($variations);
             $lang=default_language();
             $currencies=Currency::where('status', true)->get();
 

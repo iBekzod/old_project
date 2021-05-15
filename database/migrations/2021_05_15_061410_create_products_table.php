@@ -33,6 +33,13 @@ class CreateProductsTable extends Migration
             $table->string('tax_type', 10)->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
+            $table->integer('featured')->default(0);
+            $table->integer('seller_featured')->default(0);
+            $table->boolean('on_moderation')->default(0);
+            $table->boolean('is_accepted')->default(1);
+            $table->double('rating', 8, 2)->default(0.00);
+            $table->string('barcode', 255)->nullable();
+            $table->double('earn_point', 8, 2)->default(0.00);
         });
     }
 

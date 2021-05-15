@@ -14,11 +14,9 @@ class CreateProductTranslationsTable extends Migration
     public function up()
     {
         Schema::create('product_translations', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigincrements('id');
             $table->bigInteger('product_id');
             $table->string('name', 200)->nullable();
-            $table->string('unit', 20)->nullable();
-            $table->longText('description')->nullable();
             $table->string('lang', 100);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();

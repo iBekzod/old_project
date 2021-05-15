@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVariationsTable extends Migration
+class CreateCountryTranslationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,11 @@ class CreateVariationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('variations', function (Blueprint $table) {
+        Schema::create('country_translations', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 255)->nullable();
-            $table->integer('lowest_price_id')->nullable();
-            $table->string('slug', 255)->nullable();
-            $table->integer('element_id');
-            $table->json('prices')->nullable();
-            $table->string('variant', 255)->nullable();
-            $table->string('sku', 255)->nullable();
+            $table->integer('country_id');
+            $table->string('name', 255);
+            $table->string('lang', 10);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
         });
@@ -34,6 +30,6 @@ class CreateVariationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('variations');
+        Schema::dropIfExists('country_translations');
     }
 }

@@ -14,7 +14,7 @@ class CreateCustomerProductTranslationsTable extends Migration
     public function up()
     {
         Schema::create('customer_product_translations', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigincrements('id');
             $table->bigInteger('customer_product_id');
             $table->string('name', 200)->nullable();
             $table->string('unit', 20)->nullable();

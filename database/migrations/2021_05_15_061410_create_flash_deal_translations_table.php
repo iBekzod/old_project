@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePickupPointTranslationsTable extends Migration
+class CreateFlashDealTranslationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreatePickupPointTranslationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('pickup_point_translations', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('pickup_point_id');
-            $table->string('name', 50);
-            $table->text('address');
+        Schema::create('flash_deal_translations', function (Blueprint $table) {
+            $table->bigincrements('id');
+            $table->bigInteger('flash_deal_id');
+            $table->string('title', 50);
             $table->string('lang', 100);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
@@ -31,6 +30,6 @@ class CreatePickupPointTranslationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pickup_point_translations');
+        Schema::dropIfExists('flash_deal_translations');
     }
 }

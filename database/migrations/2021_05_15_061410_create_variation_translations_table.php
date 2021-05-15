@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRoleTranslationsTable extends Migration
+class CreateVariationTranslationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateRoleTranslationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('role_translations', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('role_id');
+        Schema::create('variation_translations', function (Blueprint $table) {
+            $table->bigincrements('id');
+            $table->bigInteger('variation_id');
             $table->string('name', 50);
             $table->string('lang', 100);
             $table->timestamp('created_at')->useCurrent();
@@ -30,6 +30,6 @@ class CreateRoleTranslationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('role_translations');
+        Schema::dropIfExists('variation_translations');
     }
 }
