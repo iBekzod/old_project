@@ -29,6 +29,7 @@ class CreateVariationsTable extends Migration
             $table->integer('num_of_sale')->nullable();
             $table->integer('qty')->nullable();
             $table->integer('rating')->nullable();
+            $table->primary(['id', 'user_id']);
         });
     }
 
