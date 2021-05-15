@@ -44,6 +44,8 @@ class AttributeController extends Controller
     {
         $attribute = new Attribute;
         $attribute->name = $request->name;
+        $attribute->combination = false;
+        if($request->has('branch_id')) $attribute->branch_id = $request->branch_id;
         $attribute->save();
 
 
@@ -95,7 +97,8 @@ class AttributeController extends Controller
     {
         $attribute = Attribute::findOrFail($id);
         $attribute->name = $request->name;
-
+        $attribute->combination = false;
+        if($request->has('branch_id'))$attribute->branch_id = $request->branch_id;
         $attribute->save();
         if(AttributeTranslation::where('attribute_id' , $attribute->id)->where('lang' , default_language())->first()){
             foreach (Language::all() as $language) {

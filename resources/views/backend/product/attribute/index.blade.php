@@ -12,7 +12,7 @@
             </button>
         </div>
     </div>
-
+    @if(isset($branch))<input type="hidden" name="branch_id" value="{{ $branch->id }}">@endif
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card">
