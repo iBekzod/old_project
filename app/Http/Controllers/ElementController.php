@@ -180,6 +180,7 @@ class ElementController extends Controller
             if ($request->method() == 'GET'){
                 $data=null;
                 $variations=[];
+                $selected_ids=[];
 //                if ($request->has('selected_attribute_ids')){
 //                    $selected_attribute_ids=$request->selected_attribute_ids;
 //                    $selected_attributes = Attribute::whereIn('id', $selected_attribute_ids)->pluck('name')->toArray();
@@ -189,15 +190,17 @@ class ElementController extends Controller
                     foreach ($request->choice_groups as $value_ids){
                         $selected_attributes = Characteristic::whereIn('id', $value_ids)->pluck('name')->toArray();
                         $variations[]=$selected_attributes;
+//                        $selected_ids[]=$value_ids;
                     }
                 }
                 if ($request->has('color_ids')){
                     $color_ids=$request->color_ids;
                     $selected_colors = Color::whereIn('id', $color_ids)->pluck('name')->toArray();
                     $variations[]=$selected_colors;
+//                    $selected_ids[]=$color_ids;
                 }
                 $combinations = Combinations::makeCombinations($variations);
-//                dd(json_encode($combinations[0], true));
+
                 $content=null;
                 $content=$content.'
                 <div style="overflow-y: scroll; ">
@@ -247,7 +250,7 @@ class ElementController extends Controller
                             </td>
                             <td>
                                 <label for="" class="control-label">'.implode (",", $combination).'</label>
-                                <input type="hidden" name="combination['.$index.'][slug]" value="'.implode (",", $combination).'" class="form-control">
+                                <input type="hidden" name="combination['.$index.'][name]" value="'.implode (",", $combination).'" class="form-control">
                             </td>
                             <td>
                                 <input type="text" name="combination['.$index.'][artikul]" value="" class="form-control">
@@ -439,27 +442,18 @@ class ElementController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+
         $element = new Element;
-//        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
-//        if ($refund_request_addon != null && $refund_request_addon->activated == 1) {
-//            if ($request->refundable != null) {
-//                $element->refundable = 1;
-//            } else {
-//                $element->refundable = 0;
-//            }
-//        }
         $element->added_by = $request->added_by;
         $element->category_id = $request->category_id;
         $element->brand_id = $request->brand_id;
         $element->barcode = $request->barcode;
         $choice_options = $request->choice_options;
-        $my_attributes = array();
-        $my_characteristics = array();
+        $generated_variations = array();
         $my_choice_options = array();
+        $my_characteristics = array();
         if ($choice_options) {
             foreach ($choice_options as $attribute => $values) {
-                array_push($my_attributes, $attribute);
                 if (is_array($values)) {
                     foreach ($values as $value) {
                         array_push($my_characteristics, $value);
@@ -468,19 +462,30 @@ class ElementController extends Controller
                 }
             }
         }
+        if ($request->has('combination')) {
+            foreach ($request->combination as $variant) {
+                $generated_variations[]=[
+                    "image"=>$variant["thumbnail_img"],
+                    "name"=>$variant["name"],
+                    "artikul"=>$variant["name"],
+                ];
+            }
+        }
+        $element->attribute_characteristics = json_encode($my_choice_options ?? array());
+        $element->variations = json_encode($generated_variations ?? array());
+
+
         $element->choice_options = json_encode($my_choice_options ?? array());
-        $element->attributes = json_encode($my_attributes ?? array());
-        $element->characteristics = json_encode($my_characteristics ?? array());
+        $element->variations = json_encode($my_characteristics ?? array());
+        $element->attribute_variations = json_encode($request->selected_variations ?? array());
         $element->colors = json_encode($request->colors ?? array());
-//        if ($request->lang == env("DEFAULT_LANGUAGE")) {
-            $element->name = $request->name;
-            $element->unit = $request->unit;
-            $element->description = $request->description;
-            $element->slug = SlugService::createSlug(Element::class, 'slug', slugify($request->name));
-//        }
+
+        $element->name = $request->name;
+        $element->unit = $request->unit;
+        $element->description = $request->description;
+        $element->slug = SlugService::createSlug(Element::class, 'slug', slugify($request->name));
         $element->photos = $request->photos;
         $element->thumbnail_img = $request->thumbnail_img;
-        // $element->min_qty = $request->min_qty;
         $tags = array();
         if ($request->tags[0] != null) {
             foreach (json_decode($request->tags[0]) as $key => $tag) {
@@ -510,17 +515,18 @@ class ElementController extends Controller
         if($element->save()){
             if ($request->has('combination')) {
                 foreach ($request->combination as $variant) {
-                    if(Variation::where('name', $variant['name'])->where('element_id', $variant['element_id'])->first())
+                    if(Variation::where('name', $variant['name'])->where('element_id', $element->id)->first())
                     {
                         continue;
                     }
                     $variation= new Variation;
                     $variation->element_id=$element->id;
                     $variation->name=$variant['name'];
+                    $variation->thumbnail_img = $variant['thumbnail_img'];
                     $variation->slug = SlugService::createSlug(Element::class, 'slug', slugify($variant['name']));
-//                $variation->sku=$variant['artikul'];
+                    $variation->sku=$variant['artikul'];
                     $variation->num_of_sale=0;
-//                $variation->qty=$total_stock;
+                    $variation->qty=0;
                     $variation->rating=0;
                     $variation->user_id=Auth::user()->id;
                     $variation->save();
