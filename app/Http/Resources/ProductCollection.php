@@ -15,23 +15,24 @@ class ProductCollection extends ResourceCollection
                 $lang = ProductTranslation::where('product_id', $data->id)->where('lang', app()->getLocale())->first();
 
                 $arr =  [
+
                     'id'=>$data->id,
                     'slug'=>$data->slug,
                     'owner_id' => $data->user_id,
                     'name' => $data->name,
                     'photos' => explode(',', $data->photos),
                     'thumbnail_image' => api_asset($data->thumbnail_img),
-                    'base_price' => (double) homeBasePrice($data->id),
-                    'base_discounted_price' => (double) homeDiscountedBasePrice($data->id),
+                    // 'base_price' => (double) homeBasePrice($data->id),
+                    // 'base_discounted_price' => (double) homeDiscountedBasePrice($data->id),
                     'todays_deal' => (integer) $data->todays_deal,
                     'featured' =>(integer) $data->featured,
                     'unit' => $data->unit,
-                    'discount' => (integer) $data->discount,
-                    'discount_type' => $data->discount_type,
+                    // 'discount' => (integer) $data->discount,
+                    // 'discount_type' => $data->discount_type,
                     'rating' => (double) $data->rating,
                     'sales' => (integer) $data->num_of_sale,
-                    'variant' => ProductStock::where('product_id', $data->id)->first(),
-                    'variations' => ProductStock::where('product_id', $data->id)->get(),
+                    // 'variant' => ProductStock::where('product_id', $data->id)->first(),
+                    // 'variations' => ProductStock::where('product_id', $data->id)->get(),
                     'links' => [
                         'details' => route('products.show', $data->id),
                         'reviews' => route('api.reviews.index', $data->id),
