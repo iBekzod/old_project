@@ -409,7 +409,6 @@ class ProductController extends Controller
         $product_id=0;
         $total_stock=0;
         $variation=Variation::findOrFail($id);
-
         $variation->name=$name;
         $variation->save();
         $product_ids=array();

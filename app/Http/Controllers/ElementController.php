@@ -442,6 +442,7 @@ class ElementController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request);
         $element = new Element;
         $element->added_by = $request->added_by;
         $element->category_id = $request->category_id;
@@ -449,15 +450,18 @@ class ElementController extends Controller
         $element->barcode = $request->barcode;
         $choice_options = $request->choice_options;
         $generated_variations = array();
-        $my_choice_options = array();
         $my_characteristics = array();
+        $my_variation_attributes = array();
         if ($choice_options) {
             foreach ($choice_options as $attribute => $values) {
                 if (is_array($values)) {
                     foreach ($values as $value) {
                         array_push($my_characteristics, $value);
                     }
-                    array_push($my_choice_options, array($attribute => $values));
+                    array_push($my_characteristics, array($attribute => $values));
+                    if(in_array($attribute, $variation_attributes)){
+                        array_push($my_variations, array($attribute => $values));
+                    }
                 }
             }
         }
@@ -470,11 +474,11 @@ class ElementController extends Controller
                 ];
             }
         }
-        $element->attribute_characteristics = json_encode($my_choice_options ?? array());
+        $element->characteristics = json_encode($my_characteristics ?? array());
         $element->variations = json_encode($generated_variations ?? array());
 
 
-        $element->choice_options = json_encode($my_choice_options ?? array());
+        // $element->choice_options = json_encode($my_choice_options ?? array());
         $element->variations = json_encode($my_characteristics ?? array());
         $element->attribute_variations = json_encode($request->selected_variations ?? array());
         $element->colors = json_encode($request->colors ?? array());
