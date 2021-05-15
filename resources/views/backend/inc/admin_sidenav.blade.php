@@ -785,13 +785,13 @@
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('translations.show_translation', ['base_table'=>'customer_packages', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'customer_package_translations', 'relation_id'=>'customer_package_id', 'language_selected'=>'ru'])}}"
                                    class="aiz-side-nav-link">
-                                    <span class="aiz-side-nav-text">{{translate('Customer_packages')}}</span>
+                                    <span class="aiz-side-nav-text">{{translate('Customer Packages')}}</span>
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('translations.show_translation', ['base_table'=>'customer_products', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'customer_product_translations', 'relation_id'=>'customer_product_id', 'language_selected'=>'ru'])}}"
                                    class="aiz-side-nav-link">
-                                    <span class="aiz-side-nav-text">{{translate('Customer_products')}}</span>
+                                    <span class="aiz-side-nav-text">{{translate('Customer Products')}}</span>
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
@@ -803,7 +803,7 @@
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('translations.show_translation', ['base_table'=>'flash_deals', 'fields'=>['title'], 'selected_field'=>0, 'table_translations'=>'flash_deal_translations', 'relation_id'=>'flash_deal_id', 'language_selected'=>'ru'])}}"
                                    class="aiz-side-nav-link">
-                                    <span class="aiz-side-nav-text">{{translate('Flash_deals')}}</span>
+                                    <span class="aiz-side-nav-text">{{translate('Flash deals')}}</span>
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
@@ -822,7 +822,7 @@
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('translations.show_translation', ['base_table'=>'pickup_points', 'fields'=>['title','content'], 'selected_field'=>0, 'table_translations'=>'pickup_point_translations', 'pickup_point_id'=>'page_id', 'language_selected'=>'ru'])}}"
                                    class="aiz-side-nav-link">
-                                    <span class="aiz-side-nav-text">{{translate('pickup_points')}}</span>
+                                    <span class="aiz-side-nav-text">{{translate('Pickup Points')}}</span>
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
