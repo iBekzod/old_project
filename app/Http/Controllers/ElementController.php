@@ -583,13 +583,16 @@ class ElementController extends Controller
     public function admin_element_edit(Request $request, $id)
     {
         $element = Element::findOrFail($id);
-        ($element->category) ? $element_attributes = $element->category->attributes->groupBy('branch_id') : $element_attributes = [];
+        // ($element->category) ? $element_attributes = $element->category->attributes->groupBy('branch_id') : $element_attributes = [];
         $lang = $request->lang;
         $tags = json_decode($element->tags);
         $variation_colors = json_decode($element->variation_colors);
+        $variation_attributes = json_decode($element->variation_attributes);
         $characteristics = json_decode($element->characteristics);
         $categories = Category::withDepth()->having('depth', '=', 2)->get();
-        return view('backend.product.elements.edit', compact('element', 'colors', 'choice_options', 'categories', 'tags', 'lang', 'element_attributes'));
+        $brands = Brand::all();
+        $colors = Color::all();
+        return view('backend.product.elements.edit', compact('element', 'colors', 'variation_colors', 'variation_attributes', 'categories', 'tags', 'lang', 'characteristics', 'brands'));
     }
 
     public function seller_element_edit(Request $request, $id)
@@ -613,36 +616,39 @@ class ElementController extends Controller
         $element->brand_id = $request->brand_id;
         $element->barcode = $request->barcode;
         $choice_options = $request->choice_options;
+
         $generated_variations = array();
-        $my_choice_options = array();
         $my_characteristics = array();
+        $my_variations = array();
+        $variation_attributes = array();
+        if($request->has('collected_variations'))$variation_attributes = explode(",", $request->collected_variations[0]);
+
         if ($choice_options) {
             foreach ($choice_options as $attribute => $values) {
                 if (is_array($values)) {
                     foreach ($values as $value) {
                         array_push($my_characteristics, $value);
                     }
-                    array_push($my_choice_options, array($attribute => $values));
+                    array_push($my_characteristics, array($attribute => $values));
+                    if(in_array($attribute, $variation_attributes)){
+                        array_push($my_variations, array($attribute => $values));
+                    }
                 }
             }
         }
-        if ($request->has('combination')) {
-            foreach ($request->combination as $variant) {
-                $generated_variations[]=[
-                    "image"=>$variant["thumbnail_img"],
-                    "name"=>$variant["name"],
-                    "artikul"=>$variant["name"],
-                ];
-            }
-        }
-        $element->attribute_characteristics = json_encode($my_choice_options ?? array());
-        $element->variations = json_encode($generated_variations ?? array());
-
-
-        $element->choice_options = json_encode($my_choice_options ?? array());
-        $element->variations = json_encode($my_characteristics ?? array());
-        $element->attribute_variations = json_encode($request->selected_variations ?? array());
-        $element->colors = json_encode($request->colors ?? array());
+        // if ($request->has('combination')) {
+        //     foreach ($request->combination as $variant) {
+        //         $generated_variations[]=[
+        //             "image"=>$variant["thumbnail_img"],
+        //             "name"=>$variant["name"],
+        //             "artikul"=>$variant["name"],
+        //         ];
+        //     }
+        // }
+        $element->characteristics = json_encode($my_characteristics ?? array());
+        $element->variations = json_encode($variation_attributes ?? array());
+        $element->variation_attributes = json_encode($request->selected_variations ?? array());
+        $element->variation_colors = json_encode($request->colors ?? array());
 
         $element->name = $request->name;
         $element->unit = $request->unit;

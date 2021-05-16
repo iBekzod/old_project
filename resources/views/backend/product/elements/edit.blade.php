@@ -57,7 +57,7 @@
                         <div class="col-lg-8">
                             <input type="text" class="form-control" name="name"
                                    placeholder="{{translate('Element Name')}}"
-                                   value="{{ $element->getTranslation('name', $lang) }}" required>
+                                   value="" required onchange="update_sku()">
                         </div>
                     </div>
 
@@ -67,9 +67,8 @@
                             <select class="form-control aiz-selectpicker" name="brand_id" id="brand_id"
                                     data-live-search="true">
                                 <option value="">{{ ('Select Brand') }}</option>
-                                @foreach (\App\Brand::all() as $brand)
-                                    <option value="{{ $brand->id }}"
-                                            @if($element->brand_id == $brand->id) selected @endif>{{ $brand->getTranslation('name') }}</option>
+                                @foreach ($brands as $brand)
+                                    <option value="{{ $brand->id }}">{{ $brand->getTranslation('name') }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -81,14 +80,14 @@
                         <div class="col-lg-8">
                             <input type="text" class="form-control" name="unit"
                                    placeholder="{{ translate('Unit (e.g. KG, Pc etc)') }}"
-                                   value="{{$element->getTranslation('unit', $lang)}}" required>
+                                   value="" required>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-lg-3 col-from-label">{{translate('Tags')}}</label>
                         <div class="col-lg-8">
                             <input type="text" class="form-control aiz-tag-input" name="tags[]" id="tags"
-                                   value="{{ $element->tags }}" placeholder="{{ translate('Type to add a tag') }}"
+                                   value="" placeholder="{{ translate('Type to add a tag') }}"
                                    data-role="tagsinput" required>
                         </div>
                     </div>
@@ -100,12 +99,14 @@
                             <label class="col-lg-3 col-from-label">{{translate('Barcode')}}</label>
                             <div class="col-lg-8">
                                 <input type="text" class="form-control" name="barcode"
-                                       placeholder="{{ translate('Barcode') }}" value="{{ $element->barcode }}">
+                                       placeholder="{{ translate('Barcode') }}" value="">
                             </div>
                         </div>
                     @endif
+
                 </div>
             </div>
+            
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0 h6">{{translate('Element Category')}}</h5>
@@ -117,7 +118,7 @@
                             <select class="form-control aiz-selectpicker" name="category_id" id="category_id"
                                     data-selected="" data-live-search="true" required>
                                 @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}" @if($element->category_id==$category->id) selected @endif>{{ $category->getTranslation('name') }}</option>
+                                    <option value="{{ $category->id }}">{{ $category->getTranslation('name') }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -138,7 +139,7 @@
                         <div class="col-lg-8">
                             <select class="form-control aiz-selectpicker" data-live-search="true"
                                     data-selected-text-format="count" name="selected_attribute_ids[]" id="selected_attribute_id" multiple>
-                                {{-- <option value="" disabled>{{translate('Select Attribute')}}</option> --}}
+                                    {{-- <option value="" disabled>{{translate('Select Attribute')}}</option> --}}
                             </select>
                         </div>
                     </div>
@@ -158,12 +159,25 @@
                         <div class="col-lg-8">
                             <select class="form-control aiz-selectpicker" data-live-search="true"
                                     data-selected-text-format="count" name="colors[]" id="colors" multiple>
-                                @foreach (\App\Color::orderBy('name', 'asc')->get() as $key => $color)
-                                    <option @if(in_array($color->code, $colors)) selected @endif data-id="{{$color->id}}" value="{{$color->id}}"  data-content="<span><span class='mr-2 border rounded size-15px d-inline-block' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"></option>
+                                @foreach ($colors as $key => $color)
+                                    <option data-id="{{$color->id}}" value="{{$color->id}}"  data-content="<span><span class='mr-2 border rounded size-15px d-inline-block' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"></option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
+{{--                    <div class="form-group row">--}}
+{{--                        <div class="col-lg-3">--}}
+{{--                            <input type="text" class="form-control" value="{{translate('Colors')}}" disabled>--}}
+{{--                        </div>--}}
+{{--                        <div class="col-lg-8">--}}
+{{--                            <select class="form-control aiz-selectpicker" data-live-search="true"--}}
+{{--                                    data-selected-text-format="count" name="selected_colors[]" id="selected_colors" multiple>--}}
+{{--                                --}}{{-- @foreach (\App\Color::orderBy('name', 'asc')->get() as $key => $color)--}}
+{{--                                    <option value="" data-content="<span><span class='mr-2 border rounded size-15px d-inline-block' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"></option>--}}
+{{--                                @endforeach --}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
                     <div class="form-group row">
                         <div class="col-lg-3">
                             <input type="text" class="form-control" value="{{translate('Attributes')}}" disabled>
@@ -171,76 +185,18 @@
                         <div class="col-lg-8">
                             <select class="form-control aiz-selectpicker" data-live-search="true"
                                     data-selected-text-format="count" name="selected_variations[]" id="selected_variations" multiple>
-                                {{-- <option value="" disabled>{{translate('Select Attribute')}}</option> --}}
+                                    {{-- <option value="" disabled>{{translate('Select Attribute')}}</option> --}}
                                 {{-- @foreach (\App\Color::orderBy('name', 'asc')->get() as $key => $color)
                                     <option value="" data-content="<span><span class='mr-2 border rounded size-15px d-inline-block' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"></option>
                                 @endforeach --}}
                             </select>
                         </div>
                     </div>
-                    <div id="variation_div">
-                        <div style="overflow-y: scroll; ">
-                            <table class="table table-bordered" >
-                                <thead>
-                                <tr>
-                                    <td class="text-center">
-                                        <label for="" class="control-label">{{translate('#')}}</label>
-                                    </td>
-                                    <td class="text-center">
-                                        <label class="col-form-label" for="signinSrEmails">{{translate('Variation Image')}}
-                                                <small>(290x300)</small></label>
-                                    </td>
-                                    <td class="text-center">
-                                        <label for="" class="control-label">{{translate('Name')}}</label>
-                                    </td>
-                                    <td class="text-center">
-                                        <label for="" class="control-label">{{translate('Artikul')}}</label>
-                                    </td>
-                                    <td class="text-center">
-                                        <label for="" class="control-label">{{translate('Delete')}}</label>
-                                    </td>
-
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($selected_variations as $index=>$combination)
-                                <tr class="variant">
-                                    <td>
-                                        <label for="" class="control-label">{{($index+1)}}</label>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                                <div class="input-group" data-toggle="aizuploader" data-type="image">
-                                                    <div class="input-group-prepend">
-                                                        <div
-                                                            class="input-group-text bg-soft-secondary font-weight-medium">{{translate('Browse')}}</div>
-                                                    </div>
-                                                    <div class="form-control file-amount"></div>
-                                                    <input type="hidden" name="combination[{{$index}}][thumbnail_img]" value=""
-                                                           class="selected-files">
-                                                </div>
-                                                <div class="file-preview box sm">
-                                                </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <label for="" class="control-label">{{implode (",", $combination)}}</label>
-                                        <input type="hidden" name="combination[{{$index}}][name]" value="{{implode (",", $combination)}}" class="form-control">
-                                    </td>
-                                    <td>
-                                        <input type="text" name="combination[{{$index}}][artikul]" value="" class="form-control">
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="delete_variant(this)"><i class="las la-trash"></i></button>
-                                    </td>
-                                </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    <div id="variation_div"></div>
+                    <input type="hidden" name="collected_variations[]" id="collected_variations" >
                 </div>
             </div>
+            
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0 h6">{{translate('Element Images')}}</h5>
@@ -257,11 +213,14 @@
                                         class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse')}}</div>
                                 </div>
                                 <div class="form-control file-amount">{{ translate('Choose File') }}</div>
-                                <input type="hidden" name="photos" value="{{ $element->photos }}"
+                                <input type="hidden" name="photos" value=""
                                        class="selected-files">
                             </div>
                             <div class="file-preview box sm">
                             </div>
+                            <small
+                                class="text-muted">{{translate('This image is visible in all product box. Use 300x300 sizes image. Keep some blank space around main object of your image as we had to crop some edge in different devices to make it responsive.')}}</small>
+
                         </div>
                     </div>
                     <div class="form-group row">
@@ -274,7 +233,7 @@
                                         class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse')}}</div>
                                 </div>
                                 <div class="form-control file-amount">{{ translate('Choose File') }}</div>
-                                <input type="hidden" name="thumbnail_img" value="{{ $element->thumbnail_img }}"
+                                <input type="hidden" name="thumbnail_img" value=""
                                        class="selected-files">
                             </div>
                             <div class="file-preview box sm">
@@ -293,18 +252,18 @@
                         <div class="col-lg-8">
                             <select class="form-control aiz-selectpicker" name="video_provider" id="video_provider">
                                 <option
-                                    value="youtube" <?php if ($element->video_provider == 'youtube') echo "selected";?> >{{translate('Youtube')}}</option>
+                                    value="youtube"  >{{translate('Youtube')}}</option>
                                 <option
-                                    value="dailymotion" <?php if ($element->video_provider == 'dailymotion') echo "selected";?> >{{translate('Dailymotion')}}</option>
+                                    value="dailymotion"  >{{translate('Dailymotion')}}</option>
                                 <option
-                                    value="vimeo" <?php if ($element->video_provider == 'vimeo') echo "selected";?> >{{translate('Vimeo')}}</option>
+                                    value="vimeo"  >{{translate('Vimeo')}}</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-lg-3 col-from-label">{{translate('Video Link')}}</label>
                         <div class="col-lg-8">
-                            <input type="text" class="form-control" name="video_link" value="{{ $element->video_link }}"
+                            <input type="text" class="form-control" name="video_link" value=""
                                    placeholder="{{ translate('Video Link') }}">
                         </div>
                     </div>
@@ -321,7 +280,7 @@
                                 title="{{translate('Translatable')}}"></i></label>
                         <div class="col-lg-9">
                             <textarea class="aiz-text-editor"
-                                      name="description">{{ $element->getTranslation('description', $lang) }}</textarea>
+                                      name="description"></textarea>
                         </div>
                     </div>
                 </div>
@@ -341,7 +300,7 @@
                                         class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse')}}</div>
                                 </div>
                                 <div class="form-control file-amount">{{ translate('Choose File') }}</div>
-                                <input type="hidden" name="pdf" value="{{ $element->pdf }}" class="selected-files">
+                                <input type="hidden" name="pdf" value="" class="selected-files">
                             </div>
                             <div class="file-preview box sm">
                             </div>
@@ -357,7 +316,7 @@
                     <div class="form-group row">
                         <label class="col-lg-3 col-from-label">{{translate('Meta Title')}}</label>
                         <div class="col-lg-8">
-                            <input type="text" class="form-control" name="meta_title" value="{{ $element->meta_title }}"
+                            <input type="text" class="form-control" name="meta_title" value=""
                                    placeholder="{{translate('Meta Title')}}">
                         </div>
                     </div>
@@ -365,7 +324,7 @@
                         <label class="col-lg-3 col-from-label">{{translate('Description')}}</label>
                         <div class="col-lg-8">
                             <textarea name="meta_description" rows="8"
-                                      class="form-control">{{ $element->meta_description }}</textarea>
+                                      class="form-control"></textarea>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -377,7 +336,7 @@
                                         class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse')}}</div>
                                 </div>
                                 <div class="form-control file-amount">{{ translate('Choose File') }}</div>
-                                <input type="hidden" name="meta_img" value="{{ $element->meta_img }}"
+                                <input type="hidden" name="meta_img" value=""
                                        class="selected-files">
                             </div>
                             <div class="file-preview box sm">
@@ -388,7 +347,7 @@
                         <label class="col-md-3 col-form-label">{{translate('Slug')}}</label>
                         <div class="col-md-8">
                             <input type="text" placeholder="{{translate('Slug')}}" id="slug" name="slug"
-                                   value="{{ $element->slug }}" class="form-control">
+                                   value="" class="form-control">
                         </div>
                     </div>
                 </div>
@@ -423,9 +382,34 @@
         $('#colors').on('change', function () {
             update_attribute_combination()
         });
+        // $('#selected_colors').on('change', function () {
+        //     update_attribute_combination()
+        // });
         $('#selected_variations').on('change', function () {
             update_attribute_combination()
         });
+        {{--function update_color(){--}}
+        {{--    color_ids = []--}}
+        {{--    $('#colors option:selected').each(function (index, val){--}}
+        {{--        color_ids.push(val.getAttribute('data-id'))--}}
+        {{--    })--}}
+        {{--    // alert(color_ids);--}}
+        {{--    $.ajax({--}}
+        {{--        type:'GET',--}}
+        {{--        url:'{{ route('elements.make_color_options') }}',--}}
+        {{--        data:{--}}
+        {{--            colors: color_ids--}}
+        {{--        },--}}
+        {{--        success:function(data){--}}
+        {{--            // alert("Selected attribute id: "+data.message);--}}
+        {{--            $('#selected_colors').html(" ")--}}
+        {{--            if(data.success){--}}
+        {{--                $('#selected_colors').append(data.data)--}}
+        {{--            }--}}
+        {{--            update_attribute_combination();--}}
+        {{--        }--}}
+        {{--    });--}}
+        {{--}--}}
         function update_attribute(){
             $.ajax({
                 type:'GET',
@@ -489,7 +473,7 @@
                     choice_options.push(val.getAttribute('data-id'))
                 })
                 // if(choice_options.length > 0){
-                choice_groups[index]=choice_options
+                    choice_groups[index]=choice_options
                 // }
             });
             // console.log(choice_groups);
@@ -500,7 +484,7 @@
             })
             // alert("Colors: "+color_ids)
 
-            // $('#collected_variations').val(choice_groups);
+            $('#collected_variations').val(choice_groups);
             $.ajax({
                 type:'GET',
                 url:'{{ route('elements.make_all_combination') }}',
