@@ -29,7 +29,7 @@
     <div class="mt-2 mb-3 text-left aiz-titlebar">
         <h1 class="mb-0 h6">{{ translate('Edit Element') }}</h5>
     </div>
-    <div class="mx-auto col-lg-8">
+    <div class="mx-auto col-lg-12">
         <form class="form form-horizontal mar-top" action="{{route('elements.update', $element->id)}}" method="POST"
               enctype="multipart/form-data" id="choice_form">
             <input name="_method" type="hidden" value="POST">
