@@ -83,7 +83,7 @@ class ElementController extends Controller
                         // if ($request->has('id') && $element->characteristics != null && in_array($value->id, json_decode($element->characteristics, true))) {
                         //     $options = $options . 'selected';
                         // }
-                        $options = $options . ' value = "' . $attribute->id . '" > ' . $attribute->getTranslation('name') . ' </option >';
+                        $options = $options . ' value = "' . $attribute->id . '" > ' . $attribute->getTranslation('name', $request->lang) . ' </option >';
                 }
                 $data = $options;
                 return response()->json(['success' => true, 'message' => 'done', 'data' => $data]);
@@ -105,7 +105,7 @@ class ElementController extends Controller
                     foreach($selected_attributes as $attribute){
                         $content = $content . '<input type="hidden" name="choice_options[' . $attribute->id . ']" value="' . $attribute->id . '">
                             <div class="form-group row">
-                                <label class="col-md-3 col-form-label"  for="signinSrEmail">' . $attribute->getTranslation('name') . '</label>
+                                <label class="col-md-3 col-form-label"  for="signinSrEmail">' . $attribute->getTranslation('name', $request->lang) . '</label>
                                 <div class="col-md-8">
                                     <select class="form-control js-example-basic-multiple" onchange="update_attribute_combination()" id="choice_option_' . $attribute->id . '" multiple name="choice_options[' . $attribute->id . '][]">';
 
@@ -115,7 +115,7 @@ class ElementController extends Controller
                             // if ($request->has('id') && $element->characteristics != null && in_array($value->id, json_decode($element->characteristics, true))) {
                             //     $options = $options . 'selected';
                             // }
-                            $options = $options . ' value = "' . $value->id . '" > ' . $value->getTranslation('name') . ' </option >';
+                            $options = $options . ' value = "' . $value->id . '" > ' . $value->getTranslation('name',$request->lang) . ' </option >';
                         }
 
                         $content = $content . $options . '</select>
@@ -163,7 +163,7 @@ class ElementController extends Controller
                     $selected_attributes= Attribute::whereIn('id', $selected_attribute_ids)->where('combination','=', 1)->get();
                     $options = null;
                     foreach($selected_attributes as $attribute){
-                        $options = $options .'<option selected value="'.$attribute->id.'" data-id="'.$attribute->id.'" >'.$attribute->getTranslation('name').'</option>';
+                        $options = $options .'<option selected value="'.$attribute->id.'" data-id="'.$attribute->id.'" >'.$attribute->getTranslation('name',$request->lang).'</option>';
                     }
                     $data=$options;
                 }
@@ -289,14 +289,14 @@ class ElementController extends Controller
                 foreach ($element_attributes as $branch => $attributes) {
                     $data = $data . '<div class="card">
                                         <div class="card-header">
-                                            <h5 class="mb-0 h6">' . Branch::where('id', $branch)->first()->getTranslation('name') . '</h5>
+                                            <h5 class="mb-0 h6">' . Branch::where('id', $branch)->first()->getTranslation('name',$request->lang) . '</h5>
                                         </div>
                                         <div class="card-body">';
                     $content = null;
                     foreach ($attributes as $attribute) {
                         $content = $content . '<input type="hidden" name="choice_options[' . $attribute->id . ']" value="' . $attribute->id . '">
                             <div class="form-group row">
-                                <label class="col-md-3 col-form-label"  for="signinSrEmail">' . $attribute->getTranslation('name') . '</label>
+                                <label class="col-md-3 col-form-label"  for="signinSrEmail">' . $attribute->getTranslation('name',$request->lang) . '</label>
                                 <div class="col-md-8">
                                     <select class="form-control js-example-basic-multiple"  multiple name="choice_options[' . $attribute->id . '][]">';
 
@@ -306,7 +306,7 @@ class ElementController extends Controller
                             if ($request->has('id') && $element->characteristics != null && in_array($value->id, json_decode($element->characteristics, true))) {
                                 $options = $options . 'selected';
                             }
-                            $options = $options . ' value = "' . $value->id . '" > ' . $value->getTranslation('name') . ' </option >';
+                            $options = $options . ' value = "' . $value->id . '" > ' . $value->getTranslation('name',$request->lang) . ' </option >';
                         }
 
                         $content = $content . $options . '</select>
