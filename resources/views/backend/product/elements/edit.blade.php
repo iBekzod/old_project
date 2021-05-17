@@ -234,7 +234,69 @@
                             </select>
                         </div>
                     </div>
-                    <div id="variation_div"></div>
+                    <div id="variation_div">
+                        <div style="overflow-y: scroll; ">
+                            <table class="table table-bordered" >
+                                <thead>
+                                <tr>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{ translate('#') }}</label>
+                                    </td>
+                                    <td class="text-center">
+                                        <label class="col-form-label" for="signinSrEmails">{{ translate('Variation Image') }}
+                                                <small>{{ translate('(290x300)') }}</small></label>
+                                    </td>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{ translate('Name') }}</label>
+                                    </td>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{ translate('Artikul') }}</label>
+                                    </td>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{ translate('Delete') }}</label>
+                                    </td>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                            @foreach($element->combinations as $index=>$combination)
+                                <tr class="variant">
+                                    <td>
+                                        <label for="" class="control-label">{{ ($index+1) }}</label>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                                <div class="input-group" data-toggle="aizuploader" data-type="image">
+                                                    <div class="input-group-prepend">
+                                                        <div
+                                                            class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse') }}</div>
+                                                    </div>
+                                                    <div class="form-control file-amount"></div>
+                                                    <input type="hidden" name="combination[{{ $index }}][thumbnail_img]" value=""
+                                                           class="selected-files">
+                                                </div>
+                                                <div class="file-preview box sm">
+                                                </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <label for="" class="control-label">{{ $combination->name??null }}</label>
+                                        <input type="hidden" name="combination[{{ $index }}][name]" value="{{ $combination->name??null }}" class="form-control">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="combination[{{ $index }}][artikul]" value="{{ $combination->artikul??null }}" class="form-control">
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="delete_variant(this)"><i class="las la-trash"></i></button>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                            </table>
+                        </div>
+
+                    </div>
                     <input type="hidden" name="collected_variations[]" id="collected_variations" >
                 </div>
             </div>
@@ -554,7 +616,7 @@
         }
         AIZ.plugins.tagify();
         $(document).ready(function () {
-            update_attribute_combination();
+            // update_attribute_combination();
 
             $('.remove-files').on('click', function () {
                 $(this).parents(".col-md-4").remove();
