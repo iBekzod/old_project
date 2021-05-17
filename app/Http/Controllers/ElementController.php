@@ -454,21 +454,27 @@ class ElementController extends Controller
         $my_characteristics = array();
         $my_variations = array();
         $variation_attributes = array();
-        if($request->has('collected_variations'))$variation_attributes = explode(",", $request->collected_variations[0]);
+        $variation_values = array();
+        if($request->has('collected_variations'))$variation_values = explode(",", $request->collected_variations[0]);
+        if($request->has('selected_variations'))$variation_attributes = $request->selected_variations;
 
         if ($choice_options) {
             foreach ($choice_options as $attribute => $values) {
                 if (is_array($values)) {
-                    foreach ($values as $value) {
-                        array_push($my_characteristics, $value);
-                    }
-                    array_push($my_characteristics, array($attribute => $values));
+                    $my_characteristics[$attribute] =$values;
                     if(in_array($attribute, $variation_attributes)){
-                        array_push($my_variations, array($attribute => $values));
+                        $my_values=array();
+                        foreach ($values as $value) {
+                            if(in_array($value, $variation_values)){
+                                $my_values[] = $value;
+                            }
+                        }
+                        $my_variations[$attribute] = $my_values;
                     }
                 }
             }
         }
+        // dd($my_variations);
         // if ($request->has('combination')) {
         //     foreach ($request->combination as $variant) {
         //         $generated_variations[]=[
@@ -479,7 +485,7 @@ class ElementController extends Controller
         //     }
         // }
         $element->characteristics = json_encode($my_characteristics ?? array());
-        $element->variations = json_encode($variation_attributes ?? array());
+        $element->variations = json_encode($my_variations ?? array());
         $element->variation_attributes = json_encode($request->selected_variations ?? array());
         $element->variation_colors = json_encode($request->colors ?? array());
 
@@ -489,6 +495,13 @@ class ElementController extends Controller
         $element->slug = SlugService::createSlug(Element::class, 'slug', slugify($request->name));
         $element->photos = $request->photos;
         $element->thumbnail_img = $request->thumbnail_img;
+        // $tags = array();
+        // if ($request->tags != null) {
+        //     foreach (json_decode($request->tags[0], true) as $key => $tag) {
+        //         $tags[] = $tag["value"];
+        //     }
+        // }
+        // $element->tags = json_encode($tags ?? array());;
         $tags = array();
         if ($request->tags[0] != null) {
             foreach (json_decode($request->tags[0]) as $key => $tag) {
@@ -588,11 +601,14 @@ class ElementController extends Controller
         $tags = json_decode($element->tags);
         $variation_colors = json_decode($element->variation_colors);
         $variation_attributes = json_decode($element->variation_attributes);
-        $characteristics = json_decode($element->characteristics);
+        $variations = json_decode($element->variations, true);
+        $characteristics = json_decode($element->characteristics, true);
         $categories = Category::withDepth()->having('depth', '=', 2)->get();
         $brands = Brand::all();
         $colors = Color::all();
-        return view('backend.product.elements.edit', compact('element', 'colors', 'variation_colors', 'variation_attributes', 'categories', 'tags', 'lang', 'characteristics', 'brands'));
+
+        // dd( $characteristics );
+        return view('backend.product.elements.edit', compact('element', 'colors','variations', 'variation_colors', 'variation_attributes', 'categories', 'tags', 'lang', 'characteristics', 'brands'));
     }
 
     public function seller_element_edit(Request $request, $id)
