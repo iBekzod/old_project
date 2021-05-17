@@ -600,14 +600,14 @@ class ElementController extends Controller
         $lang = $request->lang;
         $tags = json_decode($element->tags);
         $variation_colors = json_decode($element->variation_colors);
-        $variation_attributes = json_decode($element->variation_attributes);
+        $variation_attributes = json_decode($element->variation_attributes, true);
         $variations = json_decode($element->variations, true);
         $characteristics = json_decode($element->characteristics, true);
         $categories = Category::withDepth()->having('depth', '=', 2)->get();
         $brands = Brand::all();
         $colors = Color::all();
 
-        // dd( $characteristics );
+        // dd( $variation_attributes );
         return view('backend.product.elements.edit', compact('element', 'colors','variations', 'variation_colors', 'variation_attributes', 'categories', 'tags', 'lang', 'characteristics', 'brands'));
     }
 
