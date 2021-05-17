@@ -51,14 +51,14 @@ class ConversationController extends Controller
              'user_id'=>'required',
             'product_id' => 'required',
             'type'=>'required',
-            'title' => 'required',
+            'message' => 'required',
 
         ]);
         $support_ticket = new Conversation;
          $support_ticket->sender_id =$request->user_id;
         $support_ticket->receiver_id = Product::findOrFail($request->product_id)->user->id;
         $support_ticket->type = $request->type;
-        $support_ticket->title = $request->title;
+        $support_ticket->message = $request->message;
 
         $support_ticket->save();
         flash(translate('Message has been send to seller'))->success();
