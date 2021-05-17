@@ -69,10 +69,6 @@ class ElementController extends Controller
     {
         try {
             if ($request->method() == 'GET') {
-//                $data=null;
-//                if ($request->has('id')) {
-//                    $element = Element::where('id', $request->id)->firstOrFail();
-//                }
 
                 $category = Category::findOrFail($request->category_id);
                 $element_attributes = $category->attributes;
@@ -191,12 +187,14 @@ class ElementController extends Controller
 //                        $selected_ids[]=$value_ids;
                     }
                 }
+                // dd($request->choice_groups);
                 if ($request->has('color_ids')){
                     $color_ids=$request->color_ids;
                     $selected_colors = Color::whereIn('id', $color_ids)->pluck('name')->toArray();
                     $variations[]=$selected_colors;
 //                    $selected_ids[]=$color_ids;
                 }
+                // dd($request->choice_groups);
                 $combinations = Combinations::makeCombinations($variations);
 
                 $content=null;

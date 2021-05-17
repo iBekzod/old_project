@@ -175,29 +175,6 @@
                                 </div>
                             @endforeach
                         @endif
-                        @php
-                            // $content = null;
-                            // foreach($selected_attributes as $attribute){
-                            //     $content = $content . '<input type="hidden" name="choice_options[' . $attribute->id . ']" value="' . $attribute->id . '">
-                            //         <div class="form-group row">
-                            //             <label class="col-md-3 col-form-label"  for="signinSrEmail">' . $attribute->getTranslation('name') . '</label>
-                            //             <div class="col-md-8">
-                            //                 <select class="form-control js-example-basic-multiple" onchange="update_attribute_combination()" id="choice_option_' . $attribute->id . '" multiple name="choice_options[' . $attribute->id . '][]">';
-
-                            //     $options = null;
-                            //     foreach ($attribute->characteristics as $value) {
-                            //         $options = $options . '<option selected  data-id="'.$value->id.'" ';
-                            //         // if ($request->has('id') && $element->characteristics != null && in_array($value->id, json_decode($element->characteristics, true))) {
-                            //         //     $options = $options . 'selected';
-                            //         // }
-                            //         $options = $options . ' value = "' . $value->id . '" > ' . $value->getTranslation('name') . ' </option >';
-                            //     }
-
-                            //     $content = $content . $options . '</select>
-                            //             </div>
-                            //         </div>';
-                            // }
-                        @endphp
                     </div>
                 </div>
             </div>
@@ -226,11 +203,11 @@
                         <div class="col-lg-8">
                             <select required class="form-control aiz-selectpicker" data-live-search="true"
                                     data-selected-text-format="count" name="selected_variations[]" id="selected_variations" multiple>
-                                    @foreach (\App\Attribute::whereIn('id', $characteristic_attributes)->get() as $attribute)
-                                        <option value="{{ $attribute->id }}"
-                                            @if(in_array($attribute->id, $variation_attributes))  selected @endif
-                                            >{{ $attribute->getTranslation('name', $lang) }}</option>
-                                    @endforeach
+                                @foreach (\App\Attribute::whereIn('id', $characteristic_attributes)->get() as $attribute)
+                                    <option value="{{ $attribute->id }}"
+                                        @if(in_array($attribute->id, $variation_attributes))  selected @endif
+                                        >{{ $attribute->getTranslation('name', $lang) }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -261,7 +238,7 @@
                                 <tbody>
 
                                 @foreach($element->combinations as $index=>$combination)
-                                    <tr class="variant" id="variant_{{ $combination->id }}" >
+                                    <tr id="variant_{{ $combination->id }}" >
                                         <td>
                                             <label for="" class="control-label">{{ ($index+1) }}</label>
                                         </td>
@@ -482,6 +459,7 @@
         });
         $('#selected_attribute_id').on('change', function () {
             update_category_attribute();
+            update_attribute_combination();
         });
         $('#colors').on('change', function () {
             update_attribute_combination()
@@ -511,6 +489,7 @@
         }
 
         function delete_variantion(em, variation_id){
+            $('#variant_'+variation_id).remove()
             $.ajax({
                 type:'GET',
                 url:'{{ route("elements.variation.remove") }}',
@@ -559,6 +538,7 @@
             });
         }
         function update_attribute_combination(){
+            // $('.variant').remove();
             attribute_ids = []
             $('#selected_variations option:selected').each(function (index, val){
                 attribute_ids.push(val.getAttribute('data-id'))
