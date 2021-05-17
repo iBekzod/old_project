@@ -627,49 +627,46 @@ class ElementController extends Controller
     {
 
         $element = Element::findOrFail($id);
-//        $element->added_by = $request->added_by;
         $element->category_id = $request->category_id;
         $element->brand_id = $request->brand_id;
         $element->barcode = $request->barcode;
         $choice_options = $request->choice_options;
 
-        $generated_variations = array();
         $my_characteristics = array();
         $my_variations = array();
         $variation_attributes = array();
-        if($request->has('collected_variations'))$variation_attributes = explode(",", $request->collected_variations[0]);
+        $variation_values = array();
+        if($request->has('collected_variations'))$variation_values = explode(",", $request->collected_variations[0]);
+        if($request->has('selected_variations'))$variation_attributes = $request->selected_variations;
 
         if ($choice_options) {
             foreach ($choice_options as $attribute => $values) {
                 if (is_array($values)) {
-                    foreach ($values as $value) {
-                        array_push($my_characteristics, $value);
-                    }
-                    array_push($my_characteristics, array($attribute => $values));
+                    $my_characteristics[$attribute] =$values;
                     if(in_array($attribute, $variation_attributes)){
-                        array_push($my_variations, array($attribute => $values));
+                        $my_values=array();
+                        foreach ($values as $value) {
+                            if(in_array($value, $variation_values)){
+                                $my_values[] = $value;
+                            }
+                        }
+                        $my_variations[$attribute] = $my_values;
                     }
                 }
             }
         }
-        // if ($request->has('combination')) {
-        //     foreach ($request->combination as $variant) {
-        //         $generated_variations[]=[
-        //             "image"=>$variant["thumbnail_img"],
-        //             "name"=>$variant["name"],
-        //             "artikul"=>$variant["name"],
-        //         ];
-        //     }
-        // }
         $element->characteristics = json_encode($my_characteristics ?? array());
-        $element->variations = json_encode($variation_attributes ?? array());
+        $element->variations = json_encode($my_variations ?? array());
         $element->variation_attributes = json_encode($request->selected_variations ?? array());
         $element->variation_colors = json_encode($request->colors ?? array());
 
         $element->name = $request->name;
         $element->unit = $request->unit;
         $element->description = $request->description;
-        $element->slug = SlugService::createSlug(Element::class, 'slug', slugify($request->name));
+        if ($request->name != null) {
+            if($element->slug!=$request->slug)
+                $element->slug = SlugService::createSlug(Element::class, 'slug', slugify($request->name));
+        }
         $element->photos = $request->photos;
         $element->thumbnail_img = $request->thumbnail_img;
         $tags = array();
@@ -705,7 +702,10 @@ class ElementController extends Controller
                     $variation->element_id=$element->id;
                     $variation->name=$variant['name'];
                     $variation->thumbnail_img = $variant['thumbnail_img'];
-                    $variation->slug = SlugService::createSlug(Element::class, 'slug', slugify($variant['name']));
+                    if ($variant['name'] != null) {
+                        if($variation->slug!=$request->slug)
+                            $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
+                    }
                     $variation->sku=$variant['artikul'];
                     $variation->num_of_sale=0;
                     $variation->qty=0;
