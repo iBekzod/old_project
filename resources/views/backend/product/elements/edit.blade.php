@@ -260,37 +260,37 @@
                                 </thead>
                                 <tbody>
 
-                            @foreach($element->combinations as $index=>$combination)
-                                <tr class="variant">
-                                    <td>
-                                        <label for="" class="control-label">{{ ($index+1) }}</label>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                                <div class="input-group" data-toggle="aizuploader" data-type="image">
-                                                    <div class="input-group-prepend">
-                                                        <div
-                                                            class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse') }}</div>
+                                @foreach($element->combinations as $index=>$combination)
+                                    <tr class="variant" id="variant_{{ $combination->id }}" >
+                                        <td>
+                                            <label for="" class="control-label">{{ ($index+1) }}</label>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                    <div class="input-group" data-toggle="aizuploader" data-type="image">
+                                                        <div class="input-group-prepend">
+                                                            <div
+                                                                class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse') }}</div>
+                                                        </div>
+                                                        <div class="form-control file-amount"></div>
+                                                        <input type="hidden" name="combination[{{ $index }}][thumbnail_img]" value="{{ $combination->thumbnail_img??null }}"
+                                                            class="selected-files">
                                                     </div>
-                                                    <div class="form-control file-amount"></div>
-                                                    <input type="hidden" name="combination[{{ $index }}][thumbnail_img]" value=""
-                                                           class="selected-files">
-                                                </div>
-                                                <div class="file-preview box sm">
-                                                </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <label for="" class="control-label">{{ $combination->name??null }}</label>
-                                        <input type="hidden" name="combination[{{ $index }}][name]" value="{{ $combination->name??null }}" class="form-control">
-                                    </td>
-                                    <td>
-                                        <input type="text" name="combination[{{ $index }}][artikul]" value="{{ $combination->artikul??null }}" class="form-control">
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="delete_variant(this)"><i class="las la-trash"></i></button>
-                                    </td>
-                                </tr>
+                                                    <div class="file-preview box sm">
+                                                    </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <label for="" class="control-label">{{ $combination->name??null }}</label>
+                                            <input type="hidden" name="combination[{{ $index }}][name]" value="{{ $combination->name??null }}" class="form-control">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="combination[{{ $index }}][artikul]" value="{{ $combination->artikul??null }}" class="form-control">
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="delete_variantion(this, '{{ $combination->id }}')"><i class="las la-trash"></i></button>
+                                        </td>
+                                    </tr>
                                 @endforeach
                             </tbody>
                             </table>
@@ -492,28 +492,6 @@
         $('#selected_variations').on('change', function () {
             update_attribute_combination()
         });
-        {{--function update_color(){--}}
-        {{--    color_ids = []--}}
-        {{--    $('#colors option:selected').each(function (index, val){--}}
-        {{--        color_ids.push(val.getAttribute('data-id'))--}}
-        {{--    })--}}
-        {{--    // alert(color_ids);--}}
-        {{--    $.ajax({--}}
-        {{--        type:'GET',--}}
-        {{--        url:'{{ route('elements.make_color_options') }}',--}}
-        {{--        data:{--}}
-        {{--            colors: color_ids--}}
-        {{--        },--}}
-        {{--        success:function(data){--}}
-        {{--            // alert("Selected attribute id: "+data.message);--}}
-        {{--            $('#selected_colors').html(" ")--}}
-        {{--            if(data.success){--}}
-        {{--                $('#selected_colors').append(data.data)--}}
-        {{--            }--}}
-        {{--            update_attribute_combination();--}}
-        {{--        }--}}
-        {{--    });--}}
-        {{--}--}}
         function update_attribute(){
             $.ajax({
                 type:'GET',
@@ -528,6 +506,21 @@
                         $('#selected_attribute_id').html(data.data)
                     }
                     update_category_attribute();
+                }
+            });
+        }
+
+        function delete_variantion(em, variation_id){
+            $.ajax({
+                type:'GET',
+                url:'{{ route("elements.variation.remove") }}',
+                data:{
+                    id: variation_id
+                },
+                success:function(data){
+                    if(data.success){
+                        delete_variant(em);
+                    }
                 }
             });
         }

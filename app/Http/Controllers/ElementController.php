@@ -322,7 +322,13 @@ class ElementController extends Controller
         return response()->json(['success' => false, 'message' => 'server']);
     }
 
-
+    public function remove_variation(Request $request){
+        if($variation=Variation::findOrFail($request->id)){
+            $variation->delete();
+            return response()->json(['success' => true, 'message' => 'server']);
+        }
+        return response()->json(['success' => false, 'message' => 'server']);
+    }
     /**
      * Display a listing of the resource.
      *
