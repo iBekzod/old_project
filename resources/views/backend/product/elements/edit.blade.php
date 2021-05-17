@@ -59,7 +59,7 @@
                         <div class="col-lg-8">
                             <input type="text" class="form-control" name="name"
                                    placeholder="{{translate('Element Name')}}"
-                                   value="" required onchange="update_sku()">
+                                   value="{{ $element->name }}" required onchange="update_sku()">
                         </div>
                     </div>
 
@@ -554,7 +554,7 @@
         }
         AIZ.plugins.tagify();
         $(document).ready(function () {
-            // update_attribute_combination();
+            update_attribute_combination();
 
             $('.remove-files').on('click', function () {
                 $(this).parents(".col-md-4").remove();
