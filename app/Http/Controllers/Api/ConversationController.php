@@ -49,14 +49,10 @@ class ConversationController extends Controller
     {
         $request->validate([
              'user_id'=>'required',
-                // 'type'=>'required',
+                 'type'=>'required',
             'product_id' => 'required',
             'msg' => 'required',
-
          ]);
-        //  $user_type = Product::findOrFail($request->product_id)->user->user_type;
-
-
           $support_ticket = new Conversation;
           $support_ticket->sender_id =$request->user_id;
           $support_ticket->receiver_id = $request->product_id;
