@@ -49,22 +49,24 @@ class ConversationController extends Controller
     {
         $request->validate([
              'user_id'=>'required',
+                'type'=>'required',
             'product_id' => 'required',
-            'type'=>'required',
-            'message' => 'required',
+            'msg' => 'required',
 
-        ]);
-        $support_ticket = new Conversation;
-         $support_ticket->sender_id =$request->user_id;
-        $support_ticket->receiver_id = Product::findOrFail($request->product_id)->user->id;
-        $support_ticket->type = $request->type;
-        $support_ticket->message = $request->message;
+         ]);
+        //   $support_ticket = new Conversation;
+        //   $support_ticket->sender_id =$request->user_id;
+        //   $support_ticket->receiver_id = Product::findOrFail($request->product_id)->user->id;
+        //   $support_ticket->type = $request->type;
+        //   $support_ticket->title = $request->title;
 
-        $support_ticket->save();
-        flash(translate('Message has been send to seller'))->success();
+            //  $support_ticket->save();
+       //  flash(translate('Message has been send to seller'))->success();
+
         return response()->json([
-            'message' => translate('Message has been send to seller')
+             'message' => translate('Message has been send to seller')
         ]);
+
     }
     public function store(Request $request)
     {
