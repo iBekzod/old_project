@@ -69,10 +69,6 @@ class ElementController extends Controller
     {
         try {
             if ($request->method() == 'GET') {
-//                $data=null;
-//                if ($request->has('id')) {
-//                    $element = Element::where('id', $request->id)->firstOrFail();
-//                }
 
                 $category = Category::findOrFail($request->category_id);
                 $element_attributes = $category->attributes;
@@ -83,7 +79,7 @@ class ElementController extends Controller
                         // if ($request->has('id') && $element->characteristics != null && in_array($value->id, json_decode($element->characteristics, true))) {
                         //     $options = $options . 'selected';
                         // }
-                        $options = $options . ' value = "' . $attribute->id . '" > ' . $attribute->getTranslation('name') . ' </option >';
+                        $options = $options . ' value = "' . $attribute->id . '" > ' . $attribute->getTranslation('name', $request->lang) . ' </option >';
                 }
                 $data = $options;
                 return response()->json(['success' => true, 'message' => 'done', 'data' => $data]);
@@ -105,7 +101,7 @@ class ElementController extends Controller
                     foreach($selected_attributes as $attribute){
                         $content = $content . '<input type="hidden" name="choice_options[' . $attribute->id . ']" value="' . $attribute->id . '">
                             <div class="form-group row">
-                                <label class="col-md-3 col-form-label"  for="signinSrEmail">' . $attribute->getTranslation('name') . '</label>
+                                <label class="col-md-3 col-form-label"  for="signinSrEmail">' . $attribute->getTranslation('name', $request->lang) . '</label>
                                 <div class="col-md-8">
                                     <select class="form-control js-example-basic-multiple" onchange="update_attribute_combination()" id="choice_option_' . $attribute->id . '" multiple name="choice_options[' . $attribute->id . '][]">';
 
@@ -115,7 +111,7 @@ class ElementController extends Controller
                             // if ($request->has('id') && $element->characteristics != null && in_array($value->id, json_decode($element->characteristics, true))) {
                             //     $options = $options . 'selected';
                             // }
-                            $options = $options . ' value = "' . $value->id . '" > ' . $value->getTranslation('name') . ' </option >';
+                            $options = $options . ' value = "' . $value->id . '" > ' . $value->getTranslation('name',$request->lang) . ' </option >';
                         }
 
                         $content = $content . $options . '</select>
@@ -163,7 +159,7 @@ class ElementController extends Controller
                     $selected_attributes= Attribute::whereIn('id', $selected_attribute_ids)->where('combination','=', 1)->get();
                     $options = null;
                     foreach($selected_attributes as $attribute){
-                        $options = $options .'<option selected value="'.$attribute->id.'" data-id="'.$attribute->id.'" >'.$attribute->getTranslation('name').'</option>';
+                        $options = $options .'<option selected value="'.$attribute->id.'" data-id="'.$attribute->id.'" >'.$attribute->getTranslation('name',$request->lang).'</option>';
                     }
                     $data=$options;
                 }
@@ -174,30 +170,23 @@ class ElementController extends Controller
         }
         return response()->json(['success' => false, 'message' => 'server']);
     }
+
     public function make_all_combination(Request $request)
     {
-//        try {
+       try {
             if ($request->method() == 'GET'){
                 $data=null;
                 $variations=[];
-                $selected_ids=[];
-//                if ($request->has('selected_attribute_ids')){
-//                    $selected_attribute_ids=$request->selected_attribute_ids;
-//                    $selected_attributes = Attribute::whereIn('id', $selected_attribute_ids)->pluck('name')->toArray();
-//                    $variations[]=$selected_attributes;
-//                }
                 if ($request->has('choice_groups')){
                     foreach ($request->choice_groups as $value_ids){
                         $selected_attributes = Characteristic::whereIn('id', $value_ids)->pluck('name')->toArray();
                         $variations[]=$selected_attributes;
-//                        $selected_ids[]=$value_ids;
                     }
                 }
                 if ($request->has('color_ids')){
                     $color_ids=$request->color_ids;
                     $selected_colors = Color::whereIn('id', $color_ids)->pluck('name')->toArray();
                     $variations[]=$selected_colors;
-//                    $selected_ids[]=$color_ids;
                 }
                 $combinations = Combinations::makeCombinations($variations);
 
@@ -268,63 +257,69 @@ class ElementController extends Controller
                 $data=$content;
                 return response()->json(['success' => true, 'message' => $combinations, 'data' => $data]);
             }
-//        } catch (\Exception $exception) {
-//            return response()->json(['success' => false, 'message' => $exception->getMessage()]);
-//        }
+       } catch (\Exception $exception) {
+           return response()->json(['success' => false, 'message' => $exception->getMessage()]);
+       }
         return response()->json(['success' => false, 'message' => 'server']);
     }
 
 
-    public function make_choice_options(Request $request)
-    {
-        try {
-            if ($request->method() == 'GET') {
-                if ($request->has('id')) {
-                    $element = Element::where('id', $request->id)->firstOrFail();
-                }
+    // public function make_choice_options(Request $request)
+    // {
+    //     try {
+    //         if ($request->method() == 'GET') {
+    //             if ($request->has('id')) {
+    //                 $element = Element::where('id', $request->id)->firstOrFail();
+    //             }
 
-                $category = Category::findOrFail($request->category_id);
-                $element_attributes = $category->attributes->groupBy('branch_id');
-                $data = null;
-                foreach ($element_attributes as $branch => $attributes) {
-                    $data = $data . '<div class="card">
-                                        <div class="card-header">
-                                            <h5 class="mb-0 h6">' . Branch::where('id', $branch)->first()->getTranslation('name') . '</h5>
-                                        </div>
-                                        <div class="card-body">';
-                    $content = null;
-                    foreach ($attributes as $attribute) {
-                        $content = $content . '<input type="hidden" name="choice_options[' . $attribute->id . ']" value="' . $attribute->id . '">
-                            <div class="form-group row">
-                                <label class="col-md-3 col-form-label"  for="signinSrEmail">' . $attribute->getTranslation('name') . '</label>
-                                <div class="col-md-8">
-                                    <select class="form-control js-example-basic-multiple"  multiple name="choice_options[' . $attribute->id . '][]">';
+    //             $category = Category::findOrFail($request->category_id);
+    //             $element_attributes = $category->attributes->groupBy('branch_id');
+    //             $data = null;
+    //             foreach ($element_attributes as $branch => $attributes) {
+    //                 $data = $data . '<div class="card">
+    //                                     <div class="card-header">
+    //                                         <h5 class="mb-0 h6">' . Branch::where('id', $branch)->first()->getTranslation('name',$request->lang) . '</h5>
+    //                                     </div>
+    //                                     <div class="card-body">';
+    //                 $content = null;
+    //                 foreach ($attributes as $attribute) {
+    //                     $content = $content . '<input type="hidden" name="choice_options[' . $attribute->id . ']" value="' . $attribute->id . '">
+    //                         <div class="form-group row">
+    //                             <label class="col-md-3 col-form-label"  for="signinSrEmail">' . $attribute->getTranslation('name',$request->lang) . '</label>
+    //                             <div class="col-md-8">
+    //                                 <select class="form-control js-example-basic-multiple"  multiple name="choice_options[' . $attribute->id . '][]">';
 
-                        $options = null;
-                        foreach ($attribute->characteristics as $value) {
-                            $options = $options . '<option';
-                            if ($request->has('id') && $element->characteristics != null && in_array($value->id, json_decode($element->characteristics, true))) {
-                                $options = $options . 'selected';
-                            }
-                            $options = $options . ' value = "' . $value->id . '" > ' . $value->getTranslation('name') . ' </option >';
-                        }
+    //                     $options = null;
+    //                     foreach ($attribute->characteristics as $value) {
+    //                         $options = $options . '<option';
+    //                         if ($request->has('id') && $element->characteristics != null && in_array($value->id, json_decode($element->characteristics, true))) {
+    //                             $options = $options . 'selected';
+    //                         }
+    //                         $options = $options . ' value = "' . $value->id . '" > ' . $value->getTranslation('name',$request->lang) . ' </option >';
+    //                     }
 
-                        $content = $content . $options . '</select>
-                                </div>
-                            </div>';
-                    }
-                    $data = $data . $content . '</div>
-                                </div>';
-                }
-                return response()->json(['success' => true, 'message' => 'get', 'data' => $data]);
-            }
-        } catch (\Exception $exception) {
-            return response()->json(['success' => false, 'message' => $exception->getMessage()]);
+    //                     $content = $content . $options . '</select>
+    //                             </div>
+    //                         </div>';
+    //                 }
+    //                 $data = $data . $content . '</div>
+    //                             </div>';
+    //             }
+    //             return response()->json(['success' => true, 'message' => 'get', 'data' => $data]);
+    //         }
+    //     } catch (\Exception $exception) {
+    //         return response()->json(['success' => false, 'message' => $exception->getMessage()]);
+    //     }
+    //     return response()->json(['success' => false, 'message' => 'server']);
+    // }
+
+    public function remove_variation(Request $request){
+        if($variation=Variation::findOrFail($request->id)){
+            $variation->delete();
+            return response()->json(['success' => true, 'message' => 'server']);
         }
         return response()->json(['success' => false, 'message' => 'server']);
     }
-
-
     /**
      * Display a listing of the resource.
      *
@@ -531,7 +526,7 @@ class ElementController extends Controller
         if($element->save()){
             if ($request->has('combination')) {
                 foreach ($request->combination as $variant) {
-                    if(Variation::where('name', $variant['name'])->where('element_id', $element->id)->first())
+                    if(Variation::where('name', $variant['name'])->where('element_id', $element->id)->where('user_id', Auth::user()->id)->first())
                     {
                         continue;
                     }
@@ -600,14 +595,14 @@ class ElementController extends Controller
         $lang = $request->lang;
         $tags = json_decode($element->tags);
         $variation_colors = json_decode($element->variation_colors);
-        $variation_attributes = json_decode($element->variation_attributes);
+        $variation_attributes = json_decode($element->variation_attributes, true);
         $variations = json_decode($element->variations, true);
         $characteristics = json_decode($element->characteristics, true);
         $categories = Category::withDepth()->having('depth', '=', 2)->get();
         $brands = Brand::all();
         $colors = Color::all();
 
-        // dd( $characteristics );
+        // dd( $element->combinations );
         return view('backend.product.elements.edit', compact('element', 'colors','variations', 'variation_colors', 'variation_attributes', 'categories', 'tags', 'lang', 'characteristics', 'brands'));
     }
 
@@ -627,49 +622,46 @@ class ElementController extends Controller
     {
 
         $element = Element::findOrFail($id);
-//        $element->added_by = $request->added_by;
         $element->category_id = $request->category_id;
         $element->brand_id = $request->brand_id;
         $element->barcode = $request->barcode;
         $choice_options = $request->choice_options;
 
-        $generated_variations = array();
         $my_characteristics = array();
         $my_variations = array();
         $variation_attributes = array();
-        if($request->has('collected_variations'))$variation_attributes = explode(",", $request->collected_variations[0]);
+        $variation_values = array();
+        if($request->has('collected_variations'))$variation_values = explode(",", $request->collected_variations[0]);
+        if($request->has('selected_variations'))$variation_attributes = $request->selected_variations;
 
         if ($choice_options) {
             foreach ($choice_options as $attribute => $values) {
                 if (is_array($values)) {
-                    foreach ($values as $value) {
-                        array_push($my_characteristics, $value);
-                    }
-                    array_push($my_characteristics, array($attribute => $values));
+                    $my_characteristics[$attribute] =$values;
                     if(in_array($attribute, $variation_attributes)){
-                        array_push($my_variations, array($attribute => $values));
+                        $my_values=array();
+                        foreach ($values as $value) {
+                            if(in_array($value, $variation_values)){
+                                $my_values[] = $value;
+                            }
+                        }
+                        $my_variations[$attribute] = $my_values;
                     }
                 }
             }
         }
-        // if ($request->has('combination')) {
-        //     foreach ($request->combination as $variant) {
-        //         $generated_variations[]=[
-        //             "image"=>$variant["thumbnail_img"],
-        //             "name"=>$variant["name"],
-        //             "artikul"=>$variant["name"],
-        //         ];
-        //     }
-        // }
         $element->characteristics = json_encode($my_characteristics ?? array());
-        $element->variations = json_encode($variation_attributes ?? array());
+        $element->variations = json_encode($my_variations ?? array());
         $element->variation_attributes = json_encode($request->selected_variations ?? array());
         $element->variation_colors = json_encode($request->colors ?? array());
 
         $element->name = $request->name;
         $element->unit = $request->unit;
         $element->description = $request->description;
-        $element->slug = SlugService::createSlug(Element::class, 'slug', slugify($request->name));
+        if ($request->name != null) {
+            if($element->slug!=$request->slug)
+                $element->slug = SlugService::createSlug(Element::class, 'slug', slugify($request->name));
+        }
         $element->photos = $request->photos;
         $element->thumbnail_img = $request->thumbnail_img;
         $tags = array();
@@ -700,18 +692,49 @@ class ElementController extends Controller
         $element->pdf = $request->pdf;
         if($element->save()){
             if ($request->has('combination')) {
-                foreach ($request->combination as $variant) {
-                    $variation= Variation::where('name', $variant['name'])->where('element_id', $element->id)->first();
-                    $variation->element_id=$element->id;
-                    $variation->name=$variant['name'];
-                    $variation->thumbnail_img = $variant['thumbnail_img'];
-                    $variation->slug = SlugService::createSlug(Element::class, 'slug', slugify($variant['name']));
-                    $variation->sku=$variant['artikul'];
-                    $variation->num_of_sale=0;
-                    $variation->qty=0;
-                    $variation->rating=0;
-                    $variation->user_id=Auth::user()->id;
-                    $variation->save();
+                if($request->is_new_combination){
+                    Variation::where('element_id', $element->id)->where('user_id', Auth::user()->id)->delete();
+                    foreach ($request->combination as $variant) {
+                        $variation= new Variation;
+                        $variation->element_id=$element->id;
+                        $variation->name=$variant['name'];
+                        $variation->thumbnail_img = $variant['thumbnail_img'];
+                        $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
+                        $variation->sku=$variant['artikul'];
+                        $variation->num_of_sale=0;
+                        $variation->qty=0;
+                        $variation->rating=0;
+                        $variation->user_id=Auth::user()->id;
+                        $variation->save();
+                    }
+                }else{
+                    $variations= Variation::where('element_id', $element->id)->where('user_id', Auth::user()->id);
+                    foreach ($request->combination as $variant) {
+                        if($variation=$variations->where('name', $variant['name'])->firstOrFail()){
+                            $variation->name=$variant['name'];
+                            $variation->thumbnail_img = $variant['thumbnail_img'];
+                            if ($variant['name'] != null) {
+                                if($variation->slug!=$variant['name'])
+                                    $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
+                            }
+                            $variation->sku=$variant['artikul'];
+                            $variation->user_id=Auth::user()->id;
+                            $variation->save();
+                        }else{
+                            $variation= new Variation;
+                            $variation->element_id=$element->id;
+                            $variation->name=$variant['name'];
+                            $variation->thumbnail_img = $variant['thumbnail_img'];
+                            $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
+                            $variation->sku=$variant['artikul'];
+                            $variation->num_of_sale=0;
+                            $variation->qty=0;
+                            $variation->rating=0;
+                            $variation->user_id=Auth::user()->id;
+                            $variation->save();
+                        }
+
+                    }
                 }
             }
             foreach (Language::all() as $language){

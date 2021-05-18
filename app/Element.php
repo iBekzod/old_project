@@ -94,7 +94,7 @@ class Element extends Model
         return api_asset($this->thumbnail_img);
     }
 
-    public function variations()
+    public function combinations()
     {
         return $this->hasMany(Variation::class, 'element_id', 'id');
     }
