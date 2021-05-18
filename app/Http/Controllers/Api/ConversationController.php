@@ -74,15 +74,6 @@ class ConversationController extends Controller
            ]);
           }
 
-        //  TODO::bazaga jonatish qoldi
-
-        //   if($support_ticket->save()) {
-        //     $message = new Message;
-        //     $message->conversation_id = $support_ticket->id;
-        //     $message->user_id = $request->id;
-        //     $message->message = $request->message;
-        //   }
-        //     $message->save();
 
     }
     public function store(Request $request)
