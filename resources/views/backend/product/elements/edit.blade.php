@@ -37,6 +37,7 @@
             <input name="_method" type="hidden" value="POST">
             <input type="hidden" name="id" value="{{ $element->id }}">
             <input type="hidden" name="lang" value="{{ $lang }}">
+            <input type="hidden" name="is_new_combination" id="is_new_combination" value="{{ true }}">
             @csrf
             <div class="card">
                 <ul class="nav nav-tabs nav-fill border-light">
@@ -260,6 +261,7 @@
                                         <td>
                                             <label for="" class="control-label">{{ $combination->name??null }}</label>
                                             <input type="hidden" name="combination[{{ $index }}][name]" value="{{ $combination->name??null }}" class="form-control">
+                                            <input type="hidden" name="combination[{{ $index }}][id]" value="{{ $combination->id??null }}" class="form-control">
                                         </td>
                                         <td>
                                             <input type="text" name="combination[{{ $index }}][artikul]" value="{{ $combination->sku??null }}" class="form-control">
@@ -504,6 +506,7 @@
             });
         }
         function update_category_attribute(){
+            $('#is_new_combination').val(false);
             $.ajax({
                 type:'GET',
                 url:'{{ route('elements.make_selected_attribute_options') }}',
