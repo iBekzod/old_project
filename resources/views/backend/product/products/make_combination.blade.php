@@ -1,44 +1,144 @@
-@if(count($combinations[0]) > 0)
-	<table class="table table-bordered">
-		<thead>
-			<tr>
-				<td class="text-center">
-					<label for="" class="control-label">{{translate('Slug')}}</label>
-				</td>
-				<td class="text-center">
-					<label for="" class="control-label">{{translate('Price')}}</label>
-				</td>
-				<td class="text-center">
-					<label for="" class="control-label">{{translate('Quantity')}}</label>
-				</td>
+@if(count($combinations) > 0)
+    <input type="hidden" value="{{$lang}}" name="lang" class="form-control">
+    <input type="hidden"  name="element_id" value="{{$element->id}}" class="form-control">
+    <div style="overflow-y: scroll; ">
+        <table class="table table-bordered" style="width:1800px">
+            <thead>
+            <tr>
                 <td class="text-center">
-                    <label for="" class="control-label">{{translate('Discount')}}</label>
+                    <label for="" class="control-label">{{ translate('Slug') }}</label>
                 </td>
-				<td></td>
-			</tr>
-		</thead>
-		<tbody>
+                <td class="text-center">
+                    <label for="" class="control-label">{{ translate('Price') }}</label>
+                    <input type="number" onkeyup="change_input(this.value, 'price_change')" name="price" value="0" min="0" step="0.01" class="form-control" >
+                </td>
+                <td class="text-center">
+                    <label for="" class="control-label">{{ translate('Currency') }}</label>
+    {{--                <select class="form-control aiz-selectpicker"  name="currency" onchange="change_selection(this.value, 'currency_change')" >--}}
+    {{--                    <option value="no">{{translate('Selected value')}}</option>--}}
+    {{--                    @foreach($currencies as $currency)--}}
+    {{--                        <option  value="{{$currency->code}}">{{$currency->code}}</option>--}}
+    {{--                    @endforeach--}}
+    {{--                </select>--}}
+                </td>
+                <td class="text-center">
+                    <label for="" class="control-label">{{ translate('Quantity') }}</label>
+                    <input type="number" onkeyup="change_input(this.value, 'quantity_change')" name="quantity" value="0" min="0" step="1" class="form-control" >
+                </td>
+                <td class="text-center">
+                    <label for="" class="control-label">{{ translate('Discount') }}</label>
+                    <input type="number" onkeyup="change_input(this.value, 'discount_change')" name="discount" value="0" min="0" step="0.01" class="form-control" >
+                </td>
+                <td class="text-center">
+                    <label for="" class="control-label">{{ translate('Discount Type') }}</label>
+    {{--                <select class="form-control aiz-selectpicker" name="discount_type">--}}
+    {{--                    <option value="no">{{translate('Selected value')}}</option>--}}
+    {{--                    <option value="amount">{{translate('Flat')}}</option>--}}
+    {{--                    <option value="percent">{{translate('Percent')}}</option>--}}
+    {{--                </select>--}}
+                </td>
+                <td class="text-center">
+                    <label for="" class="control-label">{{ translate('Delivery Type') }}</label>
+    {{--                <select class="form-control aiz-selectpicker" name="delivery_type">--}}
+    {{--                    <option value="no">{{translate('Selected value')}}</option>--}}
+    {{--                </select>--}}
+                </td>
 
-
-@foreach ($combinations as $index=>$combination)
-			<tr class="variant">
-                <td>
-                    <input type="text" name="sku_{{ $index }}" disabled value="{{implode ("-", $combination)}}" class="form-control">
+                <td class="text-center">
+                    <label for="" class="control-label">{{ translate('Tax') }}</label>
+                    <input type="number" name="tax" onkeyup="change_input(this.value, 'tax_change')" value="0" min="0" step="0.01" class="form-control" >
                 </td>
-				<td>
-					<input type="number" lang="en" name="price_{{ $index }}" value="0" min="0" step="0.01" class="form-control" required>
-				</td>
-				<td>
-					<input type="number" lang="en" name="qty_{{ $index }}" value="10" min="0" step="1" class="form-control" required>
-				</td>
-                <td>
-                    <input type="number" lang="en" name="discount_{{ $index }}" value="0" min="0" step="1" class="form-control" required>
+                <td class="text-center">
+                    <label for="" class="control-label">{{ translate('Tax type') }}</label>
+    {{--                <select class="form-control aiz-selectpicker" name="tax_type">--}}
+    {{--                    <option value="no">{{translate('Selected value')}}</option>--}}
+    {{--                    <option value="amount">{{translate('Flat')}}</option>--}}
+    {{--                    <option value="percent">{{translate('Percent')}}</option>--}}
+    {{--                </select>--}}
                 </td>
-				<td>
-					<button type="button" class="btn btn-icon btn-sm btn-danger" onclick="delete_variant(this)"><i class="las la-trash"></i></button>
-				</td>
-			</tr>
-@endforeach
-	</tbody>
-</table>
+                <td class="text-center">
+                    <label for="" class="control-label">{{ translate('Todays deals') }}</label>
+                    <label class="aiz-switch aiz-switch-success mb-0">
+                        <input type="checkbox" onchange="change_switch(this.checked, 'todays_deal_change')" name="todays_deal" checked>
+                        <span></span>
+                    </label>
+                </td>
+                <td class="text-center">
+                    <label for="" class="control-label">{{ translate('Published') }}</label>
+                    <label class="aiz-switch aiz-switch-success mb-0">
+                        <input type="checkbox" onchange="change_switch(this.checked, 'published_change')" name="published" checked>
+                        <span></span>
+                    </label>
+                </td>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach ($combinations as $index=>$combination)
+            <tr class="variant">
+                <td>
+                    <label for="" class="control-label">{{$combination->name}}</label>
+                    <input type="hidden" name="variation[{{ $index }}][id]" value="{{$combination->id}}" class="form-control">
+                    <input type="hidden" name="variation[{{ $index }}][name]" value="{{$combination->name}}" class="form-control">
+                </td>
+                <td>
+                    <input type="number"  name="variation[{{ $index }}][price]" value="0" min="0" step="0.01" class="form-control price_change" required>
+                </td>
+                <td>
+                    <select required class="form-control aiz-selectpicker " name="variation[{{ $index }}][currency]">
+                        @foreach($currencies as $currency)
+                            @if($currency->code=='UZB')
+                                <option class="currency_change" value="{{$currency->id}}" selected>{{$currency->code}}</option>
+                            @else
+                                <option class="currency_change" value="{{$currency->id}}">{{$currency->code}}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                </td>
+                <td>
+                    <input required type="number" name="variation[{{ $index }}][quantity]" value="0" min="0" step="0.01" class="form-control quantity_change" required>
+                </td>
+                <td>
+                    <input required type="number" name="variation[{{ $index }}][discount]" value="0" min="0" step="0.01" class="form-control discount_change" required>
+                </td>
+                <td>
+                    <select class="form-control aiz-selectpicker discount_type_change" name="variation[{{ $index }}][discount_type]">
+                        <option value="amount">{{translate('Flat')}}</option>
+                        <option value="percent" selected>{{translate('Percent')}}</option>
+                    </select>
+                </td>
+                <td>
+                    <select class="form-control aiz-selectpicker delivery_type_change" name="variation[{{ $index }}][delivery_type]">
+                        <option value="amount">{{translate('Tinfis')}}</option>
+                        <option value="percent" selected>{{translate('Free')}}</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="number" name="variation[{{ $index }}][tax]" value="0" min="0" step="0.01" class="form-control tax_change" required>
+                </td>
+                <td>
+                    <select class="form-control aiz-selectpicker tax_type_change" name="variation[{{ $index }}][tax_type]">
+                        <option value="amount">{{translate('Flat')}}</option>
+                        <option value="percent" selected>{{translate('Percent')}}</option>
+                    </select>
+                </td>
+                <td>
+                    <label class="aiz-switch aiz-switch-success mb-0">
+                        <input type="checkbox" name="variation[{{ $index }}][todays_deal]" class="todays_deal_change" checked>
+                        <span></span>
+                    </label>
+                </td>
+                <td>
+                    <label class="aiz-switch aiz-switch-success mb-0 ">
+                        <input type="checkbox" name="variation[{{ $index }}][published]" class="published_change" checked>
+                        <span></span>
+                    </label>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="delete_variant(this)"><i class="las la-trash"></i></button>
+                </td>
+            </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
 @endif
