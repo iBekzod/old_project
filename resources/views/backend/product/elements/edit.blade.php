@@ -204,7 +204,7 @@
                             <select required class="form-control aiz-selectpicker" data-live-search="true"
                                     data-selected-text-format="count" name="selected_variations[]" id="selected_variations" multiple>
                                 @foreach (\App\Attribute::whereIn('id', $characteristic_attributes)->get() as $attribute)
-                                    <option value="{{ $attribute->id }}"
+                                    <option value="{{ $attribute->id }}" data-id="{{ $attribute->id }}"
                                         @if(in_array($attribute->id, $variation_attributes))  selected @endif
                                         >{{ $attribute->getTranslation('name', $lang) }}</option>
                                 @endforeach
@@ -262,7 +262,7 @@
                                             <input type="hidden" name="combination[{{ $index }}][name]" value="{{ $combination->name??null }}" class="form-control">
                                         </td>
                                         <td>
-                                            <input type="text" name="combination[{{ $index }}][artikul]" value="{{ $combination->artikul??null }}" class="form-control">
+                                            <input type="text" name="combination[{{ $index }}][artikul]" value="{{ $combination->sku??null }}" class="form-control">
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="delete_variantion(this, '{{ $combination->id }}')"><i class="las la-trash"></i></button>
@@ -539,6 +539,7 @@
         }
         function update_attribute_combination(){
             // $('.variant').remove();
+            // alert("Combination changed")
             attribute_ids = []
             $('#selected_variations option:selected').each(function (index, val){
                 attribute_ids.push(val.getAttribute('data-id'))
@@ -548,12 +549,13 @@
                 choice_options = [];
                 $('#choice_option_'+attribute_ids[index]+' option:selected').each(function (index, val){
                     choice_options.push(val.getAttribute('data-id'))
+                    console.log(val.getAttribute('data-id'));
                 })
                 // if(choice_options.length > 0){
                     choice_groups[index]=choice_options
                 // }
             });
-            // console.log(choice_groups);
+
 
             color_ids = []
             $('#colors option:selected').each(function (index, val){
