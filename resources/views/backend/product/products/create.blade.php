@@ -85,5 +85,10 @@
         $('#element_id').on('change', function () {
             update_variation();
         });
+
+        $( document ).ready(function () {
+            update_variation();
+        });
+
     </script>
 @endsection
