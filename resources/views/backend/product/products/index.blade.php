@@ -105,15 +105,17 @@
                         <tr>
                             <td>{{ ($key+1) + ($variations->currentPage() - 1)*$variations->perPage() }}</td>
                             <td>
-                                <div class="form-group row">
-                                    <div class="col-lg-4">
-                                        <img src="{{ ($variation->element)?uploaded_asset($variation->element->thumbnail_img)??static_asset('assets/img/placeholder.jpg'):null}}" alt="Image"
-                                                class="w-50px">
+                                <a href="{{ url('single_product/'.$variation->slug) }}" target="_blank">
+                                    <div class="form-group row">
+                                        <div class="col-lg-4">
+                                            <img src="{{ ($variation->element)?uploaded_asset($variation->element->thumbnail_img)??static_asset('assets/img/placeholder.jpg'):null}}" alt="Image"
+                                                    class="w-50px">
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <span class="text-muted">{{  $variation->getTranslation('name')??null}}</span>
+                                        </div>
                                     </div>
-                                    <div class="col-lg-8">
-                                        <span class="text-muted">{{  $variation->getTranslation('name')??null}}</span>
-                                    </div>
-                                </div>
+                                </a>
                             </td>
                             @if($type == 'Seller' || $type == 'All')
                                 <td>{{ ($variation->product)?$variation->product->user->name??null:null }}</td>

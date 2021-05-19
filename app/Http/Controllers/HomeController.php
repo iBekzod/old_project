@@ -40,15 +40,15 @@ class HomeController extends Controller
     public function login()
     {
         if(Auth::check()){
-            return redirect()->route('home');
+            return redirect()->route('admin');
         }
-        return view('frontend.user_login');
+        return $this->admin_dashboard();
     }
 
     public function registration(Request $request)
     {
         if(Auth::check()){
-            return redirect()->route('home');
+            return redirect()->route('admin');
         }
         if($request->has('referral_code')){
             Cookie::queue('referral_code', $request->referral_code, 43200);
@@ -105,11 +105,14 @@ class HomeController extends Controller
         if(Auth::user()->user_type == 'seller'){
             return view('frontend.user.seller.dashboard');
         }
+        else if(Auth::user()->user_type == 'seller'){
+            return $this->admin_dashboard();
+        }
         // elseif(Auth::user()->user_type == 'customer'){
         //     return view('frontend.user.customer.dashboard');
         // }
         else {
-            return $this->home();
+            return $this->admin_dashboard();
             // abort(404);
         }
     }
@@ -209,7 +212,11 @@ class HomeController extends Controller
     }
 
     public function home(){
-        return redirect('https://marketproo.vercel.app/');
+        return redirect(default_website());
+    }
+
+    public function single_product($slug){
+        return redirect(default_website().'product/'.$slug);
     }
 
     public function flash_deal_details($slug)
@@ -970,7 +977,7 @@ class HomeController extends Controller
                 {
                     return redirect()->route('admin.dashboard');
                 }
-                return redirect()->route('home');
+                return redirect()->route('login');
             }
             else {
                 flash("Password and confirm password didn't match")->warning();

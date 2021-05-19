@@ -192,6 +192,13 @@ if (!function_exists('default_language')) {
     }
 }
 
+if (!function_exists('default_website')) {
+    function default_website()
+    {
+        return "http://tinfis.vercel.app/";
+    }
+}
+
 /**
  * Save JSON File
  * @return Response
