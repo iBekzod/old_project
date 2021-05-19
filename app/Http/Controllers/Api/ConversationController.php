@@ -47,11 +47,14 @@ class ConversationController extends Controller
     }
     public function postConversations(Request $request)
     {
+
+        // dd($request->all());
+
         $request->validate([
-             'user_id'=>'required',
-                 'type'=>'required',
+            'user_id'=>'required',
+            'type'=>'required',
             'product_id' => 'required',
-            'msg' => 'required',
+            'msg' => 'required'
          ]);
           $support_ticket = new Conversation;
           $support_ticket->sender_id =$request->user_id;
