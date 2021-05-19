@@ -58,4 +58,11 @@ class Variation extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    public function delete()
+    {
+        $this->products()->delete();
+        $this->variation_translations()->delete();
+        return parent::delete();
+    }
 }

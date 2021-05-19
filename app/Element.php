@@ -75,11 +75,6 @@ class Element extends Model
         return $this->belongsTo(Category::class);
     }
 
-//    public function parentHierarchy()
-//    {
-//        return $this->hasOne(Category::class, 'id', 'category_id')->with('parentCategoryHierarchy');
-//    }
-
     public function brand()
     {
         return $this->belongsTo(Brand::class);
@@ -97,5 +92,12 @@ class Element extends Model
     public function combinations()
     {
         return $this->hasMany(Variation::class, 'element_id', 'id');
+    }
+
+    public function delete()
+    {
+        $this->combinations()->delete();
+        $this->element_translations()->delete();
+        return parent::delete();
     }
 }
