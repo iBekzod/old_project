@@ -12,7 +12,7 @@ class PosProductCollection extends ResourceCollection
             'data' => $this->collection->map(function($data) {
                 return [
                     'id' => $data->id,
-                    'name' => $data->name,
+                    'name' => $data->getTranslation('name'),
                     'variant_product' => $data->variant_product,
                     'thumbnail_image' => uploaded_asset($data->thumbnail_img),
                     'price' => single_price($data->unit_price)

@@ -14,7 +14,7 @@ class SettingsCollection extends ResourceCollection
         return [
             'data' => $this->collection->map(function($data) {
                 return [
-                    'name' => $data->name,
+                    'name' => $data->getTranslation('name'),
                     'logo' => $data->logo,
                     'facebook' => $data->facebook,
                     'twitter' => $data->twitter,
