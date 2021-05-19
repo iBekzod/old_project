@@ -130,7 +130,6 @@ class ProductController extends Controller
      */
     public function admin_products(Request $request)
     {
-        //CoreComponentRepository::instantiateShopRepository();
         $col_name = null;
         $query = null;
         $sort_search = null;

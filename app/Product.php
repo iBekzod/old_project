@@ -101,6 +101,14 @@ class Product extends Model
          return $this->hasMany(Wishlist::class);
      }
 
+     public function element()
+    {
+        return $this->hasOneThrough(
+            Element::class,
+            Variation::class
+        );
+    }
+
      public function delete()
     {
         $this->reviews()->delete();

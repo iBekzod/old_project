@@ -63,10 +63,9 @@
                                 @isset($col_name , $query) @if($col_name == 'num_of_sale' && $query == 'desc') selected @endif @endisset>{{translate('Num of Sale (High > Low)')}}</option>
                         <option value="num_of_sale,asc"
                                 @isset($col_name , $query) @if($col_name == 'num_of_sale' && $query == 'asc') selected @endif @endisset>{{translate('Num of Sale (Low > High)')}}</option>
-{{--                        <option value="price,desc"--}}
-{{--                                @isset($col_name , $query) @if($col_name == 'price' && $query == 'desc') selected @endif @endisset>{{translate('Base Price (High > Low)')}}</option>--}}
-{{--                        <option value="price,asc"--}}
-{{--                                @isset($col_name , $query) @if($col_name == 'price' && $query == 'asc') selected @endif @endisset>{{translate('Base Price (Low > High)')}}</option>--}}
+                       {{--   <option value="price,desc"
+{{--                                @isset($col_name , $query) @if($col_name == 'price' && $query == 'desc') selected @endif @endisset>{{translate('Base Price (High > Low)')}}</option>                        <option value="price,asc"
+{{--                                @isset($col_name , $query) @if($col_name == 'price' && $query == 'asc') selected @endif @endisset>{{translate('Base Price (Low > High)')}}</option> --}}
                     </select>
                 </div>
                 <div class="col-md-2">
