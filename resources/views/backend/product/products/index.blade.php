@@ -107,11 +107,11 @@
                             <td>
                                 <div class="form-group row">
                                     <div class="col-lg-4">
-                                        <img src="{{ uploaded_asset($variation->element->thumbnail_img)??static_asset('assets/img/placeholder.jpg')}}" alt="Image"
+                                        <img src="{{ ($variation->element)?uploaded_asset($variation->element->thumbnail_img)??static_asset('assets/img/placeholder.jpg'):null}}" alt="Image"
                                                 class="w-50px">
                                     </div>
                                     <div class="col-lg-8">
-                                        <span class="text-muted">{{ ($variation->product)?$variation->product->getTranslation('name'):null}}</span>
+                                        <span class="text-muted">{{  $variation->getTranslation('name')??null}}</span>
                                     </div>
                                 </div>
                             </td>

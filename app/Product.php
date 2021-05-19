@@ -100,4 +100,12 @@ class Product extends Model
      {
          return $this->hasMany(Wishlist::class);
      }
+
+     public function delete()
+    {
+        $this->reviews()->delete();
+        $this->wishlists()->delete();
+        $this->product_translations()->delete();
+        return parent::delete();
+    }
 }
