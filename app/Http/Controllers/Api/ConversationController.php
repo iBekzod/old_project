@@ -49,14 +49,10 @@ class ConversationController extends Controller
     {
         $request->validate([
              'user_id'=>'required',
-                // 'type'=>'required',
+                 'type'=>'required',
             'product_id' => 'required',
             'msg' => 'required',
-
          ]);
-        //  $user_type = Product::findOrFail($request->product_id)->user->user_type;
-
-
           $support_ticket = new Conversation;
           $support_ticket->sender_id =$request->user_id;
           $support_ticket->receiver_id = $request->product_id;
@@ -74,15 +70,6 @@ class ConversationController extends Controller
            ]);
           }
 
-        //  TODO::bazaga jonatish qoldi
-
-        //   if($support_ticket->save()) {
-        //     $message = new Message;
-        //     $message->conversation_id = $support_ticket->id;
-        //     $message->user_id = $request->id;
-        //     $message->message = $request->message;
-        //   }
-        //     $message->save();
 
     }
     public function store(Request $request)
