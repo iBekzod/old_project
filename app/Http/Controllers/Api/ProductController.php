@@ -187,7 +187,7 @@ class ProductController extends Controller
                 }
             }
         }
-        
+
         foreach ($attributes as $key => $attribute) {
             $attributes[$key]['attr'] = Attribute::find($attribute['id']);
         }
@@ -242,7 +242,9 @@ class ProductController extends Controller
 
     public function brand($id)
     {
-        return new ProductCollection(Product::where('brand_id', $id)->where('is_accepted', 1)->inRandomOrder()->paginate(10));
+        
+        $products=Product::where('brand_id', $id)->where('is_accepted', 1)->inRandomOrder()->paginate(10);
+        return new ProductCollection($products);
     }
 
     public function todaysDeal()
