@@ -12,7 +12,7 @@ class BranchCollection extends ResourceCollection
             'data' => $this->collection->map(function($data) {
                 return [
                     'branch_id'=>$data->id,
-                    'name' => $data->name,
+                    'name' => $data->getTranslation('name'),
                 ];
             })
         ];
@@ -21,6 +21,7 @@ class BranchCollection extends ResourceCollection
     public function with($request)
     {
         return [
+            'lang'=>app()->getLocale(),
             'success' => true,
             'status' => 200
         ];

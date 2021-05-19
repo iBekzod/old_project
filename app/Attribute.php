@@ -3,14 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App;
 
 class Attribute extends Model
 {
     protected $table="attributes";
     public function getTranslation($field = '', $lang = false)
     {
-        $lang = $lang == false ? App::getLocale() : $lang;
+        $lang = $lang == false ?  app()->getLocale() : $lang;
         $attribute_translation = $this->attribute_translations()->where('lang', $lang)->first();
         return $attribute_translation != null ? $attribute_translation->$field : $this->$field;
     }

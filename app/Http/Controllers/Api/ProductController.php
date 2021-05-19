@@ -187,7 +187,7 @@ class ProductController extends Controller
                 }
             }
         }
-
+        
         foreach ($attributes as $key => $attribute) {
             $attributes[$key]['attr'] = Attribute::find($attribute['id']);
         }

@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App;
+
 use Cviebrock\EloquentSluggable\Sluggable;
 
 class Page extends Model
@@ -18,7 +18,7 @@ class Page extends Model
       ];
   }
   public function getTranslation($field = '', $lang = false){
-      $lang = $lang == false ? App::getLocale() : $lang;
+      $lang = $lang == false ? app()->getLocale() : $lang;
       $page_translation = $this->page_translations()->where('lang', $lang)->first();
       return $page_translation != null ? $page_translation->$field : $this->$field;
   }

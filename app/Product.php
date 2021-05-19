@@ -4,7 +4,7 @@ namespace App;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
-use App;
+
 class Product extends Model
 {
     protected $fillable = [
@@ -61,7 +61,7 @@ class Product extends Model
 
 
     public function getTranslation($field = '', $lang = false){
-        $lang = $lang == false ? App::getLocale() : $lang;
+        $lang = $lang == false ? app()->getLocale() : $lang;
         $product_translations = $this->product_translations()->where('lang', $lang)->first();
         return $product_translations != null ? $product_translations->$field : $this->$field;
     }

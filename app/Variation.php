@@ -4,7 +4,7 @@ namespace App;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
-use App;
+
 class Variation extends Model
 {
     protected $fillable = [
@@ -34,7 +34,7 @@ class Variation extends Model
     }
 
     public function getTranslation($field = '', $lang = false){
-        $lang = $lang == false ? App::getLocale() : $lang;
+        $lang = $lang == false ? app()->getLocale() : $lang;
         $variation_translations = $this->variation_translations()->where('lang', $lang)->first();
         return $variation_translations != null ? $variation_translations->$field : $this->$field;
     }
