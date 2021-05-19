@@ -23,7 +23,7 @@ class Characteristic extends Model
 
     public function getTranslation($field = '', $lang = false)
     {
-        $lang = $lang == false ? App::getLocale() : $lang;
+        $lang = $lang == false ? app()->getLocale() : $lang;
         $attribute_value_translation = $this->characteristic_translations()->where('lang', $lang)->first();
         return $attribute_value_translation != null ? $attribute_value_translation->$field : $this->$field;
     }

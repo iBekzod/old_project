@@ -18,7 +18,6 @@ class ProductCollection extends ResourceCollection
 
 
 
-
                     // $table->string('added_by', 6)->nullable();
                     // $table->integer('currency_id')->nullable();
                     // $table->double('price', 20, 2)->default(0.00);

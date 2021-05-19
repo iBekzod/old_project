@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
-use App;
+
 
 class Element extends Model
 {
@@ -62,7 +62,7 @@ class Element extends Model
     ];
 
     public function getTranslation($field = '', $lang = false){
-        $lang = $lang == false ? App::getLocale() : $lang;
+        $lang = $lang == false ? app()->getLocale() : $lang;
         $element_translations = $this->element_translations()->where('lang', $lang)->first();
         return $element_translations != null ? $element_translations->$field : $this->$field;
     }

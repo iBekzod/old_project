@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App;
+
 
 use Cviebrock\EloquentSluggable\Sluggable;
 class CustomerProduct extends Model
@@ -18,7 +18,7 @@ class CustomerProduct extends Model
         ];
     }
     public function getTranslation($field = '', $lang = false){
-      $lang = $lang == false ? App::getLocale() : $lang;
+      $lang = $lang == false ? app()->getLocale() : $lang;
       $customer_product_translations = $this->hasMany(CustomerProductTranslation::class)->where('lang', $lang)->first();
       return $customer_product_translations != null ? $customer_product_translations->$field : $this->$field;
     }
