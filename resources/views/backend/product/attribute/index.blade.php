@@ -141,7 +141,7 @@
     </div>
     <!-- Modal -->
     <form action="{{ route('attributes.store') }}" class=" overflow-hidden" method="POST">
-        @if(isset($branch))<input type="hidden" name="branch_id" value="{{ $branch->id }}">@endif
+
         <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog"
              aria-labelledby="exampleModalLongTitle" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -159,6 +159,8 @@
                             <input type="text" placeholder="{{ translate('Name')}}" id="name" name="name"
                                    class="form-control" required>
                         </div>
+                        @if(isset($branch))<input type="hidden" name="branch_id" value="{{ $branch->id }}">
+                        @else
                         <div class="form-group mb-3">
                             <label for="selected_branch_id">{{translate('Branch')}}</label>
                             <select class="form-control aiz-selectpicker" name="selected_branch_id" id="selected_branch_id"
@@ -168,6 +170,7 @@
                                 @endforeach
                             </select>
                         </div>
+                        @endif
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary"
