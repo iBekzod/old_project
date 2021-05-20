@@ -4,11 +4,12 @@ namespace App\Http\Resources;
 
 use App\Element;
 use App\Http\Resources\ElementCollection;
+use App\Http\Resources\roductCollection;
 use App\ProductTranslation;
 use App\VariationTranslation;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class ProductCollection extends ResourceCollection
+class VariationCollection extends ResourceCollection
 {
     public function toArray($request)
     {
@@ -16,7 +17,7 @@ class ProductCollection extends ResourceCollection
             'data' => $this->collection->map(function($data) {
                 return [
                     'name'=>$data->getTranslation('name'),
-                    'lowest_price_id'=>$data->lowest_price_id,
+                    'lowest_price_id'=>ProductCollection(Product::findOrFail($data->product_id)),
                     'slug'=>$data->slug,
                     'element_id'=> ElementCollection(Element::findOrFail($data->element_id)),
                     'prices'=>$data->prices,
@@ -55,6 +56,7 @@ class ProductCollection extends ResourceCollection
     public function with($request)
     {
         return [
+            'lang'=>app()->getLocale(),
             'success' => true,
             'status' => 200
         ];
