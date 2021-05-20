@@ -18,7 +18,7 @@ class FlashDealProductCollection extends ResourceCollection
                     'id'=>$product->id,
                     'slug'=>$product->slug,
                     'owner_id' => $product->user_id,
-                    'name' => $product->name,
+                    'name' => $product->getTranslation('name'),
                     'photos' => explode(',', $product->photos),
                     'thumbnail_image' => api_asset($product->thumbnail_img),
                     'base_price' => (double) homeBasePrice($product->id),
@@ -52,6 +52,7 @@ class FlashDealProductCollection extends ResourceCollection
     public function with($request)
     {
         return [
+            'lang'=> app()->getLocale(),
             'success' => true,
             'status' => 200
         ];

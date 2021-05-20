@@ -15,7 +15,7 @@ class FreeShippingProductsCollection extends ResourceCollection
                     'id'=>$data->id,
                     'slug'=>$data->slug,
                     'owner_id' => $data->user_id,
-                    'name' => $data->name,
+                    'name' => $data->getTranslation('name'),
                     'photos' => explode(',', $data->photos),
                     'thumbnail_image' => api_asset($data->thumbnail_img),
                     'base_price' => (double) homeBasePrice($data->id),
@@ -43,6 +43,7 @@ class FreeShippingProductsCollection extends ResourceCollection
     public function with($request)
     {
         return [
+            'lang'=> app()->getLocale(),
             'success' => true,
             'status' => 200
         ];

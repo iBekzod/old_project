@@ -11,7 +11,7 @@ class SubCategoryCollection extends ResourceCollection
         return [
             'data' => $this->collection->map(function($data) {
                 return [
-                    'name' => $data->name,
+                    'name' => $data->getTranslation('name'),
                     'subSubCategories' => new SubSubCategoryCollection($data->subSubCategories),
                     'links' => [
                         'products' => route('products.subCategory', $data->id)
@@ -24,6 +24,7 @@ class SubCategoryCollection extends ResourceCollection
     public function with($request)
     {
         return [
+            'lang'=> app()->getLocale(),
             'success' => true,
             'status' => 200
         ];

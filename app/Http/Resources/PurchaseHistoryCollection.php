@@ -14,7 +14,7 @@ class PurchaseHistoryCollection extends ResourceCollection
                 return [
                     'code' => $data->code,
                     'user' => [
-                        'name' => $data->user->name,
+                        'name' => $data->user->getTranslation('name'),
                         'email' => $data->user->email,
                         'avatar' => $data->user->avatar,
                         'avatar_original' => api_asset($data->user->avatar_original)
@@ -39,6 +39,7 @@ class PurchaseHistoryCollection extends ResourceCollection
     public function with($request)
     {
         return [
+            'lang'=> app()->getLocale(),
             'success' => true,
             'status' => 200
         ];

@@ -15,7 +15,7 @@ class ProductCollection extends ResourceCollection
         return [
             'data' => $this->collection->map(function($data) {
                 return [
-                    'name'=>$data->name,
+                    'name'=>$data->getTranslation('name'),
                     'lowest_price_id'=>$data->lowest_price_id,
                     'slug'=>$data->slug,
                     'element_id'=> ElementCollection(Element::findOrFail($data->element_id)),

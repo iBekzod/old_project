@@ -11,7 +11,7 @@ class ShopCollection extends ResourceCollection
         return [
             'data' => $this->collection->map(function($data) {
                 $arr = [
-                    'name' => $data->name,
+                    'name' => $data->getTranslation('name'),
                     'logo' => api_asset($data->logo),
                     'sliders' => $this->convertPhotos(explode(',', $data->sliders)),
                     'address' => $data->address,
@@ -47,6 +47,7 @@ class ShopCollection extends ResourceCollection
     public function with($request)
     {
         return [
+            'lang'=> app()->getLocale(),
             'success' => true,
             'status' => 200
         ];

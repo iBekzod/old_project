@@ -1,16 +1,16 @@
 <?php
 
-// namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api;
 
-// use App\Attribute as AppAttribute;
-// use App\Http\Resources\AttributeCollection;
-// use App\Models\Attribute;
-// class AttributeController extends Controller
-// {
-//     public function index()
-//     {
-//       //  return "hasbgfasfdhaghdf";
+use App\Branch as AppBranch;
+use App\Http\Resources\BranchCollection;
+use App\Models\Branch;
+class BranchController extends Controller
+{
+    public function index()
+    {
+      //  return "hasbgfasfdhaghdf";
 
-//         return new AttributeCollection(AppAttribute::all());
-//     }
-// }
+        return new BranchCollection(AppBranch::all());
+    }
+}

@@ -13,7 +13,7 @@ class BrandCollection extends ResourceCollection
                 return [
 
                     // 'brand_id'=>$data->id,
-                    'name' => $data->name,
+                    'name' => $data->getTranslation('name'),
                     'slug' => $data->slug,
                     // 'top'=>$data->top,
                     'logo' => api_asset($data->logo),
@@ -30,6 +30,7 @@ class BrandCollection extends ResourceCollection
     public function with($request)
     {
         return [
+            'lang'=> app()->getLocale(),
             'success' => true,
             'status' => 200
         ];

@@ -12,7 +12,7 @@ class CategoryAllCollection extends ResourceCollection
             'data' => $this->collection->map(function($data) {
                 return [
                     'id'=>$data->id,
-                    'name' => $data->name,
+                    'name' => $data->getTranslation('name'),
                     'slug' => $data->slug,
                     'banner' => $data->banner ? api_asset($data->banner) : 'public/images/default-image.jpg',
                     'icon' => api_asset($data->icon),
@@ -29,6 +29,7 @@ class CategoryAllCollection extends ResourceCollection
     public function with($request)
     {
         return [
+            'lang'=> app()->getLocale(),
             'success' => true,
             'status' => 200
         ];
