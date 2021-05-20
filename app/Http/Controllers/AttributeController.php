@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Attribute;
 use App\Characteristic;
 use App\AttributeTranslation;
+use App\Branch;
 use CoreComponentRepository;
 use App\Language;
 class AttributeController extends Controller
@@ -21,7 +22,8 @@ class AttributeController extends Controller
     {
         // CoreComponentRepository::instantiateShopRepository();
         $attributes = Attribute::orderBy('created_at', 'desc')->paginate(15);
-        return view('backend.product.attribute.index', compact('attributes'));
+        $branches = Branch::all();
+        return view('backend.product.attribute.index', compact('attributes', 'branches'));
     }
 
     /**
@@ -46,6 +48,8 @@ class AttributeController extends Controller
         $attribute->name = $request->name;
         $attribute->combination = false;
         if($request->has('branch_id')) $attribute->branch_id = $request->branch_id;
+        if($request->has('selected_branch_id')) $attribute->branch_id = $request->selected_branch_id;
+
         $attribute->save();
 
 
@@ -99,6 +103,7 @@ class AttributeController extends Controller
         $attribute->name = $request->name;
         $attribute->combination = false;
         if($request->has('branch_id')) $attribute->branch_id = $request->branch_id;
+        if($request->has('edit_branch_'.$attribute->id)) $attribute->branch_id = $request->input('edit_branch_'.$attribute->id);
         $attribute->save();
         if(AttributeTranslation::where('attribute_id' , $attribute->id)->where('lang' , default_language())->first()){
             foreach (Language::all() as $language) {

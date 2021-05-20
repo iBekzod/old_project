@@ -5748,7 +5748,6 @@ div.footable-loader > span.fooicon:after {
 }
 .modal-content .modal-body {
     padding: 20px 25px;
-    overflow-y: auto;
     max-height: 80vh;
 }
 .modal-content .modal-footer {
