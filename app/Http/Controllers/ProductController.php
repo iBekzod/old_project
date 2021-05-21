@@ -468,11 +468,11 @@ class ProductController extends Controller
             $variation->rating = 0;
             $variation->user_id = $user_id;
             $variation->save();
-            foreach (Language::all() as $language) {
-                $variation_translation = VariationTranslation::firstOrNew(['lang' => $language->code, 'variation_id' => $variation->id]);
-                $variation_translation->name = $name;
-                $variation_translation->save();
-            }
+            // foreach (Language::all() as $language) {
+            //     $variation_translation = VariationTranslation::firstOrNew(['lang' => $language->code, 'variation_id' => $variation->id]);
+            //     $variation_translation->name = $name;
+            //     $variation_translation->save();
+            // }
 
 
             //            }

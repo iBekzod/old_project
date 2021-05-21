@@ -22,18 +22,15 @@
 {{--                                   placeholder="{{ translate('Product Name') }}" required>--}}
 {{--                        </div>--}}
 {{--                    </div>--}}
-                    {{--  <div class="form-group row" id="element">
-                        <label class="col-md-3 col-from-label">{{translate('Element')}} <span
+                    <div class="form-group row">
+                        <label class="col-md-3 col-from-label">{{$element->getTranslation('name')}} <span
                                 class="text-danger">*</span></label>
-                        <div class="col-md-8">
-                            <select class="form-control aiz-selectpicker" name="element_id" id="element_id"
-                                    data-live-search="true" required>
-                                @foreach ($elements as $element)
-                                     <option value="{{ $element->id }}">{{ $element->getTranslation('name') }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>  --}}
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" name="name"
+                                placeholder="{{ translate('Product Name') }}" required
+                                value="{{$element->getTranslation('name')}}">
+                    </div>
+                    </div>
                     @if(count($combinations) > 0)
                         <input type="hidden" value="{{$lang}}" name="lang" class="form-control">
                         <input type="hidden"  name="element_id" value="{{$element->id}}" class="form-control">

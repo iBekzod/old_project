@@ -17,11 +17,11 @@
                     <div class="form-group row">
                         <label class="col-md-3 col-from-label">{{$element->getTranslation('name')}} <span
                                 class="text-danger">*</span></label>
-{{--                        <div class="col-md-8">--}}
-{{--                            <input type="text" class="form-control" name="name"--}}
-{{--                                   placeholder="{{ translate('Product Name') }}" required--}}
-{{--                                   value="{{$element->getTranslation('name')}}">--}}
-{{--                        </div>--}}
+                      <div class="col-md-8">
+                          <input type="text" class="form-control" name="name"
+                                 placeholder="{{ translate('Product Name') }}" required
+                                 value="{{$element->getTranslation('name')}}">
+                      </div>
                     </div>
                     @if(count($products) > 0)
                         <input type="hidden" value="{{$lang}}" name="lang" class="form-control">
