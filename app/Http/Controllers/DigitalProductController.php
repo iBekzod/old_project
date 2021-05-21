@@ -32,7 +32,7 @@ class DigitalProductController extends Controller
         $col_name = null;
         $query = null;
         $sort_search = null;
-
+            
         $products = Product::whereNotNull('variation_id');
         if ($request->search != null) {
             $products = $products->where('name', 'like', '%' . $request->search . '%');
@@ -45,7 +45,7 @@ class DigitalProductController extends Controller
             $products = $products->orderBy($col_name, $query);
             $sort_type = $request->type;
         }
-        $products = $products->where('digital', 1)->orderBy('created_at', 'desc')->paginate(15);
+        $products = $products->orderBy('created_at', 'desc')->paginate(15);
         $type = 'In House';
         return view('backend.product.digital_products.index', compact('products', 'type', 'col_name', 'query', 'sort_search'));
     }
