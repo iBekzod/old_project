@@ -25,6 +25,23 @@ class VariationCollection extends ResourceCollection
                     'sales'=>$data->num_of_sale,
                     'qty'=>$data->qty,
                     'rating'=>$data->rating
+
+                    // 'name',
+                    // 'lowest_price_id',
+                    // 'slug',
+                    // 'element_id',
+                    // 'prices',
+                    // 'variant',
+                    // 'sku',
+                    // 'user_id',
+                    // 'num_of_sale',
+                    // 'qty',
+                    // 'rating',
+                    // 'created_at',
+                    // 'updated_at',
+
+
+
                     // 'id'=>$data->id,
                     // 'slug'=>$data->slug,
                     // 'owner_id' => $data->user_id,
