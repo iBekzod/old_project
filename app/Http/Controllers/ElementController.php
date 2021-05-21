@@ -17,6 +17,7 @@ use App\Element;
 use App\ProductTranslation;
 use App\ProductStock;
 use App\Category;
+use App\Currency;
 use App\Language;
 use Auth;
 use App\SubSubCategory;
@@ -833,5 +834,28 @@ class ElementController extends Controller
             return 1;
         }
         return 0;
+    }
+
+
+    // public function variantProducts(Request $request){
+    //     if($variation = Variation::findOrFail($request->id)){
+    //         $products = $variation->products;
+    //         $lang = default_language();
+    //         $currencies = Currency::where('status', true)->get();
+    //         return view('backend.product.products.edit', compact('variation', 'products', 'currencies', 'lang'));
+    //     }
+    //     return back();
+    // }
+
+    public function elementProducts(Request $request){
+        $element = Element::findOrFail($request->id);
+        $variation_ids=Variation::where('element_id', $element->id)->pluck('id');
+        if(count($variation_ids)>0){
+            $products=Product::where('user_id', auth()->id())->whereIn('variation_id', $variation_ids)->get();
+            $lang = default_language();
+            $currencies = Currency::where('status', true)->get();
+            return view('backend.product.products.edit', compact('element', 'products', 'currencies', 'lang'));
+        }
+        return back();
     }
 }
