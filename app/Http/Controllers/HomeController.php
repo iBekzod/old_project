@@ -45,6 +45,14 @@ class HomeController extends Controller
         return $this->admin_dashboard();
     }
 
+    public function seller_login()
+    {
+        if(Auth::check()){
+            return redirect()->route('home');
+        }
+        return view('frontend.user_login');
+    }
+
     public function registration(Request $request)
     {
         if(Auth::check()){
@@ -105,7 +113,7 @@ class HomeController extends Controller
         if(Auth::user()->user_type == 'seller'){
             return view('frontend.user.seller.dashboard');
         }
-        else if(Auth::user()->user_type == 'seller'){
+        else if(Auth::user()->user_type == 'admin'){
             return $this->admin_dashboard();
         }
         // elseif(Auth::user()->user_type == 'customer'){
