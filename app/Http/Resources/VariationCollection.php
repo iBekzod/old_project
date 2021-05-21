@@ -1,10 +1,8 @@
 <?php
 
 namespace App\Http\Resources;
-
+use App\Product;
 use App\Element;
-use App\Http\Resources\ElementCollection;
-use App\Http\Resources\roductCollection;
 use App\ProductTranslation;
 use App\VariationTranslation;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -17,9 +15,9 @@ class VariationCollection extends ResourceCollection
             'data' => $this->collection->map(function($data) {
                 return [
                     'name'=>$data->getTranslation('name'),
-                    'lowest_price_id'=>ProductCollection(Product::findOrFail($data->product_id)),
+                    // 'lowest_price_id'=> new ProductCollection(Product::findOrFail($data->lowest_price_id)),
                     'slug'=>$data->slug,
-                    'element_id'=> ElementCollection(Element::findOrFail($data->element_id)),
+                   // 'element_id'=> ElementCollection(Element::findOrFail($data->element_id)),
                     'prices'=>$data->prices,
                     'owner_id'=>$data->user_id,
                     'sales'=>$data->num_of_sale,
