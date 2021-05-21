@@ -2,7 +2,10 @@
 
 use App\Http\Controllers\Api\V2\HomePageController;
 use \App\Http\Controllers\Api\SearchController;
+
 use \App\Models\Category;
+
+
 // use Illuminate\Routing\Route;
 
 Route::prefix('v1/auth')->group(function () {
@@ -167,6 +170,11 @@ Route::prefix('v1')->group(function () {
     Route::get('wallet/history/{id}', 'Api\WalletController@walletRechargeHistory')->middleware('auth:api');
 
     Route::match(['get', 'post'], 'search', 'SearchController@search');
+    Route::match(['get', 'post'], 'test',  function(){
+        $attribute= App\Product::all();
+        $data = new App\Http\Resources\ProductCollection($attribute);
+        dd($data);
+    });
 
     Route::get('conversation_messages','Api\ConversationController@getConversations');//->middleware('auth:api');
     Route::post('send_conversation_message','Api\ConversationController@store');//->middleware('auth:api');
