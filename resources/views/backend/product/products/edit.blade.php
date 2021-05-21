@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="aiz-titlebar text-left mt-2 mb-3">
-        <h5 class="mb-0 h6">{{translate('Add New Product')}}</h5>
+        <h5 class="mb-0 h6">{{translate('Edit Product')}}</h5>
     </div>
     <div class="col-md-12 mx-auto">
         <form class="form form-horizontal mar-top" action="{{route('products.update', $variation->id)}}" method="POST"
@@ -247,6 +247,9 @@
         }
 
         $('#element_id').on('change', function () {
+            update_variation();
+        });
+        $( document ).ready(function () {
             update_variation();
         });
     </script>

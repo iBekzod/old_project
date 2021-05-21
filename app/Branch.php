@@ -3,12 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App;
 class Branch extends Model
 {
     public function getTranslation($field = '', $lang = false)
     {
-        $lang = $lang == false ? App::getLocale() : $lang;
+        $lang = $lang == false ?  app()->getLocale() : $lang;
         $branch_translation = $this->branch_translations()->where('lang', $lang)->first();
         return $branch_translation != null ? $branch_translation->$field : $this->$field;
     }

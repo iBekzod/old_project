@@ -63,10 +63,9 @@
                                 @isset($col_name , $query) @if($col_name == 'num_of_sale' && $query == 'desc') selected @endif @endisset>{{translate('Num of Sale (High > Low)')}}</option>
                         <option value="num_of_sale,asc"
                                 @isset($col_name , $query) @if($col_name == 'num_of_sale' && $query == 'asc') selected @endif @endisset>{{translate('Num of Sale (Low > High)')}}</option>
-{{--                        <option value="price,desc"--}}
-{{--                                @isset($col_name , $query) @if($col_name == 'price' && $query == 'desc') selected @endif @endisset>{{translate('Base Price (High > Low)')}}</option>--}}
-{{--                        <option value="price,asc"--}}
-{{--                                @isset($col_name , $query) @if($col_name == 'price' && $query == 'asc') selected @endif @endisset>{{translate('Base Price (Low > High)')}}</option>--}}
+                       {{--   <option value="price,desc"
+{{--                                @isset($col_name , $query) @if($col_name == 'price' && $query == 'desc') selected @endif @endisset>{{translate('Base Price (High > Low)')}}</option>                        <option value="price,asc"
+{{--                                @isset($col_name , $query) @if($col_name == 'price' && $query == 'asc') selected @endif @endisset>{{translate('Base Price (Low > High)')}}</option> --}}
                     </select>
                 </div>
                 <div class="col-md-2">
@@ -105,32 +104,32 @@
                         <tr>
                             <td>{{ ($key+1) + ($variations->currentPage() - 1)*$variations->perPage() }}</td>
                             <td>
-{{--                                <a href="{{ route('product', $variation->product->slug) }}" target="_blank">--}}
+                                <a href="{{ url('single_product/'.$variation->slug) }}" target="_blank">
                                     <div class="form-group row">
                                         <div class="col-lg-4">
-                                            <img src="{{ uploaded_asset($variation->element->thumbnail_img)??static_asset('assets/img/placeholder.jpg')}}" alt="Image"
-                                                 class="w-50px">
+                                            <img src="{{ ($variation->element)?uploaded_asset($variation->element->thumbnail_img)??static_asset('assets/img/placeholder.jpg'):null}}" alt="Image"
+                                                    class="w-50px">
                                         </div>
                                         <div class="col-lg-8">
-                                            <span class="text-muted">{{ ($variation->has('product'))?$variation->product->getTranslation('name'):null }}</span>
+                                            <span class="text-muted">{{  $variation->getTranslation('name')??null}}</span>
                                         </div>
                                     </div>
-{{--                                </a>--}}
+                                </a>
                             </td>
                             @if($type == 'Seller' || $type == 'All')
-                                <td>{{ $variation->product->user->name??null }}</td>
+                                <td>{{ ($variation->product)?$variation->product->user->name??null:null }}</td>
                             @endif
                             <td>{{ $variation->num_of_sale??0 }} {{translate('times')}}</td>
                             <td>
-                                {{$variation->product->qty??0}}
+                                {{($variation->product)?$variation->product->qty??0:null}}
                             </td>
-                            <td>{{ number_format($variation->product->price, 2) }}</td>
+                            <td>{{ ($variation->product)?number_format($variation->product->price, 2):null }}</td>
                             <td>{{ $variation->rating??0 }}</td>
 {{--                            <td>{{ $variation->product->currency->code }}</td>--}}
                             <td>
                                 <label class="aiz-switch aiz-switch-success mb-0">
                                     <input onchange="update_todays_deal(this)" value="{{ $variation->id }}"
-                                           type="checkbox" @if($variation->product->todays_deal == 1) checked @endif >
+                                           type="checkbox" @if(($variation->product)?$variation->product->todays_deal:null == 1) checked @endif >
                                     <span class="slider round"></span>
                                 </label>
                             </td>
@@ -138,14 +137,14 @@
                             <td>
                                 <label class="aiz-switch aiz-switch-success mb-0">
                                     <input onchange="update_published(this)" value="{{ $variation->id }}"
-                                           type="checkbox" @if($variation->product->published == 1) checked @endif >
+                                           type="checkbox" @if(($variation->product)?$variation->product->published:null == 1) checked @endif >
                                     <span class="slider round"></span>
                                 </label>
                             </td>
                             <td>
                                 <label class="aiz-switch aiz-switch-success mb-0">
                                     <input onchange="update_featured(this)" value="{{ $variation->id }}"
-                                           type="checkbox" @if($variation->product->featured == 1) checked @endif>
+                                           type="checkbox" @if(($variation->product)?$variation->product->featured:null == 1) checked @endif>
                                     <span class="slider round"></span>
                                 </label>
                             </td>

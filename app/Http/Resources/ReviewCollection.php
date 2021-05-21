@@ -12,7 +12,7 @@ class ReviewCollection extends ResourceCollection
             'data' => $this->collection->map(function($data) {
                 return [
                     'user' => [
-                        'name' => $data->user->name,
+                        'name' => $data->user->getTranslation('name'),
                         'avatar' => $data->user->avatar,
                         'avatar_original' => api_asset($data->user->avatar_original),
                     ],
@@ -27,6 +27,7 @@ class ReviewCollection extends ResourceCollection
     public function with($request)
     {
         return [
+            'lang'=> app()->getLocale(),
             'success' => true,
             'status' => 200
         ];

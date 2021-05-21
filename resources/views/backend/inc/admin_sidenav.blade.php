@@ -29,7 +29,7 @@
                 <div class="aiz-side-nav-logo-wrap bg-light">
                     <a href="{{ route('admin.dashboard') }}" class="text-left d-block">
                         @if(get_setting('system_logo_white') != null)
-                            <img class="mw-100" src="{{ uploaded_asset(get_setting('system_logo_white'))??static_asset('assets/img/logo.jpg') }}" class="brand-icon"
+                            <img class="mw-100" src="{{ uploaded_asset(get_setting('system_logo_white'))??static_asset('assets/img/logo.png') }}" class="brand-icon"
                                  alt="{{ get_setting('site_name') }}">
                         @else
                             <img class="mw-100" src="{{ static_asset('assets/img/logo.png') }}" class="brand-icon"
@@ -103,7 +103,7 @@
                                     <span class="aiz-side-nav-text">{{ translate('All Elements') }}</span>
                                 </a>
                             </li>
-                            <li class="aiz-side-nav-item">
+                            {{--  <li class="aiz-side-nav-item">
                                 <a href="{{route('products.manage')}}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{ translate('Mange Added Products') }}</span>
                                     @php
@@ -113,7 +113,7 @@
                                         <span class="badge badge-info">{{ $on_moderation->count() }}</span>
                                     @endif
                                 </a>
-                            </li>
+                            </li>  --}}
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('products.admin')}}"
                                    class="aiz-side-nav-link {{ areActiveRoutes(['products.admin', 'products.create', 'products.admin.edit']) }}">

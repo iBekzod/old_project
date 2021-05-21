@@ -8,7 +8,7 @@ class Color extends Model
 {
     public function getTranslation($field = '', $lang = false)
     {
-        $lang = $lang == false ? App::getLocale() : $lang;
+        $lang = $lang == false ? app()->getLocale() : $lang;
         $color_translations = $this->color_translations()->where('lang', $lang)->first();
         return $color_translations != null ? $color_translations->$field : $this->$field;
     }

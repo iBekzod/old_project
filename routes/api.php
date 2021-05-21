@@ -88,6 +88,9 @@ Route::prefix('v1')->group(function () {
 
     Route::apiResource('home-categories', 'Api\HomeCategoryController')->only('index');
 
+   // Route::get('test/attribute','Api\AttributeController@index');
+   // Route::get('test/branch','Api\BranchController@index');
+
     Route::get('purchase-history/{id}', 'Api\PurchaseHistoryController@index')->middleware('auth:api');
     Route::get('purchase-history-details/{id}', 'Api\PurchaseHistoryDetailController@index')->name('purchaseHistory.details')->middleware('auth:api');
 

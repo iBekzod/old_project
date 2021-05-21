@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Attribute as AppAttribute;
 use App\ProductStock;
 use App\ProductTranslation;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -106,6 +107,7 @@ class ProductDetailCollection extends ResourceCollection
             'breadcrumbs' => [
                 $this->collection
             ],
+            'lang'=> app()->getLocale(),
             'success' => true,
             'status' => 200
         ];

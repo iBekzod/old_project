@@ -14,7 +14,7 @@ class WishlistCollection extends ResourceCollection
                     return [
                         'id' => (integer) $data->id,
                             'product_id' => $data->product->id,
-                            'name' => $data->product->name,
+                            'name' => $data->product->getTranslation('name'),
                             'slug' => $data->product->slug,
                             'thumbnail_image' => api_asset($data->product->thumbnail_img),
                             'base_price' => (double) homeBasePrice($data->product->id),
@@ -36,6 +36,7 @@ class WishlistCollection extends ResourceCollection
     public function with($request)
     {
         return [
+            'lang'=> app()->getLocale(),
             'success' => true,
             'status' => 200
         ];

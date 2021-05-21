@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
-use App;
+
 
 class Element extends Model
 {
@@ -62,7 +62,7 @@ class Element extends Model
     ];
 
     public function getTranslation($field = '', $lang = false){
-        $lang = $lang == false ? App::getLocale() : $lang;
+        $lang = $lang == false ? app()->getLocale() : $lang;
         $element_translations = $this->element_translations()->where('lang', $lang)->first();
         return $element_translations != null ? $element_translations->$field : $this->$field;
     }
@@ -74,11 +74,6 @@ class Element extends Model
     {
         return $this->belongsTo(Category::class);
     }
-
-//    public function parentHierarchy()
-//    {
-//        return $this->hasOne(Category::class, 'id', 'category_id')->with('parentCategoryHierarchy');
-//    }
 
     public function brand()
     {
@@ -94,8 +89,15 @@ class Element extends Model
         return api_asset($this->thumbnail_img);
     }
 
-    public function variations()
+    public function combinations()
     {
         return $this->hasMany(Variation::class, 'element_id', 'id');
+    }
+
+    public function delete()
+    {
+        $this->combinations()->delete();
+        $this->element_translations()->delete();
+        return parent::delete();
     }
 }

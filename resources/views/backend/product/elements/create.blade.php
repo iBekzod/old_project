@@ -33,6 +33,7 @@
         <form class="form form-horizontal mar-top" action="{{route('elements.store')}}" method="POST"
               enctype="multipart/form-data" id="choice_form">
             @csrf
+            <input type="hidden" name="lang" value="{{ $lang??default_language() }}">
             <input type="hidden" name="added_by" value="admin">
 
             <div class="card">

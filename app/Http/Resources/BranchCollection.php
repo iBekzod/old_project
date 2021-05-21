@@ -4,24 +4,15 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class BrandCollection extends ResourceCollection
+class BranchCollection extends ResourceCollection
 {
     public function toArray($request)
     {
         return [
             'data' => $this->collection->map(function($data) {
                 return [
-
-                    // 'brand_id'=>$data->id,
+                    'branch_id'=>$data->id,
                     'name' => $data->getTranslation('name'),
-                    'slug' => $data->slug,
-                    // 'top'=>$data->top,
-                    'logo' => api_asset($data->logo),
-                    'links' => [
-                        'products' => route('api.products.brand', $data->id)
-
-                    ]
-
                 ];
             })
         ];
@@ -30,9 +21,10 @@ class BrandCollection extends ResourceCollection
     public function with($request)
     {
         return [
-            'lang'=> app()->getLocale(),
+            'lang'=>app()->getLocale(),
             'success' => true,
             'status' => 200
         ];
     }
 }
+

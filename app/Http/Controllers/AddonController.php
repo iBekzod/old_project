@@ -166,8 +166,9 @@ class AddonController extends Controller
             }
         }
         else {
-            ('Please enable ZipArchive extensflash(translateion.'))->error();
+            flash(translate('Please enable ZipArchive extension.'))->error();
         }
+        return back();
     }
 
     /**

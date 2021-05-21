@@ -20,14 +20,34 @@ class DigitalProductController extends Controller
      */
     public function index(Request $request)
     {
-        $sort_search    = null;
-        $products       = Product::orderBy('created_at', 'desc');
-        if ($request->has('search')){
-            $sort_search    = $request->search;
-            $products       = $products->where('name', 'like', '%'.$sort_search.'%');
+        // $sort_search    = null;
+        // $products       = Product::orderBy('created_at', 'desc');
+        // if ($request->has('search')){
+        //     $sort_search    = $request->search;
+        //     $products       = $products->where('name', 'like', '%'.$sort_search.'%');
+        // }
+        // $products = $products->where('digital', 1)->paginate(10);
+        // return view('backend.product.digital_products.index', compact('products','sort_search'));
+
+        $col_name = null;
+        $query = null;
+        $sort_search = null;
+
+        $products = Product::whereNotNull('variation_id');
+        if ($request->search != null) {
+            $products = $products->where('name', 'like', '%' . $request->search . '%');
+            $sort_search = $request->search;
         }
-        $products = $products->where('digital', 1)->paginate(10);
-        return view('backend.product.digital_products.index', compact('products','sort_search'));
+        if ($request->type != null) {
+            $var = explode(",", $request->type);
+            $col_name = $var[0];
+            $query = $var[1];
+            $products = $products->orderBy($col_name, $query);
+            $sort_type = $request->type;
+        }
+        $products = $products->where('digital', 1)->orderBy('created_at', 'desc')->paginate(15);
+        $type = 'In House';
+        return view('backend.product.digital_products.index', compact('products', 'type', 'col_name', 'query', 'sort_search'));
     }
 
     /**

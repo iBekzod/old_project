@@ -72,18 +72,18 @@ pre {
 /* common helper utilites */
 .c-scrollbar::-webkit-scrollbar {
     width: 4px;
-    background: #1e1e2d;
+    background: rgba(179, 179, 179, 0.4);
     border-radius: 3px;
 }
 .c-scrollbar::-webkit-scrollbar-track {
     background: transparent;
 }
 .c-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(179, 179, 179, 0.4);
     border-radius: 3px;
 }
 .c-scrollbar {
-    scrollbar-color: rgba(255, 255, 255, 0.2);
+    scrollbar-color: rgba(179, 179, 179, 0.4);
     scrollbar-width: thin;
 }
 
@@ -3701,7 +3701,7 @@ input[type="number"] {
     height: 100vh;
     overflow-y: auto;
     z-index: 99;
-    background-color: #141423;
+    background-color: #ffffff;
     width: 265px;
     -webkit-transition: left 0.3s ease;
     transition: left 0.3s ease;
@@ -3756,7 +3756,7 @@ input[type="number"] {
     font-size: 0.875rem;
     font-weight: 400;
     text-transform: capitalize;
-    color: #a2a3b7;
+    color: #000000;
 }
 .aiz-side-nav-list .aiz-side-nav-icon {
     display: -webkit-box;
@@ -3765,7 +3765,7 @@ input[type="number"] {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    color: #7a7c9e;
+    color: #000000;
     margin-right: 6px;
     -webkit-transition: all 0.3s ease;
     transition: all 0.3s ease;
@@ -3798,7 +3798,7 @@ input[type="number"] {
     font-size: 80%;
 }
 .aiz-side-nav-list .aiz-side-nav-link:hover .aiz-side-nav-icon {
-    color: #9191a0;
+    color: white;
 }
 .aiz-side-nav-list .aiz-side-nav-arrow::after {
     content: "\f105";
@@ -3858,7 +3858,7 @@ input[type="number"] {
 .aiz-side-nav-list .aiz-side-nav-link.level-3-active,
 .aiz-side-nav-list .aiz-side-nav-link.active {
     color: #fff;
-    background-color:#143e62;
+    background-color:#5353CF;
 }
 .aiz-side-nav-list .level-2 .aiz-side-nav-link:hover:after,
 .aiz-side-nav-list .level-2 .aiz-side-nav-link.active:after {
@@ -5748,7 +5748,6 @@ div.footable-loader > span.fooicon:after {
 }
 .modal-content .modal-body {
     padding: 20px 25px;
-    overflow-y: auto;
     max-height: 80vh;
 }
 .modal-content .modal-footer {

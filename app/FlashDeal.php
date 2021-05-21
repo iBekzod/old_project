@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App;
+
 use Cviebrock\EloquentSluggable\Sluggable;
 
 class FlashDeal extends Model
@@ -18,7 +18,7 @@ class FlashDeal extends Model
         ];
     }
     public function getTranslation($field = '', $lang = false){
-        $lang = $lang == false ? App::getLocale() : $lang;
+        $lang = $lang == false ? app()->getLocale() : $lang;
         $flash_deal_translation = $this->flash_deal_translations()->where('lang', $lang)->first();
         return $flash_deal_translation != null ? $flash_deal_translation->$field : $this->$field;
     }
