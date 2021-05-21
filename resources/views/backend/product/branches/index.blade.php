@@ -30,6 +30,18 @@
                         </tr>
                         </thead>
                         <tbody>
+                            <tr>
+                                <td>{{0}}</td>
+                                <td>{{translate('Others')}}</td>
+                                <td class="text-right">
+                                    <a href="{{route('branches.arributes', '')}}"
+                                       class="btn btn-soft-warning btn-icon btn-circle btn-sm "
+                                       title="{{ translate('View Attributes') }}">
+                                        <i class="fas fa-link"></i>
+                                    </a>
+
+                                </td>
+                            </tr>
                         @foreach($branches as $key => $branch)
                             <tr>
                                 <td>{{$key+1}}</td>

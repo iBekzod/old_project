@@ -123,11 +123,19 @@ class BranchController extends Controller
         return redirect()->route('branches.index');
     }
 
-    public function arribute_index($id){
-        $branch = Branch::findOrFail($id);
-        $branches = Branch::all();
-        if($attributes=$branch->attributes()->paginate(15)){
-            return view('backend.product.attribute.index', compact('attributes', 'branch', 'branches'));
+    public function arribute_index(Request $request){
+        if($request->has('id')){
+            $branch = Branch::findOrFail($request->id);
+            $branches = Branch::all();
+            if($attributes=$branch->attributes()->paginate(15)){
+                return view('backend.product.attribute.index', compact('attributes', 'branch', 'branches'));
+            }
+        }else{
+            $branch = null;
+            $branches = Branch::all();
+            if($attributes=Attribute::where('branch_id', '=', null)->paginate(15)){
+                return view('backend.product.attribute.index', compact('attributes', 'branch', 'branches'));
+            }
         }
         flash(translate('Branch has no attributes'))->message();
         return redirect()->route('branches.index');

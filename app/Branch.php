@@ -21,4 +21,15 @@ class Branch extends Model
     {
         return $this->hasMany(Attribute::class);
     }
+
+    public function delete()
+    {
+        if($attributes=$this->attributes()){
+            foreach($attributes as $attribute){
+                $attribute->branch_id=null;
+            }
+        }
+        $this->branch_translations()->delete();
+        return parent::delete();
+    }
 }

@@ -225,7 +225,7 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 //	Route::resource('branches','BranchController');
     Route::get('/branches', 'BranchController@index')->name('branches.index');
     Route::get('/branches/edit/{id}', 'BranchController@edit')->name('branches.edit');
-    Route::get('/branches/{id}/attributes', 'BranchController@arribute_index')->name('branches.arributes');
+    Route::get('/branches/attributes', 'BranchController@arribute_index')->name('branches.arributes');
     Route::post('/branches/{id}/update/attributes', 'BranchController@updateAttributes')->name('branches.update.arributes');
     Route::get('/branches/destroy/{id}', 'BranchController@destroy')->name('branches.destroy');
 	Route::post('/branches/{id}/update','BranchController@update')->name('branches.update');

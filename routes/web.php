@@ -56,12 +56,14 @@ Route::post('/currency', 'CurrencyController@changeCurrency')->name('currency.ch
 
 Route::get('/social-login/redirect/{provider}', 'Auth\LoginController@redirectToProvider')->name('social.login');
 Route::get('/social-login/{provider}/callback', 'Auth\LoginController@handleProviderCallback')->name('social.callback');
-// Route::get('/users/login', 'HomeController@login')->name('user.login');
-// Route::get('/users/registration', 'HomeController@registration')->name('user.registration');
-//Route::post('/users/login', 'HomeController@user_login')->name('user.login.submit');
+Route::get('/users/login', 'HomeController@login')->name('user.login');
+Route::get('/seller/registration', 'HomeController@registration')->name('user.registration');
+// Route::post('/users/login', 'HomeController@user_login')->name('user.login.submit');
 // Route::post('/users/login/cart', 'HomeController@cart_login')->name('cart.login.submit');
 
 //Home Page
+
+Route::get('/seller/login', 'HomeController@seller_login')->name('user.login');
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/page', 'HomeController@home')->name('homePage');
 Route::get('/single_product/{slug}', 'HomeController@single_product');
