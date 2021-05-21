@@ -25,4 +25,9 @@ class Brand extends Model
     return $this->hasMany(BrandTranslation::class);
   }
 
+  public function delete()
+  {
+      $this->brand_translations()->delete();
+      return parent::delete();
+  }
 }
