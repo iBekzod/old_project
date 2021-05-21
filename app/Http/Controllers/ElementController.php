@@ -849,12 +849,17 @@ class ElementController extends Controller
 
     public function elementProducts(Request $request){
         $element = Element::findOrFail($request->id);
-        $variation_ids=Variation::where('element_id', $element->id)->pluck('id');
+        $combinations=Variation::where('element_id', $element->id);
+        $variation_ids=$combinations->pluck('id');
         if(count($variation_ids)>0){
-            $products=Product::where('user_id', auth()->id())->whereIn('variation_id', $variation_ids)->get();
             $lang = default_language();
             $currencies = Currency::where('status', true)->get();
-            return view('backend.product.products.edit', compact('element', 'products', 'currencies', 'lang'));
+            if(Product::where('user_id', auth()->id())->whereIn('variation_id', $variation_ids)->exists()){
+                $products=Product::where('user_id', auth()->id())->whereIn('variation_id', $variation_ids)->get();
+                return view('backend.product.products.edit', compact('element', 'products', 'currencies', 'lang'));
+            }
+            $combinations=$combinations->get();
+            return view('backend.product.products.create', compact('element', 'combinations', 'currencies', 'lang'));
         }
         return back();
     }
