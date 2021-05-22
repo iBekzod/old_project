@@ -5,7 +5,7 @@
         <h5 class="mb-0 h6">{{translate('Edit Product')}}</h5>
     </div>
     <div class="col-md-12 mx-auto">
-        <form class="form form-horizontal mar-top" action="{{route('products.update', $variation->id)}}" method="POST"
+        <form class="form form-horizontal mar-top" action="{{route('products.update', $element->id)}}" method="POST"
               enctype="multipart/form-data" id="choice_form">
             @csrf
             <input type="hidden" name="added_by" value="admin">
@@ -15,13 +15,13 @@
                 </div>
                 <div class="card-body">
                     <div class="form-group row">
-                        <label class="col-md-3 col-from-label">{{$variation->getTranslation('name')}} <span
+                        <label class="col-md-3 col-from-label">{{$element->getTranslation('name')}} <span
                                 class="text-danger">*</span></label>
-{{--                        <div class="col-md-8">--}}
-{{--                            <input type="text" class="form-control" name="name"--}}
-{{--                                   placeholder="{{ translate('Product Name') }}" required--}}
-{{--                                   value="{{$variation->getTranslation('name')}}">--}}
-{{--                        </div>--}}
+                      <div class="col-md-8">
+                          <input type="text" class="form-control" name="name"
+                                 placeholder="{{ translate('Product Name') }}" required
+                                 value="{{$element->getTranslation('name')}}">
+                      </div>
                     </div>
                     @if(count($products) > 0)
                         <input type="hidden" value="{{$lang}}" name="lang" class="form-control">

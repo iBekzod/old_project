@@ -856,10 +856,10 @@ class ElementController extends Controller
             $currencies = Currency::where('status', true)->get();
             if(Product::where('user_id', auth()->id())->whereIn('variation_id', $variation_ids)->exists()){
                 $products=Product::where('user_id', auth()->id())->whereIn('variation_id', $variation_ids)->get();
-                return view('backend.product.products.edit', compact('element', 'products', 'currencies', 'lang'));
+                return view('backend.product.products.edit_product', compact('element', 'products', 'currencies', 'lang'));
             }
             $combinations=$combinations->get();
-            return view('backend.product.products.create', compact('element', 'combinations', 'currencies', 'lang'));
+            return view('backend.product.products.create_product', compact('element', 'combinations', 'currencies', 'lang'));
         }
         return back();
     }
