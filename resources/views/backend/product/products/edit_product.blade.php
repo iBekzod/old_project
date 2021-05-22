@@ -36,7 +36,7 @@
                                     </td>
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Price') }}</label>
-                                        <input type="number" onkeyup="change_input(this.value, 'price_change')"
+                                        <input style="width: 100px;" type="number" onkeyup="change_input(this.value, 'price_change')"
                                                name="price" value="0" min="0" step="0.01" class="form-control">
                                     </td>
                                     <td class="text-center">

@@ -4148,8 +4148,7 @@ input[type="number"] {
 /*form elements*/
 
 .form-control {
-    width: 100px;
-    padding: 0rem 1rem;
+    padding: 0.6rem 1rem;
     font-size: 0.875rem;
     height: calc(1.3125rem + 1.2rem + 2px);
     border: 1px solid #e2e5ec;
