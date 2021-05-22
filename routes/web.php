@@ -57,7 +57,7 @@ Route::post('/currency', 'CurrencyController@changeCurrency')->name('currency.ch
 Route::get('/social-login/redirect/{provider}', 'Auth\LoginController@redirectToProvider')->name('social.login');
 Route::get('/social-login/{provider}/callback', 'Auth\LoginController@handleProviderCallback')->name('social.callback');
 Route::get('/users/login', 'HomeController@login')->name('user.login');
-Route::get('/seller/registration', 'HomeController@registration')->name('user.registration');
+Route::get('/seller/registration', 'HomeController@seller_registration')->name('user.registration');
 // Route::post('/users/login', 'HomeController@user_login')->name('user.login.submit');
 // Route::post('/users/login/cart', 'HomeController@cart_login')->name('cart.login.submit');
 

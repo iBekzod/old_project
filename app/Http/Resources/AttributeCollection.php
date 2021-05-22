@@ -12,7 +12,7 @@ class AttributeCollection extends ResourceCollection
         return [
             'data' => $this->collection->map(function($data) {
                 return [
-                   // 'branchs'=> new BranchCollection($data->branch),
+                    //'branchs'=> new BranchCollection($data->branch),
                     'id'=>$data->id,
                     'name'=>$data->getTranslation('name'),
                     'branch_id'=>$data->branch_id,

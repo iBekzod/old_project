@@ -45,25 +45,33 @@ class HomeController extends Controller
         return $this->admin_dashboard();
     }
 
-    public function seller_login()
+    public function seller_login(Request $request)
     {
-        if(Auth::check()){
-            return redirect()->route('home');
-        }
-        return view('frontend.user_login');
+        if ($request->method() === 'POST') {
+                    dd($request->all());
+                }else if($request->method() === 'GET'){
+                    if(Auth::check()){
+                        return redirect()->route('home');
+                    }
+                    return view('frontend.user_login');
+                }
+                return back();
     }
 
-    public function registration(Request $request)
+    public function seller_registration(Request $request)
     {
-        if(Auth::check()){
-            return redirect()->route('admin');
+        if ($request->method() === 'POST') {
+        }else if($request->method() === 'GET'){
+            if(Auth::check()){
+                return redirect()->route('admin');
+            }
+            if($request->has('referral_code')){
+                Cookie::queue('referral_code', $request->referral_code, 43200);
+            }
+            return view('frontend.user_registration');
         }
-        if($request->has('referral_code')){
-            Cookie::queue('referral_code', $request->referral_code, 43200);
-        }
-        return view('frontend.user_registration');
+        return back();
     }
-
     public function cart_login(Request $request)
     {
         $user = User::whereIn('user_type', ['customer', 'seller'])->where('email', $request->email)->orWhere('phone', $request->email)->first();
