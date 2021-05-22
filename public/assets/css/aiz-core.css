@@ -4148,7 +4148,8 @@ input[type="number"] {
 /*form elements*/
 
 .form-control {
-    padding: 0.6rem 1rem;
+    width: 100px;
+    padding: 0rem 1rem;
     font-size: 0.875rem;
     height: calc(1.3125rem + 1.2rem + 2px);
     border: 1px solid #e2e5ec;
@@ -4156,14 +4157,14 @@ input[type="number"] {
 }
 .form-control-sm {
     height: calc(1.5rem + 0.8rem + 2px);
-    padding: 0.4rem 0.7rem;
+    padding: 0rem 0.7rem;
     font-size: 0.8125rem;
     line-height: 1.5;
     border-radius: 0.25rem;
 }
 .form-control-lg {
     height: calc(1.5rem + 1.5rem + 2px);
-    padding: 0.75rem 1rem;
+    padding: 0rem 1rem;
     font-size: 1rem;
     line-height: 1.5;
     border-radius: 0.3rem;

@@ -170,8 +170,8 @@ Route::prefix('v1')->group(function () {
 
     Route::match(['get', 'post'], 'search', 'SearchController@search');
     Route::match(['get', 'post'], 'test',  function(){
-        $attribute= App\Product::all();
-        $data = new App\Http\Resources\ProductCollection($attribute);
+        $attribute= \App\Product::all();
+        $data = new \App\Http\Resources\ProductCollection($attribute);
         // dd($data[0]);
         return response()->json($data);
     });

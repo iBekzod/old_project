@@ -22,14 +22,25 @@
 {{--                                   placeholder="{{ translate('Product Name') }}" required>--}}
 {{--                        </div>--}}
 {{--                    </div>--}}
-                    <div class="form-group row">
+                    {{-- <div class="form-group row">
                         <label class="col-md-3 col-from-label">{{$element->getTranslation('name')}} <span
                                 class="text-danger">*</span></label>
                     <div class="col-md-8">
+
                         <input type="text" class="form-control" name="name"
                                 placeholder="{{ translate('Product Name') }}" required
                                 value="{{$element->getTranslation('name')}}">
                     </div>
+                    </div> --}}
+                    <div class="form-group row px-3">
+                        <img src="{{ uploaded_asset($element->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}" height="140" width="140" style="object-fit: cover" style="display:inline-block;">
+                      <div class="col-md-10">
+                        <label class="col-from-label font-weight-bold h6">{{$element->getTranslation('name')}}</label>
+                            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ex eaque facere est delectus magnam dolor incidunt neque error aliquid blanditiis? Mollitia fugit labore adipisci culpa repellendus similique quidem natus commodi, nesciunt ab est fuga molestias, explicabo delectus voluptatem ut? Natus, quos. Quaerat at excepturi ea eum aperiam suscipit, porro vero.</p>
+                          <input type="text" class="form-control" name="name"
+                                 placeholder="{{ translate('Product Name') }}" required
+                                 value="{{$element->getTranslation('name')}}" hidden>
+                      </div>
                     </div>
                     @if(count($combinations) > 0)
                         <input type="hidden" value="{{$lang}}" name="lang" class="form-control">

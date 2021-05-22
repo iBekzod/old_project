@@ -104,17 +104,8 @@ class Product extends Model
      public function element()
     {
         return $this->hasOneThrough(
-
             Element::class,
             Variation::class
-
-
-            // 'variation_id',
-            // 'element_id',
-            // 'id',
-            // 'id'
-
-
         );
     }
 
@@ -131,11 +122,9 @@ class Product extends Model
     {
 
        // before save code
-       $result = parent::save($options); // returns boolean
+        $result = parent::save($options); // returns boolean
        // after save code
-
         $variation=$this->variation;
-
         $products = Product::where('name', $variation->name)->where('variation_id', $variation->id);
         // dd($products);
         if(count($products->get())>1){
