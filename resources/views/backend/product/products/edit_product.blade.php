@@ -14,13 +14,15 @@
                     <h5 class="mb-0 h6">{{translate('Product Information')}}</h5>
                 </div>
                 <div class="card-body">
-                    <div class="form-group row">
-                        <label class="col-md-3 col-from-label">{{$element->getTranslation('name')}} <span
-                                class="text-danger">*</span></label>
-                      <div class="col-md-8">
+                    <div class="form-group row px-3">
+                        <img src="{{ uploaded_asset($element->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}" height="140" width="140" style="object-fit: cover" style="display:inline-block;">
+                      <div class="col-md-10">
+                        <label class="col-from-label font-weight-bold h6">{{$element->getTranslation('name')}}</label>
+
+                            {!! $element->getTranslation('description') !!}
                           <input type="text" class="form-control" name="name"
                                  placeholder="{{ translate('Product Name') }}" required
-                                 value="{{$element->getTranslation('name')}}">
+                                 value="{{$element->getTranslation('name')}}" hidden>
                       </div>
                     </div>
                     @if(count($products) > 0)
@@ -35,7 +37,7 @@
                                     </td>
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Price') }}</label>
-                                        <input type="number" onkeyup="change_input(this.value, 'price_change')"
+                                        <input style="width: 100px;" type="number" onkeyup="change_input(this.value, 'price_change')"
                                                name="price" value="0" min="0" step="0.01" class="form-control">
                                     </td>
                                     <td class="text-center">
@@ -49,12 +51,12 @@
                                     </td>
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Quantity') }}</label>
-                                        <input type="number" onkeyup="change_input(this.value, 'quantity_change')"
+                                        <input type="number" style="width: 100px;" onkeyup="change_input(this.value, 'quantity_change')"
                                                name="quantity" value="0" min="0" step="1" class="form-control">
                                     </td>
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Discount') }}</label>
-                                        <input type="number" onkeyup="change_input(this.value, 'discount_change')"
+                                        <input type="number" style="width: 100px;" onkeyup="change_input(this.value, 'discount_change')"
                                                name="discount" value="0" min="0" step="0.01" class="form-control">
                                     </td>
                                     <td class="text-center">
@@ -74,7 +76,7 @@
 
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Tax') }}</label>
-                                        <input type="number" name="tax" onkeyup="change_input(this.value, 'tax_change')"
+                                        <input type="number" style="width: 100px;" name="tax" onkeyup="change_input(this.value, 'tax_change')"
                                                value="0" min="0" step="0.01" class="form-control">
                                     </td>
                                     <td class="text-center">
@@ -117,7 +119,7 @@
                                                    class="form-control">
                                         </td>
                                         <td>
-                                            <input type="number" name="variation[{{ $product->id }}][price]"
+                                            <input type="number" style="width: 100px;" name="variation[{{ $product->id }}][price]"
                                                    value="{{$product->price??0}}" min="0" step="0.01"
                                                    class="form-control price_change" required>
                                         </td>
@@ -136,12 +138,12 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="number" name="variation[{{ $product->id }}][quantity]"
+                                            <input type="number" style="width: 100px;" name="variation[{{ $product->id }}][quantity]"
                                                    value="{{$product->qty??0}}" min="0" step="0.01"
                                                    class="form-control quantity_change" required>
                                         </td>
                                         <td>
-                                            <input type="number" name="variation[{{ $product->id }}][discount]" min="0"
+                                            <input type="number" style="width: 100px;" name="variation[{{ $product->id }}][discount]" min="0"
                                                    step="0.01" class="form-control discount_change" required
                                                    value="{{$product->discount??0}}">
                                         </td>
@@ -160,7 +162,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="number" name="variation[{{ $product->id }}][tax]"
+                                            <input type="number" style="width: 100px;" name="variation[{{ $product->id }}][tax]"
                                                    value="{{$product->tax??0}}" min="0" step="0.01"
                                                    class="form-control tax_change" required>
                                         </td>

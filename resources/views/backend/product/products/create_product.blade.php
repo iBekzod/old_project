@@ -22,14 +22,25 @@
 {{--                                   placeholder="{{ translate('Product Name') }}" required>--}}
 {{--                        </div>--}}
 {{--                    </div>--}}
-                    <div class="form-group row">
+                    {{-- <div class="form-group row">
                         <label class="col-md-3 col-from-label">{{$element->getTranslation('name')}} <span
                                 class="text-danger">*</span></label>
                     <div class="col-md-8">
+
                         <input type="text" class="form-control" name="name"
                                 placeholder="{{ translate('Product Name') }}" required
                                 value="{{$element->getTranslation('name')}}">
                     </div>
+                    </div> --}}
+                    <div class="form-group row px-3">
+                        <img src="{{ uploaded_asset($element->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}" height="140" width="140" style="object-fit: cover" style="display:inline-block;">
+                      <div class="col-md-10">
+                        <label class="col-from-label font-weight-bold h6">{{$element->getTranslation('name')}}</label>
+                        {!! $element->getTranslation('description') !!}
+                          <input type="text" class="form-control" name="name"
+                                 placeholder="{{ translate('Product Name') }}" required
+                                 value="{{$element->getTranslation('name')}}" hidden>
+                      </div>
                     </div>
                     @if(count($combinations) > 0)
                         <input type="hidden" value="{{$lang}}" name="lang" class="form-control">
@@ -43,7 +54,7 @@
                                     </td>
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Price') }}</label>
-                                        <input type="number" onkeyup="change_input(this.value, 'price_change')" name="price" value="0" min="0" step="0.01" class="form-control" >
+                                        <input type="number" style="width: 100px;" onkeyup="change_input(this.value, 'price_change')" name="price" value="0" min="0" step="0.01" class="form-control" >
                                     </td>
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Currency') }}</label>
@@ -56,11 +67,11 @@
                                     </td>
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Quantity') }}</label>
-                                        <input type="number" onkeyup="change_input(this.value, 'quantity_change')" name="quantity" value="0" min="0" step="1" class="form-control" >
+                                        <input type="number" style="width: 100px;" onkeyup="change_input(this.value, 'quantity_change')" name="quantity" value="0" min="0" step="1" class="form-control" >
                                     </td>
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Discount') }}</label>
-                                        <input type="number" onkeyup="change_input(this.value, 'discount_change')" name="discount" value="0" min="0" step="0.01" class="form-control" >
+                                        <input type="number" style="width: 100px;" onkeyup="change_input(this.value, 'discount_change')" name="discount" value="0" min="0" step="0.01" class="form-control" >
                                     </td>
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Discount Type') }}</label>
@@ -79,7 +90,7 @@
 
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Tax') }}</label>
-                                        <input type="number" name="tax" onkeyup="change_input(this.value, 'tax_change')" value="0" min="0" step="0.01" class="form-control" >
+                                        <input type="number" style="width: 100px;" name="tax" onkeyup="change_input(this.value, 'tax_change')" value="0" min="0" step="0.01" class="form-control" >
                                     </td>
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Tax type') }}</label>
@@ -114,7 +125,7 @@
                                         <input type="hidden" name="variation[{{ $index }}][name]" value="{{$combination->name}}" class="form-control">
                                     </td>
                                     <td>
-                                        <input type="number"  name="variation[{{ $index }}][price]" value="0" min="0" step="0.01" class="form-control price_change" required>
+                                        <input type="number" style="width: 100px;"  name="variation[{{ $index }}][price]" value="0" min="0" step="0.01" class="form-control price_change" required>
                                     </td>
                                     <td>
                                         <select required class="form-control aiz-selectpicker " name="variation[{{ $index }}][currency]">
@@ -128,10 +139,10 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <input required type="number" name="variation[{{ $index }}][quantity]" value="0" min="0" step="0.01" class="form-control quantity_change" required>
+                                        <input required type="number" style="width: 100px;" name="variation[{{ $index }}][quantity]" value="0" min="0" step="0.01" class="form-control quantity_change" required>
                                     </td>
                                     <td>
-                                        <input required type="number" name="variation[{{ $index }}][discount]" value="0" min="0" step="0.01" class="form-control discount_change" required>
+                                        <input required type="number" style="width: 100px;" name="variation[{{ $index }}][discount]" value="0" min="0" step="0.01" class="form-control discount_change" required>
                                     </td>
                                     <td>
                                         <select class="form-control aiz-selectpicker discount_type_change" name="variation[{{ $index }}][discount_type]">
@@ -146,7 +157,7 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <input type="number" name="variation[{{ $index }}][tax]" value="0" min="0" step="0.01" class="form-control tax_change" required>
+                                        <input type="number" style="width: 100px;" name="variation[{{ $index }}][tax]" value="0" min="0" step="0.01" class="form-control tax_change" required>
                                     </td>
                                     <td>
                                         <select class="form-control aiz-selectpicker tax_type_change" name="variation[{{ $index }}][tax_type]">

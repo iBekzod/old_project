@@ -320,16 +320,17 @@ class ProductController extends Controller
 
         Artisan::call('view:clear');
         Artisan::call('cache:clear');
-
         if (Auth::user()->user_type == 'admin' || Auth::user()->user_type == 'staff') {
-            return redirect()->route('products.admin');
+            // return redirect()->route('products.admin');
+            return redirect()->route('elements.all');
         } else {
             if (\App\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated) {
                 $seller = Auth::user()->seller;
                 $seller->remaining_uploads -= 1;
                 $seller->save();
             }
-            return redirect()->route('seller.products');
+            // return redirect()->route('seller.products');
+            return redirect()->route('elements.all');
         }
     }
 
@@ -425,7 +426,7 @@ class ProductController extends Controller
         Artisan::call('view:clear');
         Artisan::call('cache:clear');
 
-        return back();
+        return redirect()->route('elements.all');
     }
 
     /**
@@ -450,12 +451,12 @@ class ProductController extends Controller
 
             Artisan::call('view:clear');
             Artisan::call('cache:clear');
-
-            if (Auth::user()->user_type == 'admin') {
-                return redirect()->route('products.admin');
-            } else {
-                return redirect()->route('seller.products');
-            }
+            return redirect()->route('elements.all');
+            // if (Auth::user()->user_type == 'admin') {
+            //     return redirect()->route('products.admin');
+            // } else {
+            //     return redirect()->route('seller.products');
+            // }
         } catch (\Exception $e) {
             flash(translate('Something went wrong'))->error();
             return back();
@@ -629,7 +630,6 @@ class ProductController extends Controller
             $combinations = $element->combinations;
             $lang = default_language();
             $currencies = Currency::where('status', true)->get();
-
             return view('backend.product.products.make_combination', compact('combinations', 'element', 'lang', 'currencies'));
         } catch (\Exception $e) {
         }

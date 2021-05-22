@@ -129,6 +129,7 @@
                 </div>
             </div>
             @php
+                
                 foreach ($characteristics as $attribute_id=>$value_id){
                     $characteristic_attributes[]=$attribute_id;
                 }
