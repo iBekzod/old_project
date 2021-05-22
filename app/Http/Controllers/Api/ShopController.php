@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ShopCollection;
-use App\Models\Product;
-use App\Models\Shop;
-use App\Models\Seller;
+use App\Product;
+use App\Shop;
+use App\Seller;
 
 class ShopController extends Controller
 {

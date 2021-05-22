@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Category;
 use App\Http\Controllers\Controller;
 use App\Http\HelperTrait;
-use App\Models\FlashDealProduct;
+use App\FlashDealProduct;
 use App\Product;
 use App\Shop;
 use Illuminate\Http\Request;

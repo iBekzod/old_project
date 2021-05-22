@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Models\Product;
+use App\Product;
 use Illuminate\Database\Eloquent\Model;
 
 class FlashDealProduct extends Model

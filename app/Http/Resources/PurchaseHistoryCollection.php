@@ -14,7 +14,7 @@ class PurchaseHistoryCollection extends ResourceCollection
                 return [
                     'code' => $data->code,
                     'user' => [
-                        'name' => $data->user->getTranslation('name'),
+                        'name' => $data->user->name,
                         'email' => $data->user->email,
                         'avatar' => $data->user->avatar,
                         'avatar_original' => api_asset($data->user->avatar_original)

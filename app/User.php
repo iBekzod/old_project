@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Laravel\Passport\HasApiTokens;
-use App\Models\Cart;
+use App\Cart;
 use App\Notifications\EmailVerificationNotification;
 
 class User extends Authenticatable implements MustVerifyEmail

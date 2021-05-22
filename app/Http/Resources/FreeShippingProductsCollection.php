@@ -15,7 +15,7 @@ class FreeShippingProductsCollection extends ResourceCollection
                     'id'=>$data->id,
                     'slug'=>$data->slug,
                     'owner_id' => $data->user_id,
-                    'name' => $data->getTranslation('name'),
+                    'name' => $data->name,
                     'photos' => explode(',', $data->photos),
                     'thumbnail_image' => api_asset($data->thumbnail_img),
                     'base_price' => (double) homeBasePrice($data->id),

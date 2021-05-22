@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\BrandCollection;
-use App\Models\Brand;
+use App\Brand;
 
 class BrandController extends Controller
 {

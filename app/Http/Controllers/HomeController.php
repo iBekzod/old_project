@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\HelperClasses\Translations;
-use App\Models\CharacteristicValues;
+use App\CharacteristicValues;
 use App\ProductTranslation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;

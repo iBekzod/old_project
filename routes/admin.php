@@ -41,11 +41,11 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
     Route::post('/products/todays_deals', 'ProductController@updateTodaysDeals')->name('products.todays_deals');
     Route::post('/products/featured', 'ProductController@updateFeatured')->name('products.featured');
     Route::post('/products/featureds', 'ProductController@updateFeatureds')->name('products.featureds');
-    Route::get('/products/{id}/characteristics', 'ProductController@characteristics')->name('products.characteristics');
-    Route::post('/products/{id}/characteristics', 'ProductController@characteristics')->name('products.characteristics');
+    // Route::get('/products/{id}/characteristics', 'ProductController@characteristics')->name('products.characteristics');
+    // Route::post('/products/{id}/characteristics', 'ProductController@characteristics')->name('products.characteristics');
     Route::post('/products/get_products_by_subcategory', 'ProductController@get_products_by_subcategory')->name('products.get_products_by_subcategory');
-    Route::get('/products/{id}/in-stock', 'ProductController@inStock')->name('products.in_stock');
-	Route::get('/products/{id}/in-stock/add/attrs', 'ProductController@addInStockProductAttrs')->name('products.in_stock_add_attrs');
+    // Route::get('/products/{id}/in-stock', 'ProductController@inStock')->name('products.in_stock');
+	// Route::get('/products/{id}/in-stock/add/attrs', 'ProductController@addInStockProductAttrs')->name('products.in_stock_add_attrs');
 
     Route::get('/elements/variation/remove','ElementController@remove_variation')->name('elements.variation.remove');
     Route::get('/elements/admin','ElementController@admin_elements')->name('elements.admin');

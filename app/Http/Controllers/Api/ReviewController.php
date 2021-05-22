@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\ProductDetailCollection;
 use App\Http\Resources\ReviewCollection;
-use App\Models\Review;
+use App\Review;
 use App\Product;
 use Illuminate\Http\Request;
 

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\FlashDealProductCollection;
 use App\Http\Resources\ProductCollection;
-use App\Models\FlashDeal;
+use App\FlashDeal;
 use Illuminate\Http\Request;
 
 use \Cviebrock\EloquentSluggable\Services\SlugService;

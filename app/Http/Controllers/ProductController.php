@@ -62,66 +62,66 @@ class ProductController extends Controller
         ]);
     }
 
-    public function characteristics(Request $request, $id)
-    {
-        if ($request->method() == 'POST') {
-            $product = Product::where('id', $id)->firstOrFail();
-            $product->characteristicValues()->delete();
-            if ($request->get('attr')) {
-                foreach ($request->get('attr') as $item) {
-                    $data = [
-                        'product_id' => $product->id,
-                        'parent_id' => $item['parent_id'],
-                        'attr_id' => $item['id'],
-                        'name' => $item['name'],
-                    ];
+    // public function characteristics(Request $request, $id)
+    // {
+    //     if ($request->method() == 'POST') {
+    //         $product = Product::where('id', $id)->firstOrFail();
+    //         $product->characteristicValues()->delete();
+    //         if ($request->get('attr')) {
+    //             foreach ($request->get('attr') as $item) {
+    //                 $data = [
+    //                     'product_id' => $product->id,
+    //                     'parent_id' => $item['parent_id'],
+    //                     'attr_id' => $item['id'],
+    //                     'name' => $item['name'],
+    //                 ];
 
 
-                    if (isset($item['values'])) {
-                        $data['values'] = implode(' / ', $item['values']);
-                    }
-                    // dd($data);
-                    CharacteristicValues::create($data);
-                }
-            }
+    //                 if (isset($item['values'])) {
+    //                     $data['values'] = implode(' / ', $item['values']);
+    //                 }
+    //                 // dd($data);
+    //                 CharacteristicValues::create($data);
+    //             }
+    //         }
 
-            flash(translate('Saved successfully'))->success();
-            return back();
-        } else {
-            $product = Product::where('id', $id)->with(['characteristicValues'])->firstOrFail();
-            $options = $product->category->productAttributes;
-            // dd($product->characteristicValues);
-            return view('backend.product.products.add_attr', compact(
-                'product',
-                'options'
-            ));
-        }
-    }
+    //         flash(translate('Saved successfully'))->success();
+    //         return back();
+    //     } else {
+    //         $product = Product::where('id', $id)->with(['characteristicValues'])->firstOrFail();
+    //         $options = $product->category->productAttributes;
+    //         // dd($product->characteristicValues);
+    //         return view('backend.product.products.add_attr', compact(
+    //             'product',
+    //             'options'
+    //         ));
+    //     }
+    // }
 
-    public function addInStockProductAttrs(Request $request, $id)
-    {
-        $product = ProductStock::where('id', $id)->firstOrFail();
-        $lang = $request->get('lang');
-        $options = ProductAttribute::all();
+    // public function addInStockProductAttrs(Request $request, $id)
+    // {
+    //     $product = ProductStock::where('id', $id)->firstOrFail();
+    //     $lang = $request->get('lang');
+    //     $options = ProductAttribute::all();
 
-        return view('backend.product.products.add_attr', [
-            'product' => $product,
-            'lang' => $lang,
-            'options' => $options
-        ]);
-    }
+    //     return view('backend.product.products.add_attr', [
+    //         'product' => $product,
+    //         'lang' => $lang,
+    //         'options' => $options
+    //     ]);
+    // }
 
-    public function inStock($id)
-    {
-        $product = Product::where('id', $id)->firstOrFail();
-        $type = 'All';
+    // public function inStock($id)
+    // {
+    //     $product = Product::where('id', $id)->firstOrFail();
+    //     $type = 'All';
 
-        return view('backend.product.products.in_stock', [
-            'product' => $product,
-            'products' => $product->stocks()->paginate(15),
-            'type' => $type
-        ]);
-    }
+    //     return view('backend.product.products.in_stock', [
+    //         'product' => $product,
+    //         'products' => $product->stocks()->paginate(15),
+    //         'type' => $type
+    //     ]);
+    // }
 
     /**
      * Display a listing of the resource.
@@ -240,23 +240,16 @@ class ProductController extends Controller
         } else {
             $user_id = \App\User::where('user_type', 'admin')->first()->id;
         }
-
-        // $name = $element->name;
-        // $added_by = Auth::user()->user_type;
-        // $minimum_price=0;
-        // $product_price=0;
-        // $product_id=0;
-        // $total_stock=0;
-        // $product_ids=array();
         $element = Element::findOrFail($request->element_id);
         if ($request->has('variation')) {
             foreach ($request->variation as $variant) {
                 if ($variation = Variation::findOrFail($variant["id"])) {
                     $product = new Product;
-                    $product->name = $variant["name"];
+                    $product_name = $variation->name . " " . Auth::user()->name??null . " ".$variant["price"];
+                    $product->name = $product_name;
                     $product->added_by = Auth::user()->user_type;
                     $product->user_id = $user_id;
-                    $product->slug = $element->name . " " . $variant["name"];
+                    $product->slug = SlugService::createSlug(Product::class, 'slug', $product_name);
                     $product->currency_id = (int)$variant["currency"];
                     $product->price = (float)$variant["price"];
                     $product->discount = (float)$variant["discount"];
@@ -280,18 +273,19 @@ class ProductController extends Controller
                     $product->earn_point = 0;
                     $product->num_of_sale = 0;
                     $product->variation_id = $variation->id;
-                    if ($product->save()) {
-                        $products = Product::where('name', $variant["name"])->where('variation_id', $variation->id);
-                        if(count($products->get())>1){
-                            $min_price=$products->min("price");
-                            $variation->lowest_price_id=json_encode($products->where('price', $min_price)->pluck('id'));
-                            $variation->qty=$products->sum('qty');
-                            $variation->num_of_sale=$products->sum('num_of_sale');
-                            $variation->prices=$products->pluck('price');
-                            $variation->rating=(double)$products->sum('rating')/$products->count();
-                        }
+                    $product->save();
+                    // if ($product->save()) {
+                    //     $products = Product::where('name', $variant["name"])->where('variation_id', $variation->id);
+                    //     if(count($products->get())>1){
+                    //         $min_price=$products->min("price");
+                    //         $variation->lowest_price_id=json_encode($products->where('price', $min_price)->pluck('id'));
+                    //         $variation->qty=$products->sum('qty');
+                    //         $variation->num_of_sale=$products->sum('num_of_sale');
+                    //         $variation->prices=$products->pluck('price');
+                    //         $variation->rating=(double)$products->sum('rating')/$products->count();
+                    //     }
 
-                    }
+                    // }
                 }
 
 
@@ -390,92 +384,40 @@ class ProductController extends Controller
         } else {
             $user_id = \App\User::where('user_type', 'admin')->first()->id;
         }
-        $name = $request->name;
-        $slug = SlugService::createSlug(Variation::class, 'slug', slugify($name));
-        $added_by = Auth::user()->user_type;
-        $minimum_price = 0;
-        $product_price = 0;
-        $product_id = 0;
-        $total_stock = 0;
-        $variation = Variation::findOrFail($id);
-        $variation->name = $name;
-        $variation->save();
-        $product_ids = array();
+        $element = Element::findOrFail($request->element_id);
         if ($request->has('variation')) {
-            foreach ($request->variation as $key => $variant) {
-                $product = Product::findOrFail($key);
-                $product->name = $variant["name"];
-                $product->added_by = $added_by;
-                $product->user_id = $user_id;
-                if ($product->slug != SlugService::createSlug(Product::class, 'slug', slugify($variant["slug"])))
-                    $product->slug = SlugService::createSlug(Product::class, 'slug', slugify($variant["slug"]));
-                $product->currency_id = (int)$variant["currency"];
-                $product->price = (float)$variant["price"];
-                $product->discount = (float)$variant["discount"];
-                $product->discount_type = $variant["discount_type"];
-                if (array_key_exists('todays_deal', $variant)) {
-                    ($variant["todays_deal"] == "on") ? $product->todays_deal = true : $product->todays_deal = false;
-                } else {
-                    $product->todays_deal = false;
-                }
-                if (array_key_exists('published', $variant)) {
-                    ($variant["published"] == "on") ? $product->published = true : $product->published = false;
-                } else {
-                    $product->published = false;
-                }
-                $product->delivery_group_id = $variant["delivery_type"];
-                $product->qty = (int)$variant["quantity"];
-                $product->tax = (float)$variant["tax"];
-                $product->tax_type = $variant["tax_type"];
-                //                $product->rating=0;
-                $product->barcode = rand(10000, 999999);
-                $product->earn_point = 0;
-                $product->num_of_sale = 0;
-                $product->variation_id = $variation->id;
-                $product->save();
-
-                $product_price = $product->price;
-                $total_stock = $total_stock + $product->qty;
-                if ($currency = Currency::findOrFail($product->currency_id)) {
-                    $product_price = $product_price / $currency->exchange_rate;
-                }
-                if ($minimum_price > $product_price || $minimum_price == 0) {
-                    $minimum_price = $product_price;
-                    $product_id = $product->id;
-                    $product_ids = array();
-                    $product_ids[] = $product->id;
-                } else if ($minimum_price == $product_price && $product_price != 0) {
-                    $product_ids[] = $product->id;
-                }
-                foreach (Language::all() as $language) {
-                    // Product Translations
-                    $product_translation = ProductTranslation::firstOrNew(['lang' => $language->code, 'product_id' => $product->id]);
-                    $product_translation->name = $product->name;
-                    $product_translation->save();
+            foreach ($request->variation as $variant) {
+                if ($variation = Variation::findOrFail($variant["id"])) {
+                    $product = new Product;
+                    $product_name = $variation->name . " " . Auth::user()->name??null . " ".$variant["price"];
+                    $product->name = $product_name;
+                    $product->added_by = Auth::user()->user_type;
+                    $product->user_id = $user_id;
+                    if ($product->slug != SlugService::createSlug(Product::class, 'slug', slugify($variant["slug"])))
+                        $product->slug = SlugService::createSlug(Product::class, 'slug', slugify($variant["slug"]));
+                    $product->currency_id = (int)$variant["currency"];
+                    $product->price = (float)$variant["price"];
+                    $product->discount = (float)$variant["discount"];
+                    $product->discount_type = $variant["discount_type"];
+                    if (array_key_exists('todays_deal', $variant)) {
+                        ($variant["todays_deal"] == "on") ? $product->todays_deal = true : $product->todays_deal = false;
+                    } else {
+                        $product->todays_deal = false;
+                    }
+                    if (array_key_exists('published', $variant)) {
+                        ($variant["published"] == "on") ? $product->published = true : $product->published = false;
+                    } else {
+                        $product->published = false;
+                    }
+                    $product->delivery_group_id = $variant["delivery_type"];
+                    $product->qty = (int)$variant["quantity"];
+                    $product->tax = (float)$variant["tax"];
+                    $product->tax_type = $variant["tax_type"];
+                    $product->barcode = rand(10000, 999999);
+                    $product->variation_id = $variation->id;
+                    $product->save();
                 }
             }
-        }
-        if ($product_id != 0 && $product = Product::findOrFail($product_id)) {
-            //            if($element=Element::findOrFail($request->element_id)){
-            $variation->lowest_price_id = $product->id;
-            $variation->slug = $slug;
-            //                $variation->element_id=$element->id;
-            $variation->prices = json_encode($product_ids);
-            $variation->variant = $product->slug;
-            $variation->sku = $product->slug;
-            //                $variation->num_of_sale=0;
-            $variation->qty = $total_stock;
-            $variation->rating = 0;
-            $variation->user_id = $user_id;
-            $variation->save();
-            // foreach (Language::all() as $language) {
-            //     $variation_translation = VariationTranslation::firstOrNew(['lang' => $language->code, 'variation_id' => $variation->id]);
-            //     $variation_translation->name = $name;
-            //     $variation_translation->save();
-            // }
-
-
-            //            }
         }
 
         flash(translate('Product has been updated successfully'))->success();
@@ -526,34 +468,34 @@ class ProductController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function duplicate(Request $request, $id)
-    {
-        $product = Product::find($id);
-        $product_new = $product->replicate();
-        // $product_new->slug = substr($product_new->slug, 0, -5) . Str::random(5);
-        if ($product_new->save()) {
-            flash(translate('Product has been duplicated successfully'))->success();
-            if (Auth::user()->user_type == 'admin' || Auth::user()->user_type == 'staff') {
-                if ($request->type == 'In House')
-                    return redirect()->route('products.admin');
-                elseif ($request->type == 'Seller')
-                    return redirect()->route('products.seller');
-                elseif ($request->type == 'All')
-                    return redirect()->route('products.all');
-            } else {
-                return redirect()->route('seller.products');
-            }
-        } else {
-            flash(translate('Something went wrong'))->error();
-            return back();
-        }
-    }
+    // public function duplicate(Request $request, $id)
+    // {
+    //     $product = Product::find($id);
+    //     $product_new = $product->replicate();
+    //     // $product_new->slug = substr($product_new->slug, 0, -5) . Str::random(5);
+    //     if ($product_new->save()) {
+    //         flash(translate('Product has been duplicated successfully'))->success();
+    //         if (Auth::user()->user_type == 'admin' || Auth::user()->user_type == 'staff') {
+    //             if ($request->type == 'In House')
+    //                 return redirect()->route('products.admin');
+    //             elseif ($request->type == 'Seller')
+    //                 return redirect()->route('products.seller');
+    //             elseif ($request->type == 'All')
+    //                 return redirect()->route('products.all');
+    //         } else {
+    //             return redirect()->route('seller.products');
+    //         }
+    //     } else {
+    //         flash(translate('Something went wrong'))->error();
+    //         return back();
+    //     }
+    // }
 
-    public function get_products_by_brand(Request $request)
-    {
-        $products = Product::where('brand_id', $request->brand_id)->get();
-        return view('partials.product_select', compact('products'));
-    }
+    // public function get_products_by_brand(Request $request)
+    // {
+    //     $products = Product::where('brand_id', $request->brand_id)->get();
+    //     return view('partials.product_select', compact('products'));
+    // }
 
 
     public function updateTodaysDeal(Request $request)

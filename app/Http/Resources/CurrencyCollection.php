@@ -11,7 +11,7 @@ class CurrencyCollection extends ResourceCollection
         return [
             'data' => $this->collection->map(function($data) {
                 return [
-                    'name' => $data->getTranslation('name'),
+                    'name' => $data->name,
                     'code' => $data->code,
                     'symbol' => $data->symbol,
                     'exchange_rate' => (double) $data->exchange_rate

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Cart;
-use App\Models\Coupon;
-use App\Models\CouponUsage;
+use App\Cart;
+use App\Coupon;
+use App\CouponUsage;
 use Illuminate\Http\Request;
 
 class CouponController extends Controller

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\ColorCollection;
-use App\Models\Color;
+use App\Color;
 
 class ColorController extends Controller
 {
