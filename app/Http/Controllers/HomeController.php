@@ -61,6 +61,7 @@ class HomeController extends Controller
     public function seller_registration(Request $request)
     {
         if ($request->method() === 'POST') {
+            dd($request->all());
         }else if($request->method() === 'GET'){
             if(Auth::check()){
                 return redirect()->route('admin');

@@ -15,7 +15,7 @@
 
                             <div class="px-4 py-3 py-lg-4">
                                 <div class="">
-                                    <form class="form-default" role="form" action="{{ route('login') }}" method="POST">
+                                    <form class="form-default" role="form" action="{{ route('seller.login') }}" method="POST">
                                         @csrf
                                         <div class="form-group">
                                             @if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null && \App\Addon::where('unique_identifier', 'otp_system')->first()->activated)

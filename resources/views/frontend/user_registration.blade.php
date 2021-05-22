@@ -14,7 +14,7 @@
                             </div>
                             <div class="px-4 py-3 py-lg-4">
                                 <div class="">
-                                    <form id="reg-form" class="form-default" role="form" action="{{ route('register') }}" method="POST">
+                                    <form id="reg-form" class="form-default" role="form" action="{{ route('seller.registration') }}" method="POST">
                                         @csrf
                                         <div class="form-group">
                                             <input type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" value="{{ old('name') }}" placeholder="{{  translate('Full Name') }}" name="name">
