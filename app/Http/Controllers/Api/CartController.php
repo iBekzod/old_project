@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\CartCollection;
-use App\Models\Cart;
-use App\Models\Color;
-use App\Models\FlashDeal;
-use App\Models\FlashDealProduct;
-use App\Models\Product;
+use App\Cart;
+use App\Color;
+use App\FlashDeal;
+use App\FlashDealProduct;
+use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

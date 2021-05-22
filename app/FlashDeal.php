@@ -31,4 +31,9 @@ class FlashDeal extends Model
     {
         return $this->hasMany(FlashDealProduct::class);
     }
+
+    public function flashDealProducts()
+    {
+        return $this->hasMany(FlashDealProduct::class)->with('product');
+    }
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\WishlistCollection;
-use App\Models\Wishlist;
+use App\Wishlist;
 use Illuminate\Http\Request;
 
 class WishlistController extends Controller

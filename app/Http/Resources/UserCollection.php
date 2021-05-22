@@ -12,7 +12,7 @@ class UserCollection extends ResourceCollection
             'data' => $this->collection->map(function($data) {
                 return [
                     'id' => (integer) $data->id,
-                    'name' => $data->getTranslation('name'),
+                    'name' => $data->name,
                     'type' => $data->user_type,
                     'email' => $data->email,
                     'avatar' => $data->avatar,

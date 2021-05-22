@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
+use App\Product;
 use App\ProductTranslation;
 use Illuminate\Http\Request;
 use App\Search;

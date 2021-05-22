@@ -11,14 +11,14 @@ use App\Http\Resources\ProductDetailCollection;
 use App\Http\Resources\SearchProductCollection;
 use App\Http\Resources\FlashDealCollection;
 use App\Http\Resources\FlashDealsCollection;
-use App\Models\Attribute;
-use App\Models\Brand;
-use App\Models\Category;
-use App\Models\FlashDeal;
-use App\Models\FlashDealProduct;
+use App\Attribute;
+use App\Brand;
+use App\Category;
+use App\FlashDeal;
+use App\FlashDealProduct;
 use App\Product;
-use App\Models\Shop;
-use App\Models\Color;
+use App\Shop;
+use App\Color;
 use App\Seller;
 use Illuminate\Http\Request;
 use App\Utility\CategoryUtility;
@@ -242,7 +242,7 @@ class ProductController extends Controller
 
     public function brand($id)
     {
-        
+
         $products=Product::where('brand_id', $id)->where('is_accepted', 1)->inRandomOrder()->paginate(10);
         return new ProductCollection($products);
     }

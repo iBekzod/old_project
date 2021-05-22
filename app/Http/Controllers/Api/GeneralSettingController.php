@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\GeneralSettingCollection;
-use App\Models\GeneralSetting;
+use App\GeneralSetting;
 
 class GeneralSettingController extends Controller
 {

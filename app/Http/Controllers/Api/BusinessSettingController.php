@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\BusinessSettingCollection;
-use App\Models\BusinessSetting;
+use App\BusinessSetting;
 
 class BusinessSettingController extends Controller
 {

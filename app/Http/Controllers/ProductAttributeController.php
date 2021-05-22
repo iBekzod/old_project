@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Category;
-use App\Models\AttributeValue;
-use App\Models\ProductAttribute;
-use App\Models\ProductAttributeCharacteristics;
-use App\Models\ProductAttributeCharacteristicTranslation;
-use App\Models\ProductAttributeTranslation;
+use App\AttributeValue;
+use App\ProductAttribute;
+use App\ProductAttributeCharacteristics;
+use App\ProductAttributeCharacteristicTranslation;
+use App\ProductAttributeTranslation;
 use App\Product;
 use Illuminate\Http\Request;
 

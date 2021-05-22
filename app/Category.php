@@ -7,6 +7,7 @@ use App;
 use Kalnoy\Nestedset\NodeTrait;
 use Rennokki\QueryCache\Traits\QueryCacheable;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 
 class Category extends Model
 {
@@ -81,4 +82,20 @@ class Category extends Model
 //            'attribute_id'
 //        )->with('attributes');
 //    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function subCategories()
+    {
+        return $this->hasMany(SubCategory::class);
+    }
+
+
+    public function subSubCategories()
+    {
+        return $this->hasMany(SubSubCategory::class);
+    }
 }

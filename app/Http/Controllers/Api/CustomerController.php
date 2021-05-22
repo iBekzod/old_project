@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\CustomerResource;
-use App\Models\Customer;
+use App\Customer;
 
 class CustomerController extends Controller
 {

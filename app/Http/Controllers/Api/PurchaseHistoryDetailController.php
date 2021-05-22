@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\PurchaseHistoryDetailCollection;
-use App\Models\OrderDetail;
+use App\OrderDetail;
 
 class PurchaseHistoryDetailController extends Controller
 {

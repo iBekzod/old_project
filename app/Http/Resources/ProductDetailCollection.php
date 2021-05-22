@@ -6,9 +6,9 @@ use App\Attribute as AppAttribute;
 use App\ProductStock;
 use App\ProductTranslation;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use App\Models\Review;
-use App\Models\Attribute;
-use App\Models\FlashDealProduct;
+use App\Review;
+use App\Attribute;
+use App\FlashDealProduct;
 class ProductDetailCollection extends ResourceCollection
 {
     public function toArray($request)
