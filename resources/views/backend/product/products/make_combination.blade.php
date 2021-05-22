@@ -1,3 +1,14 @@
+<div class="form-group row px-3">
+    <img src="{{ uploaded_asset($element->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}" height="140" width="140" style="object-fit: cover" style="display:inline-block;">
+  <div class="col-md-10">
+    <label class="col-from-label font-weight-bold h6">{{$element->getTranslation('name')}}</label>
+
+        {!! $element->getTranslation('description') !!}
+      <input type="text" class="form-control" name="name"
+             placeholder="{{ translate('Product Name') }}" required
+             value="{{$element->getTranslation('name')}}" hidden>
+  </div>
+</div>
 @if(count($combinations) > 0)
     <input type="hidden" value="{{$lang}}" name="lang" class="form-control">
     <input type="hidden"  name="element_id" value="{{$element->id}}" class="form-control">
@@ -10,7 +21,7 @@
                 </td>
                 <td class="text-center">
                     <label for="" class="control-label">{{ translate('Price') }}</label>
-                    <input type="number" onkeyup="change_input(this.value, 'price_change')" name="price" value="0" min="0" step="0.01" class="form-control" >
+                    <input type="number"  style="width: 100px;" onkeyup="change_input(this.value, 'price_change')" name="price" value="0" min="0" step="0.01" class="form-control" >
                 </td>
                 <td class="text-center">
                     <label for="" class="control-label">{{ translate('Currency') }}</label>
@@ -23,11 +34,11 @@
                 </td>
                 <td class="text-center">
                     <label for="" class="control-label">{{ translate('Quantity') }}</label>
-                    <input type="number" onkeyup="change_input(this.value, 'quantity_change')" name="quantity" value="0" min="0" step="1" class="form-control" >
+                    <input type="number"  style="width: 100px;" onkeyup="change_input(this.value, 'quantity_change')" name="quantity" value="0" min="0" step="1" class="form-control" >
                 </td>
                 <td class="text-center">
                     <label for="" class="control-label">{{ translate('Discount') }}</label>
-                    <input type="number" onkeyup="change_input(this.value, 'discount_change')" name="discount" value="0" min="0" step="0.01" class="form-control" >
+                    <input type="number"  style="width: 100px;" onkeyup="change_input(this.value, 'discount_change')" name="discount" value="0" min="0" step="0.01" class="form-control" >
                 </td>
                 <td class="text-center">
                     <label for="" class="control-label">{{ translate('Discount Type') }}</label>
@@ -46,7 +57,7 @@
 
                 <td class="text-center">
                     <label for="" class="control-label">{{ translate('Tax') }}</label>
-                    <input type="number" name="tax" onkeyup="change_input(this.value, 'tax_change')" value="0" min="0" step="0.01" class="form-control" >
+                    <input type="number"  style="width: 100px;" name="tax" onkeyup="change_input(this.value, 'tax_change')" value="0" min="0" step="0.01" class="form-control" >
                 </td>
                 <td class="text-center">
                     <label for="" class="control-label">{{ translate('Tax type') }}</label>
@@ -58,17 +69,20 @@
                 </td>
                 <td class="text-center">
                     <label for="" class="control-label">{{ translate('Todays deals') }}</label>
-                    <label class="aiz-switch aiz-switch-success mb-0">
+                    <label style="display: block;" class="aiz-switch aiz-switch-success mb-0">
                         <input type="checkbox" onchange="change_switch(this.checked, 'todays_deal_change')" name="todays_deal" checked>
                         <span></span>
                     </label>
                 </td>
                 <td class="text-center">
                     <label for="" class="control-label">{{ translate('Published') }}</label>
-                    <label class="aiz-switch aiz-switch-success mb-0">
+                    <label style="display: block;" class="aiz-switch aiz-switch-success mb-0">
                         <input type="checkbox" onchange="change_switch(this.checked, 'published_change')" name="published" checked>
                         <span></span>
                     </label>
+                </td>
+                <td>
+                    {{ translate('Delete') }}
                 </td>
             </tr>
             </thead>
@@ -81,7 +95,7 @@
                     <input type="hidden" name="variation[{{ $index }}][name]" value="{{$combination->name}}" class="form-control">
                 </td>
                 <td>
-                    <input type="number"  name="variation[{{ $index }}][price]" value="0" min="0" step="0.01" class="form-control price_change" required>
+                    <input type="number"  style="width: 100px;"  name="variation[{{ $index }}][price]" value="0" min="0" step="0.01" class="form-control price_change" required>
                 </td>
                 <td>
                     <select required class="form-control aiz-selectpicker " name="variation[{{ $index }}][currency]">
@@ -95,10 +109,10 @@
                     </select>
                 </td>
                 <td>
-                    <input required type="number" name="variation[{{ $index }}][quantity]" value="0" min="0" step="0.01" class="form-control quantity_change" required>
+                    <input required type="number"  style="width: 100px;"  name="variation[{{ $index }}][quantity]" value="0" min="0" step="0.01" class="form-control quantity_change" required>
                 </td>
                 <td>
-                    <input required type="number" name="variation[{{ $index }}][discount]" value="0" min="0" step="0.01" class="form-control discount_change" required>
+                    <input required type="number"  style="width: 100px;"  name="variation[{{ $index }}][discount]" value="0" min="0" step="0.01" class="form-control discount_change" required>
                 </td>
                 <td>
                     <select class="form-control aiz-selectpicker discount_type_change" name="variation[{{ $index }}][discount_type]">
@@ -113,7 +127,7 @@
                     </select>
                 </td>
                 <td>
-                    <input type="number" name="variation[{{ $index }}][tax]" value="0" min="0" step="0.01" class="form-control tax_change" required>
+                    <input type="number"  style="width: 100px;" name="variation[{{ $index }}][tax]" value="0" min="0" step="0.01" class="form-control tax_change" required>
                 </td>
                 <td>
                     <select class="form-control aiz-selectpicker tax_type_change" name="variation[{{ $index }}][tax_type]">
@@ -121,17 +135,23 @@
                         <option value="percent" selected>{{translate('Percent')}}</option>
                     </select>
                 </td>
-                <td>
-                    <label class="aiz-switch aiz-switch-success mb-0">
-                        <input type="checkbox" name="variation[{{ $index }}][todays_deal]" class="todays_deal_change" checked>
-                        <span></span>
-                    </label>
+                <td >
+                    <div class="d-flex justify-content-center">
+                        <label  class="aiz-switch aiz-switch-success mb-0">
+                            <input type="checkbox" name="variation[{{ $index }}][todays_deal]" class="todays_deal_change" checked>
+                            <span></span>
+                        </label>
+                    </div>
+
                 </td>
-                <td>
-                    <label class="aiz-switch aiz-switch-success mb-0 ">
-                        <input type="checkbox" name="variation[{{ $index }}][published]" class="published_change" checked>
-                        <span></span>
-                    </label>
+                <td >
+                    <div class="d-flex justify-content-center">
+                        <label class="aiz-switch aiz-switch-success mb-0 ">
+                            <input type="checkbox" name="variation[{{ $index }}][published]" class="published_change" checked>
+                            <span></span>
+                        </label>
+                    </div>
+
                 </td>
                 <td>
                     <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="delete_variant(this)"><i class="las la-trash"></i></button>

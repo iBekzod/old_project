@@ -88,11 +88,11 @@
                         </a>
                         <!--Submenu-->
                         <ul class="aiz-side-nav-list level-2">
-                            <li class="aiz-side-nav-item">
+                            {{--  <li class="aiz-side-nav-item">
                                 <a class="aiz-side-nav-link" href="{{route('products.create')}}">
                                     <span class="aiz-side-nav-text">{{translate('Add New product')}}</span>
                                 </a>
-                            </li>
+                            </li>  --}}
                              {{--  <li class="aiz-side-nav-item">
                                 <a href="{{route('products.all')}}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{ translate('All Products') }}</span>
@@ -114,12 +114,12 @@
                                     @endif
                                 </a>
                             </li>  --}}
-                            <li class="aiz-side-nav-item">
+                            {{--  <li class="aiz-side-nav-item">
                                 <a href="{{route('products.admin')}}"
                                    class="aiz-side-nav-link {{ areActiveRoutes(['products.admin', 'products.create', 'products.admin.edit']) }}">
                                     <span class="aiz-side-nav-text">{{ translate('In House Products') }}</span>
                                 </a>
-                            </li>
+                            </li>  --}}
                             @if($vendor_system_activation->value == 1)
                                 <li class="aiz-side-nav-item">
                                     <a href="{{route('products.seller')}}"
