@@ -3,7 +3,6 @@
 use App\Http\Controllers\Api\V2\HomePageController;
 use \App\Http\Controllers\Api\SearchController;
 
-use \App\Models\Category;
 
 
 // use Illuminate\Routing\Route;
@@ -173,7 +172,8 @@ Route::prefix('v1')->group(function () {
     Route::match(['get', 'post'], 'test',  function(){
         $attribute= App\Product::all();
         $data = new App\Http\Resources\ProductCollection($attribute);
-        dd($data);
+        // dd($data[0]);
+        return response()->json($data);
     });
 
     Route::get('conversation_messages','Api\ConversationController@getConversations');//->middleware('auth:api');

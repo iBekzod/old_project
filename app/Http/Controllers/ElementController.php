@@ -608,7 +608,6 @@ class ElementController extends Controller
         $categories = Category::withDepth()->having('depth', '=', 2)->get();
         $brands = Brand::all();
         $colors = Color::all();
-
         // dd( $element->combinations );
         return view('backend.product.elements.edit', compact('element', 'colors','variations', 'variation_colors', 'variation_attributes', 'categories', 'tags', 'lang', 'characteristics', 'brands'));
     }

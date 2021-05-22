@@ -104,8 +104,17 @@ class Product extends Model
      public function element()
     {
         return $this->hasOneThrough(
+
             Element::class,
             Variation::class
+
+
+            // 'variation_id',
+            // 'element_id',
+            // 'id',
+            // 'id'
+
+
         );
     }
 
