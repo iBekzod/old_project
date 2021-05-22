@@ -116,4 +116,29 @@ class Product extends Model
         $this->product_translations()->delete();
         return parent::delete();
     }
+
+
+    public function save(array $options = [])
+    {
+
+       // before save code
+       $result = parent::save($options); // returns boolean
+       // after save code
+
+        $variation=$this->variation;
+
+        $products = Product::where('name', $variation->name)->where('variation_id', $variation->id);
+        // dd($products);
+        if(count($products->get())>1){
+            $min_price=$products->min("price");
+            $variation->lowest_price_id=json_encode($products->where('price', $min_price)->pluck('id'));
+            $variation->qty=$products->sum('qty');
+            $variation->num_of_sale=$products->sum('num_of_sale');
+            $variation->prices=$products->pluck('price');
+            $variation->rating=(double)$products->sum('rating')/$products->count();
+        }
+        // dd($variation);
+       return $result; // do not ignore it eloquent calculates this value and returns this, not just to ignore
+
+    }
 }

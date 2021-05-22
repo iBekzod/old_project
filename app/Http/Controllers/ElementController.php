@@ -27,6 +27,7 @@ use DB;
 use Illuminate\Support\Str;
 use Artisan;
 use App\Product_Warehouse;
+use App\VariationTranslation;
 use App\Warehouse;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
 
@@ -533,7 +534,7 @@ class ElementController extends Controller
                     }
                     $variation= new Variation;
                     $variation->element_id=$element->id;
-                    $variation->name=$variant['name'];
+                    $variation->name=$element->name." ".$variant['name'];
                     $variation->thumbnail_img = $variant['thumbnail_img'];
                     $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
                     $variation->sku=$variant['artikul'];
@@ -542,6 +543,11 @@ class ElementController extends Controller
                     $variation->rating=0;
                     $variation->user_id=Auth::user()->id;
                     $variation->save();
+                    foreach (Language::all() as $language) {
+                        $variation_translation = VariationTranslation::firstOrNew(['lang' => $language->code, 'variation_id' => $variation->id]);
+                        $variation_translation->name = $variation->name;
+                        $variation_translation->save();
+                    }
                 }
             }
             foreach (Language::all() as $language){
@@ -698,7 +704,7 @@ class ElementController extends Controller
                     foreach ($request->combination as $variant) {
                         $variation= new Variation;
                         $variation->element_id=$element->id;
-                        $variation->name=$variant['name'];
+                        $variation->name=$element->name." ".$variant['name'];
                         $variation->thumbnail_img = $variant['thumbnail_img'];
                         $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
                         $variation->sku=$variant['artikul'];
@@ -712,7 +718,7 @@ class ElementController extends Controller
                     $variations= Variation::where('element_id', $element->id)->where('user_id', Auth::user()->id);
                     foreach ($request->combination as $variant) {
                         if($variation=$variations->where('name', $variant['name'])->firstOrFail()){
-                            $variation->name=$variant['name'];
+                            $variation->name=$element->name." ".$variant['name'];
                             $variation->thumbnail_img = $variant['thumbnail_img'];
                             if ($variant['name'] != null) {
                                 if($variation->slug!=$variant['name'])
@@ -724,7 +730,7 @@ class ElementController extends Controller
                         }else{
                             $variation= new Variation;
                             $variation->element_id=$element->id;
-                            $variation->name=$variant['name'];
+                            $variation->name=$element->name." ".$variant['name'];
                             $variation->thumbnail_img = $variant['thumbnail_img'];
                             $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
                             $variation->sku=$variant['artikul'];
@@ -733,6 +739,11 @@ class ElementController extends Controller
                             $variation->rating=0;
                             $variation->user_id=Auth::user()->id;
                             $variation->save();
+                        }
+                        foreach (Language::all() as $language) {
+                            $variation_translation = VariationTranslation::firstOrNew(['lang' => $language->code, 'variation_id' => $variation->id]);
+                            $variation_translation->name = $variation->name;
+                            $variation_translation->save();
                         }
 
                     }

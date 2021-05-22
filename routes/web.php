@@ -208,8 +208,8 @@ Route::group(['prefix' =>'seller', 'middleware' => ['seller', 'verified', 'user'
 	Route::post('/product/clone', 'HomeController@show_product_clone_form')->name('seller.products.clone');
 	// Route::post('/product/clone-from-all', 'HomeController@show_product_clone_form')->name('seller.products.clone');
 	Route::get('/product/{id}/edit', 'HomeController@show_product_edit_form')->name('seller.products.edit');
-	Route::get('/product/{id}/characteristics', 'HomeController@characteristics')->name('seller.products.characteristics');
-	Route::post('/product/{id}/characteristics', 'HomeController@characteristics')->name('seller.products.characteristics');
+	// Route::get('/product/{id}/characteristics', 'HomeController@characteristics')->name('seller.products.characteristics');
+	// Route::post('/product/{id}/characteristics', 'HomeController@characteristics')->name('seller.products.characteristics');
 	Route::resource('payments','PaymentController');
 
 	Route::get('/shop/apply_for_verification', 'ShopController@verify_form')->name('shop.verify');
