@@ -186,6 +186,11 @@
                                    title="{{ translate('Delete') }}">
                                     <i class="las la-trash"></i>
                                 </a>
+
+                                <a href="{{route('element.products.edit', ['id'=>$element->id])}}" class="btn btn-soft-primary btn-icon btn-circle btn-sm"
+                                    title="{{ translate('Products') }}">
+                                    <i class="las la-clipboard-list"></i>
+                                </a>
                             </td>
                         </tr>
                     @endforeach
