@@ -14,7 +14,8 @@ class ProductCollection extends ResourceCollection
 
         return [
             'data' => $this->collection->map(function($data) {
-                $variation=$data->variation;
+                // $variation=Variation::findOrFail($data->variation_id);
+                // dd($variation);
                 return  [
                     'id'=>$data->id,
                     'slug'=>$data->slug,
