@@ -67,7 +67,7 @@ class ProductController extends Controller
             }
         }
 
-        $products = Product::where('id', $id)->orWhere('slug', $id)->get();
+        $products = Product::where('id', $id)->get();
         $product = isset($products[0]) ? $products[0] : null;
         $breadcrumbs = [];
         if ($product) {
@@ -92,6 +92,7 @@ class ProductController extends Controller
     public function admin()
     {
         if($variations= Variation::where('lowest_price_id','<>', null)->get()){
+            dd($variations);
             return new ProductCollection($variations);
         }
         return null;
