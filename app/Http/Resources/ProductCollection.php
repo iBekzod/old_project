@@ -2,87 +2,49 @@
 
 namespace App\Http\Resources;
 
-use App\ProductStock;
-use App\ProductTranslation;
-use App\Variation;
+use App\Element;
+use App\Product;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class ProductCollection extends ResourceCollection
 {
     public function toArray($request)
     {
-
         return [
             'data' => $this->collection->map(function($data) {
+<<<<<<< HEAD
                 // $variation=Variation::findOrFail($data->variation_id);
                 // dd($variation);
                 return  [
+=======
+                $element=Element::findOrFail($data->element_id);
+                $product=Product::findOrFail($data->lowest_price_id);
+                $products=Product::where('variation_id', $data->id)->where('lowest_price_id', $data->lowest_price_id)->get();
+                return [
+>>>>>>> d0a0d35cca8b269fa1ffc902aca81888aa13139e
                     'id'=>$data->id,
                     'slug'=>$data->slug,
-                    'owner_id' => $data->user_id,
-                    // 'name' => $data->element->name.' '.$variation->slug,
-                    // 'photos' => explode(',', $data->photos),
-                    'thumbnail_image' => api_asset($data->thumbnail_img),
-                    // 'base_price' => (double) homeBasePrice($data->id),
-                    // 'base_discounted_price' => (double) homeDiscountedBasePrice($data->id),
-                    'todays_deal' => (integer) $data->todays_deal,
-                    'featured' =>(integer) $data->featured,
-                    'unit' => $data->unit,
-                    'discount' => (integer) $data->discount,
-                    'discount_type' => $data->discount_type,
-                    'rating' => (double) $data->rating,
+                    'owner_id' => $product->user_id,
+                    'name' => $data->name,
+                    'photos' => explode(',', $element->photos),
+                    'thumbnail_image' => api_asset($data->thumbnail_image),
+                    'base_price' => (double) homeBasePrice($data->lowest_price_id),
+                    'base_discounted_price' => (double) homeDiscountedBasePrice($data->lowest_price_id),
+                    'todays_deal' => (integer) $product->todays_deal,
+                    'featured' =>(integer) $product->featured,
+                    'unit' => $element->unit,
+                    'discount' => (integer) $product->discount,
+                    'discount_type' => $product->discount_type,
+                    'rating' => (double) $product->rating,
                     'sales' => (integer) $data->num_of_sale,
-                    // 'variant' => ProductStock::where('product_id', $data->id)->first(),
-                    // 'variations' => ProductStock::where('product_id', $data->id)->get(),
-                    // 'links' => [
-                    //     'details' => route('products.show', $data->id),
-                    //     'reviews' => route('api.reviews.index', $data->id),
-                    //     'related' => route('products.related', $data->id),
-                    //     'top_from_seller' => route('products.topFromSeller', $data->id)
-                    // ]
-
-
-                    // $table->string('added_by', 6)->nullable();
-                    // $table->integer('currency_id')->nullable();
-                    // $table->double('price', 20, 2)->default(0.00);
-                    // $table->integer('variation_id')->nullable();
-                    // $table->integer('delivery_group_id')->nullable();
-                    // $table->integer('qty')->default(0);
-                    // $table->integer('published')->default(0);
-                    // $table->double('tax', 20, 2)->nullable();
-                    // $table->string('tax_type', 10)->nullable();
-                    // $table->integer('featured')->default(0);
-                    // $table->integer('seller_featured')->default(0);
-                    // $table->boolean('on_moderation')->default(0);
-                    // $table->boolean('is_accepted')->default(1);
-                    // $table->string('barcode', 255)->nullable();
-                    // $table->double('earn_point', 8, 2)->default(0.00);
-
-
-
-                    // 'id'=>$data->id,
-                    // 'slug'=>$data->slug,
-                    // 'owner_id' => $data->user_id,
-                    // 'name' => $data->getTranslation('name'),
-                    // 'photos' => explode(',', $data->photos),
-                    // 'thumbnail_image' => api_asset($data->thumbnail_img),
-                    // // 'base_price' => (double) homeBasePrice($data->id),
-                    // // 'base_discounted_price' => (double) homeDiscountedBasePrice($data->id),
-                    // 'todays_deal' => (integer) $data->todays_deal,
-                    // 'featured' =>(integer) $data->featured,
-                    // 'unit' => $data->unit,
-                    // // 'discount' => (integer) $data->discount,
-                    // // 'discount_type' => $data->discount_type,
-                    // 'rating' => (double) $data->rating,
-                    // 'sales' => (integer) $data->num_of_sale,
-                    // // 'variant' => ProductStock::where('product_id', $data->id)->first(),
-                    // // 'variations' => ProductStock::where('product_id', $data->id)->get(),
-                    // 'links' => [
-                    //     'details' => route('products.show', $data->id),
-                    //     'reviews' => route('api.reviews.index', $data->id),
-                    //     'related' => route('products.related', $data->id),
-                    //     'top_from_seller' => route('products.topFromSeller', $data->id)
-                    // ]
+                    'variant' => $product,
+                    'variations' => $products,
+                    'links' => [
+                        'details' => route('products.show', $data->id),
+                        'reviews' => route('api.reviews.index', $data->id),
+                        'related' => route('products.related', $data->id),
+                        'top_from_seller' => route('products.topFromSeller', $data->id)
+                    ]
                 ];
             })
         ];

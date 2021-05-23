@@ -8,12 +8,14 @@ class BannerCollection extends ResourceCollection
 {
     public function toArray($request)
     {
+        // dd($request->all());
         return [
             'data' => $this->collection->map(function($data) {
                 return [
-                    'photo' => $data ? api_asset($data) : 'public/images/default-image.jpg',
-                    'url' => route('home'),
-                    'position' => 1
+                    'photo' => $data->photo ? api_asset($data->photo) : 'public/images/default-image.jpg',
+                    'position' => $data->position,
+                    'url' => $data->url ?? route('home'),
+
                 ];
             })
         ];

@@ -540,7 +540,7 @@ if (!function_exists('homeBasePrice')) {
     {
         return 0;
         $product = Product::findOrFail($id);
-        $price = $product->unit_price;
+        $price = $product->price;
         if ($product->tax_type == 'percent') {
             $price += ($price * $product->tax) / 100;
         } elseif ($product->tax_type == 'amount') {
@@ -555,7 +555,7 @@ if (!function_exists('homeDiscountedBasePrice')) {
     {
         return 0;
         $product = Product::findOrFail($id);
-        $price = $product->unit_price;
+        $price = $product->price;
 
         $flash_deals = FlashDeal::where('status', 1)->get();
         $inFlashDeal = false;
@@ -937,8 +937,10 @@ if (!function_exists('isUnique')) {
 if (!function_exists('get_setting')) {
     function get_setting($key, $default = null)
     {
-        $setting = BusinessSetting::where('type', $key)->first();
-        return $setting == null ? $default : $setting->value;
+        if($setting = BusinessSetting::where('type', $key)->firstOrFail()){
+            return $setting->value;
+        }
+        return $setting ?? $default;
     }
 }
 

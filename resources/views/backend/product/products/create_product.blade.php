@@ -50,6 +50,9 @@
                                 <thead>
                                 <tr>
                                     <td class="text-center">
+                                        {{ translate('Image') }}
+                                    </td>
+                                    <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Slug') }}</label>
                                     </td>
                                     <td class="text-center">
@@ -119,6 +122,9 @@
                                 <tbody>
                                 @foreach ($combinations as $index=>$combination)
                                 <tr class="variant">
+                                    <td>
+                                        <img src="{{ uploaded_asset($combination->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}" height="50" width="50" style="object-fit: cover" style="display:inline-block;">
+                                    </td>
                                     <td>
                                         <label for="" class="control-label">{{$combination->name}}</label>
                                         <input type="hidden" name="variation[{{ $index }}][id]" value="{{$combination->id}}" class="form-control">

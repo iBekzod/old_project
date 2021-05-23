@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\SearchController;
-use App\Http\Resources\CategoryCollection;
-use App\Http\Resources\FlashDealProductCollection;
-use App\Http\Resources\FreeShippingProductsCollection;
+// use App\Http\Controllers\SearchController;
+// use App\Http\Resources\CategoryCollection;
+// use App\Http\Resources\FlashDealProductCollection;
+// use App\Http\Resources\FreeShippingProductsCollection;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductDetailCollection;
 use App\Http\Resources\SearchProductCollection;
@@ -19,11 +19,13 @@ use App\FlashDealProduct;
 use App\Product;
 use App\Shop;
 use App\Color;
-use App\Seller;
+// use App\Seller;
 use Illuminate\Http\Request;
 use App\Utility\CategoryUtility;
-use Illuminate\Http\Resources\Json\ResourceCollection;
-use phpDocumentor\Reflection\Types\Integer;
+use App\Variation;
+
+// use Illuminate\Http\Resources\Json\ResourceCollection;
+// use phpDocumentor\Reflection\Types\Integer;
 
 class ProductController extends Controller
 {
@@ -89,7 +91,12 @@ class ProductController extends Controller
 
     public function admin()
     {
-        return new ProductCollection(Product::where('added_by', 'admin')->inRandomOrder()->paginate(10));
+        if($variations= Variation::where('lowest_price_id','<>', null)->get()){
+            return new ProductCollection( $variations);
+        }
+        return null;
+        // return Product::where('added_by', 'admin')->inRandomOrder()->paginate(10);
+
     }
 
     public function seller()

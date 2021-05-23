@@ -30,7 +30,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            {{-- <tr>
                                 <td>{{0}}</td>
                                 <td>{{translate('Others')}}</td>
                                 <td class="text-right">
@@ -41,7 +41,7 @@
                                     </a>
 
                                 </td>
-                            </tr>
+                            </tr> --}}
                         @foreach($branches as $key => $branch)
                             <tr>
                                 <td>{{$key+1}}</td>

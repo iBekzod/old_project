@@ -33,6 +33,9 @@
                                 <thead>
                                 <tr>
                                     <td class="text-center">
+                                        {{ translate('Image') }}
+                                    </td>
+                                    <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Slug') }}</label>
                                     </td>
                                     <td class="text-center">
@@ -111,13 +114,17 @@
                                 @foreach ($products as $product)
                                     <tr class="variant">
                                         <td>
+                                            <img src="{{ uploaded_asset($product->variation->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}" height="50" width="50" style="object-fit: cover" style="display:inline-block;">
+                                        </td>
+                                        <td>
                                             <label for="" class="control-label">{{$product->getTranslation('name')}}</label>
                                             <input type="hidden" name="variation[{{ $product->id }}][slug]"
                                                    value="{{$product->slug??null}}" class="form-control">
                                             <input type="hidden" name="variation[{{ $product->id }}][name]"
                                                    value="{{$product->name??null}}"
                                                    class="form-control">
-                                        </td>
+
+                                            </td>
                                         <td>
                                             <input type="number" style="width: 100px;" name="variation[{{ $product->id }}][price]"
                                                    value="{{$product->price??0}}" min="0" step="0.01"

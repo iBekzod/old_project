@@ -380,6 +380,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         if (Auth::user()->user_type == 'seller') {
             $user_id = Auth::user()->id;
         } else {
