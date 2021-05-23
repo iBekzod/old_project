@@ -13,8 +13,9 @@ class BannerCollection extends ResourceCollection
             'data' => $this->collection->map(function($data) {
                 return [
                     'photo' => $data->photo ? api_asset($data->photo) : 'public/images/default-image.jpg',
-                    'url' => route('home'),
-                    'position' => 1
+                    'position' => $data->position,
+                    'url' => $data->url ?? route('home'),
+
                 ];
             })
         ];
