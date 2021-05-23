@@ -9,8 +9,15 @@ class BannerController extends Controller
 {
     public function index()
     {
-        // return json_decode(get_setting('home_slider_images', 'home_banner1_images'));
-        $banners=Banner::whereIn('id', json_decode(get_setting('home_slider_images', 'home_banner1_images')))->get();
-        return new BannerCollection($banners);
+        $banner_image_ids = json_decode(get_setting('home_slider_images', 'home_banner1_images'), true);
+        // return $banner_image_ids;
+        if(is_array($banner_image_ids)){
+            $banners=Banner::whereIn('id', $banner_image_ids)->where('published', true)->get();
+            return new BannerCollection($banners);
+        }else{
+            return null;
+        }
+
+
     }
 }
