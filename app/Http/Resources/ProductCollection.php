@@ -14,6 +14,7 @@ class ProductCollection extends ResourceCollection
             'data' => $this->collection->map(function($data) {
                 $element=Element::findOrFail($data->element_id);
                 $product=Product::findOrFail($data->lowest_price_id);
+                $products=Product::where('variation_id', $data->id)->where('lowest_price_id', $data->lowest_price_id)->get();
                 return [
                     'id'=>$data->id,
                     'slug'=>$data->slug,
@@ -30,8 +31,8 @@ class ProductCollection extends ResourceCollection
                     'discount_type' => $product->discount_type,
                     'rating' => (double) $product->rating,
                     'sales' => (integer) $data->num_of_sale,
-                    // 'variant' => ProductStock::where('product_id', $data->id)->first(),
-                    // 'variations' => ProductStock::where('product_id', $data->id)->get(),
+                    'variant' => $product,
+                    'variations' => $products,
                     'links' => [
                         'details' => route('products.show', $data->id),
                         'reviews' => route('api.reviews.index', $data->id),
