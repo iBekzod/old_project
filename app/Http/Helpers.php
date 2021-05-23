@@ -937,8 +937,10 @@ if (!function_exists('isUnique')) {
 if (!function_exists('get_setting')) {
     function get_setting($key, $default = null)
     {
-        $setting = BusinessSetting::where('type', $key)->first();
-        return $setting == null ? $default : $setting->value;
+        if($setting = BusinessSetting::where('type', $key)->firstOrFail()){
+            return $setting->value;
+        }
+        return $setting ?? $default;
     }
 }
 
