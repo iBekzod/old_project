@@ -540,7 +540,7 @@ if (!function_exists('homeBasePrice')) {
     {
         return 0;
         $product = Product::findOrFail($id);
-        $price = $product->unit_price;
+        $price = $product->price;
         if ($product->tax_type == 'percent') {
             $price += ($price * $product->tax) / 100;
         } elseif ($product->tax_type == 'amount') {
@@ -555,7 +555,7 @@ if (!function_exists('homeDiscountedBasePrice')) {
     {
         return 0;
         $product = Product::findOrFail($id);
-        $price = $product->unit_price;
+        $price = $product->price;
 
         $flash_deals = FlashDeal::where('status', 1)->get();
         $inFlashDeal = false;

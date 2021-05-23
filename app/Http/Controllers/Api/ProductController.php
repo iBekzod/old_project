@@ -22,6 +22,8 @@ use App\Color;
 // use App\Seller;
 use Illuminate\Http\Request;
 use App\Utility\CategoryUtility;
+use App\Variation;
+
 // use Illuminate\Http\Resources\Json\ResourceCollection;
 // use phpDocumentor\Reflection\Types\Integer;
 
@@ -89,7 +91,12 @@ class ProductController extends Controller
 
     public function admin()
     {
-        return new ProductCollection(Product::where('added_by', 'admin')->inRandomOrder()->paginate(10));
+        if($variations= Variation::where('lowest_price_id','<>', null)->get()){
+            return new ProductCollection( $variations);
+        }
+        return null;
+        // return Product::where('added_by', 'admin')->inRandomOrder()->paginate(10);
+
     }
 
     public function seller()

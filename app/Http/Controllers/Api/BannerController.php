@@ -15,14 +15,6 @@ class BannerController extends Controller
         }else{
             return null;
         }
-
-
-        // if(is_array($banner_image_ids)){
-        //     $banners=Banner::whereIn('id', $banner_image_ids)->where('published', true)->get();
-        //     return new BannerSliderCollection($banners);
-        // }else{
-        //     return null;
-        // }
     }
 
     protected function convertPhotos($data){
