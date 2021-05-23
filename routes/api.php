@@ -90,13 +90,15 @@ Route::prefix('v1')->group(function () {
 
     Route::apiResource('home-categories', 'Api\HomeCategoryController')->only('index');
 
-   // Route::get('test/attribute','Api\AttributeController@index');
-    // Route::get('test/branch','Api\BranchController@index');
+    // Route::get('test/attribute','Api\AttributeController@index');
+    //  Route::get('test/branch','Api\BranchController@index');
     // Route::get('test/variation','Api\VariationController@index');
 
     Route::get('purchase-history/{id}', 'Api\PurchaseHistoryController@index')->middleware('auth:api');
     Route::get('purchase-history-details/{id}', 'Api\PurchaseHistoryDetailController@index')->name('purchaseHistory.details')->middleware('auth:api');
-
+    //Route::get('products/index', 'Api\ProductController@index');
+    // Route::get('products/detail/{id}', 'Api\ProductController@show');
+    
     Route::get('products/admin', 'Api\ProductController@admin');
     Route::get('products/seller', 'Api\ProductController@seller');
     Route::get('products/category/{id}', 'Api\ProductController@category')->name('api.products.category');

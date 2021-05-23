@@ -12,10 +12,16 @@ class ProductCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection->map(function($data) {
+<<<<<<< HEAD
+                // $variation=Variation::findOrFail($data->variation_id);
+                // dd($variation);
+                return  [
+=======
                 $element=Element::findOrFail($data->element_id);
                 $product=Product::findOrFail($data->lowest_price_id);
                 $products=Product::where('variation_id', $data->id)->where('lowest_price_id', $data->lowest_price_id)->get();
                 return [
+>>>>>>> d0a0d35cca8b269fa1ffc902aca81888aa13139e
                     'id'=>$data->id,
                     'slug'=>$data->slug,
                     'owner_id' => $product->user_id,

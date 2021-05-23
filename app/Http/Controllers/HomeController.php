@@ -48,7 +48,8 @@ class HomeController extends Controller
     public function seller_login(Request $request)
     {
         if ($request->method() === 'POST') {
-                    dd($request->all());
+                    dump($request->all());
+
                 }else if($request->method() === 'GET'){
                     if(Auth::check()){
                         return redirect()->route('home');
