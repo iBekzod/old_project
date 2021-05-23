@@ -129,7 +129,7 @@
                 </div>
             </div>
             @php
-                
+
                 foreach ($characteristics as $attribute_id=>$value_id){
                     $characteristic_attributes[]=$attribute_id;
                 }
@@ -146,11 +146,11 @@
                             <input type="text" class="form-control" value="{{translate('Attributes')}}" disabled>
                         </div>
                         <div class="col-lg-8">
-                            <select required class="form-control aiz-selectpicker" data-live-search="true"
+                            <select class="form-control aiz-selectpicker" data-live-search="true"
                                     data-selected-text-format="count" name="selected_attribute_ids[]" id="selected_attribute_id" multiple>
                                     @foreach ($element->category->attributes as $attribute)
                                         <option value="{{ $attribute->id }}"
-                                            @if(in_array($attribute->id, $characteristic_attributes))  selected @endif
+                                            @if(is_array($characteristic_attributes) && in_array($attribute->id, $characteristic_attributes))  selected @endif
                                             >{{ $attribute->getTranslation('name', $lang) }}</option>
                                     @endforeach
                             </select>
@@ -190,10 +190,10 @@
                             <input type="text" class="form-control" value="{{translate('Colors')}}" disabled>
                         </div>
                         <div class="col-lg-8">
-                            <select required class="form-control aiz-selectpicker" data-live-search="true"
+                            <select class="form-control aiz-selectpicker" data-live-search="true"
                                     data-selected-text-format="count" name="colors[]" id="colors" multiple>
                                 @foreach ($colors as $key => $color)
-                                    <option data-id="{{$color->id}}" @if(in_array($color->id, $variation_colors)) selected @endif value="{{$color->id}}"  data-content="<span><span class='mr-2 border rounded size-15px d-inline-block' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"></option>
+                                    <option data-id="{{$color->id}}" @if(is_array($variation_colors) && in_array($color->id, $variation_colors)) selected @endif value="{{$color->id}}"  data-content="<span><span class='mr-2 border rounded size-15px d-inline-block' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"></option>
                                 @endforeach
                             </select>
                         </div>
@@ -203,11 +203,11 @@
                             <input type="text" class="form-control" value="{{translate('Attributes')}}" disabled>
                         </div>
                         <div class="col-lg-8">
-                            <select required class="form-control aiz-selectpicker" data-live-search="true"
+                            <select class="form-control aiz-selectpicker" data-live-search="true"
                                     data-selected-text-format="count" name="selected_variations[]" id="selected_variations" multiple>
                                 @foreach (\App\Attribute::whereIn('id', $characteristic_attributes)->get() as $attribute)
                                     <option value="{{ $attribute->id }}" data-id="{{ $attribute->id }}"
-                                        @if(in_array($attribute->id, $variation_attributes))  selected @endif
+                                        @if(is_array($variation_attributes) && in_array($attribute->id, $variation_attributes))  selected @endif
                                         >{{ $attribute->getTranslation('name', $lang) }}</option>
                                 @endforeach
                             </select>
