@@ -41,7 +41,7 @@ class CountryController extends Controller
                     $country_translations = CountryTranslation::firstOrNew(['lang' => $language->code, 'country_id' => $country->id]);
                     $country_translations->name = $country->name;
                     $country_translations->save();
-                }
+                // }
     }
 
     /**
@@ -81,7 +81,7 @@ class CountryController extends Controller
                 $country_translations->name = $request->name;
                 $country_translations->save();
             }
-        }
+        // }
     }
 
     /**
