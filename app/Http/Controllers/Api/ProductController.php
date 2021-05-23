@@ -92,7 +92,7 @@ class ProductController extends Controller
     public function admin()
     {
         if($variations= Variation::where('lowest_price_id','<>', null)->get()){
-            return new ProductCollection( $variations);
+            return new ProductCollection($variations);
         }
         return null;
         // return Product::where('added_by', 'admin')->inRandomOrder()->paginate(10);
