@@ -836,7 +836,7 @@ if (!function_exists('api_asset')) {
         if (($asset = \App\Upload::find($id)) != null) {
             return 'public/' . $asset->file_name;
         }
-        return "";
+        return null;
     }
 }
 
