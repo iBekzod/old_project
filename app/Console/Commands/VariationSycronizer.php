@@ -42,31 +42,57 @@ class VariationSycronizer extends Command
     {
 
         $items=Product::where('variation_id', '<>', null)->get()->groupBy('variation_id');
-
-        foreach($items as $variation_id=>$products){
-            print_r($variation_id);
-            // break;
-            if($variation=Variation::findOrFail($variation_id)){
-                // print_r($variation);
-                $min_price=$products->min("price");
-                $variation->lowest_price_id=json_encode($products->where('price', $min_price)->pluck('id'));
-                $variation->qty=$products->sum('qty');
-                $variation->num_of_sale=$products->sum('num_of_sale');
-                $variation->prices=$products->pluck('price');
-                $variation->rating=(double)$products->sum('rating')/$products->count();
-                $variation->save();
-                // print_r($variation);
+        foreach($items as $product){
+            if ($variation = Variation::findOrFail($product->variation_id)) {
+                $products = Product::where('variation_id', $variation->id);
+                if(count($products->get())>0){
+                    $min_price=$products->min("price");
+                    $lowest_price_list=$products->where('price', $min_price)->pluck('id');
+                    $lowest_price_id=array_rand($lowest_price_list, 1);
+                    $variation->lowest_price_id=$lowest_price_id;
+                    $variation->qty=$products->sum('qty');
+                    $variation->num_of_sale=$products->sum('num_of_sale');
+                    $variation->prices=$products->pluck('price');
+                    $variation->rating=(double)$products->sum('rating')/$products->count();
+                    $variation->save();
+                }
             }
-
-            // break;
-            // foreach (Language::all() as $language){
-            //     DB::table($translation_table)
-            //     ->updateOrInsert(
-            //         ['lang' => $language->code, $relation_id => $item->id],
-            //         [$column => $item->$column, 'lang' => $language->code, $relation_id => $item->id]
-            //     );
-            // }
         }
+
+        // foreach($items as $variation_id=>$products){
+        //     print_r($variation_id);
+        //     // break;
+        //     if($variation=Variation::findOrFail($variation_id)){
+        //         // print_r($variation);
+        //         $min_price=$products->min("price");
+        //         $variation->lowest_price_id=json_encode($products->where('price', $min_price)->pluck('id'));
+        //         $variation->qty=$products->sum('qty');
+        //         $variation->num_of_sale=$products->sum('num_of_sale');
+        //         $variation->prices=$products->pluck('price');
+        //         $variation->rating=(double)$products->sum('rating')/$products->count();
+        //         $variation->save();
+        //         // print_r($variation);
+        //     }
+        // }
+
+        // $items=Product::where('variation_id', '<>', null)->get()->groupBy('variation_id');
+
+
+        // foreach($items as $variation_id=>$products){
+        //     print_r($variation_id);
+        //     // break;
+        //     if($variation=Variation::findOrFail($variation_id)){
+        //         // print_r($variation);
+        //         $min_price=$products->min("price");
+        //         $variation->lowest_price_id=json_encode($products->where('price', $min_price)->pluck('id'));
+        //         $variation->qty=$products->sum('qty');
+        //         $variation->num_of_sale=$products->sum('num_of_sale');
+        //         $variation->prices=$products->pluck('price');
+        //         $variation->rating=(double)$products->sum('rating')/$products->count();
+        //         $variation->save();
+        //         // print_r($variation);
+        //     }
+        // }
 
         $this->info('Successfully generated translations');
     }

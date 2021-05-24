@@ -12,8 +12,11 @@ class ProductCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection->map(function($data) {
+                // $lowest_price_list=json_decode($data->lowest_price_id, true);
+                // $lowest_price_id=array_rand($lowest_price_list, 1);
+                $lowest_price_id=$data->lowest_price_id;
                 $element=Element::findOrFail($data->element_id);
-                $product=Product::findOrFail($data->lowest_price_id);
+                $product=Product::findOrFail($lowest_price_id);
                 $products=Product::where('variation_id', $data->id)->get();
                 return [
                     'id'=>$data->id,
@@ -22,8 +25,8 @@ class ProductCollection extends ResourceCollection
                     'name' => $data->name,
                     'photos' => explode(',', $element->photos),
                     'thumbnail_image' => api_asset($data->thumbnail_image),
-                    'base_price' => (double) homeBasePrice($data->lowest_price_id),
-                    'base_discounted_price' => (double) homeDiscountedBasePrice($data->lowest_price_id),
+                    'base_price' => (double) homeBasePrice($lowest_price_id),
+                    'base_discounted_price' => (double) homeDiscountedBasePrice($lowest_price_id),
                     'todays_deal' => (integer) $product->todays_deal,
                     'featured' =>(integer) $product->featured,
                     'unit' => $element->unit,

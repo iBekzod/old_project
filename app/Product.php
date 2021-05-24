@@ -129,7 +129,9 @@ class Product extends Model
     //     // dd($products);
     //     if(count($products->get())>1){
     //         $min_price=$products->min("price");
-    //         $variation->lowest_price_id=json_encode($products->where('price', $min_price)->pluck('id'));
+    // $lowest_price_list=$products->where('price', $min_price)->pluck('id');
+    // $lowest_price_id=array_rand($lowest_price_list, 1);
+    // $variation->lowest_price_id=$lowest_price_id;
     //         $variation->qty=$products->sum('qty');
     //         $variation->num_of_sale=$products->sum('num_of_sale');
     //         $variation->prices=$products->pluck('price');
