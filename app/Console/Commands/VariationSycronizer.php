@@ -41,14 +41,14 @@ class VariationSycronizer extends Command
     public function handle()
     {
 
-        $items=Product::where('variation_id', '<>', null)->get()->groupBy('variation_id');
+        $items=Product::where('variation_id', '<>', null)->get();
         foreach($items as $product){
             if ($variation = Variation::findOrFail($product->variation_id)) {
                 $products = Product::where('variation_id', $variation->id);
                 if(count($products->get())>0){
                     $min_price=$products->min("price");
                     $lowest_price_list=$products->where('price', $min_price)->pluck('id');
-                    $lowest_price_id=array_rand($lowest_price_list, 1);
+                    $lowest_price_id=$lowest_price_list[rand(0, count($lowest_price_list)-1)];
                     $variation->lowest_price_id=$lowest_price_id;
                     $variation->qty=$products->sum('qty');
                     $variation->num_of_sale=$products->sum('num_of_sale');
