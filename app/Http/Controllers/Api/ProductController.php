@@ -321,6 +321,7 @@ class ProductController extends Controller
 
     public function bestSeller()
     {
+        $this->admin();
         return new ProductCollection(Product::orderBy('num_of_sale', 'desc')->where('is_accepted', 1)->limit(20)->get());
     }
 
