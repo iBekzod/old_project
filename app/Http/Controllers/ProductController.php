@@ -26,6 +26,7 @@ use Artisan;
 use App\Product_Warehouse;
 use App\Warehouse;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
+use Exception;
 
 class ProductController extends Controller
 {
@@ -273,19 +274,19 @@ class ProductController extends Controller
                     $product->earn_point = 0;
                     $product->num_of_sale = 0;
                     $product->variation_id = $variation->id;
-                    $product->save();
-                    // if ($product->save()) {
-                    //     $products = Product::where('name', $variant["name"])->where('variation_id', $variation->id);
-                    //     if(count($products->get())>1){
-                    //         $min_price=$products->min("price");
-                    //         $variation->lowest_price_id=json_encode($products->where('price', $min_price)->pluck('id'));
-                    //         $variation->qty=$products->sum('qty');
-                    //         $variation->num_of_sale=$products->sum('num_of_sale');
-                    //         $variation->prices=$products->pluck('price');
-                    //         $variation->rating=(double)$products->sum('rating')/$products->count();
-                    //     }
+                    // $product->save();
+                    if ($product->save()) {
+                        $products = Product::where('name', $variant["name"])->where('variation_id', $variation->id);
+                        if(count($products->get())>1){
+                            $min_price=$products->min("price");
+                            $variation->lowest_price_id=json_encode($products->where('price', $min_price)->pluck('id'));
+                            $variation->qty=$products->sum('qty');
+                            $variation->num_of_sale=$products->sum('num_of_sale');
+                            $variation->prices=$products->pluck('price');
+                            $variation->rating=(double)$products->sum('rating')/$products->count();
+                        }
 
-                    // }
+                    }
                 }
 
 
@@ -417,7 +418,24 @@ class ProductController extends Controller
                     $product->tax_type = $variant["tax_type"];
                     $product->barcode = rand(10000, 999999);
                     $product->variation_id = $variation->id;
-                    $product->save();
+                    // $product->save();
+                    try{
+                        if ($product->save()) {
+                            $products = Product::where('name', $variant["name"])->where('variation_id', $variation->id);
+                            if(count($products->get())>1){
+                                $min_price=$products->min("price");
+                                $variation->lowest_price_id=json_encode($products->where('price', $min_price)->pluck('id'));
+                                $variation->qty=$products->sum('qty');
+                                $variation->num_of_sale=$products->sum('num_of_sale');
+                                $variation->prices=$products->pluck('price');
+                                $variation->rating=(double)$products->sum('rating')/$products->count();
+                            }
+
+                        }
+                    }catch(Exception $e){
+                        dd($e->getMessage());
+                    }
+
                 }
             }
         }

@@ -14,7 +14,7 @@ class ProductCollection extends ResourceCollection
             'data' => $this->collection->map(function($data) {
                 $element=Element::findOrFail($data->element_id);
                 $product=Product::findOrFail($data->lowest_price_id);
-                $products=Product::where('variation_id', $data->id)->where('lowest_price_id', $data->lowest_price_id)->get();
+                $products=Product::where('variation_id', $data->id)->get();
                 return [
                     'id'=>$data->id,
                     'slug'=>$data->slug,
