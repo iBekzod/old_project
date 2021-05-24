@@ -276,8 +276,8 @@ class ProductController extends Controller
                     $product->variation_id = $variation->id;
                     // $product->save();
                     if ($product->save()) {
-                        $products = Product::where('name', $variant["name"])->where('variation_id', $variation->id);
-                        if(count($products->get())>1){
+                        $products = Product::where('variation_id', $variation->id);
+                        if(count($products->get())>0){
                             $min_price=$products->min("price");
                             $lowest_price_list=$products->where('price', $min_price)->pluck('id');
                             $lowest_price_id=$lowest_price_list[rand(0, count($lowest_price_list)-1)];
@@ -286,6 +286,7 @@ class ProductController extends Controller
                             $variation->num_of_sale=$products->sum('num_of_sale');
                             $variation->prices=$products->pluck('price');
                             $variation->rating=(double)$products->sum('rating')/$products->count();
+                            $variation->save();
                         }
 
                     }
@@ -395,7 +396,8 @@ class ProductController extends Controller
             foreach ($request->variation as $variant) {
                 // dd($request);
                 if ($product=Product::findOrFail($variant["id"])){
-                    $variation = $product->variation;//Variation::findOrFail($variant["variation_id"]) &&
+                    $variation = $product->variation;
+                    //Variation::findOrFail($variant["variation_id"]) &&
                     // dd($variation);
                     // $product_name = $variation->name . " " . Auth::user()->name??null . " ".$variant["price"];
                     $product_name = $variation->name . " ".$variant["price"];
@@ -427,7 +429,7 @@ class ProductController extends Controller
                     // $product->save();
                     try{
                         if ($product->save()) {
-                            $products = Product::where('name', $variant["name"])->where('variation_id', $variation->id);
+                            $products = Product::where('variation_id', $variation->id);
                             if(count($products->get())>0){
                                 $min_price=$products->min("price");
                                 $lowest_price_list=$products->where('price', $min_price)->pluck('id');
@@ -437,11 +439,12 @@ class ProductController extends Controller
                                 $variation->num_of_sale=$products->sum('num_of_sale');
                                 $variation->prices=$products->pluck('price');
                                 $variation->rating=(double)$products->sum('rating')/$products->count();
+                                $variation->save();
                             }
 
                         }
                     }catch(Exception $e){
-                        dd($e->getMessage());
+                        // dd($e->getMessage());
                     }
 
                 }
