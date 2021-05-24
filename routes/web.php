@@ -72,7 +72,7 @@ Route::post('/seller/registration', 'HomeController@seller_registration')->name(
 // Route::post('/users/login/cart', 'HomeController@cart_login')->name('cart.login.submit');
 
 //Route::post('/users/login', 'HomeController@user_login')->name('user.login.submit');
-    
+
 //Home Page
 
 Route::get('/seller/login', 'HomeController@seller_login')->name('user.login');
