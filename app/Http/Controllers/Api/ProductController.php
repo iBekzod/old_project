@@ -321,12 +321,13 @@ class ProductController extends Controller
 
     public function bestSeller()
     {
-        $this->admin();
-        return new ProductCollection(Product::orderBy('num_of_sale', 'desc')->where('is_accepted', 1)->limit(20)->get());
+        return $this->admin();
+        // return new ProductCollection(Product::orderBy('num_of_sale', 'desc')->where('is_accepted', 1)->limit(20)->get());
     }
 
     public function related($id)
     {
+        return $this->admin();
         $product = Product::find($id);
         if ($product)
             return new ProductCollection(Product::where('category_id', $product->category_id)->where('is_accepted', 1)->where('id', '!=', $id)->inRandomOrder()->limit(10)->get());
