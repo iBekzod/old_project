@@ -3,6 +3,7 @@
 namespace App;
 
 use Cviebrock\EloquentSluggable\Sluggable;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -118,27 +119,33 @@ class Product extends Model
     }
 
 
-    // public function save(array $options = [])
-    // {
+    public function save(array $options = [])
+    {
 
-    //    // before save code
-    //     $result = parent::save($options); // returns boolean
-    //     // after save code
-    //     $variation=$this->variation;
-    //     $products = Product::where('name', $variation->name)->where('variation_id', $variation->id);
-    //     // dd($products);
-    //     if(count($products->get())>1){
-    //         $min_price=$products->min("price");
-    // $lowest_price_list=$products->where('price', $min_price)->pluck('id');
-    // $lowest_price_id=$lowest_price_list[rand(0, count($lowest_price_list)-1)];
-    // $variation->lowest_price_id=$lowest_price_id;
-    //         $variation->qty=$products->sum('qty');
-    //         $variation->num_of_sale=$products->sum('num_of_sale');
-    //         $variation->prices=$products->pluck('price');
-    //         $variation->rating=(double)$products->sum('rating')/$products->count();
-    //     }
-    //     // dd($variation);
-    //    return $result; // do not ignore it eloquent calculates this value and returns this, not just to ignore
+       // before save code
+        $result = parent::save($options); // returns boolean
+        // after save code
+        $variation=$this->variation;
+        $products = Product::where('name', $variation->name)->where('variation_id', $variation->id);
+        // dd($products);
+        try{
+            $products = Product::where('variation_id', $variation->id);
+            if(count($products->get())>0){
+                $min_price=$products->min("price");
+                $lowest_price_list=$products->where('price', $min_price)->pluck('id');
+                $lowest_price_id=$lowest_price_list[rand(0, count($lowest_price_list)-1)];
+                $variation->lowest_price_id=$lowest_price_id;
+                $variation->qty=$products->sum('qty');
+                $variation->num_of_sale=$products->sum('num_of_sale');
+                $variation->prices=$products->pluck('price');
+                $variation->rating=(double)$products->sum('rating')/$products->count();
+                $variation->save();
+            }
+        }catch(Exception $e){
+            // dd($e->getMessage());
+        }
+        // dd($variation);
+       return $result; // do not ignore it eloquent calculates this value and returns this, not just to ignore
 
-    // }
+    }
 }
