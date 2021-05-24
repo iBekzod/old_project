@@ -23,7 +23,7 @@ class ProductCollection extends ResourceCollection
                     'slug'=>$data->slug,
                     'owner_id' => $product->user_id,
                     'name' => $data->name,
-                    'photos' => explode(',', $element->photos),
+                    'photos' => $this->convertPhotos(explode(',', $element->photos)),
                     'thumbnail_image' => api_asset($data->thumbnail_image),
                     'base_price' => (double) homeBasePrice($lowest_price_id),
                     'base_discounted_price' => (double) homeDiscountedBasePrice($lowest_price_id),
@@ -54,5 +54,13 @@ class ProductCollection extends ResourceCollection
             'success' => true,
             'status' => 200
         ];
+    }
+
+    protected function convertPhotos($data){
+        $result = array();
+        foreach ($data as $key => $item) {
+            array_push($result, api_asset($item));
+        }
+        return $result;
     }
 }
