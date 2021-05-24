@@ -12,18 +12,21 @@ class ProductCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection->map(function($data) {
+                // $lowest_price_list=json_decode($data->lowest_price_id, true);
+                // $lowest_price_id=array_rand($lowest_price_list, 1);
+                $lowest_price_id=$data->lowest_price_id;
                 $element=Element::findOrFail($data->element_id);
-                $product=Product::findOrFail($data->lowest_price_id);
-                $products=Product::where('variation_id', $data->id)->where('lowest_price_id', $data->lowest_price_id)->get();
+                $product=Product::findOrFail($lowest_price_id);
+                $products=Product::where('variation_id', $data->id)->get();
                 return [
                     'id'=>$data->id,
                     'slug'=>$data->slug,
                     'owner_id' => $product->user_id,
                     'name' => $data->name,
-                    'photos' => explode(',', $element->photos),
+                    'photos' => $this->convertPhotos(explode(',', $element->photos)),
                     'thumbnail_image' => api_asset($data->thumbnail_image),
-                    'base_price' => (double) homeBasePrice($data->lowest_price_id),
-                    'base_discounted_price' => (double) homeDiscountedBasePrice($data->lowest_price_id),
+                    'base_price' => (double) homeBasePrice($lowest_price_id),
+                    'base_discounted_price' => (double) homeDiscountedBasePrice($lowest_price_id),
                     'todays_deal' => (integer) $product->todays_deal,
                     'featured' =>(integer) $product->featured,
                     'unit' => $element->unit,
@@ -51,5 +54,13 @@ class ProductCollection extends ResourceCollection
             'success' => true,
             'status' => 200
         ];
+    }
+
+    protected function convertPhotos($data){
+        $result = array();
+        foreach ($data as $key => $item) {
+            array_push($result, api_asset($item));
+        }
+        return $result;
     }
 }

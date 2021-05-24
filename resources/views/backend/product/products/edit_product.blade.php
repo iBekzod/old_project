@@ -118,6 +118,10 @@
                                         </td>
                                         <td>
                                             <label for="" class="control-label">{{$product->getTranslation('name')}}</label>
+                                            <input type="hidden" name="variation[{{ $product->id }}][id]"
+                                                   value="{{$product->id??null}}" class="form-control">
+                                            <input type="hidden" name="variation[{{ $product->id }}][variation_id]"
+                                                   value="{{$product->variation_id??null}}" class="form-control">
                                             <input type="hidden" name="variation[{{ $product->id }}][slug]"
                                                    value="{{$product->slug??null}}" class="form-control">
                                             <input type="hidden" name="variation[{{ $product->id }}][name]"
