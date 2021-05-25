@@ -27,6 +27,7 @@ class ProductCollection extends ResourceCollection
                     'thumbnail_image' => api_asset($data->thumbnail_img),
                     'base_price' => (double) homeBasePrice($lowest_price_id),
                     'base_discounted_price' => (double) homeDiscountedBasePrice($lowest_price_id),
+                    'currency_code'=>defaultCurrency(),
                     'todays_deal' => (integer) $product->todays_deal,
                     'featured' =>(integer) $product->featured,
                     'unit' => $element->unit,
@@ -34,6 +35,7 @@ class ProductCollection extends ResourceCollection
                     'discount_type' => $product->discount_type,
                     'rating' => (double) $product->rating,
                     'sales' => (integer) $data->num_of_sale,
+                    'qty' => (integer) $data->qty,
                     'variant' => $product,
                     'variations' => $products,
                     'links' => [

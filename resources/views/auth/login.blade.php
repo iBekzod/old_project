@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="h-100 bg-cover bg-center py-5 d-flex align-items-center" style="background-image: url({{ uploaded_asset(get_setting('admin_login_background'))??static_asset('assets/img/placeholder.jpg') }})">
+<div class="h-100 bg-cover bg-center py-5 d-flex align-items-center">
     <div class="container">
         <div class="row">
             <div class="col-lg-6 col-xl-4 mx-auto">
@@ -25,8 +25,8 @@
                             </div>
                             <div class="form-group">
                                 <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required placeholder="{{ translate('Password') }}">
-                                @if ($errors->has('password'))
                                     <span class="invalid-feedback" role="alert">
+                                @if ($errors->has('password'))
                                         <strong>{{ $errors->first('password') }}</strong>
                                     </span>
                                 @endif

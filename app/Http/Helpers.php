@@ -538,23 +538,25 @@ if (!function_exists('renderStarRating')) {
 if (!function_exists('homeBasePrice')) {
     function homeBasePrice($id)
     {
-        return 0;
+        // return 0;
         $product = Product::findOrFail($id);
+        $currency=$product->currency;
         $price = $product->price;
         if ($product->tax_type == 'percent') {
             $price += ($price * $product->tax) / 100;
         } elseif ($product->tax_type == 'amount') {
             $price += $product->tax;
         }
-        return $price;
+        return convertCurrency($price, $currency->id);
     }
 }
 
 if (!function_exists('homeDiscountedBasePrice')) {
     function homeDiscountedBasePrice($id)
     {
-        return 0;
+        // return 0;
         $product = Product::findOrFail($id);
+        $currency=$product->currency;
         $price = $product->price;
 
         $flash_deals = FlashDeal::where('status', 1)->get();
@@ -585,7 +587,7 @@ if (!function_exists('homeDiscountedBasePrice')) {
         } elseif ($product->tax_type == 'amount') {
             $price += $product->tax;
         }
-        return $price;
+        return convertCurrency($price, $currency->id);
     }
 }
 
@@ -722,6 +724,39 @@ if (!function_exists('convertPrice')) {
     }
 }
 
+//TODO: create currrency
+if (!function_exists('convertCurrency')) {
+    function convertCurrency($price, $price_currency_id)
+    {
+        $converted_price=0;
+        if($currency = Currency::findOrFail($price_currency_id)){
+            $converted_price = floatval($price) / floatval($currency->exchange_rate);
+        }
+
+
+        if ($business_settings = BusinessSetting::where('type', 'system_default_currency')->first()) {
+            $currency = Currency::find($business_settings->value);
+            $converted_price = floatval($converted_price) * floatval($currency->exchange_rate);
+        }
+        if($converted_price!=0){
+            return $converted_price;
+        }
+        return $price;
+    }
+}
+if (!function_exists('defaultCurrency')) {
+    function defaultCurrency()
+    {
+        if ($business_settings = BusinessSetting::where('type', 'system_default_currency')->first()) {
+            $currency = Currency::findOrFail($business_settings->value);
+            return $currency->code;
+        }
+        if($currency = Currency::where('status', true)->where('currency_code', env('DEFAULT_CURRENCY', 'USD'))->firstOrFail()){
+            return $currency->code;
+        }
+        return "USD";
+    }
+}
 
 function translate($key, $lang = null)
 {
