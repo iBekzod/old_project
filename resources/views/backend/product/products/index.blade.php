@@ -149,7 +149,7 @@
                                 </label>
                             </td>
                             <td class="text-right">
-                                @if ($type == 'Seller')
+                                {{--  @if ($type == 'Seller')
                                     <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
                                        href="{{route('products.seller.edit', $variation->id )}}"
                                        title="{{ translate('Edit') }}">
@@ -161,7 +161,7 @@
                                        title="{{ translate('Edit') }}">
                                         <i class="las la-edit"></i>
                                     </a>
-                                @endif
+                                @endif  --}}
                                 <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
                                    data-href="{{route('products.destroy', ['id'=>$variation->id])}}"
                                    title="{{ translate('Delete') }}">

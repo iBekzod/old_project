@@ -93,11 +93,11 @@
                                     <span class="aiz-side-nav-text">{{translate('Add New product')}}</span>
                                 </a>
                             </li>  --}}
-                             {{--  <li class="aiz-side-nav-item">
+                             <li class="aiz-side-nav-item">
                                 <a href="{{route('products.all')}}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{ translate('All Products') }}</span>
                                 </a>
-                            </li>  --}}
+                            </li>
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('elements.all')}}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{ translate('All Elements') }}</span>
@@ -120,14 +120,14 @@
                                     <span class="aiz-side-nav-text">{{ translate('In House Products') }}</span>
                                 </a>
                             </li>  --}}
-                            @if($vendor_system_activation->value == 1)
+                            {{--  @if($vendor_system_activation->value == 1)
                                 <li class="aiz-side-nav-item">
                                     <a href="{{route('products.seller')}}"
                                        class="aiz-side-nav-link {{ areActiveRoutes(['products.seller', 'products.seller.edit']) }}">
                                         <span class="aiz-side-nav-text">{{ translate('Seller Products') }}</span>
                                     </a>
                                 </li>
-                            @endif
+                            @endif  --}}
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('digitalproducts.index')}}"
                                    class="aiz-side-nav-link {{ areActiveRoutes(['digitalproducts.index', 'digitalproducts.create', 'digitalproducts.edit']) }}">
