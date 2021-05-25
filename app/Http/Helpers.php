@@ -729,7 +729,7 @@ if (!function_exists('convertCurrency')) {
     function convertCurrency($price, $price_currency_id)
     {
         $converted_price=0;
-        $currency = Currency::where('status', true)->where('currency_code', env('DEFAULT_CURRENCY', 'USD'))->firstOrFail();
+        $currency = Currency::where('status', true)->where('code', env('DEFAULT_CURRENCY', 'USD'))->firstOrFail();
         if($currency = Currency::findOrFail($price_currency_id)){
             $converted_price = floatval($price) / floatval($currency->exchange_rate);
         }
@@ -750,7 +750,7 @@ if (!function_exists('defaultCurrency')) {
             $currency = Currency::findOrFail($business_settings->value);
             return $currency->code;
         }
-        if($currency = Currency::where('status', true)->where('currency_code', env('DEFAULT_CURRENCY', 'USD'))->firstOrFail()){
+        if($currency = Currency::where('status', true)->where('code', env('DEFAULT_CURRENCY', 'USD'))->firstOrFail()){
             return $currency->code;
         }
         return "USD";
@@ -764,7 +764,7 @@ if (!function_exists('defaultExchangeRate')) {
             $currency = Currency::findOrFail($business_settings->value);
             return $currency->exchange_rate;
         }
-        if($currency = Currency::where('status', true)->where('currency_code', env('DEFAULT_ECHANGE_RATE', 'USD'))->firstOrFail()){
+        if($currency = Currency::where('status', true)->where('code', env('DEFAULT_ECHANGE_RATE', 'USD'))->firstOrFail()){
             return $currency->exchange_rate;
         }
         return 1;
