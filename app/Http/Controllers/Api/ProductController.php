@@ -19,6 +19,7 @@ use App\FlashDealProduct;
 use App\Product;
 use App\Shop;
 use App\Color;
+use App\Element;
 // use App\Seller;
 use Illuminate\Http\Request;
 use App\Utility\CategoryUtility;
@@ -66,12 +67,13 @@ class ProductController extends Controller
                 innerCategory($category->parentCategoryHierarchy, $breadcrumbs);
             }
         }
-
-        $products = Product::where('id', $id)->get();
-        $product = isset($products[0]) ? $products[0] : null;
-        $breadcrumbs = [];
-        if ($product) {
-            $categories = $product->parentHierarchy;
+        $product=null;
+        $product_collection=null;
+        $breadcrumbs[] = null;
+        if($product=Product::where('slug', $id)->first()){
+            $variation=$product->variation;
+            $element=Element::findOrFail($variation->element_id);
+            $categories = $element->parentHierarchy;
             $breadcrumbs[] = $categories;
             if ($categories->parentCategoryHierarchy) {
                 innerCategory($categories->parentCategoryHierarchy, $breadcrumbs);
@@ -80,11 +82,12 @@ class ProductController extends Controller
                 unset($item->parentCategoryHierarchy);
             }
             $breadcrumbs = array_reverse($breadcrumbs);
+            $product->breadcrumbs = $breadcrumbs;
+            $product_collection=new ProductDetailCollection($product);
         }
-        $product->breadcrumbs = $breadcrumbs;
 
         return [
-            'product' => new ProductDetailCollection($products),
+            'product' => $product_collection,
             'breadcrumbs' => $breadcrumbs
         ];
     }
