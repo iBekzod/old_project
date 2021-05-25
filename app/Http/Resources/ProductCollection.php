@@ -24,7 +24,7 @@ class ProductCollection extends ResourceCollection
                     'owner_id' => $product->user_id,
                     'name' => $data->name,
                     'photos' => $this->convertPhotos(explode(',', $element->photos)),
-                    'thumbnail_image' => api_asset($data->thumbnail_image),
+                    'thumbnail_image' => api_asset($data->thumbnail_img),
                     'base_price' => (double) homeBasePrice($lowest_price_id),
                     'base_discounted_price' => (double) homeDiscountedBasePrice($lowest_price_id),
                     'todays_deal' => (integer) $product->todays_deal,
