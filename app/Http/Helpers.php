@@ -732,16 +732,14 @@ if (!function_exists('convertCurrency')) {
         if($currency = Currency::findOrFail($price_currency_id)){
             $converted_price = floatval($price) / floatval($currency->exchange_rate);
         }
-
-
         if ($business_settings = BusinessSetting::where('type', 'system_default_currency')->first()) {
             $currency = Currency::find($business_settings->value);
             $converted_price = floatval($converted_price) * floatval($currency->exchange_rate);
         }
         if($converted_price!=0){
-            return $converted_price;
+            return round($converted_price, 2);
         }
-        return $price;
+        return round($price, 2);
     }
 }
 if (!function_exists('defaultCurrency')) {
