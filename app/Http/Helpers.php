@@ -729,6 +729,7 @@ if (!function_exists('convertCurrency')) {
     function convertCurrency($price, $price_currency_id)
     {
         $converted_price=0;
+        $currency = Currency::where('status', true)->where('currency_code', env('DEFAULT_CURRENCY', 'USD'))->firstOrFail();
         if($currency = Currency::findOrFail($price_currency_id)){
             $converted_price = floatval($price) / floatval($currency->exchange_rate);
         }
@@ -737,9 +738,9 @@ if (!function_exists('convertCurrency')) {
             $converted_price = floatval($converted_price) * floatval($currency->exchange_rate);
         }
         if($converted_price!=0){
-            return round($converted_price, 2);
+            return round($converted_price, $currency->precision??(-2));
         }
-        return round($price, 2);
+        return round($price, $currency->precision??(-2));
     }
 }
 if (!function_exists('defaultCurrency')) {
@@ -753,6 +754,20 @@ if (!function_exists('defaultCurrency')) {
             return $currency->code;
         }
         return "USD";
+    }
+}
+
+if (!function_exists('defaultExchangeRate')) {
+    function defaultExchangeRate()
+    {
+        if ($business_settings = BusinessSetting::where('type', 'system_default_currency')->first()) {
+            $currency = Currency::findOrFail($business_settings->value);
+            return $currency->exchange_rate;
+        }
+        if($currency = Currency::where('status', true)->where('currency_code', env('DEFAULT_ECHANGE_RATE', 'USD'))->firstOrFail()){
+            return $currency->exchange_rate;
+        }
+        return 1;
     }
 }
 

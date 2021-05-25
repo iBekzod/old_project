@@ -28,6 +28,7 @@ class ProductCollection extends ResourceCollection
                     'base_price' => (double) homeBasePrice($lowest_price_id),
                     'base_discounted_price' => (double) homeDiscountedBasePrice($lowest_price_id),
                     'currency_code'=>defaultCurrency(),
+                    'exchange_rate'=>defaultExchangeRate(),
                     'todays_deal' => (integer) $product->todays_deal,
                     'featured' =>(integer) $product->featured,
                     'unit' => $element->unit,
