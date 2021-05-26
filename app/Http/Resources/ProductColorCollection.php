@@ -9,9 +9,10 @@ class ProductColorCollection extends ResourceCollection
     public function toArray($request)
     {
         return $this->collection->map(function($data) {
+            $color=\App\Color::where('id', $data)->first();
             $arr = [
-                'hash' => $data,
-                'name' => \App\Color::where('code', $data)->first()->getTranslation('name')
+                'hash' => $color->code,
+                'name' => $color->getTranslation('name')
             ];
           //  TODO::name ni bir korish kere
 

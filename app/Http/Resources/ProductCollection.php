@@ -20,13 +20,15 @@ class ProductCollection extends ResourceCollection
                 $products=Product::where('variation_id', $data->id)->get();
                 return [
                     'id'=>$data->id,
-                    'slug'=>$data->slug,
+                    'slug'=>$product->slug,
                     'owner_id' => $product->user_id,
                     'name' => $data->name,
                     'photos' => $this->convertPhotos(explode(',', $element->photos)),
-                    'thumbnail_image' => api_asset($data->thumbnail_image),
+                    'thumbnail_image' => api_asset($data->thumbnail_img),
                     'base_price' => (double) homeBasePrice($lowest_price_id),
                     'base_discounted_price' => (double) homeDiscountedBasePrice($lowest_price_id),
+                    'currency_code'=>defaultCurrency(),
+                    'exchange_rate'=>defaultExchangeRate(),
                     'todays_deal' => (integer) $product->todays_deal,
                     'featured' =>(integer) $product->featured,
                     'unit' => $element->unit,
@@ -34,6 +36,7 @@ class ProductCollection extends ResourceCollection
                     'discount_type' => $product->discount_type,
                     'rating' => (double) $product->rating,
                     'sales' => (integer) $data->num_of_sale,
+                    'qty' => (integer) $data->qty,
                     'variant' => $product,
                     'variations' => $products,
                     'links' => [

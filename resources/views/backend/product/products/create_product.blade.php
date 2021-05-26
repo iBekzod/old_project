@@ -106,14 +106,14 @@
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Todays deals') }}</label>
                                         <label class="aiz-switch aiz-switch-success mb-0">
-                                            <input type="checkbox" onchange="change_switch(this.checked, 'todays_deal_change')" name="todays_deal" checked>
+                                            <input type="checkbox" onchange="change_switch(this.checked, 'todays_deal_change')" name="todays_deal" @if($element->todays_deal) checked @endif>
                                             <span></span>
                                         </label>
                                     </td>
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Published') }}</label>
                                         <label class="aiz-switch aiz-switch-success mb-0">
-                                            <input type="checkbox" onchange="change_switch(this.checked, 'published_change')" name="published" checked>
+                                            <input type="checkbox" onchange="change_switch(this.checked, 'published_change')" name="published" @if($element->published) checked @endif>
                                             <span></span>
                                         </label>
                                     </td>
@@ -173,13 +173,13 @@
                                     </td>
                                     <td>
                                         <label class="aiz-switch aiz-switch-success mb-0">
-                                            <input type="checkbox" name="variation[{{ $index }}][todays_deal]" class="todays_deal_change" checked>
+                                            <input type="checkbox" name="variation[{{ $index }}][todays_deal]" class="todays_deal_change" @if($element->todays_deal)checked @endif>
                                             <span></span>
                                         </label>
                                     </td>
                                     <td>
                                         <label class="aiz-switch aiz-switch-success mb-0 ">
-                                            <input type="checkbox" name="variation[{{ $index }}][published]" class="published_change" checked>
+                                            <input type="checkbox" name="variation[{{ $index }}][published]" class="published_change"  @if($element->published)checked @endif>
                                             <span></span>
                                         </label>
                                     </td>

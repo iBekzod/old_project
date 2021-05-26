@@ -100,4 +100,9 @@ class Element extends Model
         $this->element_translations()->delete();
         return parent::delete();
     }
+
+    public function parentHierarchy()
+    {
+        return $this->hasOne(Category::class, 'id', 'category_id');
+    }
 }

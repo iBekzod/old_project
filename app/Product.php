@@ -60,6 +60,10 @@ class Product extends Model
     //     return $this->hasMany(App\Models\CharacteristicValues::class, 'product_id', 'id');
     // }
 
+    // public function parentHierarchy()
+    // {
+    //     return $this->hasOne(Category::class, 'id', 'category_id')->with('parentCategoryHierarchy');
+    // }
 
     public function getTranslation($field = '', $lang = false){
         $lang = $lang == false ? app()->getLocale() : $lang;

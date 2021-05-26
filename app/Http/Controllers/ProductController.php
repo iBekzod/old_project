@@ -135,7 +135,7 @@ class ProductController extends Controller
         $query = null;
         $sort_search = null;
 
-        $variations = Variation::whereNotNull('element_id');
+        $variations = Variation::whereNotNull('element_id')->whereNotNull('lowest_price_id');
         if ($request->search != null) {
             $variations = $variations
                 ->where('name', 'like', '%' . $request->search . '%');
@@ -165,7 +165,7 @@ class ProductController extends Controller
         $seller_id = null;
         $sort_search = null;
 
-        $variations = Variation::whereNotNull('element_id');
+        $variations = Variation::whereNotNull('element_id')->whereNotNull('lowest_price_id');
         if ($request->has('user_id') && $request->user_id != null) {
             $variations = $variations->where('user_id', $request->user_id);
             $seller_id = $request->user_id;
@@ -194,7 +194,7 @@ class ProductController extends Controller
         $seller_id = null;
         $sort_search = null;
 
-        $variations = Variation::where('element_id', '<>', null);
+        $variations = Variation::whereNotNull('element_id')->whereNotNull('lowest_price_id');
         if ($request->has('user_id') && $request->user_id != null) {
             $variations = $variations->where('user_id', $request->user_id);
             $seller_id = $request->user_id;

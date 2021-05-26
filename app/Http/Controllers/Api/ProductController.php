@@ -19,6 +19,7 @@ use App\FlashDealProduct;
 use App\Product;
 use App\Shop;
 use App\Color;
+use App\Element;
 // use App\Seller;
 use Illuminate\Http\Request;
 use App\Utility\CategoryUtility;
@@ -59,6 +60,7 @@ class ProductController extends Controller
 
     public function show($id)
     {
+
         function innerCategory($category, &$breadcrumbs)
         {
             $breadcrumbs[] = $category;
@@ -66,12 +68,13 @@ class ProductController extends Controller
                 innerCategory($category->parentCategoryHierarchy, $breadcrumbs);
             }
         }
-
-        $products = Product::where('id', $id)->get();
-        $product = isset($products[0]) ? $products[0] : null;
-        $breadcrumbs = [];
-        if ($product) {
-            $categories = $product->parentHierarchy;
+        $product=null;
+        $product_collection=null;
+        $breadcrumbs[] = null;
+        if($product=Product::where('slug', $id)->first()){
+            $variation=$product->variation;
+            $element=Element::findOrFail($variation->element_id);
+            $categories = $element->parentHierarchy;
             $breadcrumbs[] = $categories;
             if ($categories->parentCategoryHierarchy) {
                 innerCategory($categories->parentCategoryHierarchy, $breadcrumbs);
@@ -80,11 +83,12 @@ class ProductController extends Controller
                 unset($item->parentCategoryHierarchy);
             }
             $breadcrumbs = array_reverse($breadcrumbs);
+            // $product->breadcrumbs = $breadcrumbs;
+            $product_collection=new ProductDetailCollection($product);
         }
-        $product->breadcrumbs = $breadcrumbs;
-
+        // dd($product);
         return [
-            'product' => new ProductDetailCollection($products),
+            'product' => $product_collection,
             'breadcrumbs' => $breadcrumbs
         ];
     }
@@ -321,11 +325,13 @@ class ProductController extends Controller
 
     public function bestSeller()
     {
-        return new ProductCollection(Product::orderBy('num_of_sale', 'desc')->where('is_accepted', 1)->limit(20)->get());
+        return $this->admin();
+        // return new ProductCollection(Product::orderBy('num_of_sale', 'desc')->where('is_accepted', 1)->limit(20)->get());
     }
 
     public function related($id)
     {
+        return $this->admin();
         $product = Product::find($id);
         if ($product)
             return new ProductCollection(Product::where('category_id', $product->category_id)->where('is_accepted', 1)->where('id', '!=', $id)->inRandomOrder()->limit(10)->get());

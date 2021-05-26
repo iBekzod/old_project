@@ -27,7 +27,7 @@ use App\Product_Warehouse;
 use App\Warehouse;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
 
-class ProductController extends Controller
+class ProductControllerCopy extends Controller
 {
     public function changeOnModerationAccept(Request $request, $id)
     {
@@ -275,6 +275,11 @@ class ProductController extends Controller
                 }else{
                     $product->published=false;
                 }
+                if(array_key_exists('featured', $variant)){
+                    ($variant["featured"]=="on" )?$product->featured=true:$product->featured=false;
+                }else{
+                    $product->featured=false;
+                }
                 $product->delivery_group_id=$variant["delivery_type"];
                 $product->qty=(int)$variant["quantity"];
                 $product->tax=(double)$variant["tax"];
@@ -433,6 +438,11 @@ class ProductController extends Controller
                     ($variant["published"]=="on" )?$product->published=true:$product->published=false;
                 }else{
                     $product->published=false;
+                }
+                if(array_key_exists('featured', $variant)){
+                    ($variant["featured"]=="on" )?$product->featured=true:$product->featured=false;
+                }else{
+                    $product->featured=false;
                 }
                 $product->delivery_group_id=$variant["delivery_type"];
                 $product->qty=(int)$variant["quantity"];

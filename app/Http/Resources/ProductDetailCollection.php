@@ -3,102 +3,100 @@
 namespace App\Http\Resources;
 
 use App\Attribute as AppAttribute;
-use App\ProductStock;
-use App\ProductTranslation;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use App\Review;
 use App\Attribute;
+use App\Branch;
+use App\Characteristic;
+use App\Element;
 use App\FlashDealProduct;
+use App\Product;
+use App\Variation;
+use Attribute as GlobalAttribute;
+
 class ProductDetailCollection extends ResourceCollection
 {
     public function toArray($request)
     {
-        return [
-            'data' => $this->collection->map(function($data) {
-                $lang = ProductTranslation::where('product_id', $data->id)->where('lang', app()->getLocale())->first();
+        $product=Product::where('slug', $request->id)->first();
+        $variation=Variation::findOrFail($product->variation_id);
+        $products=Product::where('variation_id', $product->variation_id)->where('user_id', $product->user_id);
+        $element=Element::findOrFail($variation->element_id);
+        try{
+            $data = [
+            'id' => (integer) $product->id,
+            'name' => $product->getTranslation('name'),
+            'added_by' => $product->added_by,
+            'user' => [
+                'name' => $product->user->name,
+                'email' => $product->user->email,
+                'avatar' => $product->user->avatar,
+                'avatar_original' => api_asset($product->user->avatar_original),
+                'shop_name' => $product->added_by == 'admin' ? '' : $product->user->shop->name,
+                'shop_logo' => $product->added_by == 'admin' ? '' : uploaded_asset($product->user->shop->logo),
+                'shop_link' => $product->added_by == 'admin' ? '' : route('shops.info', $product->user->shop->id)
+            ],
+            'brand' => [
+                'name' => $element != null ? $element->name : null,
+                'logo' => $element != null ? api_asset($element->logo) : null,
+                'links' => [
+                    'products' => $element != null ? route('api.products.brand', $element->brand_id) : null
+                ]
+            ],
+            'photos' => $this->convertPhotos(explode(',', $element->photos)),
+            'thumbnail_image' => api_asset($variation->thumbnail_img),
+            'base_price' => (double) homeBasePrice($product->id),
+            'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
+            'currency_code'=>defaultCurrency(),
+            'exchange_rate'=>defaultExchangeRate(),
+            'todays_deal' => (integer) $product->todays_deal,
+            'featured' =>(integer) $product->featured,
+            'unit' => $element->unit,
+            'discount' => (integer) $product->discount,
+            'discount_type' => $product->discount_type,
+            'tax' => (double) $product->tax,
+            'tax_type' => $product->tax_type,
+            'rating' => (double) $product->rating,
+            'number_of_sales' => (integer) $product->num_of_sale,
+            'current_stock' => (integer) $product->qty,
+            'tag' => explode(',', $element->tags),
+            'slug' => $product->slug,
+            'unit' => $element->unit,
+            'video_link' => $element->video_link,
+            'video_provider' => $element->video_provider,
+            'rating' => (double) $product->rating,
+            'rating_count' => (integer) Review::where(['product_id' => $product->id])->count(),
+            'description' => $product->getTranslation('description'),
+            'reviews' => new ReviewCollection(Review::where('product_id', $product->id)->latest()->get()),
+            // 'variations' => $products->groupBy('user_id', true)->get(),
+            'price_lower' => (double) convertCurrency($products->min('price'), $product->currency_id),
+            'price_higher' => (double) convertCurrency($products->max('price'), $product->currency_id),
+            'choice_options' => $this->convertToChoiceOptions(json_decode($element->variations)),
+            'colors' => new ProductColorCollection(json_decode($element->variation_colors)),
+            'shipping_type' => $product->delivery_type,
+            // 'shipping_cost' => $product->delivery,
+            'characteristics' => $this->convertToChoiceOptions(json_decode($element->characteristics, true)),
 
-                $arr = [
-                    'id' => (integer) $data->id,
-                    'name' => $data->name,
-                    'added_by' => $data->added_by,
-                    'user' => [
-                        'name' => $data->user->name,
-                        'email' => $data->user->email,
-                        'avatar' => $data->user->avatar,
-                        'avatar_original' => api_asset($data->user->avatar_original),
-                        'shop_name' => $data->added_by == 'admin' ? '' : $data->user->shop->name,
-                        'shop_logo' => $data->added_by == 'admin' ? '' : uploaded_asset($data->user->shop->logo),
-                        'shop_link' => $data->added_by == 'admin' ? '' : route('shops.info', $data->user->shop->id)
-                    ],
-                    'brand' => [
-                        'name' => $data->brand != null ? $data->brand->name : null,
-                        'logo' => $data->brand != null ? api_asset($data->brand->logo) : null,
-                        'links' => [
-                            'products' => $data->brand != null ? route('api.products.brand', $data->brand_id) : null
-                        ]
-                    ],
-                    'translations' => ProductTranslation::where('product_id', $data->id)->get(),
-                    'variations' => ProductStock::where('product_id', $data->id)->groupBy('user_id', true)->get(),
-                    'photos' => $this->convertPhotos(explode(',', $data->photos)),
-                    'thumbnail_image' => api_asset($data->thumbnail_img),
-                    'tag' => explode(',', $data->tags),
-                    'price_lower' => (double) explode('-', homeDiscountedPrice($data->id))[0],
-                    'price_higher' => (double) explode('-', homeDiscountedPrice($data->id))[1],
-                    'choice_options' => $this->convertToChoiceOptions(json_decode($data->choice_options)),
-                    'colors' => new ProductColorCollection(json_decode($data->colors)),
-                    'todays_deal' => (integer) $data->todays_deal,
-                    'featured' => (integer) $data->featured,
-                    'base_price' => (double) homeBasePrice($data->id),
-                    'base_discounted_price' => (double) homeDiscountedBasePrice($data->id),
-                    'current_stock' => (integer) $data->current_stock,
-                    'slug' => $data->slug,
-                    'unit' => $data->unit,
-                    'video_link' => $data->video_link,
-                    'video_provider' => $data->video_provider,
-                    'discount' => (integer) $data->discount,
-                    'discount_type' => $data->discount_type,
-                    'tax' => (double) $data->tax,
-                    'tax_type' => $data->tax_type,
-                    'shipping_type' => $data->shipping_type,
-                    'shipping_cost' => (double) $data->shipping_cost,
-                    'number_of_sales' => (integer) $data->num_of_sale,
-                    'rating' => (double) $data->rating,
-                    'rating_count' => (integer) Review::where(['product_id' => $data->id])->count(),
-                    'description' => $data->description,
-                    'characteristics' => $data->characteristicValuesForDetailProduct,
-                    'reviews' => new ReviewCollection(Review::where('product_id', $data->id)->latest()->get()),
-                    'links' => [
-                        'reviews' => route('api.reviews.index', $data->id),
-                        'related' => route('products.related', $data->id)
-                    ]
-                ];
+            'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??null,
+            'category'=>[
+                'name' => $element->category->name,
+                'banner' => api_asset($element->category->banner),
+                'icon' => $element->category->icon,
+                'links' => [
+                    'products' => route('api.products.category', $element->category_id),
+                    'sub_categories' => route('subCategories.index', $element->category_id)
+                ]
+            ],
+            'links' => [
+                'reviews' => route('api.reviews.index', $product->id),
+                'related' => route('products.related', $product->id)
+            ],
 
-                if ($lang) {
-                    $arr['name'] = $lang->name;
-                    $arr['description'] = $lang->description;
-                }
-
-                if($flashDeal = FlashDealProduct::where('product_id',$data->id)->first())
-                {
-                   $arr['flashDeal'] = $flashDeal;
-                }
-
-                if($data->category_id !== 0)
-                {
-                    $arr['category'] = [
-                        'name' => $data->category->name,
-                        'banner' => api_asset($data->category->banner),
-                        'icon' => $data->category->icon,
-                        'links' => [
-                            'products' => route('api.products.category', $data->category_id),
-                            'sub_categories' => route('subCategories.index', $data->category_id)
-                        ]
-                    ];
-                }
-
-                return $arr;
-            })
         ];
+        } catch (\Exception $th) {
+            dd($th->getMessage());
+        }
+        return $data;
     }
 
     public function with($request)
@@ -113,19 +111,30 @@ class ProductDetailCollection extends ResourceCollection
         ];
     }
 
-    protected function convertToChoiceOptions($data){
-        $result = array();
-        foreach ($data as $key => $choice) {
-            $attr = Attribute::find($choice->attribute_id);
-            if($attr && $choice->values!=null)
-            {
-                $item['name'] = $choice->attribute_id;
-                $item['title'] = Attribute::find($choice->attribute_id)->name;
-                $item['options'] = $choice->values;
-                if($item['name']!=null && $item['title']!=null){
-                    array_push($result, $item);
+    protected function convertToChoiceOptions($attributes){
+        $result=array();
+        $collected_characteristics=[];
+        if ($attributes) {
+            foreach($attributes as $attribute_id=>$value_ids){
+                $characteristics=Characteristic::whereIn('id',$value_ids)->get();
+                $attribute=Attribute::findOrFail($attribute_id);
+                $branch=Branch::findOrFail($attribute->branch_id);
+                $items=array();
+                foreach($characteristics as $characteristic){
+                    $items[]=[
+                        'id'=>$characteristic->id,
+                        'name'=>$characteristic->getTranslation('name')
+                    ];
                 }
+                $collected_characteristics['id']=$attribute->id;
+                $collected_characteristics['attribute']=$attribute->getTranslation('name');
+                $collected_characteristics['values']=$items;
 
+                $result[]=[
+                    'id'=>$branch->id,
+                    'title'=>$branch->getTranslation('name'),
+                    'options'=>$collected_characteristics
+                ];
             }
         }
         return $result;
