@@ -20,7 +20,7 @@ class ProductCollection extends ResourceCollection
                 $products=Product::where('variation_id', $data->id)->get();
                 return [
                     'id'=>$data->id,
-                    'slug'=>$data->slug,
+                    'slug'=>$product->slug,
                     'owner_id' => $product->user_id,
                     'name' => $data->name,
                     'photos' => $this->convertPhotos(explode(',', $element->photos)),
