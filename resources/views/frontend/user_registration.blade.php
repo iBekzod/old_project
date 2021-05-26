@@ -98,7 +98,7 @@
                                                     </a>
                                                 </li>
                                             @endif
-                                            @if(\App\BusinessSetting::where('type', 'google_login')->first()->value == 1)
+                                            @if(\App\BusinessSetting::where('type', 'google_login')->firFst()->value == 1)
                                                 <li class="list-inline-item">
                                                     <a href="{{ route('social.login', ['provider' => 'google']) }}" class="google">
                                                         <i class="lab la-google"></i>
@@ -141,20 +141,20 @@
         // making the CAPTCHA  a required field for form submission
         $(document).ready(function(){
             // alert('helloman');
-            $("#reg-form").on("submit", function(evt)
-            {
-                var response = grecaptcha.getResponse();
-                if(response.length == 0)
-                {
-                //reCaptcha not verified
-                    alert("please verify you are humann!");
-                    evt.preventDefault();
-                    return false;
-                }
-                //captcha verified
-                //do the rest of your validations here
-                $("#reg-form").submit();
-            });
+            // $("#reg-form").on("submit", function(evt)
+            // {
+            //     var response = grecaptcha.getResponse();
+            //     if(response.length == 0)
+            //     {
+            //     //reCaptcha not verified
+            //         alert("please verify you are humann!");
+            //         evt.preventDefault();
+            //         return false;
+            //     }
+            //     //captcha verified
+            //     //do the rest of your validations here
+            //     $("#reg-form").submit();
+            // });
         });
         @endif
 
@@ -208,3 +208,16 @@
         }
     </script>
 @endsection
+
+
+{{-- <form id="reg-form" class="form-default" role="form" action="{{ route('seller.registration') }}" method="POST">
+    @csrf
+    <label for="name">name:
+         <input type="text" placeholder="your name" style="margin:10px"> <br>
+    </label>
+    <label for="email">name:
+        <input type="email" placeholder="your email" style="margin:10px"> <br>
+   </label>
+    <input type="submit" value="inter" style="margin:20px" >
+
+</form> --}}
