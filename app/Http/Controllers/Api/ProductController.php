@@ -83,13 +83,13 @@ class ProductController extends Controller
                 unset($item->parentCategoryHierarchy);
             }
             $breadcrumbs = array_reverse($breadcrumbs);
-            $product->breadcrumbs = $breadcrumbs;
+            // $product->breadcrumbs = $breadcrumbs;
             $product_collection=new ProductDetailCollection($product);
         }
         // dd($product);
-        $product_collection->breadcrumbs=$breadcrumbs;
         return [
-            'product' =>$product_collection
+            'product' => $product_collection,
+            'breadcrumbs' => $breadcrumbs
         ];
     }
 

@@ -20,7 +20,7 @@ class ProductDetailCollection extends ResourceCollection
         $products=Product::where('variation_id', $product->variation_id);
         $element=Element::findOrFail($variation->element_id);
         // try{
-        $data= [
+        return [
             'id' => (integer) $product->id,
             'name' => $product->getTranslation('name'),
             'added_by' => $product->added_by,
@@ -93,7 +93,7 @@ class ProductDetailCollection extends ResourceCollection
         // } catch (\Exception $th) {
         //     dd($th->getMessage());
         // }
-        return $data;
+        // return $data;
     }
 
     public function with($request)
