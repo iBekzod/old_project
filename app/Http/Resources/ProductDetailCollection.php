@@ -6,10 +6,12 @@ use App\Attribute as AppAttribute;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use App\Review;
 use App\Attribute;
+use App\Characteristic;
 use App\Element;
 use App\FlashDealProduct;
 use App\Product;
 use App\Variation;
+use Attribute as GlobalAttribute;
 
 class ProductDetailCollection extends ResourceCollection
 {
@@ -17,10 +19,10 @@ class ProductDetailCollection extends ResourceCollection
     {
         $product=Product::where('slug', $request->id)->first();
         $variation=Variation::findOrFail($product->variation_id);
-        $products=Product::where('variation_id', $product->variation_id);
+        $products=Product::where('variation_id', $product->variation_id)->where('user_id', $product->user_id);
         $element=Element::findOrFail($variation->element_id);
-        // try{
-        return [
+        try{
+            $data = [
             'id' => (integer) $product->id,
             'name' => $product->getTranslation('name'),
             'added_by' => $product->added_by,
@@ -66,13 +68,13 @@ class ProductDetailCollection extends ResourceCollection
             'description' => $product->getTranslation('description'),
             'reviews' => new ReviewCollection(Review::where('product_id', $product->id)->latest()->get()),
             // 'variations' => $products->groupBy('user_id', true)->get(),
-            // 'price_lower' => (double) homeBasePrice($products->min('price')),
-            // 'price_higher' => (double) homeBasePrice($products->max('price')),
-            'choice_options' => $this->convertToChoiceOptions(json_decode($element->variations)),
+            'price_lower' => (double) convertCurrency($products->min('price'), $product->currency_id),
+            'price_higher' => (double) convertCurrency($products->max('price'), $product->currency_id),
+            'choice_options' => $this->convertToArrayAttributes(json_decode($element->variations)),
             'colors' => new ProductColorCollection(json_decode($element->variation_colors)),
             'shipping_type' => $product->delivery_type,
             // 'shipping_cost' => $product->delivery,
-            'characteristics' => $this->convertToCharacteristics(json_decode($element->characteristics, true)),
+            'characteristics' => $this->convertToArrayAttributes(json_decode($element->characteristics, true)),
 
             'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??null,
             'category'=>[
@@ -90,10 +92,10 @@ class ProductDetailCollection extends ResourceCollection
             ],
 
         ];
-        // } catch (\Exception $th) {
-        //     dd($th->getMessage());
-        // }
-        // return $data;
+        } catch (\Exception $th) {
+            dd($th->getMessage());
+        }
+        return $data;
     }
 
     public function with($request)
@@ -108,29 +110,18 @@ class ProductDetailCollection extends ResourceCollection
         ];
     }
 
-    protected function convertToCharacteristics($characteristics){
-
-
-        return null;
-    }
-
-    protected function convertToChoiceOptions($data){
-        return null;
-        $result = array();
-        foreach ($data as $key => $choice) {
-            $attr = Attribute::find($choice->attribute_id);
-            if($attr && $choice->values!=null)
-            {
-                $item['name'] = $choice->attribute_id;
-                $item['title'] = Attribute::find($choice->attribute_id)->name;
-                $item['options'] = $choice->values;
-                if($item['name']!=null && $item['title']!=null){
-                    array_push($result, $item);
+    protected function convertToArrayAttributes($attributes){
+        $collected_characteristics=[];
+        if ($attributes) {
+            foreach($attributes as $attribute_id=>$value_ids){
+                $characteristics=Characteristic::whereIn('id', $value_ids)->get();
+                $attribute=Attribute::findOrFail($attribute_id);
+                foreach($characteristics as $characteristic){
+                    $collected_characteristics[$attribute->getTranslation('name')]=$characteristic->getTranslation('name');
                 }
-
             }
         }
-        return $result;
+        return $collected_characteristics;
     }
 
     protected function convertPhotos($data){
