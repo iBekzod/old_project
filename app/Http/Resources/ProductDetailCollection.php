@@ -6,6 +6,7 @@ use App\Attribute as AppAttribute;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use App\Review;
 use App\Attribute;
+use App\Branch;
 use App\Characteristic;
 use App\Element;
 use App\FlashDealProduct;
@@ -70,11 +71,11 @@ class ProductDetailCollection extends ResourceCollection
             // 'variations' => $products->groupBy('user_id', true)->get(),
             'price_lower' => (double) convertCurrency($products->min('price'), $product->currency_id),
             'price_higher' => (double) convertCurrency($products->max('price'), $product->currency_id),
-            'choice_options' => $this->convertToArrayAttributes(json_decode($element->variations)),
+            'choice_options' => $this->convertToChoiceOptions(json_decode($element->variations)),
             'colors' => new ProductColorCollection(json_decode($element->variation_colors)),
             'shipping_type' => $product->delivery_type,
             // 'shipping_cost' => $product->delivery,
-            'characteristics' => $this->convertToArrayAttributes(json_decode($element->characteristics, true)),
+            'characteristics' => $this->convertToChoiceOptions(json_decode($element->characteristics, true)),
 
             'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??null,
             'category'=>[
@@ -110,18 +111,33 @@ class ProductDetailCollection extends ResourceCollection
         ];
     }
 
-    protected function convertToArrayAttributes($attributes){
+    protected function convertToChoiceOptions($attributes){
+        $result=array();
         $collected_characteristics=[];
         if ($attributes) {
             foreach($attributes as $attribute_id=>$value_ids){
-                $characteristics=Characteristic::whereIn('id', $value_ids)->get();
+                $characteristics=Characteristic::whereIn('id',$value_ids)->get();
                 $attribute=Attribute::findOrFail($attribute_id);
+                $branch=Branch::findOrFail($attribute->branch_id);
+                $items=array();
                 foreach($characteristics as $characteristic){
-                    $collected_characteristics[$attribute->getTranslation('name')]=$characteristic->getTranslation('name');
+                    $items[]=[
+                        'id'=>$characteristic->id,
+                        'name'=>$characteristic->getTranslation('name')
+                    ];
                 }
+                $collected_characteristics['id']=$attribute->id;
+                $collected_characteristics['attribute']=$attribute->getTranslation('name');
+                $collected_characteristics['values']=$items;
+
+                $result[]=[
+                    'id'=>$branch->id,
+                    'title'=>$branch->getTranslation('name'),
+                    'options'=>$collected_characteristics
+                ];
             }
         }
-        return $collected_characteristics;
+        return $result;
     }
 
     protected function convertPhotos($data){
