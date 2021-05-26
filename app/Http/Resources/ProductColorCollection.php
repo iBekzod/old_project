@@ -11,7 +11,7 @@ class ProductColorCollection extends ResourceCollection
         return $this->collection->map(function($data) {
             $arr = [
                 'hash' => $data,
-                'name' => \App\Color::where('code', $data)->first()->getTranslation('name')
+                'name' => \App\Color::where('id', $data)->first()->getTranslation('name')
             ];
           //  TODO::name ni bir korish kere
 

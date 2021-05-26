@@ -103,6 +103,6 @@ class Element extends Model
 
     public function parentHierarchy()
     {
-        return $this->hasOne(Category::class, 'id', 'category_id')->with('parentCategoryHierarchy');
+        return $this->hasOne(Category::class, 'id', 'category_id');
     }
 }

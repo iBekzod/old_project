@@ -15,23 +15,28 @@ class ProductDetailCollection extends ResourceCollection
 {
     public function toArray($request)
     {
-        dd($request);
+        // return $this->collection;
         // $data=$request;
-        // $product=Product::findOrFail($this->id);
-        $variation=Variation::findOrFail($request->variation_id);
+        // try {
+            //code...
+
+        $product=Product::where('slug', $request->id)->first();
+        $variation=Variation::findOrFail($product->variation_id);
+        $products=Product::where('variation_id', $product->variation_id)->get();
         $element=Element::findOrFail($variation->element_id);
-        return [
-            'id' => (integer) $this->id,
-            'name' => $this->getTranslation('name'),
-            'added_by' => $this->added_by,
+
+        $data= [
+            'id' => (integer) $product->id,
+            'name' => $product->getTranslation('name'),
+            'added_by' => $product->added_by,
             'user' => [
-                'name' => $this->user->name,
-                'email' => $this->user->email,
-                'avatar' => $this->user->avatar,
-                'avatar_original' => api_asset($this->user->avatar_original),
-                'shop_name' => $this->added_by == 'admin' ? '' : $this->user->shop->name,
-                'shop_logo' => $this->added_by == 'admin' ? '' : uploaded_asset($this->user->shop->logo),
-                'shop_link' => $this->added_by == 'admin' ? '' : route('shops.info', $this->user->shop->id)
+                'name' => $product->user->name,
+                'email' => $product->user->email,
+                'avatar' => $product->user->avatar,
+                'avatar_original' => api_asset($product->user->avatar_original),
+                'shop_name' => $product->added_by == 'admin' ? '' : $product->user->shop->name,
+                'shop_logo' => $product->added_by == 'admin' ? '' : uploaded_asset($product->user->shop->logo),
+                'shop_link' => $product->added_by == 'admin' ? '' : route('shops.info', $product->user->shop->id)
             ],
             'brand' => [
                 'name' => $element != null ? $element->name : null,
@@ -42,41 +47,41 @@ class ProductDetailCollection extends ResourceCollection
             ],
             'photos' => $this->convertPhotos(explode(',', $element->photos)),
             'thumbnail_image' => api_asset($variation->thumbnail_img),
-            'base_price' => (double) homeBasePrice($this->id),
-            'base_discounted_price' => (double) homeDiscountedBasePrice($this->id),
+            'base_price' => (double) homeBasePrice($product->id),
+            'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
             'currency_code'=>defaultCurrency(),
             'exchange_rate'=>defaultExchangeRate(),
-            'todays_deal' => (integer) $this->todays_deal,
-            'featured' =>(integer) $this->featured,
+            'todays_deal' => (integer) $product->todays_deal,
+            'featured' =>(integer) $product->featured,
             'unit' => $element->unit,
-            'discount' => (integer) $this->discount,
-            'discount_type' => $this->discount_type,
-            'tax' => (double) $this->tax,
-            'tax_type' => $this->tax_type,
-            'rating' => (double) $this->rating,
-            'number_of_sales' => (integer) $this->num_of_sale,
-            'current_stock' => (integer) $this->qty,
+            'discount' => (integer) $product->discount,
+            'discount_type' => $product->discount_type,
+            'tax' => (double) $product->tax,
+            'tax_type' => $product->tax_type,
+            'rating' => (double) $product->rating,
+            'number_of_sales' => (integer) $product->num_of_sale,
+            'current_stock' => (integer) $product->qty,
             'tag' => explode(',', $element->tags),
-            'slug' => $this->slug,
+            'slug' => $product->slug,
             'unit' => $element->unit,
             'video_link' => $element->video_link,
             'video_provider' => $element->video_provider,
-            'rating' => (double) $this->rating,
-            'rating_count' => (integer) Review::where(['product_id' => $this->id])->count(),
-            'description' => $this->getTranslation('description'),
-            'reviews' => new ReviewCollection(Review::where('product_id', $this->id)->latest()->get()),
+            'rating' => (double) $product->rating,
+            'rating_count' => (integer) Review::where(['product_id' => $product->id])->count(),
+            'description' => $product->getTranslation('description'),
+            'reviews' => new ReviewCollection(Review::where('product_id', $product->id)->latest()->get()),
 
             // 'translations' => ProductTranslation::where('product_id', $data->id)->get(),
             // 'variations' => ProductStock::where('product_id', $data->id)->groupBy('user_id', true)->get(),
             // 'price_lower' => (double) explode('-', homeDiscountedPrice($data->id))[0],
             // 'price_higher' => (double) explode('-', homeDiscountedPrice($data->id))[1],
-            // 'choice_options' => $this->convertToChoiceOptions(json_decode($data->choice_options)),
-            // 'colors' => new ProductColorCollection(json_decode($element->colors)),
-            // 'shipping_type' => $data->shipping_type,
-            // 'shipping_cost' => (double) $data->shipping_cost,
+            // 'choice_options' => $product->convertToChoiceOptions(json_decode($data->choice_options)),
+            'colors' => new ProductColorCollection(json_decode($element->variation_colors)),
+            'shipping_type' => $product->delivery_type,
+            // 'shipping_cost' => $product->delivery,
             // 'characteristics' => $data->characteristicValuesForDetailProduct,
 
-            'flashDeal'=> FlashDealProduct::where('product_id', $this->id)->firstOrFail()??null,
+            'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??null,
             'category'=>[
                 'name' => $element->category->name,
                 'banner' => api_asset($element->category->banner),
@@ -87,10 +92,14 @@ class ProductDetailCollection extends ResourceCollection
                 ]
             ],
             'links' => [
-                'reviews' => route('api.reviews.index', $this->id),
-                'related' => route('products.related', $this->id)
+                'reviews' => route('api.reviews.index', $product->id),
+                'related' => route('products.related', $product->id)
             ]
         ];
+        // } catch (\Exception $th) {
+        //     dd($th->getMessage());
+        // }
+        return $data;
     }
 
     public function with($request)

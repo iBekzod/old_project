@@ -60,6 +60,7 @@ class ProductController extends Controller
 
     public function show($id)
     {
+
         function innerCategory($category, &$breadcrumbs)
         {
             $breadcrumbs[] = $category;
@@ -85,7 +86,7 @@ class ProductController extends Controller
             $product->breadcrumbs = $breadcrumbs;
             $product_collection=new ProductDetailCollection($product);
         }
-
+        // dd($product);
         return [
             'product' => $product_collection,
             'breadcrumbs' => $breadcrumbs
