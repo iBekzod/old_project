@@ -15,16 +15,11 @@ class ProductDetailCollection extends ResourceCollection
 {
     public function toArray($request)
     {
-        // return $this->collection;
-        // $data=$request;
-        // try {
-            //code...
-
         $product=Product::where('slug', $request->id)->first();
         $variation=Variation::findOrFail($product->variation_id);
-        $products=Product::where('variation_id', $product->variation_id)->get();
+        $products=Product::where('variation_id', $product->variation_id);
         $element=Element::findOrFail($variation->element_id);
-
+        // try{
         $data= [
             'id' => (integer) $product->id,
             'name' => $product->getTranslation('name'),
@@ -70,16 +65,14 @@ class ProductDetailCollection extends ResourceCollection
             'rating_count' => (integer) Review::where(['product_id' => $product->id])->count(),
             'description' => $product->getTranslation('description'),
             'reviews' => new ReviewCollection(Review::where('product_id', $product->id)->latest()->get()),
-
-            // 'translations' => ProductTranslation::where('product_id', $data->id)->get(),
-            // 'variations' => ProductStock::where('product_id', $data->id)->groupBy('user_id', true)->get(),
-            // 'price_lower' => (double) explode('-', homeDiscountedPrice($data->id))[0],
-            // 'price_higher' => (double) explode('-', homeDiscountedPrice($data->id))[1],
-            // 'choice_options' => $product->convertToChoiceOptions(json_decode($data->choice_options)),
+            // 'variations' => $products->groupBy('user_id', true)->get(),
+            // 'price_lower' => (double) homeBasePrice($products->min('price')),
+            // 'price_higher' => (double) homeBasePrice($products->max('price')),
+            'choice_options' => $this->convertToChoiceOptions(json_decode($element->variations)),
             'colors' => new ProductColorCollection(json_decode($element->variation_colors)),
             'shipping_type' => $product->delivery_type,
             // 'shipping_cost' => $product->delivery,
-            // 'characteristics' => $data->characteristicValuesForDetailProduct,
+            'characteristics' => $this->convertToCharacteristics(json_decode($element->characteristics, true)),
 
             'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??null,
             'category'=>[
@@ -94,7 +87,8 @@ class ProductDetailCollection extends ResourceCollection
             'links' => [
                 'reviews' => route('api.reviews.index', $product->id),
                 'related' => route('products.related', $product->id)
-            ]
+            ],
+
         ];
         // } catch (\Exception $th) {
         //     dd($th->getMessage());
@@ -114,7 +108,14 @@ class ProductDetailCollection extends ResourceCollection
         ];
     }
 
+    protected function convertToCharacteristics($characteristics){
+
+
+        return null;
+    }
+
     protected function convertToChoiceOptions($data){
+        return null;
         $result = array();
         foreach ($data as $key => $choice) {
             $attr = Attribute::find($choice->attribute_id);

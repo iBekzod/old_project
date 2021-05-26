@@ -87,9 +87,9 @@ class ProductController extends Controller
             $product_collection=new ProductDetailCollection($product);
         }
         // dd($product);
+        $product_collection->breadcrumbs=$breadcrumbs;
         return [
-            'product' => $product_collection,
-            'breadcrumbs' => $breadcrumbs
+            'product' =>$product_collection
         ];
     }
 
