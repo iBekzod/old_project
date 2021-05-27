@@ -15,11 +15,11 @@ class ElementCollection extends ResourceCollection
         return [
             'data' => $this->collection->map(function($data) {
                 try{
-                $element=Element::findOrFail($data->id);
-                $variation=Variation::where('element_id', $element->id)->where('lowest_price_id', '<>', null)->inRandomOrder()->first();
-                $lowest_price_id=$variation->lowest_price_id;
-                $product=Product::findOrFail($lowest_price_id);
-                $products=Product::where('variation_id', $data->id)->get();
+                    $element=Element::findOrFail($data->id);
+                    $variation=Variation::where('element_id', $element->id)->where('lowest_price_id', '<>', null)->inRandomOrder()->first();
+                    $lowest_price_id=$variation->lowest_price_id;
+                    $product=Product::findOrFail($lowest_price_id);
+                    $products=Product::where('variation_id', $data->id)->get();
                 }catch(Exception $e){
                     return null;
                 }
