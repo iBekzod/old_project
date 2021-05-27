@@ -77,7 +77,8 @@ class ProductDetailCollection extends ResourceCollection
             'shipping_type' => $product->delivery_type,
             // 'shipping_cost' => $product->delivery,
             'characteristics' => $this->convertToCharacteristics(json_decode($element->characteristics, true)),
-
+            'variant' => $product,
+            'variations' => $products,
             'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??null,
             'category'=>[
                 'name' => $element->category->name,
