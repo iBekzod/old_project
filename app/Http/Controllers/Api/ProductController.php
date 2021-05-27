@@ -97,7 +97,7 @@ class ProductController extends Controller
 
     public function admin()
     {
-        return new ElementCollection(Element::where()->get());
+        return new ElementCollection(Element::all());
         // if($variations= Variation::where('lowest_price_id','<>', null)->get()){
         //     // dd($variations);
         //     return new VariationCollection($variations);
