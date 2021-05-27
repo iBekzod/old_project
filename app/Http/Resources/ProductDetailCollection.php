@@ -62,7 +62,7 @@ class ProductDetailCollection extends ResourceCollection
             'tag' => explode(',', $element->tags),
             'slug' => $product->slug,
             'unit' => $element->unit,
-            'quantity'=>$product->qty,
+            'qty'=>$product->qty,
             'video_link' => $element->video_link,
             'video_provider' => $element->video_provider,
             'rating' => (double) $product->rating,
