@@ -136,6 +136,13 @@ class ProductDetailCollection extends ResourceCollection
                     'options'=>$collected_characteristics
                 ];
             }
+            foreach($result as $key => $value){
+                $newarray[$value['id']]['id'] = $value['id'];
+                $newarray[$value['id']]['title'] = $value['title'];
+                $newarray[$value['id']]['options'][$key] = $value['options'];
+            }
+            return $newarray;
+            //  var_dump($newarray);
         }
         return $result;
     }
