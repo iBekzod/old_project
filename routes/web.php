@@ -79,6 +79,7 @@ Route::get('/seller/login', 'HomeController@seller_login')->name('user.login');
 Route::post('/seller/login', 'HomeController@seller_login')->name('seller.login');
 
 
+
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/page', 'HomeController@home')->name('homePage');
 Route::get('/single_product/{slug}', 'HomeController@single_product');
@@ -95,6 +96,7 @@ Route::get('/flash-deal/{slug}', 'HomeController@flash_deal_details')->name('fla
 Route::get('/sitemap.xml', function(){
 	return base_path('sitemap.xml');
 });
+
 
 
 Route::get('/customer-products', 'CustomerProductController@customer_products_listing')->name('customer.products');
