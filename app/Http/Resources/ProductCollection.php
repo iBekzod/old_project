@@ -12,7 +12,7 @@ class ProductCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'variation' => $this->collection->map(function($data) {
+            'data' => $this->collection->map(function($data) {
                 $product=Product::findOrFail($data->id);
                 $variation=Variation::findOrFail($product->variation_id);
                 $element=Element::findOrFail($variation->element_id);

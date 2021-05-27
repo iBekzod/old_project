@@ -107,11 +107,12 @@ class ProductController extends Controller
 
     public function seller()
     {
-        if($variations = Variation::where('lowest_price_id','<>', null)->get()){
-            // dd($variations);
-            return new ProductCollection($variations);
-        }
-        return null;
+        return $this->admin();
+        // if($variations = Variation::where('lowest_price_id','<>', null)->get()){
+        //     // dd($variations);
+        //     return new ProductCollection($variations);
+        // }
+        // return null;
         // return new ProductCollection(Product::where('added_by', 'seller')->inRandomOrder()->paginate(10));
     }
 
