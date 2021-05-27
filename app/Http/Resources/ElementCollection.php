@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Element;
 use App\Product;
 use App\Variation;
+use Exception;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class ElementCollection extends ResourceCollection
@@ -13,10 +14,15 @@ class ElementCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection->map(function($data) {
+                try{
                 $element=Element::findOrFail($data->id);
-                $variation=Variation::where('element_id', $element->id)->get();
+                $variation=Variation::where('element_id', $element->id)->where('lowest_price_id', '<>', null)->inRandomOrder()->first();
+                $lowest_price_id=$variation->lowest_price_id;
                 $product=Product::findOrFail($lowest_price_id);
                 $products=Product::where('variation_id', $data->id)->get();
+                }catch(Exception $e){
+                    return $e->getMessage();
+                }
                 return [
                     'id'=>$data->id,
                     'slug'=>$product->slug,
