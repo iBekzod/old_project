@@ -97,12 +97,10 @@ class ProductController extends Controller
 
     public function admin()
     {
-        return new ElementCollection(Element::all());
-        // if($variations= Variation::where('lowest_price_id','<>', null)->get()){
-        //     // dd($variations);
-        //     return new VariationCollection($variations);
-        // }
-        // return null;
+        if($variations= Variation::where('lowest_price_id','<>', null)->inRandomOrder()->groupBy('element_id')->get()){
+            return new VariationCollection($variations);
+        }
+        return null;
         // return Product::where('added_by', 'admin')->inRandomOrder()->paginate(10);
 
     }

@@ -13,23 +13,23 @@ class ElementCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->map(function($data) {
+            'variation' => $this->collection->map(function($variation) {
                 try{
-                    $element=Element::findOrFail($data->id);
+                    $element=Element::findOrFail($variation->id);
                     $variation=Variation::where('element_id', $element->id)->where('lowest_price_id', '<>', null)->inRandomOrder()->first();
                     $lowest_price_id=$variation->lowest_price_id;
                     $product=Product::findOrFail($lowest_price_id);
-                    $products=Product::where('variation_id', $data->id)->get();
+                    $products=Product::where('variation_id', $variation->id)->get();
                 }catch(Exception $e){
                     return null;
                 }
                 return [
-                    'id'=>$data->id,
+                    'id'=>$variation->id,
                     'slug'=>$product->slug,
                     'owner_id' => $product->user_id,
-                    'name' => $data->name,
+                    'name' => $variation->name,
                     'photos' => $this->convertPhotos(explode(',', $element->photos)),
-                    'thumbnail_image' => api_asset($data->thumbnail_img),
+                    'thumbnail_image' => api_asset($variation->thumbnail_img),
                     'base_price' => (double) homeBasePrice($lowest_price_id),
                     'base_discounted_price' => (double) homeDiscountedBasePrice($lowest_price_id),
                     'currency_code'=>defaultCurrency(),
@@ -40,15 +40,15 @@ class ElementCollection extends ResourceCollection
                     'discount' => (integer) $product->discount,
                     'discount_type' => $product->discount_type,
                     'rating' => (double) $product->rating,
-                    'sales' => (integer) $data->num_of_sale,
-                    'qty' => (integer) $data->qty,
+                    'sales' => (integer) $variation->num_of_sale,
+                    'qty' => (integer) $variation->qty,
                     'variant' => $product,
                     'variations' => $products,
                     'links' => [
-                        'details' => route('products.show', $data->id),
-                        'reviews' => route('api.reviews.index', $data->id),
-                        'related' => route('products.related', $data->id),
-                        'top_from_seller' => route('products.topFromSeller', $data->id)
+                        'details' => route('products.show', $variation->id),
+                        'reviews' => route('api.reviews.index', $variation->id),
+                        'related' => route('products.related', $variation->id),
+                        'top_from_seller' => route('products.topFromSeller', $variation->id)
                     ]
                 ];
             })
@@ -64,9 +64,9 @@ class ElementCollection extends ResourceCollection
         ];
     }
 
-    protected function convertPhotos($data){
+    protected function convertPhotos($variation){
         $result = array();
-        foreach ($data as $key => $item) {
+        foreach ($variation as $key => $item) {
             array_push($result, api_asset($item));
         }
         return $result;
