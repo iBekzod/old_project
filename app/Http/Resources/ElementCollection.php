@@ -21,7 +21,7 @@ class ElementCollection extends ResourceCollection
                 $product=Product::findOrFail($lowest_price_id);
                 $products=Product::where('variation_id', $data->id)->get();
                 }catch(Exception $e){
-                    return $e->getMessage();
+                    return null;
                 }
                 return [
                     'id'=>$data->id,
