@@ -75,7 +75,7 @@ class ProductDetailCollection extends ResourceCollection
             'colors' => new ProductColorCollection(json_decode($element->variation_colors)),
             'shipping_type' => $product->delivery_type,
             // 'shipping_cost' => $product->delivery,
-            'characteristics' => $this->convertToChoiceOptions(json_decode($element->characteristics, true)),
+            'characteristics' => $this->convertToCharacteristics(json_decode($element->characteristics, true)),
 
             'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??null,
             'category'=>[
@@ -111,7 +111,7 @@ class ProductDetailCollection extends ResourceCollection
         ];
     }
 
-    protected function convertToChoiceOptions($attributes){
+    protected function convertToCharacteristics($attributes){
         $result=array();
         $collected_characteristics=[];
         if ($attributes) {
@@ -145,6 +145,27 @@ class ProductDetailCollection extends ResourceCollection
             //  var_dump($newarray);
         }
         return $result;
+    }
+
+    protected function convertToChoiceOptions($attributes){
+        $collected_characteristics=[];
+        if ($attributes) {
+            foreach($attributes as $attribute_id=>$value_ids){
+                $characteristics=Characteristic::whereIn('id',$value_ids)->get();
+                $attribute=Attribute::findOrFail($attribute_id);
+                $items=array();
+                foreach($characteristics as $characteristic){
+                    $items[]=[
+                        'id'=>$characteristic->id,
+                        'name'=>$characteristic->getTranslation('name')
+                    ];
+                }
+                $collected_characteristics['id']=$attribute->id;
+                $collected_characteristics['attribute']=$attribute->getTranslation('name');
+                $collected_characteristics['values']=$items;
+            }
+        }
+        return $collected_characteristics;
     }
 
     protected function convertPhotos($data){

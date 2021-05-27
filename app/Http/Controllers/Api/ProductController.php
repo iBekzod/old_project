@@ -20,6 +20,7 @@ use App\Product;
 use App\Shop;
 use App\Color;
 use App\Element;
+use App\Http\Resources\VariationCollection;
 // use App\Seller;
 use Illuminate\Http\Request;
 use App\Utility\CategoryUtility;
@@ -97,7 +98,7 @@ class ProductController extends Controller
     {
         if($variations= Variation::where('lowest_price_id','<>', null)->get()){
             // dd($variations);
-            return new ProductCollection($variations);
+            return new VariationCollection($variations);
         }
         return null;
         // return Product::where('added_by', 'admin')->inRandomOrder()->paginate(10);
@@ -325,8 +326,8 @@ class ProductController extends Controller
 
     public function bestSeller()
     {
-        return $this->admin();
-        // return new ProductCollection(Product::orderBy('num_of_sale', 'desc')->where('is_accepted', 1)->limit(20)->get());
+        // return $this->admin();
+        return new ProductCollection(Product::orderBy('num_of_sale', 'desc')->where('is_accepted', 1)->limit(20)->get());
     }
 
     public function related($id)

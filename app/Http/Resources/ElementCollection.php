@@ -2,7 +2,9 @@
 
 namespace App\Http\Resources;
 
-use App\ElementTranslation;
+use App\Element;
+use App\Product;
+use App\Variation;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class ElementCollection extends ResourceCollection
@@ -11,53 +13,38 @@ class ElementCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection->map(function($data) {
-                $lang = ElementTranslation::where('element_id', $data->id)->where('lang', app()->getLocale())->first();
-
-                $arr =  [
-
-
+                $element=Element::findOrFail($data->id);
+                $variation=Variation::where('element_id', $element->id)->get();
+                $product=Product::findOrFail($lowest_price_id);
+                $products=Product::where('variation_id', $data->id)->get();
+                return [
                     'id'=>$data->id,
-                    'slug'=>$data->slug,
-                    'owner_id' => $data->user_id,
-                    'name' => $data->getTranslation('name'),
-                    'photos' => explode(',', $data->photos),
+                    'slug'=>$product->slug,
+                    'owner_id' => $product->user_id,
+                    'name' => $data->name,
+                    'photos' => $this->convertPhotos(explode(',', $element->photos)),
                     'thumbnail_image' => api_asset($data->thumbnail_img),
-                    // 'base_price' => (double) homeBasePrice($data->id),
-                    // 'base_discounted_price' => (double) homeDiscountedBasePrice($data->id),
-                    'todays_deal' => (integer) $data->todays_deal,
-                    'featured' =>(integer) $data->featured,
-                    'unit' => $data->unit,
-                    // 'discount' => (integer) $data->discount,
-                    // 'discount_type' => $data->discount_type,
-                    'rating' => (double) $data->rating,
+                    'base_price' => (double) homeBasePrice($lowest_price_id),
+                    'base_discounted_price' => (double) homeDiscountedBasePrice($lowest_price_id),
+                    'currency_code'=>defaultCurrency(),
+                    'exchange_rate'=>defaultExchangeRate(),
+                    'todays_deal' => (integer) $product->todays_deal,
+                    'featured' =>(integer) $product->featured,
+                    'unit' => $element->unit,
+                    'discount' => (integer) $product->discount,
+                    'discount_type' => $product->discount_type,
+                    'rating' => (double) $product->rating,
                     'sales' => (integer) $data->num_of_sale,
-                    // 'variant' => ProductStock::where('product_id', $data->id)->first(),
-                    // 'variations' => ProductStock::where('product_id', $data->id)->get(),
-
-                    'video_provider'=>$data->video_provider,
-                    'video_link'=>$data->video_link,
-                    'tags'=>$data->tags,
-                    'description'=>$data->description,
-                    'colors'=>$data->colors,
-                    'todays_deal'=>$data->todays_deal,
-                    'featured'=>$data->featured,
-                    'unit'=>$data->unit,
-                    'pdf'=>$data->pdf,
-                    'earn_point'=>$data->earn_point,
-                    'rating'=>$data->rating,
-                    // 'links' => [
-                    //     'details' => route('products.show', $data->id),
-                    //     'reviews' => route('api.reviews.index', $data->id),
-                    //     'related' => route('products.related', $data->id),
-                    //     'top_from_seller' => route('products.topFromSeller', $data->id)
-                    // ]
+                    'qty' => (integer) $data->qty,
+                    'variant' => $product,
+                    'variations' => $products,
+                    'links' => [
+                        'details' => route('products.show', $data->id),
+                        'reviews' => route('api.reviews.index', $data->id),
+                        'related' => route('products.related', $data->id),
+                        'top_from_seller' => route('products.topFromSeller', $data->id)
+                    ]
                 ];
-
-                if ($lang) {
-                    $arr['name'] = $lang->name;
-                }
-
-                return $arr;
             })
         ];
     }
@@ -69,5 +56,13 @@ class ElementCollection extends ResourceCollection
             'success' => true,
             'status' => 200
         ];
+    }
+
+    protected function convertPhotos($data){
+        $result = array();
+        foreach ($data as $key => $item) {
+            array_push($result, api_asset($item));
+        }
+        return $result;
     }
 }
