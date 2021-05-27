@@ -1,0 +1,11 @@
+.wrap{
+    padding-top: 1rem;
+}
+.wrapper{
+    margin: 0 auto;
+    padding: 1rem;
+}
+.inner{
+    position: relative;
+    left: 650px;
+}

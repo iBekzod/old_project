@@ -62,6 +62,7 @@ class ProductDetailCollection extends ResourceCollection
             'tag' => explode(',', $element->tags),
             'slug' => $product->slug,
             'unit' => $element->unit,
+            'qty'=>$product->qty,
             'video_link' => $element->video_link,
             'video_provider' => $element->video_provider,
             'rating' => (double) $product->rating,
@@ -75,8 +76,9 @@ class ProductDetailCollection extends ResourceCollection
             'colors' => new ProductColorCollection(json_decode($element->variation_colors)),
             'shipping_type' => $product->delivery_type,
             // 'shipping_cost' => $product->delivery,
-            'characteristics' => $this->convertToChoiceOptions(json_decode($element->characteristics, true)),
-
+            'characteristics' => $this->convertToCharacteristics(json_decode($element->characteristics, true)),
+            'variant' => $product,
+            'variations' => $products,
             'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??null,
             'category'=>[
                 'name' => $element->category->name,
@@ -94,7 +96,7 @@ class ProductDetailCollection extends ResourceCollection
 
         ];
         } catch (\Exception $th) {
-            dd($th->getMessage());
+            // dd($th->getMessage());
         }
         return $data;
     }
@@ -111,7 +113,7 @@ class ProductDetailCollection extends ResourceCollection
         ];
     }
 
-    protected function convertToChoiceOptions($attributes){
+    protected function convertToCharacteristics($attributes){
         $result=array();
         $collected_characteristics=[];
         if ($attributes) {
@@ -136,8 +138,38 @@ class ProductDetailCollection extends ResourceCollection
                     'options'=>$collected_characteristics
                 ];
             }
+            foreach($result as $key => $value){
+                $newarray[$value['id']]['id'] = $value['id'];
+                $newarray[$value['id']]['title'] = $value['title'];
+                $newarray[$value['id']]['options'][$key] = $value['options'];
+            }
+            return $newarray;
+            //  var_dump($newarray);
         }
         return $result;
+    }
+
+    protected function convertToChoiceOptions($attributes){
+        $collected_characteristics=[];
+        if ($attributes) {
+            foreach($attributes as $attribute_id=>$value_ids){
+                $characteristics=Characteristic::whereIn('id',$value_ids)->get();
+                $attribute=Attribute::findOrFail($attribute_id);
+                $items=array();
+                foreach($characteristics as $characteristic){
+                    $items[]=[
+                        'id'=>$characteristic->id,
+                        'name'=>$characteristic->getTranslation('name')
+                    ];
+                }
+                $collected_characteristics[]=[
+                'id'=>$attribute->id,
+                'attribute'=>$attribute->getTranslation('name'),
+                'values'=>$items
+                ];
+            }
+        }
+        return $collected_characteristics;
     }
 
     protected function convertPhotos($data){

@@ -252,7 +252,7 @@
                                                                 class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse') }}</div>
                                                         </div>
                                                         <div class="form-control file-amount"></div>
-                                                        <input type="hidden" name="combination[{{ $index }}][thumbnail_img]" value="{{ $combination->thumbnail_img??null }}"
+                                                        <input required type="hidden" name="combination[{{ $index }}][thumbnail_img]" value="{{ $combination->thumbnail_img??null }}"
                                                             class="selected-files">
                                                     </div>
                                                     <div class="file-preview box sm">

@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Element;
 use App\Product;
+use App\Variation;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class ProductCollection extends ResourceCollection
@@ -12,21 +13,19 @@ class ProductCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection->map(function($data) {
-                // $lowest_price_list=json_decode($data->lowest_price_id, true);
-                // $lowest_price_id=array_rand($lowest_price_list, 1);
-                $lowest_price_id=$data->lowest_price_id;
-                $element=Element::findOrFail($data->element_id);
-                $product=Product::findOrFail($lowest_price_id);
-                $products=Product::where('variation_id', $data->id)->get();
+                $product=Product::findOrFail($data->id);
+                $variation=Variation::findOrFail($product->variation_id);
+                $element=Element::findOrFail($variation->element_id);
+                $products=Product::where('variation_id', $product->variation_id)->get();
                 return [
-                    'id'=>$data->id,
+                    'id'=>$product->id,
                     'slug'=>$product->slug,
                     'owner_id' => $product->user_id,
-                    'name' => $data->name,
+                    'name' => $variation->name,
                     'photos' => $this->convertPhotos(explode(',', $element->photos)),
-                    'thumbnail_image' => api_asset($data->thumbnail_img),
-                    'base_price' => (double) homeBasePrice($lowest_price_id),
-                    'base_discounted_price' => (double) homeDiscountedBasePrice($lowest_price_id),
+                    'thumbnail_image' => api_asset($variation->thumbnail_img),
+                    'base_price' => (double) homeBasePrice($product->id),
+                    'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
                     'currency_code'=>defaultCurrency(),
                     'exchange_rate'=>defaultExchangeRate(),
                     'todays_deal' => (integer) $product->todays_deal,
@@ -35,15 +34,15 @@ class ProductCollection extends ResourceCollection
                     'discount' => (integer) $product->discount,
                     'discount_type' => $product->discount_type,
                     'rating' => (double) $product->rating,
-                    'sales' => (integer) $data->num_of_sale,
-                    'qty' => (integer) $data->qty,
+                    'sales' => (integer) $variation->num_of_sale,
+                    'qty' => (integer) $variation->qty,
                     'variant' => $product,
                     'variations' => $products,
                     'links' => [
-                        'details' => route('products.show', $data->id),
-                        'reviews' => route('api.reviews.index', $data->id),
-                        'related' => route('products.related', $data->id),
-                        'top_from_seller' => route('products.topFromSeller', $data->id)
+                        'details' => route('products.show', $product->id),
+                        'reviews' => route('api.reviews.index', $product->id),
+                        'related' => route('products.related', $product->id),
+                        'top_from_seller' => route('products.topFromSeller', $product->id)
                     ]
                 ];
             })
@@ -59,9 +58,9 @@ class ProductCollection extends ResourceCollection
         ];
     }
 
-    protected function convertPhotos($data){
+    protected function convertPhotos($variation){
         $result = array();
-        foreach ($data as $key => $item) {
+        foreach ($variation as $key => $item) {
             array_push($result, api_asset($item));
         }
         return $result;

@@ -128,12 +128,12 @@
                                     </a>
                                 </li>
                             @endif  --}}
-                            <li class="aiz-side-nav-item">
+                            {{--  <li class="aiz-side-nav-item">
                                 <a href="{{route('digitalproducts.index')}}"
                                    class="aiz-side-nav-link {{ areActiveRoutes(['digitalproducts.index', 'digitalproducts.create', 'digitalproducts.edit']) }}">
                                     <span class="aiz-side-nav-text">{{ translate('Digital Products') }}</span>
                                 </a>
-                            </li>
+                            </li>  --}}
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('product_bulk_upload.index') }}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{ translate('Bulk Import') }}</span>
