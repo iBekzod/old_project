@@ -160,9 +160,11 @@ class ProductDetailCollection extends ResourceCollection
                         'name'=>$characteristic->getTranslation('name')
                     ];
                 }
-                $collected_characteristics['id']=$attribute->id;
-                $collected_characteristics['attribute']=$attribute->getTranslation('name');
-                $collected_characteristics['values']=$items;
+                $collected_characteristics[]=[
+                'id'=>$attribute->id,
+                'attribute'=>$attribute->getTranslation('name'),
+                'values'=>$items
+                ];
             }
         }
         return $collected_characteristics;
