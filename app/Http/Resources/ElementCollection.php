@@ -41,7 +41,7 @@ class ElementCollection extends ResourceCollection
                     'discount_type' => $product->discount_type,
                     'rating' => (double) $product->rating,
                     'sales' => (integer) $variation->num_of_sale,
-                    'qty' => (integer) $variation->qty,
+                    'quantity' => (integer) $variation->qty,
                     'variant' => $product,
                     'variations' => $products,
                     'links' => [

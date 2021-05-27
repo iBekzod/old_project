@@ -36,7 +36,7 @@ class VariationCollection extends ResourceCollection
                     'discount_type' => $product->discount_type,
                     'rating' => (double) $product->rating,
                     'sales' => (integer) $data->num_of_sale,
-                    'qty' => (integer) $data->qty,
+                    'quantity' => (integer) $data->qty,
                     'variant' => $product,
                     'variations' => $products,
                     'links' => [

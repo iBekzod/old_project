@@ -62,6 +62,7 @@ class ProductDetailCollection extends ResourceCollection
             'tag' => explode(',', $element->tags),
             'slug' => $product->slug,
             'unit' => $element->unit,
+            'quantity'=>$product->qty,
             'video_link' => $element->video_link,
             'video_provider' => $element->video_provider,
             'rating' => (double) $product->rating,
@@ -94,7 +95,7 @@ class ProductDetailCollection extends ResourceCollection
 
         ];
         } catch (\Exception $th) {
-            dd($th->getMessage());
+            // dd($th->getMessage());
         }
         return $data;
     }
