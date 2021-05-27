@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.1.2/tailwind.min.css"
+    integrity="sha512-RntatPOhEcQEA81gC/esYoCkGkL7AYV7TeTPoU+R9zE44/yWxVvLIBfBSaMu78rhoDd73ZeRHXRJN5+aPEK53Q=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <title>Email</title>
+  <style>
+    #banner {
+      background: url("https://images.unsplash.com/photo-1617978241112-898785df45b9?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+    }
+
+    #shape {
+      border-top: 24rem solid white;
+      border-left: 0px solid transparent;
+      border-right: 100px solid transparent;
+      height: 0;
+      width: 40rem;
+      opacity: 0.6;
+    }
+    @media only screen and (max-width: 600px) {
+      #shape{
+      border-top: 24rem solid white;
+      border-left: 0px solid transparent;
+      border-right: 100px solid transparent;
+      height: 1rem;
+      width: 14rem;
+      opacity: 0.6;
+      }
+    }
+  </style>
+</head>
+
+<body class="md:px-20">
+  <nav class="border-b flex items-center justify-between md:px-10 py-2">
+    <img class="md:w-40 w-20 cursor-pointer" src="./img/LogoTinfi.png" alt="">
+    <a href="#" class="text-lg font-medium hover:text-gray-600">Акция</a>
+    <a href="#" class="text-lg font-medium hover:text-gray-600">Баллы</a>
+    <a href="#" class="text-lg font-medium hover:text-gray-600">Магазин</a>
+  </nav>
+  <div id="banner" class="w-full h-96 relative z-50">
+    <div id="shape" class="md:absolute md:top-0 md:left-0 md:z-40"></div>
+    <div class="md:absolute md:top-0 md:left-0 md:z-40 md:w-1/2 w-full md:p-8 p-6 absolute top-14">
+      <p class="md:text-lg md:font-medium">Всё лучшее только для Вас!</p>
+      <h1 class="md:text-2xl mt-3 font-bold">Здраствуйте</h1>
+      <p class="md:mt-3 md:text-lg">Вы указали зто электрнную почту а профиле TINIFS. Пожалуйста потвердите
+        почту чтобы зашитить свой аккаунт. С увжением команда TINFIS
+      </p>
+      <button class="bg-blue-600 text-white py-2 px-4 rounded mt-8">
+        Потвердить почту
+      </button>
+    </div>
+  </div>
+  <ul class="mt-8 md:grid md:grid-cols-6 md:py-6 md:gap-4 grid grid-cols-3">
+    <li class="grid justify-center">
+      <div class="text-center mb-3">
+        <i class="fas fa-book text-4xl text-blue-400"></i>
+      </div>
+      <p class="text-center mb-3">Книги</p>
+    </li>
+    <li class="grid justify-center">
+      <div class="text-center mb-3">
+        <i class="fas fa-blender text-4xl text-blue-400"></i>
+      </div>
+      <p class="text-center mb-3">Бытовая техника</p>
+    </li>
+    <li class="grid justify-center">
+      <div class="text-center mb-3">
+        <i class="fas fa-baby-carriage text-4xl text-blue-400"></i>
+      </div>
+      <p class="text-center mb-3">Детский товары</p>
+    </li>
+    <li class="grid justify-center">
+      <div class="text-center mb-3">
+        <i class="fas fa-pencil-alt text-4xl text-blue-400"></i>
+      </div>
+      <p class="text-center mb-3">Концелярский товары</p>
+    </li>
+    <li class="grid justify-center">
+      <div class="text-center mb-3">
+        <i class="fas fa-weight text-4xl text-blue-400"></i>
+      </div>
+      <p class="text-center mb-3">Красота и здаровые</p>
+    </li>
+    <li class="grid justify-center">
+      <div class="text-center mb-3">
+        <i class="fas fa-futbol text-4xl text-blue-400"></i>
+      </div>
+      <p class="text-center mb-3">Спорт и отдых</p>
+    </li>
+    <li class="grid justify-center">
+      <div class="text-center mb-3">
+        <i class="fas fa-paw text-4xl text-blue-400"></i>
+      </div>
+      <p class="text-center mb-3">Зоотовары</p>
+    </li>
+    <li class="grid justify-center">
+      <div class="text-center mb-3">
+        <i class="fas fa-car text-4xl text-blue-400"></i>
+      </div>
+      <p class="text-center mb-3">Автотовары</p>
+    </li>
+    <li class="grid justify-center">
+      <div class="text-center mb-3">
+        <i class="fas fa-music text-4xl text-blue-400"></i>
+      </div>
+      <p class="text-center mb-3">Музыка</p>
+    </li>
+    <li class="grid justify-center">
+      <div class="text-center mb-3">
+        <i class="fas fa-paint-brush text-4xl text-blue-400"></i>
+      </div>
+      <p class="text-center mb-3">Хобби и творчество</p>
+    </li>
+    <li class="grid justify-center">
+      <div class="text-center mb-3">
+        <i class="fas fa-gamepad text-4xl text-blue-400"></i>
+      </div>
+      <p class="text-center mb-3">Игры и софт</p>
+    </li>
+    <li class="grid justify-center">
+      <div class="text-center mb-3">
+        <i class="fas fa-notes-medical text-4xl text-blue-400"></i>
+      </div>
+      <p class="text-center mb-3">Аптека</p>
+    </li>
+  </ul>
+  <div>
+    <h1 class="text-center text-yellow-500 text-2xl font-medium mb-3">Рекомандация Для Вас!</h1>
+    <p class="text-end md:text-center"> Примечание: Цены и скидки предоставляются на товары, указанные в настоящей
+      рассылке, и действительны на момент отправки данного письма. Настоящая рассылка
+      не является офертой. Актуальная информация о цене и наличии товара представлена на
+      сайте ТИНФИС.
+    </p>
+  </div>
+ <div class="mt-12 ">
+  <div class="grid gap-5 m-auto grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 mt-4">
+    <div
+      class="cursor-pointer relative h-full flex flex-col justify-between sm:w-44 text-sm w-40 h-80 z-5 py-2 text-customBlue1-hover rounded mx-auto">
+
+      <div class="cover-1 flex flex-col justify-between">
+        <div>
+          <div class="my-2">
+            <div class="m-auto"><img class="w-48 h-48 m-auto object-contain"
+                src="https://ashop.helpor.ru/public/uploads/all/rxmYoAaRKJKjg3SptUJAp8ySFSjcYkRzsXfl79m2.jpg"
+                alt="Кроссовки HUGO BOSS Сатурн"></div>
+          </div>
+          <div class="pb-1 tracking-tight font-medium px-1">
+          </div>
+          <div class="flex flex-col-reverse items-start font-semibold px-1">
+            <p class="text-black px-1 rounded bg-yellow-400">2 625 000 Sum</p>
+          </div>
+          <div class="font-semibold text-sm px-1">
+            <div style="overflow: hidden;"><span>Кроссовки HUGO BOSS Сатурн DarkBlue 41</span></div>
+          </div>
+        </div>
+      </div>
+      <button class="cover-2 bg-blue-900">
+        <div class="cursor-pointer text-left py-2">
+          <h1 class="text-center font-semibold text-white">Купить сейчась</h1>
+        </div>
+      </button>
+    </div>
+    <div
+      class="cursor-pointer relative h-full flex flex-col justify-between sm:w-44 text-sm w-40 h-80 z-5 py-2 text-customBlue1-hover rounded mx-auto">
+      <div class="cover-1 flex flex-col justify-between">
+        <div>
+          <div class="my-2">
+            <div class="m-auto"><img class="w-48 h-48 m-auto object-contain"
+                src="https://ashop.helpor.ru/public/uploads/all/K3CvJTCwkt0QlecUPEdpJ87kJgbUzlWRehSYYJr1.jpg"
+                alt="Кроссовки HUGO BOSS Сатурн"></div>
+          </div>
+          <div class="pb-1 tracking-tight font-medium px-1">
+          </div>
+          <div class="flex flex-col-reverse items-start font-semibold px-1">
+            <p class="text-black px-1 rounded bg-yellow-400">2 625 000 Sum</p>
+          </div>
+          <div class="font-semibold text-sm px-1">
+            <div style="overflow: hidden;"><span>Кроссовки HUGO BOSS Сатурн DarkBlue 41</span></div>
+          </div>
+        </div>
+      </div>
+      <button class="cover-2 bg-blue-900">
+        <div class="cursor-pointer text-left py-2">
+          <h1 class="text-center font-semibold text-white">Купить сейчась</h1>
+        </div>
+      </button>
+    </div>
+    <div
+      class="cursor-pointer relative h-full flex flex-col justify-between sm:w-44 text-sm w-40 h-80 z-5 py-2 text-customBlue1-hover rounded mx-auto">
+      
+      <div class="cover-1 flex flex-col justify-between">
+        <div>
+          <div class="my-2">
+            <div class="m-auto"><img class="w-48 h-48 m-auto object-contain"
+                src="https://ashop.helpor.ru/public/uploads/all/Cwk1z1XhJCamAu5KCeDpAubCKLk5Tqnl8TPortJG.jpg"
+                alt="Кроссовки HUGO BOSS Сатурн"></div>
+          </div>
+          <div class="pb-1 tracking-tight font-medium px-1">
+          </div>
+          <div class="flex flex-col-reverse items-start font-semibold px-1">
+            <p class="text-black px-1 rounded bg-yellow-400">2 625 000 Sum</p>
+          </div>
+          <div class="font-semibold text-sm px-1">
+            <div style="overflow: hidden;"><span>Кроссовки HUGO BOSS Сатурн DarkBlue 41</span></div>
+          </div>
+        </div>
+      </div>
+      <button class="cover-2 bg-blue-900">
+        <div class="cursor-pointer text-left py-2">
+          <h1 class="text-center font-semibold text-white">Купить сейчась</h1>
+        </div>
+      </button>
+    </div>
+    <div
+      class="cursor-pointer relative h-full flex flex-col justify-between sm:w-44 text-sm w-40 h-80 z-5 py-2 text-customBlue1-hover rounded mx-auto">
+     
+      <div class="cover-1 flex flex-col justify-between">
+        <div>
+          <div class="my-2">
+            <div class="m-auto"><img class="w-48 h-48 m-auto object-contain"
+                src="https://ashop.helpor.ru/public/uploads/all/Cwk1z1XhJCamAu5KCeDpAubCKLk5Tqnl8TPortJG.jpg"
+                alt="Кроссовки HUGO BOSS Сатурн"></div>
+          </div>
+          <div class="pb-1 tracking-tight font-medium px-1">
+          </div>
+          <div class="flex flex-col-reverse items-start font-semibold px-1">
+            <p class="text-black px-1 rounded bg-yellow-400">2 625 000 Sum</p>
+          </div>
+          <div class="font-semibold text-sm px-1">
+            <div style="overflow: hidden;"><span>Кроссовки HUGO BOSS Сатурн DarkBlue 41</span></div>
+          </div>
+        </div>
+      </div>
+      <button class="cover-2 bg-blue-900">
+        <div class="cursor-pointer text-left py-2">
+          <h1 class="text-center font-semibold text-white">Купить сейчась</h1>
+        </div>
+      </button>
+    </div>
+    <div
+      class="cursor-pointer relative h-full flex flex-col justify-between sm:w-44 text-sm w-40 h-80 z-5 py-2 text-customBlue1-hover rounded mx-auto">
+      
+      <div class="cover-1 flex flex-col justify-between">
+        <div>
+          <div class="my-2">
+            <div class="m-auto"><img class="w-48 h-48 m-auto object-contain"
+                src="https://ashop.helpor.ru/public/uploads/all/yqBQ87lXNMZrPAE2dZ2bDps1hSajBR18K2PC5h9z.jpg"
+                alt="Кроссовки HUGO BOSS Сатурн"></div>
+          </div>
+          <div class="pb-1 tracking-tight font-medium px-1">
+          </div>
+          <div class="flex flex-col-reverse items-start font-semibold px-1">
+            <p class="text-black px-1 rounded bg-yellow-400">2 625 000 Sum</p>
+          </div>
+          <div class="font-semibold text-sm px-1">
+            <div style="overflow: hidden;"><span>Кроссовки HUGO BOSS Сатурн DarkBlue 41</span></div>
+          </div>
+        </div>
+      </div>
+      <button class="cover-2 bg-blue-900">
+        <div class="cursor-pointer text-left py-2">
+          <h1 class="text-center font-semibold text-white">Купить сейчась</h1>
+        </div>
+      </button>
+    </div>
+    <div
+      class="cursor-pointer relative h-full flex flex-col justify-between sm:w-44 text-sm w-40 h-80 z-5 py-2 text-customBlue1-hover rounded mx-auto">
+    
+      <div class="cover-1 flex flex-col justify-between">
+        <div>
+          <div class="my-2">
+            <div class="m-auto"><img class="w-48 h-48 m-auto object-contain"
+                src="https://ashop.helpor.ru/public/uploads/all/8MiiT3J1eFKF3lIJQLpZZ3Q0bWbhXpVFXUkL16Le.jpg"
+                alt="Кроссовки HUGO BOSS Сатурн"></div>
+          </div>
+          <div class="pb-1 tracking-tight font-medium px-1">
+          </div>
+          <div class="flex flex-col-reverse items-start font-semibold px-1">
+            <p class="text-black px-1 rounded bg-yellow-400">2 625 000 Sum</p>
+          </div>
+          <div class="font-semibold text-sm px-1">
+            <div style="overflow: hidden;"><span>Кроссовки HUGO BOSS Сатурн DarkBlue 41</span></div>
+          </div>
+        </div>
+      </div>
+      <button class="cover-2 bg-blue-900">
+        <div class="cursor-pointer text-left py-2">
+          <h1 class="text-center font-semibold text-white">Купить сейчась</h1>
+        </div>
+      </button>
+    </div>
+  </div>
+ </div>
+ <div class="mt-12 ">
+  <div class="grid gap-5 m-auto grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 mt-4">
+    <div
+      class="cursor-pointer relative h-full flex flex-col justify-between sm:w-44 text-sm w-40 h-80 z-5 py-2 text-customBlue1-hover rounded mx-auto">
+     
+      <div class="cover-1 flex flex-col justify-between">
+        <div>
+          <div class="my-2">
+            <div class="m-auto"><img class="w-48 h-48 m-auto object-contain"
+                src="https://ashop.helpor.ru/public/uploads/all/kc3BfdGofHGf5SS3DB9IA0uszPn37x4TLpmnKf0x.jpg"
+                alt="Кроссовки HUGO BOSS Сатурн"></div>
+          </div>
+          <div class="pb-1 tracking-tight font-medium px-1">
+          </div>
+          <div class="flex flex-col-reverse items-start font-semibold px-1">
+            <p class="text-black px-1 rounded bg-yellow-400">2 625 000 Sum</p>
+          </div>
+          <div class="font-semibold text-sm px-1">
+            <div style="overflow: hidden;"><span>Кроссовки HUGO BOSS Сатурн DarkBlue 41</span></div>
+          </div>
+        </div>
+      </div>
+      <button class="cover-2 bg-blue-900">
+        <div class="cursor-pointer text-left py-2">
+          <h1 class="text-center font-semibold text-white">Купить сейчась</h1>
+        </div>
+      </button>
+    </div>
+    <div
+      class="cursor-pointer relative h-full flex flex-col justify-between sm:w-44 text-sm w-40 h-80 z-5 py-2 text-customBlue1-hover rounded mx-auto">
+     
+      <div class="cover-1 flex flex-col justify-between">
+        <div>
+          <div class="my-2">
+            <div class="m-auto"><img class="w-48 h-48 m-auto object-contain"
+                src="https://ashop.helpor.ru/public/uploads/all/jNodZhsyo49QSOdU4JGiWDLzszkdkQmgALjZew9p.jpg"
+                alt="Кроссовки HUGO BOSS Сатурн"></div>
+          </div>
+          <div class="pb-1 tracking-tight font-medium px-1">
+          </div>
+          <div class="flex flex-col-reverse items-start font-semibold px-1">
+            <p class="text-black px-1 rounded bg-yellow-400">2 625 000 Sum</p>
+          </div>
+          <div class="font-semibold text-sm px-1">
+            <div style="overflow: hidden;"><span>Кроссовки HUGO BOSS Сатурн DarkBlue 41</span></div>
+          </div>
+        </div>
+      </div>
+      <button class="cover-2 bg-blue-900">
+        <div class="cursor-pointer text-left py-2">
+          <h1 class="text-center font-semibold text-white">Купить сейчась</h1>
+        </div>
+      </button>
+    </div>
+    <div
+      class="cursor-pointer relative h-full flex flex-col justify-between sm:w-44 text-sm w-40 h-80 z-5 py-2 text-customBlue1-hover rounded mx-auto">
+     
+      <div class="cover-1 flex flex-col justify-between">
+        <div>
+          <div class="my-2">
+            <div class="m-auto"><img class="w-48 h-48 m-auto object-contain"
+                src="https://ashop.helpor.ru/public/uploads/all/4IhiaH6Fg6vs2ffUn71U6wcTRZ3O2xtmQ7W2BsFg.jpg"
+                alt="Кроссовки HUGO BOSS Сатурн"></div>
+          </div>
+          <div class="pb-1 tracking-tight font-medium px-1">
+          </div>
+          <div class="flex flex-col-reverse items-start font-semibold px-1">
+            <p class="text-black px-1 rounded bg-yellow-400">2 625 000 Sum</p>
+          </div>
+          <div class="font-semibold text-sm px-1">
+            <div style="overflow: hidden;"><span>Кроссовки HUGO BOSS Сатурн DarkBlue 41</span></div>
+          </div>
+        </div>
+      </div>
+      <button class="cover-2 bg-blue-900">
+        <div class="cursor-pointer text-left py-2">
+          <h1 class="text-center font-semibold text-white">Купить сейчась</h1>
+        </div>
+      </button>
+    </div>
+    <div
+      class="cursor-pointer relative h-full flex flex-col justify-between sm:w-44 text-sm w-40 h-80 z-5 py-2 text-customBlue1-hover rounded mx-auto">
+    
+      <div class="cover-1 flex flex-col justify-between">
+        <div>
+          <div class="my-2">
+            <div class="m-auto"><img class="w-48 h-48 m-auto object-contain"
+                src="https://ashop.helpor.ru/public/uploads/all/pVFnVZd2mCrHrYqVwQCLf041qvjd4I4hpkEefFk2.jpg"
+                alt="Кроссовки HUGO BOSS Сатурн"></div>
+          </div>
+          <div class="pb-1 tracking-tight font-medium px-1">
+          </div>
+          <div class="flex flex-col-reverse items-start font-semibold px-1">
+            <p class="text-black px-1 rounded bg-yellow-400">2 625 000 Sum</p>
+          </div>
+          <div class="font-semibold text-sm px-1">
+            <div style="overflow: hidden;"><span>Кроссовки HUGO BOSS Сатурн DarkBlue 41</span></div>
+          </div>
+        </div>
+      </div>
+      <button class="cover-2 bg-blue-900">
+        <div class="cursor-pointer text-left py-2">
+          <h1 class="text-center font-semibold text-white">Купить сейчась</h1>
+        </div>
+      </button>
+    </div>
+    <div
+      class="cursor-pointer relative h-full flex flex-col justify-between sm:w-44 text-sm w-40 h-80 z-5 py-2 text-customBlue1-hover rounded mx-auto">
+    
+      <div class="cover-1 flex flex-col justify-between">
+        <div>
+          <div class="my-2">
+            <div class="m-auto"><img class="w-48 h-48 m-auto object-contain"
+                src="https://ashop.helpor.ru/public/uploads/all/NJU78YdE7CCCU3OHfi1tGbiHm7etmUikCN4civf2.jpg"
+                alt="Кроссовки HUGO BOSS Сатурн"></div>
+          </div>
+          <div class="pb-1 tracking-tight font-medium px-1">
+          </div>
+          <div class="flex flex-col-reverse items-start font-semibold px-1">
+            <p class="text-black px-1 rounded bg-yellow-400">2 625 000 Sum</p>
+          </div>
+          <div class="font-semibold text-sm px-1">
+            <div style="overflow: hidden;"><span>Кроссовки HUGO BOSS Сатурн DarkBlue 41</span></div>
+          </div>
+        </div>
+      </div>
+      <button class="cover-2 bg-blue-900">
+        <div class="cursor-pointer text-left py-2">
+          <h1 class="text-center font-semibold text-white">Купить сейчась</h1>
+        </div>
+      </button>
+    </div>
+    <div
+      class="cursor-pointer relative h-full flex flex-col justify-between sm:w-44 text-sm w-40 h-80 z-5 py-2 text-customBlue1-hover rounded mx-auto">
+    
+      <div class="cover-1 flex flex-col justify-between">
+        <div>
+          <div class="my-2">
+            <div class="m-auto"><img class="w-48 h-48 m-auto object-contain"
+                src="https://ashop.helpor.ru/public/uploads/all/PSWl8PG9q39xY28NGrn5dWNU89ylnJ322nA0kOw9.jpg"
+                alt="Кроссовки HUGO BOSS Сатурн"></div>
+          </div>
+          <div class="pb-1 tracking-tight font-medium px-1">
+          </div>
+          <div class="flex flex-col-reverse items-start font-semibold px-1">
+            <p class="text-black px-1 rounded bg-yellow-400">2 625 000 Sum</p>
+          </div>
+          <div class="font-semibold text-sm px-1">
+            <div style="overflow: hidden;"><span>Кроссовки HUGO BOSS Сатурн DarkBlue 41</span></div>
+          </div>
+        </div>
+      </div>
+      <button class="cover-2 bg-blue-900">
+        <div class="cursor-pointer text-left py-2">
+          <h1 class="text-center font-semibold text-white">Купить сейчась</h1>
+        </div>
+      </button>
+    </div>
+  </div>
+ </div>
+  <footer class="mt-8 md:text-center bg-blue-900 text-white w-full px-2 md:px-5 md:py-3">
+    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Exercitationem laborum eius sequi obcaecati suscipit?
+    Consectetur, minima expedita. Esse totam temporibus voluptates aut ducimus optio doloribus id? Excepturi assumenda
+    tempora voluptatum?
+  </footer>
+</body>
+
+</html>
