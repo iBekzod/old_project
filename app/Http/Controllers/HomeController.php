@@ -1070,8 +1070,6 @@ class HomeController extends Controller
         }
     }
 }
-<<<<<<< HEAD
-=======
 // <?php
 
 // namespace App\Http\Controllers;
@@ -2144,4 +2142,3 @@ class HomeController extends Controller
 //         }
 //     }
 // }
->>>>>>> 98a8917772775c0ac3ee81e4ef2add480a32007d
