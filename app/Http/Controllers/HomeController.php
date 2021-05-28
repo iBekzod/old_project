@@ -49,34 +49,32 @@ class HomeController extends Controller
        public function seller_registration(Request $request)
        {
 
-               //     "_token" => "1ehPpSb1YHURcC1aAjcbo5DJkIxio19cmTtajaMB"
-               //     "name" => "Adam Hanson"
-               //     "phone" => "9577604"
-               //     "country_code" => null
-               //     "email" => null
-               //     "password" => "Pa$$w0rd!"
-               //     "password_confirmation" => "Pa$$w0rd!"
-               //     "checkbox_example_1" => "on"
-               //   ]
+        // "_token" => "ZqR4A0ISvCIxijIgDZPBpJ3pMOxrsXuipQMKNqoy"
+        // "name" => "Plato Terry"
+        // "phone" => "3518914"
+        // "country_code" => "998"
+        // "email" => null
+        // "password" => "Pa$$w0rd!"
+        // "password_confirmation" => "Pa$$w0rd!"
+        // "checkbox_example_1" => "on"
 
            if ($request->method() === 'POST') {
-
+                //   dd($request->all());
                $request->validate([
                    // '_token'=>'required',
                    'name' => 'required',
-                   'phone' => 'sometimes|unique:users',
-                   'country_code' => 'sometimes',
+                    'phone' => 'sometimes|unique:users',
                    'email' => 'sometimes|unique:users|max:255',
-                   'password' => 'required',
+                    'password' => 'required',
                    'password_confirmation' => 'required',
                     'checkbox_example_1' =>'required'
                ]);
-            //    dd($request->all());
+
                $user = new User;
                $user->name = $request->name;
                $user->name = $request->name.' '.$request->surname;
-            //    $user->phone =$request->phone;
-            //    $user->country_code = $request->country_code;
+               $user->phone =$request->phone;
+               $user->country_code = $request->country_code;
                $user->email = $request->email;
                $user->user_type = "seller";
                $user->email_verified_at = now();
@@ -99,9 +97,9 @@ class HomeController extends Controller
             //        }
             //    }
 
-                return view('backend.sellers.seller_verification_form.index');
+                  return view('frontend.user_registration');
 
-           }else if($request->method() === 'GET'){
+              }else if($request->method() === 'GET'){
                if(Auth::check()){
                    return redirect()->route('admin');
                }
