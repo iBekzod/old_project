@@ -45,16 +45,98 @@ class HomeController extends Controller
         return $this->admin_dashboard();
     }
 
+       // TODO::AUTHcontroller  Home controller;
+       public function seller_registration(Request $request)
+       {
+
+               //     "_token" => "1ehPpSb1YHURcC1aAjcbo5DJkIxio19cmTtajaMB"
+               //     "name" => "Adam Hanson"
+               //     "phone" => "9577604"
+               //     "country_code" => null
+               //     "email" => null
+               //     "password" => "Pa$$w0rd!"
+               //     "password_confirmation" => "Pa$$w0rd!"
+               //     "checkbox_example_1" => "on"
+               //   ]
+
+           if ($request->method() === 'POST') {
+
+               $request->validate([
+                   // '_token'=>'required',
+                   'name' => 'required',
+                   'phone' => 'sometimes|unique:users',
+                   'country_code' => 'sometimes',
+                   'email' => 'sometimes|unique:users|max:255',
+                   'password' => 'required',
+                   'password_confirmation' => 'required',
+                    'checkbox_example_1' =>'required'
+               ]);
+            //    dd($request->all());
+               $user = new User;
+               $user->name = $request->name;
+               $user->name = $request->name.' '.$request->surname;
+            //    $user->phone =$request->phone;
+            //    $user->country_code = $request->country_code;
+               $user->email = $request->email;
+               $user->user_type = "seller";
+               $user->email_verified_at = now();
+               $user->password = Hash::make($request->password);
+                 dd($user);
+            //    if($user->save()){
+            //        $seller = new Seller;
+            //        $seller->user_id = $user->id;
+            //        if($seller->save()){
+            //            $shop = new Shop;
+            //            $shop->user_id = $user->id;
+            //            $shop->name = $request->shop_name;
+            //            $shop->meta_title = $request->shop_name;
+            //            $shop->slug =SlugService::createSlug(Shop::class, 'slug', slugify($request->shop_name));
+            //            $shop->save();
+            //            // $user->id=encrypt($user->id);
+            //            auth()->login($user, true);
+            //            $tokenResult = $user->createToken('Personal Access Token');
+            //            return $this->loginSuccess($tokenResult, $user);
+            //        }
+            //    }
+
+                return view('backend.sellers.seller_verification_form.index');
+
+           }else if($request->method() === 'GET'){
+               if(Auth::check()){
+                   return redirect()->route('admin');
+               }
+               if($request->has('referral_code')){
+                   Cookie::queue('referral_code', $request->referral_code, 43200);
+               }
+               //   dd("sdufyydsfkkkg");
+                  return view('frontend.user_registration');
+           }
+           return back();
+       }
+
+
     public function seller_login(Request $request)
     {
-        // dd("fghufgss");
 
         if ($request->method() === 'POST') {
-                    // dd($request->all());
 
-                        return response()->json([
-                            'verification_form' => json_decode(\App\BusinessSetting::where('type', 'verification_form')->first()->value)
-                        ], 200);
+            // "_token" => "c6g3qA3AgZ7IBvTDNILUUelwJa0O5FOZQABZE4ON"
+            // "email" => "tinfis@admin.uz"
+            // "password" => "123123"
+            // "remember" => "on"
+
+
+                    // dd($request->all());
+                    // $seller =->id;
+                    // $seller = Seller::findOrFail(decrypt($id));
+                    // $user  = $seller->user;
+                    // auth()->login($user, true);
+                    // return response()->json([
+                    //     'message' => 'Not verified',
+                    //     'url'=>route('dashboard')
+                    // ], 200);
+
+                    dd($request->all());
 
                 }else if($request->method() === 'GET'){
                     if(Auth::check()){
@@ -64,74 +146,6 @@ class HomeController extends Controller
                       return view('frontend.user_login');
                 }
                 return back();
-    }
-  // TODO::AUTHcontroller  Home controller;
-    public function seller_registration(Request $request)
-    {
-
-    //     "_token" => "1ehPpSb1YHURcC1aAjcbo5DJkIxio19cmTtajaMB"
-    //     "name" => "Adam Hanson"
-    //     "phone" => "9577604"
-    //     "country_code" => null
-    //     "email" => null
-    //     "password" => "Pa$$w0rd!"
-    //     "password_confirmation" => "Pa$$w0rd!"
-    //     "checkbox_example_1" => "on"
-    //   ]
-
-        if ($request->method() === 'POST') {
-
-            $request->validate([
-                // '_token'=>'required',
-                'name' => 'required',
-                'phone' => 'sometimes|unique:users',
-                'country_code' => 'sometimes',
-                'email' => 'sometimes|unique:users|max:255',
-                'password' => 'required',
-                'password_confirmation' => 'required',
-                 'checkbox_example_1' =>'required'
-            ]);
-        //    dd($request->all());
-            $user = new User;
-            $user->name = $request->name;
-            $user->name = $request->name.' '.$request->surname;
-            $user->phone =$request->phone;
-            $user->country_code = $request->country_code;
-            $user->email = $request->email;
-            $user->user_type = "seller";
-            $user->email_verified_at = now();
-            $user->password = Hash::make($request->password);
-            dd($user);
-            if($user->save()){
-                $seller = new Seller;
-                $seller->user_id = $user->id;
-                if($seller->save()){
-                    $shop = new Shop;
-                    $shop->user_id = $user->id;
-                    $shop->name = $request->shop_name;
-                    $shop->meta_title = $request->shop_name;
-                    $shop->slug =SlugService::createSlug(Shop::class, 'slug', slugify($request->shop_name));
-                    $shop->save();
-                    // $user->id=encrypt($user->id);
-                    auth()->login($user, true);
-                    $tokenResult = $user->createToken('Personal Access Token');
-                    return $this->loginSuccess($tokenResult, $user);
-                }
-            }
-
-            // return view('backend.sellers.seller_verification_form.index');
-
-        }else if($request->method() === 'GET'){
-            if(Auth::check()){
-                return redirect()->route('admin');
-            }
-            if($request->has('referral_code')){
-                Cookie::queue('referral_code', $request->referral_code, 43200);
-            }
-            //   dd("sdufyydsfkkkg");
-               return view('frontend.user_registration');
-        }
-        return back();
     }
 
 
@@ -1070,8 +1084,8 @@ class HomeController extends Controller
         }
     }
 }
-<<<<<<< HEAD
-=======
+// <<<<<<< HEAD
+// =======
 // <?php
 
 // namespace App\Http\Controllers;
@@ -2144,4 +2158,4 @@ class HomeController extends Controller
 //         }
 //     }
 // }
->>>>>>> 98a8917772775c0ac3ee81e4ef2add480a32007d
+// >>>>>>> 98a8917772775c0ac3ee81e4ef2add480a32007d
