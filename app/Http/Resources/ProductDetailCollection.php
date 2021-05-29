@@ -20,7 +20,7 @@ class ProductDetailCollection extends ResourceCollection
     {
         $product=Product::where('slug', $request->id)->first();
         $variation=Variation::findOrFail($product->variation_id);
-        $products=Product::where('variation_id', $product->variation_id)->where('user_id', $product->user_id);
+        $products=Product::where('variation_id', $variation->id)->where('user_id', $product->user_id)->get();//;
         $element=Element::findOrFail($variation->element_id);
         try{
             $data = [
@@ -77,8 +77,8 @@ class ProductDetailCollection extends ResourceCollection
             'shipping_type' => $product->delivery_type,
             // 'shipping_cost' => $product->delivery,
             'characteristics' => $this->convertToCharacteristics(json_decode($element->characteristics, true)),
-            'variant' => $product,
-            'variations' => $products,
+            'variant' => $product??[],
+            'variations' => $products??[],
             'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??null,
             'category'=>[
                 'name' => $element->category->name,
