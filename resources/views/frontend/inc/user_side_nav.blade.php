@@ -98,7 +98,7 @@
                         </a>
                     </li>
                     <li class="aiz-side-nav-item">
-                        <a href="{{ route('elements.all') }}" class="aiz-side-nav-link {{ areActiveRoutes(['elements.all'])}}">
+                        <a href="{{ route('seller.elements.all') }}" class="aiz-side-nav-link {{ areActiveRoutes(['seller.elements.all'])}}">
                             <i class="lab la-sketch aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{ translate('Elements') }}</span>
                         </a>
