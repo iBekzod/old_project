@@ -72,7 +72,7 @@
 						<input type="text" placeholder="{{translate('Name')}}" name="name" class="form-control" required>
 					</div>
 					<div class="form-group mb-3">
-						<label for="name">{{translate('Logo')}} <small>({{ translate('120x80') }})</small></label>
+						<label for="name">{{translate('Logo')}} ({{ translate('160x100') }})</label>
 						<div class="input-group" data-toggle="aizuploader" data-type="image">
 							<div class="input-group-prepend">
 									<div class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse')}}</div>

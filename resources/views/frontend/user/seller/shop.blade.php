@@ -35,7 +35,7 @@
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <label class="col-md-2 col-form-label">{{ translate('Shop Logo') }} <br>(200x200)</label>
+                                    <label class="col-md-2 col-form-label">{{ translate('Shop Logo') }} <br>(250x250)</label>
                                     <div class="col-md-10">
                                         <div class="input-group" data-toggle="aizuploader" data-type="image">
                                             <div class="input-group-prepend">
@@ -111,7 +111,7 @@
                                 @csrf
 
                                 <div class="row mb-3">
-                                    <label class="col-md-2 col-form-label">{{ translate('Banners') }} (1450x300)</label>
+                                    <label class="col-md-2 col-form-label">{{ translate('Banners') }} <strong>(1450x450)</strong></label>
                                     <div class="col-md-10">
                                         <div class="input-group" data-toggle="aizuploader" data-type="image" data-multiple="true">
                                             <div class="input-group-prepend">
