@@ -60,15 +60,16 @@ class HomeController extends Controller
 
            if ($request->method() === 'POST') {
                 //   dd($request->all());
-               $request->validate([
-                   // '_token'=>'required',
-                   'name' => 'required',
-                    'phone' => 'sometimes|unique:users',
-                   'email' => 'sometimes|unique:users|max:255',
-                    'password' => 'required',
-                   'password_confirmation' => 'required',
-                    'checkbox_example_1' =>'required'
-               ]);
+            //    $request->validate([
+            //        // '_token'=>'required',
+            //        'name' => 'required',
+            //         'phone' => 'sometimes|unique:users',
+            //        'email' => 'sometimes|unique:users|max:255',
+            //         'password' => 'required',
+            //        'password_confirmation' => 'required',
+            //         'checkbox_example_1' =>'required'
+            // "user_type" => "seller"
+            //    ]);
 
                $user = new User;
                $user->name = $request->name;
