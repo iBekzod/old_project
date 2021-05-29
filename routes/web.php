@@ -303,6 +303,27 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('/digitalproducts/edit/{id}', 'DigitalProductController@edit')->name('digitalproducts.edit');
 	Route::get('/digitalproducts/destroy/{id}', 'DigitalProductController@destroy')->name('digitalproducts.destroy');
 	Route::get('/digitalproducts/download/{id}', 'DigitalProductController@download')->name('digitalproducts.download');
+
+
+	Route::get('seller/elements/variation/remove','ElementController@remove_variation')->name('seller.elements.variation.remove');
+    Route::get('seller/elements/admin','ElementController@admin_elements')->name('seller.elements.admin');
+	Route::get('seller/elements/seller','ElementController@seller_elements')->name('seller.elements.seller');
+	Route::get('seller/elements/all','ElementController@all_elements')->name('seller.elements.all');
+	Route::get('seller/elements/manage','ElementController@manageElements')->name('seller.elements.manage');
+	Route::get('seller/elements/manage/{id}/accept','ElementController@changeOnModerationAccept')->name('seller.elements.manage.change.accept');
+	Route::get('seller/elements/manage/{id}/refuse','ElementController@changeOnModerationRefuse')->name('seller.elements.manage.change.refuse');
+    Route::get('seller/elements/create','ElementController@create')->name('seller.elements.create');
+    Route::post('seller/elements/store','ElementController@store')->name('seller.elements.store');
+	Route::get('seller/elements/admin/{id}/edit','ElementController@admin_element_edit')->name('seller.elements.admin.edit');
+	Route::get('seller/elements/seller/{id}/edit','ElementController@seller_element_edit')->name('seller.elements.seller.edit');
+	Route::post('seller/elements/todays_deal', 'ElementController@updateTodaysDeal')->name('seller.elements.todays_deal');
+	Route::post('seller/elements/featured', 'ElementController@updateFeatured')->name('seller.elements.featured');
+    Route::get('seller/elements/make_selected_attribute_options', 'ElementController@make_selected_attribute_options')->name('seller.elements.make_selected_attribute_options');
+    Route::get('seller/elements/make_attribute_options', 'ElementController@make_attribute_options')->name('seller.elements.make_attribute_options');
+    Route::get('seller/elements/make_color_options', 'ElementController@make_color_options')->name('seller.elements.make_color_options');
+    Route::get('seller/elements/make_attribute_variations', 'ElementController@make_attribute_variations')->name('seller.elements.make_attribute_variations');
+    Route::get('seller/elements/make_all_combination', 'ElementController@make_all_combination')->name('seller.elements.make_all_combination');
+    Route::get('seller/element/products', 'ElementController@elementProducts')->name('seller.element.products.edit');
 });
 
 Route::resource('shops', 'ShopController');
