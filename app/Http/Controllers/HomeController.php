@@ -59,17 +59,8 @@ class HomeController extends Controller
         // "checkbox_example_1" => "on"
 
 
-            //   dd($request->all());
-            //    $request->validate([
-            //        // '_token'=>'required',
-            //        'name' => 'required',
-            //         'phone' => 'sometimes|unique:users',
-            //        'email' => 'sometimes|unique:users|max:255',
-            //         'password' => 'required',
-            //        'password_confirmation' => 'required',
-            //         'checkbox_example_1' =>'required'
-            // "user_type" => "seller"
-            //    ]);
+
+            //
 
 
          //    if($user->save()){
@@ -92,7 +83,17 @@ class HomeController extends Controller
             //    return view('frontend.user_registration');
 
            if ($request->method() === 'POST') {
-
+                    dd($request->all());
+            $request->validate([
+                       // '_token'=>'required',
+                       'name' => 'required',
+                        'phone' => 'sometimes|unique:users',
+                       'email' => 'sometimes|unique:users|max:255',
+                        'password' => 'required',
+                       'password_confirmation' => 'required',
+                        'checkbox_example_1' =>'required',
+                         "user_type" => "seller"
+                   ]);
 
             $user = new User;
             $user->name = $request->name;
