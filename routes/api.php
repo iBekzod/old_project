@@ -1,7 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\V2\HomePageController;
-use \App\Http\Controllers\Api\SearchController;
+// use \App\Http\Controllers\Api\SearchController;
 
 
 
@@ -56,11 +55,11 @@ Route::prefix('v1')->group(function () {
 
 
 //    Route::apiResource('banners', 'Api\BannerController')->only('index');
-    Route::match(['get', 'post'], 'ajax_search', [SearchController::class, 'ajax_search']);
-    Route::match(['get', 'post'], 'search-by-category', [SearchController::class, 'searchByHashtags']);
-    Route::match(['get', 'post'], 'banners', [HomePageController::class, 'banners']);
-    Route::match(['get', 'post'], 'user/orders', [\App\Http\Controllers\Api\OrderController::class, 'userOrders']); //->middleware('auth:api');
-    Route::match(['get', 'post'], 'make/orders', [\App\Http\Controllers\Api\OrderController::class, 'processApiCheckout']); //->middleware('auth:api');
+    Route::match(['get', 'post'], '/ajax_search', 'Api\SearchController@ajax_search');
+    Route::match(['get', 'post'], '/search-by-category', 'Api\SearchController@searchByHashtags');
+    Route::match(['get', 'post'], '/banners', 'App\Http\Controllers\Api\V2\HomePageController@banners');
+    Route::match(['get', 'post'], '/user/orders', 'Api\OrderController@userOrders'); //->middleware('auth:api');
+    Route::match(['get', 'post'], '/make/orders', 'Api\OrderController@processApiCheckout'); //->middleware('auth:api');
 
     Route::apiResource('banners', 'Api\BannerController')->only('index');
 
@@ -170,12 +169,12 @@ Route::prefix('v1')->group(function () {
     Route::get('wallet/history/{id}', 'Api\WalletController@walletRechargeHistory')->middleware('auth:api');
 
     Route::match(['get', 'post'], 'search', 'SearchController@search');
-    Route::match(['get', 'post'], 'test',  function(){
-        $attribute= \App\Product::all();
-        $data = new \App\Http\Resources\ProductCollection($attribute);
-        // dd($data[0]);
-        return response()->json($data);
-    });
+    // Route::match(['get', 'post'], 'test',  function(){
+    //     $attribute= \App\Product::all();
+    //     $data = new \App\Http\Resources\ProductCollection($attribute);
+    //     // dd($data[0]);
+    //     return response()->json($data);
+    // });
 
     Route::get('conversation_messages','Api\ConversationController@getConversations');//->middleware('auth:api');
     Route::post('send_conversation_message','Api\ConversationController@store');//->middleware('auth:api');
