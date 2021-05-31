@@ -328,7 +328,7 @@ class ProductController extends Controller
     public function bestSeller()
     {
         // return $this->admin();
-        $products=Product::orderBy('num_of_sale', 'desc')->where('is_accepted', 1)->get();
+        $products=Product::orderBy('num_of_sale', 'desc')->where('is_accepted', 1);
         // $products=$products->groupBy('variation_id');
 
         // dd($products);
