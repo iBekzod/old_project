@@ -329,9 +329,9 @@ class ProductController extends Controller
     {
         // return $this->admin();
         $products=Product::orderBy('num_of_sale', 'desc')->where('is_accepted', 1)->get();
-        $products=$products->groupBy('variation_id');
-        
-        dd($products);
+        // $products=$products->groupBy('variation_id');
+
+        // dd($products);
         return new ProductCollection($products->limit(20)->get());
     }
 
