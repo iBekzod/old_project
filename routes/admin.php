@@ -69,6 +69,7 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
     Route::get('/element/products', 'ElementController@elementProducts')->name('element.products.edit');
     // Route::get('/elements/make_choice_options', 'ElementController@make_choice_options')->name('elements.make_choice_options');
     // Route::post('/elements/make_choice_options', 'ElementController@make_choice_options')->name('elements.make_choice_options');
+	Route::post('/elements/published', 'ElementController@updatePublished')->name('elements.published');
 
 	Route::resource('sellers','SellerController');
 	Route::get('sellers_ban/{id}','SellerController@ban')->name('sellers.ban');

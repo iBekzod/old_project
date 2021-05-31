@@ -42,7 +42,7 @@ class SellerElementController extends Controller
             'is_accepted' => 1
         ]);
 
-        return redirect()->route('elements.manage');
+        return redirect()->route('seller.elements.manage');
     }
 
     public function changeOnModerationRefuse(Request $request, $id)
@@ -53,7 +53,7 @@ class SellerElementController extends Controller
             'is_accepted' => 0
         ]);
 
-        return redirect()->route('elements.manage');
+        return redirect()->route('seller.elements.manage');
     }
 
     public function manageProducts(Request $request)
@@ -789,9 +789,9 @@ class SellerElementController extends Controller
             Artisan::call('cache:clear');
 
             if (Auth::user()->user_type == 'admin') {
-                return redirect()->route('elements.admin');
+                return redirect()->route('seller.elements.admin');
             } else {
-                return redirect()->route('seller.elements');
+                return redirect()->route('seller.seller.elements');
             }
         } else {
             flash(translate('Something went wrong'))->error();
