@@ -8,7 +8,7 @@
             {{-- Home Slider --}}
             <div class="card">
                 <div class="card-header">
-                    <h6 class="mb-0">{{ translate('Home Slider') }}</h6>
+                    <h6 class="mb-0">{{ translate('Home Slider') }} <small>(1450x450)</small></h6>
                 </div>
                 <div class="card-body">
                     <div class="alert alert-info">
@@ -263,7 +263,7 @@
             {{-- Home Banner horizontal --}}
             <div class="card">
                 <div class="card-header">
-                    <h6 class="mb-0">{{ translate('Home Banner horizontal') }}</h6>
+                    <h6 class="mb-0">{{ translate('Home Banner horizontal') }} <small>(450x150)</small></h6>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('business_settings.update') }}" method="POST" enctype="multipart/form-data">
