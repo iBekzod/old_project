@@ -83,17 +83,17 @@ class HomeController extends Controller
             //    return view('frontend.user_registration');
 
            if ($request->method() === 'POST') {
-                    dd($request->all());
-            $request->validate([
-                       // '_token'=>'required',
-                       'name' => 'required',
-                        'phone' => 'sometimes|unique:users',
-                       'email' => 'sometimes|unique:users|max:255',
-                        'password' => 'required',
-                       'password_confirmation' => 'required',
-                        'checkbox_example_1' =>'required',
-                         "user_type" => "seller"
-                   ]);
+                    // dd($request->all());
+            // $request->validate([
+            //            // '_token'=>'required',
+            //            'name' => 'required',
+            //             'phone' => 'sometimes|unique:users',
+            //            'email' => 'sometimes|unique:users|max:255',
+            //             'password' => 'required',
+            //            'password_confirmation' => 'required',
+            //             'checkbox_example_1' =>'required',
+            //              "user_type" => "seller"
+            //        ]);
 
             $user = new User;
             $user->name = $request->name;
@@ -104,9 +104,9 @@ class HomeController extends Controller
             $user->user_type = "seller";
             $user->email_verified_at = now();
             $user->password = Hash::make($request->password);
-              dd($user);
+            //   dd($user);
 
-            // return view('backend.sellers.seller_verification_form.index_1');
+              return view('frontend.user.seller.seller_registration');
 
             }
             else if($request->method() === 'GET'){
