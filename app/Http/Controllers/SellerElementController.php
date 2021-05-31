@@ -365,11 +365,11 @@ class SellerElementController extends Controller
         $query = null;
         $seller_id = null;
         $sort_search = null;
-        $elements = Element::where('added_by', 'seller');
-        if ($request->has('user_id') && $request->user_id != null) {
-            $elements = $elements->where('user_id', $request->user_id);
-            $seller_id = $request->user_id;
-        }
+        $elements = Element::where('added_by', 'admin');
+        // if ($request->has('user_id') && $request->user_id != null) {
+        //     $elements = $elements->where('user_id', $request->user_id);
+        //     $seller_id = $request->user_id;
+        // }
         if ($request->search != null) {
             $elements = $elements
                 ->where('name', 'like', '%' . $request->search . '%');

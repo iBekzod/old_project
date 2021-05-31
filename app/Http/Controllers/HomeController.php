@@ -23,6 +23,7 @@ use App\Shop;
 use App\Color;
 use App\Order;
 use App\BusinessSetting;
+use App\Category;
 use App\Element;
 use App\Http\Controllers\SearchController;
 use ImageOptimizer;
