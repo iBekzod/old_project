@@ -246,6 +246,7 @@ class ProductController extends Controller
             foreach ($request->variation as $variant) {
                 if ($variation = Variation::findOrFail($variant["id"])) {
                     $product = new Product;
+                    $product->element_id=$element->id;
                     $product_name = $variation->name . " " . Auth::user()->name??null . " ".$variant["price"];
                     $product->name = $product_name;
                     $product->added_by = Auth::user()->user_type;
@@ -400,6 +401,7 @@ class ProductController extends Controller
                     //Variation::findOrFail($variant["variation_id"]) &&
                     // dd($variation);
                     // $product_name = $variation->name . " " . Auth::user()->name??null . " ".$variant["price"];
+                    $product->element_id=$element->id;
                     $product_name = $variation->name . " ".$variant["price"];
                     $product->name = $product_name;
                     $product->added_by = Auth::user()->user_type;

@@ -18,6 +18,7 @@ class Product extends Model
         'discount',
         'discount_type',
         'variation_id',
+        'element_id',
         'todays_deal',
         'num_of_sale',
         'delivery_group_id',
