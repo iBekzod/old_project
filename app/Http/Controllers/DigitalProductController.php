@@ -32,7 +32,7 @@ class DigitalProductController extends Controller
         $col_name = null;
         $query = null;
         $sort_search = null;
-            
+
         $products = Product::whereNotNull('variation_id');
         if ($request->search != null) {
             $products = $products->where('name', 'like', '%' . $request->search . '%');
@@ -271,7 +271,7 @@ class DigitalProductController extends Controller
                     break;
                 }
             }
-        }
+         }
         if(Auth::user()->user_type == 'admin' || Auth::user()->id == $product->user_id || $downloadable){
             $upload = Upload::findOrFail($product->file_name);
             if (env('FILESYSTEM_DRIVER') == "s3") {
