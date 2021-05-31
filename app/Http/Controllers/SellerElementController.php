@@ -383,7 +383,9 @@ class SellerElementController extends Controller
             $sort_type = $request->type;
         }
 
-        $elements = $elements->where('digital', 0)->orderBy('created_at', 'desc')->paginate(15);
+        $elements = $elements
+        // ->where('digital', 0)
+        ->orderBy('created_at', 'desc')->paginate(15);
         $type = 'Seller';
 
         return view('frontend.user.seller.elements.index', compact('elements', 'type', 'col_name', 'query', 'seller_id', 'sort_search'));
@@ -565,15 +567,15 @@ class SellerElementController extends Controller
         Artisan::call('view:clear');
         Artisan::call('cache:clear');
 
-        if (Auth::user()->user_type == 'admin' || Auth::user()->user_type == 'staff') {
-            return redirect()->route('elements.admin');
+        if (Auth::user()->user_type == 'seller' || Auth::user()->user_type == 'staff') {
+            return redirect()->route('seller.elements.seller');
         } else {
             if (\App\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated) {
                 $seller = Auth::user()->seller;
                 $seller->remaining_uploads -= 1;
                 $seller->save();
             }
-            return redirect()->route('seller.elements');
+            return redirect()->route('seller.elements.seller');
         }
 
     }

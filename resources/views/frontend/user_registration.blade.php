@@ -67,7 +67,7 @@
                                         <div class="form-group">
                                             <input type="password" class="form-control" placeholder="{{  translate('Confirm Password') }}" name="password_confirmation">
                                         </div>
-
+ 
                                         @if(\App\BusinessSetting::where('type', 'google_recaptcha')->first()->value == 1)
                                             <div class="form-group">
                                                 <div class="g-recaptcha" data-sitekey="{{ env('CAPTCHA_KEY') }}"></div>

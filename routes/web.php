@@ -209,10 +209,13 @@ Route::get('/customer_products/destroy/{id}', 'CustomerProductController@destroy
 
 Route::group(['prefix' =>'seller', 'middleware' => ['seller', 'verified', 'user']], function(){
 
+    Route::get('/products/create','ProductController@create')->name('products.create');
+	Route::get('/products/seller/edit/{id}','ProductController@seller_product_edit')->name('products.seller.edit');
+
 	Route::get('elements/variation/remove','SellerElementController@remove_variation')->name('seller.elements.variation.remove');
-    Route::get('elements/admin','SellerElementController@admin_elements')->name('seller.elements.admin');
+    Route::get('elements/admin','SellerElementController@seller_elements')->name('seller.elements.admin');
 	Route::get('elements/seller','SellerElementController@seller_elements')->name('seller.elements.seller');
-	Route::get('elements/all','SellerElementController@all_elements')->name('seller.elements.all');
+	Route::get('elements/all','SellerElementController@seller_elements')->name('seller.elements.all');
 	Route::get('elements/manage','SellerElementController@manageElements')->name('seller.elements.manage');
 	Route::get('elements/manage/{id}/accept','SellerElementController@changeOnModerationAccept')->name('seller.elements.manage.change.accept');
 	Route::get('elements/manage/{id}/refuse','SellerElementController@changeOnModerationRefuse')->name('seller.elements.manage.change.refuse');
@@ -281,7 +284,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('/elements/sku_combination_edit', 'SellerElementController@sku_combination_edit')->name('seller.elements.sku_combination_edit');
 	Route::post('/elements/seller/featured', 'SellerElementController@updateSellerFeatured')->name('seller.elements.seller.featured');
 	Route::post('/elements/published', 'SellerElementController@updatePublished')->name('seller.elements.published');
-
+    // Route::get('/element/products', 'ElementController@elementProducts')->name('element.products.edit');
 	Route::get('invoice/customer/{order_id}', 'InvoiceController@customer_invoice_download')->name('customer.invoice.download');
 	Route::get('invoice/seller/{order_id}', 'InvoiceController@seller_invoice_download')->name('seller.invoice.download');
 

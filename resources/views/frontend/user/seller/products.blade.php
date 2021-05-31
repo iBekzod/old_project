@@ -133,15 +133,15 @@
                                                 </label>
                                             </td>
                                             <td class="text-right">
-                                                <a class="btn btn-soft-info btn-icon btn-circle btn-sm" href="{{route('seller.products.characteristics', ['id'=>$product->id])}}" title="{{ translate('Characteristics') }}">
+                                                {{-- <a class="btn btn-soft-info btn-icon btn-circle btn-sm" href="{{route('seller.products.characteristics', ['id'=>$product->id])}}" title="{{ translate('Characteristics') }}">
                                                     <i class="las la-list"></i>
-                                                </a>
+                                                </a> --}}
                 		                      <a class="btn btn-soft-info btn-icon btn-circle btn-sm" href="{{route('seller.products.edit', ['id'=>$product->id, 'lang'=>env('DEFAULT_LANGUAGE')])}}" title="{{ translate('Edit') }}">
                 		                          <i class="las la-edit"></i>
                 		                      </a>
-                                              <a href="{{route('products.duplicate', $product->id)}}" class="btn btn-soft-success btn-icon btn-circle btn-sm"  title="{{ translate('Duplicate') }}">
+                                              {{-- <a href="{{route('products.duplicate', $product->id)}}" class="btn btn-soft-success btn-icon btn-circle btn-sm"  title="{{ translate('Duplicate') }}">
                     							   <i class="las la-copy"></i>
-                    						  </a>
+                    						  </a> --}}
                                               <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete" data-href="{{route('products.destroy', $product->id)}}" title="{{ translate('Delete') }}">
                                                   <i class="las la-trash"></i>
                                               </a>
