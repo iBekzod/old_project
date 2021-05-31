@@ -109,10 +109,7 @@ class Product extends Model
 
      public function element()
     {
-        return $this->hasOneThrough(
-            Element::class,
-            Variation::class
-        );
+        return $this->belongsTo(Element::class);
     }
 
      public function delete()

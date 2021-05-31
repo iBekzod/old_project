@@ -39,10 +39,16 @@
                     <tr>
                         <td>{{ ($key+1) + ($products->currentPage() - 1)*$products->perPage() }}</td>
                         <td>
+                            {{-- @php
+                                $variation=$product->variation;
+                            @endphp --}}
                             <a href="{{ route('product', $product->slug) }}" target="_blank">
                                 <div class="form-group row">
                                     <div class="col-md-4">
-                                        <img src="{{ uploaded_asset($product->thumbnail_img)??static_asset('assets/img/placeholder.jpg')}}" alt="Image"
+                                        {{-- <img src="{{ uploaded_asset($product->variation->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}" height="50" width="50" style="object-fit: cover" style="display:inline-block;"> --}}
+                                        <img src="{{
+                                        uploaded_asset($product->thumbnail_img)??
+                                        static_asset('assets/img/placeholder.jpg') }}" alt="Image"
                                              class="w-50px">
                                     </div>
                                     <div class="col-md-8">
