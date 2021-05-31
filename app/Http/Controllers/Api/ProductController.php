@@ -100,7 +100,7 @@ class ProductController extends Controller
         if($variations= Variation::where('lowest_price_id','<>', null)->inRandomOrder()->groupBy('element_id')->get()){
             return new VariationCollection($variations);
         }
-        return null;
+        // return null;
         // return Product::where('added_by', 'admin')->inRandomOrder()->paginate(10);
 
     }
@@ -327,8 +327,12 @@ class ProductController extends Controller
 
     public function bestSeller()
     {
-        return $this->admin();
-        return new ProductCollection(Product::orderBy('num_of_sale', 'desc')->where('is_accepted', 1)->limit(20)->get());
+        // return $this->admin();
+        $products=Product::orderBy('num_of_sale', 'desc')->where('is_accepted', 1)->get();
+        $products=$products->groupBy('variation_id');
+        
+        dd($products);
+        return new ProductCollection($products->limit(20)->get());
     }
 
     public function related($id)
