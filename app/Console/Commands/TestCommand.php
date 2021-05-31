@@ -43,11 +43,11 @@ class TestCommand extends Command
     {
         $products=Product::all();
         foreach($products as $product){
-            // $this->info($product);
-            if($variation=Variation::findOrFail($product->variation_id)){
-                $product->element_id=$variation->element_id;
-                $product->save();
-            }
+            $this->info($product);
+            // if($variation=Variation::findOrFail($product->variation_id)){
+            //     $product->element_id=$variation->element_id;
+            //     $product->save();
+            // }
         }
         $this->info('Successfully run');
     }
