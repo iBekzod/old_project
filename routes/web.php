@@ -35,9 +35,9 @@ Route::get('/email_change/callback', 'HomeController@email_change_callback')->na
 Route::post('/password/reset/email/submit', 'HomeController@reset_password_with_code')->name('password.update');
 
 Route::get('/test', function () {
-       $variations= new \App\Http\Controllers\ProductController();
+    //    $variations= new \App\Http\Controllers\ProductController();
 
-       dd($variations->make_variation(78));
+    //    dd($variations->make_variation(78));
 //    $categories = \App\Category::all();
 //    $categories = $categories->groupBy('slug');
 //    foreach ($categories as $category) {
@@ -208,6 +208,26 @@ Route::group(['middleware' => ['user', 'verified','unbanned']], function(){
 Route::get('/customer_products/destroy/{id}', 'CustomerProductController@destroy')->name('customer_products.destroy');
 
 Route::group(['prefix' =>'seller', 'middleware' => ['seller', 'verified', 'user']], function(){
+
+	Route::get('elements/variation/remove','SellerElementController@remove_variation')->name('seller.elements.variation.remove');
+    Route::get('elements/admin','SellerElementController@admin_elements')->name('seller.elements.admin');
+	Route::get('elements/seller','SellerElementController@seller_elements')->name('seller.elements.seller');
+	Route::get('elements/all','SellerElementController@all_elements')->name('seller.elements.all');
+	Route::get('elements/manage','SellerElementController@manageElements')->name('seller.elements.manage');
+	Route::get('elements/manage/{id}/accept','SellerElementController@changeOnModerationAccept')->name('seller.elements.manage.change.accept');
+	Route::get('elements/manage/{id}/refuse','SellerElementController@changeOnModerationRefuse')->name('seller.elements.manage.change.refuse');
+    Route::get('elements/create','SellerElementController@create')->name('seller.elements.create');
+    Route::post('elements/store','SellerElementController@store')->name('seller.elements.store');
+    Route::get('elements/admin/{id}/edit','SellerElementController@admin_element_edit')->name('seller.elements.admin.edit');
+	Route::get('elements/seller/{id}/edit','SellerElementController@seller_element_edit')->name('seller.elements.seller.edit');
+	Route::post('elements/todays_deal', 'SellerElementController@updateTodaysDeal')->name('seller.elements.todays_deal');
+	Route::post('elements/featured', 'SellerElementController@updateFeatured')->name('seller.elements.featured');
+    Route::get('elements/make_selected_attribute_options', 'SellerElementController@make_selected_attribute_options')->name('seller.elements.make_selected_attribute_options');
+    Route::get('elements/make_attribute_options', 'SellerElementController@make_attribute_options')->name('seller.elements.make_attribute_options');
+    Route::get('elements/make_color_options', 'SellerElementController@make_color_options')->name('seller.elements.make_color_options');
+    Route::get('elements/make_attribute_variations', 'SellerElementController@make_attribute_variations')->name('seller.elements.make_attribute_variations');
+    Route::get('elements/make_all_combination', 'SellerElementController@make_all_combination')->name('seller.elements.make_all_combination');
+    Route::get('element/products', 'SellerElementController@elementProducts')->name('seller.element.products.edit');
     Route::post('/flash_deals/product_discount', 'FlashDealController@product_discount')->name('seller.flash_deals.product_discount');
     Route::post('/flash_deals/product_discount_edit', 'FlashDealController@product_discount_edit')->name('seller.flash_deals.product_discount_edit');
     Route::patch('/flash_deals/update/{id}', 'FlashDealController@update')->name('seller.flash_deals.update');
@@ -253,14 +273,14 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('/products/published', 'ProductController@updatePublished')->name('products.published');
 	Route::post('/products/publisheds', 'ProductController@updatePublisheds')->name('products.publisheds');
 
-    Route::post('/elements/store/','ElementController@store')->name('elements.store');
-	Route::post('/elements/update/{id}','ElementController@update')->name('elements.update');
-	Route::get('/elements/destroy/{id}', 'ElementController@destroy')->name('elements.destroy');
-	Route::get('/elements/duplicate/{id}', 'ElementController@duplicate')->name('elements.duplicate');
-	Route::post('/elements/sku_combination', 'ElementController@sku_combination')->name('elements.sku_combination');
-	Route::post('/elements/sku_combination_edit', 'ElementController@sku_combination_edit')->name('elements.sku_combination_edit');
-	Route::post('/elements/seller/featured', 'ElementController@updateSellerFeatured')->name('elements.seller.featured');
-	Route::post('/elements/published', 'ElementController@updatePublished')->name('elements.published');
+    Route::post('/elements/store/','SellerElementController@store')->name('seller.elements.store');
+	Route::post('/elements/update/{id}','SellerElementController@update')->name('seller.elements.update');
+	Route::get('/elements/destroy/{id}', 'SellerElementController@destroy')->name('seller.elements.destroy');
+	Route::get('/elements/duplicate/{id}', 'SellerElementController@duplicate')->name('seller.elements.duplicate');
+	Route::post('/elements/sku_combination', 'SellerElementController@sku_combination')->name('seller.elements.sku_combination');
+	Route::post('/elements/sku_combination_edit', 'SellerElementController@sku_combination_edit')->name('seller.elements.sku_combination_edit');
+	Route::post('/elements/seller/featured', 'SellerElementController@updateSellerFeatured')->name('seller.elements.seller.featured');
+	Route::post('/elements/published', 'SellerElementController@updatePublished')->name('seller.elements.published');
 
 	Route::get('invoice/customer/{order_id}', 'InvoiceController@customer_invoice_download')->name('customer.invoice.download');
 	Route::get('invoice/seller/{order_id}', 'InvoiceController@seller_invoice_download')->name('seller.invoice.download');
@@ -305,25 +325,6 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get('/digitalproducts/download/{id}', 'DigitalProductController@download')->name('digitalproducts.download');
 
 
-	Route::get('seller/elements/variation/remove','ElementController@remove_variation')->name('seller.elements.variation.remove');
-    Route::get('seller/elements/admin','ElementController@admin_elements')->name('seller.elements.admin');
-	Route::get('seller/elements/seller','ElementController@seller_elements')->name('seller.elements.seller');
-	Route::get('seller/elements/all','ElementController@all_elements')->name('seller.elements.all');
-	Route::get('seller/elements/manage','ElementController@manageElements')->name('seller.elements.manage');
-	Route::get('seller/elements/manage/{id}/accept','ElementController@changeOnModerationAccept')->name('seller.elements.manage.change.accept');
-	Route::get('seller/elements/manage/{id}/refuse','ElementController@changeOnModerationRefuse')->name('seller.elements.manage.change.refuse');
-    Route::get('seller/elements/create','ElementController@create')->name('seller.elements.create');
-    Route::post('seller/elements/store','ElementController@store')->name('seller.elements.store');
-	Route::get('seller/elements/admin/{id}/edit','ElementController@admin_element_edit')->name('seller.elements.admin.edit');
-	Route::get('seller/elements/seller/{id}/edit','ElementController@seller_element_edit')->name('seller.elements.seller.edit');
-	Route::post('seller/elements/todays_deal', 'ElementController@updateTodaysDeal')->name('seller.elements.todays_deal');
-	Route::post('seller/elements/featured', 'ElementController@updateFeatured')->name('seller.elements.featured');
-    Route::get('seller/elements/make_selected_attribute_options', 'ElementController@make_selected_attribute_options')->name('seller.elements.make_selected_attribute_options');
-    Route::get('seller/elements/make_attribute_options', 'ElementController@make_attribute_options')->name('seller.elements.make_attribute_options');
-    Route::get('seller/elements/make_color_options', 'ElementController@make_color_options')->name('seller.elements.make_color_options');
-    Route::get('seller/elements/make_attribute_variations', 'ElementController@make_attribute_variations')->name('seller.elements.make_attribute_variations');
-    Route::get('seller/elements/make_all_combination', 'ElementController@make_all_combination')->name('seller.elements.make_all_combination');
-    Route::get('seller/element/products', 'ElementController@elementProducts')->name('seller.element.products.edit');
 });
 
 Route::resource('shops', 'ShopController');
