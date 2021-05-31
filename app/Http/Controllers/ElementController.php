@@ -447,6 +447,14 @@ class ElementController extends Controller
         $element->barcode = $request->barcode;
         $choice_options = $request->choice_options;
 
+        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
+        if ($refund_request_addon != null && $refund_request_addon->activated == 1) {
+            if ($request->refundable != null) {
+                $element->refundable = 1;
+            } else {
+                $element->refundable = 0;
+            }
+        }
         $generated_variations = array();
         $my_characteristics = array();
         $my_variations = array();

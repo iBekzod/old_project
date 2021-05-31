@@ -46,7 +46,7 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
     Route::post('/products/get_products_by_subcategory', 'ProductController@get_products_by_subcategory')->name('products.get_products_by_subcategory');
     // Route::get('/products/{id}/in-stock', 'ProductController@inStock')->name('products.in_stock');
 	// Route::get('/products/{id}/in-stock/add/attrs', 'ProductController@addInStockProductAttrs')->name('products.in_stock_add_attrs');
-
+	Route::post('/elements/update/{id}','ElementController@update')->name('elements.update');
 	Route::get('/elements/destroy/{id}', 'ElementController@destroy')->name('elements.destroy');
     Route::get('/elements/variation/remove','ElementController@remove_variation')->name('elements.variation.remove');
     Route::get('/elements/admin','ElementController@admin_elements')->name('elements.admin');

@@ -112,6 +112,21 @@
                                         </div>
                                     @endif
 
+                                    @php
+                                        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
+                                    @endphp
+                                    @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-from-label">{{translate('Refundable')}}</label>
+                                            <div class="col-lg-8">
+                                                <label class="aiz-switch aiz-switch-success mb-0" style="margin-top:5px;">
+                                                    <input type="checkbox" name="refundable"
+                                                        @if ($element->refundable == 1) checked @endif>
+                                                    <span class="slider round"></span></label>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
 

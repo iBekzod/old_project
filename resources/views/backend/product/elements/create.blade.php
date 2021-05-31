@@ -191,20 +191,20 @@
                             </div>
                         </div>
                     @endif
-{{--                    @php--}}
-{{--                        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();--}}
-{{--                    @endphp--}}
-{{--                    @if ($refund_request_addon != null && $refund_request_addon->activated == 1)--}}
-{{--                        <div class="form-group row">--}}
-{{--                            <label class="col-md-3 col-from-label">{{translate('Refundable')}}</label>--}}
-{{--                            <div class="col-md-8">--}}
-{{--                                <label class="mb-0 aiz-switch aiz-switch-success">--}}
-{{--                                    <input type="checkbox" name="refundable" checked>--}}
-{{--                                    <span></span>--}}
-{{--                                </label>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    @endif--}}
+                    @php
+				        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
+                    @endphp
+                    @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
+                        <div class="form-group row">
+                            <label class="col-md-3 col-from-label">{{translate('Refundable')}}</label>
+                            <div class="col-md-8">
+                            <label class="aiz-switch aiz-switch-success mb-0">
+                                <input type="checkbox" name="refundable" checked>
+                                <span></span>
+                            </label>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
             <div class="card">
