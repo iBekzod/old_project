@@ -39,7 +39,9 @@ class FlashDealController extends Controller
                 $query->latest()->limit(12);
             }
         ])->first();
-
+        if($featuredProduct==null){
+            return null;
+        }
         $featProds = $featuredProduct->flashDealProducts->filter(function ($item) {
             if($item->product) {
                 return $item;
