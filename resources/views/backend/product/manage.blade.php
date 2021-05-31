@@ -31,7 +31,7 @@
                     <th>{{translate('Base Price')}}</th>
                     <th>{{translate('Published')}}</th>
                     <th>{{translate('Featured')}}</th>
-                    <th class="text-right">{{translate('Options')}}</th>
+                    <th class="text-right">{{translate('Accepted')}}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -54,18 +54,7 @@
                         <td>{{ $product->user->name }}</td>
                         <td>{{ $product->num_of_sale }} {{translate('times')}}</td>
                         <td>
-                            @php
-                                $qty = 0;
-                                if($product->variant_product){
-                                    foreach ($product->stocks as $key => $stock) {
-                                        $qty += $stock->qty;
-                                    }
-                                }
-                                else{
-                                    $qty = $product->current_stock;
-                                }
-                                echo $qty;
-                            @endphp
+                            {{$product->qty}}
                         </td>
                         <td>{{ number_format($product->unit_price,2) }}</td>
                         <td>
@@ -83,7 +72,12 @@
                             </label>
                         </td>
                         <td class="text-right">
-                            <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
+                            <label class="aiz-switch aiz-switch-success mb-0">
+                                <input onchange="update_accepted(this)" value="{{ $product->id }}"
+                                       type="checkbox" @if($product->is_accepted == 1) checked @endif>
+                                <span class="slider round"></span>
+                            </label>
+                            {{-- <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
                                href="{{ route('products.manage.change.accept', $product->id) }}"
                                title="{{ translate('Accept') }}">
                                 <i class="las la-check"></i>
@@ -92,7 +86,8 @@
                                href="{{ route('products.manage.change.refuse', $product->id) }}"
                                title="{{ translate('Cancel') }}">
                                 <i class="las la-times"></i>
-                            </a>
+                            </a> --}}
+
                         </td>
                     </tr>
                 @endforeach
@@ -156,6 +151,24 @@
             });
         }
 
+        function update_accepted(el) {
+            if (el.checked) {
+                var status = 1;
+            } else {
+                var status = 0;
+            }
+            $.post('{{ route('products.accepted') }}', {
+                _token: '{{ csrf_token() }}',
+                id: el.value,
+                status: status
+            }, function (data) {
+                if (data == 1) {
+                    AIZ.plugins.notify('success', '{{ translate('Accepted products updated successfully') }}');
+                } else {
+                    AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
+                }
+            });
+        }
         function update_featured(el) {
             if (el.checked) {
                 var status = 1;

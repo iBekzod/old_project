@@ -274,6 +274,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('/products/sku_combination_edit', 'ProductController@sku_combination_edit')->name('products.sku_combination_edit');
 	Route::post('/products/seller/featured', 'ProductController@updateSellerFeatured')->name('products.seller.featured');
 	Route::post('/products/published', 'ProductController@updatePublished')->name('products.published');
+	Route::post('/products/accepted', 'ProductController@updateAccepted')->name('products.accepted');
 	Route::post('/products/publisheds', 'ProductController@updatePublisheds')->name('products.publisheds');
 
     Route::post('/elements/store/','SellerElementController@store')->name('seller.elements.store');

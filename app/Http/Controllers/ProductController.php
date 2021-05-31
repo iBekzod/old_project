@@ -30,6 +30,20 @@ use Exception;
 
 class ProductController extends Controller
 {
+    public function updateAccepted(Request $request)
+    {
+        if($product = Product::findOrFail($request->id)){
+            $product->update([
+                'on_moderation' => 0,
+                'is_accepted' => 1
+            ]);
+            return 1;
+        }else{
+            return 0;
+        }
+
+    }
+
     public function changeOnModerationAccept(Request $request, $id)
     {
         $product = Product::findOrFail($id);
@@ -40,6 +54,7 @@ class ProductController extends Controller
 
         return redirect()->route('products.manage');
     }
+
 
     public function changeOnModerationRefuse(Request $request, $id)
     {
