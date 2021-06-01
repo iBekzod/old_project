@@ -40,7 +40,6 @@ module.exports = class ExternalDocument {
     return i
   }
 
-  // TODO: add mutex to not write concurrently (because of document specific _registerObject)
   async write(doc, page) {
     await doc._endPage()
 

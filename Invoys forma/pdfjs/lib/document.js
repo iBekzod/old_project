@@ -83,7 +83,6 @@ class Document extends Readable {
     this._header = this._footer = this._template = null
 
     // init cursor
-    // TODO: test for valid values
     const padding = opts.padding >= 0 ? opts.padding : 20
     this.paddingTop = util.defaults(opts.paddingTop, padding)
     this.paddingBottom = util.defaults(opts.paddingBottom, padding)
@@ -160,7 +159,6 @@ class Document extends Readable {
     // remove next from the queue
     parent.shift()
 
-    // TODO: still necessary?
     // if (!next) {
     //   return this._next()
     // }

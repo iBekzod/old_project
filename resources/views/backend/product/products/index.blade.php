@@ -107,7 +107,7 @@
                                 <a href="{{ url('single_product/'.$variation->slug) }}" target="_blank">
                                     <div class="form-group row">
                                         <div class="col-lg-4">
-                                            <img src="{{ ($variation->element)?uploaded_asset($variation->element->thumbnail_img)??static_asset('assets/img/placeholder.jpg'):null}}" alt="Image"
+                                            <img src="{{ ($variation)?uploaded_asset($variation->thumbnail_img)??static_asset('assets/img/placeholder.jpg'):null}}" alt="Image"
                                                     class="w-50px">
                                         </div>
                                         <div class="col-lg-8">

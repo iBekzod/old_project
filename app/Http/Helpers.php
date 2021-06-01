@@ -724,7 +724,6 @@ if (!function_exists('convertPrice')) {
     }
 }
 
-//TODO: create currrency
 if (!function_exists('convertCurrency')) {
     function convertCurrency($price, $price_currency_id)
     {

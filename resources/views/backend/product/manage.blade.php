@@ -42,17 +42,14 @@
                             {{-- @php
                                 $variation=$product->variation;
                             @endphp --}}
-                            <a href="{{ route('product', $product->slug) }}" target="_blank">
+                            <a href="{{ url('single_product/'.$product->slug) }}" target="_blank">
                                 <div class="form-group row">
-                                    <div class="col-md-4">
-                                        {{-- <img src="{{ uploaded_asset($product->variation->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}" height="50" width="50" style="object-fit: cover" style="display:inline-block;"> --}}
-                                        <img src="{{
-                                        uploaded_asset($product->thumbnail_img)??
-                                        static_asset('assets/img/placeholder.jpg') }}" alt="Image"
-                                             class="w-50px">
+                                    <div class="col-lg-4">
+                                        <img src="{{ ($product->variation)?uploaded_asset($product->variation->thumbnail_img)??static_asset('assets/img/placeholder.jpg'):static_asset('assets/img/placeholder.jpg')}}" alt=""
+                                                class="w-50px">
                                     </div>
-                                    <div class="col-md-8">
-                                        <span class="text-muted">{{ $product->getTranslation('name') }}</span>
+                                    <div class="col-lg-8">
+                                        <span class="text-muted">{{  $product->getTranslation('name')??null}}</span>
                                     </div>
                                 </div>
                             </a>

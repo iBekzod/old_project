@@ -92,7 +92,6 @@ module.exports = class Cell extends Fragment {
         this._cursor.bottomOffset = this.paddingBottom - this.borderBottomWidth
       }
 
-      // TODO: is there a better way of achieving this?
       if (this._pending.length === 0) {
         this._cursor.y = this._startY
       }
