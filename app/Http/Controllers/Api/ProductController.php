@@ -231,6 +231,7 @@ class ProductController extends Controller
     }
 
     public function featuredCategoryProducts($slug){
+        return $this->admin();
 //        if (!$id) {
 //            abort(404);
 //        }
@@ -245,6 +246,7 @@ class ProductController extends Controller
 
     public function subCategory($id)
     {
+        return $this->admin();
         $category_ids = CategoryUtility::children_ids($id);
         $category_ids[] = $id;
 
@@ -253,6 +255,7 @@ class ProductController extends Controller
 
     public function subSubCategory($id)
     {
+        return $this->admin();
         $category_ids = CategoryUtility::children_ids($id);
         $category_ids[] = $id;
 
@@ -261,6 +264,7 @@ class ProductController extends Controller
 
     public function brand($id)
     {
+        return $this->admin();
 
         $products=Product::where('brand_id', $id)->where('is_accepted', 1)->inRandomOrder()->paginate(10);
         return new ProductCollection($products);
@@ -268,17 +272,20 @@ class ProductController extends Controller
 
     public function todaysDeal()
     {
+        return $this->admin();
         return new ProductCollection(Product::where('todays_deal', 1)->where('is_accepted', 1)->latest()->get());
     }
 
     public function flashDeal()
     {
+        return $this->admin();
         $flash_deals = FlashDeal::where('status', 1)->where('start_date', '<=', strtotime(date('d-m-Y')))->where('end_date', '>=', strtotime(date('d-m-Y')))->get();
         return new FlashDealsCollection($flash_deals);
     }
 
     public function singleFlashDeal($id)
     {
+        return $this->admin();
         $flash_deal = FlashDeal::where('slug', $id)->firstOrFail();
         $ids = FlashDealProduct::where('flash_deal_id',$flash_deal->id)->pluck('product_id');
         $products = Product::whereIn('id',$ids)->get();
@@ -297,6 +304,7 @@ class ProductController extends Controller
 
     public function featured()
     {
+        return $this->admin();
         return new ProductCollection(Product::where('featured', 1)->where('is_accepted', 1)->inRandomOrder()->get());
     }
 
@@ -327,6 +335,7 @@ class ProductController extends Controller
 
     public function bestSeller()
     {
+        return $this->admin();
         // return $this->admin();
         $products=Product::orderBy('num_of_sale', 'desc')->where('is_accepted', 1);
         // $products=$products->groupBy('variation_id');
@@ -476,11 +485,13 @@ class ProductController extends Controller
 
     public function home()
     {
+        return $this->admin();
         return new ProductCollection(Product::inRandomOrder()->take(50)->get());
     }
 
     public function freeShippingProduct()
     {
+        return $this->admin();
         return response()->json([
             'products' => new ProductCollection(Product::where('delivery_group_id', 0)->inRandomOrder()->limit(12)->get())
         ]);

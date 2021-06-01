@@ -40,11 +40,11 @@ return [
             'driver' => 'array',
         ],
 
-        'database' => [
-            'driver' => 'database',
-            'table' => 'cache',
-            'connection' => null,
-        ],
+        // 'database' => [
+        //     'driver' => 'database',
+        //     'table' => 'cache',
+        //     'connection' => null,
+        // ],
 
         'file' => [
             'driver' => 'file',
