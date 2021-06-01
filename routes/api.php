@@ -116,6 +116,7 @@ Route::prefix('v1')->group(function () {
     Route::get('products/search', 'Api\ProductController@search');
     Route::post('products/variant/price', 'Api\ProductController@variantPrice');
     Route::get('products/home', 'Api\ProductController@home');
+    Route::get('products/index', 'Api\ProductController@getIndexPageProducts');
     Route::apiResource('products', 'Api\ProductController')->except(['store', 'update', 'destroy']);
     // Route::get('brand/{name}','Api\ProductController@byBrand');
 //    Route::get('products/byBrand/{name}','Api\ProductController');

@@ -11,6 +11,7 @@ class ProductCollection extends ResourceCollection
 {
     public function toArray($request)
     {
+        // dd($request);
         return [
             'data' => $this->collection->map(function($data) {
                 $product=Product::findOrFail($data->id);

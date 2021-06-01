@@ -105,7 +105,7 @@ class ElementController extends Controller
                             <div class="form-group row">
                                 <label class="col-md-3 col-form-label"  for="signinSrEmail">' . $attribute->getTranslation('name', $request->lang) . '</label>
                                 <div class="col-md-8">
-                                    <select class="form-control js-example-basic-multiple" onchange="update_attribute_combination()" id="choice_option_' . $attribute->id . '" multiple name="choice_options[' . $attribute->id . '][]">';
+                                    <select class="form-control js-example-basic-multiple"  id="choice_option_' . $attribute->id . '" multiple name="choice_options[' . $attribute->id . '][]">';
 
                         $options = null;
                         foreach ($attribute->characteristics as $value) {
@@ -240,7 +240,7 @@ class ElementController extends Controller
                                 </div>
                             </td>
                             <td>
-                                <label for="" class="control-label">'.implode (",", $combination).'</label>
+                                <label for="" class="control-label">'.implode(",", $combination).'</label>
                                 <input type="hidden" name="combination['.$index.'][name]" value="'.implode (",", $combination).'" class="form-control">
                             </td>
                             <td>
@@ -545,7 +545,7 @@ class ElementController extends Controller
                     $variation->name=$element->name." ".$variant['name'];
                     $variation->thumbnail_img = $variant['thumbnail_img'];
                     $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
-                    $variation->sku=$variant['artikul'];
+                    $variation->partnum=$variant['artikul'];
                     $variation->num_of_sale=0;
                     $variation->qty=0;
                     $variation->rating=0;
@@ -867,8 +867,9 @@ class ElementController extends Controller
 
     public function elementProducts(Request $request){
         $element = Element::findOrFail($request->id);
-        $combinations=Variation::where('element_id', $element->id);
+        $combinations= Variation::where('element_id', $request->id);
         $variation_ids=$combinations->pluck('id');
+        // dd($variation_ids);
         if(count($variation_ids)>0){
             $lang = default_language();
             $currencies = Currency::where('status', true)->get();

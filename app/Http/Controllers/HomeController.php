@@ -107,7 +107,7 @@ class HomeController extends Controller
             $user->password = Hash::make($request->password);
             //   dd($user);
 
-              return view('frontend.user.seller.seller_registration');
+              return view('frontend.user.seller.form_second');
 
             }
             else if($request->method() === 'GET'){

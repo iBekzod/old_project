@@ -59,8 +59,6 @@
                     <h5 class="mb-0 h6">{{translate('Element Characteristics')}}</h5>
                 </div>
                 <div class="card-body">
-
-
                     <div class="form-group row">
                         <div class="col-lg-3">
                             <input type="text" class="form-control" value="{{translate('Attributes')}}" disabled>
@@ -94,19 +92,7 @@
                             </select>
                         </div>
                     </div>
-{{--                    <div class="form-group row">--}}
-{{--                        <div class="col-lg-3">--}}
-{{--                            <input type="text" class="form-control" value="{{translate('Colors')}}" disabled>--}}
-{{--                        </div>--}}
-{{--                        <div class="col-lg-8">--}}
-{{--                            <select class="form-control aiz-selectpicker" data-live-search="true"--}}
-{{--                                    data-selected-text-format="count" name="selected_colors[]" id="selected_colors" multiple>--}}
-{{--                                --}}{{-- @foreach (\App\Color::orderBy('name', 'asc')->get() as $key => $color)--}}
-{{--                                    <option value="" data-content="<span><span class='mr-2 border rounded size-15px d-inline-block' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"></option>--}}
-{{--                                @endforeach --}}
-{{--                            </select>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
+
                     <div class="form-group row">
                         <div class="col-lg-3">
                             <input type="text" class="form-control" value="{{translate('Attributes')}}" disabled>
@@ -121,8 +107,12 @@
                             </select>
                         </div>
                     </div>
+                    <div class="d-block">
+                        <button type="button" class="mb-3 btn btn-info" onclick="update_attribute_combination()">{{ translate('Generate variations') }}</button>
+                    </div>
                     <div id="variation_div"></div>
                     <input type="hidden" name="collected_variations[]" id="collected_variations" >
+
                 </div>
             </div>
             <div class="card">
@@ -389,37 +379,6 @@
         $('#selected_attribute_id').on('change', function () {
             update_category_attribute();
         });
-        $('#colors').on('change', function () {
-            update_attribute_combination()
-        });
-        // $('#selected_colors').on('change', function () {
-        //     update_attribute_combination()
-        // });
-        $('#selected_variations').on('change', function () {
-            update_attribute_combination()
-        });
-        {{--function update_color(){--}}
-        {{--    color_ids = []--}}
-        {{--    $('#colors option:selected').each(function (index, val){--}}
-        {{--        color_ids.push(val.getAttribute('data-id'))--}}
-        {{--    })--}}
-        {{--    // alert(color_ids);--}}
-        {{--    $.ajax({--}}
-        {{--        type:'GET',--}}
-        {{--        url:'{{ route('elements.make_color_options') }}',--}}
-        {{--        data:{--}}
-        {{--            colors: color_ids--}}
-        {{--        },--}}
-        {{--        success:function(data){--}}
-        {{--            // alert("Selected attribute id: "+data.message);--}}
-        {{--            $('#selected_colors').html(" ")--}}
-        {{--            if(data.success){--}}
-        {{--                $('#selected_colors').append(data.data)--}}
-        {{--            }--}}
-        {{--            update_attribute_combination();--}}
-        {{--        }--}}
-        {{--    });--}}
-        {{--}--}}
         function update_attribute(){
             $.ajax({
                 type:'GET',
@@ -467,7 +426,7 @@
                         $('#selected_variations').html(data.data)
                         $('.js-example-basic-multiple').select2();
                     }
-                    update_attribute_combination();
+                    // update_attribute_combination();
                 }
             });
         }
@@ -516,26 +475,13 @@
         }
         // selected_variations
         function update_sku() {
-            {{--$.ajax({--}}
-            {{--    type: "POST",--}}
-            {{--    url: '{{ route('products.sku_combination_edit') }}',--}}
-            {{--    data: $('#choice_form').serialize(),--}}
-            {{--    success: function (data) {--}}
-            {{--        $('#sku_combination').html(data);--}}
-            {{--        if (data.length > 1) {--}}
-            {{--            $('#quantity').hide();--}}
-            {{--        } else {--}}
-            {{--            $('#quantity').show();--}}
-            {{--        }--}}
-            {{--    }--}}
-            {{--});--}}
         }
         function delete_variant(em) {
             $(em).closest('.variant').remove();
         }
         AIZ.plugins.tagify();
         $(document).ready(function () {
-            update_sku();
+            // update_sku();
 
             $('.remove-files').on('click', function () {
                 $(this).parents(".col-md-4").remove();

@@ -482,7 +482,7 @@ class ProductController extends Controller
     public function freeShippingProduct()
     {
         return response()->json([
-            'products' => new ProductCollection(\App\Models\Product::where('shipping_type', 'free')->inRandomOrder()->limit(12)->get())
+            'products' => new ProductCollection(Product::where('delivery_group_id', 0)->inRandomOrder()->limit(12)->get())
         ]);
     }
 
@@ -718,5 +718,32 @@ class ProductController extends Controller
         }
 
 
+    }
+
+    public function filterPublishedProduct($products){
+        return $products->where('qty', '>', 0)->where('is_accepted', 1)->where('published', 1);
+    }
+    public function getIndexPageProducts(){
+        $products=Product::where('variation_id', '<>', null);
+        $products=$this->filterPublishedProduct($products)->get();
+        $products=$products->groupBy('variation_id');
+        $products=$products->each(function($variation, $variation_key) {
+            $random_product_id=$variation->random()->id;
+            // return [$variation_key=>$variation->firstWhere(['id'=>$random_product_id])];
+            return $variation->filter(function($product) use ($random_product_id) {
+                return $product->id==$random_product_id;
+            });
+            // return $variation;
+        });
+
+        // $products = $products->filter(function ($value, $key) {
+        //     dd($value);
+        //     return $value > 2;
+        // });
+        // dd($products);
+        return response()->json([
+            'products' => $products
+        ]);
+        // $products=Product::whereNotNull('')
     }
 }

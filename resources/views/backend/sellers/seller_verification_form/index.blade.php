@@ -56,16 +56,16 @@
 						<div class="col-lg-4">
 
 							<ul class="list-group">
-								<li class="list-group-item btn" style="text-align: left;" onclick="appenddToForm('text')">{{translate('Text Input')}}</li>
-								<li class="list-group-item btn" style="text-align: left;" onclick="appenddToForm('select')">{{translate('Select')}}</li>
-								<li class="list-group-item btn" style="text-align: left;" onclick="appenddToForm('multi-select')">{{translate('Multiple Select')}}</li>
-								<li class="list-group-item btn" style="text-align: left;" onclick="appenddToForm('radio')">{{translate('Radio')}}</li>
-								<li class="list-group-item btn" style="text-align: left;" onclick="appenddToForm('file')">{{translate('File')}}</li>
+								<li class="list-group-item btn btn-outline-info btn-lg text-md-left" onclick="appenddToForm('text')">{{translate('Text Input')}}</li>
+								<li class="list-group-item btn btn-outline-info btn-lg text-md-left" onclick="appenddToForm('select')">{{translate('Select')}}</li>
+								<li class="list-group-item btn btn-outline-info btn-lg text-md-left" onclick="appenddToForm('multi-select')">{{translate('Multiple Select')}}</li>
+								<li class="list-group-item btn btn-outline-info btn-lg text-md-left" onclick="appenddToForm('radio')">{{translate('Radio')}}</li>
+								<li class="list-group-item btn btn-outline-info btn-lg text-md-left" onclick="appenddToForm('file')">{{translate('File')}}</li>
 							</ul>
 
 						</div>
 					</div>
-					<div class="form-group mb-0 text-right">
+					<div class="form-group mt-md-5 text-right">
 						<button type="submit" class="btn btn-primary">{{translate('Save')}}</button>
 					</div>
 				</form>

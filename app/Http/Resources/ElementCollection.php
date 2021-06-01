@@ -13,7 +13,7 @@ class ElementCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'variation' => $this->collection->map(function($variation) {
+            'data' => $this->collection->map(function($variation) {
                 try{
                     $element=Element::findOrFail($variation->id);
                     $variation=Variation::where('element_id', $element->id)->where('lowest_price_id', '<>', null)->inRandomOrder()->first();

@@ -2,11 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Element;
 use App\Product;
 use App\Variation;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 
 class TestCommand extends Command
 {
@@ -44,10 +42,10 @@ class TestCommand extends Command
         $products=Product::all();
         foreach($products as $product){
             $this->info($product);
-            // if($variation=Variation::findOrFail($product->variation_id)){
-            //     $product->element_id=$variation->element_id;
-            //     $product->save();
-            // }
+             if($variation=Variation::where('id',$product->variation_id)->first()){
+                 $product->element_id=$variation->element_id;
+                 $product->save();
+             }
         }
         $this->info('Successfully run');
     }

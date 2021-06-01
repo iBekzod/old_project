@@ -14,7 +14,7 @@ class Variation extends Model
         'element_id',
         'prices',
         'variant',
-        'sku',
+        'partnum',
         'user_id',
         'num_of_sale',
         'qty',

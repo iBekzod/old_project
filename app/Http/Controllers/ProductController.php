@@ -281,7 +281,8 @@ class ProductController extends Controller
                     } else {
                         $product->published = false;
                     }
-                    $product->delivery_group_id = $variant["delivery_type"];
+                    $product->delivery_type = $variant["delivery_type"];
+                    $product->sku = $variant["sku"];
                     $product->qty = (int)$variant["quantity"];
                     $product->tax = (float)$variant["tax"];
                     $product->tax_type = $variant["tax_type"];
@@ -437,7 +438,8 @@ class ProductController extends Controller
                     } else {
                         $product->published = false;
                     }
-                    $product->delivery_group_id = $variant["delivery_type"];
+                    $product->delivery_type = $variant["delivery_type"];
+                    $product->sku = $variant["sku"];
                     $product->qty = (int)$variant["quantity"];
                     $product->tax = (float)$variant["tax"];
                     $product->tax_type = $variant["tax_type"];
