@@ -39,7 +39,7 @@
                 </div>
         <div class="aiz-side-nav-wrap">
             <div class="mb-3 px-20px">
-                <input class="text-white border-0 form-control bg-soft-secondary form-control-sm" type="text" name=""
+                <input class="text-black border-0 form-control bg-soft-secondary form-control-sm" type="text" name=""
                        placeholder="{{ translate('Search in menu') }}" id="menu-search" onkeyup="menuSearch()">
             </div>
             <ul class="aiz-side-nav-list" id="search-menu">
