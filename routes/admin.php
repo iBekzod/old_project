@@ -28,6 +28,13 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::get('/brands/edit/{id}', 'BrandController@edit')->name('brands.edit');
 	Route::get('/brands/destroy/{id}', 'BrandController@destroy')->name('brands.destroy');
 
+    Route::post('/products/store/','ProductController@store')->name('products.store');
+	Route::post('/products/update/{id}','ProductController@update')->name('products.update');
+	Route::get('/products/destroy/{id}', 'ProductController@destroy')->name('products.destroy');
+    Route::get('/products/make_combination', 'ProductController@make_combination')->name('products.make_combination');
+	Route::post('/products/published', 'ProductController@updatePublished')->name('products.published');
+	Route::post('/products/accepted', 'ProductController@updateAccepted')->name('products.accepted');
+	Route::post('/products/publisheds', 'ProductController@updatePublisheds')->name('products.publisheds');
 	Route::get('/products/admin','ProductController@admin_products')->name('products.admin');
 	Route::get('/products/seller','ProductController@seller_products')->name('products.seller');
 	Route::get('/products/all','ProductController@all_products')->name('products.all');
@@ -41,11 +48,8 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
     Route::post('/products/todays_deals', 'ProductController@updateTodaysDeals')->name('products.todays_deals');
     Route::post('/products/featured', 'ProductController@updateFeatured')->name('products.featured');
     Route::post('/products/featureds', 'ProductController@updateFeatureds')->name('products.featureds');
-    // Route::get('/products/{id}/characteristics', 'ProductController@characteristics')->name('products.characteristics');
-    // Route::post('/products/{id}/characteristics', 'ProductController@characteristics')->name('products.characteristics');
     Route::post('/products/get_products_by_subcategory', 'ProductController@get_products_by_subcategory')->name('products.get_products_by_subcategory');
-    // Route::get('/products/{id}/in-stock', 'ProductController@inStock')->name('products.in_stock');
-	// Route::get('/products/{id}/in-stock/add/attrs', 'ProductController@addInStockProductAttrs')->name('products.in_stock_add_attrs');
+
 	Route::post('/elements/update/{id}','ElementController@update')->name('elements.update');
 	Route::get('/elements/destroy/{id}', 'ElementController@destroy')->name('elements.destroy');
     Route::get('/elements/variation/remove','ElementController@remove_variation')->name('elements.variation.remove');

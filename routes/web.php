@@ -264,29 +264,22 @@ Route::group(['prefix' =>'seller', 'middleware' => ['seller', 'verified', 'user'
 });
 
 Route::group(['middleware' => ['auth']], function(){
-	Route::post('/products/store/','ProductController@store')->name('products.store');
-	Route::post('/products/store/','ProductController@store')->name('seller.products.store');
-	Route::post('/products/update/{id}','ProductController@update')->name('products.update');
-	Route::get('/products/destroy/{id}', 'ProductController@destroy')->name('products.destroy');
-	Route::get('/products/duplicate/{id}', 'ProductController@duplicate')->name('products.duplicate');
-    Route::get('/products/make_combination', 'ProductController@make_combination')->name('products.make_combination');
-//    Route::post('/products/edit_combination', 'ProductController@edit_combination')->name('products.edit_combination');
-	Route::post('/products/sku_combination', 'ProductController@sku_combination')->name('products.sku_combination');
-	Route::post('/products/sku_combination_edit', 'ProductController@sku_combination_edit')->name('products.sku_combination_edit');
-	Route::post('/products/seller/featured', 'ProductController@updateSellerFeatured')->name('products.seller.featured');
-	Route::post('/products/published', 'ProductController@updatePublished')->name('products.published');
-	Route::post('/products/accepted', 'ProductController@updateAccepted')->name('products.accepted');
-	Route::post('/products/publisheds', 'ProductController@updatePublisheds')->name('products.publisheds');
+
+    Route::post('/products/store/','SellerProductController@store')->name('seller.products.store');
+    Route::post('/products/update/{id}','SellerProductController@update')->name('seller.products.update');
+	Route::get('/products/destroy/{id}', 'SellerProductController@destroy')->name('seller.products.destroy');
+    Route::get('/products/make_combination', 'SellerProductController@make_combination')->name('seller.products.make_combination');
+	Route::post('/products/seller/featured', 'SellerProductController@updateSellerFeatured')->name('seller.products.seller.featured');
+	Route::post('/products/published', 'SellerProductController@updatePublished')->name('seller.products.published');
+	Route::post('/products/accepted', 'SellerProductController@updateAccepted')->name('seller.products.accepted');
+	Route::post('/products/publisheds', 'SellerProductController@updatePublisheds')->name('seller.products.publisheds');
 
     Route::post('/elements/store/','SellerElementController@store')->name('seller.elements.store');
 	Route::post('/elements/update/{id}','SellerElementController@update')->name('seller.elements.update');
 	Route::get('/elements/destroy/{id}', 'SellerElementController@destroy')->name('seller.elements.destroy');
-	Route::get('/elements/duplicate/{id}', 'SellerElementController@duplicate')->name('seller.elements.duplicate');
-	Route::post('/elements/sku_combination', 'SellerElementController@sku_combination')->name('seller.elements.sku_combination');
-	Route::post('/elements/sku_combination_edit', 'SellerElementController@sku_combination_edit')->name('seller.elements.sku_combination_edit');
 	Route::post('/elements/seller/featured', 'SellerElementController@updateSellerFeatured')->name('seller.elements.seller.featured');
 	Route::post('/elements/published', 'SellerElementController@updatePublished')->name('seller.elements.published');
-    // Route::get('/element/products', 'ElementController@elementProducts')->name('element.products.edit');
+
 	Route::get('invoice/customer/{order_id}', 'InvoiceController@customer_invoice_download')->name('customer.invoice.download');
 	Route::get('invoice/seller/{order_id}', 'InvoiceController@seller_invoice_download')->name('seller.invoice.download');
 

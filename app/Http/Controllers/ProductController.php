@@ -274,13 +274,18 @@ class ProductController extends Controller
                     } else {
                         $product->published = false;
                     }
+                    if (array_key_exists('featured', $variant)) {
+                        ($variant["featured"] == "on") ? $product->featured = true : $product->featured = false;
+                    } else {
+                        $product->featured = false;
+                    }
                     $product->delivery_type = $variant["delivery_type"];
                     $product->sku = $variant["sku"];
                     $product->qty = (int)$variant["quantity"];
                     $product->tax = (float)$variant["tax"];
                     $product->tax_type = $variant["tax_type"];
                     $product->rating = 0;
-                    $product->barcode = rand(10000, 999999);
+                    // $product->barcode = $variant["barcode"];
                     $product->earn_point = 0;
                     $product->num_of_sale = 0;
                     $product->variation_id = $variation->id;
@@ -301,25 +306,6 @@ class ProductController extends Controller
 
                     // }
                 }
-
-
-                // $product_price=$product->price;
-                // $total_stock=$total_stock+$product->qty;
-                // if($currency=Currency::findOrFail($product->currency_id)){
-                //     $product_price=$product_price/$currency->exchange_rate;
-                // }
-                // if($minimum_price>$product_price || $minimum_price==0){
-                //     $minimum_price=$product_price;
-                //     $product_id=$product->id;
-                //     $product_ids=array();
-                //     $product_ids[]=$product->id;
-                // }else if($minimum_price==$product_price && $product_price!=0){
-                //     $product_ids[]=$product->id;
-                // }
-
-                //Update variation data
-
-
                 //Language chaqnges
                 foreach (Language::all() as $language) {
                     // Product Translations
@@ -430,12 +416,17 @@ class ProductController extends Controller
                     } else {
                         $product->published = false;
                     }
+                    if (array_key_exists('featured', $variant)) {
+                        ($variant["featured"] == "on") ? $product->featured = true : $product->featured = false;
+                    } else {
+                        $product->featured = false;
+                    }
                     $product->delivery_type = $variant["delivery_type"];
                     $product->sku = $variant["sku"];
                     $product->qty = (int)$variant["quantity"];
                     $product->tax = (float)$variant["tax"];
                     $product->tax_type = $variant["tax_type"];
-                    $product->barcode = rand(10000, 999999);
+                    // $product->barcode = rand(10000, 999999);
                     $product->variation_id = $variation->id;
                     $product->element_id=$element->id;
                     $product->save();
@@ -483,9 +474,6 @@ class ProductController extends Controller
             $variation = Variation::findOrFail($id);
             $products = $variation->products;
             foreach ($products as $product) {
-                foreach ($product->product_translations as $product_translation) {
-                    $product_translation->delete();
-                }
                 $product->delete();
             }
             $variation->delete();

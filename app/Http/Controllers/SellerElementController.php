@@ -848,17 +848,6 @@ class SellerElementController extends Controller
         return 0;
     }
 
-
-    // public function variantProducts(Request $request){
-    //     if($variation = Variation::findOrFail($request->id)){
-    //         $products = $variation->products;
-    //         $lang = default_language();
-    //         $currencies = Currency::where('status', true)->get();
-    //         return view('backend.product.products.edit', compact('variation', 'products', 'currencies', 'lang'));
-    //     }
-    //     return back();
-    // }
-
     public function elementProducts(Request $request){
         $element = Element::findOrFail($request->id);
         $combinations=Variation::where('element_id', $element->id);

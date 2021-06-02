@@ -133,6 +133,15 @@
                                                 <span></span>
                                             </label>
                                         </td>
+                                        <td class="text-center">
+                                            <label for="" class="control-label">{{ translate('Featured') }}</label>
+                                            <label class="aiz-switch aiz-switch-success mb-0">
+                                                <input type="checkbox"
+                                                    onchange="change_switch(this.checked, 'seller_featured_change')"
+                                                    name="seller_featured" @if ($element->featured) checked @endif>
+                                                <span></span>
+                                            </label>
+                                        </td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -214,14 +223,21 @@
                                                 <label class="aiz-switch aiz-switch-success mb-0">
                                                     <input type="checkbox"
                                                         name="variation[{{ $index }}][todays_deal]"
-                                                        class="todays_deal_change" @if ($element->todays_deal) checked @endif>
+                                                        class="todays_deal_change" @if($element->todays_deal) checked @endif>
                                                     <span></span>
                                                 </label>
                                             </td>
                                             <td>
                                                 <label class="aiz-switch aiz-switch-success mb-0 ">
                                                     <input type="checkbox" name="variation[{{ $index }}][published]"
-                                                        class="published_change" @if ($element->published) checked @endif>
+                                                        class="published_change" @if($element->published) checked @endif>
+                                                    <span></span>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <label class="aiz-switch aiz-switch-success mb-0 ">
+                                                    <input type="checkbox" name="variation[{{ $index }}][seller_featured]"
+                                                        class="seller_featured_change" @if($element->seller_seller_featured) checked @endif>
                                                     <span></span>
                                                 </label>
                                             </td>
@@ -280,7 +296,7 @@
             $('#sku_combination').html(null);
             $.ajax({
                 type: "GET",
-                url: '{{ route('products.make_combination') }}',
+                url: '{{ route('seller.products.make_combination') }}',
                 data: $('#choice_form').serialize(),
                 success: function(data) {
                     $('#sku_combination').html(data);

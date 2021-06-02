@@ -1,6 +1,6 @@
 <div class="form-group row px-3">
-    <img src="{{ uploaded_asset($element->thumbnail_img) ?? static_asset('assets/img/placeholder.jpg') }}" height="140"
-        width="140" style="object-fit: cover" style="display:inline-block;">
+    <img src="{{ uploaded_asset($element->thumbnail_img) ?? static_asset('assets/img/placeholder.jpg') }}"
+        height="140" width="140" style="object-fit: cover" style="display:inline-block;">
     <div class="col-md-10">
         <label class="col-from-label font-weight-bold h6">{{ $element->getTranslation('name') }}</label>
 
@@ -88,6 +88,14 @@
                         <label style="display: block;" class="aiz-switch aiz-switch-success mb-0">
                             <input type="checkbox" onchange="change_switch(this.checked, 'published_change')"
                                 name="published" checked>
+                            <span></span>
+                        </label>
+                    </td>
+                    <td class="text-center">
+                        <label for="" class="control-label">{{ translate('seller_featured') }}</label>
+                        <label class="aiz-switch aiz-switch-success mb-0">
+                            <input type="checkbox" onchange="change_switch(this.checked, 'seller_featured_change')"
+                                name="seller_featured" @if ($element->featured) checked @endif>
                             <span></span>
                         </label>
                     </td>
@@ -183,6 +191,15 @@
                                 </label>
                             </div>
 
+                        </td>
+                        <td>
+                            <div class="d-flex justify-content-center">
+                                <label class="aiz-switch aiz-switch-success mb-0 ">
+                                    <input type="checkbox" name="variation[{{ $index }}][seller_featured]"
+                                        class="seller_featured_change" checked>
+                                    <span></span>
+                                </label>
+                            </div>
                         </td>
                         <td>
                             <button type="button" class="btn btn-icon btn-sm btn-danger"
