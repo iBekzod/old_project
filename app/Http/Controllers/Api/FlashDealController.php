@@ -47,15 +47,7 @@ class FlashDealController extends Controller
                 return $item;
             }
         });
-
-        $arr = [];
-        foreach ($featProds as $item) {
-            $arr[] = $item;
-        }
-
-        $products = new FlashDealProductCollection($arr);
-
-        return response()->json($products);
+        return response()->json(new FlashDealProductCollection($featProds));
 
     }
 
