@@ -27,7 +27,7 @@
                     </div>
                     @if(count($products) > 0)
                         <input type="hidden" value="{{$lang}}" name="lang" class="form-control">
-
+                        <input type="hidden"  name="element_id" value="{{$element->id}}" class="form-control">
                         <div style="overflow-y: scroll; ">
                             <table class="table table-bordered" style="width:1800px">
                                 <thead>
@@ -37,6 +37,9 @@
                                     </td>
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Slug') }}</label>
+                                    </td>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{ translate('SKU') }}</label>
                                     </td>
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Price') }}</label>
@@ -128,7 +131,10 @@
                                                    value="{{$product->name??null}}"
                                                    class="form-control">
 
-                                            </td>
+                                        </td>
+                                        <td>
+                                           <input type="text" name="variation[{{ $product->id }}][sku]" value="{{$product->sku}}" class="form-control">
+                                        </td>
                                         <td>
                                             <input type="number" style="width: 100px;" name="variation[{{ $product->id }}][price]"
                                                    value="{{$product->price??0}}" min="0" step="0.01"

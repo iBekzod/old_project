@@ -181,7 +181,7 @@
                                 <div class="form-group row">
                                     <label class="col-md-3 col-form-label"  for="signinSrEmail">{{  $attribute->getTranslation('name', $lang) }}</label>
                                     <div class="col-md-8">
-                                        <select class="form-control js-example-basic-multiple" onchange="update_attribute_combination()" id="choice_option_{{ $attribute->id }}" multiple name="choice_options[{{ $attribute->id }}][]">
+                                        <select class="form-control js-example-basic-multiple"  id="choice_option_{{ $attribute->id }}" multiple name="choice_options[{{ $attribute->id }}][]">
                                             @foreach ($attribute->characteristics as $value)
                                                 <option
                                                 @if(in_array($value->id, $value_ids)) selected @endif
@@ -227,6 +227,9 @@
                                 @endforeach
                             </select>
                         </div>
+                    </div>
+                    <div class="d-block">
+                        <button type="button" class="mb-3 btn btn-info" onclick="update_attribute_combination()">{{ translate('Generate variations') }}</button>
                     </div>
                     <div id="variation_div">
                         <div style="overflow-y: scroll; ">
@@ -477,16 +480,6 @@
         });
         $('#selected_attribute_id').on('change', function () {
             update_category_attribute();
-            update_attribute_combination();
-        });
-        $('#colors').on('change', function () {
-            update_attribute_combination()
-        });
-        // $('#selected_colors').on('change', function () {
-        //     update_attribute_combination()
-        // });
-        $('#selected_variations').on('change', function () {
-            update_attribute_combination()
         });
         function update_attribute(){
             $.ajax({
@@ -552,7 +545,6 @@
                         $('#selected_variations').html(data.data)
                         $('.js-example-basic-multiple').select2();
                     }
-                    update_attribute_combination();
                 }
             });
         }
@@ -610,7 +602,6 @@
         }
         AIZ.plugins.tagify();
         $(document).ready(function () {
-            // update_attribute_combination();
 
             $('.remove-files').on('click', function () {
                 $(this).parents(".col-md-4").remove();

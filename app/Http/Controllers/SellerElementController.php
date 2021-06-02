@@ -105,7 +105,7 @@ class SellerElementController extends Controller
                             <div class="form-group row">
                                 <label class="col-md-3 col-form-label"  for="signinSrEmail">' . $attribute->getTranslation('name', $request->lang) . '</label>
                                 <div class="col-md-8">
-                                    <select class="form-control js-example-basic-multiple" onchange="update_attribute_combination()" id="choice_option_' . $attribute->id . '" multiple name="choice_options[' . $attribute->id . '][]">';
+                                    <select class="form-control js-example-basic-multiple" id="choice_option_' . $attribute->id . '" multiple name="choice_options[' . $attribute->id . '][]">';
 
                         $options = null;
                         foreach ($attribute->characteristics as $value) {
@@ -539,7 +539,7 @@ class SellerElementController extends Controller
                     $variation->name=$element->name." ".$variant['name'];
                     $variation->thumbnail_img = $variant['thumbnail_img'];
                     $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
-                    $variation->sku=$variant['artikul'];
+                    $variation->partnum=$variant['artikul'];
                     $variation->num_of_sale=0;
                     $variation->qty=0;
                     $variation->rating=0;
@@ -847,17 +847,6 @@ class SellerElementController extends Controller
         }
         return 0;
     }
-
-
-    // public function variantProducts(Request $request){
-    //     if($variation = Variation::findOrFail($request->id)){
-    //         $products = $variation->products;
-    //         $lang = default_language();
-    //         $currencies = Currency::where('status', true)->get();
-    //         return view('backend.product.products.edit', compact('variation', 'products', 'currencies', 'lang'));
-    //     }
-    //     return back();
-    // }
 
     public function elementProducts(Request $request){
         $element = Element::findOrFail($request->id);

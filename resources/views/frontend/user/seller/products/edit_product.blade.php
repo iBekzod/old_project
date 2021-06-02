@@ -5,7 +5,7 @@
         <h5 class="mb-0 h6">{{translate('Edit Product')}}</h5>
     </div>
     <div class="col-md-12 mx-auto">
-        <form class="form form-horizontal mar-top" action="{{route('products.update', $element->id)}}" method="POST"
+        <form class="form form-horizontal mar-top" action="{{route('seller.products.update', $element->id)}}" method="POST"
               enctype="multipart/form-data" id="choice_form">
             @csrf
             <input type="hidden" name="added_by" value="admin">
@@ -37,6 +37,9 @@
                                     </td>
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Slug') }}</label>
+                                    </td>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{ translate('SKU') }}</label>
                                     </td>
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Price') }}</label>
@@ -95,7 +98,7 @@
                                         <label class="aiz-switch aiz-switch-success mb-0">
                                             <input type="checkbox"
                                                    onchange="change_switch(this.checked, 'todays_deal_change')"
-                                                   name="todays_deal" checked>
+                                                   name="todays_deal" >
                                             <span></span>
                                         </label>
                                     </td>
@@ -104,7 +107,16 @@
                                         <label class="aiz-switch aiz-switch-success mb-0">
                                             <input type="checkbox"
                                                    onchange="change_switch(this.checked, 'published_change')"
-                                                   name="published" checked>
+                                                   name="published" >
+                                            <span></span>
+                                        </label>
+                                    </td>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{ translate('Featured') }}</label>
+                                        <label class="aiz-switch aiz-switch-success mb-0">
+                                            <input type="checkbox"
+                                                   onchange="change_switch(this.checked, 'seller_featured_change')"
+                                                   name="seller_featured" >
                                             <span></span>
                                         </label>
                                     </td>
@@ -128,7 +140,11 @@
                                                    value="{{$product->name??null}}"
                                                    class="form-control">
 
-                                            </td>
+                                        </td>
+                                        <td>
+                                            <input type="text" name="variation[{{ $product->id }}][sku]"
+                                                value="{{ $product->sku }}" class="form-control">
+                                        </td>
                                         <td>
                                             <input type="number" style="width: 100px;" name="variation[{{ $product->id }}][price]"
                                                    value="{{$product->price??0}}" min="0" step="0.01"
@@ -200,6 +216,13 @@
                                             </label>
                                         </td>
                                         <td>
+                                            <label class="aiz-switch aiz-switch-success mb-0 ">
+                                                <input type="checkbox" name="variation[{{ $product->id }}][seller_featured]"
+                                                       class="seller_featured_change" @if($product->seller_featured) checked @endif>
+                                                <span></span>
+                                            </label>
+                                        </td>
+                                        <td>
                                             <button type="button" class="btn btn-icon btn-sm btn-danger"
                                                     onclick="delete_variant(this)"><i class="las la-trash"></i></button>
                                         </td>
@@ -252,7 +275,7 @@
             $('#sku_combination').html(null);
             $.ajax({
                 type: "GET",
-                url: '{{ route('products.make_combination') }}',
+                url: '{{ route('seller.products.make_combination') }}',
                 data: $('#choice_form').serialize(),
                 success: function (data) {
                     $('#sku_combination').html(data);

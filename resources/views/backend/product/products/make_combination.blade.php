@@ -9,15 +9,19 @@
              value="{{$element->getTranslation('name')}}" hidden>
   </div>
 </div>
+<input type="hidden" value="{{$lang}}" name="lang" class="form-control">
+<input type="hidden"  name="element_id" value="{{$element->id}}" class="form-control">
 @if(count($combinations) > 0)
-    <input type="hidden" value="{{$lang}}" name="lang" class="form-control">
-    <input type="hidden"  name="element_id" value="{{$element->id}}" class="form-control">
+
     <div style="overflow-y: scroll; ">
         <table class="table table-bordered" style="width:1800px">
             <thead>
             <tr>
                 <td class="text-center">
                     <label for="" class="control-label">{{ translate('Slug') }}</label>
+                </td>
+                <td class="text-center">
+                    <label for="" class="control-label">{{ translate('SKU') }}</label>
                 </td>
                 <td class="text-center">
                     <label for="" class="control-label">{{ translate('Price') }}</label>
@@ -93,6 +97,9 @@
                     <label for="" class="control-label">{{$combination->name}}</label>
                     <input type="hidden" name="variation[{{ $index }}][id]" value="{{$combination->id}}" class="form-control">
                     <input type="hidden" name="variation[{{ $index }}][name]" value="{{$combination->name}}" class="form-control">
+                </td>
+                <td>
+                    <input type="text" name="variation[{{ $index }}][sku]" value="{{$combination->sku}}" class="form-control">
                 </td>
                 <td>
                     <input type="number"  style="width: 100px;"  name="variation[{{ $index }}][price]" value="0" min="0" step="0.01" class="form-control price_change" required>

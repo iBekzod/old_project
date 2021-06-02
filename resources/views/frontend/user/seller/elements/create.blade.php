@@ -121,6 +121,10 @@
                             </select>
                         </div>
                     </div>
+                    <div class="d-block">
+                        <button type="button" class="mb-3 btn btn-info" onclick="update_attribute_combination()">{{ translate('Generate variations') }}</button>
+                    </div>
+
                     <div id="variation_div"></div>
                     <input type="hidden" name="collected_variations[]" id="collected_variations" >
                 </div>
@@ -389,37 +393,6 @@
         $('#selected_attribute_id').on('change', function () {
             update_category_attribute();
         });
-        $('#colors').on('change', function () {
-            update_attribute_combination()
-        });
-        // $('#selected_colors').on('change', function () {
-        //     update_attribute_combination()
-        // });
-        $('#selected_variations').on('change', function () {
-            update_attribute_combination()
-        });
-        {{--function update_color(){--}}
-        {{--    color_ids = []--}}
-        {{--    $('#colors option:selected').each(function (index, val){--}}
-        {{--        color_ids.push(val.getAttribute('data-id'))--}}
-        {{--    })--}}
-        {{--    // alert(color_ids);--}}
-        {{--    $.ajax({--}}
-        {{--        type:'GET',--}}
-        {{--        url:'{{ route('seller.elements.make_color_options') }}',--}}
-        {{--        data:{--}}
-        {{--            colors: color_ids--}}
-        {{--        },--}}
-        {{--        success:function(data){--}}
-        {{--            // alert("Selected attribute id: "+data.message);--}}
-        {{--            $('#selected_colors').html(" ")--}}
-        {{--            if(data.success){--}}
-        {{--                $('#selected_colors').append(data.data)--}}
-        {{--            }--}}
-        {{--            update_attribute_combination();--}}
-        {{--        }--}}
-        {{--    });--}}
-        {{--}--}}
         function update_attribute(){
             $.ajax({
                 type:'GET',
@@ -467,7 +440,6 @@
                         $('#selected_variations').html(data.data)
                         $('.js-example-basic-multiple').select2();
                     }
-                    update_attribute_combination();
                 }
             });
         }
