@@ -30,14 +30,21 @@
                                 <div class="form-group row" id="category">
                                     <label class="col-lg-3 col-from-label mb-2">{{$element->label}}</label>
                                     <div class="col-lg-8">
-                                    <input class="form-control" type="{{$element->type}}" name="{{($element->label)}}">
+                                    <input class="form-control" type="number" name="{{($element->label)}}">
                                     </div>
                                 </div>
                                 @elseif ($element->type=='number')
                                 <div class="form-group row" id="category">
                                     <label class="col-lg-3 col-from-label mb-2">{{$element->label}}</label>
                                     <div class="col-lg-8">
-                                    <input class="form-control" type="{{$element->type}}" name="{{($element->label)}}">
+                                    <input class="form-control" type="{{($element->type)}}" name="{{($element->label)}}">
+                                    </div>
+                                </div>
+                                @elseif ($element->type=='email')
+                                <div class="form-group row" id="category">
+                                    <label class="col-lg-3 col-from-label mb-2">{{$element->label}}</label>
+                                    <div class="col-lg-8">
+                                    <input class="form-control" type="{{($element->type)}}" name="{{($element->label)}}">
                                     </div>
                                 </div>
                                     @endif
