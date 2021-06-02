@@ -738,20 +738,18 @@ class ProductController extends Controller
         $products=Product::where('variation_id', '<>', null);
         $products=$this->filterPublishedProduct($products)->get();
         $products=$products->groupBy('variation_id');
+        $products_arr=[];
         $products=$products->each(function($variation, $variation_key) {
             $random_product_id=$variation->random()->id;
             // return [$variation_key=>$variation->firstWhere(['id'=>$random_product_id])];
             return $variation->filter(function($product) use ($random_product_id) {
-                return $product->id==$random_product_id;
-            });
-            // return $variation;
-        });
+                if($product->id==$random_product_id){
+                    return $product;
+                }
 
-        // $products = $products->filter(function ($value, $key) {
-        //     dd($value);
-        //     return $value > 2;
-        // });
-        // dd($products);
+            });
+        });
+        dd($products);
         return response()->json([
             'products' => $products
         ]);
