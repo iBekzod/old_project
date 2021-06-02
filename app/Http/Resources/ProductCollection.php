@@ -14,10 +14,14 @@ class ProductCollection extends ResourceCollection
         // dd($request);
         return [
             'data' => $this->collection->map(function($data) {
-                $product=Product::findOrFail($data->id);
-                $variation=Variation::findOrFail($product->variation_id);
-                $element=Element::findOrFail($variation->element_id);
-                $products=Product::where('variation_id', $product->variation_id)->get();
+                try {
+                    $product=Product::findOrFail($data->id);
+                    $variation=Variation::findOrFail($product->variation_id);
+                    $element=Element::findOrFail($variation->element_id);
+                    $products=Product::where('variation_id', $product->variation_id)->get();
+                } catch (\Exception $th) {
+                    return null;//($th->getMessage());
+                }
                 return [
                     'id'=>$product->id,
                     'slug'=>$product->slug,
