@@ -2,7 +2,7 @@
 
 @section('content')
 
-	<div class="col-sm-12">
+	<div class=" offset-sm-2 col-sm-8">
 
 		<div class="card">
 			<div class="card-header">
@@ -12,7 +12,7 @@
 				<form action="{{ route('seller_verification_form.update') }}" method="post">
 					@csrf
 					<div class="row">
-						<div class="col-lg-8 form-horizontal" id="form">
+						<div class=" offset-lg-1 col-lg-10 form-horizontal" id="form">
 							@foreach (json_decode(\App\BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element)
                                 @if($element->type=='select')
                                 <div class="form-group row" id="category">
@@ -27,15 +27,22 @@
                                     </div>
                                 </div>
                                 @elseif ($element->type=='text')
-                                    <label for="{{$element->label}}">{{$element->label}}</label>
-                                    <input type="{{$element->type}}" name="{{($element->label)}}">
-                                @endif
+                                <div class="form-group row" id="category">
+                                    <label class="col-lg-3 col-from-label">{{$element->label}}</label>
+                                    <div class="col-lg-8">
+                                    <input class="form-control" type="{{$element->type}}" name="{{($element->label)}}">
+
+                                    </div>
+                                </div> @endif
                             @endforeach
+
+                            <div class="form-group text-right  mr-5 mb-2">
+                                <button type="submit" class="btn btn-primary ">{{translate('Save')}}</button>
+                            </div>
 						</div>
 
-					<div class="form-group mt-md-5 text-right">
-						<button type="submit" class="btn btn-primary">{{translate('Save')}}</button>
-					</div>
+                    </div>
+
 				</form>
 			</div>
 		</div>
