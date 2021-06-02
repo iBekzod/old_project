@@ -2,17 +2,17 @@
 
 @section('content')
 
-	<div class=" offset-sm-2 col-sm-8">
+	<div class=" offset-sm-1 col-sm-10">
 
 		<div class="card">
 			<div class="card-header">
 				<h5 class="mb-0 h6">{{translate('Seller Verification Form')}}</h5>
 			</div>
 			<div class="card-body">
-				<form action="{{ route('seller_verification_form.update') }}" method="post">
+				<form action="{{ route('seller.autoidentification') }}" method="post">
 					@csrf
 					<div class="row">
-						<div class=" offset-lg-1 col-lg-10 form-horizontal" id="form">
+						<div class=" offset-lg-1 col-lg-11 form-horizontal" id="form">
 							@foreach (json_decode(\App\BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element)
                                 @if($element->type=='select')
                                 <div class="form-group row" id="category">
@@ -28,7 +28,7 @@
                                 </div>
                                 @elseif ($element->type=='text')
                                 <div class="form-group row" id="category">
-                                    <label class="col-lg-3 col-from-label">{{$element->label}}</label>
+                                    <label class="col-lg-3 col-from-label mb-2">{{$element->label}}</label>
                                     <div class="col-lg-8">
                                     <input class="form-control" type="{{$element->type}}" name="{{($element->label)}}">
 
@@ -36,8 +36,8 @@
                                 </div> @endif
                             @endforeach
 
-                            <div class="form-group text-right  mr-5 mb-2">
-                                <button type="submit" class="btn btn-primary ">{{translate('Save')}}</button>
+                            <div class="form-group text-right  mr-4 mt-3 ">
+                                <button type="submit" class="btn btn-primary py-2">{{translate('Save')}}</button>
                             </div>
 						</div>
 
