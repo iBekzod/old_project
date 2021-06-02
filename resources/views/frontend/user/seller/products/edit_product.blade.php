@@ -39,6 +39,9 @@
                                         <label for="" class="control-label">{{ translate('Slug') }}</label>
                                     </td>
                                     <td class="text-center">
+                                        <label for="" class="control-label">{{ translate('SKU') }}</label>
+                                    </td>
+                                    <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Price') }}</label>
                                         <input style="width: 100px;" type="number" onkeyup="change_input(this.value, 'price_change')"
                                                name="price" value="0" min="0" step="0.01" class="form-control">
@@ -128,7 +131,11 @@
                                                    value="{{$product->name??null}}"
                                                    class="form-control">
 
-                                            </td>
+                                        </td>
+                                        <td>
+                                            <input type="text" name="variation[{{ $product->id }}][sku]"
+                                                value="{{ $product->sku }}" class="form-control">
+                                        </td>
                                         <td>
                                             <input type="number" style="width: 100px;" name="variation[{{ $product->id }}][price]"
                                                    value="{{$product->price??0}}" min="0" step="0.01"

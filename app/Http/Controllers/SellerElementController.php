@@ -539,7 +539,7 @@ class SellerElementController extends Controller
                     $variation->name=$element->name." ".$variant['name'];
                     $variation->thumbnail_img = $variant['thumbnail_img'];
                     $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
-                    $variation->sku=$variant['artikul'];
+                    $variation->partnum=$variant['artikul'];
                     $variation->num_of_sale=0;
                     $variation->qty=0;
                     $variation->rating=0;
