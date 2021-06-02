@@ -105,7 +105,7 @@ class SellerElementController extends Controller
                             <div class="form-group row">
                                 <label class="col-md-3 col-form-label"  for="signinSrEmail">' . $attribute->getTranslation('name', $request->lang) . '</label>
                                 <div class="col-md-8">
-                                    <select class="form-control js-example-basic-multiple" onchange="update_attribute_combination()" id="choice_option_' . $attribute->id . '" multiple name="choice_options[' . $attribute->id . '][]">';
+                                    <select class="form-control js-example-basic-multiple" id="choice_option_' . $attribute->id . '" multiple name="choice_options[' . $attribute->id . '][]">';
 
                         $options = null;
                         foreach ($attribute->characteristics as $value) {

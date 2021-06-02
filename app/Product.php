@@ -123,14 +123,10 @@ class Product extends Model
 
     public function save(array $options = [])
     {
-
        // before save code
-        $result = parent::save($options); // returns boolean
-        // after save code
-        $variation=$this->variation;
-        $products = Product::where('name', $variation->name)->where('variation_id', $variation->id);
-        // dd($products);
+        $result = parent::save($options);
         try{
+            $variation=$this->variation;
             $products = Product::where('variation_id', $variation->id);
             if(count($products->get())>0){
                 $min_price=$products->min("price");
@@ -144,7 +140,7 @@ class Product extends Model
                 $variation->save();
             }
         }catch(Exception $e){
-            // dd($e->getMessage());
+            dd($e->getMessage());
         }
         // dd($variation);
        return $result; // do not ignore it eloquent calculates this value and returns this, not just to ignore

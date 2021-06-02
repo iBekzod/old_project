@@ -634,7 +634,6 @@ class ElementController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         $element = Element::findOrFail($id);
         $element->category_id = $request->category_id;
         $element->brand_id = $request->brand_id;
@@ -866,20 +865,25 @@ class ElementController extends Controller
     // }
 
     public function elementProducts(Request $request){
-        $element = Element::findOrFail($request->id);
-        $combinations= Variation::where('element_id', $request->id);
-        $variation_ids=$combinations->pluck('id');
-        // dd($variation_ids);
-        if(count($variation_ids)>0){
-            $lang = default_language();
-            $currencies = Currency::where('status', true)->get();
-            if(Product::where('user_id', auth()->id())->whereIn('variation_id', $variation_ids)->exists()){
-                $products=Product::where('user_id', auth()->id())->whereIn('variation_id', $variation_ids)->get();
-                return view('backend.product.products.edit_product', compact('element', 'products', 'currencies', 'lang'));
+        try {
+            $element = Element::findOrFail($request->id);
+            $combinations= Variation::where('element_id', $request->id);
+            $variation_ids=$combinations->pluck('id');
+            // dd($variation_ids);
+            if(count($variation_ids)>0){
+                $lang = default_language();
+                $currencies = Currency::where('status', true)->get();
+                if(Product::where('user_id', auth()->id())->whereIn('variation_id', $variation_ids)->exists()){
+                    $products=Product::where('user_id', auth()->id())->whereIn('variation_id', $variation_ids)->get();
+                    return view('backend.product.products.edit_product', compact('element', 'products', 'currencies', 'lang'));
+                }
+                $combinations=$combinations->get();
+                return view('backend.product.products.create_product', compact('element', 'combinations', 'currencies', 'lang'));
             }
-            $combinations=$combinations->get();
-            return view('backend.product.products.create_product', compact('element', 'combinations', 'currencies', 'lang'));
+        } catch (\Exception $e) {
+            dd($e->getMessage());
         }
+
         return back();
     }
 }

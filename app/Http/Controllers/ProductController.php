@@ -2,20 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Attribute;
-use App\Brand;
-use App\Characteristic;
-use App\Color;
 use App\Currency;
 use App\Element;
 use App\Http\HelperClasses\Combinations;
 use App\Variation;
-use App\VariationTranslation;
 use Illuminate\Http\Request;
 use App\Product;
 use App\ProductTranslation;
-use App\ProductStock;
-use App\Category;
 use App\Language;
 use Auth;
 use Session;
@@ -401,7 +394,6 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         if (Auth::user()->user_type == 'seller') {
             $user_id = Auth::user()->id;
         } else {
@@ -413,11 +405,11 @@ class ProductController extends Controller
             foreach ($request->variation as $variant) {
                 // dd($request);
                 if ($product=Product::findOrFail($variant["id"])){
-                    $variation = $product->variation;
-                    //Variation::findOrFail($variant["variation_id"]) &&
+                    //  $product->variation;
+                     $variation = Variation::findOrFail($variant["variation_id"]);
                     // dd($variation);
                     // $product_name = $variation->name . " " . Auth::user()->name??null . " ".$variant["price"];
-                    $product->element_id=$element->id;
+                    // dd($product);
                     $product_name = $variation->name . " ".$variant["price"];
                     $product->name = $product_name;
                     $product->added_by = Auth::user()->user_type;
@@ -445,6 +437,7 @@ class ProductController extends Controller
                     $product->tax_type = $variant["tax_type"];
                     $product->barcode = rand(10000, 999999);
                     $product->variation_id = $variation->id;
+                    $product->element_id=$element->id;
                     $product->save();
                     // try{
                     //     if ($product->save()) {
