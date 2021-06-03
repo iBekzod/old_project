@@ -153,20 +153,22 @@ class ProductDetailCollection extends ResourceCollection
         $collected_characteristics=[];
         if ($attributes) {
             foreach($attributes as $attribute_id=>$value_ids){
-                $characteristics=Characteristic::whereIn('id',$value_ids)->get();
-                $attribute=Attribute::findOrFail($attribute_id);
-                $items=array();
-                foreach($characteristics as $characteristic){
-                    $items[]=[
-                        'id'=>$characteristic->id,
-                        'name'=>$characteristic->getTranslation('name')
+                if( is_array($value_ids) && count($value_ids)>0){
+                    $characteristics=Characteristic::whereIn('id',$value_ids)->get();
+                    $attribute=Attribute::findOrFail($attribute_id);
+                    $items=array();
+                    foreach($characteristics as $characteristic){
+                        $items[]=[
+                            'id'=>$characteristic->id,
+                            'name'=>$characteristic->getTranslation('name')
+                        ];
+                    }
+                    $collected_characteristics[]=[
+                    'id'=>$attribute->id,
+                    'attribute'=>$attribute->getTranslation('name'),
+                    'values'=>$items
                     ];
                 }
-                $collected_characteristics[]=[
-                'id'=>$attribute->id,
-                'attribute'=>$attribute->getTranslation('name'),
-                'values'=>$items
-                ];
             }
         }
         return $collected_characteristics;
