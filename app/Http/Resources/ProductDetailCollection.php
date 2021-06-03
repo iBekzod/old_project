@@ -131,12 +131,13 @@ class ProductDetailCollection extends ResourceCollection
                 $collected_characteristics['id']=$attribute->id;
                 $collected_characteristics['attribute']=$attribute->getTranslation('name');
                 $collected_characteristics['values']=$items;
-
-                $result[]=[
-                    'id'=>$branch->id,
-                    'title'=>$branch->getTranslation('name'),
-                    'options'=>$collected_characteristics
-                ];
+                if( is_array($items) && count($items)>0){
+                    $result[]=[
+                        'id'=>$branch->id,
+                        'title'=>$branch->getTranslation('name'),
+                        'options'=>$collected_characteristics
+                    ];
+                }
             }
             foreach($result as $key => $value){
                 $newarray[$value['id']]['id'] = $value['id'];
@@ -163,11 +164,13 @@ class ProductDetailCollection extends ResourceCollection
                             'name'=>$characteristic->getTranslation('name')
                         ];
                     }
-                    $collected_characteristics[]=[
-                    'id'=>$attribute->id,
-                    'attribute'=>$attribute->getTranslation('name'),
-                    'values'=>$items
-                    ];
+                    if( is_array($items) && count($items)>0){
+                        $collected_characteristics[]=[
+                            'id'=>$attribute->id,
+                            'attribute'=>$attribute->getTranslation('name'),
+                            'values'=>$items
+                        ];
+                    }
                 }
             }
         }
