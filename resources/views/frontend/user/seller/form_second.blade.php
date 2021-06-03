@@ -14,7 +14,7 @@
 					<div class="row">
 						<div class=" offset-lg-1 col-lg-11 form-horizontal" id="form">
 							@foreach (json_decode(\App\BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element)
-                                @if($element->type=='select')
+                                {{-- @if($element->type=='select')
                                 <div class="form-group row" id="category">
                                     <label class="col-lg-3 col-from-label">{{translate('Category')}}</label>
                                     <div class="col-lg-8">
@@ -25,15 +25,29 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                </div>
-                                @elseif ($element->type=='text')
+                                </div> --}}
+                                @if ($element->type=='text')
                                 <div class="form-group row" id="category">
                                     <label class="col-lg-3 col-from-label mb-2">{{$element->label}}</label>
                                     <div class="col-lg-8">
-                                    <input class="form-control" type="{{$element->type}}" name="{{($element->label)}}">
-
+                                    <input class="form-control" type="number" name="{{($element->label)}}">
                                     </div>
-                                </div> @endif
+                                </div>
+                                @elseif ($element->type=='number')
+                                <div class="form-group row" id="category">
+                                    <label class="col-lg-3 col-from-label mb-2">{{$element->label}}</label>
+                                    <div class="col-lg-8">
+                                    <input class="form-control" type="{{($element->type)}}" name="{{($element->label)}}">
+                                    </div>
+                                </div>
+                                @elseif ($element->type=='email')
+                                <div class="form-group row" id="category">
+                                    <label class="col-lg-3 col-from-label mb-2">{{$element->label}}</label>
+                                    <div class="col-lg-8">
+                                    <input class="form-control" type="{{($element->type)}}" name="{{($element->label)}}">
+                                    </div>
+                                </div>
+                                    @endif
                             @endforeach
 
                             <div class="form-group text-right  mr-4 mt-3 ">
