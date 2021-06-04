@@ -41,6 +41,13 @@
                                     <input class="form-control" type="number" name="{{($element->label)}}">
                                     </div>
                                 </div>
+                                @elseif($element->type=='email')
+                                <div class="form-group row" id="category">
+                                    <label class="col-lg-3 col-from-label mb-2">email</label>
+                                    <div class="col-lg-8">
+                                    <input class="form-control" type="email" name="{{($element->label)}}">
+                                    </div>
+                                </div>
                                 @endif
                                 {{-- {{$element->label}} --}}
                                 {{-- {{($element->type)}} --}}
