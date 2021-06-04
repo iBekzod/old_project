@@ -20,7 +20,6 @@ class ProductDetailCollection extends ResourceCollection
     {
         $product=Product::where('slug', $request->id)->first();
         $variation=Variation::findOrFail($product->variation_id);
-        $products=Product::where('variation_id', $variation->id)->where('user_id', $product->user_id)->get();
         $element=Element::findOrFail($variation->element_id);
         try{
             $data = [
@@ -69,7 +68,6 @@ class ProductDetailCollection extends ResourceCollection
             'rating_count' => (integer) Review::where(['product_id' => $product->id])->count(),
             'description' => $product->getTranslation('description'),
             'reviews' => new ReviewCollection(Review::where('product_id', $product->id)->latest()->get()),
-            // 'variations' => $products->groupBy('user_id', true)->get(),
             'price_lower' => (double) convertCurrency($products->min('price'), $product->currency_id),
             'price_higher' => (double) convertCurrency($products->max('price'), $product->currency_id),
             'choice_options' => $this->convertToChoiceOptions(json_decode($element->variations)),

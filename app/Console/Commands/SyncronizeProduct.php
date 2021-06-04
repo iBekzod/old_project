@@ -7,14 +7,14 @@ use App\Variation;
 use Exception;
 use Illuminate\Console\Command;
 
-class TestCommand extends Command
+class SyncronizeProduct extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'run:query';
+    protected $signature = 'syncronize:product';
 
     /**
      * The console command description.
