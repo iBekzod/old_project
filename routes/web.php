@@ -210,19 +210,17 @@ Route::get('/customer_products/destroy/{id}', 'CustomerProductController@destroy
 Route::group(['prefix' =>'seller', 'middleware' => ['seller', 'verified', 'user']], function(){
 
     Route::get('/products/create','ProductController@create')->name('products.create');
-	Route::get('/products/seller/edit/{id}','ProductController@seller_product_edit')->name('products.seller.edit');
+	Route::get('/products/{id}/edit','ProductController@seller_product_edit')->name('seller.products.edit');
 
+    Route::get('elements/all','SellerElementController@seller_elements')->name('seller.elements.all');
 	Route::get('elements/variation/remove','SellerElementController@remove_variation')->name('seller.elements.variation.remove');
-    Route::get('elements/admin','SellerElementController@admin_elements')->name('seller.elements.admin');
-	Route::get('elements/seller','SellerElementController@seller_elements')->name('seller.elements.seller');
-	Route::get('elements/all','SellerElementController@all_elements')->name('seller.elements.all');
+	// Route::get('elements/seller','SellerElementController@seller_elements')->name('seller.elements.seller');
 	Route::get('elements/manage','SellerElementController@manageElements')->name('seller.elements.manage');
 	Route::get('elements/manage/{id}/accept','SellerElementController@changeOnModerationAccept')->name('seller.elements.manage.change.accept');
 	Route::get('elements/manage/{id}/refuse','SellerElementController@changeOnModerationRefuse')->name('seller.elements.manage.change.refuse');
     Route::get('elements/create','SellerElementController@create')->name('seller.elements.create');
     Route::post('elements/store','SellerElementController@store')->name('seller.elements.store');
-    Route::get('elements/admin/{id}/edit','SellerElementController@admin_element_edit')->name('seller.elements.admin.edit');
-	Route::get('elements/seller/{id}/edit','SellerElementController@seller_element_edit')->name('seller.elements.seller.edit');
+	Route::get('elements/{id}/edit','SellerElementController@seller_element_edit')->name('seller.elements.edit');
 	Route::post('elements/todays_deal', 'SellerElementController@updateTodaysDeal')->name('seller.elements.todays_deal');
 	Route::post('elements/featured', 'SellerElementController@updateFeatured')->name('seller.elements.featured');
     Route::get('elements/make_selected_attribute_options', 'SellerElementController@make_selected_attribute_options')->name('seller.elements.make_selected_attribute_options');
@@ -230,7 +228,7 @@ Route::group(['prefix' =>'seller', 'middleware' => ['seller', 'verified', 'user'
     Route::get('elements/make_color_options', 'SellerElementController@make_color_options')->name('seller.elements.make_color_options');
     Route::get('elements/make_attribute_variations', 'SellerElementController@make_attribute_variations')->name('seller.elements.make_attribute_variations');
     Route::get('elements/make_all_combination', 'SellerElementController@make_all_combination')->name('seller.elements.make_all_combination');
-    Route::get('element/products', 'SellerElementController@elementProducts')->name('seller.element.products.edit');
+    Route::get('element/products', 'SellerElementController@elementProducts')->name('seller.elements.products.edit');
     Route::post('/flash_deals/product_discount', 'FlashDealController@product_discount')->name('seller.flash_deals.product_discount');
     Route::post('/flash_deals/product_discount_edit', 'FlashDealController@product_discount_edit')->name('seller.flash_deals.product_discount_edit');
     Route::patch('/flash_deals/update/{id}', 'FlashDealController@update')->name('seller.flash_deals.update');
@@ -242,12 +240,12 @@ Route::group(['prefix' =>'seller', 'middleware' => ['seller', 'verified', 'user'
     Route::post('/marketing/update/status', 'MarketingController@updateStatus')->name('marketing.update_status');
     Route::post('/marketing/update_featured', 'MarketingController@updateFeatured')->name('marketing.update_featured');
 	Route::get('/products', 'HomeController@seller_product_list')->name('seller.products');
-	Route::get('/elements', 'HomeController@seller_product_list')->name('seller.elements');
+	// Route::get('/elements', 'HomeController@seller_product_list')->name('seller.elements');
 	Route::get('/product/upload', 'HomeController@show_product_upload_form')->name('seller.products.upload');
 	Route::get('/product/clone', 'HomeController@show_product_clone_form')->name('seller.products.clone');
-	Route::post('/product/clone', 'HomeController@show_product_clone_form')->name('seller.products.clone');
+	// Route::post('/product/clone', 'HomeController@show_product_clone_form')->name('seller.products.clone');
 	// Route::post('/product/clone-from-all', 'HomeController@show_product_clone_form')->name('seller.products.clone');
-	Route::get('/product/{id}/edit', 'HomeController@show_product_edit_form')->name('seller.products.edit');
+	// Route::get('/product/{id}/edit', 'HomeController@show_product_edit_form')->name('seller.products.edit');
 	// Route::get('/product/{id}/characteristics', 'HomeController@characteristics')->name('seller.products.characteristics');
 	// Route::post('/product/{id}/characteristics', 'HomeController@characteristics')->name('seller.products.characteristics');
 	Route::resource('payments','PaymentController');
@@ -269,10 +267,11 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('/products/update/{id}','SellerProductController@update')->name('seller.products.update');
 	Route::get('/products/destroy/{id}', 'SellerProductController@destroy')->name('seller.products.destroy');
     Route::get('/products/make_combination', 'SellerProductController@make_combination')->name('seller.products.make_combination');
-	Route::post('/products/seller/featured', 'SellerProductController@updateSellerFeatured')->name('seller.products.seller.featured');
 	Route::post('/products/published', 'SellerProductController@updatePublished')->name('seller.products.published');
 	Route::post('/products/accepted', 'SellerProductController@updateAccepted')->name('seller.products.accepted');
 	Route::post('/products/publisheds', 'SellerProductController@updatePublisheds')->name('seller.products.publisheds');
+
+	Route::post('/products/seller/featured', 'SellerProductController@updateSellerFeatured')->name('seller.products.seller.featured');
 
     Route::post('/elements/store/','SellerElementController@store')->name('seller.elements.store');
 	Route::post('/elements/update/{id}','SellerElementController@update')->name('seller.elements.update');

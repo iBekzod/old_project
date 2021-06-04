@@ -20,7 +20,7 @@ class ProductDetailCollection extends ResourceCollection
     {
         $product=Product::where('slug', $request->id)->first();
         $variation=Variation::findOrFail($product->variation_id);
-        $products=Product::where('variation_id', $variation->id)->where('user_id', $product->user_id)->get();//;
+        $products=Product::where('variation_id', $variation->id)->where('user_id', $product->user_id)->get();
         $element=Element::findOrFail($variation->element_id);
         try{
             $data = [
@@ -73,6 +73,7 @@ class ProductDetailCollection extends ResourceCollection
             'price_lower' => (double) convertCurrency($products->min('price'), $product->currency_id),
             'price_higher' => (double) convertCurrency($products->max('price'), $product->currency_id),
             'choice_options' => $this->convertToChoiceOptions(json_decode($element->variations)),
+            'short_characteristics' => $this->convertToShortCharacteristics(json_decode($element->characteristics)),
             'colors' => new ProductColorCollection(json_decode($element->variation_colors)),
             'shipping_type' => $product->delivery_type,
             // 'shipping_cost' => $product->delivery,
@@ -131,12 +132,13 @@ class ProductDetailCollection extends ResourceCollection
                 $collected_characteristics['id']=$attribute->id;
                 $collected_characteristics['attribute']=$attribute->getTranslation('name');
                 $collected_characteristics['values']=$items;
-
-                $result[]=[
-                    'id'=>$branch->id,
-                    'title'=>$branch->getTranslation('name'),
-                    'options'=>$collected_characteristics
-                ];
+                if( is_array($items) && count($items)>0){
+                    $result[]=[
+                        'id'=>$branch->id,
+                        'title'=>$branch->getTranslation('name'),
+                        'options'=>$collected_characteristics
+                    ];
+                }
             }
             foreach($result as $key => $value){
                 $newarray[$value['id']]['id'] = $value['id'];
@@ -149,24 +151,56 @@ class ProductDetailCollection extends ResourceCollection
         return $result;
     }
 
+    protected function convertToShortCharacteristics($attributes, $number=10){
+        $collected_characteristics=[];
+        if ($attributes) {
+            foreach($attributes as $attribute_id=>$value_ids){
+                if( is_array($value_ids) && count($value_ids)>0){
+                    $characteristics=Characteristic::whereIn('id',$value_ids)->get();
+                    $attribute=Attribute::findOrFail($attribute_id);
+                    $items=array();
+                    foreach($characteristics as $characteristic){
+                        $items[]=[
+                            'id'=>$characteristic->id,
+                            'name'=>$characteristic->getTranslation('name')
+                        ];
+                    }
+                    if( is_array($items) && count($items)>1 && $number>0){
+                        $collected_characteristics[]=[
+                            'id'=>$attribute->id,
+                            'attribute'=>$attribute->getTranslation('name'),
+                            'values'=>$items
+                        ];
+                        $number--;
+                    }
+                }
+            }
+        }
+        return $collected_characteristics;
+    }
+
     protected function convertToChoiceOptions($attributes){
         $collected_characteristics=[];
         if ($attributes) {
             foreach($attributes as $attribute_id=>$value_ids){
-                $characteristics=Characteristic::whereIn('id',$value_ids)->get();
-                $attribute=Attribute::findOrFail($attribute_id);
-                $items=array();
-                foreach($characteristics as $characteristic){
-                    $items[]=[
-                        'id'=>$characteristic->id,
-                        'name'=>$characteristic->getTranslation('name')
-                    ];
+                if( is_array($value_ids) && count($value_ids)>0){
+                    $characteristics=Characteristic::whereIn('id',$value_ids)->get();
+                    $attribute=Attribute::findOrFail($attribute_id);
+                    $items=array();
+                    foreach($characteristics as $characteristic){
+                        $items[]=[
+                            'id'=>$characteristic->id,
+                            'name'=>$characteristic->getTranslation('name')
+                        ];
+                    }
+                    if( is_array($items) && count($items)>0){
+                        $collected_characteristics[]=[
+                            'id'=>$attribute->id,
+                            'attribute'=>$attribute->getTranslation('name'),
+                            'values'=>$items
+                        ];
+                    }
                 }
-                $collected_characteristics[]=[
-                'id'=>$attribute->id,
-                'attribute'=>$attribute->getTranslation('name'),
-                'values'=>$items
-                ];
             }
         }
         return $collected_characteristics;

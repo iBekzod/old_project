@@ -11,13 +11,11 @@
                             <div class="col-md-6">
                                 <h1 class="h3">{{ translate('All elements') }}</h1>
                             </div>
-                            @if ($type != 'Seller')
-                                <div class="col-md-6 text-md-right">
-                                    <a href="{{ route('seller.elements.create') }}" class="btn btn-circle btn-info">
-                                        <span>{{ translate('Add New Element') }}</span>
-                                    </a>
-                                </div>
-                            @endif
+                            <div class="col-md-6 text-md-right">
+                                <a href="{{ route('seller.elements.create') }}" class="btn btn-circle btn-info">
+                                    <span>{{ translate('Add New Element') }}</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                     <br>
@@ -147,24 +145,11 @@
                                             </td>
                                             <td class="text-right">
 
-                                                @if ($type == 'Seller')
-                                                    <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                                        href="{{ route('seller.elements.products.edit', ['id' => $element->id, 'lang' => env('DEFAULT_LANGUAGE')]) }}"
-                                                        title="{{ translate('Edit') }}">
-                                                        <i class="las la-edit"></i>
-                                                    </a>
-                                                @else
-                                                    <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                                        href="{{ route('seller.elements.admin.edit', ['id' => $element->id, 'lang' => env('DEFAULT_LANGUAGE')]) }}"
-                                                        title="{{ translate('Edit') }}">
-                                                        <i class="las la-edit"></i>
-                                                    </a>
-                                                @endif
-                                                {{-- <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
-                                   href="{{route('elements.duplicate', ['id'=>$element->id, 'type'=>$type]  )}}"
-                                   title="{{ translate('Duplicate') }}">
-                                    <i class="las la-copy"></i>
-                                </a> --}}
+                                                <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
+                                                    href="{{ route('seller.elements.edit', ['id' => $element->id, 'lang' => default_language()]) }}"
+                                                    title="{{ translate('Edit') }}">
+                                                    <i class="las la-edit"></i>
+                                                </a>
                                                 <a href="#"
                                                     class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
                                                     data-href="{{ route('seller.elements.destroy', $element->id) }}"
@@ -172,7 +157,7 @@
                                                     <i class="las la-trash"></i>
                                                 </a>
 
-                                                <a href="{{ route('seller.element.products.edit', ['id' => $element->id]) }}"
+                                                <a href="{{ route('seller.elements.products.edit', ['id' => $element->id]) }}"
                                                     class="btn btn-soft-primary btn-icon btn-circle btn-sm"
                                                     title="{{ translate('Products') }}">
                                                     <i class="las la-clipboard-list"></i>

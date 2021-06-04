@@ -591,13 +591,8 @@ class SellerElementController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
-     */
-    public function admin_element_edit(Request $request, $id)
+
+    public function seller_element_edit(Request $request, $id)
     {
         $element = Element::findOrFail($id);
         // ($element->category) ? $element_attributes = $element->category->attributes->groupBy('branch_id') : $element_attributes = [];
@@ -611,12 +606,8 @@ class SellerElementController extends Controller
         $brands = Brand::all();
         $colors = Color::all();
         // dd( $element->combinations );
+        //resources\views\frontend\user\seller\elements\edit.blade.php
         return view('frontend.user.seller.elements.edit', compact('element', 'colors','variations', 'variation_colors', 'variation_attributes', 'categories', 'tags', 'lang', 'characteristics', 'brands'));
-    }
-
-    public function seller_element_edit(Request $request, $id)
-    {
-        $this->admin_element_edit($request, $id);
     }
 
     /**
@@ -791,7 +782,7 @@ class SellerElementController extends Controller
             if (Auth::user()->user_type == 'admin') {
                 return redirect()->route('seller.elements.admin');
             } else {
-                return redirect()->route('seller.seller.elements');
+                return redirect()->route('seller.elements');
             }
         } else {
             flash(translate('Something went wrong'))->error();

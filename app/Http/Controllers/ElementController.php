@@ -179,19 +179,22 @@ class ElementController extends Controller
             if ($request->method() == 'GET'){
                 $data=null;
                 $variations=[];
+                $ids=[];
                 if ($request->has('choice_groups')){
                     foreach ($request->choice_groups as $value_ids){
                         $selected_attributes = Characteristic::whereIn('id', $value_ids)->pluck('name')->toArray();
                         $variations[]=$selected_attributes;
+                        $ids[]=Characteristic::whereIn('id', $value_ids)->pluck('id')->toArray();
                     }
                 }
                 if ($request->has('color_ids')){
                     $color_ids=$request->color_ids;
                     $selected_colors = Color::whereIn('id', $color_ids)->pluck('name')->toArray();
                     $variations[]=$selected_colors;
+                    $ids[]=Color::whereIn('id', $color_ids)->pluck('id')->toArray();;
                 }
                 $combinations = Combinations::makeCombinations($variations);
-
+                $combination_ids = Combinations::makeCombinations($ids);
                 $content=null;
                 $content=$content.'
                 <div style="overflow-y: scroll; ">
@@ -223,6 +226,7 @@ class ElementController extends Controller
                         <tr class="variant">
                             <td>
                                 <label for="" class="control-label">'.($index+1).'</label>
+                                <input type="hidden" name="combination['.$index.'][color_id]" value="'.$combination_ids[$index].'">
                             </td>
                             <td>
                                 <div class="form-group">
@@ -257,7 +261,7 @@ class ElementController extends Controller
                 </div>
                 ';
                 $data=$content;
-                return response()->json(['success' => true, 'message' => $combinations, 'data' => $data]);
+                return response()->json(['success' => true, 'message' => $combination_ids, 'data' => $data]);
             }
        } catch (\Exception $exception) {
            return response()->json(['success' => false, 'message' => $exception->getMessage()]);

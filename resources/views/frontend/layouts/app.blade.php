@@ -84,7 +84,29 @@
             --soft-primary: {{ hex2rgba(get_setting('base_color','#e62d04'),.15) }};
         }
     </style>
-
+<style>
+        .select2-selection__rendered li{
+            background-color: transparent !important;
+            border: none;
+            border-right: 1px solid #aaa;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+            color: gray;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            padding: 0 4px;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        .select2-selection__rendered li button:hover{
+            background: rgba(255, 0, 0, 0.5) !important;
+        }
+        .select2-selection__rendered li:hover {
+            background: rgba(255, 0, 0, 0.3) !important;
+        }
+    </style>
 @if (\App\BusinessSetting::where('type', 'google_analytics')->first()->value == 1)
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ env('TRACKING_ID') }}"></script>
@@ -587,7 +609,13 @@
     </script>
 
     @yield('script')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('.js-example-basic-multiple').select2();
 
+    });
+    </script>
     @php
         echo get_setting('footer_script');
     @endphp

@@ -28,6 +28,8 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::get('/brands/edit/{id}', 'BrandController@edit')->name('brands.edit');
 	Route::get('/brands/destroy/{id}', 'BrandController@destroy')->name('brands.destroy');
 
+	Route::post('/products/seller/featured', 'SellerProductController@updateSellerFeatured')->name('products.seller.featured');
+
     Route::post('/products/store/','ProductController@store')->name('products.store');
 	Route::post('/products/update/{id}','ProductController@update')->name('products.update');
 	Route::get('/products/destroy/{id}', 'ProductController@destroy')->name('products.destroy');
