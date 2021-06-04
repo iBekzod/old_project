@@ -252,7 +252,7 @@ class ProductDetailCollection extends ResourceCollection
                 'exchange_rate'=>defaultExchangeRate(),
                 'discount' => (integer) $product->discount,
                 'discount_type' => $product->discount_type,
-
+                'delivery_type' => $product->delivery_type,
                 'name' => $product->user->name,
                 'email' => $product->user->email,
                 'avatar' => $product->user->avatar,
