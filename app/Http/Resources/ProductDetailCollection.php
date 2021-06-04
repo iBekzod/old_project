@@ -76,7 +76,7 @@ class ProductDetailCollection extends ResourceCollection
             'short_characteristics' => $this->convertToShortCharacteristics(json_decode($element->characteristics)),
             'colors' => new ProductColorCollection(json_decode($element->variation_colors)),
             'shipping_type' => $product->delivery_type,
-            // 'shipping_cost' => $product->delivery,
+            'shipping_cost' => 0,
             'characteristics' => $this->convertToCharacteristics(json_decode($element->characteristics, true)),
             'variant' => $this->makeVariation($product)??[],
             'variations' => $this->makeVariations($product)??[],
