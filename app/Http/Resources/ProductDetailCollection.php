@@ -36,6 +36,7 @@ class ProductDetailCollection extends ResourceCollection
                 'shop_logo' => $product->added_by == 'admin' ? '' : uploaded_asset($product->user->shop->logo),
                 'shop_link' => $product->added_by == 'admin' ? '' : route('shops.info', $product->user->shop->id)
             ],
+            'selers'=>$this->getSellers($product),
             'brand' => [
                 'name' => $element != null ? $element->name : null,
                 'logo' => $element != null ? api_asset($element->logo) : null,
@@ -233,5 +234,35 @@ class ProductDetailCollection extends ResourceCollection
             'attributes'=>$variation->characteristics??null,
             'color'=>$variation->color_id??null
         ];
+    }
+
+
+    protected function getSellers($item){
+        $products=Product::where('variation_id', $item->variation_id)->get();
+        $sellers=array();
+        foreach($products as $product){
+            // if($item->id==$product->id){
+            //     continue;
+            // }
+            $sellers[]=[
+                'slug' => $product->slug,
+                'base_price' => (double) homeBasePrice($product->id),
+                'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
+                'currency_code'=>defaultCurrency(),
+                'exchange_rate'=>defaultExchangeRate(),
+                'discount' => (integer) $product->discount,
+                'discount_type' => $product->discount_type,
+
+                'name' => $product->user->name,
+                'email' => $product->user->email,
+                'avatar' => $product->user->avatar,
+                'avatar_original' => api_asset($product->user->avatar_original),
+                'shop_name' => $product->added_by == 'admin' ? '' : $product->user->shop->name,
+                'shop_logo' => $product->added_by == 'admin' ? '' : uploaded_asset($product->user->shop->logo),
+                'shop_link' => $product->added_by == 'admin' ? '' : route('shops.info', $product->user->shop->id)
+            ];
+        }
+        return $sellers;
+
     }
 }
