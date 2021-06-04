@@ -40,7 +40,6 @@ class VariationSycronizer extends Command
      */
     public function handle()
     {
-
         $items=Product::where('variation_id', '<>', null)->get();
         foreach($items as $product){
             if ($variation = Variation::findOrFail($product->variation_id)) {
@@ -58,42 +57,6 @@ class VariationSycronizer extends Command
                 }
             }
         }
-
-        // foreach($items as $variation_id=>$products){
-        //     print_r($variation_id);
-        //     // break;
-        //     if($variation=Variation::findOrFail($variation_id)){
-        //         // print_r($variation);
-        //         $min_price=$products->min("price");
-        //         $variation->lowest_price_id=json_encode($products->where('price', $min_price)->pluck('id'));
-        //         $variation->qty=$products->sum('qty');
-        //         $variation->num_of_sale=$products->sum('num_of_sale');
-        //         $variation->prices=$products->pluck('price');
-        //         $variation->rating=(double)$products->sum('rating')/$products->count();
-        //         $variation->save();
-        //         // print_r($variation);
-        //     }
-        // }
-
-        // $items=Product::where('variation_id', '<>', null)->get()->groupBy('variation_id');
-
-
-        // foreach($items as $variation_id=>$products){
-        //     print_r($variation_id);
-        //     // break;
-        //     if($variation=Variation::findOrFail($variation_id)){
-        //         // print_r($variation);
-        //         $min_price=$products->min("price");
-        //         $variation->lowest_price_id=json_encode($products->where('price', $min_price)->pluck('id'));
-        //         $variation->qty=$products->sum('qty');
-        //         $variation->num_of_sale=$products->sum('num_of_sale');
-        //         $variation->prices=$products->pluck('price');
-        //         $variation->rating=(double)$products->sum('rating')/$products->count();
-        //         $variation->save();
-        //         // print_r($variation);
-        //     }
-        // }
-
         $this->info('Successfully generated translations');
     }
 }

@@ -7,7 +7,7 @@ use App\Variation;
 use Exception;
 use Illuminate\Console\Command;
 
-class SyncronizeProduct extends Command
+class ProductSyncronizer extends Command
 {
     /**
      * The name and signature of the console command.
@@ -21,7 +21,7 @@ class SyncronizeProduct extends Command
      *
      * @var string
      */
-    protected $description = 'Run query';
+    protected $description = 'Syncronize product elements';
 
     /**
      * Create a new command instance.
