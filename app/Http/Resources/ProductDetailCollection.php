@@ -78,8 +78,8 @@ class ProductDetailCollection extends ResourceCollection
             'shipping_type' => $product->delivery_type,
             // 'shipping_cost' => $product->delivery,
             'characteristics' => $this->convertToCharacteristics(json_decode($element->characteristics, true)),
-            'variant' => $product??[],
-            'variations' => $products??[],
+            'variant' => $this->makeVariation($product)??[],
+            'variations' => $this->makeVariations($product)??[],
             'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??null,
             'category'=>[
                 'name' => $element->category->name,
@@ -146,7 +146,6 @@ class ProductDetailCollection extends ResourceCollection
                 $newarray[$value['id']]['options'][$key] = $value['options'];
             }
             return $newarray;
-            //  var_dump($newarray);
         }
         return $result;
     }
@@ -212,5 +211,28 @@ class ProductDetailCollection extends ResourceCollection
             array_push($result, api_asset($item));
         }
         return $result;
+    }
+
+    protected function makeVariations($product){
+        $products=Product::where('element_id', $product->element_id)->where('user_id', $product->user_id)->get();
+        $variations=array();
+        foreach($products as $product){
+            $variation=$product->variation;
+            $variations[]=[
+                'slug'=>$product->slug??null,
+                'attributes'=>$variation->characteristics??null,
+                'color'=>$variation->color_id??null
+            ];
+        }
+        return $variations;
+    }
+
+    protected function makeVariation($product){
+        $variation=$product->variation;
+        return [
+            'slug'=>$product->slug??null,
+            'attributes'=>$variation->characteristics??null,
+            'color'=>$variation->color_id??null
+        ];
     }
 }
