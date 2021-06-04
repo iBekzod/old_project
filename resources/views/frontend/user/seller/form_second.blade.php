@@ -29,28 +29,28 @@
 
                                 @if($element->type=='text')
                                 <div class="form-group row" id="category">
-                                    <label class="col-lg-3 col-from-label mb-2">text</label>
+                                    <label class="col-lg-3 col-from-label mb-2"> {{($element->type)}}</label>
                                     <div class="col-lg-8">
-                                    <input class="form-control" type="text" name="{{($element->label)}}">
+                                    <input class="form-control" type=" {{($element->type)}}" name="{{($element->label)}}">
                                     </div>
                                 </div>
                                 @elseif($element->type=='number')
                                 <div class="form-group row" id="category">
-                                    <label class="col-lg-3 col-from-label mb-2">number</label>
+                                    <label class="col-lg-3 col-from-label mb-2"> {{($element->type)}}</label>
                                     <div class="col-lg-8">
-                                    <input class="form-control" type="number" name="{{($element->label)}}">
+                                    <input class="form-control" type=" {{($element->type)}}" name="{{($element->label)}}">
                                     </div>
                                 </div>
                                 @elseif($element->type=='email')
                                 <div class="form-group row" id="category">
-                                    <label class="col-lg-3 col-from-label mb-2">email</label>
+                                    <label class="col-lg-3 col-from-label mb-2"> {{($element->type)}}</label>
                                     <div class="col-lg-8">
-                                    <input class="form-control" type="email" name="{{($element->label)}}">
+                                    <input class="form-control" type=" {{($element->type)}}" name="{{($element->label)}}">
                                     </div>
                                 </div>
                                 @endif
                                 {{-- {{$element->label}} --}}
-                                {{-- {{($element->type)}} --}}
+
                                 {{-- @elseif ($element->type=='email')
                                 <div class="form-group row" id="category">
                                     <label class="col-lg-3 col-from-label mb-2">{{$element->label}}</label>
