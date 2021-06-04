@@ -25,6 +25,17 @@
 									    </div>
 									    <div class="col-lg-2"><span class="btn btn-icon btn-circle icon-lg" onclick="delete_choice_clearfix(this)"><i class="las la-times"></i></span></div>
 									</div>
+                                @elseif ($element->type == 'number' || $element->type == 'email')
+									<div class="form-group row" style="background:rgba(0,0,0,0.1);padding:10px 0;">
+									    <input type="hidden" name="type[]" value="{{ $element->type }}">
+									    <div class="col-lg-3">
+									        <label class="col-from-label">{{ ucfirst($element->type) }}</label>
+									    </div>
+									    <div class="col-lg-7">
+									        <input class="form-control" type="text" name="label[]" value="{{ $element->label }}" placeholder="{{ translate('Label') }}">
+									    </div>
+									    <div class="col-lg-2"><span class="btn btn-icon btn-circle icon-lg" onclick="delete_choice_clearfix(this)"><i class="las la-times"></i></span></div>
+									</div>
 								@elseif ($element->type == 'select' || $element->type == 'multi_select' || $element->type == 'radio')
 									<div class="form-group row" style="background:rgba(0,0,0,0.1);padding:10px 0;">
 									    <input type="hidden" name="type[]" value="{{ $element->type }}">
@@ -54,10 +65,10 @@
 							@endforeach
 						</div>
 						<div class="col-lg-4">
+
 							<ul class="list-group">
                                <li class="list-group-item btn btn-outline-info btn-lg text-md-left" onclick="appenddToForm('text')">{{translate('Text Input')}}</li>
                                <li class="list-group-item btn btn-outline-info btn-lg text-md-left" onclick="appenddToForm('number')">{{translate('Number Input')}}</li>
-                               <li class="list-group-item btn btn-outline-info btn-lg text-md-left" onclick="appenddToForm('email')">{{translate('Email Input')}}</li>
                                <li class="list-group-item btn btn-outline-info btn-lg text-md-left" onclick="appenddToForm('select')">{{translate('Select')}}</li>
 								<li class="list-group-item btn btn-outline-info btn-lg text-md-left" onclick="appenddToForm('multi-select')">{{translate('Multiple Select')}}</li>
 								<li class="list-group-item btn btn-outline-info btn-lg text-md-left" onclick="appenddToForm('radio')">{{translate('Radio')}}</li>
@@ -188,29 +199,14 @@
 							+'</div>';
 				$('#form').append(str);
 			}
-			if(type == 'number'){
+			else if(type == 'number'){
 				var str = '<div class="form-group row" style="background:rgba(0,0,0,0.1);padding:10px 0;">'
-								+'<input type="hidden" name="type[]" value="text">'
+								+'<input type="hidden" name="type[]" value="number">'
 								+'<div class="col-lg-3">'
 									+'<label class="col-from-label">Number</label>'
 								+'</div>'
 								+'<div class="col-lg-7">'
 									+'<input class="form-control" type="text" name="label[]" placeholder="{{ translate('Number') }}">'
-								+'</div>'
-								+'<div class="col-lg-2">'
-									+'<span class="btn btn-icon btn-circle icon-lg" onclick="delete_choice_clearfix(this)"><i class="las la-times"></i></span>'
-								+'</div>'
-							+'</div>';
-				$('#form').append(str);
-			}
-            if(type == 'email'){
-				var str = '<div class="form-group row" style="background:rgba(0,0,0,0.1);padding:10px 0;">'
-								+'<input type="hidden" name="type[]" value="text">'
-								+'<div class="col-lg-3">'
-									+'<label class="col-from-label">Email</label>'
-								+'</div>'
-								+'<div class="col-lg-7">'
-									+'<input class="form-control" type="text" name="label[]" placeholder="{{ translate('Email') }}">'
 								+'</div>'
 								+'<div class="col-lg-2">'
 									+'<span class="btn btn-icon btn-circle icon-lg" onclick="delete_choice_clearfix(this)"><i class="las la-times"></i></span>'

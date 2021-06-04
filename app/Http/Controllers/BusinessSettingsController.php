@@ -251,6 +251,7 @@ class BusinessSettingsController extends Controller
             }
             array_push($form, $item);
         }
+            // dd($form);
         $business_settings = BusinessSetting::where('type', 'verification_form')->first();
         $business_settings->value = json_encode($form);
         if($business_settings->save()){
