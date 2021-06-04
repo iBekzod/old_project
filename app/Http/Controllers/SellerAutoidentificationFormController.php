@@ -8,7 +8,8 @@ class SellerAutoidentificationFormController extends Controller
 {
    public function seller_autoidentification_form_save(Request $request)
    {
-         dd($request->all());
+        //  dd($request->all());
+        return view('frontend.user.seller.seller_documentation');
    }
 
 
