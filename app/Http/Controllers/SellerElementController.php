@@ -179,19 +179,29 @@ class SellerElementController extends Controller
             if ($request->method() == 'GET'){
                 $data=null;
                 $variations=[];
+                $ids=[];
+                $count_color_ids=0;
+                $count_attribute_ids=0;
                 if ($request->has('choice_groups')){
                     foreach ($request->choice_groups as $value_ids){
                         $selected_attributes = Characteristic::whereIn('id', $value_ids)->pluck('name')->toArray();
                         $variations[]=$selected_attributes;
+                        $attribute_ids=Characteristic::whereIn('id', $value_ids)->pluck('id')->toArray();
+                        $ids[]=$attribute_ids;
+                        $count_attribute_ids=count($attribute_ids);
                     }
                 }
                 if ($request->has('color_ids')){
                     $color_ids=$request->color_ids;
                     $selected_colors = Color::whereIn('id', $color_ids)->pluck('name')->toArray();
                     $variations[]=$selected_colors;
+                    $color_ids=Color::whereIn('id', $color_ids)->pluck('id')->toArray();
+                    $ids[]=$color_ids;
+                    $count_color_ids=count($color_ids);
+
                 }
                 $combinations = Combinations::makeCombinations($variations);
-
+                $combination_ids = Combinations::makeCombinations($ids);
                 $content=null;
                 $content=$content.'
                 <div style="overflow-y: scroll; ">
@@ -219,10 +229,26 @@ class SellerElementController extends Controller
                         </thead>
                         <tbody>';
                 foreach ($combinations as $index=>$combination){
+                    if($count_color_ids>0 && $count_attribute_ids>0){
+                        $my_colors=array_slice($combination_ids[$index], -1);
+                        $my_attributes=array_slice($combination_ids[$index], 0, -1);
+                    }else if($count_color_ids==0 && $count_attribute_ids>0){
+                        $my_colors=[];
+                        $my_attributes=$combination_ids[$index];
+                    }else if($count_color_ids>0 && $count_attribute_ids==0){
+                        $my_colors=$combination_ids[$index];
+                        $my_attributes=[];
+                    }else{
+                        $my_colors=[];
+                        $my_attributes=[];
+                    }
+                    // dd($my_attributes);
                     $content=$content.'
                         <tr class="variant">
                             <td>
                                 <label for="" class="control-label">'.($index+1).'</label>
+                                <input type="hidden" name="combination['.$index.'][color_id]" value="'.implode(",", $my_colors).'">
+                                <input type="hidden" name="combination['.$index.'][attribute_id]" value="'.implode(",", $my_attributes).'">
                             </td>
                             <td>
                                 <div class="form-group">
@@ -240,7 +266,7 @@ class SellerElementController extends Controller
                                 </div>
                             </td>
                             <td>
-                                <label for="" class="control-label">'.implode (",", $combination).'</label>
+                                <label for="" class="control-label">'.implode(",", $combination).'</label>
                                 <input type="hidden" name="combination['.$index.'][name]" value="'.implode (",", $combination).'" class="form-control">
                             </td>
                             <td>
@@ -257,9 +283,10 @@ class SellerElementController extends Controller
                 </div>
                 ';
                 $data=$content;
-                return response()->json(['success' => true, 'message' => $combinations, 'data' => $data]);
+                return response()->json(['success' => true, 'message' => $combination_ids, 'data' => $data]);
             }
        } catch (\Exception $exception) {
+           dd($exception);
            return response()->json(['success' => false, 'message' => $exception->getMessage()]);
        }
         return response()->json(['success' => false, 'message' => 'server']);
@@ -540,6 +567,9 @@ class SellerElementController extends Controller
                     $variation->thumbnail_img = $variant['thumbnail_img'];
                     $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
                     $variation->partnum=$variant['artikul'];
+                    $variation->color_id=(int)$variant['color_id'];
+                    $variation->characteristics=$variant['attribute_id'];
+                    $variation->photos=$variant['photos'];
                     $variation->num_of_sale=0;
                     $variation->qty=0;
                     $variation->rating=0;
