@@ -1,10 +1,10 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-    <div class="aiz-titlebar text-left mt-2 mb-3">
+    <div class="mt-2 mb-3 text-left aiz-titlebar">
         <h5 class="mb-0 h6">{{ translate('Add New Product') }}</h5>
     </div>
-    <div class="col-md-12 mx-auto">
+    <div class="mx-auto col-md-12">
         <form class="form form-horizontal mar-top" action="{{ route('seller.products.store') }}" method="POST"
             enctype="multipart/form-data" id="choice_form">
             @csrf
@@ -32,12 +32,12 @@
                                 value="{{$element->getTranslation('name')}}">
                     </div>
                     </div> --}}
-                    <div class="form-group row px-3">
+                    <div class="px-3 form-group row">
                         <img src="{{ uploaded_asset($element->thumbnail_img) ?? static_asset('assets/img/placeholder.jpg') }}"
                             height="140" width="140" style="object-fit: cover" style="display:inline-block;">
                         <div class="col-md-10">
                             <label class="col-from-label font-weight-bold h6">{{ $element->getTranslation('name') }}</label>
-                            {!! $element->getTranslation('description') !!}
+                            {!! strip_tags($element->getTranslation('description')) !!}
                             <input type="text" class="form-control" name="name"
                                 placeholder="{{ translate('Product Name') }}" required
                                 value="{{ $element->getTranslation('name') }}" hidden>
@@ -117,7 +117,7 @@
                                         </td>
                                         <td class="text-center">
                                             <label for="" class="control-label">{{ translate('Todays deals') }}</label>
-                                            <label class="aiz-switch aiz-switch-success mb-0">
+                                            <label class="mb-0 aiz-switch aiz-switch-success">
                                                 <input type="checkbox"
                                                     onchange="change_switch(this.checked, 'todays_deal_change')"
                                                     name="todays_deal" @if ($element->todays_deal) checked @endif>
@@ -126,7 +126,7 @@
                                         </td>
                                         <td class="text-center">
                                             <label for="" class="control-label">{{ translate('Published') }}</label>
-                                            <label class="aiz-switch aiz-switch-success mb-0">
+                                            <label class="mb-0 aiz-switch aiz-switch-success">
                                                 <input type="checkbox"
                                                     onchange="change_switch(this.checked, 'published_change')"
                                                     name="published" @if ($element->published) checked @endif>
@@ -135,7 +135,7 @@
                                         </td>
                                         <td class="text-center">
                                             <label for="" class="control-label">{{ translate('Featured') }}</label>
-                                            <label class="aiz-switch aiz-switch-success mb-0">
+                                            <label class="mb-0 aiz-switch aiz-switch-success">
                                                 <input type="checkbox"
                                                     onchange="change_switch(this.checked, 'seller_featured_change')"
                                                     name="seller_featured" @if ($element->featured) checked @endif>
@@ -220,7 +220,7 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <label class="aiz-switch aiz-switch-success mb-0">
+                                                <label class="mb-0 aiz-switch aiz-switch-success">
                                                     <input type="checkbox"
                                                         name="variation[{{ $index }}][todays_deal]"
                                                         class="todays_deal_change" @if($element->todays_deal) checked @endif>
@@ -228,14 +228,14 @@
                                                 </label>
                                             </td>
                                             <td>
-                                                <label class="aiz-switch aiz-switch-success mb-0 ">
+                                                <label class="mb-0 aiz-switch aiz-switch-success ">
                                                     <input type="checkbox" name="variation[{{ $index }}][published]"
                                                         class="published_change" @if($element->published) checked @endif>
                                                     <span></span>
                                                 </label>
                                             </td>
                                             <td>
-                                                <label class="aiz-switch aiz-switch-success mb-0 ">
+                                                <label class="mb-0 aiz-switch aiz-switch-success ">
                                                     <input type="checkbox" name="variation[{{ $index }}][seller_featured]"
                                                         class="seller_featured_change" @if($element->seller_seller_featured) checked @endif>
                                                     <span></span>

@@ -9,7 +9,7 @@
 
                 <div class="aiz-user-panel">
 
-                    <div class="aiz-titlebar mt-2 mb-4">
+                    <div class="mt-2 mb-4 aiz-titlebar">
                       <div class="row align-items-center">
                         <div class="col-md-6">
                             <h1 class="h3">{{ translate('Products') }}</h1>
@@ -19,24 +19,24 @@
 
                     <div class="row gutters-10 justify-content-center">
                         @if (\App\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated)
-                            <div class="col-md-4 mx-auto mb-3" >
-                                <div class="bg-grad-1 text-white rounded-lg overflow-hidden">
-                                  <span class="size-30px rounded-circle mx-auto bg-soft-primary d-flex align-items-center justify-content-center mt-3">
-                                      <i class="las la-upload la-2x text-white"></i>
+                            <div class="mx-auto mb-3 col-md-4" >
+                                <div class="overflow-hidden text-white rounded-lg bg-grad-1">
+                                  <span class="mx-auto mt-3 size-30px rounded-circle bg-soft-primary d-flex align-items-center justify-content-center">
+                                      <i class="text-white las la-upload la-2x"></i>
                                   </span>
                                   <div class="px-3 pt-3 pb-3">
-                                      <div class="h4 fw-700 text-center">{{ max(0, Auth::user()->seller->remaining_uploads) }}</div>
-                                      <div class="opacity-50 text-center">{{  translate('Remaining Uploads') }}</div>
+                                      <div class="text-center h4 fw-700">{{ max(0, Auth::user()->seller->remaining_uploads) }}</div>
+                                      <div class="text-center opacity-50">{{  translate('Remaining Uploads') }}</div>
                                   </div>
                                 </div>
                             </div>
                         @endif
 
-                        <div class="col-md-4 mx-auto mb-3" >
+                        <div class="mx-auto mb-3 col-md-4" >
                             <a href="{{ route('seller.products.upload')}}">
-                              <div class="p-3 rounded mb-3 c-pointer text-center bg-white shadow-sm hov-shadow-lg has-transition">
-                                  <span class="size-60px rounded-circle mx-auto bg-secondary d-flex align-items-center justify-content-center mb-3">
-                                      <i class="las la-plus la-3x text-white"></i>
+                              <div class="p-3 mb-3 text-center bg-white rounded shadow-sm c-pointer hov-shadow-lg has-transition">
+                                  <span class="mx-auto mb-3 size-60px rounded-circle bg-secondary d-flex align-items-center justify-content-center">
+                                      <i class="text-white las la-plus la-3x"></i>
                                   </span>
                                   <div class="fs-18 text-primary">{{ translate('Add New Product') }}</div>
                               </div>
@@ -48,26 +48,26 @@
                             $seller_package = \App\SellerPackage::find(Auth::user()->seller->seller_package_id);
                         @endphp
                         <div class="col-md-4">
-                            <a href="{{ route('seller_packages_list') }}" class="text-center bg-white shadow-sm hov-shadow-lg text-center d-block p-3 rounded">
+                            <a href="{{ route('seller_packages_list') }}" class="p-3 text-center bg-white rounded shadow-sm hov-shadow-lg d-block">
                                 @if($seller_package != null)
-                                    <img src="{{ uploaded_asset($seller_package->logo)??static_asset('assets/img/placeholder.jpg') }}" height="44" class="mw-100 mx-auto">
-                                    <span class="d-block sub-title mb-2">{{ translate('Current Package')}}: {{ $seller_package->getTranslation('name') }}</span>
+                                    <img src="{{ uploaded_asset($seller_package->logo)??static_asset('assets/img/placeholder.jpg') }}" height="44" class="mx-auto mw-100">
+                                    <span class="mb-2 d-block sub-title">{{ translate('Current Package')}}: {{ $seller_package->getTranslation('name') }}</span>
                                 @else
-                                    <i class="la la-frown-o mb-2 la-3x"></i>
-                                    <div class="d-block sub-title mb-2">{{ translate('No Package Found')}}</div>
+                                    <i class="mb-2 la la-frown-o la-3x"></i>
+                                    <div class="mb-2 d-block sub-title">{{ translate('No Package Found')}}</div>
                                 @endif
-                                <div class="btn btn-outline-primary py-1">{{ translate('Upgrade Package')}}</div>
+                                <div class="py-1 btn btn-outline-primary">{{ translate('Upgrade Package')}}</div>
                             </a>
                         </div>
                         @endif
 
                     </div>
 
-                    <div class="card">
+                    {{-- <div class="card">
                         <div class="card-header">
                             <a href="{{ route('seller.products.clone')}}" class="btn btn-primary d-inline-block">{{ translate('Clone Product')}}</a>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="card">
                         <div class="card-header row gutters-5">
@@ -83,7 +83,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <table class="table aiz-table mb-0">
+                            <table class="table mb-0 aiz-table">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -127,7 +127,7 @@
                                             </td>
                                             <td>{{ $product->unit_price }}</td>
                                             <td>
-                                                <label class="aiz-switch aiz-switch-success mb-0">
+                                                <label class="mb-0 aiz-switch aiz-switch-success">
                                                     <input onchange="update_published(this)" value="{{ $product->id }}" type="checkbox" <?php if($product->published == 1) echo "checked";?> >
                                                     <span class="slider round"></span>
                                                 </label>

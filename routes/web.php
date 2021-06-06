@@ -212,7 +212,8 @@ Route::group(['prefix' =>'seller', 'middleware' => ['seller', 'verified', 'user'
     Route::get('/products/create','ProductController@create')->name('products.create');
 	Route::get('/products/{id}/edit','ProductController@seller_product_edit')->name('seller.products.edit');
 
-    Route::get('elements/all','SellerElementController@seller_elements')->name('seller.elements.all');
+    Route::get('elements/all','SellerElementController@seller_elements')->name('seller.elements.all');    
+	Route::get('elements/clone','SellerElementController@clone_elements')->name('seller.elements.clone');
 	Route::get('elements/variation/remove','SellerElementController@remove_variation')->name('seller.elements.variation.remove');
 	// Route::get('elements/seller','SellerElementController@seller_elements')->name('seller.elements.seller');
 	Route::get('elements/manage','SellerElementController@manageElements')->name('seller.elements.manage');
