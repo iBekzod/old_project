@@ -1,10 +1,10 @@
-<div class="form-group row px-3">
+<div class="px-3 form-group row">
     <img src="{{ uploaded_asset($element->thumbnail_img) ?? static_asset('assets/img/placeholder.jpg') }}"
         height="140" width="140" style="object-fit: cover" style="display:inline-block;">
     <div class="col-md-10">
         <label class="col-from-label font-weight-bold h6">{{ $element->getTranslation('name') }}</label>
 
-        {!! $element->getTranslation('description') !!}
+        {!! strip_tags($element->getTranslation('description')) !!}
         <input type="text" class="form-control" name="name" placeholder="{{ translate('Product Name') }}" required
             value="{{ $element->getTranslation('name') }}" hidden>
     </div>
@@ -77,7 +77,7 @@
                     </td>
                     <td class="text-center">
                         <label for="" class="control-label">{{ translate('Todays deals') }}</label>
-                        <label style="display: block;" class="aiz-switch aiz-switch-success mb-0">
+                        <label style="display: block;" class="mb-0 aiz-switch aiz-switch-success">
                             <input type="checkbox" onchange="change_switch(this.checked, 'todays_deal_change')"
                                 name="todays_deal" checked>
                             <span></span>
@@ -85,7 +85,7 @@
                     </td>
                     <td class="text-center">
                         <label for="" class="control-label">{{ translate('Published') }}</label>
-                        <label style="display: block;" class="aiz-switch aiz-switch-success mb-0">
+                        <label style="display: block;" class="mb-0 aiz-switch aiz-switch-success">
                             <input type="checkbox" onchange="change_switch(this.checked, 'published_change')"
                                 name="published" checked>
                             <span></span>
@@ -93,7 +93,7 @@
                     </td>
                     <td class="text-center">
                         <label for="" class="control-label">{{ translate('seller_featured') }}</label>
-                        <label class="aiz-switch aiz-switch-success mb-0">
+                        <label class="mb-0 aiz-switch aiz-switch-success">
                             <input type="checkbox" onchange="change_switch(this.checked, 'seller_featured_change')"
                                 name="seller_featured" @if ($element->featured) checked @endif>
                             <span></span>
@@ -174,7 +174,7 @@
                         </td>
                         <td>
                             <div class="d-flex justify-content-center">
-                                <label class="aiz-switch aiz-switch-success mb-0">
+                                <label class="mb-0 aiz-switch aiz-switch-success">
                                     <input type="checkbox" name="variation[{{ $index }}][todays_deal]"
                                         class="todays_deal_change" checked>
                                     <span></span>
@@ -184,7 +184,7 @@
                         </td>
                         <td>
                             <div class="d-flex justify-content-center">
-                                <label class="aiz-switch aiz-switch-success mb-0 ">
+                                <label class="mb-0 aiz-switch aiz-switch-success ">
                                     <input type="checkbox" name="variation[{{ $index }}][published]"
                                         class="published_change" checked>
                                     <span></span>
@@ -194,7 +194,7 @@
                         </td>
                         <td>
                             <div class="d-flex justify-content-center">
-                                <label class="aiz-switch aiz-switch-success mb-0 ">
+                                <label class="mb-0 aiz-switch aiz-switch-success ">
                                     <input type="checkbox" name="variation[{{ $index }}][seller_featured]"
                                         class="seller_featured_change" checked>
                                     <span></span>

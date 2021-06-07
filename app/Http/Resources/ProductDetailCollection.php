@@ -76,7 +76,7 @@ class ProductDetailCollection extends ResourceCollection
             'short_characteristics' => $this->convertToShortCharacteristics(json_decode($element->characteristics)),
             'colors' => new ProductColorCollection(json_decode($element->variation_colors)),
             'shipping_type' => $product->delivery_type,
-            'shipping_cost' => 0,
+            'shipping_cost' => $this->calculateShippingCost($product),
             'characteristics' => $this->convertToCharacteristics(json_decode($element->characteristics, true)),
             'variant' => $this->makeVariation($product)??[],
             'variations' => $this->makeVariations($product)??[],
@@ -241,18 +241,16 @@ class ProductDetailCollection extends ResourceCollection
         $products=Product::where('variation_id', $item->variation_id)->get();
         $sellers=array();
         foreach($products as $product){
-            // if($item->id==$product->id){
-            //     continue;
-            // }
             $sellers[]=[
+                'is_current'=>($item->id==$product->id),
                 'slug' => $product->slug,
                 'base_price' => (double) homeBasePrice($product->id),
                 'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
                 'currency_code'=>defaultCurrency(),
                 'exchange_rate'=>defaultExchangeRate(),
                 'discount' => (integer) $product->discount,
-                'discount_type' => $product->discount_type,
-                'delivery_type' => $product->delivery_type,
+                'shipping_type' => $product->delivery_type,
+                'shipping_cost' => $this->calculateShippingCost($product),
                 'name' => $product->user->name,
                 'email' => $product->user->email,
                 'avatar' => $product->user->avatar,
@@ -264,5 +262,10 @@ class ProductDetailCollection extends ResourceCollection
         }
         return $sellers;
 
+    }
+
+
+    protected function calculateShippingCost($product){
+        return 0;
     }
 }

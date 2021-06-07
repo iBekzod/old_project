@@ -6,7 +6,7 @@
             <div class="d-flex align-items-start">
                 @include('frontend.inc.user_side_nav')
                 <div class="aiz-user-panel">
-                    <div class="aiz-titlebar text-left mt-2 mb-3">
+                    <div class="mt-2 mb-3 text-left aiz-titlebar">
                         <div class="row align-items-center">
                             <div class="col-md-6">
                                 <h1 class="h3">{{ translate('All elements') }}</h1>
@@ -14,6 +14,9 @@
                             <div class="col-md-6 text-md-right">
                                 <a href="{{ route('seller.elements.create') }}" class="btn btn-circle btn-info">
                                     <span>{{ translate('Add New Element') }}</span>
+                                </a>
+                                <a href="{{ route('seller.elements.clone') }}" class="btn btn-circle btn-info">
+                                    <span>{{ translate('Clone Element') }}</span>
                                 </a>
                             </div>
                         </div>
@@ -23,12 +26,12 @@
                     <div class="card">
                         <form class="" id="sort_elements" action="" method="GET">
                             <div class="card-header row gutters-5">
-                                <div class="col text-center text-md-left">
+                                <div class="text-center col text-md-left">
                                     <h5 class="mb-md-0 h6">{{ translate('All Element') }}</h5>
                                 </div>
                                 @if ($type == 'Seller')
-                                    <div class="col-md-2 ml-auto">
-                                        <select class="form-control form-control-sm aiz-selectpicker mb-2 mb-md-0"
+                                    <div class="ml-auto col-md-2">
+                                        <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0"
                                             id="user_id" name="user_id" onchange="sort_elements()">
                                             <option value="">{{ translate('All Sellers') }}</option>
                                             @foreach (App\Seller::all() as $key => $seller)
@@ -42,8 +45,8 @@
                                     </div>
                                 @endif
                                 @if ($type == 'All')
-                                    <div class="col-md-2 ml-auto">
-                                        <select class="form-control form-control-sm aiz-selectpicker mb-2 mb-md-0"
+                                    <div class="ml-auto col-md-2">
+                                        <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0"
                                             id="user_id" name="user_id" onchange="sort_elements()">
                                             <option value="">{{ translate('All Sellers') }}</option>
                                             @foreach (App\User::where('user_type', '=', 'admin')->orWhere('user_type', '=', 'seller')->get() as $key => $seller)
@@ -52,8 +55,8 @@
                                         </select>
                                     </div>
                                 @endif
-                                <div class="col-md-2 ml-auto">
-                                    <select class="form-control form-control-sm aiz-selectpicker mb-2 mb-md-0" name="type"
+                                <div class="ml-auto col-md-2">
+                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" name="type"
                                         id="type" onchange="sort_elements()">
                                         <option value="">{{ translate('Sort By') }}</option>
                                         <option value="rating,desc" @isset($col_name, $query) @if ($col_name == 'rating' && $query == 'desc') selected @endif @endisset>{{ translate('Rating (High > Low)') }}</option>
@@ -69,7 +72,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-2">
-                                    <div class="form-group mb-0">
+                                    <div class="mb-0 form-group">
                                         <input type="text" class="form-control form-control-sm" id="search" name="search"
                                             @isset($sort_search) value="{{ $sort_search }}" @endisset
                                             placeholder="{{ translate('Type & Enter') }}">
@@ -78,7 +81,7 @@
                             </div>
                         </form>
                         <div class="card-body">
-                            <table class="table aiz-table mb-0">
+                            <table class="table mb-0 aiz-table">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -135,7 +138,7 @@
                             <td>{{ number_format($element->unit_price,2) }}</td> --}}
                                             <td>{{ $element->rating }}</td>
                                             <td>
-                                                <label class="aiz-switch aiz-switch-success mb-0">
+                                                <label class="mb-0 aiz-switch aiz-switch-success">
                                                     <input onchange="update_featured(this)" value="{{ $element->id }}"
                                                         type="checkbox" <?php if ($element->featured == 1) {
                                                     echo 'checked';

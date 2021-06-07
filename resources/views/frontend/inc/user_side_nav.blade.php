@@ -1,17 +1,17 @@
-<div class="aiz-user-sidenav-wrap pt-4 position-relative z-1 shadow-sm">
+<div class="pt-4 shadow-sm aiz-user-sidenav-wrap position-relative z-1">
     <div class="absolute-top-right d-xl-none">
-        <button class="btn btn-sm p-2" data-toggle="class-toggle" data-target=".aiz-mobile-side-nav" data-same=".mobile-side-nav-thumb">
+        <button class="p-2 btn btn-sm" data-toggle="class-toggle" data-target=".aiz-mobile-side-nav" data-same=".mobile-side-nav-thumb">
             <i class="las la-times la-2x"></i>
         </button>
     </div>
     <div class="absolute-top-left d-xl-none">
-        <a class="btn btn-sm p-2" href="{{ route('logout') }}">
+        <a class="p-2 btn btn-sm" href="{{ route('logout') }}">
             <i class="las la-sign-out-alt la-2x"></i>
         </a>
     </div>
-    <div class="aiz-user-sidenav rounded overflow-hidden  c-scrollbar-light">
-        <div class="px-4 text-center mb-4">
-            <span class="avatar avatar-md mb-3">
+    <div class="overflow-hidden rounded aiz-user-sidenav c-scrollbar-light">
+        <div class="px-4 mb-4 text-center">
+            <span class="mb-3 avatar avatar-md">
                 @if (Auth::user()->avatar_original != null)
                     <img src="{{ uploaded_asset(Auth::user()->avatar_original) }}" onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';">
                 @else
@@ -34,7 +34,7 @@
             @endif
         </div>
 
-        <div class="sidemnenu mb-3">
+        <div class="mb-3 sidemnenu">
             <ul class="aiz-side-nav-list" data-toggle="aiz-side-menu">
 
                 <li class="aiz-side-nav-item">
@@ -282,8 +282,8 @@
         @endif
         @if(Auth::user()->user_type == 'seller')
           <hr>
-          <h4 class="h5 fw-600 text-center">{{ translate('Sold Amount')}}</h4>
-          <!-- <div class="sidebar-widget-title py-3">
+          <h4 class="text-center h5 fw-600">{{ translate('Sold Amount')}}</h4>
+          <!-- <div class="py-3 sidebar-widget-title">
               <span></span>
           </div> -->
           @php
@@ -291,9 +291,9 @@
               $days_ago_30 = date('Y-m-d', strtotime('-30 days', strtotime($date)));
               $days_ago_60 = date('Y-m-d', strtotime('-60 days', strtotime($date)));
           @endphp
-          <div class="widget-balance pb-3 pt-1">
+          <div class="pt-1 pb-3 widget-balance">
             <div class="text-center">
-                <div class="heading-4 strong-700 mb-4">
+                <div class="mb-4 heading-4 strong-700">
                     @php
                         $orderDetails = \App\OrderDetail::where('seller_id', Auth::user()->id)->where('created_at', '>=', $days_ago_30)->get();
                         $total = 0;
@@ -303,7 +303,7 @@
                             }
                         }
                     @endphp
-                    <small class="d-block fs-12 mb-2">{{ translate('Your sold amount (current month)')}}</small>
+                    <small class="mb-2 d-block fs-12">{{ translate('Your sold amount (current month)')}}</small>
                     <span class="btn btn-primary fw-600 fs-18">{{ single_price($total) }}</span>
                 </div>
                 <table class="table table-borderless">

@@ -49,7 +49,7 @@
                                     @foreach (\App\Language::all() as $key => $language)
                                         <li class="nav-item">
                                             <a class="nav-link text-reset @if ($language->code == $lang) active @else bg-soft-dark border-light border-left-0 @endif py-3"
-                                            href="{{ route('seller.elements.admin.edit', ['id'=>$element->id, 'lang'=> $language->code] ) }}">
+                                            href="{{ route('seller.elements.edit', ['id'=>$element->id, 'lang'=> $language->code] ) }}">
                                                 <img src="{{ static_asset('assets/img/flags/'.$language->code.'.png') }}" height="11"
                                                     class="mr-1">
                                                 <span>{{$language->name}}</span>
@@ -186,7 +186,7 @@
                                                 <div class="form-group row">
                                                     <label class="col-md-3 col-form-label"  for="signinSrEmail">{{  $attribute->getTranslation('name', $lang) }}</label>
                                                     <div class="col-md-8">
-                                                        <select class="form-control js-example-basic-multiple" onchange="update_attribute_combination()" id="choice_option_{{ $attribute->id }}" multiple name="choice_options[{{ $attribute->id }}][]">
+                                                        <select class="form-control js-example-basic-multiple" id="choice_option_{{ $attribute->id }}" multiple name="choice_options[{{ $attribute->id }}][]">
                                                             @foreach ($attribute->characteristics as $value)
                                                                 <option
                                                                 @if(in_array($value->id, $value_ids)) selected @endif
@@ -233,6 +233,9 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="d-block">
+                                        <button type="button" class="mb-3 btn btn-info" onclick="update_attribute_combination()">{{ translate('Generate variations') }}</button>
+                                    </div>
                                     <div id="variation_div">
                                         <div style="overflow-y: scroll; ">
                                             <table class="table table-bordered" >
@@ -244,6 +247,10 @@
                                                     <td class="text-center">
                                                         <label class="col-form-label" for="signinSrEmails">{{ translate('Variation Image') }}
                                                                 <small>{{ translate('(290x300)') }}</small></label>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <label class="col-form-label" for="signinSrEmails">{{ translate('Gallery Images') }}
+                                                                <small>{{ translate('(600x600)') }}</small></label>
                                                     </td>
                                                     <td class="text-center">
                                                         <label for="" class="control-label">{{ translate('Name') }}</label>
@@ -271,12 +278,23 @@
                                                                             <div
                                                                                 class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse') }}</div>
                                                                         </div>
-                                                                        <div class="form-control file-amount"></div>
                                                                         <input required type="hidden" name="combination[{{ $index }}][thumbnail_img]" value="{{ $combination->thumbnail_img??null }}"
                                                                             class="selected-files">
                                                                     </div>
                                                                     <div class="file-preview box sm">
                                                                     </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <div class="input-group" data-toggle="aizuploader" data-type="image" data-multiple="true">
+                                                                    <div class="input-group-prepend">
+                                                                        <div class="input-group-text bg-soft-secondary font-weight-medium">{{  translate('Browse')}}</div>
+                                                                    </div>
+                                                                    <input type="hidden" name="combination[{{ $index }}][photos]" value="{{ $combination->photos }}" class="selected-files">
+                                                                </div>
+                                                                <div class="file-preview box sm">
+                                                                </div>
                                                             </div>
                                                         </td>
                                                         <td>
@@ -484,19 +502,19 @@
         $('#category_id').on('change', function () {
             update_attribute();
         });
-        $('#selected_attribute_id').on('change', function () {
-            update_category_attribute();
-            update_attribute_combination();
-        });
-        $('#colors').on('change', function () {
-            update_attribute_combination()
-        });
+        // $('#selected_attribute_id').on('change', function () {
+        //     update_category_attribute();
+        //     update_attribute_combination();
+        // });
+        // $('#colors').on('change', function () {
+        //     update_attribute_combination()
+        // });
         // $('#selected_colors').on('change', function () {
         //     update_attribute_combination()
         // });
-        $('#selected_variations').on('change', function () {
-            update_attribute_combination()
-        });
+        // $('#selected_variations').on('change', function () {
+        //     update_attribute_combination()
+        // });
         function update_attribute(){
             $.ajax({
                 type:'GET',
@@ -561,7 +579,7 @@
                         $('#selected_variations').html(data.data)
                         $('.js-example-basic-multiple').select2();
                     }
-                    update_attribute_combination();
+                    // update_attribute_combination();
                 }
             });
         }
