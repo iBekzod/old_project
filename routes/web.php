@@ -12,8 +12,9 @@
 */
 // use App\Mail\SupportMailManager;
 //demo
-use Cviebrock\EloquentSluggable\Services\SlugService;
-use App\Category;
+// use Cviebrock\EloquentSluggable\Services\SlugService;
+// use App\Category;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/demo/cron_1', 'DemoController@cron_1');
 Route::get('/demo/cron_2', 'DemoController@cron_2');
