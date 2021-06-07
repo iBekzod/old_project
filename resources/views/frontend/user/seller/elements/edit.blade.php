@@ -303,7 +303,7 @@
                                                             <input type="text" hidden name="combination[{{ $index }}][id]" value="{{ $combination->id??null }}" class="form-control">
                                                         </td>
                                                         <td>
-                                                            <input type="text" name="combination[{{ $index }}][artikul]" value="{{ $combination->sku??null }}" class="form-control">
+                                                            <input type="text" name="combination[{{ $index }}][artikul]" value="{{ $combination->partnum??null }}" class="form-control">
                                                         </td>
                                                         <td>
                                                             <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="delete_variantion(this, '{{ $combination->id }}')"><i class="las la-trash"></i></button>
