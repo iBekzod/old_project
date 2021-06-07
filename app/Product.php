@@ -140,7 +140,7 @@ class Product extends Model
                 $variation->save();
             }
         }catch(Exception $e){
-            dd($e->getMessage());
+            // dd($e->getMessage());
         }
         // dd($variation);
        return $result; // do not ignore it eloquent calculates this value and returns this, not just to ignore
