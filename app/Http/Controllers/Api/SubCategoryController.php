@@ -10,8 +10,6 @@ use App\Http\Resources\ProductCollection;
 use App\Http\Resources\SearchProductCollection;
 use App\Attribute;
 use App\Category;
-use App\Category as MainCategory;
-use App\Product;
 use App\Seller;
 use App\Utility\CategoryUtility;
 use Illuminate\Http\Request;
@@ -61,7 +59,7 @@ class SubCategoryController extends Controller
 
     public function subCategories($id)
     {
-        $category = MainCategory::where('slug',  $id )
+        $category = Category::where('slug',  $id )
             ->with('products')
             ->firstOrFail();
 
