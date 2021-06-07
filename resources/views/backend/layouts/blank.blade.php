@@ -17,7 +17,6 @@
     <!-- aiz core css -->
     <link rel="stylesheet" href="{{ static_asset('assets/css/vendors.css') }}">
     <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css') }}">
-
     <script>
         var AIZ = AIZ || {};
     </script>
