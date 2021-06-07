@@ -91,12 +91,12 @@
                 </li> --}}
 
                 @if(Auth::user()->user_type == 'seller')
-                    <li class="aiz-side-nav-item">
+                    {{-- <li class="aiz-side-nav-item">
                         <a href="{{ route('seller.products') }}" class="aiz-side-nav-link {{ areActiveRoutes(['seller.products', 'seller.products.upload', 'seller.products.edit'])}}">
                             <i class="lab la-sketch aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{ translate('Products') }}</span>
                         </a>
-                    </li>
+                    </li> --}}
                     <li class="aiz-side-nav-item">
                         <a href="{{ route('seller.elements.all') }}" class="aiz-side-nav-link {{ areActiveRoutes(['seller.elements.all'])}}">
                             <i class="lab la-sketch aiz-side-nav-icon"></i>
