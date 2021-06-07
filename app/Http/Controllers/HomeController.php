@@ -38,6 +38,12 @@ use Illuminate\Auth\Events\PasswordReset;
 
 class HomeController extends Controller
 {
+
+    public function return_back()
+    {
+        redirect()->back();
+    }
+
     public function login()
     {
         if(Auth::check()){

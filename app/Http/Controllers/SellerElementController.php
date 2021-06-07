@@ -30,7 +30,7 @@ use App\Product_Warehouse;
 use App\VariationTranslation;
 use App\Warehouse;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
-
+use Exception;
 
 class SellerElementController extends Controller
 {
@@ -40,9 +40,12 @@ class SellerElementController extends Controller
         $col_name = null;
         $query = null;
         $sort_search = null;
-
-        $elements = Element::where('added_by', 'admin')->where('published', true)->where('user_id', '<>', Auth::user()->id);
-
+        $seller_id = null;
+        $elements = Element::where('parent_id', null)->where('published', true)->where('user_id', '<>', Auth::user()->id);
+        if ($request->has('user_id') && $request->user_id != null) {
+            $elements = $elements->where('user_id', $request->user_id);
+            $seller_id = $request->user_id;
+        }
         if ($request->type != null) {
             $var = explode(",", $request->type);
             $col_name = $var[0];
@@ -56,9 +59,70 @@ class SellerElementController extends Controller
             $sort_search = $request->search;
         }
         $elements = $elements->latest()->paginate(15);
-        return view('frontend.user.seller.elements.clone', compact('elements', 'type', 'col_name', 'query', 'sort_search'));
+        foreach($elements as $element){
+            // dd(Element::where('parent_id', $element->id)->where('user_id', Auth::user()->id)->first());
+            if(Element::where('parent_id', $element->id)->where('user_id', Auth::user()->id)->first()){
+                $element->cloned=true;
+            }else{
+                $element->cloned=false;
+            }
+        }
+
+        return view('frontend.user.seller.elements.clone', compact('elements', 'type', 'seller_id', 'col_name', 'query', 'sort_search'));
     }
-    
+
+    public function clone_selected_elements(Request $request)
+    {
+        try {
+            if($request->status && $element = Element::findOrFail($request->id)){
+                $element_translations = $element->element_translations;
+                $element_new = $element->replicate();
+                $element_new->slug = SlugService::createSlug(Element::class, 'slug', slugify($element->slug));
+                $element_new->user_id = Auth::user()->id;
+                $element_new->parent_id = $element->id;
+                $element_new->added_by = 'seller';
+                $element_new->on_moderation = 1;
+                $element_new->is_accepted = 0;
+
+                if ($element_new->save()) {
+                    foreach ($element_translations as $translation) {
+                        $element_translation =  $translation->replicate();
+                        $element_translation->element_id = $element_new->id;
+                        $element_translation->save();
+                    }
+                    foreach($element->combinations as $variation){
+                        $variation_translations = $variation->variation_translations;
+                        $variation_new= $variation->replicate();
+                        $variation_new->element_id=$element_new->id;
+                        $variation_new->updated_at=now();
+                        $variation_new->user_id=$element_new->user_id;
+                        $variation->num_of_sale=0;
+                        $variation->qty=0;
+                        $variation->rating=0;
+                        if($variation_new->save()){
+                            foreach ($variation_translations as $translation) {
+                                $variation_translation =  $translation->replicate();
+                                $variation_translation->variation_id = $variation_new->id;
+                                $variation_translation->save();
+                            }
+                        }
+                    }
+                    return 1;
+                }
+            }else if($request->status==false && $element = Element::findOrFail($request->id)){
+                if($seller_element=Element::where('parent_id', $element->id)->where('user_id', Auth::user()->id)->first()){
+                    if($seller_element->delete()){
+                        return 1;
+                    }
+                }
+
+            }
+        } catch (Exception $e) {
+            dd($e->getMessage());
+        }
+        return 0;
+    }
+
     public function changeOnModerationAccept(Request $request, $id)
     {
         $element = Element::findOrFail($id);
@@ -414,7 +478,7 @@ class SellerElementController extends Controller
         $query = null;
         $seller_id = null;
         $sort_search = null;
-        $elements = Element::where('user_id', Auth::user()->id)->latest();
+        $elements = Element::where('user_id', '<>', Auth::user()->id)->latest();
         if ($request->has('user_id') && $request->user_id != null) {
             $elements = $elements->where('user_id', $request->user_id);
             $seller_id = $request->user_id;
@@ -733,7 +797,7 @@ class SellerElementController extends Controller
                     $variations= Variation::where('element_id', $element->id)->where('user_id', Auth::user()->id);
                     foreach ($request->combination as $variant) {
                         if($variation=$variations->where('name', $variant['name'])->firstOrFail()){
-                            $variation->name=$element->name." ".$variant['name'];
+                            $variation->name=$variant['name'];
                             $variation->thumbnail_img = $variant['thumbnail_img'];
                             if ($variant['name'] != null) {
                                 if($variation->slug!=$variant['name'])
@@ -808,11 +872,7 @@ class SellerElementController extends Controller
             Artisan::call('view:clear');
             Artisan::call('cache:clear');
 
-            if (Auth::user()->user_type == 'admin') {
-                return redirect()->route('seller.elements.admin');
-            } else {
-                return redirect()->route('seller.elements');
-            }
+            return back();
         } else {
             flash(translate('Something went wrong'))->error();
             return back();
@@ -868,6 +928,9 @@ class SellerElementController extends Controller
         return 0;
     }
 
+
+
+
     public function elementProducts(Request $request){
         $element = Element::findOrFail($request->id);
         $combinations=Variation::where('element_id', $element->id);
@@ -881,6 +944,8 @@ class SellerElementController extends Controller
             }
             $combinations=$combinations->get();
             return view('frontend.user.seller.products.create_product', compact('element', 'combinations', 'currencies', 'lang'));
+        }else{
+            flash(translate('There is no variations created for this element. Please create variation first!'))->error();
         }
         return back();
     }

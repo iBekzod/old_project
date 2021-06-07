@@ -1,7 +1,7 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-    <div class="mt-2 mb-3 text-left aiz-titlebar">
+    <div class="m-2 text-left aiz-titlebar">
         <h5 class="mb-0 h6">{{translate('Edit Product')}}</h5>
     </div>
     <div class="mx-auto col-md-12">
@@ -234,6 +234,7 @@
                     @endif
                 </div>
                 <div class="mb-3 text-right">
+                    <a href="{{ url()->previous() }}" class="btn btn-info">{{ translate('Back') }}</a>
                     <button type="submit" name="button" class="btn btn-primary">{{ translate('Update Product') }}</button>
                 </div>
             </div>

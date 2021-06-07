@@ -775,7 +775,7 @@ class ElementController extends Controller
                     $variations= Variation::where('element_id', $element->id)->where('user_id', Auth::user()->id);
                     foreach ($request->combination as $variant) {
                         if($variation=$variations->where('name', $variant['name'])->firstOrFail()){
-                            $variation->name=$element->name." ".$variant['name'];
+                            $variation->name=$variant['name'];
                             $variation->thumbnail_img = $variant['thumbnail_img'];
                             if ($variant['name'] != null) {
                                 if($variation->slug!=$variant['name'])

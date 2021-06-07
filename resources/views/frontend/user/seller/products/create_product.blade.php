@@ -1,7 +1,7 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-    <div class="mt-2 mb-3 text-left aiz-titlebar">
+    <div class="m-2 text-left aiz-titlebar">
         <h5 class="mb-0 h6">{{ translate('Add New Product') }}</h5>
     </div>
     <div class="mx-auto col-md-12">
@@ -14,24 +14,6 @@
                     <h5 class="mb-0 h6">{{ translate('Product Information') }}</h5>
                 </div>
                 <div class="card-body">
-                    {{-- <div class="form-group row"> --}}
-                    {{-- <label class="col-md-3 col-from-label">{{translate('Product Name')}} <span --}}
-                    {{-- class="text-danger">*</span></label> --}}
-                    {{-- <div class="col-md-8"> --}}
-                    {{-- <input type="text" class="form-control" name="name" --}}
-                    {{-- placeholder="{{ translate('Product Name') }}" required> --}}
-                    {{-- </div> --}}
-                    {{-- </div> --}}
-                    {{-- <div class="form-group row">
-                        <label class="col-md-3 col-from-label">{{$element->getTranslation('name')}} <span
-                                class="text-danger">*</span></label>
-                    <div class="col-md-8">
-
-                        <input type="text" class="form-control" name="name"
-                                placeholder="{{ translate('Product Name') }}" required
-                                value="{{$element->getTranslation('name')}}">
-                    </div>
-                    </div> --}}
                     <div class="px-3 form-group row">
                         <img src="{{ uploaded_asset($element->thumbnail_img) ?? static_asset('assets/img/placeholder.jpg') }}"
                             height="140" width="140" style="object-fit: cover" style="display:inline-block;">
@@ -67,12 +49,6 @@
                                         </td>
                                         <td class="text-center">
                                             <label for="" class="control-label">{{ translate('Currency') }}</label>
-                                            {{-- <select class="form-control aiz-selectpicker"  name="currency" onchange="change_selection(this.value, 'currency_change')" > --}}
-                                            {{-- <option value="no">{{translate('Selected value')}}</option> --}}
-                                            {{-- @foreach ($currencies as $currency) --}}
-                                            {{-- <option  value="{{$currency->code}}">{{$currency->code}}</option> --}}
-                                            {{-- @endforeach --}}
-                                            {{-- </select> --}}
                                         </td>
                                         <td class="text-center">
                                             <label for="" class="control-label">{{ translate('Quantity') }}</label>
@@ -255,6 +231,7 @@
                 </div>
             </div>
             <div class="mb-3 text-right">
+                <a href="{{ url()->previous() }}" class="btn btn-info">{{ translate('Back') }}</a>
                 <button type="submit" name="button" class="btn btn-primary">{{ translate('Save Product') }}</button>
             </div>
     </div>
