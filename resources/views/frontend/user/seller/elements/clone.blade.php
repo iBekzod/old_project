@@ -9,15 +9,7 @@
                     <div class="mt-2 mb-3 text-left aiz-titlebar">
                         <div class="row align-items-center">
                             <div class="col-md-6">
-                                <h1 class="h3">{{ translate('All elements') }}</h1>
-                            </div>
-                            <div class="col-md-6 text-md-right">
-                                <a href="{{ route('seller.elements.create') }}" class="btn btn-circle btn-info">
-                                    <span>{{ translate('Add New Element') }}</span>
-                                </a>
-                                <a href="{{ route('seller.elements.clone') }}" class="btn btn-circle btn-info">
-                                    <span>{{ translate('Clone Element') }}</span>
-                                </a>
+                                <h1 class="h3">{{ translate('All sample elements') }}</h1>
                             </div>
                         </div>
                     </div>
@@ -61,14 +53,6 @@
                                         <option value="">{{ translate('Sort By') }}</option>
                                         <option value="rating,desc" @isset($col_name, $query) @if ($col_name == 'rating' && $query == 'desc') selected @endif @endisset>{{ translate('Rating (High > Low)') }}</option>
                                         <option value="rating,asc" @isset($col_name, $query) @if ($col_name == 'rating' && $query == 'asc') selected @endif @endisset>{{ translate('Rating (Low > High)') }}</option>
-                                        {{-- <option value="num_of_sale,desc"
-                                @isset($col_name, $query) @if ($col_name == 'num_of_sale' && $query == 'desc') selected @endif @endisset>{{translate('Num of Sale (High > Low)')}}</option>
-                        <option value="num_of_sale,asc"
-                                @isset($col_name, $query) @if ($col_name == 'num_of_sale' && $query == 'asc') selected @endif @endisset>{{translate('Num of Sale (Low > High)')}}</option>
-                        <option value="unit_price,desc"
-                                @isset($col_name, $query) @if ($col_name == 'unit_price' && $query == 'desc') selected @endif @endisset>{{translate('Base Price (High > Low)')}}</option>
-                        <option value="unit_price,asc"
-                                @isset($col_name, $query) @if ($col_name == 'unit_price' && $query == 'asc') selected @endif @endisset>{{translate('Base Price (Low > High)')}}</option> --}}
                                     </select>
                                 </div>
                                 <div class="col-md-2">
@@ -86,16 +70,8 @@
                                     <tr>
                                         <th>#</th>
                                         <th width="20%">{{ translate('Name') }}</th>
-                                        @if ($type == 'Seller' || $type == 'All')
-                                            <th>{{ translate('Added By') }}</th>
-                                        @endif
-                                        {{-- <th>{{translate('Num of Sale')}}</th>
-                        <th>{{translate('Total Stock')}}</th>
-                        <th>{{translate('Base Price')}}</th> --}}
-                                        {{-- <th>{{ translate('Todays Deal') }}</th> --}}
-                                        <th>{{ translate('Rating') }}</th>
-                                        {{-- <th>{{ translate('Published') }}</th> --}}
-                                        <th>{{ translate('Featured') }}</th>
+                                        <th width="60%">{{ translate('Description') }}</th>
+                                        <th>{{ translate('Added By') }}</th>
                                         <th class="text-right">{{ translate('Options') }}</th>
                                     </tr>
                                 </thead>
@@ -104,66 +80,30 @@
                                         <tr>
                                             <td>{{ $key + 1 + ($elements->currentPage() - 1) * $elements->perPage() }}</td>
                                             <td>
-                                                {{-- <a href="{{ route('seller.element', $element->slug) }}" target="_blank"> --}}
                                                 <div class="form-group row">
                                                     <div class="col-lg-4">
                                                         <img src="{{ uploaded_asset($element->thumbnail_img) ?? static_asset('assets/img/placeholder.jpg') }}"
                                                             alt="Image" class="w-50px">
                                                     </div>
                                                     <div class="col-lg-8">
-                                                        {{-- <span class="text-muted">{{ $element->getTranslation('name') }}</span> --}}
-                                                        <span class="text-muted">{{ $element->name }}</span>
+                                                        <span class="text-muted">{{ $element->getTranslation('name') }}</span>
+                                                        {{-- <span class="text-muted">{{ $element->name }}</span> --}}
                                                     </div>
                                                 </div>
-                                                {{-- </a> --}}
                                             </td>
-                                            @if ($type == 'Seller' || $type == 'All')
-                                                <td>{{ $element->user->name }}</td>
-                                            @endif
-                                            {{-- <td>{{ $element->num_of_sale }} {{translate('times')}}</td>
-                            <td>
-                                @php
-                                    $qty = 0;
-                                    if($element->variant_element){
-                                        foreach ($element->stocks as $key => $stock) {
-                                            $qty += $stock->qty;
-                                        }
-                                    }
-                                    else{
-                                        $qty = $element->current_stock;
-                                    }
-                                    echo $qty;
-                                @endphp
-                            </td>
-                            <td>{{ number_format($element->unit_price,2) }}</td> --}}
-                                            <td>{{ $element->rating }}</td>
-                                            <td>
-                                                <label class="mb-0 aiz-switch aiz-switch-success">
-                                                    <input onchange="update_featured(this)" value="{{ $element->id }}"
-                                                        type="checkbox" <?php if ($element->featured == 1) {
-                                                    echo 'checked';
-                                                    } ?> >
-                                                    <span class="slider round"></span>
-                                                </label>
-                                            </td>
+                                            <td>{!! strip_tags($element->getTranslation('description')) !!}</td>
+                                            <td>{{ $element->user->name }}</td>
                                             <td class="text-right">
-
-                                                <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
+                                                <a id="add_{{ $element->id }}" class="btn btn-soft-primary btn-icon btn-circle btn-sm"
                                                     href="{{ route('seller.elements.edit', ['id' => $element->id, 'lang' => default_language()]) }}"
-                                                    title="{{ translate('Edit') }}">
-                                                    <i class="las la-edit"></i>
-                                                </a>
-                                                <a href="#"
-                                                    class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
-                                                    data-href="{{ route('seller.elements.destroy', $element->id) }}"
-                                                    title="{{ translate('Delete') }}">
-                                                    <i class="las la-trash"></i>
+                                                    title="{{ translate('Add to clone') }}">
+                                                    <i class="las la-plus"></i>
                                                 </a>
 
-                                                <a href="{{ route('seller.elements.products.edit', ['id' => $element->id]) }}"
-                                                    class="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                                    title="{{ translate('Products') }}">
-                                                    <i class="las la-clipboard-list"></i>
+                                                <a hidden id="remove_{{ $element->id }}" class="btn btn-soft-success btn-icon btn-circle btn-sm"
+                                                    href="{{ route('seller.elements.edit', ['id' => $element->id, 'lang' => default_language()]) }}"
+                                                    title="{{ translate('Remove from clone') }}">
+                                                    <i class="las la-check"></i>
                                                 </a>
                                             </td>
                                         </tr>
@@ -188,49 +128,7 @@
 
 @section('script')
     <script type="text/javascript">
-        $(document).ready(function() {
-            //$('#container').removeClass('mainnav-lg').addClass('mainnav-sm');
-        });
-
-        function update_todays_deal(el) {
-            if (el.checked) {
-                var status = 1;
-            } else {
-                var status = 0;
-            }
-            $.post('{{ route('seller.elements.todays_deal') }}', {
-                _token: '{{ csrf_token() }}',
-                id: el.value,
-                status: status
-            }, function(data) {
-                if (data == 1) {
-                    AIZ.plugins.notify('success', '{{ translate('Todays Deal updated successfully') }}');
-                } else {
-                    AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
-                }
-            });
-        }
-
-        function update_published(el) {
-            if (el.checked) {
-                var status = 1;
-            } else {
-                var status = 0;
-            }
-            $.post('{{ route('seller.elements.published') }}', {
-                _token: '{{ csrf_token() }}',
-                id: el.value,
-                status: status
-            }, function(data) {
-                if (data == 1) {
-                    AIZ.plugins.notify('success', '{{ translate('Published elements updated successfully') }}');
-                } else {
-                    AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
-                }
-            });
-        }
-
-        function update_featured(el) {
+        function update_selected(el) {
             if (el.checked) {
                 var status = 1;
             } else {
