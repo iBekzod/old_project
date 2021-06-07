@@ -12,8 +12,9 @@
 */
 // use App\Mail\SupportMailManager;
 //demo
-use Cviebrock\EloquentSluggable\Services\SlugService;
-use App\Category;
+// use Cviebrock\EloquentSluggable\Services\SlugService;
+// use App\Category;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/demo/cron_1', 'DemoController@cron_1');
 Route::get('/demo/cron_2', 'DemoController@cron_2');
@@ -34,7 +35,7 @@ Route::get('/verification-confirmation/{code}', 'Auth\VerificationController@ver
 Route::get('/email_change/callback', 'HomeController@email_change_callback')->name('email_change.callback');
 Route::post('/password/reset/email/submit', 'HomeController@reset_password_with_code')->name('password.update');
 
-Route::get('/test', function () {
+// Route::get('/test', function () {
     //    $variations= new \App\Http\Controllers\ProductController();
 
     //    dd($variations->make_variation(78));
@@ -49,7 +50,7 @@ Route::get('/test', function () {
 //            }
 //        }
 //    }
-});
+// });
 
 Route::post('/language', 'LanguageController@changeLanguage')->name('language.change');
 Route::post('/currency', 'CurrencyController@changeCurrency')->name('currency.change');
@@ -93,9 +94,9 @@ Route::post('/category/nav-element-list', 'HomeController@get_category_items')->
 //Flash Deal Details Page
 Route::get('/flash-deal/{slug}', 'HomeController@flash_deal_details')->name('flash-deal-details');
 
-Route::get('/sitemap.xml', function(){
-	return base_path('sitemap.xml');
-});
+// Route::get('/sitemap.xml', function(){
+// 	return base_path('sitemap.xml');
+// });
 
 
 

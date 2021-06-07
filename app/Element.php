@@ -94,6 +94,12 @@ class Element extends Model
         return $this->hasMany(Variation::class, 'element_id', 'id');
     }
 
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'element_id', 'id');
+    }
+
     public function delete()
     {
         $this->combinations()->delete();

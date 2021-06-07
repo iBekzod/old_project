@@ -827,8 +827,8 @@ class ElementController extends Controller
 
         Artisan::call('view:clear');
         Artisan::call('cache:clear');
-
-        return back();
+        return redirect()->route('elements.all');
+        // return back();
     }
 
     /**
