@@ -1,12 +1,12 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-    <section class="py-5">
+    <section class="py-2">
         <div class="container">
             <div class="d-flex align-items-start">
                 @include('frontend.inc.user_side_nav')
                 <div class="aiz-user-panel">
-                    <div class="mt-2 mb-3 text-left aiz-titlebar">
+                    <div class="m-1 text-left aiz-titlebar">
                         <div class="row align-items-center">
                             <div class="col-md-6">
                                 <h1 class="h3">{{ translate('All elements') }}</h1>
@@ -29,7 +29,7 @@
                                 <div class="text-center col text-md-left">
                                     <h5 class="mb-md-0 h6">{{ translate('All Element') }}</h5>
                                 </div>
-                                @if ($type == 'Seller')
+                                {{-- @if ($type == 'Seller')
                                     <div class="ml-auto col-md-2">
                                         <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0"
                                             id="user_id" name="user_id" onchange="sort_elements()">
@@ -43,8 +43,8 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                @endif
-                                @if ($type == 'All')
+                                @endif --}}
+                                {{-- @if ($type == 'All')
                                     <div class="ml-auto col-md-2">
                                         <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0"
                                             id="user_id" name="user_id" onchange="sort_elements()">
@@ -54,7 +54,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                @endif
+                                @endif --}}
                                 <div class="ml-auto col-md-2">
                                     <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" name="type"
                                         id="type" onchange="sort_elements()">
@@ -86,9 +86,9 @@
                                     <tr>
                                         <th>#</th>
                                         <th width="20%">{{ translate('Name') }}</th>
-                                        @if ($type == 'Seller' || $type == 'All')
+                                        {{-- @if ($type == 'Seller' || $type == 'All')
                                             <th>{{ translate('Added By') }}</th>
-                                        @endif
+                                        @endif --}}
                                         {{-- <th>{{translate('Num of Sale')}}</th>
                         <th>{{translate('Total Stock')}}</th>
                         <th>{{translate('Base Price')}}</th> --}}
@@ -117,9 +117,9 @@
                                                 </div>
                                                 {{-- </a> --}}
                                             </td>
-                                            @if ($type == 'Seller' || $type == 'All')
+                                            {{-- @if ($type == 'Seller' || $type == 'All')
                                                 <td>{{ $element->user->name }}</td>
-                                            @endif
+                                            @endif --}}
                                             {{-- <td>{{ $element->num_of_sale }} {{translate('times')}}</td>
                             <td>
                                 @php
