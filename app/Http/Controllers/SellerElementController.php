@@ -213,7 +213,11 @@ class SellerElementController extends Controller
                             </td>
                             <td class="text-center">
                                 <label class="col-form-label" for="signinSrEmails">'.translate('Variation Image').'
-                                        <small>(290x300)</small></label>
+                                        <small>'. translate('(290x300)').'</small></label>
+                            </td>
+                            <td class="text-center">
+                                <label class="col-form-label" for="signinSrEmails">'.translate('Gallery Images').'
+                                        <small>'. translate('(600x600)').'</small></label>
                             </td>
                             <td class="text-center">
                                 <label for="" class="control-label">'.translate('Name').'</label>
@@ -257,12 +261,23 @@ class SellerElementController extends Controller
                                                 <div
                                                     class="input-group-text bg-soft-secondary font-weight-medium">'.translate('Browse').'</div>
                                             </div>
-                                            <div class="form-control file-amount"></div>
                                             <input type="hidden" name="combination['.$index.'][thumbnail_img]" value=""
                                                    class="selected-files">
                                         </div>
                                         <div class="file-preview box sm">
                                         </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <div class="input-group" data-toggle="aizuploader" data-type="image" data-multiple="true">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text bg-soft-secondary font-weight-medium">'. translate('Browse').'</div>
+                                        </div>
+                                        <input type="hidden" name="combination['.$index.'][photos]" value="" class="selected-files">
+                                    </div>
+                                    <div class="file-preview box sm">
+                                    </div>
                                 </div>
                             </td>
                             <td>
@@ -729,7 +744,10 @@ class SellerElementController extends Controller
                         $variation->name=$element->name." ".$variant['name'];
                         $variation->thumbnail_img = $variant['thumbnail_img'];
                         $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
-                        $variation->sku=$variant['artikul'];
+                        $variation->partnum=$variant['artikul'];
+                        $variation->color_id=(int)$variant['color_id'];
+                        $variation->characteristics=$variant['attribute_id'];
+                        $variation->photos=$variant['photos'];
                         $variation->num_of_sale=0;
                         $variation->qty=0;
                         $variation->rating=0;
@@ -746,7 +764,10 @@ class SellerElementController extends Controller
                                 if($variation->slug!=$variant['name'])
                                     $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
                             }
-                            $variation->sku=$variant['artikul'];
+                            $variation->partnum=$variant['artikul'];
+                            $variation->color_id=(int)$variant['color_id'];
+                            $variation->characteristics=$variant['attribute_id'];
+                            $variation->photos=$variant['photos'];
                             $variation->user_id=Auth::user()->id;
                             $variation->save();
                         }else{
@@ -755,7 +776,10 @@ class SellerElementController extends Controller
                             $variation->name=$element->name." ".$variant['name'];
                             $variation->thumbnail_img = $variant['thumbnail_img'];
                             $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
-                            $variation->sku=$variant['artikul'];
+                            $variation->partnum=$variant['artikul'];
+                            $variation->color_id=(int)$variant['color_id'];
+                            $variation->characteristics=$variant['attribute_id'];
+                            $variation->photos=$variant['photos'];
                             $variation->num_of_sale=0;
                             $variation->qty=0;
                             $variation->rating=0;

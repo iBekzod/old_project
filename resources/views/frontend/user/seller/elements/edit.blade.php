@@ -246,6 +246,10 @@
                                                                 <small>{{ translate('(290x300)') }}</small></label>
                                                     </td>
                                                     <td class="text-center">
+                                                        <label class="col-form-label" for="signinSrEmails">{{ translate('Gallery Images') }}
+                                                                <small>{{ translate('(600x600)') }}</small></label>
+                                                    </td>
+                                                    <td class="text-center">
                                                         <label for="" class="control-label">{{ translate('Name') }}</label>
                                                     </td>
                                                     <td class="text-center">
@@ -271,12 +275,23 @@
                                                                             <div
                                                                                 class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse') }}</div>
                                                                         </div>
-                                                                        <div class="form-control file-amount"></div>
                                                                         <input required type="hidden" name="combination[{{ $index }}][thumbnail_img]" value="{{ $combination->thumbnail_img??null }}"
                                                                             class="selected-files">
                                                                     </div>
                                                                     <div class="file-preview box sm">
                                                                     </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <div class="input-group" data-toggle="aizuploader" data-type="image" data-multiple="true">
+                                                                    <div class="input-group-prepend">
+                                                                        <div class="input-group-text bg-soft-secondary font-weight-medium">{{  translate('Browse')}}</div>
+                                                                    </div>
+                                                                    <input type="hidden" name="combination[{{ $index }}][photos]" value="{{ $combination->photos }}" class="selected-files">
+                                                                </div>
+                                                                <div class="file-preview box sm">
+                                                                </div>
                                                             </div>
                                                         </td>
                                                         <td>

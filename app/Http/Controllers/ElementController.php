@@ -216,8 +216,8 @@ class ElementController extends Controller
                                         <small>'. translate('(290x300)').'</small></label>
                             </td>
                             <td class="text-center">
-                                <label class="col-md-3 col-form-label"
-                                for="signinSrEmail">'.translate('Gallery Images').'<small>'. translate('(600x600)').'</small></label>
+                                <label class="col-form-label" for="signinSrEmails">'.translate('Gallery Images').'
+                                        <small>'. translate('(600x600)').'</small></label>
                             </td>
                             <td class="text-center">
                                 <label for="" class="control-label">'.translate('Name').'</label>
@@ -761,7 +761,10 @@ class ElementController extends Controller
                         $variation->name=$element->name." ".$variant['name'];
                         $variation->thumbnail_img = $variant['thumbnail_img'];
                         $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
-                        $variation->sku=$variant['artikul'];
+                        $variation->partnum=$variant['artikul'];
+                        $variation->color_id=(int)$variant['color_id'];
+                        $variation->characteristics=$variant['attribute_id'];
+                        $variation->photos=$variant['photos'];
                         $variation->num_of_sale=0;
                         $variation->qty=0;
                         $variation->rating=0;
@@ -778,7 +781,10 @@ class ElementController extends Controller
                                 if($variation->slug!=$variant['name'])
                                     $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
                             }
-                            $variation->sku=$variant['artikul'];
+                            $variation->partnum=$variant['artikul'];
+                            $variation->color_id=(int)$variant['color_id'];
+                            $variation->characteristics=$variant['attribute_id'];
+                            $variation->photos=$variant['photos'];
                             $variation->user_id=Auth::user()->id;
                             $variation->save();
                         }else{
@@ -787,7 +793,10 @@ class ElementController extends Controller
                             $variation->name=$element->name." ".$variant['name'];
                             $variation->thumbnail_img = $variant['thumbnail_img'];
                             $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
-                            $variation->sku=$variant['artikul'];
+                            $variation->partnum=$variant['artikul'];
+                            $variation->color_id=(int)$variant['color_id'];
+                            $variation->characteristics=$variant['attribute_id'];
+                            $variation->photos=$variant['photos'];
                             $variation->num_of_sale=0;
                             $variation->qty=0;
                             $variation->rating=0;
