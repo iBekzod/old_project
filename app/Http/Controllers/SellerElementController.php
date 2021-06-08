@@ -118,7 +118,7 @@ class SellerElementController extends Controller
 
             }
         } catch (Exception $e) {
-            dd($e->getMessage());
+            // dd($e->getMessage());
         }
         return 0;
     }
@@ -850,7 +850,7 @@ class SellerElementController extends Controller
         Artisan::call('view:clear');
         Artisan::call('cache:clear');
 
-        return back();
+        return redirect()->route('seller.elements.all');
     }
 
     /**
@@ -938,6 +938,7 @@ class SellerElementController extends Controller
         if(count($variation_ids)>0){
             $lang = default_language();
             $currencies = Currency::where('status', true)->get();
+
             if(Product::where('user_id', auth()->id())->whereIn('variation_id', $variation_ids)->exists()){
                 $products=Product::where('user_id', auth()->id())->whereIn('variation_id', $variation_ids)->get();
                 return view('frontend.user.seller.products.edit_product', compact('element', 'products', 'currencies', 'lang'));

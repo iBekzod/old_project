@@ -29,12 +29,12 @@
 @endsection
 
 @section('content')
-    <section class="py-5">
+    <section class="py-1">
         <div class="container">
             <div class="d-flex align-items-start">
-                {{-- @include('frontend.inc.user_side_nav') --}}
+                @include('frontend.inc.user_side_nav')
                 <div class="aiz-user-panel">
-                    <div class="mt-2 mb-3 text-left aiz-titlebar">
+                    <div class="m-2 text-left aiz-titlebar">
                         <h1 class="mb-0 h6">{{ translate('Create Element') }}</h5>
                     </div>
                     <div class="mx-auto col-lg-12">

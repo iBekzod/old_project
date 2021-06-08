@@ -12,11 +12,13 @@ class ProductColorCollection extends ResourceCollection
         return $this->collection->map(function($data) {
             if($color=Color::where('id', $data)->firstOrFail()){
                 $arr = [
+                    'id'=>$color->id,
                     'hash' => $color->code,
                     'name' => $color->getTranslation('name')
                 ];
             }else{
                 $arr = [
+                    'id'=>null,
                     'hash' => null,
                     'name' => null
                 ];

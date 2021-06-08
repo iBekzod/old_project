@@ -27,6 +27,8 @@ class ProductDetailCollection extends ResourceCollection
             'id' => (integer) $product->id,
             'name' => $product->getTranslation('name'),
             'added_by' => $product->added_by,
+            'variant' => $this->makeVariation($product)??[],
+            'variations' => $this->makeVariations($product)??[],
             'user' => [
                 'name' => $product->user->name,
                 'email' => $product->user->email,
@@ -78,8 +80,7 @@ class ProductDetailCollection extends ResourceCollection
             'shipping_type' => $product->delivery_type,
             'shipping_cost' => $this->calculateShippingCost($product),
             'characteristics' => $this->convertToCharacteristics(json_decode($element->characteristics, true)),
-            'variant' => $this->makeVariation($product)??[],
-            'variations' => $this->makeVariations($product)??[],
+
             'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??null,
             'category'=>[
                 'name' => $element->category->name,
@@ -220,7 +221,7 @@ class ProductDetailCollection extends ResourceCollection
             $variation=$product->variation;
             $variations[]=[
                 'slug'=>$product->slug??null,
-                'attributes'=>$variation->characteristics??null,
+                'attributes'=>array_map(function($v){ return (int)$v; }, explode(",",$variation->characteristics)??null),
                 'color'=>$variation->color_id??null
             ];
         }
@@ -231,8 +232,10 @@ class ProductDetailCollection extends ResourceCollection
         $variation=$product->variation;
         return [
             'slug'=>$product->slug??null,
-            'attributes'=>$variation->characteristics??null,
-            'color'=>$variation->color_id??null
+            'attributes'=>array_map(function($v){ return (int)$v; }, explode(",",$variation->characteristics)??null),
+            'color'=>$variation->color_id??null,
+            'photos' => $this->convertPhotos(explode(',', $variation->photos)),
+            'thumbnail_image' => api_asset($variation->thumbnail_img),
         ];
     }
 

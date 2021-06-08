@@ -930,7 +930,7 @@ class ElementController extends Controller
             if(count($variation_ids)>0){
                 $lang = default_language();
                 $currencies = Currency::where('status', true)->get();
-                if(Product::where('user_id', auth()->id())->whereIn('variation_id', $variation_ids)->exists()){
+                if(Product::where('user_id', $element->user_id)->whereIn('variation_id', $variation_ids)->exists()){
                     $products=Product::where('user_id', auth()->id())->whereIn('variation_id', $variation_ids)->get();
                     return view('backend.product.products.edit_product', compact('element', 'products', 'currencies', 'lang'));
                 }
