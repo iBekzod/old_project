@@ -10,7 +10,7 @@ class SellerAutoidentificationFormController extends Controller
    {
         $array=$request->all();
        // dd($array);
-         return view('frontend.user.seller.seller_documentation')->with('seller', $array);
+         return view('frontend.user.seller.seller_autoidentification')->with('seller', $array);
 
 
 //         array:16 [▼
