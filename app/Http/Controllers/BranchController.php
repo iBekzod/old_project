@@ -40,17 +40,14 @@ class BranchController extends Controller
      */
     public function store(Request $request)
     {
-        $branch = new Branch();
-        $branch->name = $request->name;
+        $branch = Branch::firstOrNew(['name' => $request->name]);
         $branch->save();
-
         foreach (Language::all() as $language){
             // Branch  Translation
             $branch_translation = BranchTranslation::firstOrNew(['lang' => $language->code, 'branch_id' => $branch->id]);
             $branch_translation->name = $branch->name;
             $branch_translation->save();
         }
-
         flash(translate('Branch has been inserted successfully'))->success();
         return redirect()->route('branches.index');
     }
@@ -113,12 +110,7 @@ class BranchController extends Controller
     public function destroy($id)
     {
         $branch = Branch::findOrFail($id);
-
-        foreach ($branch->branch_translations as $key => $branch_translation) {
-            $branch_translation->delete();
-        }
-
-        Branch::destroy($id);
+        $branch->delete();
         flash(translate('branch has been deleted successfully'))->success();
         return redirect()->route('branches.index');
     }

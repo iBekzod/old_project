@@ -153,12 +153,12 @@
                                                     title="{{ translate('Edit') }}">
                                                     <i class="las la-edit"></i>
                                                 </a>
-                                                <a href="#"
+                                                {{-- <a href="#"
                                                     class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
                                                     data-href="{{ route('seller.elements.destroy', $element->id) }}"
                                                     title="{{ translate('Delete') }}">
                                                     <i class="las la-trash"></i>
-                                                </a>
+                                                </a> --}}
 
                                                 <a href="{{ route('seller.elements.products.edit', ['id' => $element->id]) }}"
                                                     class="btn btn-soft-primary btn-icon btn-circle btn-sm"

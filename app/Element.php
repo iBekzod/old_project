@@ -102,7 +102,14 @@ class Element extends Model
 
     public function delete()
     {
-        $this->combinations()->delete();
+        if($this->parent_id==null){
+            if($element=Element::where('parent_id', $this->id)->first()){
+                $element->parent_id=null;
+                $element->save();
+            }
+        }else{
+            $this->combinations()->delete();
+        }
         $this->element_translations()->delete();
         return parent::delete();
     }
