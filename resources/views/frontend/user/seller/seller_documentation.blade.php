@@ -83,7 +83,7 @@
                                 Покупатель – любое физическое или юридическое лицо, посетитель сайт https://tinfis.uz, который намерен приобрести товар(ы), размещенные на торговой площадке «TINFIS», продавцом которых является один из Заказчиков, путем совершения действий, предусмотренных в настоящем Договоре, и материалах опубликованной на сайте https://tinfis.uz. <br>
                                 Счет Исполнителя - банковский счет Исполнителя в кредитной организации или других «платежных системах», на которые осуществляется оплата услуг.
                                 Регистрация продавца - совокупность действий Заказчика, а именно: заполнение регистрационной формы путем ввода персональных данных, и принятие положений Оферты, в результате чего, на сайте https://tinfis.uz для Заказчика создается учетная запись с уникальным логином и паролем.
-                                Стороны - Исполнитель (ООО «BMG HI-TECH») и Заказчик  <span class="text-danger">{{ $seller['Название_магазина'] }}</span>. <br>
+                                Стороны - Исполнитель (ООО «BMG HI-TECH») и Заказчик  <span class="text-danger">{{$seller['Название_магазина']}}</span>. <br>
                                 Товары - товары, которые размещаются на торговой площадке https://tinfis.uz Заказчиком, с целью продажи Посетителям сайта.
                                 2.2 В Договоре могут быть использованы термины и определения, которые не получили определение в пункте 2. В этом случае толкование такого термина производится в соответствии с текстом. В случае отсутствия однозначного толкования термина в тексте Оферты, следует руководствоваться законодательством Республики Узбекистан и сложившейся бизнес-практикой ООО «BMG HI-TECH».
                             </p>
@@ -304,38 +304,39 @@
                        <div class="col-md-12">
                            <div class="row">
                                  <div class="col-md-6"><p>Название: ООО «BMG HI-TECH</p> </div>
-                                 <div class="col-md-6"><p>Название:</p> </div>
+                                 <div class="col-md-6"><p>Название: <span class="text-danger pl-1"> {{ $seller['Название_магазина']?? null }}</span></p> </div>
                            </div>
                            <div class="row">
-                                 <div class="col-md-6"><p>Адрес: 100029 г. Ташкент, Мирабадский р-он  </p></div>
-                                 <div class="col-md-6"><p>Адрес: </p> </div>
-                           </div>
-                           <div class="row">
-                                    <div class="col-md-6"><p>ул. Афросиаб 12 б</p> </div>
-                                    <div class="col-md-6"><p>Банк:  </p> </div>
+                                 <div class="col-md-6"><p>Адрес: 100029 г. Ташкент, Мирабадский р-он   ул. Афросиаб 12 б </p></div>
+                                 <div class="col-md-6"><p>Адрес:  <span class="text-danger pl-1">{{ $seller['Физический_адрес_вендора']?? null }}</span></p> </div>
                            </div>
                             <div class="row">
                                 <div class="col-md-6"><p>Банк: Алока банк </p> </div>
-                                <div class="col-md-6"><p>МФО:</p></div>
+                                <div class="col-md-6"><p> Банк: <span class="text-danger pl-1">{{ $seller['Название_банка']?? null }}</span></p></div>
                            </div>
                             <div class="row">
                                 <div class="col-md-6"><p>МФО: 00401</p> </div>
-                                <div class="col-md-6"><p>р/с: </p> </div>
+                                <div class="col-md-6"><p>МФО: <span class="text-danger pl-1">{{ $seller['МФО_банка']?? null }}</span></p> </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6"><p>р/с: 2020 8000 2009 7992 2001 </p></div>
-                                <div class="col-md-6"><p>ИНН:</p> </div>
+                                <div class="col-md-6"><p>р/с:<span class="text-danger pl-1">{{ $seller['Р/С']?? null }}</span></p> </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6"><p>ИНН: 306018564 </p> </div>
-                                <div class="col-md-6"><p>Тел раб: </p></div>
+                                <div class="col-md-6"><p> ИНН:<span class="text-danger pl-1">{{ $seller['ИНН']?? null }}</span></p></div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
                                     <p>Тел раб: 78 150 8 150</p>
-                                    <p>e-mail: bmgventure@gmail.com</p>
                                 </div>
-                                <div class="col-md-6"><p>e-mail: </p>   </div>
+                                <div class="col-md-6"> <p>Тел раб:<span class="text-danger pl-1">{{ $seller['Тел_директора']?? null }}</span></p>  </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p>e-mail: bmgventure@gmail.com </p>
+                                </div>
+                                <div class="col-md-6"> <p>e-mail: <span class="text-danger pl-1">{{ $seller['Электронная_почта_директора']?? null }}</span> </p>  </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
@@ -344,7 +345,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <p>Руководитель <br>
-                                    /________________/
+                                       <b> <span class="text-dark">{{ $seller['ФИО_директора']?? null }}</span></b>
                                     </p>
                                </div>
                             </div>
@@ -352,29 +353,7 @@
                </div>
             </div>
         </div>
-        {{-- <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0 h6">{{translate('PDF Specification')}}</h5>
-            </div>
-            <div class="card-body">
-                <div class="form-group row">
-                    <label class="col-md-3 col-form-label"
-                           for="signinSrEmail">{{translate('PDF Specification')}}</label>
-                    <div class="col-md-8">
-                        <div class="input-group" data-toggle="aizuploader">
-                            <div class="input-group-prepend">
-                                <div
-                                    class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse')}}</div>
-                            </div>
-                            <div class="form-control file-amount">{{ translate('Choose File') }}</div>
-                            <input type="hidden" name="pdf" value="" class="selected-files">
-                        </div>
-                        <div class="file-preview box sm">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
+
 
 	</div>
 
