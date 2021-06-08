@@ -49,10 +49,10 @@ class SellerElementController extends Controller
 
 
         $elements = Element::where('parent_id', null)->where('published', true)->where('user_id', '<>', Auth::user()->id);
-        if ($request->has('user_id') && $request->user_id != null) {
-            $elements = $elements->where('user_id', $request->user_id);
-            $seller_id = $request->user_id;
-        }
+        // if ($request->has('user_id') && $request->user_id != null) {
+        //     $elements = $elements->where('user_id', $request->user_id);
+        //     $seller_id = $request->user_id;
+        // }
 
         if($request->has('category_id') && $request->category_id != null && $request->category_id != 0){
             $category_id=$request->category_id;
