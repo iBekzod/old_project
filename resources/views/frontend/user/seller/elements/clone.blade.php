@@ -25,13 +25,13 @@
                                 </div>
                                 <div class="ml-auto my-2 col-md-8">
                                     <div class="mb-0 form-group text-center col text-md-right">
-                                        <input type="text" class="form-control form-control-sm" id="search" name="search"
+                                        <input type="text" class="form-control form-control-sm" id="search" name="search"  onchange="sort_elements()"
                                             @isset($sort_search) value="{{ $sort_search }}" @endisset
                                             placeholder="{{ translate('Type & Enter') }}">
                                     </div>
                                 </div>
                                 <div class="ml-auto col-md-4">
-                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0"
+                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
                                         id="category_id" name="category_id" onchange="sort_elements()">
                                         <option value="0" @if($category_id == 0) selected @endif>{{ translate('All categories') }}</option>
                                         @foreach ($categories as $key => $category)
@@ -42,7 +42,7 @@
                                     </select>
                                 </div>
                                 <div class="ml-auto col-md-4">
-                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0"
+                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
                                         id="sub_category_id" name="sub_category_id" onchange="sort_elements()">
                                         <option value="0"  @if($sub_category_id == 0) selected @endif>{{ translate('All sub categories') }}</option>
                                         @foreach ($sub_categories as $key => $category)
@@ -53,7 +53,7 @@
                                     </select>
                                 </div>
                                 <div class="ml-auto col-md-4">
-                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0"
+                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
                                         id="sub_sub_category_id" name="sub_sub_category_id" onchange="sort_elements()">
                                         <option value="0"  @if($sub_sub_category_id == 0) selected @endif>{{ translate('All sub sub categories') }}</option>
                                         @foreach ($sub_sub_categories as $key => $category)

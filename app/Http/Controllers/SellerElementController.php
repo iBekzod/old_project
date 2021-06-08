@@ -49,16 +49,25 @@ class SellerElementController extends Controller
 
 
         $elements = Element::where('parent_id', null)->where('published', true)->where('user_id', '<>', Auth::user()->id);
-        if ($request->has('user_id') && $request->user_id != null) {
-            $elements = $elements->where('user_id', $request->user_id);
-            $seller_id = $request->user_id;
-        }
+        // if ($request->has('user_id') && $request->user_id != null) {
+        //     $elements = $elements->where('user_id', $request->user_id);
+        //     $seller_id = $request->user_id;
+        // }
 
         if($request->has('category_id') && $request->category_id != null && $request->category_id != 0){
             $category_id=$request->category_id;
             $sub_category_ids=Category::where('parent_id', $category_id)->pluck('id');
             $sub_sub_category_ids=Category::whereIn('parent_id', $sub_category_ids)->pluck('id');
             $elements = $elements->whereIn('category_id', $sub_sub_category_ids);
+            if($request->has('sub_category_id') && $request->sub_category_id != null && $request->sub_category_id != 0){
+                $sub_category_id=$request->sub_category_id;
+                $sub_sub_category_ids=Category::whereIn('parent_id', $sub_category_ids)->pluck('id');
+                $elements = $elements->whereIn('category_id', $sub_sub_category_ids);
+                if($request->has('sub_sub_category_id') && $request->sub_sub_category_id != null && $request->sub_sub_category_id != 0){
+                    $sub_sub_category_id=$request->sub_sub_category_id;
+                    $elements = $elements->where('category_id', $sub_sub_category_id);
+                }
+            }
         }
 
         if ($request->type != null) {
@@ -85,7 +94,7 @@ class SellerElementController extends Controller
 
         $categories=Category::where('level', 0)->get();
         $sub_categories=Category::where('parent_id', $category_id)->get();
-        $sub_sub_categories=Category::where('parent_id', $sub_sub_category_id)->get();
+        $sub_sub_categories=Category::where('parent_id', $sub_category_id)->get();
 
         return view('frontend.user.seller.elements.clone',
         compact('elements', 'type', 'seller_id',
