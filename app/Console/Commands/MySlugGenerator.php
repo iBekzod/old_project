@@ -1,6 +1,4 @@
-<?php
-
-namespace App\Console\Commands;
+<?php namespace App\Console\Commands;
 
 use App\Brand;
 use App\Category;
@@ -14,7 +12,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class SlugGenerator extends Command
+class MySlugGenerator extends Command
 {
     /**
      * The name and signature of the console command.

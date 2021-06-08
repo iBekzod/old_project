@@ -41,11 +41,26 @@ class SellerElementController extends Controller
         $query = null;
         $sort_search = null;
         $seller_id = null;
+
+        $category_id=0;
+        $sub_category_id=0;
+        $sub_sub_category_id=0;
+
+
+
         $elements = Element::where('parent_id', null)->where('published', true)->where('user_id', '<>', Auth::user()->id);
         if ($request->has('user_id') && $request->user_id != null) {
             $elements = $elements->where('user_id', $request->user_id);
             $seller_id = $request->user_id;
         }
+
+        if($request->has('category_id') && $request->category_id != null && $request->category_id != 0){
+            $category_id=$request->category_id;
+            $sub_category_ids=Category::where('parent_id', $category_id)->pluck('id');
+            $sub_sub_category_ids=Category::whereIn('parent_id', $sub_category_ids)->pluck('id');
+            $elements = $elements->whereIn('category_id', $sub_sub_category_ids);
+        }
+
         if ($request->type != null) {
             $var = explode(",", $request->type);
             $col_name = $var[0];
@@ -68,7 +83,16 @@ class SellerElementController extends Controller
             }
         }
 
-        return view('frontend.user.seller.elements.clone', compact('elements', 'type', 'seller_id', 'col_name', 'query', 'sort_search'));
+        $categories=Category::where('level', 0)->get();
+        $sub_categories=Category::where('parent_id', $category_id)->get();
+        $sub_sub_categories=Category::where('parent_id', $sub_sub_category_id)->get();
+
+        return view('frontend.user.seller.elements.clone',
+        compact('elements', 'type', 'seller_id',
+                'col_name', 'query', 'sort_search',
+                'category_id','sub_category_id','sub_sub_category_id',
+                'categories','sub_categories','sub_sub_categories',
+        ));
     }
 
     public function clone_selected_elements(Request $request)
@@ -118,7 +142,7 @@ class SellerElementController extends Controller
 
             }
         } catch (Exception $e) {
-            dd($e->getMessage());
+            // dd($e->getMessage());
         }
         return 0;
     }
@@ -340,8 +364,8 @@ class SellerElementController extends Controller
                         <tr class="variant">
                             <td>
                                 <label for="" class="control-label">'.($index+1).'</label>
-                                <input type="hidden" name="combination['.$index.'][color_id]" value="'.implode(",", $my_colors).'">
-                                <input type="hidden" name="combination['.$index.'][attribute_id]" value="'.implode(",", $my_attributes).'">
+                                <input type="hidden" name="combination['.$index.'][color_id]" value="'.implode(", ", $my_colors).'">
+                                <input type="hidden" name="combination['.$index.'][attribute_id]" value="'.implode(", ", $my_attributes).'">
                             </td>
                             <td>
                                 <div class="form-group">
@@ -370,8 +394,8 @@ class SellerElementController extends Controller
                                 </div>
                             </td>
                             <td>
-                                <label for="" class="control-label">'.implode(",", $combination).'</label>
-                                <input type="hidden" name="combination['.$index.'][name]" value="'.implode (",", $combination).'" class="form-control">
+                                <label for="" class="control-label">'.implode(", ", $combination).'</label>
+                                <input type="hidden" name="combination['.$index.'][name]" value="'.implode (", ", $combination).'" class="form-control">
                             </td>
                             <td>
                                 <input type="text" name="combination['.$index.'][artikul]" value="" class="form-control">
@@ -850,7 +874,7 @@ class SellerElementController extends Controller
         Artisan::call('view:clear');
         Artisan::call('cache:clear');
 
-        return back();
+        return redirect()->route('seller.elements.all');
     }
 
     /**
@@ -938,6 +962,7 @@ class SellerElementController extends Controller
         if(count($variation_ids)>0){
             $lang = default_language();
             $currencies = Currency::where('status', true)->get();
+
             if(Product::where('user_id', auth()->id())->whereIn('variation_id', $variation_ids)->exists()){
                 $products=Product::where('user_id', auth()->id())->whereIn('variation_id', $variation_ids)->get();
                 return view('frontend.user.seller.products.edit_product', compact('element', 'products', 'currencies', 'lang'));

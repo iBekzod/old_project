@@ -255,7 +255,12 @@ class ProductController extends Controller
                 if ($variation = Variation::findOrFail($variant["id"])) {
                     $product = new Product;
                     $product->element_id=$element->id;
-                    $product_name = $variation->name . " " . Auth::user()->name??null . " ".$variant["price"];
+                    if($shop_name=Auth::user()->shop->name){
+                        $product_name = $variation->name . " by " . (Auth::user()->shop->name)??null;
+                    }else{
+                        $product_name = $variation->name . " by " . (Auth::user()->name)??null;
+                    }
+                    // $product_name = $variation->name . " " . Auth::user()->name??null . " ".$variant["price"];
                     $product->name = $product_name;
                     $product->added_by = Auth::user()->user_type;
                     $product->user_id = $user_id;
@@ -396,7 +401,12 @@ class ProductController extends Controller
                     // dd($variation);
                     // $product_name = $variation->name . " " . Auth::user()->name??null . " ".$variant["price"];
                     // dd($product);
-                    $product_name = $variation->name . " ".$variant["price"];
+                    // $product_name = $variation->name . " ".$variant["price"];
+                    if($shop_name=Auth::user()->shop->name){
+                        $product_name = $variation->name . " by " . (Auth::user()->shop->name)??null;
+                    }else{
+                        $product_name = $variation->name . " by " . (Auth::user()->name)??null;
+                    }
                     $product->name = $product_name;
                     $product->added_by = Auth::user()->user_type;
                     $product->user_id = $user_id;

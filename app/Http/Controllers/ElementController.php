@@ -251,8 +251,8 @@ class ElementController extends Controller
                         <tr class="variant">
                             <td>
                                 <label for="" class="control-label">'.($index+1).'</label>
-                                <input type="hidden" name="combination['.$index.'][color_id]" value="'.implode(",", $my_colors).'">
-                                <input type="hidden" name="combination['.$index.'][attribute_id]" value="'.implode(",", $my_attributes).'">
+                                <input type="hidden" name="combination['.$index.'][color_id]" value="'.implode(", ", $my_colors).'">
+                                <input type="hidden" name="combination['.$index.'][attribute_id]" value="'.implode(", ", $my_attributes).'">
                             </td>
                             <td>
                                 <div class="form-group">
@@ -283,8 +283,8 @@ class ElementController extends Controller
                                 </div>
                             </td>
                             <td>
-                                <label for="" class="control-label">'.implode(",", $combination).'</label>
-                                <input type="hidden" name="combination['.$index.'][name]" value="'.implode (",", $combination).'" class="form-control">
+                                <label for="" class="control-label">'.implode(", ", $combination).'</label>
+                                <input type="hidden" name="combination['.$index.'][name]" value="'.implode (", ", $combination).'" class="form-control">
                             </td>
                             <td>
                                 <input type="text" name="combination['.$index.'][artikul]" value="" class="form-control">
@@ -930,7 +930,7 @@ class ElementController extends Controller
             if(count($variation_ids)>0){
                 $lang = default_language();
                 $currencies = Currency::where('status', true)->get();
-                if(Product::where('user_id', auth()->id())->whereIn('variation_id', $variation_ids)->exists()){
+                if(Product::where('user_id', $element->user_id)->whereIn('variation_id', $variation_ids)->exists()){
                     $products=Product::where('user_id', auth()->id())->whereIn('variation_id', $variation_ids)->get();
                     return view('backend.product.products.edit_product', compact('element', 'products', 'currencies', 'lang'));
                 }
