@@ -84,17 +84,6 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        {{--  <div class="form-group row">  --}}
-                                                            {{--  <label class="col-sm-3 col-from-label"
-                                                            for="name">{{translate('Name')}} <i
-                                                             class="las la-language text-danger"
-                                                             title="{{translate('Translatable')}}"></i></label>
-                                                            <div class="col-sm-9">
-                                                                <input type="text" placeholder="{{translate('Name')}}"
-                                                                       name="name" class="form-control"
-                                                                       required
-                                                                       value="{{ $attribute->getTranslation('name') }}">
-                                                            </div>  --}}
                                                             <div class="form-group  row mb-3">
                                                                 <label for="name">{{translate('Name')}}<i
                                                                     class="las la-language text-danger"
@@ -106,16 +95,14 @@
                                                             </div>
                                                             <div class="form-group  row mb-3">
                                                                 <label for="edit_branch_{{$attribute->id}}">{{translate('Branch')}}</label>
-                                                                <select class="form-control aiz-selectpicker" name="edit_branch_{{$attribute->id}}" id="edit_branch_{{$attribute->id}}"
-                                                                        data-live-search="true" required>
+                                                                <select class="form-control aiz-selectpicker" name="edit_branch_{{$attribute->id}}"
+                                                                    id="edit_branch_{{$attribute->id}}" data-live-search="true" required>
                                                                     @foreach ($branches as $item)
-                                                                         <option
-                                                                         @if(isset($branch) && $item->id==$branch->id) selected @endif
+                                                                         <option  @if(isset($branch) && $item->id==$branch->id) selected @endif
                                                                           value="{{ $item->id }}">{{ $item->getTranslation('name') }}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>
-                                                        {{--  </div>  --}}
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"

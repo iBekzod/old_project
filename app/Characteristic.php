@@ -38,4 +38,9 @@ class Characteristic extends Model
         return $this->hasOne(Attribute::class);
     }
 
+    public function delete()
+    {
+        $this->characteristic_translations()->delete();
+        return parent::delete();
+    }
 }

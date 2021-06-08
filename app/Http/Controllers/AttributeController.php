@@ -9,6 +9,7 @@ use App\Attribute;
 use App\Characteristic;
 use App\AttributeTranslation;
 use App\Branch;
+use App\CharacteristicTranslation;
 use CoreComponentRepository;
 use App\Language;
 class AttributeController extends Controller
@@ -49,17 +50,13 @@ class AttributeController extends Controller
         $attribute->combination = false;
         if($request->has('branch_id')) $attribute->branch_id = $request->branch_id;
         if($request->has('selected_branch_id')) $attribute->branch_id = $request->selected_branch_id;
-
         $attribute->save();
-
-
         foreach (Language::all() as $language){
             //  Attribute  Translation
             $attribute_translation = AttributeTranslation::firstOrNew(['lang' => $language->code, 'attribute_id' => $attribute->id]);
             $attribute_translation->name = $attribute->name;
             $attribute_translation->save();
         }
-
         flash(translate('Attribute has been inserted successfully'))->success();
         return back();
 
@@ -100,6 +97,10 @@ class AttributeController extends Controller
     public function update(Request $request, $id)
     {
         $attribute = Attribute::findOrFail($id);
+        if($attribute->name == $request->name){
+            flash(translate('Attribute has same name'))->success();
+            return back();
+        }
         $attribute->name = $request->name;
         $attribute->combination = false;
         if($request->has('branch_id')) $attribute->branch_id = $request->branch_id;
@@ -127,11 +128,7 @@ class AttributeController extends Controller
     {
         $attribute = Attribute::findOrFail($id);
 
-        foreach ($attribute->attribute_translations as $key => $attribute_translation) {
-            $attribute_translation->delete();
-        }
-
-        Attribute::destroy($id);
+        $attribute->delete();
         flash(translate('Attribute has been deleted successfully'))->success();
         return back();
     }
@@ -166,6 +163,11 @@ class AttributeController extends Controller
                     'name'=>$value,
                     'attribute_id'=>$attribute->id
                 ]);
+                foreach (Language::all() as $language) {
+                    $attribute_translation = CharacteristicTranslation::firstOrNew(['lang' => $language->code, 'attribute_id' => $attribute->id]);
+                    $attribute_translation->name = $request->name;
+                    $attribute_translation->save();
+                }
             }
         }
 
@@ -182,11 +184,7 @@ class AttributeController extends Controller
                     $attribute = Attribute::findOrFail($attribute_id);
                     $options = null;
                     foreach ($attribute->characteristics as $value) {
-                        $options = $options . '<option selected';
-//                        if ($request->has('id') && $element->characteristics != null && in_array($value->id, json_decode($element->characteristics, true))) {
-//                            $options = $options . 'selected';
-//                        }
-                        $options = $options . ' value = "' . $value->name . '" > ' . $value->getTranslation('name') . ' </option >';
+                        $options = $options . '<option selected value = "' . $value->name . '" > ' . $value->getTranslation('name') . ' </option >';
                     }
                     $data=$options;
                 }

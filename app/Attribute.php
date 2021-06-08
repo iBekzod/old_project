@@ -33,4 +33,12 @@ class Attribute extends Model
     {
         return $this->hasMany(Characteristic::class);
     }
+
+    public function delete()
+    {
+        $this->characteristics()->delete();
+        $this->categories()->delete();
+        $this->attribute_translations()->delete();
+        return parent::delete();
+    }
 }
