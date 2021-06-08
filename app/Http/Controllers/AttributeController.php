@@ -186,7 +186,7 @@ class AttributeController extends Controller
 //                        if ($request->has('id') && $element->characteristics != null && in_array($value->id, json_decode($element->characteristics, true))) {
 //                            $options = $options . 'selected';
 //                        }
-                        $options = $options . ' value = "' . $value->id . '" > ' . $value->getTranslation('name') . ' </option >';
+                        $options = $options . ' value = "' . $value->name . '" > ' . $value->getTranslation('name') . ' </option >';
                     }
                     $data=$options;
                 }
