@@ -63,12 +63,12 @@
                     </a>
                 </li> --}}
 
-                <li class="aiz-side-nav-item">
+                {{-- <li class="aiz-side-nav-item">
                     <a href="{{ route('digital_purchase_history.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['digital_purchase_history.index'])}}">
                         <i class="las la-download aiz-side-nav-icon"></i>
                         <span class="aiz-side-nav-text">{{ translate('Downloads') }}</span>
                     </a>
-                </li>
+                </li> --}}
 
                 @php
                     $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
@@ -98,23 +98,23 @@
                         </a>
                     </li> --}}
                     <li class="aiz-side-nav-item">
-                        <a href="{{ route('seller.elements.all') }}" class="aiz-side-nav-link {{ areActiveRoutes(['seller.elements.all'])}}">
+                        <a href="{{ route('seller.elements.all') }}" class="aiz-side-nav-link {{ areActiveRoutes(['seller.elements.all', 'seller.elements.clone', 'seller.elements.create'])}}">
                             <i class="lab la-sketch aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{ translate('Elements') }}</span>
                         </a>
                     </li>
-                    <li class="aiz-side-nav-item">
+                    {{-- <li class="aiz-side-nav-item">
                         <a href="{{route('product_bulk_upload.index')}}" class="aiz-side-nav-link {{ areActiveRoutes(['product_bulk_upload.index'])}}">
                             <i class="las la-upload aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{ translate('Product Bulk Upload') }}</span>
                         </a>
-                    </li>
-                    <li class="aiz-side-nav-item">
+                    </li> --}}
+                    {{-- <li class="aiz-side-nav-item">
                         <a href="{{ route('seller.digitalproducts') }}" class="aiz-side-nav-link {{ areActiveRoutes(['seller.digitalproducts', 'seller.digitalproducts.upload', 'seller.digitalproducts.edit'])}}">
                             <i class="lab la-sketch aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{ translate('Digital Products') }}</span>
                         </a>
-                    </li>
+                    </li> --}}
                 @endif
 
                 @if(\App\BusinessSetting::where('type', 'classified_product')->first()->value == 1)

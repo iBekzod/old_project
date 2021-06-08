@@ -29,7 +29,7 @@
                         </div>
 
                         <div class="col-md-4 mx-auto mb-3" >
-                            <a href="{{ route('customer_products.create')}}">
+                            <a href="{{ route('seller.elements.create')}}">
                               <div class="p-3 rounded mb-3 c-pointer text-center bg-white shadow-sm hov-shadow-lg has-transition">
                                   <span class="size-60px rounded-circle mx-auto bg-secondary d-flex align-items-center justify-content-center mb-3">
                                       <i class="las la-plus la-3x text-white"></i>
@@ -81,7 +81,7 @@
                                     <tr>
                                         <td>{{ $key+1 }}</td>
                                         <td><a href="{{ route('customer.product', $product->slug) }}">{{ $product->name }}</a></td>
-                                        <td>{{ single_price($product->unit_price) }}</td>
+                                        <td>{{ single_price($product->price) }}</td>
                                         <td><label class="aiz-switch aiz-switch-success mb-0">
                                             <input onchange="update_status(this)" value="{{ $product->id }}" type="checkbox" <?php if($product->status == 1) echo "checked";?> >
                                             <span class="slider round"></span></label>
