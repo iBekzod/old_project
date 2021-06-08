@@ -18,52 +18,61 @@
                     <div class="card">
                         <form class="" id="sort_elements" action="" method="GET">
                             <div class="card-header row gutters-5">
-                                <div class="text-center col text-md-left">
-                                    <h5 class="mb-md-0 h6">{{ translate('All Element') }}</h5>
+                                <div class="ml-auto  my-2 col-md-4">
+                                    <div class="text-center col text-md-left">
+                                        <h5 class="mb-md-0 h6">{{ translate('Elements') }}</h5>
+                                    </div>
                                 </div>
-                                @if ($type == 'Seller')
-                                    <div class="ml-auto col-md-3">
-                                        <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0"
-                                            id="user_id" name="user_id" onchange="sort_elements()">
-                                            <option value="">{{ translate('All Sellers') }}</option>
-                                            @foreach (App\Seller::all() as $key => $seller)
-                                                @if ($seller->user != null && $seller->user->shop != null)
-                                                    <option value="{{ $seller->user->id }}" @if ($seller->user->id == $seller_id) selected @endif>{{ $seller->user->shop->name }}
-                                                        ({{ $seller->user->name }})
-                                                    </option>
-                                                @endif
-                                            @endforeach
-                                        </select>
+                                <div class="ml-auto my-2 col-md-8">
+                                    <div class="mb-0 form-group text-center col text-md-right">
+                                        <input type="text" class="form-control form-control-sm" id="search" name="search"
+                                            @isset($sort_search) value="{{ $sort_search }}" @endisset
+                                            placeholder="{{ translate('Type & Enter') }}">
                                     </div>
-                                @endif
-                                {{-- @if ($type == 'All') --}}
-                                    <div class="ml-auto col-md-2">
-                                        <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0"
-                                            id="user_id" name="user_id" onchange="sort_elements()">
-                                            <option value="">{{ translate('All Sellers') }}</option>
-                                            @foreach (App\User::where('user_type', '=', 'admin')->orWhere('user_type', '=', 'seller')->get() as $key => $seller)
-                                                @if($seller->id!=Auth::id())
-                                                    <option value="{{ $seller->id }}" @if ($seller->id == $seller_id) selected @endif>{{ $seller->name }}</option>
-                                                @endif
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                {{-- @endif --}}
-                                <div class="ml-auto col-md-2">
+                                </div>
+                                <div class="ml-auto col-md-4">
+                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0"
+                                        id="category_id" name="category_id" onchange="sort_elements()">
+                                        <option value="0" @if($category_id == 0) selected @endif>{{ translate('All categories') }}</option>
+                                        @foreach ($categories as $key => $category)
+                                                <option value="{{ $category->id }}" @if ($category->id == $category_id) selected @endif>
+                                                    {{ $category->name }}
+                                                </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="ml-auto col-md-4">
+                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0"
+                                        id="sub_category_id" name="sub_category_id" onchange="sort_elements()">
+                                        <option value="0"  @if($sub_category_id == 0) selected @endif>{{ translate('All sub categories') }}</option>
+                                        @foreach ($sub_categories as $key => $category)
+                                                <option value="{{ $category->id }}" @if ($category->id == $sub_category_id) selected @endif>
+                                                    {{ $category->name }}
+                                                </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="ml-auto col-md-4">
+                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0"
+                                        id="sub_sub_category_id" name="sub_sub_category_id" onchange="sort_elements()">
+                                        <option value="0"  @if($sub_sub_category_id == 0) selected @endif>{{ translate('All sub sub categories') }}</option>
+                                        @foreach ($sub_sub_categories as $key => $category)
+                                                <option value="{{ $category->id }}" @if ($category->id == $sub_sub_category_id) selected @endif>
+                                                    {{ $category->name }}
+                                                </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                {{-- <div class="ml-auto col-md-2">
                                     <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" name="type"
                                         id="type" onchange="sort_elements()">
                                         <option value="">{{ translate('Sort By') }}</option>
                                         <option value="rating,desc" @isset($col_name, $query) @if ($col_name == 'rating' && $query == 'desc') selected @endif @endisset>{{ translate('Rating (High > Low)') }}</option>
                                         <option value="rating,asc" @isset($col_name, $query) @if ($col_name == 'rating' && $query == 'asc') selected @endif @endisset>{{ translate('Rating (Low > High)') }}</option>
                                     </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-0 form-group">
-                                        <input type="text" class="form-control form-control-sm" id="search" name="search"
-                                            @isset($sort_search) value="{{ $sort_search }}" @endisset
-                                            placeholder="{{ translate('Type & Enter') }}">
-                                    </div>
-                                </div>
+                                </div> --}}
+
                             </div>
                         </form>
                         <div class="card-body">
@@ -73,7 +82,7 @@
                                         <th>#</th>
                                         <th width="20%">{{ translate('Name') }}</th>
                                         <th width="60%">{{ translate('Description') }}</th>
-                                        <th>{{ translate('Added By') }}</th>
+                                        {{-- <th>{{ translate('Added By') }}</th> --}}
                                         <th class="text-right">{{ translate('Is cloned') }}</th>
                                     </tr>
                                 </thead>
@@ -94,7 +103,7 @@
                                                 </div>
                                             </td>
                                             <td>{!! strip_tags($element->getTranslation('description')) !!}</td>
-                                            <td>{{ $element->user->name }}</td>
+                                            {{-- <td>{{ $element->user->name }}</td> --}}
                                             <td class="text-right">
                                                 <label class="aiz-switch aiz-switch-success mb-0">
                                                     <input onchange="clone_selected(this)" value="{{ $element->id }}"
@@ -102,19 +111,6 @@
                                                     <span class="slider round"></span>
                                                 </label>
                                             </td>
-                                            {{-- <td >
-                                                <a id="add_{{ $element->id }}" class="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                                    href="{{ route('seller.elements.edit', ['id' => $element->id, 'lang' => default_language()]) }}"
-                                                    title="{{ translate('Add to clone') }}">
-                                                    <i class="las la-plus"></i>
-                                                </a>
-
-                                                <a hidden id="remove_{{ $element->id }}" class="btn btn-soft-success btn-icon btn-circle btn-sm"
-                                                    href="{{ route('seller.elements.edit', ['id' => $element->id, 'lang' => default_language()]) }}"
-                                                    title="{{ translate('Remove from clone') }}">
-                                                    <i class="las la-check"></i>
-                                                </a>
-                                            </td> --}}
                                         </tr>
                                     @endforeach
                                 </tbody>

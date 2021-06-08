@@ -41,11 +41,26 @@ class SellerElementController extends Controller
         $query = null;
         $sort_search = null;
         $seller_id = null;
+
+        $category_id=0;
+        $sub_category_id=0;
+        $sub_sub_category_id=0;
+
+
+
         $elements = Element::where('parent_id', null)->where('published', true)->where('user_id', '<>', Auth::user()->id);
         if ($request->has('user_id') && $request->user_id != null) {
             $elements = $elements->where('user_id', $request->user_id);
             $seller_id = $request->user_id;
         }
+
+        if($request->has('category_id') && $request->category_id != null && $request->category_id != 0){
+            $category_id=$request->category_id;
+            $sub_category_ids=Category::where('parent_id', $category_id)->pluck('id');
+            $sub_sub_category_ids=Category::whereIn('parent_id', $sub_category_ids)->pluck('id');
+            $elements = $elements->whereIn('category_id', $sub_sub_category_ids);
+        }
+
         if ($request->type != null) {
             $var = explode(",", $request->type);
             $col_name = $var[0];
@@ -68,7 +83,16 @@ class SellerElementController extends Controller
             }
         }
 
-        return view('frontend.user.seller.elements.clone', compact('elements', 'type', 'seller_id', 'col_name', 'query', 'sort_search'));
+        $categories=Category::where('level', 0)->get();
+        $sub_categories=Category::where('parent_id', $category_id)->get();
+        $sub_sub_categories=Category::where('parent_id', $sub_sub_category_id)->get();
+
+        return view('frontend.user.seller.elements.clone',
+        compact('elements', 'type', 'seller_id',
+                'col_name', 'query', 'sort_search',
+                'category_id','sub_category_id','sub_sub_category_id',
+                'categories','sub_categories','sub_sub_categories',
+        ));
     }
 
     public function clone_selected_elements(Request $request)
