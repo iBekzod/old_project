@@ -249,6 +249,52 @@ if (!function_exists('slugify')) {
         return $string;
     }
 }
+if (!function_exists('getPublishedProducts')) {
+    function getPublishedProducts($type='product', $paginate=0, $product_conditions=[], $variation_conditions=[], $element_conditions=[]) {
+        $products=Product::where('variation_id', '<>', null);
+        $products=filterPublishedProduct($products, $product_conditions);
+        $products=filterProductByRelation($products, 'variation', $variation_conditions);
+        $products=filterProductByRelation($products, 'element', $element_conditions);
+
+        if($type=='product'){
+            return ($paginate==0)?$products->get():$products->paginate($paginate);
+        }
+        $products=$products->get();
+        $variations=$products->groupBy('variation_id');
+        $variations_arr=collect();
+        $elements_arr=collect();
+        foreach($variations as $variation_id=>$models){
+            $variations_arr->push(Product::where('variation_id',$variation_id)->inRandomOrder()->first());
+        }
+        if($type=='variation'){
+            return $variations_arr->paginate($paginate);
+            // return $variations_arr;
+        }
+        $elements=$variations_arr->groupBy('element_id');
+        foreach($elements as $element_id=>$models){
+            $elements_arr->push(Product::where('element_id',$element_id)->inRandomOrder()->first());
+        }
+        return $elements_arr;
+    }
+}
+
+function filterPublishedProduct($products, $conditions=[]){
+    if(count($conditions)>0){
+        return $products->where([['qty', '>', 0],['is_accepted', 1],['published', 1]])->where($conditions);
+    }
+    return $products->where([['qty', '>', 0],['is_accepted', 1],['published', 1]]);
+}
+
+function filterProductByRelation($products, $relation_name, $conditions){
+    if(count($conditions)>0){
+        $products = Product::whereHas($relation_name, function($q) use ($conditions)
+        {
+            $q->where($conditions);
+        })->get();
+        return $products;
+    }
+    return $products;
+}
 //cache products based on category
 if (!function_exists('get_cached_products')) {
     function get_cached_products($category_id = null)

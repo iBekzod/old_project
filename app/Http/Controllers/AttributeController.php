@@ -166,7 +166,7 @@ class AttributeController extends Controller
                 if($characteristic->save()){
                     foreach (Language::all() as $language) {
                         $characteristic_translation = CharacteristicTranslation::firstOrNew(['lang' => $language->code, 'characteristic_id' => $characteristic->id]);
-                        $characteristic_translation->name = $request->name;
+                        $characteristic_translation->name = $value;
                         $characteristic_translation->save();
                     }
                 }

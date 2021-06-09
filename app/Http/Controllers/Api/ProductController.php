@@ -43,21 +43,13 @@ class ProductController extends Controller
 
     public function getAllProducts(Request $request)
     {
-        $query = $request->get('q');
-
-        if ($query) {
-            return [
-                'products' => Product::where('name', 'like', '%' . $query . '%')->get()
-            ];
-        } else {
-            return [
-            ];
-        }
+        return new ProductCollection(getPublishedProducts('product', [['name', 'like', '%' . $request->get('q') . '%']]));
     }
 
     public function index()
     {
-        return new ProductCollection(Product::inRandomOrder()->paginate(10));
+        return new ProductCollection(getPublishedProducts('variation', 10));
+        // return new ProductCollection(Product::inRandomOrder()->paginate(10));
     }
 
     public function show($id)
@@ -731,35 +723,39 @@ class ProductController extends Controller
 
     }
 
-    public function filterPublishedProduct($products, $conditions){
-        if(count($conditions)>0){
-            return $products->where([['qty', '>', 0],['is_accepted', 1],['published', 1]])->where($conditions);
-        }
-        return $products->where([['qty', '>', 0],['is_accepted', 1],['published', 1]]);
-    }
-
-    public function filterProductByVariation($variations, $conditions){
-        if(count($conditions)>0){
-            return $variations->where($conditions);
-        }
-        return $variations;
-    }
+    // public function filterPublishedProduct($products, $conditions=[]){
+    //     if(count($conditions)>0){
+    //         return $products->where([['qty', '>', 0],['is_accepted', 1],['published', 1]])->where($conditions);
+    //     }
+    //     return $products->where([['qty', '>', 0],['is_accepted', 1],['published', 1]]);
+    // }
+    // public function filterProductByRelation($products, $relation_name, $conditions){
+    //     if(count($conditions)>0){
+    //         $products = Product::whereHas($relation_name, function($q) use ($conditions)
+    //         {
+    //             $q->where($conditions);
+    //         })->get();
+    //         return $products;
+    //     }
+    //     return $products;
+    // }
 
     //Getting elements and filtering by product $conditions=array(['todays_deal', 1])
-    public function getIndexPageProducts($product_conditions){
-        $products=Product::where('variation_id', '<>', null);
-        $products=$this->filterPublishedProduct($products, $product_conditions)->get();
-        $variations=$products->groupBy('variation_id');
-        $variations_arr=collect();
-        $elements_arr=collect();
-        foreach($variations as $variation_id=>$models){
-            $variations_arr->push(Product::where('variation_id',$variation_id)->inRandomOrder()->first());
-        }
-        $elements=$variations_arr->groupBy('element_id');
-        foreach($elements as $element_id=>$models){
-            $elements_arr->push(Product::where('element_id',$element_id)->inRandomOrder()->first());
-        }
-        return new ProductCollection($elements_arr);
+    public function getIndexPageProducts(){
+        return getPublishedProducts('element');
+        // $products=Product::where('variation_id', '<>', null);
+        // $products=$this->filterPublishedProduct($products)->get();
+        // $variations=$products->groupBy('variation_id');
+        // $variations_arr=collect();
+        // $elements_arr=collect();
+        // foreach($variations as $variation_id=>$models){
+        //     $variations_arr->push(Product::where('variation_id',$variation_id)->inRandomOrder()->first());
+        // }
+        // $elements=$variations_arr->groupBy('element_id');
+        // foreach($elements as $element_id=>$models){
+        //     $elements_arr->push(Product::where('element_id',$element_id)->inRandomOrder()->first());
+        // }
+        // return $elements_arr;
     }
 
 }
