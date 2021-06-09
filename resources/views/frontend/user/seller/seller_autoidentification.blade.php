@@ -26,7 +26,7 @@
 	<div class=" offset-sm-1 col-sm-10">
         <div class="card">
             <div class="container px-5">
-                <form action="" method="post">
+                <form action="{{route('seller.delivery')}}" method="post">
 					@csrf
                     <div class="row">
                         <div class="col-md-12 mt-4 text-center">
@@ -353,12 +353,12 @@
                                </div>
                           </div>
                     </div>
-                    {{-- <div class="row">
+                    <div class="row">
                         <div class=" col-md-12  form-group text-right  mr-4 mt-3 ">
-                            <button type="submit" class="btn btn-primary py-2">{{translate('Save')}}</button>
+                            <button type="submit" class="btn btn-primary py-2">{{translate('inter')}}</button>
                         </div>
-                    </div> --}}
-                 </form>
+                    </div>
+                </form>
             </div>
         </div>
 
