@@ -265,19 +265,19 @@ class ProductController extends Controller
 
     public function flashDeal()
     {
-        return $this->admin();
+        // return $this->admin();
         $flash_deals = FlashDeal::where('status', 1)->where('start_date', '<=', strtotime(date('d-m-Y')))->where('end_date', '>=', strtotime(date('d-m-Y')))->get();
         return new FlashDealsCollection($flash_deals);
     }
 
     public function singleFlashDeal($id)
     {
-        return $this->admin();
+        // return $this->admin();
         $flash_deal = FlashDeal::where('slug', $id)->firstOrFail();
         $ids = FlashDealProduct::where('flash_deal_id',$flash_deal->id)->pluck('product_id');
         $products = Product::whereIn('id',$ids)->get();
-        $min_price = ($products)->min('unit_price');
-        $max_price = ($products)->max('unit_price');
+        $min_price = ($products)->min('price');
+        $max_price = ($products)->max('price');
         return [
             'title' => $flash_deal->title,
             'end_date' => $flash_deal->end_date,
@@ -291,8 +291,10 @@ class ProductController extends Controller
 
     public function featured()
     {
-        return $this->admin();
-        return new ProductCollection(Product::where('featured', 1)->where('is_accepted', 1)->inRandomOrder()->get());
+        // return $this->admin();
+        return new ProductCollection(getPublishedProducts('variation', 0, [['featured', 1]]));
+
+        // return new ProductCollection(Product::where('featured', 1)->where('is_accepted', 1)->inRandomOrder()->get());
     }
 
     public function featuredFlashDeals()
@@ -322,21 +324,31 @@ class ProductController extends Controller
 
     public function bestSeller()
     {
-        return $this->admin();
-        // return $this->admin();
-        $products=Product::orderBy('num_of_sale', 'desc')->where('is_accepted', 1);
-        // $products=$products->groupBy('variation_id');
+        return new ProductCollection(getPublishedProducts('element', 0, [['todays_deal', 1], ['featured', 1]]));
 
-        // dd($products);
-        return new ProductCollection($products->limit(20)->get());
+        // $products=Product::where('is_accepted', 1)->groupBy('element_id');
+        // $elements_arr=collect();
+        // foreach($products as $variation_id=>$models){
+        //     $elements_arr->push(Product::where('element_id',$variation_id)->inRandomOrder()->first());
+        // }
+        // $element_ids=$elements_arr->map(function ($item, $key) {
+        //     return $item->id;
+        // });
+        // return Product::whereIn('id', $element_ids)->orderBy('num_of_sale', 'desc')->paginate(20);
     }
 
     public function related($id)
     {
         return $this->admin();
         $product = Product::find($id);
-        if ($product)
-            return new ProductCollection(Product::where('category_id', $product->category_id)->where('is_accepted', 1)->where('id', '!=', $id)->inRandomOrder()->limit(10)->get());
+        if($element=Element::findOrFail($product->element_id)){
+            return new ProductCollection(getPublishedProducts('variation', 10, [],[], [['category_id', $element->category_id]]));
+        }
+
+        // return $this->admin();
+        // ;
+        // if ($product)
+        //     return new ProductCollection(Product::where('category_id', $product->category_id)->where('is_accepted', 1)->where('id', '!=', $id)->inRandomOrder()->limit(10)->get());
 
         return response()->json([
             'error' => 'Такого продукта не существует.'
