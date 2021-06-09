@@ -14,14 +14,15 @@ class TestCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'syncronize:product';
+    protected $signature = 'run:query';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Syncronize product elements';
+    protected $description = 'Run test command';
+
 
     /**
      * Create a new command instance.
@@ -40,22 +41,26 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $products=Product::where('variation_id', '<>', null);
-        $products=$this->filterPublishedProduct($products)->get();
-        $products=$products->groupBy('variation_id');
-        $products_arr=[];
-        $products=$products->each(function($variation, $variation_key) {
-            $random_product_id=$variation->random()->id;
-            return $variation->filter(function($product) use ($random_product_id) {
-                return $product->id==$random_product_id;
+        // $products=Product::where('variation_id', '<>', null);
+        // $products=$this->filterPublishedProduct($products)->get();
+        // $products=$products->groupBy('variation_id');
+        // $products_arr=[];
+        // $products=$products->each(function($variation, $variation_key) {
+        //     $random_product_id=$variation->random()->id;
+        //     return $variation->filter(function($product) use ($random_product_id) {
+        //         return $product->id==$random_product_id;
 
-            })->values();
-        });
+        //     })->values();
+        // });
         // dd($products);
         // return response()->json([
         //     'products' => $products
         // ]);
-        print_r($products);
+        // print_r($products);
         $this->info('Successfully run');
     }
+
+    // public function filterPublishedProduct($products){
+    //     return $products->where('qty', '>', 0)->where('is_accepted', 1)->where('published', 1);
+    // }
 }
