@@ -37,7 +37,7 @@ class Attribute extends Model
     public function delete()
     {
         $this->characteristics()->delete();
-        $this->categories()->delete();
+        // $this->categories()->delete();
         $this->attribute_translations()->delete();
         return parent::delete();
     }

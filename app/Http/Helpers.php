@@ -251,11 +251,10 @@ if (!function_exists('slugify')) {
 }
 if (!function_exists('getPublishedProducts')) {
     function getPublishedProducts($type='product', $paginate=0, $product_conditions=[], $variation_conditions=[], $element_conditions=[]) {
-        $products=Product::where('variation_id', '<>', null);
+        $products=Product::where('variation_id', '<>', null)->where('element_id', '<>', null);
         $products=filterPublishedProduct($products, $product_conditions);
         $products=filterProductByRelation($products, 'variation', $variation_conditions);
         $products=filterProductByRelation($products, 'element', $element_conditions);
-
         if($type=='product'){
             return ($paginate==0)?$products->get():$products->paginate($paginate);
         }
@@ -267,12 +266,26 @@ if (!function_exists('getPublishedProducts')) {
             $variations_arr->push(Product::where('variation_id',$variation_id)->inRandomOrder()->first());
         }
         if($type=='variation'){
-            return $variations_arr->paginate($paginate);
-            // return $variations_arr;
+            if($paginate!=0){
+                $variation_ids=$variations_arr->map(function ($item, $key) {
+                    return $item->id;
+                });
+                return Product::whereIn('id', $variation_ids)->paginate($paginate);
+            }
+            return $variations_arr;
         }
         $elements=$variations_arr->groupBy('element_id');
         foreach($elements as $element_id=>$models){
             $elements_arr->push(Product::where('element_id',$element_id)->inRandomOrder()->first());
+        }
+        if($type=='element'){
+            if($paginate!=0){
+                $element_ids=$elements_arr->map(function ($item, $key) {
+                    return $item->id;
+                });
+                return Product::whereIn('id', $element_ids)->paginate($paginate);
+            }
+            return $elements_arr;
         }
         return $elements_arr;
     }
@@ -290,7 +303,7 @@ function filterProductByRelation($products, $relation_name, $conditions){
         $products = Product::whereHas($relation_name, function($q) use ($conditions)
         {
             $q->where($conditions);
-        })->get();
+        });
         return $products;
     }
     return $products;

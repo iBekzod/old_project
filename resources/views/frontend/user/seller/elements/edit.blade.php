@@ -149,9 +149,10 @@
                                 </div>
                             </div>
                             @php
-
-                                foreach ($characteristics as $attribute_id=>$value_id){
-                                    $characteristic_attributes[]=$attribute_id;
+                                if(is_array($characteristics)){
+                                    foreach ($characteristics as $attribute_id=>$value_id){
+                                        $characteristic_attributes[]=$attribute_id;
+                                    }
                                 }
                             @endphp
                             <div class="card">
@@ -168,11 +169,13 @@
                                         <div class="col-lg-8">
                                             <select class="form-control aiz-selectpicker" data-live-search="true"
                                                     data-selected-text-format="count" name="selected_attribute_ids[]" id="selected_attribute_id" multiple>
-                                                    @foreach ($element->category->attributes as $attribute)
-                                                        <option value="{{ $attribute->id }}"
-                                                            @if(is_array($characteristic_attributes) && in_array($attribute->id, $characteristic_attributes))  selected @endif
-                                                            >{{ $attribute->getTranslation('name', $lang) }}</option>
-                                                    @endforeach
+                                                    @if($element->category)
+                                                        @foreach ($element->category->attributes as $attribute)
+                                                            <option value="{{ $attribute->id }}"
+                                                                @if(is_array($characteristic_attributes) && in_array($attribute->id, $characteristic_attributes))  selected @endif
+                                                                >{{ $attribute->getTranslation('name', $lang) }}</option>
+                                                        @endforeach
+                                                    @endif
                                             </select>
                                         </div>
                                     </div>

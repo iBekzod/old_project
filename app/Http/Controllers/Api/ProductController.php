@@ -43,13 +43,12 @@ class ProductController extends Controller
 
     public function getAllProducts(Request $request)
     {
-        return new ProductCollection(getPublishedProducts('product', [['name', 'like', '%' . $request->get('q') . '%']]));
+        return new ProductCollection(getPublishedProducts('product', 100, [['name', 'like', '%' . $request->get('q') . '%']]));
     }
 
     public function index()
     {
-        return new ProductCollection(getPublishedProducts('variation', 10));
-        // return new ProductCollection(Product::inRandomOrder()->paginate(10));
+        return new ProductCollection(getPublishedProducts('element', 10));
     }
 
     public function show($id)
@@ -89,17 +88,13 @@ class ProductController extends Controller
 
     public function admin()
     {
-        if($variations= Variation::where('lowest_price_id','<>', null)->inRandomOrder()->groupBy('element_id')->get()){
-            return new VariationCollection($variations);
-        }
-        // return null;
-        // return Product::where('added_by', 'admin')->inRandomOrder()->paginate(10);
-
+        return new ProductCollection(getPublishedProducts('product', 10, [['added_by', 'admin']]));
     }
 
     public function seller()
     {
-        return $this->admin();
+        return new ProductCollection(getPublishedProducts('product', 10, [['added_by', 'seller']]));
+        // return $this->admin();
         // if($variations = Variation::where('lowest_price_id','<>', null)->get()){
         //     // dd($variations);
         //     return new ProductCollection($variations);
@@ -118,7 +113,7 @@ class ProductController extends Controller
             return $category->id;
         });
         $conditions = ['published' => 1, 'featured'=>1];
-        $products = Product::where($conditions)->whereIn('subsubcategory_id',$ids);
+        $products = Product::where($conditions)->whereIn('category_id',$ids);
 //        $category_ids = CategoryUtility::children_ids($id);
 //        $category_ids[] = $id;
         $sort_by = $request->sort_by;
@@ -146,10 +141,10 @@ class ProductController extends Controller
                     $products->orderBy('created_at', 'asc');
                     break;
                 case 'price-asc':
-                    $products->orderBy('unit_price', 'asc');
+                    $products->orderBy('price', 'asc');
                     break;
                 case 'price-desc':
-                    $products->orderBy('unit_price', 'desc');
+                    $products->orderBy('price', 'desc');
                     break;
                 default:
                     // code...
@@ -160,63 +155,63 @@ class ProductController extends Controller
 
         $non_paginate_products = filter_products($products)->get();
 
-        $attributes = array();
+        // $attributes = array();
 
-        foreach ($non_paginate_products as $key => $product) {
-            if ($product->attributes != null && is_array(json_decode($product->attributes))) {
-                foreach (json_decode($product->attributes) as $key => $value) {
-                    $flag = false;
-                    $pos = 0;
-                    foreach ($attributes as $key => $attribute) {
-                        if ($attribute['id'] == $value) {
-                            $flag = true;
-                            $pos = $key;
-                            break;
-                        }
-                    }
-                    if (!$flag) {
-                        $item['id'] = $value;
-                        $item['values'] = array();
-                        foreach (json_decode($product->choice_options) as $key => $choice_option) {
-                            if ($choice_option->attribute_id == $value) {
-                                $item['values'] = $choice_option->values;
-                                break;
-                            }
-                        }
-                        array_push($attributes, $item);
-                    } else {
-                        foreach (json_decode($product->choice_options) as $key => $choice_option) {
-                            if ($choice_option->attribute_id == $value) {
-                                foreach ($choice_option->values as $key => $value) {
-                                    if (!in_array($value, $attributes[$pos]['values'])) {
-                                        array_push($attributes[$pos]['values'], $value);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        // foreach ($non_paginate_products as $key => $product) {
+        //     if ($product->attributes != null && is_array(json_decode($product->attributes))) {
+        //         foreach (json_decode($product->attributes) as $key => $value) {
+        //             $flag = false;
+        //             $pos = 0;
+        //             foreach ($attributes as $key => $attribute) {
+        //                 if ($attribute['id'] == $value) {
+        //                     $flag = true;
+        //                     $pos = $key;
+        //                     break;
+        //                 }
+        //             }
+        //             if (!$flag) {
+        //                 $item['id'] = $value;
+        //                 $item['values'] = array();
+        //                 foreach (json_decode($product->choice_options) as $key => $choice_option) {
+        //                     if ($choice_option->attribute_id == $value) {
+        //                         $item['values'] = $choice_option->values;
+        //                         break;
+        //                     }
+        //                 }
+        //                 array_push($attributes, $item);
+        //             } else {
+        //                 foreach (json_decode($product->choice_options) as $key => $choice_option) {
+        //                     if ($choice_option->attribute_id == $value) {
+        //                         foreach ($choice_option->values as $key => $value) {
+        //                             if (!in_array($value, $attributes[$pos]['values'])) {
+        //                                 array_push($attributes[$pos]['values'], $value);
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
-        foreach ($attributes as $key => $attribute) {
-            $attributes[$key]['attr'] = Attribute::find($attribute['id']);
-        }
+        // foreach ($attributes as $key => $attribute) {
+        //     $attributes[$key]['attr'] = Attribute::find($attribute['id']);
+        // }
 
-        $selected_attributes = array();
+        // $selected_attributes = array();
 
-        foreach ($attributes as $key => $attribute) {
-            if ($request->has('attribute_' . $attribute['id'])) {
-                foreach ($request['attribute_' . $attribute['id']] as $key => $value) {
-                    $str = '"' . $value . '"';
-                    $products = $products->where('choice_options', 'like', '%' . $str . '%');
-                }
+        // foreach ($attributes as $key => $attribute) {
+        //     if ($request->has('attribute_' . $attribute['id'])) {
+        //         foreach ($request['attribute_' . $attribute['id']] as $key => $value) {
+        //             $str = '"' . $value . '"';
+        //             $products = $products->where('choice_options', 'like', '%' . $str . '%');
+        //         }
 
-                $item['id'] = $attribute['id'];
-                $item['values'] = $request['attribute_' . $attribute['id']];
-                array_push($selected_attributes, $item);
-            }
-        }
+        //         $item['id'] = $attribute['id'];
+        //         $item['values'] = $request['attribute_' . $attribute['id']];
+        //         array_push($selected_attributes, $item);
+        //     }
+        // }
 
 
         return new ProductCollection($products->inRandomOrder()->paginate(10));
@@ -238,7 +233,6 @@ class ProductController extends Controller
 
     public function subCategory($id)
     {
-        return $this->admin();
         $category_ids = CategoryUtility::children_ids($id);
         $category_ids[] = $id;
 
@@ -247,7 +241,7 @@ class ProductController extends Controller
 
     public function subSubCategory($id)
     {
-        return $this->admin();
+        // return $this->admin();
         $category_ids = CategoryUtility::children_ids($id);
         $category_ids[] = $id;
 
@@ -257,15 +251,16 @@ class ProductController extends Controller
     public function brand($id)
     {
         return $this->admin();
-
-        $products=Product::where('brand_id', $id)->where('is_accepted', 1)->inRandomOrder()->paginate(10);
-        return new ProductCollection($products);
+        //getPublishedProducts($type='product', $paginate=0, $product_conditions=[], $variation_conditions=[], $element_conditions=[])
+        return new ProductCollection(getPublishedProducts('element', 10, [], [], [['brand_id', $id]]));
+        // $products=Product::where('brand_id', $id)->where('is_accepted', 1)->inRandomOrder()->paginate(10);
     }
 
     public function todaysDeal()
     {
-        return $this->admin();
-        return new ProductCollection(Product::where('todays_deal', 1)->where('is_accepted', 1)->latest()->get());
+        // return $this->admin();
+        return new ProductCollection(getPublishedProducts('element', 10, [['todays_deal', 1]]));
+        // return new ProductCollection(Product::where('todays_deal', 1)->where('is_accepted', 1)->latest()->get());
     }
 
     public function flashDeal()
