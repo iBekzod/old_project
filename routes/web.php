@@ -388,6 +388,6 @@ Route::get('/nagad/callback', 'NagadController@verify')->name('nagad.callback');
 Route::get('/{slug}', 'PageController@show_custom_page')->name('custom-pages.show_custom_page');
 Route::get('map', 'Test\MapController@index');
 // Route::get('/return_back', 'HomeController@return_back')->name('return_back');
-Route::get('/resolve-dependencies','ResolveDependenciesController@resolveDependencyManually');
+Route::get('resolve-dependencies','ResolveDependenciesController@resolveDependencyManually');
 
 

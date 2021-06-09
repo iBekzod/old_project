@@ -159,15 +159,18 @@ class AttributeController extends Controller
         $values=$request->get('characteristics');
         if($values){
             foreach ($values as $value){
-                Characteristic::create([
+                $characteristic=Characteristic::firstOrNew([
                     'name'=>$value,
                     'attribute_id'=>$attribute->id
                 ]);
-                foreach (Language::all() as $language) {
-                    $attribute_translation = CharacteristicTranslation::firstOrNew(['lang' => $language->code, 'attribute_id' => $attribute->id]);
-                    $attribute_translation->name = $request->name;
-                    $attribute_translation->save();
+                if($characteristic->save()){
+                    foreach (Language::all() as $language) {
+                        $characteristic_translation = CharacteristicTranslation::firstOrNew(['lang' => $language->code, 'characteristic_id' => $characteristic->id]);
+                        $characteristic_translation->name = $request->name;
+                        $characteristic_translation->save();
+                    }
                 }
+
             }
         }
 

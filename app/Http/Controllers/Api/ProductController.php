@@ -731,25 +731,35 @@ class ProductController extends Controller
 
     }
 
-    public function filterPublishedProduct($products){
-        return $products->where('qty', '>', 0)->where('is_accepted', 1)->where('published', 1);
+    public function filterPublishedProduct($products, $conditions){
+        if(count($conditions)>0){
+            return $products->where([['qty', '>', 0],['is_accepted', 1],['published', 1]])->where($conditions);
+        }
+        return $products->where([['qty', '>', 0],['is_accepted', 1],['published', 1]]);
     }
-    public function getIndexPageProducts(){
-        $products=Product::where('variation_id', '<>', null);
-        $products=$this->filterPublishedProduct($products)->get();
-        $products=$products->groupBy('variation_id');
-        $products_arr=[];
-        $products=$products->each(function($variation, $variation_key) {
-            $random_product_id=$variation->random()->id;
-            return $variation->filter(function($product) use ($random_product_id) {
-                return $product->id==$random_product_id;
 
-            })->values();
-        });
-        // dd($products);
-        return response()->json([
-            'products' => $products
-        ]);
-        // $products=Product::whereNotNull('')
+    public function filterProductByVariation($variations, $conditions){
+        if(count($conditions)>0){
+            return $variations->where($conditions);
+        }
+        return $variations;
     }
+
+    //Getting elements and filtering by product $conditions=array(['todays_deal', 1])
+    public function getIndexPageProducts($product_conditions){
+        $products=Product::where('variation_id', '<>', null);
+        $products=$this->filterPublishedProduct($products, $product_conditions)->get();
+        $variations=$products->groupBy('variation_id');
+        $variations_arr=collect();
+        $elements_arr=collect();
+        foreach($variations as $variation_id=>$models){
+            $variations_arr->push(Product::where('variation_id',$variation_id)->inRandomOrder()->first());
+        }
+        $elements=$variations_arr->groupBy('element_id');
+        foreach($elements as $element_id=>$models){
+            $elements_arr->push(Product::where('element_id',$element_id)->inRandomOrder()->first());
+        }
+        return new ProductCollection($elements_arr);
+    }
+
 }

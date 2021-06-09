@@ -19,7 +19,9 @@ class ResolveDependenciesController extends Controller
 
     public function resolveDependencyManually()
     {
+        // dd("hi");
         $this->manualDependency = resolve(SingleTonDependency::class);
+        // dd($this->manualDependency);
     }
 
     /**
