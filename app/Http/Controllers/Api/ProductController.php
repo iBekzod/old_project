@@ -43,21 +43,12 @@ class ProductController extends Controller
 
     public function getAllProducts(Request $request)
     {
-        $query = $request->get('q');
-
-        if ($query) {
-            return [
-                'products' => Product::where('name', 'like', '%' . $query . '%')->get()
-            ];
-        } else {
-            return [
-            ];
-        }
+        return new ProductCollection(getPublishedProducts('product', 100, [['name', 'like', '%' . $request->get('q') . '%']]));
     }
 
     public function index()
     {
-        return new ProductCollection(Product::inRandomOrder()->paginate(10));
+        return new ProductCollection(getPublishedProducts('element', 10));
     }
 
     public function show($id)
@@ -97,17 +88,13 @@ class ProductController extends Controller
 
     public function admin()
     {
-        if($variations= Variation::where('lowest_price_id','<>', null)->inRandomOrder()->groupBy('element_id')->get()){
-            return new VariationCollection($variations);
-        }
-        // return null;
-        // return Product::where('added_by', 'admin')->inRandomOrder()->paginate(10);
-
+        return new ProductCollection(getPublishedProducts('product', 10, [['added_by', 'admin']]));
     }
 
     public function seller()
     {
-        return $this->admin();
+        return new ProductCollection(getPublishedProducts('product', 10, [['added_by', 'seller']]));
+        // return $this->admin();
         // if($variations = Variation::where('lowest_price_id','<>', null)->get()){
         //     // dd($variations);
         //     return new ProductCollection($variations);
@@ -126,7 +113,7 @@ class ProductController extends Controller
             return $category->id;
         });
         $conditions = ['published' => 1, 'featured'=>1];
-        $products = Product::where($conditions)->whereIn('subsubcategory_id',$ids);
+        $products = Product::where($conditions)->whereIn('category_id',$ids);
 //        $category_ids = CategoryUtility::children_ids($id);
 //        $category_ids[] = $id;
         $sort_by = $request->sort_by;
@@ -154,10 +141,10 @@ class ProductController extends Controller
                     $products->orderBy('created_at', 'asc');
                     break;
                 case 'price-asc':
-                    $products->orderBy('unit_price', 'asc');
+                    $products->orderBy('price', 'asc');
                     break;
                 case 'price-desc':
-                    $products->orderBy('unit_price', 'desc');
+                    $products->orderBy('price', 'desc');
                     break;
                 default:
                     // code...
@@ -168,63 +155,63 @@ class ProductController extends Controller
 
         $non_paginate_products = filter_products($products)->get();
 
-        $attributes = array();
+        // $attributes = array();
 
-        foreach ($non_paginate_products as $key => $product) {
-            if ($product->attributes != null && is_array(json_decode($product->attributes))) {
-                foreach (json_decode($product->attributes) as $key => $value) {
-                    $flag = false;
-                    $pos = 0;
-                    foreach ($attributes as $key => $attribute) {
-                        if ($attribute['id'] == $value) {
-                            $flag = true;
-                            $pos = $key;
-                            break;
-                        }
-                    }
-                    if (!$flag) {
-                        $item['id'] = $value;
-                        $item['values'] = array();
-                        foreach (json_decode($product->choice_options) as $key => $choice_option) {
-                            if ($choice_option->attribute_id == $value) {
-                                $item['values'] = $choice_option->values;
-                                break;
-                            }
-                        }
-                        array_push($attributes, $item);
-                    } else {
-                        foreach (json_decode($product->choice_options) as $key => $choice_option) {
-                            if ($choice_option->attribute_id == $value) {
-                                foreach ($choice_option->values as $key => $value) {
-                                    if (!in_array($value, $attributes[$pos]['values'])) {
-                                        array_push($attributes[$pos]['values'], $value);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        // foreach ($non_paginate_products as $key => $product) {
+        //     if ($product->attributes != null && is_array(json_decode($product->attributes))) {
+        //         foreach (json_decode($product->attributes) as $key => $value) {
+        //             $flag = false;
+        //             $pos = 0;
+        //             foreach ($attributes as $key => $attribute) {
+        //                 if ($attribute['id'] == $value) {
+        //                     $flag = true;
+        //                     $pos = $key;
+        //                     break;
+        //                 }
+        //             }
+        //             if (!$flag) {
+        //                 $item['id'] = $value;
+        //                 $item['values'] = array();
+        //                 foreach (json_decode($product->choice_options) as $key => $choice_option) {
+        //                     if ($choice_option->attribute_id == $value) {
+        //                         $item['values'] = $choice_option->values;
+        //                         break;
+        //                     }
+        //                 }
+        //                 array_push($attributes, $item);
+        //             } else {
+        //                 foreach (json_decode($product->choice_options) as $key => $choice_option) {
+        //                     if ($choice_option->attribute_id == $value) {
+        //                         foreach ($choice_option->values as $key => $value) {
+        //                             if (!in_array($value, $attributes[$pos]['values'])) {
+        //                                 array_push($attributes[$pos]['values'], $value);
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
-        foreach ($attributes as $key => $attribute) {
-            $attributes[$key]['attr'] = Attribute::find($attribute['id']);
-        }
+        // foreach ($attributes as $key => $attribute) {
+        //     $attributes[$key]['attr'] = Attribute::find($attribute['id']);
+        // }
 
-        $selected_attributes = array();
+        // $selected_attributes = array();
 
-        foreach ($attributes as $key => $attribute) {
-            if ($request->has('attribute_' . $attribute['id'])) {
-                foreach ($request['attribute_' . $attribute['id']] as $key => $value) {
-                    $str = '"' . $value . '"';
-                    $products = $products->where('choice_options', 'like', '%' . $str . '%');
-                }
+        // foreach ($attributes as $key => $attribute) {
+        //     if ($request->has('attribute_' . $attribute['id'])) {
+        //         foreach ($request['attribute_' . $attribute['id']] as $key => $value) {
+        //             $str = '"' . $value . '"';
+        //             $products = $products->where('choice_options', 'like', '%' . $str . '%');
+        //         }
 
-                $item['id'] = $attribute['id'];
-                $item['values'] = $request['attribute_' . $attribute['id']];
-                array_push($selected_attributes, $item);
-            }
-        }
+        //         $item['id'] = $attribute['id'];
+        //         $item['values'] = $request['attribute_' . $attribute['id']];
+        //         array_push($selected_attributes, $item);
+        //     }
+        // }
 
 
         return new ProductCollection($products->inRandomOrder()->paginate(10));
@@ -246,7 +233,6 @@ class ProductController extends Controller
 
     public function subCategory($id)
     {
-        return $this->admin();
         $category_ids = CategoryUtility::children_ids($id);
         $category_ids[] = $id;
 
@@ -255,7 +241,7 @@ class ProductController extends Controller
 
     public function subSubCategory($id)
     {
-        return $this->admin();
+        // return $this->admin();
         $category_ids = CategoryUtility::children_ids($id);
         $category_ids[] = $id;
 
@@ -265,32 +251,33 @@ class ProductController extends Controller
     public function brand($id)
     {
         return $this->admin();
-
-        $products=Product::where('brand_id', $id)->where('is_accepted', 1)->inRandomOrder()->paginate(10);
-        return new ProductCollection($products);
+        //getPublishedProducts($type='product', $paginate=0, $product_conditions=[], $variation_conditions=[], $element_conditions=[])
+        return new ProductCollection(getPublishedProducts('element', 10, [], [], [['brand_id', $id]]));
+        // $products=Product::where('brand_id', $id)->where('is_accepted', 1)->inRandomOrder()->paginate(10);
     }
 
     public function todaysDeal()
     {
-        return $this->admin();
-        return new ProductCollection(Product::where('todays_deal', 1)->where('is_accepted', 1)->latest()->get());
+        // return $this->admin();
+        return new ProductCollection(getPublishedProducts('element', 10, [['todays_deal', 1]]));
+        // return new ProductCollection(Product::where('todays_deal', 1)->where('is_accepted', 1)->latest()->get());
     }
 
     public function flashDeal()
     {
-        return $this->admin();
+        // return $this->admin();
         $flash_deals = FlashDeal::where('status', 1)->where('start_date', '<=', strtotime(date('d-m-Y')))->where('end_date', '>=', strtotime(date('d-m-Y')))->get();
         return new FlashDealsCollection($flash_deals);
     }
 
     public function singleFlashDeal($id)
     {
-        return $this->admin();
+        // return $this->admin();
         $flash_deal = FlashDeal::where('slug', $id)->firstOrFail();
         $ids = FlashDealProduct::where('flash_deal_id',$flash_deal->id)->pluck('product_id');
         $products = Product::whereIn('id',$ids)->get();
-        $min_price = ($products)->min('unit_price');
-        $max_price = ($products)->max('unit_price');
+        $min_price = ($products)->min('price');
+        $max_price = ($products)->max('price');
         return [
             'title' => $flash_deal->title,
             'end_date' => $flash_deal->end_date,
@@ -304,8 +291,10 @@ class ProductController extends Controller
 
     public function featured()
     {
-        return $this->admin();
-        return new ProductCollection(Product::where('featured', 1)->where('is_accepted', 1)->inRandomOrder()->get());
+        // return $this->admin();
+        return new ProductCollection(getPublishedProducts('variation', 0, [['featured', 1]]));
+
+        // return new ProductCollection(Product::where('featured', 1)->where('is_accepted', 1)->inRandomOrder()->get());
     }
 
     public function featuredFlashDeals()
@@ -335,21 +324,31 @@ class ProductController extends Controller
 
     public function bestSeller()
     {
-        return $this->admin();
-        // return $this->admin();
-        $products=Product::orderBy('num_of_sale', 'desc')->where('is_accepted', 1);
-        // $products=$products->groupBy('variation_id');
+        return new ProductCollection(getPublishedProducts('element', 0, [['todays_deal', 1], ['featured', 1]]));
 
-        // dd($products);
-        return new ProductCollection($products->limit(20)->get());
+        // $products=Product::where('is_accepted', 1)->groupBy('element_id');
+        // $elements_arr=collect();
+        // foreach($products as $variation_id=>$models){
+        //     $elements_arr->push(Product::where('element_id',$variation_id)->inRandomOrder()->first());
+        // }
+        // $element_ids=$elements_arr->map(function ($item, $key) {
+        //     return $item->id;
+        // });
+        // return Product::whereIn('id', $element_ids)->orderBy('num_of_sale', 'desc')->paginate(20);
     }
 
     public function related($id)
     {
         return $this->admin();
         $product = Product::find($id);
-        if ($product)
-            return new ProductCollection(Product::where('category_id', $product->category_id)->where('is_accepted', 1)->where('id', '!=', $id)->inRandomOrder()->limit(10)->get());
+        if($element=Element::findOrFail($product->element_id)){
+            return new ProductCollection(getPublishedProducts('variation', 10, [],[], [['category_id', $element->category_id]]));
+        }
+
+        // return $this->admin();
+        // ;
+        // if ($product)
+        //     return new ProductCollection(Product::where('category_id', $product->category_id)->where('is_accepted', 1)->where('id', '!=', $id)->inRandomOrder()->limit(10)->get());
 
         return response()->json([
             'error' => 'Такого продукта не существует.'
@@ -731,35 +730,39 @@ class ProductController extends Controller
 
     }
 
-    public function filterPublishedProduct($products, $conditions){
-        if(count($conditions)>0){
-            return $products->where([['qty', '>', 0],['is_accepted', 1],['published', 1]])->where($conditions);
-        }
-        return $products->where([['qty', '>', 0],['is_accepted', 1],['published', 1]]);
-    }
-
-    public function filterProductByVariation($variations, $conditions){
-        if(count($conditions)>0){
-            return $variations->where($conditions);
-        }
-        return $variations;
-    }
+    // public function filterPublishedProduct($products, $conditions=[]){
+    //     if(count($conditions)>0){
+    //         return $products->where([['qty', '>', 0],['is_accepted', 1],['published', 1]])->where($conditions);
+    //     }
+    //     return $products->where([['qty', '>', 0],['is_accepted', 1],['published', 1]]);
+    // }
+    // public function filterProductByRelation($products, $relation_name, $conditions){
+    //     if(count($conditions)>0){
+    //         $products = Product::whereHas($relation_name, function($q) use ($conditions)
+    //         {
+    //             $q->where($conditions);
+    //         })->get();
+    //         return $products;
+    //     }
+    //     return $products;
+    // }
 
     //Getting elements and filtering by product $conditions=array(['todays_deal', 1])
-    public function getIndexPageProducts($product_conditions){
-        $products=Product::where('variation_id', '<>', null);
-        $products=$this->filterPublishedProduct($products, $product_conditions)->get();
-        $variations=$products->groupBy('variation_id');
-        $variations_arr=collect();
-        $elements_arr=collect();
-        foreach($variations as $variation_id=>$models){
-            $variations_arr->push(Product::where('variation_id',$variation_id)->inRandomOrder()->first());
-        }
-        $elements=$variations_arr->groupBy('element_id');
-        foreach($elements as $element_id=>$models){
-            $elements_arr->push(Product::where('element_id',$element_id)->inRandomOrder()->first());
-        }
-        return new ProductCollection($elements_arr);
+    public function getIndexPageProducts(){
+        return getPublishedProducts('element');
+        // $products=Product::where('variation_id', '<>', null);
+        // $products=$this->filterPublishedProduct($products)->get();
+        // $variations=$products->groupBy('variation_id');
+        // $variations_arr=collect();
+        // $elements_arr=collect();
+        // foreach($variations as $variation_id=>$models){
+        //     $variations_arr->push(Product::where('variation_id',$variation_id)->inRandomOrder()->first());
+        // }
+        // $elements=$variations_arr->groupBy('element_id');
+        // foreach($elements as $element_id=>$models){
+        //     $elements_arr->push(Product::where('element_id',$element_id)->inRandomOrder()->first());
+        // }
+        // return $elements_arr;
     }
 
 }
