@@ -741,15 +741,12 @@ class ProductController extends Controller
         $products_arr=[];
         $products=$products->each(function($variation, $variation_key) {
             $random_product_id=$variation->random()->id;
-            // return [$variation_key=>$variation->firstWhere(['id'=>$random_product_id])];
             return $variation->filter(function($product) use ($random_product_id) {
-                if($product->id==$random_product_id){
-                    return $product;
-                }
+                return $product->id==$random_product_id;
 
-            });
+            })->values();
         });
-        dd($products);
+        // dd($products);
         return response()->json([
             'products' => $products
         ]);

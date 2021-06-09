@@ -20,7 +20,7 @@ class ProductDetailCollection extends ResourceCollection
     {
         $product=Product::where('slug', $request->id)->first();
         $variation=Variation::findOrFail($product->variation_id);
-        $products=Product::where('variation_id', $variation->id)->where('user_id', $product->user_id)->get();
+        $products=Product::where('variation_id', $variation->id)->get();
         $element=Element::findOrFail($variation->element_id);
         try{
             $data = [
