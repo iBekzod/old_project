@@ -41,22 +41,22 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        // $products=Product::where('variation_id', '<>', null);
-        // $products=$this->filterPublishedProduct($products)->get();
-        // $products=$products->groupBy('variation_id');
-        // $products_arr=[];
-        // $products=$products->each(function($variation, $variation_key) {
+        $products=Product::where('variation_id', '<>', null);
+        $products=$this->filterPublishedProduct($products)->get();
+        $products=$products->groupBy('variation_id');
+        $products_arr=[];
+        // $products=$products->filter(function($variation) {
+        //     //$products_arr[]=$variation->random();
         //     $random_product_id=$variation->random()->id;
         //     return $variation->filter(function($product) use ($random_product_id) {
         //         return $product->id==$random_product_id;
-
-        //     })->values();
+        //     });
         // });
-        // dd($products);
+        dd($products);
         // return response()->json([
         //     'products' => $products
         // ]);
-        // print_r($products);
+        print_r($products);
         $this->info('Successfully run');
     }
 
