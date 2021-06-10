@@ -250,7 +250,7 @@ if (!function_exists('getPublishedProducts')) {
     function getPublishedProducts($type = 'product', $product_conditions = [], $variation_conditions = [], $element_conditions = [])
     {
         $products = Product::where([['qty', '>', 0], ['is_accepted', 1], ['published', 1], ['variation_id', '<>', null], ['element_id', '<>', null]]);
-        $products = filterPublishedProduct($products, $product_conditions);
+        $products = filterProductByRelation($products, 'product', $product_conditions);
         $products = filterProductByRelation($products, 'variation', $variation_conditions);
         $products = filterProductByRelation($products, 'element', $element_conditions);
         if ($type == 'product') {
@@ -277,45 +277,59 @@ if (!function_exists('getPublishedProducts')) {
         return $elements_arr;
     }
 }
-if (!function_exists('filterPublishedProduct')) {
-    function filterPublishedProduct($products, $conditions = [])
+if (!function_exists('filterProductByRelation')) {
+    function filterProductByRelation($products, $relation_name, $conditions)
     {
         if (count($conditions) > 0) {
-            if (array_key_exists('where', $conditions)) {
-                $products->where($conditions['where']);
-            }
-            if (array_key_exists('whereIn', $conditions)) {
-                $products->whereIn($conditions['whereIn']);
-            }
-            if (array_key_exists('orderBy', $conditions)) {
-                $products->orderBy($conditions['orderBy']);
-            }
-            if (array_key_exists('random', $conditions)) {
-                $products->inRandomOrder();
-            }
-            return $products;
-        }
-        return $products;
-    }
-}
-if (!function_exists('filterPublishedProduct')) {
-function filterProductByRelation($products, $relation_name, $conditions)
-    {
-        if (count($conditions) > 0) {
-            $products = Product::whereHas($relation_name, function ($q) use ($conditions) {
+            if ($relation_name == 'product') {
                 if (array_key_exists('where', $conditions)) {
-                    $q->where($conditions['where']);
+                    $products->where($conditions['where']);
+                    // foreach($conditions['where'] as $condition){
+                    //     $products->where($condition);
+                    // }
                 }
                 if (array_key_exists('whereIn', $conditions)) {
-                    $q->whereIn($conditions['whereIn']);
+                    foreach($conditions['whereIn'] as $condition){
+                        foreach($condition as $column=>$items){
+                            $products->whereIn($column, $items);
+                        }
+                    }
                 }
                 if (array_key_exists('orderBy', $conditions)) {
-                    $q->orderBy($conditions['orderBy']);
+                    foreach($conditions['orderBy'] as $condition){
+                        foreach($condition as $column=>$direction){
+                            $products->orderBy($column, $direction);
+                        }
+                    }
                 }
                 if (array_key_exists('random', $conditions)) {
-                    $q->inRandomOrder();
+                    $products->inRandomOrder();
+                }
+                return $products;
+            }
+            $products = $products->whereHas($relation_name, function ($relation) use ($conditions) {
+                if (array_key_exists('where', $conditions)) {
+                    $relation->where($conditions['where']);
+                }
+                if (array_key_exists('whereIn', $conditions)) {
+                    foreach($conditions['whereIn'] as $condition){
+                        foreach($condition as $column=>$items){
+                            $relation->whereIn($column, $items);
+                        }
+                    }
+                }
+                if (array_key_exists('orderBy', $conditions)) {
+                    foreach($conditions['orderBy'] as $condition){
+                        foreach($condition as $column=>$direction){
+                            $relation->orderBy($column, $direction);
+                        }
+                    }
+                }
+                if (array_key_exists('random', $conditions)) {
+                    $relation->inRandomOrder();
                 }
             });
+            // dd($products->get());
             return $products;
         }
         return $products;
