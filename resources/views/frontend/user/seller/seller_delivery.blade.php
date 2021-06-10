@@ -1421,54 +1421,48 @@
 
                         </b></p>
                     </div>
-                    <table class=" border width">
+                    <table class="text-center width" border="3" cellpadding="5">
                         <thead>
-                               <tr>
-                                   <td>Lorem.</td>
-                                   <td>Neque?</td>
-                                   <td>Eaque?</td>
-                                   <td>Voluptatum.</td>
-                                   <td>Recusandae.</td>
-                                   <td>Quae?</td>
-                                   <td>Dolorem.</td>
+                               <tr class="py-2">
+                                   <td>№ п/п</td>
+                                   <td>Код подразделения <br> Исполнителя или Ф.И.О. <br> курьера, принявшего <br> платеж</td>
+                                   <td>Сумма <br>  платежа
+                                    </td>
+                                   <td>Дата <br> платежа.</td>
+                                   <td>Ф. И. О. <br> плательщика.</td>
+                                   <td>
+                                    ИИН <br> плательщика
+                                    </td>
+                                   <td>№ посылки <br> (ШПИ).</td>
                                </tr>
                         </thead>
                         <tbody>
                               <tr>
-                                  <td>Lorem.</td>
-                                  <td>Commodi!</td>
-                                  <td>Repudiandae.</td>
-                                  <td>Ratione!</td>
-                                  <td>Quis!</td>
-                                  <td>Eligendi?</td>
-                                  <td>Ullam!</td>
+                                  <td>1</td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
                               </tr>
                               <tr>
-                                  <td>Aliquid.</td>
-                                  <td>Tenetur!</td>
-                                  <td>Obcaecati!</td>
-                                  <td>Cum.</td>
-                                  <td>Minus.</td>
-                                  <td>Eligendi.</td>
-                                  <td>Sunt.</td>
+                                  <td>2</td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
                               </tr>
                               <tr>
-                                  <td>Tempora.</td>
-                                  <td>Pariatur?</td>
-                                  <td>Ratione.</td>
-                                  <td>Rem.</td>
-                                  <td>Repellendus.</td>
-                                  <td>Provident!</td>
-                                  <td>Incidunt.</td>
-                              </tr>
-                              <tr>
-                                  <td>Mollitia.</td>
-                                  <td>Ex!</td>
-                                  <td>Iusto!</td>
-                                  <td>Eos!</td>
-                                  <td>Ea!</td>
-                                  <td>Possimus.</td>
-                                  <td>Perspiciatis?</td>
+                                  <td></td>
+                                  <td>Итого</td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
                               </tr>
 
                         </tbody>
