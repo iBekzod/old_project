@@ -43,12 +43,12 @@ class ProductController extends Controller
 
     public function getAllProducts(Request $request)
     {
-        return new ProductCollection(getPublishedProducts('product', 100, [['name', 'like', '%' . $request->get('q') . '%']]));
+        return new ProductCollection(getPublishedProducts('product', ['random', 'where'=>[['name', 'like', '%' . $request->get('q') . '%']]])->get());
     }
 
     public function index()
     {
-        return new ProductCollection(getPublishedProducts('element', 10));
+        return new ProductCollection(getPublishedProducts('element')->paginate(10));
     }
 
     public function show($id)
@@ -88,12 +88,12 @@ class ProductController extends Controller
 
     public function admin()
     {
-        return new ProductCollection(getPublishedProducts('product', 10, [['added_by', 'admin']]));
+        return new ProductCollection(getPublishedProducts('product', ['where'=>[['added_by', 'admin']]])->paginate(10));
     }
 
     public function seller()
     {
-        return new ProductCollection(getPublishedProducts('product', 10, [['added_by', 'seller']]));
+        return new ProductCollection(getPublishedProducts('product', ['where'=>[['added_by', 'seller']]])->paginate(10));
         // return $this->admin();
         // if($variations = Variation::where('lowest_price_id','<>', null)->get()){
         //     // dd($variations);
@@ -112,6 +112,8 @@ class ProductController extends Controller
         $ids = Category::descendantsAndSelf($categoryA->id)->where('level','=', 2)->map(function ($category) {
             return $category->id;
         });
+
+        
         $conditions = ['published' => 1, 'featured'=>1];
         $products = Product::where($conditions)->whereIn('category_id',$ids);
 //        $category_ids = CategoryUtility::children_ids($id);

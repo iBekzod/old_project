@@ -25,7 +25,7 @@ if (!function_exists('sendSMS')) {
         if (OtpConfiguration::where('type', 'nexmo')->first()->value == 1) {
             try {
                 $my_sms = new EskizSmsClient;
-                $response = $my_sms->send($to, $from." ".$text);
+                $response = $my_sms->send($to, $from . " " . $text);
             } catch (\Exception $e) {
                 //dd($e->getMessage());
                 // throw $th;
@@ -74,9 +74,7 @@ if (!function_exists('sendSMS')) {
                     )
                 );
             } catch (\Exception $e) {
-
             }
-
         } elseif (OtpConfiguration::where('type', 'ssl_wireless')->first()->value == 1) {
             $token = env("SSL_SMS_API_TOKEN"); //put ssl provided api_token here
             $sid = env("SSL_SMS_SID"); // put ssl provided sid here
@@ -169,7 +167,6 @@ if (!function_exists('areActiveRoutes')) {
         foreach ($routes as $route) {
             if (Route::currentRouteName() == $route) return $output;
         }
-
     }
 }
 
@@ -180,7 +177,6 @@ if (!function_exists('areActiveRoutesHome')) {
         foreach ($routes as $route) {
             if (Route::currentRouteName() == $route) return $output;
         }
-
     }
 }
 
@@ -243,70 +239,87 @@ if (!function_exists('filter_products')) {
 }
 
 if (!function_exists('slugify')) {
-    function slugify($string) {
+    function slugify($string)
+    {
         $string = preg_replace('/[-\s]+/', '-', $string);
         $string = transliterator_transliterate("Any-Latin; NFD; [:Nonspacing Mark:] Remove; NFC; [:Punctuation:] Remove; Lower();", $string);
         return $string;
     }
 }
 if (!function_exists('getPublishedProducts')) {
-    function getPublishedProducts($type='product', $paginate=0, $product_conditions=[], $variation_conditions=[], $element_conditions=[]) {
-        $products=Product::where('variation_id', '<>', null)->where('element_id', '<>', null);
-        $products=filterPublishedProduct($products, $product_conditions);
-        $products=filterProductByRelation($products, 'variation', $variation_conditions);
-        $products=filterProductByRelation($products, 'element', $element_conditions);
-        if($type=='product'){
-            return ($paginate==0)?$products->get():$products->paginate($paginate);
+    function getPublishedProducts($type = 'product', $product_conditions = [], $variation_conditions = [], $element_conditions = [])
+    {
+        $products = Product::where([['qty', '>', 0], ['is_accepted', 1], ['published', 1], ['variation_id', '<>', null], ['element_id', '<>', null]]);
+        $products = filterPublishedProduct($products, $product_conditions);
+        $products = filterProductByRelation($products, 'variation', $variation_conditions);
+        $products = filterProductByRelation($products, 'element', $element_conditions);
+        if ($type == 'product') {
+            return $products;
         }
-        $products=$products->get();
-        $variations=$products->groupBy('variation_id');
-        $variations_arr=collect();
-        $elements_arr=collect();
-        foreach($variations as $variation_id=>$models){
-            $variations_arr->push(Product::where('variation_id',$variation_id)->inRandomOrder()->first());
+        $variations = $products->get()->groupBy('variation_id');
+        $variation_ids = [];
+        foreach ($variations as $variation_id => $models) {
+            $variation_ids[] = Product::where('variation_id', $variation_id)->inRandomOrder()->first()->id;
         }
-        if($type=='variation'){
-            if($paginate!=0){
-                $variation_ids=$variations_arr->map(function ($item, $key) {
-                    return $item->id;
-                });
-                return Product::whereIn('id', $variation_ids)->paginate($paginate);
-            }
+        $variations_arr = Product::whereIn('id', $variation_ids);
+        if ($type == 'variation') {
             return $variations_arr;
         }
-        $elements=$variations_arr->groupBy('element_id');
-        foreach($elements as $element_id=>$models){
-            $elements_arr->push(Product::where('element_id',$element_id)->inRandomOrder()->first());
+        $elements = $variations_arr->get()->groupBy('element_id');
+        $element_ids = [];
+        foreach ($elements as $element_id => $models) {
+            $element_ids[] = Product::where('element_id', $element_id)->inRandomOrder()->first()->id;
         }
-        if($type=='element'){
-            if($paginate!=0){
-                $element_ids=$elements_arr->map(function ($item, $key) {
-                    return $item->id;
-                });
-                return Product::whereIn('id', $element_ids)->paginate($paginate);
-            }
+        $elements_arr = Product::whereIn('id', $element_ids);
+        if ($type == 'element') {
             return $elements_arr;
         }
         return $elements_arr;
     }
 }
-
-function filterPublishedProduct($products, $conditions=[]){
-    if(count($conditions)>0){
-        return $products->where([['qty', '>', 0],['is_accepted', 1],['published', 1]])->where($conditions);
-    }
-    return $products->where([['qty', '>', 0],['is_accepted', 1],['published', 1]]);
-}
-
-function filterProductByRelation($products, $relation_name, $conditions){
-    if(count($conditions)>0){
-        $products = Product::whereHas($relation_name, function($q) use ($conditions)
-        {
-            $q->where($conditions);
-        });
+if (!function_exists('filterPublishedProduct')) {
+    function filterPublishedProduct($products, $conditions = [])
+    {
+        if (count($conditions) > 0) {
+            if (array_key_exists('where', $conditions)) {
+                $products->where($conditions['where']);
+            }
+            if (array_key_exists('whereIn', $conditions)) {
+                $products->whereIn($conditions['whereIn']);
+            }
+            if (array_key_exists('orderBy', $conditions)) {
+                $products->orderBy($conditions['orderBy']);
+            }
+            if (array_key_exists('random', $conditions)) {
+                $products->inRandomOrder();
+            }
+            return $products;
+        }
         return $products;
     }
-    return $products;
+}
+if (!function_exists('filterPublishedProduct')) {
+function filterProductByRelation($products, $relation_name, $conditions)
+    {
+        if (count($conditions) > 0) {
+            $products = Product::whereHas($relation_name, function ($q) use ($conditions) {
+                if (array_key_exists('where', $conditions)) {
+                    $q->where($conditions['where']);
+                }
+                if (array_key_exists('whereIn', $conditions)) {
+                    $q->whereIn($conditions['whereIn']);
+                }
+                if (array_key_exists('orderBy', $conditions)) {
+                    $q->orderBy($conditions['orderBy']);
+                }
+                if (array_key_exists('random', $conditions)) {
+                    $q->inRandomOrder();
+                }
+            });
+            return $products;
+        }
+        return $products;
+    }
 }
 //cache products based on category
 if (!function_exists('get_cached_products')) {
@@ -502,7 +515,7 @@ if (!function_exists('home_base_price')) {
     function home_base_price($id)
     {
         return 0;
-        if($product = Product::findOrFail($id)){
+        if ($product = Product::findOrFail($id)) {
             $price = $product->price;
             if ($product->tax_type == 'percent') {
                 $price += ($price * $product->tax) / 100;
@@ -512,7 +525,6 @@ if (!function_exists('home_base_price')) {
             return format_price(convert_price($price));
         }
         return 0;
-
     }
 }
 
@@ -521,7 +533,7 @@ if (!function_exists('home_discounted_base_price')) {
     function home_discounted_base_price($id)
     {
         return 0;
-        if($product = Product::findOrFail($id)){
+        if ($product = Product::findOrFail($id)) {
             $price = $product->unit_price;
 
             $flash_deals = \App\FlashDeal::where('status', 1)->get();
@@ -556,7 +568,6 @@ if (!function_exists('home_discounted_base_price')) {
             return format_price(convert_price($price));
         }
         return 0;
-
     }
 }
 
@@ -599,7 +610,7 @@ if (!function_exists('homeBasePrice')) {
     {
         // return 0;
         $product = Product::findOrFail($id);
-        $currency=$product->currency;
+        $currency = $product->currency;
         $price = $product->price;
         if ($product->tax_type == 'percent') {
             $price += ($price * $product->tax) / 100;
@@ -615,7 +626,7 @@ if (!function_exists('homeDiscountedBasePrice')) {
     {
         // return 0;
         $product = Product::findOrFail($id);
-        $currency=$product->currency;
+        $currency = $product->currency;
         $price = $product->price;
 
         $flash_deals = FlashDeal::where('status', 1)->get();
@@ -786,19 +797,19 @@ if (!function_exists('convertPrice')) {
 if (!function_exists('convertCurrency')) {
     function convertCurrency($price, $price_currency_id)
     {
-        $converted_price=0;
+        $converted_price = 0;
         $currency = Currency::where('status', true)->where('code', env('DEFAULT_CURRENCY', 'USD'))->firstOrFail();
-        if($currency = Currency::findOrFail($price_currency_id)){
+        if ($currency = Currency::findOrFail($price_currency_id)) {
             $converted_price = floatval($price) / floatval($currency->exchange_rate);
         }
         if ($business_settings = BusinessSetting::where('type', 'system_default_currency')->first()) {
             $currency = Currency::find($business_settings->value);
             $converted_price = floatval($converted_price) * floatval($currency->exchange_rate);
         }
-        if($converted_price!=0){
-            return round($converted_price, $currency->precision??(-2));
+        if ($converted_price != 0) {
+            return round($converted_price, $currency->precision ?? (-2));
         }
-        return round($price, $currency->precision??(-2));
+        return round($price, $currency->precision ?? (-2));
     }
 }
 if (!function_exists('defaultCurrency')) {
@@ -808,7 +819,7 @@ if (!function_exists('defaultCurrency')) {
             $currency = Currency::findOrFail($business_settings->value);
             return $currency->code;
         }
-        if($currency = Currency::where('status', true)->where('code', env('DEFAULT_CURRENCY', 'USD'))->firstOrFail()){
+        if ($currency = Currency::where('status', true)->where('code', env('DEFAULT_CURRENCY', 'USD'))->firstOrFail()) {
             return $currency->code;
         }
         return "USD";
@@ -822,7 +833,7 @@ if (!function_exists('defaultExchangeRate')) {
             $currency = Currency::findOrFail($business_settings->value);
             return $currency->exchange_rate;
         }
-        if($currency = Currency::where('status', true)->where('code', env('DEFAULT_ECHANGE_RATE', 'USD'))->firstOrFail()){
+        if ($currency = Currency::where('status', true)->where('code', env('DEFAULT_ECHANGE_RATE', 'USD'))->firstOrFail()) {
             return $currency->exchange_rate;
         }
         return 1;
@@ -950,7 +961,7 @@ if (!function_exists('api_asset')) {
 if (!function_exists('uploaded_asset')) {
     function uploaded_asset($id)
     {
-        if ($id!=null && ($asset = \App\Upload::find($id)) != null ) {
+        if ($id != null && ($asset = \App\Upload::find($id)) != null) {
             return my_asset($asset->file_name);
         }
         return null;
@@ -1043,7 +1054,7 @@ if (!function_exists('isUnique')) {
 if (!function_exists('get_setting')) {
     function get_setting($key, $default = null)
     {
-        if($setting = BusinessSetting::where('type', $key)->first()){
+        if ($setting = BusinessSetting::where('type', $key)->first()) {
             return $setting->value;
         }
         return $setting ?? $default;
@@ -1101,5 +1112,3 @@ if (!function_exists('formatBytes')) {
         return round($bytes, $precision) . ' ' . $units[$pow];
     }
 }
-
-?>
