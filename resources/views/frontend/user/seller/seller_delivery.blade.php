@@ -29,6 +29,7 @@
     }
     .width{
         width: 100% !important;
+        margin: 0 auto;
     }
 </style>
 
@@ -1190,13 +1191,314 @@
                         <div class="text-center">
                             <p><b>После 30 кг, за каждые последующие 1 кг добавляются 4000 сум.</b></p>
                         </div>
-                    </div>
+                        <p>
+                            *Внутри города <br>
+                            **по областным центрам <br>
+                            ***по центральным районам
 
-                </div>
+                        </p>
+                    </div>
+                    <div class="col-md-12 border">
+                          <div class="row">
+                              <div class="col-md-6 text-center border">
+                                  <p class="pt-2">
+                                    Исполнитель <br>
+                                    ООО «TINFIS Cargo» <br>
+                                    Каримов Д.Р.
+                                  </p>
+                              </div>
+                              <div class="col-md-6 border">
+                                     <p class="text-center pt-2">
+                                        Заказчик
+                                     </p>
+                                     <p>
+                                        firma nomi_______________________ <br>
+                                        _derektor ism familya______________________
+
+                                     </p>
+                              </div>
+                          </div>
+                    </div>
+                    <div class="col-md-12 top">
+                        <div class="float-right right_text ">
+                            <p><b>ПРИЛОЖЕНИЕ №2 <br>
+                                к договору на оказание курьерских услуг № ______ <br>
+                                от «____» ________________ 20 __года
+                            </b></p>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="text-center">
+                            <p  class="m-0"><b>СТОИМОСТЬ КУРЬЕРСКИХ УСЛУГ</b></p>
+                            <p class="size m-0"><b>Внутри Республики Узбекистан</b></p>
+                        </div>
+                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-right:6.75pt;text-align:center;'><br></p>
+                        <div align="center" style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";'>
+                            <table class="width" style="width: 5.2e+2pt;border: none;border-collapse:collapse;">
+                                <tbody>
+                                    <tr>
+                                        <td style="width:19.3pt;border:solid black 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:27.0pt;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";text-align:center;'><strong><span style="font-size:13px;">N</span></strong></p>
+                                        </td>
+                                        <td style="width:126.2pt;border:solid black 1.0pt;border-left:none;padding:0cm 5.4pt 0cm 5.4pt;height:27.0pt;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";text-align:center;'><strong><span style="font-size:13px;">Вид отправления</span></strong></p>
+                                        </td>
+                                        <td style="width:38.9pt;border:solid black 1.0pt;border-left:none;padding:0cm 5.4pt 0cm 5.4pt;height:27.0pt;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";text-align:center;'><strong><span style="font-size:13px;">Вес</span></strong></p>
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";text-align:center;'><strong><span style="font-size:13px;">(кг)</span></strong></p>
+                                        </td>
+                                        <td style="width:332.6pt;border:solid black 1.0pt;border-left:none;padding:0cm 5.4pt 0cm 5.4pt;height:27.0pt;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";text-align:center;'><strong><span style="font-size:13px;">Размеры в упаковке</span></strong></p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 19.3pt;border-right: 1pt solid black;border-bottom: 1pt solid black;border-left: 1pt solid black;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";text-align:center;'><span style="font-size:13px;">1.</span></p>
+                                        </td>
+                                        <td style="width: 126.2pt;border-top: none;border-left: none;border-bottom: 1pt solid black;border-right: 1pt solid black;padding: 0cm 5.4pt;vertical-align: top;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-top:0cm;margin-right:9.0pt;margin-left:13.5pt;'><span style="font-size:13px;">Письмо</span></p>
+                                        </td>
+                                        <td style="width: 38.9pt;border-top: none;border-left: none;border-bottom: 1pt solid black;border-right: 1pt solid black;padding: 0cm 5.4pt;vertical-align: top;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";text-align:center;'><span style="font-size:13px;">2</span></p>
+                                        </td>
+                                        <td style="width: 332.6pt;border-top: none;border-left: none;border-bottom: 1pt solid black;border-right: 1pt solid black;padding: 0cm 5.4pt;vertical-align: top;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-top:0cm;margin-right:9.0pt;margin-left:6.75pt;'><span style="font-size:13px;">162х229 мм; 229х324 мм; &nbsp; 110х220 мм; 114х162 мм</span></p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 19.3pt;border-right: 1pt solid black;border-bottom: 1pt solid black;border-left: 1pt solid black;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";text-align:center;'><span style="font-size:13px;">2.</span></p>
+                                        </td>
+                                        <td style="width: 126.2pt;border-top: none;border-left: none;border-bottom: 1pt solid black;border-right: 1pt solid black;padding: 0cm 5.4pt;vertical-align: top;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-top:0cm;margin-right:9.0pt;margin-left:13.5pt;'><span style="font-size:13px;">Почтовая карточка</span></p>
+                                        </td>
+                                        <td style="width: 38.9pt;border-top: none;border-left: none;border-bottom: 1pt solid black;border-right: 1pt solid black;padding: 0cm 5.4pt;vertical-align: top;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";text-align:center;'><span style="font-size:13px;">-</span></p>
+                                        </td>
+                                        <td style="width: 332.6pt;border-top: none;border-left: none;border-bottom: 1pt solid black;border-right: 1pt solid black;padding: 0cm 5.4pt;vertical-align: top;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-top:0cm;margin-right:9.0pt;margin-left:6.75pt;'><span style="font-size:13px;">105х148 мм</span></p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 19.3pt;border-right: 1pt solid black;border-bottom: 1pt solid black;border-left: 1pt solid black;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";text-align:center;'><span style="font-size:13px;">3.</span></p>
+                                        </td>
+                                        <td style="width: 126.2pt;border-top: none;border-left: none;border-bottom: 1pt solid black;border-right: 1pt solid black;padding: 0cm 5.4pt;vertical-align: top;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-top:0cm;margin-right:9.0pt;margin-left:13.5pt;'><span style="font-size:13px;">Бандероль,</span></p>
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-top:0cm;margin-right:9.0pt;margin-left:13.5pt;'><span style="font-size:13px;">в том числе с вложением одной книги</span></p>
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-top:0cm;margin-right:9.0pt;margin-left:13.5pt;'><span style="font-size:13px;">&nbsp;</span></p>
+                                        </td>
+                                        <td style="width: 38.9pt;border-top: none;border-left: none;border-bottom: 1pt solid black;border-right: 1pt solid black;padding: 0cm 5.4pt;vertical-align: top;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";text-align:center;'><span style="font-size:13px;">2</span></p>
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";text-align:center;'><span style="font-size:13px;">3</span></p>
+                                        </td>
+                                        <td style="width: 332.6pt;border-top: none;border-left: none;border-bottom: 1pt solid black;border-right: 1pt solid black;padding: 0cm 5.4pt;vertical-align: top;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-top:0cm;margin-right:9.0pt;margin-left:6.75pt;'><span style="font-size:13px;">Максимальные: длина, ширина и толщина, сложенные вместе, - 900 мм, причем наибольший размер не может превышать 600 мм с отклонением в 2 мм; для рулонов: сумма длины и двойного диаметра - 1040 мм, причем наибольший диаметр не может превышать 900 мм с отклонением в 2 мм.</span></p>
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-top:0cm;margin-right:9.0pt;margin-left:6.75pt;'><span style="font-size:13px;">Минимальные: допускаются размеры не менее 90х140 мм с отклонением в 2 мм; для рулонов: суммы длины и двойного диаметра - 170 мм, причем наибольший размер не может превышать 100 мм.</span></p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan="3" style="width: 19.3pt;border-right: 1pt solid black;border-bottom: 1pt solid black;border-left: 1pt solid black;border-image: initial;border-top: none;padding: 0cm 5.4pt;height: 10pt;vertical-align: top;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";text-align:center;'><span style="font-size:13px;">4.</span></p>
+                                        </td>
+                                        <td style="width: 126.2pt;border-top: none;border-bottom: none;border-left: none;border-image: initial;border-right: 1pt solid black;padding: 0cm 5.4pt;height: 10pt;vertical-align: top;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-top:0cm;margin-right:9.0pt;margin-left:13.5pt;'><span style="font-size:13px;">Посылка:</span></p>
+                                        </td>
+                                        <td style="width: 38.9pt;border-top: none;border-bottom: none;border-left: none;border-image: initial;border-right: 1pt solid black;padding: 0cm 5.4pt;height: 10pt;vertical-align: top;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-top:0cm;margin-right:9.0pt;margin-left:13.5pt;'><span style="font-size:13px;">&nbsp;</span></p>
+                                        </td>
+                                        <td rowspan="3" style="width: 332.6pt;border-top: none;border-left: none;border-bottom: 1pt solid black;border-right: 1pt solid black;padding: 0cm 5.4pt;height: 10pt;vertical-align: top;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-top:0cm;margin-right:9.0pt;margin-left:6.75pt;'><span style="font-size:13px;">Максимальные: 1,50 м для одного из измерений или 3 м суммы длины и наибольшей окружности, взятой в направлении ином, чем длина.</span></p>
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-top:0cm;margin-right:9.0pt;margin-left:6.75pt;'><span style="font-size:13px;">Минимальные: 90x140 мм с отклонением в 2 мм (при минимальной толщине 50 мм).</span></p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 126.2pt;border-top: none;border-bottom: none;border-left: none;border-image: initial;border-right: 1pt solid black;padding: 0cm 5.4pt;height: 22pt;vertical-align: top;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-top:0cm;margin-right:9.0pt;margin-left:13.5pt;'><span style="font-size:13px;">а) с делимым вложением</span></p>
+                                        </td>
+                                        <td style="width: 38.9pt;border-top: none;border-bottom: none;border-left: none;border-image: initial;border-right: 1pt solid black;padding: 0cm 5.4pt;height: 22pt;vertical-align: top;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";text-align:center;'><span style="font-size:13px;">10</span></p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 126.2pt;border-top: none;border-left: none;border-bottom: 1pt solid black;border-right: 1pt solid black;padding: 0cm 5.4pt;height: 22pt;vertical-align: top;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-top:0cm;margin-right:9.0pt;margin-left:13.5pt;'><span style="font-size:13px;">б) с неделимым вложением</span></p>
+                                        </td>
+                                        <td style="width: 38.9pt;border-top: none;border-left: none;border-bottom: 1pt solid black;border-right: 1pt solid black;padding: 0cm 5.4pt;height: 22pt;vertical-align: top;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";text-align:center;'><span style="font-size:13px;">15</span></p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 19.3pt;border-right: 1pt solid black;border-bottom: 1pt solid black;border-left: 1pt solid black;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";text-align:center;'><span style="font-size:13px;">5.</span></p>
+                                        </td>
+                                        <td style="width: 126.2pt;border-top: none;border-left: none;border-bottom: 1pt solid black;border-right: 1pt solid black;padding: 0cm 5.4pt;vertical-align: top;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-top:0cm;margin-right:9.0pt;margin-left:13.5pt;'><span style="font-size:13px;">Печатные издания в соответствующей упаковке</span></p>
+                                        </td>
+                                        <td style="width: 38.9pt;border-top: none;border-left: none;border-bottom: 1pt solid black;border-right: 1pt solid black;padding: 0cm 5.4pt;vertical-align: top;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";text-align:center;'><span style="font-size:13px;">2</span></p>
+                                        </td>
+                                        <td style="width: 332.6pt;border-top: none;border-left: none;border-bottom: 1pt solid black;border-right: 1pt solid black;padding: 0cm 5.4pt;vertical-align: top;">
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-top:0cm;margin-right:9.0pt;margin-left:6.75pt;'><span style="font-size:13px;">Максимальные: длина, ширина и толщина, сложенные вместе, - 900 мм, причем наибольший размер не может превышать 600 мм с отклонением в 2 мм; для рулонов: сумма длины и двойного диаметра - 1040 мм, причем наибольший диаметр не может превышать 900 мм с отклонением в 2 мм.</span></p>
+                                            <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-top:0cm;margin-right:9.0pt;margin-left:6.75pt;'><span style="font-size:13px;">Минимальные: допускаются размеры не менее 90х140 мм с отклонением в 2 мм; для рулонов: суммы длины и двойного диаметра - 170 мм, причем наибольший размер не может превышать 100 мм.</span></p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:36.0pt;text-align:right;'><strong><span style="font-size:15px;">&nbsp;</span></strong></p>
+                    </div>
+                    <div class="col-md-12 border">
+                        <div class="row">
+                            <div class="col-md-6 text-center border">
+                                <p class="pt-2">
+                                    Исполнитель <br>
+                                    ООО «TINFIS Cargo» <br>
+                                    __________________ Каримов Д.Р.
+
+                                </p>
+                            </div>
+                            <div class="col-md-6 border">
+                                   <p class="text-center pt-2">
+                                      Заказчик
+                                   </p>
+                                   <p>
+                                      firma nomi_______________________ <br>
+                                      _derektor ism familya______________________
+
+                                   </p>
+                            </div>
+                        </div>
+                  </div>
+                  <div class="col-md-12 top">
+                    <div class="float-right right_text ">
+                        <p><b>ПРИЛОЖЕНИЕ №3 <br>
+                            к договору на оказание курьерских услуг № ______ <br>
+                            от «____» ________________ 20 __года
+                        </b></p>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="text-center">
+                        <p  class="m-0"><b>ПЕРЕЧЕНЬ</b></p>
+                        <p class="size"><b>предметов и веществ, запрещенных и ограниченных к пересылке</b></p>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                      <p>
+                        1. Во внутренних курьерских отправлениях запрещены к пересылке:
+                        <ol>
+                            <li class="display-inline:block">а) огнестрельное, сигнальное, пневматическое, газовое оружие, боеприпасы, холодное оружие (включая метательное), электрошоковые устройства и искровые разрядники, а также основные части огнестрельного оружия, неснаряженные взрывные устройства и боеприпасы, в том числе неснаряженные гранаты, снаряды и другие аналогичные предметы, а также муляжи таких устройств и предметов; </li>
+                            <li>б) наркотические средства, психотропные, сильнодействующие, радиоактивные, взрывчатые, ядовитые, едкие, легковоспламеняющиеся и другие опасные вещества;</li>
+                            <li>в) денежные знаки Республики Узбекистан и иностранная валюта (за исключением пересылаемых Центральным банком Республики Узбекистан и его учреждениями);</li>
+                            <li>г) предметы непристойного или безнравственного характера, а также товары, угрожающие национальной духовности;</li>
+                            <li>д) контрафактные и пиратские предметы; </li>
+                            <li>е) предметы, ввоз или обращение которых запрещены в стране назначения (для международных почтовых отправлений);</li>
+                            <li>ж) предметы, которые по своему характеру или упаковке могут представлять опасность для почтовых работников или обычного населения, пачкать или портить другие отправления и почтовое оборудование;</li>
+                            <li>з) документы, имеющие характер текущей и личной переписки, а также простые и заказные письма, почтовые карточки и бандероли, которыми обмениваются лица, не являющиеся отправителем и получателем, или лица, проживающие с ними;</li>
+                            <li>и) живые животные.</li>
+                        </ol>
+                        2. Печатные издания в соответствующей упаковке и отправления для слепых (секограммы): <br>
+                        не могут иметь никаких аннотаций, содержать никаких документов, имеющих характер текущей или личной переписки; <br>
+                        не могут содержать никаких марок, бланков оплаты, проштемпелеванных или нет, никаких документов, представляющих денежную ценность, за исключением случаев, когда отправление содержит в качестве вложения карточку, конверт или бандероль с напечатанным адресом отправителя.
+
+                      </p>
+                  </div>
+                  <div class="col-md-12 top">
+                    <div class="float-right right_text ">
+                        <p><b>ПРИЛОЖЕНИЕ №4 <br>
+                            к договору на оказание курьерских услуг № ______ <br>
+                            от «____» ________________ 20 __года
+                        </b></p>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="text-center">
+                        <p ><b>
+                            Реестр принятых платежей <br>
+                            в пользу «__________________» <br>
+                            за «___» _____________ 20__ г.
+
+                        </b></p>
+                    </div>
+                    <table class=" border width">
+                        <thead>
+                               <tr>
+                                   <td>Lorem.</td>
+                                   <td>Neque?</td>
+                                   <td>Eaque?</td>
+                                   <td>Voluptatum.</td>
+                                   <td>Recusandae.</td>
+                                   <td>Quae?</td>
+                                   <td>Dolorem.</td>
+                               </tr>
+                        </thead>
+                        <tbody>
+                              <tr>
+                                  <td>Lorem.</td>
+                                  <td>Commodi!</td>
+                                  <td>Repudiandae.</td>
+                                  <td>Ratione!</td>
+                                  <td>Quis!</td>
+                                  <td>Eligendi?</td>
+                                  <td>Ullam!</td>
+                              </tr>
+                              <tr>
+                                  <td>Aliquid.</td>
+                                  <td>Tenetur!</td>
+                                  <td>Obcaecati!</td>
+                                  <td>Cum.</td>
+                                  <td>Minus.</td>
+                                  <td>Eligendi.</td>
+                                  <td>Sunt.</td>
+                              </tr>
+                              <tr>
+                                  <td>Tempora.</td>
+                                  <td>Pariatur?</td>
+                                  <td>Ratione.</td>
+                                  <td>Rem.</td>
+                                  <td>Repellendus.</td>
+                                  <td>Provident!</td>
+                                  <td>Incidunt.</td>
+                              </tr>
+                              <tr>
+                                  <td>Mollitia.</td>
+                                  <td>Ex!</td>
+                                  <td>Iusto!</td>
+                                  <td>Eos!</td>
+                                  <td>Ea!</td>
+                                  <td>Possimus.</td>
+                                  <td>Perspiciatis?</td>
+                              </tr>
+
+                        </tbody>
+                    </table>
+                  </div>
+                  <div class="col-md-12 my-5 ">
+                    <div class="row ">
+                        <div class="col-md-6 text-center border">
+                            <p class="pt-2">
+                                Исполнитель <br>
+                                ООО «TINFIS Cargo» <br>
+                                __________________ Каримов Д.Р.
+
+                            </p>
+                        </div>
+                        <div class="col-md-6 border">
+                               <p class="text-center pt-2">
+                                  Заказчик
+                               </p>
+                               <p>
+                                  firma nomi_______________________ <br>
+                                  _derektor ism familya______________________
+
+                               </p>
+                        </div>
+                    </div>
+              </div>
+               </div>
             </div>
         </div>
-
-
 	</div>
 
 @endsection
