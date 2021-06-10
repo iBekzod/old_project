@@ -27,6 +27,9 @@
     .top{
         margin-top: 100px !important;
     }
+    .width{
+        width: 100% !important;
+    }
 </style>
 
 @endsection
@@ -442,48 +445,751 @@
                             <p  class="m-0"><b>СТОИМОСТЬ КУРЬЕРСКИХ УСЛУГ</b></p>
                             <p class="size"><b>Внутри Республики Узбекистан</b></p>
                         </div>
-                        {{-- <table border="1">
-                            <thead >
-                                <tr class="p-2">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </thead>
+                        <table class="width" style="border-collapse:collapse;border:none;">
                             <tbody>
                                 <tr>
-                                    <td>1.</td>
-                                    <td>olma</td>
-                                    <td>5 000 som</td>
-                                    <td> 5 kg</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style="font-size:15px;">Вес</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border:solid windowtext 1.0pt;border-left:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style="font-size:15px;">Тариф 1 (От офиса TINFIS Cargo до<br>&nbsp;офиса TINFIS Cargo)</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border:solid windowtext 1.0pt;border-left:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style="font-size:15px;">Тариф 2*<br>&nbsp;(От офиса TINFIS Cargo до <br>&nbsp;получателя)</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border:solid windowtext 1.0pt;border-left:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style="font-size:15px;">На дом (От отправителя до офиса TINFIS Cargo, От офиса TINFIS Cargo до <br>&nbsp;получателя)</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border:solid windowtext 1.0pt;border-left:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style="font-size:15px;">Из рук в руки (От отправителя до получателя)</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border:solid windowtext 1.0pt;border-left:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style="font-size:15px;">На дом<br>&nbsp;район**<br>&nbsp;(От офиса TINFIS Cargo до получателя)</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border:solid windowtext 1.0pt;border-left:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style="font-size:15px;">Из рук в руки<br>&nbsp;район***<br>&nbsp;(От отправителя до<br>&nbsp;получателя)</span></p>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td>2.</td>
-                                    <td>banan</td>
-                                    <td> 15 000 som</td>
-                                    <td> 6 kg</td>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>0.5</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>7 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>15 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>17 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>22 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>30 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>35 000.00</span></p>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td>3.</td>
-                                    <td>nok</td>
-                                    <td>9 000 som</td>
-                                    <td> 8 kg</td>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>1</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>10 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>15 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>20 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>25 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>30 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>35 000.00</span></p>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td>4.</td>
-                                    <td>behi</td>
-                                    <td>11 000 som</td>
-                                    <td> 10 kg</td>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>2</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>15 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>15 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>25 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>30 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>35 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>40 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>3</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>20 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>15 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>30 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>35 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>40 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>45 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>4</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>25 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>20 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>35 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>40 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>45 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>50 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>5</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>30 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>20 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>40 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>45 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>50 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>55 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>6</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>35 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>20 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>45 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>50 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>55 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>60 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>7</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>40 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>25 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>50 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>55 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>60 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>65 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>8</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>45 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>25 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>55 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>60 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>65 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>70 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>9</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>50 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>25 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>60 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>65 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>70 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>75 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>10</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>55 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>30 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>65 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>70 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>75 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>80 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>11</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>60 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>30 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>70 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>75 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>80 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>85 000.0</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>12</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>65 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>30 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>75 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>80 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>85 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>90 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>13</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>70 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>35 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>80 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>85 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>90 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>95 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>14</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>75 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>35 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>85 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>90 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>95 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>100 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>15</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>80 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>35 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>90 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>95 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>100 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>105 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>16</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>85 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>40 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>95 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>100 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>105 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>110 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>17</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>90 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>40 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>100 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>105 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>110 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>115 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>18</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>95 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>40 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>105 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>110 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>115 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>120 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>19</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>100 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>45 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>110 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>115 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>120 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>125 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>20</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>105 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>45 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>115 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>120 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>125 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>130 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>21</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>110 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>45 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>120 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>125 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>130 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>135 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>22</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>115 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>50 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>125 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>130 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>135 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>140 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>23</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>120 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>50 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>130 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>135 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>140 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>145 000.0</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>24</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>125 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>50 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>135 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>140 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>145 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>150 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>25</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>130 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>55 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>140 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>145 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>150 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>155 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>26</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>135 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>55 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>145 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>150 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>155 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>160 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>27</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>140 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>55 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>150 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>155 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>160 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>165 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>28</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>145 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>60 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>155 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>160 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>165 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>170 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>29</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>150 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>60 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>160 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>165 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>170 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>175 000.00</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35.2pt;border:solid windowtext 1.0pt;border-top:  none;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>30</span></p>
+                                    </td>
+                                    <td style="width:77.95pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>155 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>60 000.00</span></p>
+                                    </td>
+                                    <td style="width:3.0cm;border-top:none;border-left:none;border-bottom:  solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>165 000.00</span></p>
+                                    </td>
+                                    <td style="width:87.45pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>170 000.00</span></p>
+                                    </td>
+                                    <td style="width:75.6pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>175 000.00</span></p>
+                                    </td>
+                                    <td style="width:77.65pt;border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;">
+                                        <p style='margin:0cm;margin-bottom:.0001pt;font-size:16px;font-family:"Times New Roman","serif";margin-left:0cm;text-align:center;'><span style='font-size:15px;font-family:"Calibri","sans-serif";'>180 000.00</span></p>
+                                    </td>
                                 </tr>
                             </tbody>
-                        </table> --}}
+                        </table>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="text-center">
+                            <p><b>После 30 кг, за каждые последующие 1 кг добавляются 4000 сум.</b></p>
+                        </div>
                     </div>
 
                 </div>
