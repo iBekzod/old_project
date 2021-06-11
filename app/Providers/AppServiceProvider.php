@@ -3,9 +3,7 @@
 namespace App\Providers;
 
 use App\HelperClasses\Translations;
-use App\Services\NormalDependency;
-use App\Services\SingleTonDependency;
-use App\Services\ViaInterfaceDependency;
+
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 
@@ -31,17 +29,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(NormalDependency::class,function($app){
-            return new NormalDependency();
-        });
 
-        $this->app->singleton(SingleTonDependency::class,function($app){
-           return new SingleTonDependency();
-        });
-
-        $this->app->bind(ExampleContract::class,function($app){
-           return new ViaInterfaceDependency();
-        });
         //
 //        $app->register(\KitLoong\MigrationsGenerator\MigrationsGeneratorServiceProvider::class);
     }
