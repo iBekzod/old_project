@@ -56,39 +56,6 @@ class HomeController extends Controller
        public function seller_registration(Request $request)
        {
 
-        // "_token" => "ZqR4A0ISvCIxijIgDZPBpJ3pMOxrsXuipQMKNqoy"
-        // "name" => "Plato Terry"
-        // "phone" => "3518914"
-        // "country_code" => "998"
-        // "email" => null
-        // "password" => "Pa$$w0rd!"
-        // "password_confirmation" => "Pa$$w0rd!"
-        // "checkbox_example_1" => "on"
-
-
-
-            //
-
-
-         //    if($user->save()){
-         //        $seller = new Seller;
-         //        $seller->user_id = $user->id;
-         //        if($seller->save()){
-         //            $shop = new Shop;
-         //            $shop->user_id = $user->id;
-         //            $shop->name = $request->shop_name;
-         //            $shop->meta_title = $request->shop_name;
-         //            $shop->slug =SlugService::createSlug(Shop::class, 'slug', slugify($request->shop_name));
-         //            $shop->save();
-         //            // $user->id=encrypt($user->id);
-         //            auth()->login($user, true);
-         //            $tokenResult = $user->createToken('Personal Access Token');
-         //            return $this->loginSuccess($tokenResult, $user);
-         //        }
-         //    }
-
-            //    return view('frontend.user_registration');
-
            if ($request->method() === 'POST') {
                     // dd($request->all());
             // $request->validate([
@@ -111,7 +78,7 @@ class HomeController extends Controller
             $user->user_type = "seller";
             $user->email_verified_at = now();
             $user->password = Hash::make($request->password);
-            //   dd($user);
+            //    dd($user);
 
               return view('frontend.user.seller.form_second');
 

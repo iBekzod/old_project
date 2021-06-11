@@ -22,7 +22,7 @@
         text-align:right !important;
     }
     .size{
-        font-size: 9px !important;
+        font-size: 12px !important;
     }
     .top{
         margin-top: 100px !important;

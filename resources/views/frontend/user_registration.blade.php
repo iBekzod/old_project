@@ -27,7 +27,7 @@
 
                                         @if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null && \App\Addon::where('unique_identifier', 'otp_system')->first()->activated)
                                             <div class="form-group phone-form-group mb-1">
-                                                <input type="tel" id="phone-code" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" value="{{ old('phone') }}" placeholder="" name="phone" autocomplete="off">
+                                                <input type="tel" id="phone-code" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" value="{{ old('phone') }}" placeholder="97 777 77 77" name="phone" autocomplete="off">
                                             </div>
 
                                             <input type="hidden" name="country_code" value="">
@@ -67,7 +67,7 @@
                                         <div class="form-group">
                                             <input type="password" class="form-control" placeholder="{{  translate('Confirm Password') }}" name="password_confirmation">
                                         </div>
- 
+
                                         @if(\App\BusinessSetting::where('type', 'google_recaptcha')->first()->value == 1)
                                             <div class="form-group">
                                                 <div class="g-recaptcha" data-sitekey="{{ env('CAPTCHA_KEY') }}"></div>
