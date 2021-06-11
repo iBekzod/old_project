@@ -500,6 +500,7 @@ class ProductController extends Controller
     {
         $product_conditions['where'][] = ['published', 1];
         $product_conditions[] = 'random';
+        $element_conditions=[];
         //Filtering by brand slug
         if ($type == 'brand') {
             if ($brand = Brand::where('slug', $request->id)->firstOrFail()) {
@@ -644,30 +645,28 @@ class ProductController extends Controller
         //                 }
         //             }
 
-
-
-        //             //Color Filter
-        //             $all_colors = array();
-
-        //             foreach ($non_paginate_products as $key => $product) {
-        //                 if ($product->colors != null) {
-        //                     foreach (json_decode($product->colors) as $key => $color) {
-        //                         if(!in_array($color, $all_colors)){
-        //                             array_push($all_colors, $color);
-        //                         }
-        //                     }
-        //                 }
-        //             }
-
         $query = $request->q;
         if($query != null){
             $searchController = new SearchController;
             $searchController->store($request);
-            $products = $products->where('name', 'like', '%'.$query.'%')->orWhere('tags', 'like', '%'.$query.'%');
+            $products = $products->where('name', 'like', '%'.$query.'%')->whereHas('element', function ($relation) use ($query) {
+                $relation->where('tags', 'like', '%'.$query.'%');
+            });
         }
         $products = Product::where('element_id', '<>', null);
         $products = filterProductByRelation($products, 'product', $product_conditions);
-        $products = filterProductByRelation($products, 'element', $element_conditions);
+        if( is_array($element_conditions)){
+            $products = filterProductByRelation($products, 'element', $element_conditions);
+        }
+
+        //Color Filter
+        $all_colors = array();
+        foreach ($products->get() as $product) {
+            if ($product->variation->colors_id != null) {
+                $all_colors[]=$product->variation->colors_id;
+            }
+        }
+
         $min_price =($products->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
         $max_price = ($products->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
         if($request->has('min_price')){
@@ -692,7 +691,7 @@ class ProductController extends Controller
         return response()->json([
             'products' => new ProductCollection($products),
             'attributes' => [],//$attributes,
-            // 'colors'=>new ProductColorCollection($all_colors),
+            'colors'=> new ProductColorCollection($all_colors),
             'min_price' => $min_price ?? null,
             'max_price' => $max_price ?? null,
             'type' => $type ?? null
