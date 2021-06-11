@@ -21,4 +21,10 @@ class City extends Model
     public function city_translations(){
       return $this->hasMany(CityTranslation::class);
     }
+
+    public function delete()
+    {
+        $this->city_translations()->delete();
+        return parent::delete();
+    }
 }

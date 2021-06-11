@@ -98,4 +98,11 @@ class Category extends Model
     {
         return $this->hasMany(SubSubCategory::class);
     }
+
+    public function delete()
+    {
+        $this->attributes()->detach();
+        $this->category_translations()->delete();
+        return parent::delete();
+    }
 }

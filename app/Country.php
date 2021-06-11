@@ -15,4 +15,10 @@ class Country extends Model
     public function country_translations(){
         return $this->hasMany(CountryTranslation::class);
     }
+
+    public function delete()
+    {
+        $this->country_translations()->delete();
+        return parent::delete();
+    }
 }

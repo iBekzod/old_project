@@ -108,10 +108,17 @@ class Element extends Model
                 $element->save();
             }
         }else{
-            $this->combinations()->delete();
+            // $this->combinations()->delete();
         }
-        $this->element_translations()->delete();
-        return parent::delete();
+        foreach($this->products() as $product){
+            $product->published=0;
+            $product->added_by="deleted";
+        }
+        $this->added_by="deleted";
+        $this->save();
+        // $this->element_translations()->delete();
+        dd($this);
+        return true;
     }
 
     public function parentHierarchy()

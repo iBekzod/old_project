@@ -17,4 +17,10 @@ class Color extends Model
     {
         return $this->hasMany(ColorTranslation::class, 'color_id', 'id');
     }
+
+    public function delete()
+    {
+        $this->color_translations()->delete();
+        return parent::delete();
+    }
 }

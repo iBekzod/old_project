@@ -54,4 +54,10 @@ class CustomerProduct extends Model
     public function customer_product_translations(){
       return $this->hasMany(CustomerProductTranslation::class);
     }
+
+    public function delete()
+    {
+        $this->customer_product_translations()->delete();
+        return parent::delete();
+    }
 }
