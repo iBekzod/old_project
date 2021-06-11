@@ -672,14 +672,10 @@ class ProductController extends Controller
         $max_price = ($products->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
         if($request->has('min_price')){
             $min_price = $request->min_price;
+            $product_conditions['where'][] = ['price', '>=', $min_price];
         }
         if($request->has('max_price')){
             $max_price = $request->max_price;
-        }
-        if($min_price!=0){
-            $product_conditions['where'][] = ['price', '>=', $min_price];
-        }
-        if($max_price!=0){
             $product_conditions['where'][] = ['price', '<=', $max_price];
         }
         foreach ($products as $product) {
