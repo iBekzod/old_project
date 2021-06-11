@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Product;
-use App\Variation;
-use Exception;
+use App\Services\NormalDependency;
+use App\Services\SingleTonDependency;
+use App\Services\ViaInterfaceDependency;
 use Illuminate\Console\Command;
 
 class TestCommand extends Command
@@ -41,22 +41,18 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $products=Product::where('variation_id', '<>', null);
-        $products=$this->filterPublishedProduct($products)->get();
-        $products=$products->groupBy('variation_id');
-        $products_arr=[];
-        // $products=$products->filter(function($variation) {
-        //     //$products_arr[]=$variation->random();
-        //     $random_product_id=$variation->random()->id;
-        //     return $variation->filter(function($product) use ($random_product_id) {
-        //         return $product->id==$random_product_id;
-        //     });
-        // });
-        dd($products);
-        // return response()->json([
-        //     'products' => $products
-        // ]);
-        print_r($products);
+        $this->app->bind(NormalDependency::class,function($app){
+            return new NormalDependency();
+        });
+        $this->info('Normal binding');
+        $this->app->singleton(SingleTonDependency::class,function($app){
+           return new SingleTonDependency();
+        });
+        $this->info('Singleton');
+        $this->app->bind(ExampleContract::class,function($app){
+           return new ViaInterfaceDependency();
+        });
+        $this->info('Binding through interface');
         $this->info('Successfully run');
     }
 
