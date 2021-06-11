@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Category;
+use App\Element;
 use App\Http\Controllers\Controller;
 use App\Http\HelperTrait;
 use App\FlashDealProduct;
@@ -61,15 +62,13 @@ class SearchController extends Controller
         ]);
 
         $keywords = [];
-
-        $products = Product::where('published', 1)
-            ->where('tags', 'like', '%'.$request->search.'%')
-            ->where('category_id', $request->get('category_id'))
-            ->get();
-
+        $search = $request->search;
+        $products=Product::whereHas('element', function ($relation) use ($search) {
+                $relation->where('tags', 'like', '%'.$search.'%');
+        })->where('published', 1)->get();
         foreach ($products as $key => $product) {
             foreach (explode(',',$product->tags) as $key => $tag) {
-                if(stripos($tag, $request->search) !== false){
+                if(stripos($tag, $search) !== false){
                     if(sizeof($keywords) > 5){
                         break;
                     }
@@ -143,7 +142,7 @@ class SearchController extends Controller
     public function cycleCategories($category, &$arr)
     {
         if($category->childrenCategories)
-        {;
+        {
             foreach ($category->childrenCategories as $subcategory)
             {
                 array_push($arr, $subcategory->id);

@@ -660,11 +660,11 @@ class ProductController extends Controller
         //             }
 
         $query = $request->q;
-        // if($query != null){
-        //     $searchController = new SearchController;
-        //     $searchController->store($request);
-        //     $products = $products->where('name', 'like', '%'.$query.'%')->orWhere('tags', 'like', '%'.$query.'%');
-        // }
+        if($query != null){
+            $searchController = new SearchController;
+            $searchController->store($request);
+            $products = $products->where('name', 'like', '%'.$query.'%')->orWhere('tags', 'like', '%'.$query.'%');
+        }
         $products = Product::where('element_id', '<>', null);
         $products = filterProductByRelation($products, 'product', $product_conditions);
         $products = filterProductByRelation($products, 'element', $element_conditions);
