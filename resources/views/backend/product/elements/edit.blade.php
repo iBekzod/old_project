@@ -172,9 +172,9 @@
                         </div>
                     </div>
                     <div id="attribute_div">
-                        @if(is_array($characteristics))
+                        @if(isset($characteristics))
                             @foreach ( $characteristics as $attribute_id=>$value_ids)
-                                @if($attribute = \App\Attribute::findOrFail($attribute_id))
+                                @if($attribute = \App\Attribute::find($attribute_id))
                                 <input type="hidden" name="choice_options[{{ $attribute->id }}]" value="{{ $attribute->id }}">
                                 <div class="form-group row">
                                     <label class="col-md-3 col-form-label"  for="signinSrEmail">{{  $attribute->getTranslation('name', $lang) }}</label>
