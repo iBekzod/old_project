@@ -668,8 +668,14 @@ class ProductController extends Controller
         $products = Product::where('element_id', '<>', null);
         $products = filterProductByRelation($products, 'product', $product_conditions);
         $products = filterProductByRelation($products, 'element', $element_conditions);
-        $min_price = $request->min_price??0;
-        $max_price = $request->max_price??0;
+        $min_price =($products->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
+        $max_price = ($products->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
+        if($request->has('min_price')){
+            $min_price = $request->min_price;
+        }
+        if($request->has('max_price')){
+            $max_price = $request->max_price;
+        }
         if($min_price!=0){
             $product_conditions['where'][] = ['price', '>=', $min_price];
         }
