@@ -57,31 +57,32 @@ class HomeController extends Controller
        {
 
            if ($request->method() === 'POST') {
-                    // dd($request->all());
-            // $request->validate([
-            //            // '_token'=>'required',
-            //            'name' => 'required',
-            //             'phone' => 'sometimes|unique:users',
-            //            'email' => 'sometimes|unique:users|max:255',
-            //             'password' => 'required',
-            //            'password_confirmation' => 'required',
-            //             'checkbox_example_1' =>'required',
-            //              "user_type" => "seller"
-            //        ]);
+
+                    $request->validate([
+                        'name' => 'required',
+                        // 'phone' => 'required|unique:users',
+                        // 'country_code' => 'required',
+                        'email' => 'required|unique:users|max:255',
+                        'password' => 'required',
+                        'password_confirmation'=> 'required'
+
+                    ]);
 
             $user = new User;
             $user->name = $request->name;
-            $user->name = $request->name.' '.$request->surname;
-            $user->phone =$request->phone;
-            $user->country_code = $request->country_code;
+            // $user->phone =$request->phone;
             $user->email = $request->email;
             $user->user_type = "seller";
             $user->email_verified_at = now();
             $user->password = Hash::make($request->password);
-            //    dd($user);
-
-              return view('frontend.user.seller.form_second');
-
+            $user->save();
+            if($user->save()){
+                 return view('frontend.user.seller.form_second');
+                // return 'keldi';
+            }
+            else{
+                return 'error';;
+            }
             }
             else if($request->method() === 'GET'){
                if(Auth::check()){
@@ -101,25 +102,13 @@ class HomeController extends Controller
     {
 
         if ($request->method() === 'POST') {
-
-            // "_token" => "c6g3qA3AgZ7IBvTDNILUUelwJa0O5FOZQABZE4ON"
-            // "email" => "tinfis@admin.uz"
-            // "password" => "123123"
-            // "remember" => "on"
-
+                //  $request->validate([
+                //  ]);
 
                     // dd($request->all());
-                    // $seller =->id;
-                    // $seller = Seller::findOrFail(decrypt($id));
-                    // $user  = $seller->user;
-                    // auth()->login($user, true);
-                    // return response()->json([
-                    //     'message' => 'Not verified',
-                    //     'url'=>route('dashboard')
-                    // ], 200);
-
-                    dd($request->all());
-
+                    // if(Auth::user()->user_type ==''){
+                    //     return view('frontend.user.seller.dashboard');
+                    // }
                 }else if($request->method() === 'GET'){
                     if(Auth::check()){
                         return redirect()->route('home');

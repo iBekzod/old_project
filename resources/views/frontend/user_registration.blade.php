@@ -26,11 +26,11 @@
                                         </div>
 
                                         @if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null && \App\Addon::where('unique_identifier', 'otp_system')->first()->activated)
-                                            <div class="form-group phone-form-group mb-1">
+                                            {{-- <div class="form-group phone-form-group mb-1">
                                                 <input type="tel" id="phone-code" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" value="{{ old('phone') }}" placeholder="97 777 77 77" name="phone" autocomplete="off">
                                             </div>
 
-                                            <input type="hidden" name="country_code" value="">
+                                            <input type="hidden" name="country_code" value=""> --}}
 
                                             <div class="form-group email-form-group mb-1 d-none">
                                                 <input type="email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" placeholder="{{  translate('Email') }}" name="email"  autocomplete="off">
