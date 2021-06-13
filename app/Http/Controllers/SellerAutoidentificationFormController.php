@@ -47,7 +47,7 @@ class SellerAutoidentificationFormController extends Controller
              'Тел_менеджера'=>'required',
              'Электронная_почта_менеджера'=>'required'
             ]);
-            // $array=$request->all();
+             $array=$request->all();
             // dd($array);
           $seller= new Seller;
           $seller->type_of_ownership=$request->Форма_собственности;
@@ -65,10 +65,13 @@ class SellerAutoidentificationFormController extends Controller
           $seller->name_responsible_manager=$request->ФИО_менеджера_ответственного_за_сотрудничество;
           $seller->tel_menager=$request->Тел_менеджера;
           $seller->email_manager=$request->Электронная_почта_менеджера;
+           //  dd($seller);
+         //  $seller->save();
+          // if($seller->save()){
+           // return view('frontend.user.seller.seller_autoidentification')->with('seller', $array);
+          // }
 
-        dd($seller);
-        //  return view('frontend.user.seller.seller_autoidentification')->with('seller', $array);
-
+          return view('frontend.user.seller.seller_autoidentification')->with('seller', $array);
 
    }
 
