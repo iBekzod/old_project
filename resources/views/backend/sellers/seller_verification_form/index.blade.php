@@ -219,7 +219,7 @@
 				var str = '<div class="form-group row" style="background:rgba(0,0,0,0.1);padding:10px 0;">'
 								+'<input type="hidden" name="type[]" value="email">'
 								+'<div class="col-lg-3">'
-									+'<label class="col-from-label">Number</label>'
+									+'<label class="col-from-label">Email</label>'
 								+'</div>'
 								+'<div class="col-lg-7">'
 									+'<input class="form-control" type="text" name="label[]" placeholder="{{ translate('Email') }}">'

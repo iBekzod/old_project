@@ -67,7 +67,6 @@ class HomeController extends Controller
                         'password_confirmation'=> 'required'
 
                     ]);
-
             $user = new User;
             $user->name = $request->name;
             // $user->phone =$request->phone;
