@@ -783,6 +783,12 @@
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'countries', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'country_translations', 'relation_id'=>'country_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Colors')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
                                 <a href="{{route('translations.show_translation', ['base_table'=>'customer_packages', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'customer_package_translations', 'relation_id'=>'customer_package_id', 'language_selected'=>'ru'])}}"
                                    class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{translate('Customer Packages')}}</span>
