@@ -234,17 +234,17 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $category = Category::findOrFail($id);
+        // $category = Category::findOrFail($id);
 
-        // Category Translations Delete
-        foreach ($category->category_translations as $key => $category_translation) {
-            $category_translation->delete();
-        }
+        // // Category Translations Delete
+        // foreach ($category->category_translations as $key => $category_translation) {
+        //     $category_translation->delete();
+        // }
 
-        foreach (Product::where('category_id', $category->id)->get() as $product) {
-            $product->category_id = null;
-            $product->save();
-        }
+        // foreach (Product::where('category_id', $category->id)->get() as $product) {
+        //     $product->category_id = null;
+        //     $product->save();
+        // }
 
         CategoryUtility::delete_category($id);
 
