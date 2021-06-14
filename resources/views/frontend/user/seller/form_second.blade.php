@@ -17,7 +17,6 @@
                                 <input type="text" hidden name="user_id" value={{$user_id}}>
                             @else
                             <h1>user_id not found</h1>
-
                             @endif
 
 							@foreach (json_decode(\App\BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element)
@@ -56,15 +55,7 @@
                                     </div>
                                 </div>
                                 @endif
-                                {{-- {{$element->label}} --}}
 
-                                {{-- @elseif ($element->type=='email')
-                                <div class="form-group row" id="category">
-                                    <label class="col-lg-3 col-from-label mb-2">{{$element->label}}</label>
-                                    <div class="col-lg-8">
-                                    <input class="form-control" type="{{($element->type)}}" name="{{($element->label)}}">
-                                    </div>
-                                </div> --}}
 
                             @endforeach
 
