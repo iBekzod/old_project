@@ -49,27 +49,29 @@ class SellerAutoidentificationFormController extends Controller
             ]);
              $array=$request->all();
             // dd($array);
-          $seller= new Seller;
-          $seller->type_of_ownership=$request->Форма_собственности;
-          $seller->vendor_legal_name=$request->Юридическое_название_вендора;
-          $seller->name_of_shop=$request->Название_магазина;
-          $seller->vendor_registration_address=$request->Адрес_регистрации_вендора;
-          $seller->vendor_physical_address=$request->Физический_адрес_вендора;
-          $seller->taxpayer_identification_number=$request->ИНН;
-          $seller->bank_name=$request->Название_банка;
-          $seller->mfo_bank=$request->МФО_банка;
-          $seller->rc=$request->РС;
-          $seller->full_name_director=$request->ФИО_директора;
-          $seller->tel_director=$request->Тел_директора;
-          $seller->email_director=$request->Электронная_почта_директора;
-          $seller->name_responsible_manager=$request->ФИО_менеджера_ответственного_за_сотрудничество;
-          $seller->tel_menager=$request->Тел_менеджера;
-          $seller->email_manager=$request->Электронная_почта_менеджера;
-           //  dd($seller);
+            $data= json_encode($array);
+            $seller= new Seller;
+            $seller->verification_info=$data;
+        //   $seller->type_of_ownership=$request->Форма_собственности;
+        //   $seller->vendor_legal_name=$request->Юридическое_название_вендора;
+        //   $seller->name_of_shop=$request->Название_магазина;
+        //   $seller->vendor_registration_address=$request->Адрес_регистрации_вендора;
+        //   $seller->vendor_physical_address=$request->Физический_адрес_вендора;
+        //   $seller->taxpayer_identification_number=$request->ИНН;
+        //   $seller->bank_name=$request->Название_банка;
+        //   $seller->mfo_bank=$request->МФО_банка;
+        //   $seller->rc=$request->РС;
+        //   $seller->full_name_director=$request->ФИО_директора;
+        //   $seller->tel_director=$request->Тел_директора;
+        //   $seller->email_director=$request->Электронная_почта_директора;
+        //   $seller->name_responsible_manager=$request->ФИО_менеджера_ответственного_за_сотрудничество;
+        //   $seller->tel_menager=$request->Тел_менеджера;
+        //   $seller->email_manager=$request->Электронная_почта_менеджера;
+             dd($seller);
          //  $seller->save();
-          // if($seller->save()){
-           // return view('frontend.user.seller.seller_autoidentification')->with('seller', $array);
-          // }
+        //   if($seller->save()){
+        //    return view('frontend.user.seller.seller_autoidentification')->with('seller', $array);
+        //   }
 
           return view('frontend.user.seller.seller_autoidentification')->with('seller', $array);
 
