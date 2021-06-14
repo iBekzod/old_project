@@ -69,11 +69,12 @@ class SellerAutoidentificationFormController extends Controller
             }
             $seller->user_id=$request->user_id;
             $seller->verification_info = json_encode($data);
-              dd($seller);
-            $seller->save();
-            // if($seller->save()){
-            //     return view('frontend.user.seller.seller_autoidentification')->with('seller', $array);
-            // }
+            //   dd($seller);
+            // $seller->save();
+            //   dd($array);
+            if($seller->save()){
+                return view('frontend.user.seller.seller_autoidentification')->with('seller', $array);
+            }
 
 
 

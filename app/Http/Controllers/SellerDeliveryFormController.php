@@ -8,7 +8,8 @@ class SellerDeliveryFormController extends Controller
 {
    public function seller_delivery_form_save(Request $request)
    {
-        dd($request->all());
+        $selection=$request->all();
+        dd($selection);
        return view('frontend.user.seller.seller_delivery');
    }
 
