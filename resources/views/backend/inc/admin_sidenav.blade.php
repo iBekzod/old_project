@@ -783,7 +783,7 @@
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
-                                <a href="{{route('translations.show_translation', ['base_table'=>'countries', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'country_translations', 'relation_id'=>'country_id', 'language_selected'=>'ru'])}}"
+                                <a href="{{route('translations.show_translation', ['base_table'=>'colors', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'color_translations', 'relation_id'=>'color_id', 'language_selected'=>'ru'])}}"
                                    class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{translate('Colors')}}</span>
                                 </a>
