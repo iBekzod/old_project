@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Seller;
-use App\SellerAutoidntification;
 use Illuminate\Http\Request;
+use App\Shop;
+use App\User;
+use App\Seller;
+use App\BusinessSetting;
 
 class SellerAutoidentificationFormController extends Controller
 {
@@ -31,6 +32,7 @@ class SellerAutoidentificationFormController extends Controller
             // "Электронная_почта_менеджера" => "liqax@mailinator.com"
 
             // TODO::tak seller navicatdatoldirish kere inn validate save and login register pdf to html
+             'user_id'=>'required',
              'Форма_собственности'=> 'required',
              'Юридическое_название_вендора'=>'required',
              'Название_магазина'=>'required',
@@ -47,6 +49,24 @@ class SellerAutoidentificationFormController extends Controller
              'Тел_менеджера'=>'required',
              'Электронная_почта_менеджера'=>'required'
             ]);
+            $seller=new Seller;
+            $data = array();
+            $i = 0;
+            foreach (json_decode(BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element) {
+                $item = array();
+                if ($element->type) {
+                    $item['type'] = $element->type;
+                    $item['label'] = $element->label;
+                    $item['value'] = $request['element_'.$i];
+                }
+                array_push($data, $item);
+                $i++;
+            }
+            $seller = Auth::user()->seller;
+            $seller->verification_info = json_encode($data);
+
+
+
              $array=$request->all();
             // dd($array);
             $data= json_encode($array);
