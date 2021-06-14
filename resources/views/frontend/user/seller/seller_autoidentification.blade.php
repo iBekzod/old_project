@@ -371,7 +371,7 @@
 
 @section('script')
 	<script type="text/javascript">
-
+ var inputvalue=document.getElementById("selection");
 
 	</script>
 @endsection
