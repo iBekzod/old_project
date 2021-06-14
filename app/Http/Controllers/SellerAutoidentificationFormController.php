@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Shop;
 use App\User;
+use Auth;
 use App\Seller;
 use App\BusinessSetting;
 
@@ -49,6 +50,8 @@ class SellerAutoidentificationFormController extends Controller
              'Тел_менеджера'=>'required',
              'Электронная_почта_менеджера'=>'required'
             ]);
+            $array=$request->all();
+            dd($array);
             $seller=new Seller;
             $data = array();
             $i = 0;
@@ -57,21 +60,25 @@ class SellerAutoidentificationFormController extends Controller
                 if ($element->type) {
                     $item['type'] = $element->type;
                     $item['label'] = $element->label;
-                    $item['value'] = $request['element_'.$i];
+                    $item['value'] = $request[$element->label];
                 }
                 array_push($data, $item);
                 $i++;
             }
-            $seller = Auth::user()->seller;
+            //  $seller = Auth::user()->seller;
             $seller->verification_info = json_encode($data);
+            // dd($seller->verification_info);
+            $seller->save();
+            // if($seller->save()){
+            //     return view('frontend.user.seller.seller_autoidentification')->with('seller', $array);
+            // }
 
 
 
-             $array=$request->all();
-            // dd($array);
-            $data= json_encode($array);
-            $seller= new Seller;
-            $seller->verification_info=$data;
+            //  dd($array);
+            // $data= json_encode($array);
+            // $seller= new Seller;
+            // $seller->verification_info=$data;
         //   $seller->type_of_ownership=$request->Форма_собственности;
         //   $seller->vendor_legal_name=$request->Юридическое_название_вендора;
         //   $seller->name_of_shop=$request->Название_магазина;
@@ -87,13 +94,13 @@ class SellerAutoidentificationFormController extends Controller
         //   $seller->name_responsible_manager=$request->ФИО_менеджера_ответственного_за_сотрудничество;
         //   $seller->tel_menager=$request->Тел_менеджера;
         //   $seller->email_manager=$request->Электронная_почта_менеджера;
-             dd($seller);
+            //  dd($seller);
          //  $seller->save();
         //   if($seller->save()){
         //    return view('frontend.user.seller.seller_autoidentification')->with('seller', $array);
         //   }
 
-          return view('frontend.user.seller.seller_autoidentification')->with('seller', $array);
+
 
    }
 
