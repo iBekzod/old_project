@@ -13,6 +13,13 @@
 					@csrf
 					<div class="row">
 						<div class=" offset-lg-1 col-lg-11 form-horizontal" id="form">
+                            @if ($user_id)
+                                <input type="text" hidden name="user_id" value={{$user_id}}>
+                            @else
+                            <h1>user_id not found</h1>
+
+                            @endif
+
 							@foreach (json_decode(\App\BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element)
                                 {{-- @if($element->type=='select')
                                 <div class="form-group row" id="category">
@@ -83,3 +90,18 @@
 	</script>
 @endsection
 
+
+
+
+{{-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+</body>
+</html> --}}

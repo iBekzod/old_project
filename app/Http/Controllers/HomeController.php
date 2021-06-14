@@ -76,7 +76,7 @@ class HomeController extends Controller
             $user->password = Hash::make($request->password);
             $user->save();
             if($user->save()){
-                 return view('frontend.user.seller.form_second');
+                 return view('frontend.user.seller.form_second')->with('user_id',$user->id);
                 // return 'keldi';
             }
             else{
@@ -102,12 +102,21 @@ class HomeController extends Controller
 
         if ($request->method() === 'POST') {
                 //  $request->validate([
+                //      'email'=>'required',
+                //      'password'=>'required'
                 //  ]);
+                //  dd($request->all());
+                //  $seller=new Seller;
+                //  $seller->seller_email=$request->amail;
+                //  $seller->seller_password=$request->password;
+                //  $seller->save();
+                //  if($seller->save()){
+                //           return 'lgogin save';
+                //  };
 
                     // dd($request->all());
-                    // if(Auth::user()->user_type ==''){
-                    //     return view('frontend.user.seller.dashboard');
-                    // }
+                        return view('frontend.user.seller.dashboard');
+
                 }else if($request->method() === 'GET'){
                     if(Auth::check()){
                         return redirect()->route('home');

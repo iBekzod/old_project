@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Seller;
-use App\SellerAutoidntification;
 use Illuminate\Http\Request;
+use App\Shop;
+use App\User;
+use App\Seller;
+use App\BusinessSetting;
 
 class SellerAutoidentificationFormController extends Controller
 {
@@ -31,6 +32,7 @@ class SellerAutoidentificationFormController extends Controller
             // "Электронная_почта_менеджера" => "liqax@mailinator.com"
 
             // TODO::tak seller navicatdatoldirish kere inn validate save and login register pdf to html
+             'user_id'=>'required',
              'Форма_собственности'=> 'required',
              'Юридическое_название_вендора'=>'required',
              'Название_магазина'=>'required',
@@ -47,29 +49,49 @@ class SellerAutoidentificationFormController extends Controller
              'Тел_менеджера'=>'required',
              'Электронная_почта_менеджера'=>'required'
             ]);
+            $seller=new Seller;
+            $data = array();
+            $i = 0;
+            foreach (json_decode(BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element) {
+                $item = array();
+                if ($element->type) {
+                    $item['type'] = $element->type;
+                    $item['label'] = $element->label;
+                    $item['value'] = $request['element_'.$i];
+                }
+                array_push($data, $item);
+                $i++;
+            }
+            $seller = Auth::user()->seller;
+            $seller->verification_info = json_encode($data);
+
+
+
              $array=$request->all();
             // dd($array);
-          $seller= new Seller;
-          $seller->type_of_ownership=$request->Форма_собственности;
-          $seller->vendor_legal_name=$request->Юридическое_название_вендора;
-          $seller->name_of_shop=$request->Название_магазина;
-          $seller->vendor_registration_address=$request->Адрес_регистрации_вендора;
-          $seller->vendor_physical_address=$request->Физический_адрес_вендора;
-          $seller->taxpayer_identification_number=$request->ИНН;
-          $seller->bank_name=$request->Название_банка;
-          $seller->mfo_bank=$request->МФО_банка;
-          $seller->rc=$request->РС;
-          $seller->full_name_director=$request->ФИО_директора;
-          $seller->tel_director=$request->Тел_директора;
-          $seller->email_director=$request->Электронная_почта_директора;
-          $seller->name_responsible_manager=$request->ФИО_менеджера_ответственного_за_сотрудничество;
-          $seller->tel_menager=$request->Тел_менеджера;
-          $seller->email_manager=$request->Электронная_почта_менеджера;
-           //  dd($seller);
+            $data= json_encode($array);
+            $seller= new Seller;
+            $seller->verification_info=$data;
+        //   $seller->type_of_ownership=$request->Форма_собственности;
+        //   $seller->vendor_legal_name=$request->Юридическое_название_вендора;
+        //   $seller->name_of_shop=$request->Название_магазина;
+        //   $seller->vendor_registration_address=$request->Адрес_регистрации_вендора;
+        //   $seller->vendor_physical_address=$request->Физический_адрес_вендора;
+        //   $seller->taxpayer_identification_number=$request->ИНН;
+        //   $seller->bank_name=$request->Название_банка;
+        //   $seller->mfo_bank=$request->МФО_банка;
+        //   $seller->rc=$request->РС;
+        //   $seller->full_name_director=$request->ФИО_директора;
+        //   $seller->tel_director=$request->Тел_директора;
+        //   $seller->email_director=$request->Электронная_почта_директора;
+        //   $seller->name_responsible_manager=$request->ФИО_менеджера_ответственного_за_сотрудничество;
+        //   $seller->tel_menager=$request->Тел_менеджера;
+        //   $seller->email_manager=$request->Электронная_почта_менеджера;
+             dd($seller);
          //  $seller->save();
-          // if($seller->save()){
-           // return view('frontend.user.seller.seller_autoidentification')->with('seller', $array);
-          // }
+        //   if($seller->save()){
+        //    return view('frontend.user.seller.seller_autoidentification')->with('seller', $array);
+        //   }
 
           return view('frontend.user.seller.seller_autoidentification')->with('seller', $array);
 
