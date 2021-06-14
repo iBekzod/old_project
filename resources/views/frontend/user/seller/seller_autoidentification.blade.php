@@ -28,7 +28,7 @@
             <div class="container px-5">
                 <form action="{{route('seller.delivery')}}" method="post">
 					@csrf
-                    <input type="text" id="seller_document" hidden value="{{$seller}}">
+                    {{-- <input type="text" id="seller_document" hidden value="{{$seller}}"> --}}
                     {{-- TODO::html codni inpudga tiqib bazaga saxranit qilish kere va danlilarni ham jonatish kere --}}
                     <div class="selection" id="selection">
                         <div class="row">
