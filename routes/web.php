@@ -224,7 +224,7 @@ Route::group(['prefix' =>'seller', 'middleware' => ['seller', 'verified', 'user'
 	Route::get('elements/manage/{id}/accept','SellerElementController@changeOnModerationAccept')->name('seller.elements.manage.change.accept');
 	Route::get('elements/manage/{id}/refuse','SellerElementController@changeOnModerationRefuse')->name('seller.elements.manage.change.refuse');
     Route::get('elements/create','SellerElementController@create')->name('seller.elements.create');
-    Route::post('elements/store','SellerElementController@store')->name('seller.elements.store');
+    // Route::post('elements/store','SellerElementController@store')->name('seller.elements.store');
 	Route::get('elements/{id}/edit','SellerElementController@seller_element_edit')->name('seller.elements.edit');
 	Route::post('elements/todays_deal', 'SellerElementController@updateTodaysDeal')->name('seller.elements.todays_deal');
 	Route::post('elements/featured', 'SellerElementController@updateFeatured')->name('seller.elements.featured');

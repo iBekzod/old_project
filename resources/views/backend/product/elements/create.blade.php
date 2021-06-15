@@ -151,15 +151,15 @@
                         <div class="col-lg-8">
                             <select class="form-control aiz-selectpicker" name="unit" id="unit"
                                     data-live-search="true" required>
-                                    <option value="">{{ ('Select Unit') }}</option>
+                                    <option value="">{{ translate('Select Unit') }}</option>
                                 @foreach ($units as $unit)
                                     <option value="{{ $unit }}">{{ translate($unit) }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
-                    <div class="form-group row" hidden id="weight_id">
-                        <label class="col-lg-3 col-from-label">{{translate('Weight')}} </label>
+                    <div class="form-group row" id="weight_id">
+                        <label class="col-lg-3 col-from-label">{{translate('Total Weight')}}</label>
                         <div class="col-lg-8">
                             <input type="text" class="form-control" name="weight"
                                    placeholder="{{ translate('weight (kg)') }}" value="" required>
@@ -492,12 +492,13 @@
             });
         });
 
-        $('#unit').on('change', function () {
-            if($('#unit').val()=='kg' || $('#unit').val()=='pcs'){
-                $('#weight_id').show();
-            }else{
-                $('#weight_id').hide();
-            }
-        });
+        // $('#unit').on('change', function () {
+        //     alert($('#unit').val());
+        //     if($('#unit').val()=='kg' || $('#unit').val()=='pcs'){
+        //         $('#weight_id').show();
+        //     }else{
+        //         $('#weight_id').hide();
+        //     }
+        // });
     </script>
 @endsection

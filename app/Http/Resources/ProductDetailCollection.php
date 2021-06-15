@@ -269,6 +269,7 @@ class ProductDetailCollection extends ResourceCollection
 
 
     protected function calculateShippingCost($product){
+        
         return 0;
     }
 }
