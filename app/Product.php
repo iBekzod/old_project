@@ -114,10 +114,13 @@ class Product extends Model
 
      public function delete()
     {
-        $this->reviews()->delete();
-        $this->wishlists()->delete();
-        $this->product_translations()->delete();
-        return parent::delete();
+        $this->published=false;
+        $this->added_by="deleted";
+        $this->save();
+        // $this->reviews()->delete();
+        // $this->wishlists()->delete();
+        // $this->product_translations()->delete();
+        // return parent::delete();
     }
 
 
@@ -127,7 +130,7 @@ class Product extends Model
         $result = parent::save($options);
         try{
             $variation=$this->variation;
-            $products = Product::where('variation_id', $variation->id);
+            $products = Product::where('variation_id', $variation->id)->where('published', true);
             if(count($products->get())>0){
                 $min_price=$products->min("price");
                 $lowest_price_list=$products->where('price', $min_price)->pluck('id');

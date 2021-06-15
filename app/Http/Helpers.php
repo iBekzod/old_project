@@ -267,28 +267,13 @@ if (!function_exists('getPublishedProducts')) {
         if ($type == 'variation') {
             return $products;
         }
-        $elements = $products->get()->groupBy('element_id');
-        // foreach($elements->pluck('element_id')->toArray() as $element_id){
-        //     if($element=Element::where('id', $element_id)->first()){
-        //         // dd($element);
-        //     }
-        // }
-        // dd($elements);
+        $element_id_list=removeDuplicatesFromElement($products->groupBy('element_id')->pluck('element_id')->toArray());        // dd($elements);
         $element_ids = [];
+        $elements = $products->get()->groupBy('element_id');
         foreach ($elements as $element_id => $models) {
             $element_ids[] = Product::where('element_id', $element_id)->inRandomOrder()->first()->id;
             // $element_ids[] = Product::where('element_id', $element_id)->first()->id;
         }
-
-        // if(is_array($element_ids) && count($element_ids)>0){
-        //     $my_elements=Element::whereIn('id', $element_ids)->get();
-
-        // }
-        // foreach($element_ids as $element_id){
-        //     if($element=Element:($element_id)){
-
-        //     }
-        // }
         $products = $products->whereIn('id', $element_ids);
         if ($type == 'element') {
             return $products;
@@ -297,11 +282,23 @@ if (!function_exists('getPublishedProducts')) {
     }
 }
 
-// function removeDuplicatesFromElement($elements){
+function removeDuplicatesFromElement($element_ids){
+    $element_id_list=[];
+    foreach($element_ids as $key=>$element_id){
+        // dd($element_id);
+        if($element = Element::where('id', $element_id)->first()){
+            if($element->parent_id==null){
+                $element_id_list=$element->parent_id;
+            }else{
+                $element_id_list[$element->parent_id]=$element->id;
+            }
 
+        }
+    }
+    // dd($element_id_list);
 
-//     return $elements;
-// }
+    return $element_id_list;
+}
 
 if (!function_exists('filterProductByRelation')) {
     function filterProductByRelation($products, $relation_name, $conditions)
