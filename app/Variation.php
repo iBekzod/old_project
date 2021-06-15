@@ -64,8 +64,9 @@ class Variation extends Model
 
     public function delete()
     {
-        $this->products()->delete();
-        $this->variation_translations()->delete();
-        return parent::delete();
+        return true;
+        // $this->products()->delete();
+        // $this->variation_translations()->delete();
+        // return parent::delete();
     }
 }

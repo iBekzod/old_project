@@ -86,7 +86,7 @@ class SellerProductController extends Controller
                     $product->name = $product_name;
                     $product->added_by = Auth::user()->user_type;
                     $product->user_id = $user_id;
-                    $product->slug = SlugService::createSlug(Product::class, 'slug', $product_name);
+                    $product->slug = SlugService::createSlug(Product::class, 'slug', slugify($product_name));
                     $product->currency_id = (int)$variant["currency"];
                     $product->price = (float)$variant["price"];
                     $product->discount = (float)$variant["discount"];

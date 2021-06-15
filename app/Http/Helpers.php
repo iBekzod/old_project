@@ -268,10 +268,18 @@ if (!function_exists('getPublishedProducts')) {
             return $products;
         }
         $elements = $products->get()->groupBy('element_id');
+        // foreach($elements->pluck('element_id')->toArray() as $element_id){
+        //     if($element=Element::where('id', $element_id)->first()){
+        //         // dd($element);
+        //     }
+        // }
+        // dd($elements);
         $element_ids = [];
         foreach ($elements as $element_id => $models) {
             $element_ids[] = Product::where('element_id', $element_id)->inRandomOrder()->first()->id;
+            // $element_ids[] = Product::where('element_id', $element_id)->first()->id;
         }
+
         // if(is_array($element_ids) && count($element_ids)>0){
         //     $my_elements=Element::whereIn('id', $element_ids)->get();
 
@@ -288,6 +296,13 @@ if (!function_exists('getPublishedProducts')) {
         return $products;
     }
 }
+
+// function removeDuplicatesFromElement($elements){
+
+
+//     return $elements;
+// }
+
 if (!function_exists('filterProductByRelation')) {
     function filterProductByRelation($products, $relation_name, $conditions)
     {

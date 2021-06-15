@@ -108,7 +108,7 @@ class Element extends Model
                 $element->save();
             }
         }else{
-            // $this->combinations()->delete();
+
         }
         foreach($this->products() as $product){
             $product->published=0;
@@ -117,7 +117,8 @@ class Element extends Model
         $this->added_by="deleted";
         $this->save();
         // $this->element_translations()->delete();
-        dd($this);
+        // $this->combinations()->delete();
+        // dd($this);
         return true;
     }
 
