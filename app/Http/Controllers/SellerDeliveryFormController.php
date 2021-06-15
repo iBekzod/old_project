@@ -10,9 +10,8 @@ class SellerDeliveryFormController extends Controller
    {
         //    dd($request->all());
            $selection=json_decode($request->seller_document);
-        //    dd($selection);
-           dd($selection->verification_info[0]->value);
-       return view('frontend.user.seller.seller_delivery');
+         
+       return view('frontend.user.seller.seller_delivery')->with('seller',$selection);
    }
 
 
