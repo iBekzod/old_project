@@ -1,6 +1,7 @@
 @extends('frontend.layouts.app')
 
 
+
 @section('css')
 <style>
     .card{
@@ -32,7 +33,8 @@
         margin: 0 auto;
     }
 </style>
-
+{{-- dd($selection);
+dd($selection->verification_info[0]->value); --}}
 @endsection
 @section('content')
 
@@ -41,7 +43,7 @@
             <div class="container px-5">
                 <div class="row">
                         <div class="col-md-12 mt-4 text-center my-2">
-                           <h5> <b>Договор на оказание курьерских услуг № </b> </h5>
+                           <h5> <b>Договор на оказание курьерских услуг № {{$seller->user_id}}</b> </h5>
                         </div>
                         {{-- <div class="col-md-12 mt-4 text-center">
                               <h1 class="text-danger">{{ $seller['Название_магазина'] }}</h1>
@@ -58,7 +60,7 @@
                 </div>
                 <div class="row">
                            <div class="col-md-12">
-                               <p>Общество с Ограниченной Ответственностью <b>«TINFIS Cargo»</b> , в лице директора Каримова Д.Р. действующего на основании Устава, именуемое в дальнейшем «Исполнитель», с одной стороны, и « <span class="text-danger">firma nomi</span>  », в лице руководителя <span class="text-danger">firma  derektori ism familya</span> , действующего на основании  Устава, именуемое в дальнейшем «Заказчик», с другой стороны, вместе именуемые в дальнейшем «Стороны» и по отдельности «Сторона», заключили настоящий договор о нижеследующем:
+                               <p>Общество с Ограниченной Ответственностью <b>«TINFIS Cargo»</b> , в лице директора Каримова Д.Р. действующего на основании Устава, именуемое в дальнейшем «Исполнитель», с одной стороны, и « <span class="text-danger">{{$seller->verification_info[2]->value}}</span>  », в лице руководителя <span class="text-danger">{{$seller->verification_info[9]->value}}</span> , действующего на основании  Устава, именуемое в дальнейшем «Заказчик», с другой стороны, вместе именуемые в дальнейшем «Стороны» и по отдельности «Сторона», заключили настоящий договор о нижеследующем:
                             </p>
                           </div>
                            <div class="col-md-12">
@@ -381,43 +383,59 @@
                             </div>
                        </div>
                 </div>
+                {{--
+Форма_собственности
+Юридическое_название_вендора
+Название_магазина
+Адрес_регистрации_вендора
+Физический_адрес_вендора
+ИНН
+Название_банка
+МФО_банка
+РС
+ФИО_директора
+Тел_директора
+Электронная_почта_директора
+ФИО_менеджера_ответственного_за_сотрудничество
+Тел_менеджера
+Электронная_почта_менеджера --}}
                 <div class="row">
                           <div class="col-md-12">
                               <div class="row">
                                     <div class="col-md-6"><p>Название: ООО «BMG HI-TECH</p> </div>
-                                    <div class="col-md-6"><p>Название: </p> </div>
+                                    <div class="col-md-6"><p>Название: <span class="text-danger">{{$seller->verification_info[2]->value}}</span></p> </div>
                               </div>
                               <div class="row">
                                     <div class="col-md-6"><p>Адрес: 100029 г. Ташкент, Мирабадский р-он   ул. Афросиаб 12 б </p></div>
-                                    <div class="col-md-6"><p>Адрес: </p> </div>
+                                    <div class="col-md-6"><p>Адрес: <span class="text-danger">{{$seller->verification_info[3]->value}}</span></p> </div>
                               </div>
                                <div class="row">
                                    <div class="col-md-6"><p>Банк: Алока банк </p> </div>
-                                   <div class="col-md-6"><p> Банк:</p></div>
+                                   <div class="col-md-6"><p> Банк: <span class="text-danger">{{$seller->verification_info[6]->value}}</span></p></div>
                               </div>
                                <div class="row">
                                    <div class="col-md-6"><p>МФО: 00401</p> </div>
-                                   <div class="col-md-6"><p>МФО:</p> </div>
+                                   <div class="col-md-6"><p>МФО: <span class="text-danger">{{$seller->verification_info[7]->value}}</span></p> </div>
                                </div>
                                <div class="row">
                                    <div class="col-md-6"><p>р/с: 2020 8000 2009 7992 2001 </p></div>
-                                   <div class="col-md-6"><p>р/с:</p> </div>
+                                   <div class="col-md-6"><p>р/с: <span class="text-danger">{{$seller->verification_info[8]->value}}</span></p> </div>
                                </div>
                                <div class="row">
                                    <div class="col-md-6"><p>ИНН: 306018564 </p> </div>
-                                   <div class="col-md-6"><p> ИНН:</p></div>
+                                   <div class="col-md-6"><p> ИНН: <span class="text-danger">{{$seller->verification_info[5]->value}}</span></p></div>
                                </div>
                                <div class="row">
                                    <div class="col-md-6">
                                        <p>Тел раб: 78 150 8 150</p>
                                    </div>
-                                   <div class="col-md-6"> <p>Тел раб: </p>  </div>
+                                   <div class="col-md-6"> <p>Тел раб: <span class="text-danger">{{$seller->verification_info[10]->value}}</span></p>  </div>
                                </div>
                                <div class="row">
                                    <div class="col-md-6">
                                        <p>e-mail: bmgventure@gmail.com </p>
                                    </div>
-                                   <div class="col-md-6"> <p>e-mail:  </p>  </div>
+                                   <div class="col-md-6"> <p>e-mail:   <span class="text-danger">{{$seller->verification_info[11]->value}}</span></p>  </div>
                                </div>
                                <div class="row">
                                    <div class="col-md-6">
@@ -425,7 +443,7 @@
                                            /Джаббаров И.Г./</p>
                                    </div>
                                    <div class="col-md-6">
-                                       <p>Руководитель <br>
+                                       <p>Руководитель <br><span class="text-danger">{{$seller->verification_info[9]->value}}</span>
                                           <b></b>
                                        </p>
                                   </div>
