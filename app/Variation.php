@@ -4,6 +4,7 @@ namespace App;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Variation extends Model
 {
@@ -24,9 +25,12 @@ class Variation extends Model
         'rating',
         'created_at',
         'updated_at',
+        'deleted_at',
+
     ];
 
     use Sluggable;
+    use SoftDeletes;
     public function sluggable(): array
     {
         return [

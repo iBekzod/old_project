@@ -5,9 +5,11 @@ namespace App;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'name',
         'slug',
@@ -35,6 +37,7 @@ class Product extends Model
         'earn_point',
         'created_at',
         'updated_at',
+        'deleted_at',
     ];
 
     use Sluggable;

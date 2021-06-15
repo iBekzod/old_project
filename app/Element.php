@@ -4,11 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Element extends Model
 {
   use Sluggable;
+  use SoftDeletes;
   public function sluggable(): array
   {
       return [
@@ -37,6 +38,7 @@ class Element extends Model
         'published',
         'featured',
         'unit',
+        'weight',
         'min_qty',
         'num_of_sale',
         'meta_title',
@@ -55,6 +57,7 @@ class Element extends Model
         'updated_at',
         'on_moderation',
         'is_accepted',
+        'deleted_at',
     ];
 
     public $appends = [

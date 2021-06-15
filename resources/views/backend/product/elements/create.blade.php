@@ -143,24 +143,28 @@
                             </select>
                         </div>
                     </div>
+                    @php
+                        $units=['kg', 'pcs', 'litre', 'complect']
+                    @endphp
                     <div class="form-group row">
-                        <label class="col-lg-3 col-from-label">{{translate('Unit')}} <i
-                                class="las la-language text-danger" title="{{translate('Translatable')}}"></i>
-                        </label>
+                        <label class="col-lg-3 col-from-label">{{translate('Unit')}}</label>
                         <div class="col-lg-8">
-                            <input type="text" class="form-control" name="unit"
-                                   placeholder="{{ translate('Unit (e.g. KG, Pc etc)') }}"
-                                   value="" required>
+                            <select class="form-control aiz-selectpicker" name="unit" id="unit"
+                                    data-live-search="true" required>
+                                    <option value="">{{ ('Select Unit') }}</option>
+                                @foreach ($units as $unit)
+                                    <option value="{{ $unit }}">{{ translate($unit) }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
-                    {{-- <div class="form-group row">
-                        <label class="col-lg-3 col-from-label">{{translate('Minimum Qty')}}</label>
+                    <div class="form-group row" hidden id="weight_id">
+                        <label class="col-lg-3 col-from-label">{{translate('Weight')}} </label>
                         <div class="col-lg-8">
-                            <input type="number" lang="en" class="form-control" name="min_qty"
-                                   value="1" min="1"
-                                   required>
+                            <input type="text" class="form-control" name="weight"
+                                   placeholder="{{ translate('weight (kg)') }}" value="" required>
                         </div>
-                    </div> --}}
+                    </div>
                     <div class="form-group row">
                         <label class="col-lg-3 col-from-label">{{translate('Tags')}}</label>
                         <div class="col-lg-8">
@@ -486,6 +490,14 @@
             $('.remove-files').on('click', function () {
                 $(this).parents(".col-md-4").remove();
             });
+        });
+
+        $('#unit').on('change', function () {
+            if($('#unit').val()=='kg' || $('#unit').val()=='pcs'){
+                $('#weight_id').show();
+            }else{
+                $('#weight_id').hide();
+            }
         });
     </script>
 @endsection
