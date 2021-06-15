@@ -123,7 +123,7 @@
                             <td>
                                 {{($variation->product)?$variation->product->qty??0:null}}
                             </td>
-                            <td>{{ ($variation->product)?number_format($variation->product->price, 2):null }}</td>
+                            <td>{{ ($variation->product)?number_format(homeBasePrice($variation->product->id), 2):null }}</td>
                             <td>{{ $variation->rating??0 }}</td>
 {{--                            <td>{{ $variation->product->currency->code }}</td>--}}
                             <td>

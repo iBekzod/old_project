@@ -77,7 +77,7 @@ class SellerProductController extends Controller
                 if ($variation = Variation::findOrFail($variant["id"])) {
                     $product = new Product;
                     $product->element_id=$element->id;
-                    if($shop_name=Auth::user()->shop->name){
+                    if(Auth::user()->user_type == 'seller' && $shop_name=Auth::user()->shop->name){
                         $product_name = $variation->name . " by " . (Auth::user()->shop->name)??null;
                     }else{
                         $product_name = $variation->name . " by " . (Auth::user()->name)??null;
@@ -86,7 +86,7 @@ class SellerProductController extends Controller
                     $product->name = $product_name;
                     $product->added_by = Auth::user()->user_type;
                     $product->user_id = $user_id;
-                    $product->slug = SlugService::createSlug(Product::class, 'slug', $product_name);
+                    $product->slug = SlugService::createSlug(Product::class, 'slug', slugify($product_name));
                     $product->currency_id = (int)$variant["currency"];
                     $product->price = (float)$variant["price"];
                     $product->discount = (float)$variant["discount"];

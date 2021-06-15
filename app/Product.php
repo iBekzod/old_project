@@ -5,9 +5,11 @@ namespace App;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'name',
         'slug',
@@ -35,6 +37,7 @@ class Product extends Model
         'earn_point',
         'created_at',
         'updated_at',
+        'deleted_at',
     ];
 
     use Sluggable;
@@ -114,9 +117,13 @@ class Product extends Model
 
      public function delete()
     {
-        $this->reviews()->delete();
-        $this->wishlists()->delete();
-        $this->product_translations()->delete();
+        // $this->published=false;
+        // $this->added_by="deleted";
+        // $this->save();
+
+        // $this->reviews()->delete();
+        // $this->wishlists()->delete();
+        // $this->product_translations()->delete();
         return parent::delete();
     }
 
@@ -127,7 +134,7 @@ class Product extends Model
         $result = parent::save($options);
         try{
             $variation=$this->variation;
-            $products = Product::where('variation_id', $variation->id);
+            $products = Product::where('variation_id', $variation->id)->where('published', true);
             if(count($products->get())>0){
                 $min_price=$products->min("price");
                 $lowest_price_list=$products->where('price', $min_price)->pluck('id');

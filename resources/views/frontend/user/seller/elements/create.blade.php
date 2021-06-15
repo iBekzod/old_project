@@ -42,7 +42,7 @@
                             method="POST" enctype="multipart/form-data" id="choice_form">
                             @csrf
                             <input type="hidden" name="lang" value="{{ $lang ?? default_language() }}">
-                            <input type="hidden" name="added_by" value="admin">
+                            <input type="hidden" name="added_by" value="seller">
 
                             <div class="card">
                                 <div class="card-header">
@@ -175,25 +175,28 @@
                                             </select>
                                         </div>
                                     </div>
+                                    @php
+                                        $units=['kg', 'pcs', 'litre', 'complect']
+                                    @endphp
                                     <div class="form-group row">
-                                        <label class="col-lg-3 col-from-label">{{ translate('Unit') }} <i
-                                                class="las la-language text-danger"
-                                                title="{{ translate('Translatable') }}"></i>
-                                        </label>
+                                        <label class="col-lg-3 col-from-label">{{translate('Unit')}}</label>
                                         <div class="col-lg-8">
-                                            <input type="text" class="form-control" name="unit"
-                                                placeholder="{{ translate('Unit (e.g. KG, Pc etc)') }}" value=""
-                                                required>
+                                            <select class="form-control aiz-selectpicker" name="unit" id="unit"
+                                                    data-live-search="true" required>
+                                                    <option value="">{{ translate('Select Unit') }}</option>
+                                                @foreach ($units as $unit)
+                                                    <option value="{{ $unit }}">{{ translate($unit) }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
-                                    {{-- <div class="form-group row">
-                        <label class="col-lg-3 col-from-label">{{translate('Minimum Qty')}}</label>
-                        <div class="col-lg-8">
-                            <input type="number" lang="en" class="form-control" name="min_qty"
-                                   value="1" min="1"
-                                   required>
-                        </div>
-                    </div> --}}
+                                    <div class="form-group row" id="weight_id">
+                                        <label class="col-lg-3 col-from-label">{{translate('Total Weight')}}</label>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control" name="weight"
+                                                placeholder="{{ translate('weight (kg)') }}" value="" required>
+                                        </div>
+                                    </div>
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-from-label">{{ translate('Tags') }}</label>
                                         <div class="col-lg-8">

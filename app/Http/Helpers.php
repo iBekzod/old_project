@@ -250,7 +250,7 @@ if (!function_exists('slugify')) {
 if (!function_exists('getPublishedProducts')) {
     function getPublishedProducts($type = 'product', $product_conditions = [], $variation_conditions = [], $element_conditions = [])
     {
-        $published_condition=[['qty', '>', 0], ['is_accepted', 1], ['published', 1], ['variation_id', '<>', null], ['element_id', '<>', null]];
+        $published_condition=[['qty', '>', 0], ['is_accepted', 1], ['published', 1], ['variation_id', '<>', null], ['element_id', '<>', null], ['deleted_at', '=', null],];
         $products = Product::where($published_condition);
         $products = filterProductByRelation($products, 'product', $product_conditions);
         $products = filterProductByRelation($products, 'variation', $variation_conditions);
@@ -267,25 +267,31 @@ if (!function_exists('getPublishedProducts')) {
         if ($type == 'variation') {
             return $products;
         }
-        $elements = $products->get()->groupBy('element_id');
+        $element_id_list=removeDuplicatesFromElement($products->groupBy('element_id')->pluck('element_id')->toArray());
         $element_ids = [];
+        $elements = $products->get()->groupBy('element_id');
         foreach ($elements as $element_id => $models) {
-            $element_ids[] = Product::where('element_id', $element_id)->inRandomOrder()->first()->id;
+            if(in_array($element_id, $element_id_list)){
+                $element_ids[] = Product::where('element_id', $element_id)->inRandomOrder()->first()->id;
+            }
         }
-        // if(is_array($element_ids) && count($element_ids)>0){
-        //     $my_elements=Element::whereIn('id', $element_ids)->get();
-
-        // }
-        // foreach($element_ids as $element_id){
-        //     if($element=Element:($element_id)){
-
-        //     }
-        // }
         $products = $products->whereIn('id', $element_ids);
         if ($type == 'element') {
             return $products;
         }
         return $products;
+    }
+}
+if (!function_exists('filterProductByRelation')) {
+    function removeDuplicatesFromElement($element_ids){
+        $element_id_list=[];
+        if(is_array($element_ids)){
+            $elements = Element::whereIn('id', $element_ids)->get()->groupBy('name');
+            foreach($elements as $name=>$element){
+                $element_id_list[]=$element[rand(0, count($element)-1)]->id;
+            }
+        }
+        return $element_id_list;
     }
 }
 if (!function_exists('filterProductByRelation')) {

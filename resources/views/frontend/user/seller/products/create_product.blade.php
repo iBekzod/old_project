@@ -8,7 +8,7 @@
         <form class="form form-horizontal mar-top" action="{{ route('seller.products.store') }}" method="POST"
             enctype="multipart/form-data" id="choice_form">
             @csrf
-            <input type="hidden" name="added_by" value="admin">
+            <input type="hidden" name="added_by" value="seller">
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0 h6">{{ translate('Product Information') }}</h5>
@@ -217,10 +217,10 @@
                                                     <span></span>
                                                 </label>
                                             </td>
-                                            <td>
+                                            {{-- <td>
                                                 <button type="button" class="btn btn-icon btn-sm btn-danger"
                                                     onclick="delete_variant(this)"><i class="las la-trash"></i></button>
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                     @endforeach
                                 </tbody>
