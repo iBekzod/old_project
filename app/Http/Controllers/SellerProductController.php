@@ -77,7 +77,7 @@ class SellerProductController extends Controller
                 if ($variation = Variation::findOrFail($variant["id"])) {
                     $product = new Product;
                     $product->element_id=$element->id;
-                    if($shop_name=Auth::user()->shop->name){
+                    if(Auth::user()->user_type == 'seller' && $shop_name=Auth::user()->shop->name){
                         $product_name = $variation->name . " by " . (Auth::user()->shop->name)??null;
                     }else{
                         $product_name = $variation->name . " by " . (Auth::user()->name)??null;
