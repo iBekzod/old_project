@@ -219,7 +219,7 @@ Route::group(['prefix' =>'seller', 'middleware' => ['seller', 'verified', 'user'
 	Route::get('elements/clone','SellerElementController@clone_elements')->name('seller.elements.clone');
 	Route::post('elements/clone/selected','SellerElementController@clone_selected_elements')->name('seller.elements.clone.selected');
 	Route::get('elements/variation/remove','SellerElementController@remove_variation')->name('seller.elements.variation.remove');
-	// Route::get('elements/seller','SellerElementController@seller_elements')->name('seller.elements.seller');
+	Route::get('elements/seller','SellerElementController@seller_elements')->name('seller.elements.seller');
 	Route::get('elements/manage','SellerElementController@manageElements')->name('seller.elements.manage');
 	Route::get('elements/manage/{id}/accept','SellerElementController@changeOnModerationAccept')->name('seller.elements.manage.change.accept');
 	Route::get('elements/manage/{id}/refuse','SellerElementController@changeOnModerationRefuse')->name('seller.elements.manage.change.refuse');

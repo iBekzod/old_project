@@ -117,13 +117,14 @@ class Product extends Model
 
      public function delete()
     {
-        $this->published=false;
-        $this->added_by="deleted";
-        $this->save();
+        // $this->published=false;
+        // $this->added_by="deleted";
+        // $this->save();
+
         // $this->reviews()->delete();
         // $this->wishlists()->delete();
         // $this->product_translations()->delete();
-        // return parent::delete();
+        return parent::delete();
     }
 
 

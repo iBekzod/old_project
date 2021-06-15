@@ -42,7 +42,7 @@
                             method="POST" enctype="multipart/form-data" id="choice_form">
                             @csrf
                             <input type="hidden" name="lang" value="{{ $lang ?? default_language() }}">
-                            <input type="hidden" name="added_by" value="admin">
+                            <input type="hidden" name="added_by" value="seller">
 
                             <div class="card">
                                 <div class="card-header">

@@ -161,6 +161,7 @@
                                 </div>
                             </div>
                             @php
+                                $characteristic_attributes=[];
                                 if(is_array($characteristics)){
                                     foreach ($characteristics as $attribute_id=>$value_id){
                                         $characteristic_attributes[]=$attribute_id;

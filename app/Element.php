@@ -110,19 +110,18 @@ class Element extends Model
                 $element->parent_id=null;
                 $element->save();
             }
-        }else{
+        }
+        // foreach($this->products() as $product){
+        //     $product->published=0;
 
-        }
-        foreach($this->products() as $product){
-            $product->published=0;
-            $product->added_by="deleted";
-        }
-        $this->added_by="deleted";
-        $this->save();
+        //     // $product->added_by="deleted";
+        // }
+        // $this->added_by="deleted";
+        // $this->save();
         // $this->element_translations()->delete();
         // $this->combinations()->delete();
         // dd($this);
-        return true;
+        return parent::delete();
     }
 
     public function parentHierarchy()
