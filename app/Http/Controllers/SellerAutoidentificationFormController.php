@@ -7,6 +7,7 @@ use App\User;
 use Auth;
 use App\Seller;
 use App\BusinessSetting;
+use Illuminate\Support\Arr;
 
 class SellerAutoidentificationFormController extends Controller
 {
@@ -51,7 +52,7 @@ class SellerAutoidentificationFormController extends Controller
              'Электронная_почта_менеджера'=>'required'
             ]);
             $array=$request->all();
-            dd($array);
+            //   dd($array);
             $seller=new Seller;
             $data = array();
             $i = 0;
@@ -61,17 +62,19 @@ class SellerAutoidentificationFormController extends Controller
                     $item['type'] = $element->type;
                     $item['label'] = $element->label;
                     $item['value'] = $request[$element->label];
+                    // dd($request[]);
                 }
                 array_push($data, $item);
                 $i++;
             }
-            //  $seller = Auth::user()->seller;
+            $seller->user_id=$request->user_id;
             $seller->verification_info = json_encode($data);
-            // dd($seller->verification_info);
-            $seller->save();
-            // if($seller->save()){
-            //     return view('frontend.user.seller.seller_autoidentification')->with('seller', $array);
-            // }
+            //   dd($seller);
+            // $seller->save();
+            //   dd($array);
+            if($seller->save()){
+                return view('frontend.user.seller.seller_autoidentification')->with('seller', $array);
+            }
 
 
 

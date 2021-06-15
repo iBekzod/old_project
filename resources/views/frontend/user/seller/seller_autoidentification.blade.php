@@ -28,12 +28,12 @@
             <div class="container px-5">
                 <form action="{{route('seller.delivery')}}" method="post">
 					@csrf
-                    <input type="text" id="seller_document" hidden value="">
+                    {{-- <input type="text" id="seller_document" hidden value="{{$seller}}"> --}}
                     {{-- TODO::html codni inpudga tiqib bazaga saxranit qilish kere va danlilarni ham jonatish kere --}}
                     <div class="selection" id="selection">
                         <div class="row">
                             <div class="col-md-12 mt-4 text-center">
-                               <h5> <b>ДОГОВОР</b> </h5>
+                               <h5> <b>ДОГОВОР  <span class="text-danger">{{$seller['user_id']}}</span></b> </h5>
                                <p>О предоставлении информационных услуг на онлайн торговой платформе "TINFIS"</p>
                             </div>
                             {{-- <div class="col-md-12 mt-4 text-center">
