@@ -51,8 +51,8 @@ class SellerAutoidentificationFormController extends Controller
              'Тел_менеджера'=>'required',
              'Электронная_почта_менеджера'=>'required'
             ]);
-            $array=$request->all();
-            //   dd($array);
+             $array=$request->all();
+            //    dd($array);
             $seller=new Seller;
             $data = array();
             $i = 0;
@@ -69,11 +69,11 @@ class SellerAutoidentificationFormController extends Controller
             }
             $seller->user_id=$request->user_id;
             $seller->verification_info = json_encode($data);
-            //   dd($seller);
+            //    dd($data);
             // $seller->save();
             //   dd($array);
             if($seller->save()){
-                return view('frontend.user.seller.seller_autoidentification')->with('seller', $array);
+                return view('frontend.user.seller.seller_autoidentification')->with('array', $array)->with('seller',$seller,);
             }
 
 
