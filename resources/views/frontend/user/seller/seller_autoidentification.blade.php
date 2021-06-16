@@ -30,7 +30,7 @@
                     {{-- <input type="text"  name="seller_document[]" hidden value="{!!$array!!}"> --}}
                     <input type="text" name="seller_document" hidden value="{{$seller}}">
                     {{-- TODO::html codni inpudga tiqib bazaga saxranit qilish kere va danlilarni ham jonatish kere --}}
-                    <div class="selection" id="selection">
+                    <div class="selection" id="selection" >
                         <div class="row">
                             <div class="col-md-12 mt-4 text-center">
                                <h5> <b>ДОГОВОР  <span class="text-danger">{{$array['user_id']}}</span></b> </h5>
@@ -45,7 +45,7 @@
                             </div>
                             <div class=" offset-md-6 col-md-4">
                                  <div class="right">
-                                   <p>«____» ___________20__ года.</p>
+                                   <p>{{$date}} года.</p>
                                  </div>
                             </div>
                         </div>

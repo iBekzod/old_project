@@ -71,9 +71,12 @@ class SellerAutoidentificationFormController extends Controller
             $seller->verification_info = json_encode($data);
             //    dd($data);
             // $seller->save();
-            //   dd($array);
+            //    dd($seller);
+             $time=time();
+             $date=date("d/m/Y",$time);
+            //   dd($date);
             if($seller->save()){
-                return view('frontend.user.seller.seller_autoidentification')->with('array', $array)->with('seller',$seller,);
+                return view('frontend.user.seller.seller_autoidentification')->with('array', $array)->with('seller',$seller,)->with('date',$date);
             }
 
 
