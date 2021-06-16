@@ -65,7 +65,7 @@
         <div class="col-md-5">
     		<div class="card">
     			<div class="card-header">
-    				<h5 class="mb-0 h6">{{ translate('Add New city') }}</h5>
+    				<h5 class="mb-0 h6">{{ translate('Add New region') }}</h5>
     			</div>
     			<div class="card-body">
     				<form action="{{ route('cities.store') }}" method="POST">
@@ -84,10 +84,10 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="country">{{translate('Country')}}</label>
-                            <select class="select2 form-control aiz-selectpicker" name="country_id" data-toggle="select2" data-placeholder="Choose ..." data-live-search="true">
+                            <label for="country">{{translate('Parent Region')}}</label>
+                            <select class="select2 form-control aiz-selectpicker" name="region_id" data-toggle="select2" data-placeholder="Choose ..." data-live-search="true">
                                 <option value="0">{{ translate('Country') }}</option>
-                                @foreach ($cities as $city)
+                                @foreach ($all_cities as $city)
                                     <option value="{{ $city->id }}">{{ $city->name }}</option>
                                 @endforeach
                             </select>
@@ -97,8 +97,14 @@
     						<label for="name">{{translate('Distance (km)')}}</label>
     						<input type="number" min="0" step="0.01" placeholder="{{translate('Distance (km)')}}" name="distance" class="form-control" required>
     					</div>
-
-
+                        <div class="form-group">
+                            <label for="country">{{translate('Type')}}</label>
+                            <select class="select2 form-control aiz-selectpicker" name="type" data-toggle="select2" data-placeholder="Choose ..." data-live-search="true">
+                                <option value="region">{{ translate('region') }}</option>
+                                <option value="city">{{ translate('city') }}</option>
+                                <option value="district">{{ translate('district') }}</option>
+                            </select>
+                        </div>
     					<div class="form-group mb-3 text-right">
     						<button type="submit" class="btn btn-primary">{{translate('Save')}}</button>
     					</div>

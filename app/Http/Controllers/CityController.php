@@ -17,8 +17,9 @@ class CityController extends Controller
     public function index()
     {
         $cities = City::paginate(15);
+        $all_cities = City::all();
         $countries = Country::where('status', 1)->get();
-        return view('backend.setup_configurations.cities.index', compact('cities', 'countries'));
+        return view('backend.setup_configurations.cities.index', compact('cities', 'all_cities', 'countries'));
     }
 
     /**
@@ -40,9 +41,14 @@ class CityController extends Controller
     {
         $city = new City;
 
-        $city->name = $request->name;
-        $city->cost = $request->cost;
+
+
         $city->country_id = $request->country_id;
+        $city->parent_id = $request->region_id;
+        $city->distance = $request->distance;
+        $city->name = $request->name;
+        $city->type = $request->type;
+
 
         $city->save();
 
