@@ -7,6 +7,10 @@ use App;
 
 class City extends Model
 {
+    protected $fillable = [
+        'country_id', 'parent_id', 'distance', 'name', 'type'
+    ];
+    
     public function country()
     {
         return $this->belongsTo(Country::class);

@@ -16,7 +16,7 @@ class CityController extends Controller
      */
     public function index()
     {
-        $cities = City::paginate(15);
+        $cities = City::orderBy('name', 'asc')->paginate(15);
         $all_cities = City::all();
         $countries = Country::where('status', 1)->get();
         return view('backend.setup_configurations.cities.index', compact('cities', 'all_cities', 'countries'));
@@ -39,24 +39,27 @@ class CityController extends Controller
      */
     public function store(Request $request)
     {
-        $city = new City;
-
-
-
-        $city->country_id = $request->country_id;
-        $city->parent_id = $request->region_id;
-        $city->distance = $request->distance;
-        $city->name = $request->name;
-        $city->type = $request->type;
-
-
-        $city->save();
-
-        foreach (Language::all() as $language){
-            // City Translations
-            $city_translation = CityTranslation::firstOrNew(['lang' => $language->code, 'city_id' => $city->id]);
-            $city_translation->name = $city->name;
-            $city_translation->save();
+        $city = City::firstOrNew([
+            'country_id'=>$request->country_id,
+            'parent_id'=>$request->region_id,
+            'distance'=>$request->distance,
+            'name'=>$request->name,
+            'type'=>$request->type
+        ]);
+        // $city = new City;
+        // $city->country_id = $request->country_id;
+        // $city->parent_id = $request->region_id;
+        // $city->distance = $request->distance;
+        // $city->name = $request->name;
+        // $city->type = $request->type;
+        // $city->save();
+        if($city->save()){
+            foreach (Language::all() as $language){
+                // City Translations
+                $city_translation = CityTranslation::firstOrNew(['lang' => $language->code, 'city_id' => $city->id]);
+                $city_translation->name = $city->name;
+                $city_translation->save();
+            }
         }
 
         flash(translate('City has been inserted successfully'))->success();
@@ -75,7 +78,8 @@ class CityController extends Controller
          $lang  = $request->lang;
          $city  = City::findOrFail($id);
          $countries = Country::where('status', 1)->get();
-         return view('backend.setup_configurations.cities.edit', compact('city', 'lang', 'countries'));
+         $all_cities = City::all();
+         return view('backend.setup_configurations.cities.edit', compact('city', 'all_cities', 'lang', 'countries'));
      }
 
 
@@ -89,13 +93,15 @@ class CityController extends Controller
     public function update(Request $request, $id)
     {
         $city = City::findOrFail($id);
-        if($request->lang == default_language()){
-            $city->name = $request->name;
-        }
+        // if($request->lang == default_language()){
+        //     $city->name = $request->name;
+        // }
 
         $city->country_id = $request->country_id;
-        $city->cost = $request->cost;
-
+        $city->parent_id = $request->region_id;
+        $city->distance = $request->distance;
+        $city->name = $request->name;
+        $city->type = $request->type;
         $city->save();
 
         if(CityTranslation::where('city_id' , $city->id)->where('lang' ,default_language())->first()){
