@@ -49,7 +49,7 @@ dd($selection->verification_info[0]->value); --}}
                               <h1 class="text-danger">{{ $seller['Название_магазина'] }}</h1>
                         </div> --}}
                         <div class="col-md-4">
-                            <p> «____» ___________20__ года. </p>
+                            <p> {{$date}}_ года. </p>
                         </div>
                         <div class=" offset-md-4 col-md-4">
                              <div class="right">
