@@ -179,6 +179,11 @@ Route::prefix('v1')->group(function () {
 
     Route::get('conversation_messages','Api\ConversationController@getConversations');//->middleware('auth:api');
     Route::post('send_conversation_message','Api\ConversationController@store');//->middleware('auth:api');
+
+
+    Route::get('/countries', 'Api\CityController@countries');
+    // Route::get('/region/{id}/cities', 'Api\CityController@cities');
+    Route::get('/region/{country_id}/{region_id}/cities', 'Api\CityController@regions');
 });
 
 Route::fallback(function() {
