@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Seller;
 use Illuminate\Http\Request;
+use Svg\Tag\Rect;
 
 class SellerDeliveryFormController extends Controller
 {
@@ -17,6 +18,10 @@ class SellerDeliveryFormController extends Controller
         $time=time();
         $date=date("d/m/Y",$time);
        return view('frontend.user.seller.seller_delivery')->with('seller',$selection)->with('date',$date);
+   }
+   public function seller_page_form_save(Request $request)
+   {
+      
    }
 
 
