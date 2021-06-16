@@ -193,7 +193,7 @@
                                     <div class="form-group row" id="weight_id">
                                         <label class="col-lg-3 col-from-label">{{translate('Total Weight')}}</label>
                                         <div class="col-lg-8">
-                                            <input type="text" class="form-control" name="weight"
+                                            <input type="text" class="form-control" name="weight" type="number" min="0" step="0.01"
                                                 placeholder="{{ translate('weight (kg)') }}" value="" required>
                                         </div>
                                     </div>

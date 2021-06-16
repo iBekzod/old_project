@@ -30,7 +30,8 @@
                                 <th>#</th>
                                 <th>{{translate('Name')}}</th>
                                 <th>{{translate('Country')}}</th>
-                                <th>{{translate('Cost')}}</th>
+                                <th>{{translate('Distance from center')}}</th>
+                                <th>{{translate('Type')}}</th>
                                 <th class="text-right">{{translate('Options')}}</th>
                             </tr>
                         </thead>
@@ -38,9 +39,10 @@
                             @foreach($cities as $key => $city)
                                 <tr>
                                     <td>{{ ($key+1) + ($cities->currentPage() - 1)*$cities->perPage() }}</td>
-                                    <td>{{ $city->name }}</td>
-                                    <td>{{ $city->country->name }}</td>
-                                    <td>{{ $city->cost }}</td>
+                                    <td>{{ $city->getTranslation('name') }}</td>
+                                    <td>@if($city->parent){{ $city->parent->getTranslation('name') }}@else  {{ $city->country->getTranslation('name') }} @endif</td>
+                                    <td>{{ $city->distance }}</td>
+                                    <td>{{ translate($city->type) }}</td>
                                     <td class="text-right">
                                         <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{ route('cities.edit', ['id'=>$city->id, 'lang'=>env('DEFAULT_LANGUAGE')]) }}" title="{{ translate('Edit') }}">
                                             <i class="las la-edit"></i>
@@ -83,8 +85,8 @@
                         </div>
 
                         <div class="form-group mb-3">
-    						<label for="name">{{translate('Cost')}}</label>
-    						<input type="number" min="0" step="0.01" placeholder="{{translate('Cost')}}" name="cost" class="form-control" required>
+    						<label for="name">{{translate('Distance (km)')}}</label>
+    						<input type="number" min="0" step="0.01" placeholder="{{translate('Cost')}}" name="distance" class="form-control" required>
     					</div>
 
 
