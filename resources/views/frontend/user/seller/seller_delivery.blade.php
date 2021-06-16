@@ -451,15 +451,15 @@ dd($selection->verification_info[0]->value); --}}
                           </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12 top">
+                    {{-- <div class="col-md-12 top">
                         <div class="float-right right_text ">
                             <p><b>ПРИЛОЖЕНИЕ №1 <br>
                                 к договору на оказание курьерских услуг № ______ <br>
                                 от «____» ________________ 20 __года
                             </b></p>
                         </div>
-                    </div>
-                    <div class="col-md-12">
+                    </div> --}}
+                    {{-- <div class="col-md-12">
                         <div class="text-center">
                             <p  class="m-0"><b>СТОИМОСТЬ КУРЬЕРСКИХ УСЛУГ</b></p>
                             <p class="size"><b>Внутри Республики Узбекистан</b></p>
@@ -1746,7 +1746,7 @@ dd($selection->verification_info[0]->value); --}}
                                 </tbody>
                             </table>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col-md-12">
                         <div class="text-center">
                             <p><b>После 30 кг, за каждые последующие 1 кг добавляются 4000 сум.</b></p>
