@@ -12,6 +12,14 @@ class City extends Model
         return $this->belongsTo(Country::class);
     }
 
+    public function parent()
+    {
+        if($this->parent_id==0){
+            return $this->belongsTo(Country::class);
+        }
+        return $this->belongsTo(City::class);
+    }
+
     public function getTranslation($field = '', $lang = false){
         $lang = $lang == false ? app()->getLocale() : $lang;
         $city_translation = $this->city_translations()->where('lang', $lang)->first();
