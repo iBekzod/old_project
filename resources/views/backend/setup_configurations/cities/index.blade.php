@@ -30,7 +30,7 @@
                                 <th>#</th>
                                 <th>{{translate('Name')}}</th>
                                 <th>{{translate('Country')}}</th>
-                                <th>{{translate('Distance from center')}}</th>
+                                <th>{{translate('Distance (km)')}}</th>
                                 <th>{{translate('Type')}}</th>
                                 <th class="text-right">{{translate('Options')}}</th>
                             </tr>
@@ -83,10 +83,19 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label for="country">{{translate('Country')}}</label>
+                            <select class="select2 form-control aiz-selectpicker" name="country_id" data-toggle="select2" data-placeholder="Choose ..." data-live-search="true">
+                                <option value="0">{{ translate('Country') }}</option>
+                                @foreach ($cities as $city)
+                                    <option value="{{ $city->id }}">{{ $city->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
                         <div class="form-group mb-3">
     						<label for="name">{{translate('Distance (km)')}}</label>
-    						<input type="number" min="0" step="0.01" placeholder="{{translate('Cost')}}" name="distance" class="form-control" required>
+    						<input type="number" min="0" step="0.01" placeholder="{{translate('Distance (km)')}}" name="distance" class="form-control" required>
     					</div>
 
 
