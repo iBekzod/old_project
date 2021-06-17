@@ -21,7 +21,7 @@ class SellerDeliveryFormController extends Controller
    }
    public function seller_page_form_save(Request $request)
    {
-      
+
    }
 
 

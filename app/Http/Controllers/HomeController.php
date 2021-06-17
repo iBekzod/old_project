@@ -115,8 +115,10 @@ class HomeController extends Controller
                 //  };
 
                     // dd($request->all());
-                        return view('frontend.user.seller.dashboard');
 
+                    // if(true){
+                    //     return view('frontend.user.seller.dashboard');
+                    // }
                 }else if($request->method() === 'GET'){
                     if(Auth::check()){
                         return redirect()->route('home');

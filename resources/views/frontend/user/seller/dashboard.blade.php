@@ -13,7 +13,6 @@
                         </div>
                     </div>
                   </div>
-
                   <div class="row gutters-10">
                     <div class="col-md-3">
                         <div class="bg-grad-3 text-white rounded-lg mb-4 overflow-hidden">
