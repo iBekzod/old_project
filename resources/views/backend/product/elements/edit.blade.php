@@ -602,19 +602,20 @@
                 color_ids.push(val.getAttribute('data-id'))
             })
             // alert("Colors: "+color_ids)
-
+            element_id=$('#id').val();
             $('#collected_variations').val(choice_groups);
             $.ajax({
                 type:'GET',
                 url:'{{ route('elements.make_all_combination') }}',
                 data:{
+                    element_id:element_id,
                     selected_attribute_ids: attribute_ids,
                     choice_groups: choice_groups,
                     color_ids: color_ids
                 },
                 success:function(data){
                     $('#variation_div').html(" ")
-                    // alert("Combinations: "+data.message)
+                    alert("Combinations: "+data.message)
                     // console.log(data.message);
                     if(data.success){
                         $('#variation_div').html(data.data)
