@@ -258,7 +258,7 @@ class ProductController extends Controller
                     if(Auth::user()->user_type == 'seller' && $shop_name=Auth::user()->shop->name){
                         $product_name = $variation->name . " by " . (Auth::user()->shop->name)??null;
                     }else{
-                        $product_name = $variation->name . " by " . (Auth::user()->name)??null;
+                        $product_name = $variation->name;
                     }
                     // $product_name = $variation->name . " " . Auth::user()->name??null . " ".$variant["price"];
                     $product->name = $product_name;
@@ -405,7 +405,7 @@ class ProductController extends Controller
                     if($shop_name=Auth::user()->shop->name){
                         $product_name = $variation->name . " by " . (Auth::user()->shop->name)??null;
                     }else{
-                        $product_name = $variation->name . " by " . (Auth::user()->name)??null;
+                        $product_name = $variation->name;
                     }
                     $product->name = $product_name;
                     $product->added_by = Auth::user()->user_type;

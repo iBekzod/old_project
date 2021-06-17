@@ -9,6 +9,9 @@
               enctype="multipart/form-data" id="choice_form">
             @csrf
             <input type="hidden" name="added_by" value="admin">
+            <input type="hidden" value="{{$lang}}" name="lang" class="form-control">
+            <input type="hidden"  name="element_id" value="{{$element->id}}" class="form-control">
+
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0 h6">{{translate('Product Information')}}</h5>
@@ -26,8 +29,6 @@
                       </div>
                     </div>
                     @if(count($products) > 0)
-                        <input type="hidden" value="{{$lang}}" name="lang" class="form-control">
-                        <input type="hidden"  name="element_id" value="{{$element->id}}" class="form-control">
                         <div style="overflow-y: scroll; ">
                             <table class="table table-bordered" style="width:1800px">
                                 <thead>

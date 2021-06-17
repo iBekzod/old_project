@@ -524,28 +524,12 @@
             });
         }
         // selected_variations
-        function update_sku() {
-            {{-- $.ajax({ --}}
-            {{-- type: "POST", --}}
-            {{-- url: '{{ route('seller.products.sku_combination_edit') }}', --}}
-            {{-- data: $('#choice_form').serialize(), --}}
-            {{-- success: function (data) { --}}
-            {{-- $('#sku_combination').html(data); --}}
-            {{-- if (data.length > 1) { --}}
-            {{-- $('#quantity').hide(); --}}
-            {{-- } else { --}}
-            {{-- $('#quantity').show(); --}}
-            {{-- } --}}
-            {{-- } --}}
-            {{-- }); --}}
-        }
 
         function delete_variant(em) {
             $(em).closest('.variant').remove();
         }
         AIZ.plugins.tagify();
         $(document).ready(function() {
-            update_sku();
 
             $('.remove-files').on('click', function() {
                 $(this).parents(".col-md-4").remove();
