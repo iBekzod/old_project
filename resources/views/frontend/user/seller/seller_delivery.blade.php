@@ -739,50 +739,182 @@ dd($selection->verification_info[0]->value); --}}
 
                             </p>
                         </div>
-                        <table border="1" cellspacing="0" cellpadding="0" width="100%">
-                            <tbody>
-                                <tr>
-                                    <td width="336" valign="top">
-                                        <p align="center">
-                                            <strong>Исполнитель</strong>
-                                        </p>
-                                        <p align="center">
-                                            <strong>ООО «</strong>
-                                            <strong>TINFIS</strong>
-                                            <strong> </strong>
-                                            <strong>Cargo</strong>
-                                            <strong>»</strong>
-                                        </p>
-                                        <p align="center">
-                                            <strong>__________________ Каримов Д.Р.</strong>
-                                        </p>
-                                        <p align="center">
-                                            <strong></strong>
-                                        </p>
-                                    </td>
-                                    <td width="346" valign="top">
-                                        <p align="center">
-                                            <strong>Заказчик</strong>
-                                            <strong></strong>
-                                        </p>
-                                        <p>
-                                            <strong class="ml-1">firma nomi_______________________</strong>
-                                        </p>
-                                        <p>
-                                            <strong class="ml-1">
-                                                _derektor ism familya______________________
-                                            </strong>
-                                        </p>
-                                        <p align="center">
-                                            <strong></strong>
-                                        </p>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="col-md-12 top">
+                            <div class="float-right right_text ">
+                                <p><b>ПРИЛОЖЕНИЕ №3 <br>
+                                    к договору на оказание курьерских услуг № ______  <br>
+                                    Форма реестра принятых платежей
+                                </b></p>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <p align="center" class="m-0 p-0">
+                                <strong>Реестр принятых платежей</strong>
+                            </p>
+                            <p align="center" class="m-0 p-0">
+                                <strong>в пользу «__________________»</strong>
+                            </p>
+                            <p align="center" class=" p-0">
+                                <strong>за «___» _____________ 20__ г</strong>
+                            </p>
+                            <table border="1" cellspacing="2" cellpadding="0" width="100%">
+                                <tbody>
+                                    <tr>
+                                        <td width="55">
+                                            <p align="center">
+                                                № п/п
+                                            </p>
+                                        </td>
+                                        <td width="165">
+                                            <p align="center">
+                                                Код подразделения Исполнителя или Ф.И.О. курьера,
+                                                принявшего платеж
+                                                <s>
+                                                </s>
+                                            </p>
+                                        </td>
+                                        <td width="73">
+                                            <p align="center">
+                                                Сумма
+                                                платежа
+                                            </p>
+                                        </td>
+                                        <td width="82" >
+                                            <p align="center">
+                                                Дата платежа
+                                            </p>
+                                        </td>
+                                        <td width="105">
+                                            <p align="center">
+                                                Ф. И. О. плательщика
+                                            </p>
+                                        </td>
+                                        <td width="108" >
+                                            <p align="center">
+                                                ИИН плательщика
+                                            </p>
+                                        </td>
+                                        <td width="100" >
+                                            <p align="center">
+                                                № посылки (ШПИ)
+                                            </p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="55" valign="bottom">
+                                            <p align="center">
+                                                1
+                                            </p>
+                                        </td>
+                                        <td width="165" valign="bottom">
+                                            <p>
+                                                <s>
+                                                </s>
+                                            </p>
+                                        </td>
+                                        <td width="73" valign="bottom">
+                                        </td>
+                                        <td width="82" valign="top">
+                                        </td>
+                                        <td width="105" valign="bottom">
+                                        </td>
+                                        <td width="108" valign="top">
+                                        </td>
+                                        <td width="110" valign="top">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="55" valign="bottom">
+                                            <p align="center">
+                                                2
+                                            </p>
+                                        </td>
+                                        <td width="165" valign="bottom">
+                                            <p>
+                                                <s>
+                                                </s>
+                                            </p>
+                                        </td>
+                                        <td width="73" valign="bottom">
+                                        </td>
+                                        <td width="82" valign="top">
+                                        </td>
+                                        <td width="105" valign="bottom">
+                                        </td>
+                                        <td width="108" valign="top">
+                                        </td>
+                                        <td width="110" valign="top">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="55">
+                                        </td>
+                                        <td width="165">
+                                            <p align="center">
+                                                Итого
+                                                <s>
+                                                </s>
+                                            </p>
+                                        </td>
+                                        <td width="73" valign="bottom">
+                                        </td>
+                                        <td width="82" valign="top">
+                                        </td>
+                                        <td width="105" valign="bottom">
+                                        </td>
+                                        <td width="108" valign="top">
+                                        </td>
+                                        <td width="110" valign="top">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table border="1" cellspacing="0" cellpadding="0" width="100%" class="mt-5">
+                                <tbody>
+                                    <tr>
+                                        <td width="336" valign="top">
+                                            <p align="center">
+                                                <strong>Исполнитель</strong>
+                                            </p>
+                                            <p align="center">
+                                                <strong>ООО «</strong>
+                                                <strong>TINFIS</strong>
+                                                <strong> </strong>
+                                                <strong>Cargo</strong>
+                                                <strong>»</strong>
+                                            </p>
+                                            <p align="center">
+                                                <strong>__________________ Каримов Д.Р.</strong>
+                                            </p>
+                                            <p align="center">
+                                                <strong></strong>
+                                            </p>
+                                        </td>
+                                        <td width="346" valign="top">
+                                            <p align="center">
+                                                <strong>Заказчик</strong>
+                                                <strong></strong>
+                                            </p>
+                                            <p>
+                                                <strong class="ml-1">firma nomi_______________________</strong>
+                                            </p>
+                                            <p>
+                                                <strong class="ml-1">
+                                                    _derektor ism familya______________________
+                                                </strong>
+                                            </p>
+                                            <p align="center">
+                                                <strong></strong>
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
                     <div class="row">
-                        <div class=" col-md-12  form-group text-right  mr-4 mt-3 ">
+                        <div class=" col-md-12  form-group text-right  mr-4 mt-4 ">
                             <button type="submit" class="btn btn-primary py-2">{{translate('я согласен')}}</button>
                         </div>
                     </div>
