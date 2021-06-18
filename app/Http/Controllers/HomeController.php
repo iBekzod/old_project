@@ -60,8 +60,8 @@ class HomeController extends Controller
 
                     $request->validate([
                         'name' => 'required',
-                        // 'phone' => 'required|unique:users',
-                        // 'country_code' => 'required',
+                        'phone' => 'required|unique:users',
+                        'country_code' => 'required',
                         'email' => 'required|unique:users|max:255',
                         'password' => 'required',
                         'password_confirmation'=> 'required'
@@ -69,7 +69,7 @@ class HomeController extends Controller
                     ]);
             $user = new User;
             $user->name = $request->name;
-            // $user->phone =$request->phone;
+            $user->phone =$request->phone;
             $user->email = $request->email;
             $user->user_type = "seller";
             $user->email_verified_at = now();
