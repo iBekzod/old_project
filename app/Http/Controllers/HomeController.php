@@ -60,12 +60,13 @@ class HomeController extends Controller
 
                     $request->validate([
                         'name' => 'required|min:3',
-                        'phone' => 'required|length:9|unique:users',
+                        'phone' => 'required|max:9|unique:users',
                         'country_code' => 'required',
                         'email' => 'required|unique:users|max:255',
                         'password' => 'required|min:6',
                         'password_confirmation'=> 'required'
                     ]);
+                    
             $user = new User;
             $user->name = $request->name;
             $user->phone =$request->phone;
