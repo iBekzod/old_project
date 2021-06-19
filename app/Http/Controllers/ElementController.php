@@ -254,7 +254,7 @@ class ElementController extends Controller
 
                     $vars=[];
                     if($request->has('element_id') && $my_variations->where('color_id', implode(", ", $my_colors))->where('characteristics', implode(", ", $my_attributes))->exists()){
-                        $variation=$my_variations->where('name', $element->name??''.implode(", ", $combination))->first();
+                        $variation=$my_variations->where('color_id', implode(", ", $my_colors))->where('characteristics', implode(", ", $my_attributes))->first();
                         $variation_id=$variation->id;
                         $vars[]=$variation_id;
                         $content = $content . '
