@@ -128,4 +128,23 @@ class Element extends Model
     {
         return $this->hasOne(Category::class, 'id', 'category_id');
     }
+
+    public function save(array $options = [])
+    {
+       // before save code
+        $result = parent::save($options);
+        foreach (Language::all() as $language) {
+            // Element Translations
+            $element_translation = ElementTranslation::firstOrNew(['lang' => $language->code, 'element_id' => $this->id]);
+            $element_translation->name = $this->name;
+            $element_translation->unit = $this->unit;
+            $element_translation->description = $this->description;
+            $element_translation->save();
+        }
+        // dd($variation);
+       return $result; // do not ignore it eloquent calculates this value and returns this, not just to ignore
+
+    }
+
+    
 }

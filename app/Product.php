@@ -149,6 +149,13 @@ class Product extends Model
         }catch(Exception $e){
             // dd($e->getMessage());
         }
+
+        foreach (Language::all() as $language) {
+            // Product Translations
+            $product_translation = ProductTranslation::firstOrNew(['lang' => $language->code, 'product_id' => $this->id]);
+            $product_translation->name = $this->name;
+            $product_translation->save();
+        }
         // dd($variation);
        return $result; // do not ignore it eloquent calculates this value and returns this, not just to ignore
 

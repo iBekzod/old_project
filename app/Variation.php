@@ -3,6 +3,7 @@
 namespace App;
 
 use Cviebrock\EloquentSluggable\Sluggable;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -72,5 +73,28 @@ class Variation extends Model
         $this->products()->delete();
         // $this->variation_translations()->delete();
         return parent::delete();
+    }
+
+    public function save(array $options = [])
+    {
+       // before save code
+        $result = parent::save($options);
+        try{
+            $variation=$this->variation;
+            $color=Color::where('id', $variation->color_id)->first();
+            $attributes=Attribute::whereIn('id', explode(", ", $variation->characteristics))->get();
+            $variation->name=$variation->element->name." ".implode(", ", $attributes->pluck('name'))." ".$color->name;
+            $variation->save();
+        }catch(Exception $e){
+            // dd($e->getMessage());
+        }
+        foreach (Language::all() as $language) {
+            $variation_translation = VariationTranslation::firstOrNew(['lang' => $language->code, 'variation_id' => $this->id]);
+            $variation_translation->name = $this->name;
+            $variation_translation->save();
+        }
+        // dd($variation);
+       return $result; // do not ignore it eloquent calculates this value and returns this, not just to ignore
+
     }
 }
