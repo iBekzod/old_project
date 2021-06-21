@@ -1012,9 +1012,21 @@ class SellerElementController extends Controller
         $element->pdf = $request->pdf;
         if ($element->save()) {
             if ($request->has('combination')) {
-                if ($request->is_new_combination) {
-                    Variation::where('element_id', $element->id)->where('user_id', Auth::user()->id)->delete();
-                    foreach ($request->combination as $variant) {
+                foreach ($request->combination as $variant) {
+                    if(array_key_exists('variation_id',$variant) && $variation = Variation::findOrFail($variant['variation_id'])){
+                        $variation->name = $variant['name'];
+                        $variation->thumbnail_img = $variant['thumbnail_img'];
+                        if ($variant['name'] != null) {
+                            if ($variation->slug != $variant['name'])
+                                $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
+                        }
+                        $variation->partnum = $variant['artikul'];
+                        $variation->color_id = (int)$variant['color_id'];
+                        $variation->characteristics = $variant['attribute_id'];
+                        $variation->photos = $variant['photos'];
+                        $variation->user_id = Auth::user()->id;
+                        $variation->save();
+                    }else{
                         $variation = new Variation;
                         $variation->element_id = $element->id;
                         $variation->name = $element->name . " " . $variant['name'];
@@ -1030,44 +1042,12 @@ class SellerElementController extends Controller
                         $variation->user_id = Auth::user()->id;
                         $variation->save();
                     }
-                } else {
-                    $variations = Variation::where('element_id', $element->id)->where('user_id', Auth::user()->id);
-                    foreach ($request->combination as $variant) {
-                        if ($variation = $variations->where('name', $variant['name'])->firstOrFail()) {
-                            $variation->name = $variant['name'];
-                            $variation->thumbnail_img = $variant['thumbnail_img'];
-                            if ($variant['name'] != null) {
-                                if ($variation->slug != $variant['name'])
-                                    $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
-                            }
-                            $variation->partnum = $variant['artikul'];
-                            $variation->color_id = (int)$variant['color_id'];
-                            $variation->characteristics = $variant['attribute_id'];
-                            $variation->photos = $variant['photos'];
-                            $variation->user_id = Auth::user()->id;
-                            $variation->save();
-                        } else {
-                            $variation = new Variation;
-                            $variation->element_id = $element->id;
-                            $variation->name = $element->name . " " . $variant['name'];
-                            $variation->thumbnail_img = $variant['thumbnail_img'];
-                            $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
-                            $variation->partnum = $variant['artikul'];
-                            $variation->color_id = (int)$variant['color_id'];
-                            $variation->characteristics = $variant['attribute_id'];
-                            $variation->photos = $variant['photos'];
-                            $variation->num_of_sale = 0;
-                            $variation->qty = 0;
-                            $variation->rating = 0;
-                            $variation->user_id = Auth::user()->id;
-                            $variation->save();
-                        }
-                        foreach (Language::all() as $language) {
-                            $variation_translation = VariationTranslation::firstOrNew(['lang' => $language->code, 'variation_id' => $variation->id]);
-                            $variation_translation->name = $variation->name;
-                            $variation_translation->save();
-                        }
+                    foreach (Language::all() as $language) {
+                        $variation_translation = VariationTranslation::firstOrNew(['lang' => $language->code, 'variation_id' => $variation->id]);
+                        $variation_translation->name = $variation->name;
+                        $variation_translation->save();
                     }
+
                 }
             }
             foreach (Language::all() as $language) {

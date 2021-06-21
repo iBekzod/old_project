@@ -285,6 +285,9 @@
                                                     <tr id="variant_{{ $combination->id }}" >
                                                         <td>
                                                             <label for="" class="control-label">{{ ($index+1) }}</label>
+                                                            <input type="hidden" name="combination[{{ $index }}][variation_id]" value="{{ $combination->id }}">
+                                                            <input type="hidden" name="combination[{{ $index }}][color_id]" value="{{ $combination->color_id??null }}">
+                                                            <input type="hidden" name="combination[{{ $index }}][attribute_id]" value="{{ $combination->characteristics??null }}">
                                                         </td>
                                                         <td>
                                                             <div class="form-group">
