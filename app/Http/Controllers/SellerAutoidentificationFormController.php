@@ -15,8 +15,12 @@ class SellerAutoidentificationFormController extends Controller
    {
 
 
-        $request->validate([
-
+             $validation = array();
+            foreach (json_decode(BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element) {
+                if ($element->type) {
+                    $validation[$element->label] = 'required';
+                }
+            }
             // "Форма_собственности" => "Laborum Ullam nesci"
             // "Юридическое_название_вендора" => "Repudiandae laborum"
             // "Название_магазина" => "Eu aut irure expedit"
@@ -34,23 +38,8 @@ class SellerAutoidentificationFormController extends Controller
             // "Электронная_почта_менеджера" => "liqax@mailinator.com"
 
             // TODO::tak seller navicatdatoldirish kere inn validate save and login register pdf to html
-             'user_id'=>'required',
-             'Форма_собственности'=> 'required',
-             'Юридическое_название_вендора'=>'required',
-             'Название_магазина'=>'required',
-             'Адрес_регистрации_вендора'=>'required',
-             'Физический_адрес_вендора'=>'required',
-             'ИНН'=>'required',
-             'Название_банка'=> 'required',
-             'МФО_банка'=>'required',
-             'РС'=>'required',
-             'ФИО_директора'=>'required',
-             'Тел_директора'=>'required',
-             'Электронная_почта_директора'=>'required',
-             'ФИО_менеджера_ответственного_за_сотрудничество'=> 'required',
-             'Тел_менеджера'=>'required',
-             'Электронная_почта_менеджера'=>'required'
-            ]);
+
+             $request->validate($validation);
              $array=$request->all();
             //    dd($array);
             $seller=new Seller;

@@ -66,7 +66,7 @@ class HomeController extends Controller
                         'password' => 'required|min:6',
                         'password_confirmation'=> 'required'
                     ]);
-                    
+
             $user = new User;
             $user->name = $request->name;
             $user->phone =$request->phone;
@@ -74,7 +74,7 @@ class HomeController extends Controller
             $user->user_type = "seller";
             $user->email_verified_at = now();
             $user->password = Hash::make($request->password);
-            $user->save();
+            // $user->save();
             if($user->save()){
                  return view('frontend.user.seller.form_second')->with('user_id',$user->id);
                 // return 'keldi';

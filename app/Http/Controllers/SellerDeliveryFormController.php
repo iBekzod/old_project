@@ -2,26 +2,49 @@
 
 namespace App\Http\Controllers;
 
-use App\Seller;
 use Illuminate\Http\Request;
-use Svg\Tag\Rect;
+
+use App\Seller;
+use App\Shop;
+use App\User;
 
 class SellerDeliveryFormController extends Controller
 {
    public function seller_delivery_form_save(Request $request)
    {
-        //    dd($request->all());
+            //  dd($request->all());
            $selection=json_decode($request->seller_document);
-        // //   dd($selection);
-        //  $data=$request->created_at;
+            $user=$selection->user_id;
+            // dd($user);
+        //    dd($selection);
+          $date=$request->date;
+
         //  dd($data);
-        $time=time();
-        $date=date("d/m/Y",$time);
-       return view('frontend.user.seller.seller_delivery')->with('seller',$selection)->with('date',$date);
+        // $time=time();
+        // $date=date("d/m/Y",$time);
+       return view('frontend.user.seller.seller_delivery')->with('seller',$selection)->with('date',$date)->with('user_id', $user);
    }
    public function seller_page_form_save(Request $request)
    {
 
+       $request->validate([
+        'user_id'=>'required'
+       ]);
+        //  dd($request->all());
+    $user_id=$request->user_id;
+    $user = User::findOrFail($user_id);
+//     if( $seller = Seller::findOrFail($user)==false){
+//   return 'error';
+//     }
+    // $seller = Seller::findOrFail(decrypt($user));
+    // $users = $seller->user;
+    // dd($users);
+    auth()->login($user, true);
+    return view('frontend.user.seller.dashboard');
+
+    // if(auth()->login($user, true)){
+    //     return 'malumotlar keldi';
+    // }
    }
 
 
