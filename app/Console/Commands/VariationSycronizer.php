@@ -2,8 +2,13 @@
 
 namespace App\Console\Commands;
 
+use App\Color;
 use App\Product;
 use App\Variation;
+use App\Attribute;
+use App\Characteristic;
+use Cviebrock\EloquentSluggable\Services\SlugService;
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -40,6 +45,8 @@ class VariationSycronizer extends Command
      */
     public function handle()
     {
+        //Set variation lowest price id and synchronize all variations
+        /*
         $items=Product::where('variation_id', '<>', null)->get();
         foreach($items as $product){
             if ($variation = Variation::findOrFail($product->variation_id)) {
@@ -55,6 +62,32 @@ class VariationSycronizer extends Command
                     $variation->rating=(double)$products->sum('rating')/$products->count();
                     $variation->save();
                 }
+            }
+        }
+        */
+
+        //Change variation name by element and characteristics
+
+        $variations=Variation::withTrashed()->get();
+        foreach($variations as $variation){
+            try{
+                $variation=$variation;
+                $color=Color::where('id', $variation->color_id)->first();
+                $this->info( explode(" ", $variation->characterisics));
+                $attributes=Characteristic::whereIn('id', explode(", ", $variation->characteristics))->pluck('name');
+                $variation_name=$variation->element->name;
+                if(is_array($attributes)){
+                    $variation_name=$variation_name.', '.implode(",", $attributes);
+                }
+
+                if($color->name){
+                    $variation_name=$variation_name.', '.$color->name;
+                }
+                $variation->name=$variation_name;
+                $variation->slug = SlugService::createSlug(Variation::class, 'slug', ($variation_name));
+                $variation->save();
+            }catch(Exception $e){
+                $this->info($e->getMessage());
             }
         }
         $this->info('Successfully generated translations');
