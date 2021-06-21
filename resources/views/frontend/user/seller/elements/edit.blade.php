@@ -40,7 +40,7 @@
                         <form class="form form-horizontal mar-top" action="{{ route('seller.elements.update', $element->id)}}" method="POST"
                             enctype="multipart/form-data" id="choice_form">
                             <input name="_method" type="hidden" value="POST">
-                            <input type="hidden" name="id" value="{{ $element->id }}">
+                            <input type="hidden" id="element_id" value="{{ $element->id }}" name="element_id">
                             <input type="hidden" name="lang" value="{{ $lang }}">
                             <input type="hidden" name="is_new_combination" id="is_new_combination" value="{{ true }}">
                             @csrf
@@ -648,12 +648,13 @@
                 color_ids.push(val.getAttribute('data-id'))
             })
             // alert("Colors: "+color_ids)
-
+            element_id=$('#element_id').val();
             $('#collected_variations').val(choice_groups);
             $.ajax({
                 type:'GET',
                 url:'{{ route('seller.elements.make_all_combination') }}',
                 data:{
+                    element_id:element_id,
                     selected_attribute_ids: attribute_ids,
                     choice_groups: choice_groups,
                     color_ids: color_ids
