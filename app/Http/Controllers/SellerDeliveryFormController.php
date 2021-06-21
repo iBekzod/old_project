@@ -42,8 +42,8 @@ class SellerDeliveryFormController extends Controller
     auth()->login($user, true);
     return view('frontend.user.seller.dashboard');
 
-    // if(auth()->login($user, true)){
-    //     return 'malumotlar keldi';
+    // if( auth()){
+    //     return redirect('seller.login.id')->with('seller_id',$user_id);
     // }
    }
 
