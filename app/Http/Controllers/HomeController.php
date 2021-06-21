@@ -67,21 +67,18 @@ class HomeController extends Controller
                         'password_confirmation'=> 'required'
                     ]);
 
-            $user = new User;
-            $user->name = $request->name;
-            $user->phone =$request->phone;
-            $user->email = $request->email;
-            $user->user_type = "seller";
-            $user->email_verified_at = now();
-            $user->password = Hash::make($request->password);
-            // $user->save();
-            if($user->save()){
-                 return view('frontend.user.seller.form_second')->with('user_id',$user->id);
-                // return 'keldi';
-            }
-            else{
-                return 'error';;
-            }
+                    $user = new User;
+                    $user->name = $request->name;
+                    $user->phone =$request->phone;
+                    $user->email = $request->email;
+                    $user->user_type = "seller";
+                    $user->email_verified_at = now();
+                    $user->password = Hash::make($request->password);
+                    // $user->save();
+                    if($user->save()){
+                        return view('frontend.user.seller.form_second')->with('user_id',$user->id);
+                        // return 'keldi';
+                    }
             }
             else if($request->method() === 'GET'){
                if(Auth::check()){
@@ -94,38 +91,44 @@ class HomeController extends Controller
                   return view('frontend.user_registration');
            }
            return back();
-       }
+        }
 
 
     public function seller_login(Request $request)
     {
 
         if ($request->method() === 'POST') {
-                //  $request->validate([
-                //      'email'=>'required',
-                //      'password'=>'required'
-                //  ]);
-                //  dd($request->all());
-                //  $seller=new Seller;
-                //  $seller->seller_email=$request->amail;
-                //  $seller->seller_password=$request->password;
-                //  $seller->save();
-                //  if($seller->save()){
-                //           return 'lgogin save';
-                //  };
+            $request->validate([
+                'email' => 'required|string|email',
+                'password' => 'required|string',
+                'remember_me' => 'boolean'
+            ]);
+            $credentials = request(['email', 'password']);
+            if (!Auth::attempt($credentials))
+                return back();
+            $user = $request->user();
+            auth()->login($user, true);
+            return view('frontend.user.seller.dashboard');
+            // if($user->email_verified_at == null){
+            //     return response()->json(['message' => 'Please verify your account', 'user' => null], 401);
+            // }
+            // $tokenResult = $user->createToken('Personal Access Token');
+            // return $this->loginSuccess($tokenResult, $user);
 
-                    // dd($request->all());
-
-                    // if(true){
-                    //     return view('frontend.user.seller.dashboard');
-                    // }
-                }else if($request->method() === 'GET'){
+                // if($user=User::where('email', $request->email)->where('password', bcrypt($request->password))->first()){
+                //    auth()->login($user, true);
+                //    return view('frontend.user.seller.dashboard');
+                // }
+                // else{
+                //     return 'error';
+                // }
+        }else if($request->method() === 'GET'){
                     if(Auth::check()){
                         return redirect()->route('home');
                     }
                     // dd("sadfafguyasdgfd");
                       return view('frontend.user_login');
-                }
+        }
                 return back();
     }
 
