@@ -522,8 +522,9 @@
                     $('#selected_attribute_id').html(" ")
                     if(data.success){
                         $('#selected_attribute_id').html(data.data)
+                        $('#selected_attribute_id').change()
                     }
-                    update_category_attribute();
+                    // update_category_attribute();
                 }
             });
         }
@@ -544,19 +545,20 @@
             });
         }
         function update_category_attribute(){
-            attribute_ids = []
-            $('#selected_variations option:selected').each(function (index, val){
-                attribute_ids.push(val.getAttribute('data-id'))
-            })
-            choice_groups = [];
+            attribute_ids = $('#selected_attribute_id').val()
+            // $('#selected_attribute_id option:selected').each(function (index, val){
+            //     attribute_ids.push(val.getAttribute('data-id'))
+            // })
+            // choice_groups = [];
+            // alert(attribute_ids);
+            choice_options = [];
             $.each(attribute_ids, function( index, value ) {
-                choice_options = [];
-                $('#choice_option_'+attribute_ids[index]+' option:selected').each(function (index, val){
+                $('#choice_option_'+value+' option:selected').each(function (index, val){
                     choice_options.push(val.getAttribute('data-id'))
-                    console.log(val.getAttribute('data-id'));
+                    // console.log(val.getAttribute('data-id'));
                 })
                 // if(choice_options.length > 0){
-                    choice_groups[index]=choice_options
+                    // choice_groups[value]=choice_options
                 // }
             });
             $.ajax({
@@ -564,7 +566,7 @@
                 url:'{{ route('elements.make_selected_attribute_options') }}',
                 data:{
                     selected_attribute_ids: $('#selected_attribute_id').val(),
-                    choice_groups:choice_groups,
+                    choice_groups:choice_options,
                 },
                 success:function(data){
                     $('#attribute_div').html(" ")
@@ -576,40 +578,40 @@
                 }
             });
         }
-        function update_category_attribute_old(){
-            $('#is_new_combination').val(false);
-            attribute_ids = []
-            $('#selected_variations option:selected').each(function (index, val){
-                attribute_ids.push(val.getAttribute('data-id'))
-            })
-            choice_groups = [];
-            $.each(attribute_ids, function( index, value ) {
-                choice_options = [];
-                $('#choice_option_'+attribute_ids[index]+' option:selected').each(function (index, val){
-                    choice_options.push(val.getAttribute('data-id'))
-                    console.log(val.getAttribute('data-id'));
-                })
-                // if(choice_options.length > 0){
-                    choice_groups[index]=choice_options
-                // }
-            });
-            $.ajax({
-                type:'GET',
-                url:'{{ route('elements.make_selected_attribute_options') }}',
-                data:{
-                    selected_attribute_ids: $('#selected_attribute_id').val(),
-                    choice_groups:choice_groups,
-                },
-                success:function(data){
-                    $('#attribute_div').html(" ")
-                    if(data.success){
-                        $('#attribute_div').html(data.data)
-                        $('.js-example-basic-multiple').select2();
-                    }
-                    update_attribute_variation();
-                }
-            });
-        }
+        // function update_category_attribute_old(){
+        //     $('#is_new_combination').val(false);
+        //     attribute_ids = []
+        //     $('#selected_variations option:selected').each(function (index, val){
+        //         attribute_ids.push(val.getAttribute('data-id'))
+        //     })
+        //     choice_groups = [];
+        //     $.each(attribute_ids, function( index, value ) {
+        //         choice_options = [];
+        //         $('#choice_option_'+attribute_ids[index]+' option:selected').each(function (index, val){
+        //             choice_options.push(val.getAttribute('data-id'))
+        //             console.log(val.getAttribute('data-id'));
+        //         })
+        //         // if(choice_options.length > 0){
+        //             choice_groups[index]=choice_options
+        //         // }
+        //     });
+        //     $.ajax({
+        //         type:'GET',
+        //         url:'{{ route('elements.make_selected_attribute_options') }}',
+        //         data:{
+        //             selected_attribute_ids: $('#selected_attribute_id').val(),
+        //             choice_groups:choice_groups,
+        //         },
+        //         success:function(data){
+        //             $('#attribute_div').html(" ")
+        //             if(data.success){
+        //                 $('#attribute_div').html(data.data)
+        //                 $('.js-example-basic-multiple').select2();
+        //             }
+        //             update_attribute_variation();
+        //         }
+        //     });
+        // }
         function update_attribute_variation(){
             $.ajax({
                 type:'GET',

@@ -231,6 +231,7 @@ class SellerElementController extends Controller
                 $data = null;
                 if ($request->has('selected_attribute_ids')) {
                     $selected_attribute_ids = $request->selected_attribute_ids;
+                    $choice_groups=$request->choice_groups;
                     $selected_attributes = Attribute::whereIn('id', $selected_attribute_ids)->get();
                     $content = null;
                     foreach ($selected_attributes as $attribute) {
@@ -242,11 +243,13 @@ class SellerElementController extends Controller
 
                         $options = null;
                         foreach ($attribute->characteristics as $value) {
-                            $options = $options . '<option selected  data-id="' . $value->id . '" ';
-                            // if ($request->has('id') && $element->characteristics != null && in_array($value->id, json_decode($element->characteristics, true))) {
-                            //     $options = $options . 'selected';
-                            // }
-                            $options = $options . ' value = "' . $value->id . '" > ' . $value->getTranslation('name', $request->lang) . ' </option >';
+                            $options = $options . '<option ';
+                            // dd( $choice_groups);
+                            if(is_array($choice_groups) && in_array($value->id, $choice_groups)){
+                                $options = $options . 'selected';
+                            }
+                            $options = $options  .'  data-id="' . $value->id . '" ';
+                            $options = $options. ' value = "' . $value->id . '" > ' . $value->getTranslation('name', $request->lang) . ' </option >';
                         }
 
                         $content = $content . $options . '</select>

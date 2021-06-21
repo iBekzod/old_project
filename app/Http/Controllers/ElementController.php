@@ -93,12 +93,13 @@ class ElementController extends Controller
     }
     public function make_selected_attribute_options(Request $request)
     {
+        // dd($request->all());
         try {
             if ($request->method() == 'GET') {
                 $data = null;
                 if ($request->has('selected_attribute_ids')) {
                     $selected_attribute_ids = $request->selected_attribute_ids;
-                    $choice_groups=json_decode($request->choice_groups, true);
+                    $choice_groups=$request->choice_groups;
                     $selected_attributes = Attribute::whereIn('id', $selected_attribute_ids)->get();
                     $content = null;
                     foreach ($selected_attributes as $attribute) {
@@ -111,9 +112,10 @@ class ElementController extends Controller
                         $options = null;
                         foreach ($attribute->characteristics as $value) {
                             $options = $options . '<option ';
-                            if(is_array($choice_groups) &&  key_exists($attribute->id, $choice_groups) && in_array($value->id, $choice_groups[$attribute->id])){
+                            // dd( $choice_groups);
+                            if(is_array($choice_groups) && in_array($value->id, $choice_groups)){
                                 $options = $options . 'selected';
-                            }   
+                            }
                             $options = $options  .'  data-id="' . $value->id . '" ';
                             // if ($request->has('id') && $element->characteristics != null && in_array($value->id, json_decode($element->characteristics, true))) {
                             //     $options = $options . 'selected';
