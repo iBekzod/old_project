@@ -43,9 +43,10 @@ dd($selection->verification_info[0]->value); --}}
             <div class="container px-5" id="selection">
                 <form action="{{route('seller.page')}}" method="POST">
                     @csrf
+                    <input type="text" name="user_id" hidden value="{{$user_id}}">
                     <div class="row">
                         <div class="col-md-12 mt-4 text-center my-2">
-                        <h5> <b>Договор на оказание курьерских услуг № {{$seller->user_id}}</b> </h5>
+                        <h5> <b>Договор на оказание курьерских услуг № {{$user_id}}</b> </h5>
                         </div>
                         {{-- <div class="col-md-12 mt-4 text-center">
                             <h1 class="text-danger">{{ $seller['Название_магазина'] }}</h1>
