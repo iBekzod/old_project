@@ -564,12 +564,19 @@
             });
         }
         function update_category_attribute(){
-            $('#is_new_combination').val(false);
+            attribute_ids = $('#selected_attribute_id').val()
+            choice_options = [];
+            $.each(attribute_ids, function( index, value ) {
+                $('#choice_option_'+value+' option:selected').each(function (index, val){
+                    choice_options.push(val.getAttribute('data-id'))
+                })
+            });
             $.ajax({
                 type:'GET',
-                url:'{{ route('seller.elements.make_selected_attribute_options') }}',
+                url:'{{ route('elements.make_selected_attribute_options') }}',
                 data:{
-                    selected_attribute_ids: $('#selected_attribute_id').val()
+                    selected_attribute_ids: $('#selected_attribute_id').val(),
+                    choice_groups:choice_options,
                 },
                 success:function(data){
                     $('#attribute_div').html(" ")
@@ -581,6 +588,24 @@
                 }
             });
         }
+        // function update_category_attribute(){
+        //     $('#is_new_combination').val(false);
+        //     $.ajax({
+        //         type:'GET',
+        //         url:'{{ route('seller.elements.make_selected_attribute_options') }}',
+        //         data:{
+        //             selected_attribute_ids: $('#selected_attribute_id').val()
+        //         },
+        //         success:function(data){
+        //             $('#attribute_div').html(" ")
+        //             if(data.success){
+        //                 $('#attribute_div').html(data.data)
+        //                 $('.js-example-basic-multiple').select2();
+        //             }
+        //             update_attribute_variation();
+        //         }
+        //     });
+        // }
         function update_attribute_variation(){
             $.ajax({
                 type:'GET',
