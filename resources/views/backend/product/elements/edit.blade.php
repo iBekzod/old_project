@@ -35,7 +35,7 @@
         <form class="form form-horizontal mar-top" action="{{route('elements.update', $element->id)}}" method="POST"
               enctype="multipart/form-data" id="choice_form">
             <input name="_method" type="hidden" value="POST">
-            <input type="hidden" name="id" value="{{ $element->id }}">
+            <input type="hidden" id="element_id" value="{{ $element->id }}" name="element_id">
             <input type="hidden" name="lang" value="{{ $lang }}">
             <input type="hidden" name="is_new_combination" id="is_new_combination" value="{{ true }}">
             @csrf
@@ -578,40 +578,6 @@
                 }
             });
         }
-        // function update_category_attribute_old(){
-        //     $('#is_new_combination').val(false);
-        //     attribute_ids = []
-        //     $('#selected_variations option:selected').each(function (index, val){
-        //         attribute_ids.push(val.getAttribute('data-id'))
-        //     })
-        //     choice_groups = [];
-        //     $.each(attribute_ids, function( index, value ) {
-        //         choice_options = [];
-        //         $('#choice_option_'+attribute_ids[index]+' option:selected').each(function (index, val){
-        //             choice_options.push(val.getAttribute('data-id'))
-        //             console.log(val.getAttribute('data-id'));
-        //         })
-        //         // if(choice_options.length > 0){
-        //             choice_groups[index]=choice_options
-        //         // }
-        //     });
-        //     $.ajax({
-        //         type:'GET',
-        //         url:'{{ route('elements.make_selected_attribute_options') }}',
-        //         data:{
-        //             selected_attribute_ids: $('#selected_attribute_id').val(),
-        //             choice_groups:choice_groups,
-        //         },
-        //         success:function(data){
-        //             $('#attribute_div').html(" ")
-        //             if(data.success){
-        //                 $('#attribute_div').html(data.data)
-        //                 $('.js-example-basic-multiple').select2();
-        //             }
-        //             update_attribute_variation();
-        //         }
-        //     });
-        // }
         function update_attribute_variation(){
             $.ajax({
                 type:'GET',
@@ -652,8 +618,8 @@
             $('#colors option:selected').each(function (index, val){
                 color_ids.push(val.getAttribute('data-id'))
             })
-            // alert("Colors: "+color_ids)
-            element_id=$('#id').val();
+            // alert("Element id: "+$('#element_id').val())
+            element_id=$('#element_id').val();
             $('#collected_variations').val(choice_groups);
             $.ajax({
                 type:'GET',
@@ -666,11 +632,13 @@
                 },
                 success:function(data){
                     $('#variation_div').html(" ")
-                    alert("Combinations: "+data.message)
+                    // alert("Combinations: "+data.message)
                     // console.log(data.message);
                     if(data.success){
+
                         $('#variation_div').html(data.data)
                         $('.js-example-basic-multiple').select2();
+                        // $('.selected-files').trigger('click');
                     }
                 }
             });
@@ -683,7 +651,6 @@
         }
         AIZ.plugins.tagify();
         $(document).ready(function () {
-
             $('.remove-files').on('click', function () {
                 $(this).parents(".col-md-4").remove();
             });

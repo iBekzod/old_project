@@ -204,12 +204,16 @@ class ElementController extends Controller
                 $data = null;
                 if ($request->has('selected_attribute_ids')) {
                     $selected_attribute_ids = $request->selected_attribute_ids;
-                    $selected_attributes = Attribute::whereIn('id', $selected_attribute_ids)->where('combination', '=', 1)->get();
-                    $options = null;
-                    foreach ($selected_attributes as $attribute) {
-                        $options = $options . '<option selected value="' . $attribute->id . '" data-id="' . $attribute->id . '" >' . $attribute->getTranslation('name', $request->lang) . '</option>';
+                    $selected_attributes = Attribute::whereIn('id', $selected_attribute_ids);
+                    if($selected_attributes->where('combination', '=', 1)->exists()){
+                        $selected_attributes=$selected_attributes->where('combination', '=', 1)->get();
+                        $options = null;
+                        foreach ($selected_attributes as $attribute) {
+                            $options = $options . '<option selected value="' . $attribute->id . '" data-id="' . $attribute->id . '" >' . $attribute->getTranslation('name', $request->lang) . '</option>';
+                        }
+                        $data = $options;
                     }
-                    $data = $options;
+
                 }
                 return response()->json(['success' => true, 'message' => 'done', 'data' => $data]);
             }
@@ -224,11 +228,6 @@ class ElementController extends Controller
         // dd($request->element_id);
         try {
             if ($request->method() == 'GET') {
-                $my_variations=collect();
-                if($request->has('element_id')){
-                    $element=Element::where('id', $request->element_id)->first();
-                    $my_variations=Variation::where('element_id', $request->element_id)->where('user_id', auth()->id());
-                }
                 $data = null;
                 $variations = [];
                 $ids = [];
@@ -297,59 +296,59 @@ class ElementController extends Controller
                         $my_colors = [];
                         $my_attributes = [];
                     }
-
+                    // dd(implode(", ", $my_colors));
+                    // dd($my_variations->where('color_id', implode(", ", $my_colors))->where('characteristics', implode(", ", $my_attributes))->first());
                     $vars=[];
-                    if($request->has('element_id') && $my_variations->where('color_id', implode(", ", $my_colors))->where('characteristics', implode(", ", $my_attributes))->exists()){
-                        $variation=$my_variations->where('color_id', implode(", ", $my_colors))->where('characteristics', implode(", ", $my_attributes))->first();
-                        $variation_id=$variation->id;
-                        $vars[]=$variation_id;
+                    if($request->has('element_id') && Element::findOrFail($request->element_id) && $my_variations=Variation::where('element_id', $request->element_id)->where('user_id', auth()->id())->where('color_id', implode(", ", $my_colors))->where('characteristics', implode(", ", $my_attributes))->first()){
+                        $variation=$my_variations;//->where('color_id', implode(", ", $my_colors))->where('characteristics', implode(", ", $my_attributes))->first();
                         $content = $content . '
-                            <tr id="variant_'. $variation->id .'" >
-                                <td>
-                                    <label for="" class="control-label">'. ($variation_id+1) .'</label>
-                                    <input type="hidden" name="combination['.  $variation_id  .'][color_id]" value="'.  $variation->color_id??null  .'">
-                                    <input type="hidden" name="combination['.  $variation_id  .'][attribute_id]" value="'.  $variation->characteristics??null  .'">
-                                </td>
-                                <td>
-                                    <div class="form-group">
-                                            <div class="input-group" data-toggle="aizuploader" data-type="image">
+                                <tr class="variant">
+                                    <td>
+                                        <input type="hidden" name="combination[' . $index . '][variation_id]" value="' . $variation->id . '">
+                                        <label for="" class="control-label">' . ($index + 1) . '</label>
+                                        <input type="hidden" name="combination[' . $index . '][color_id]" value="' . implode(", ", $my_colors) . '">
+                                        <input type="hidden" name="combination[' . $index . '][attribute_id]" value="' . implode(", ", $my_attributes) . '">
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                                <div class="input-group" data-toggle="aizuploader" data-type="image">
+                                                    <div class="input-group-prepend">
+                                                        <div
+                                                            class="input-group-text bg-soft-secondary font-weight-medium">' . translate('Browse') . '</div>
+                                                    </div>
+                                                    <div class="form-control file-amount"></div>
+                                                    <input type="hidden" name="combination[' . $index . '][thumbnail_img]" value="'. $variation->thumbnail_img .'"
+                                                        class="selected-files">
+                                                </div>
+                                                <div class="file-preview box sm">
+                                                </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <div class="input-group" data-toggle="aizuploader" data-type="image" data-multiple="true">
                                                 <div class="input-group-prepend">
-                                                    <div
-                                                        class="input-group-text bg-soft-secondary font-weight-medium">'. translate('Browse') .'</div>
+                                                    <div class="input-group-text bg-soft-secondary font-weight-medium">' . translate('Browse') . '</div>
                                                 </div>
                                                 <div class="form-control file-amount"></div>
-                                                <input type="hidden" name="combination['. $variation_id.'][thumbnail_img]" value="'. $variation->thumbnail_img??null  .'"
-                                                    class="selected-files">
+                                                <input type="hidden" name="combination[' . $index . '][photos]" value="'. $variation->photos .'" class="selected-files">
                                             </div>
                                             <div class="file-preview box sm">
                                             </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group">
-                                        <div class="input-group" data-toggle="aizuploader" data-type="image" data-multiple="true">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text bg-soft-secondary font-weight-medium">'.  translate('Browse') .'</div>
-                                            </div>
-                                            <input type="hidden" name="combination['. $variation_id  .'][photos]" value="'. $variation->photos  .'" class="selected-files">
                                         </div>
-                                        <div class="file-preview box sm">
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <label for="" class="control-label">'. $variation->name??null  .'</label>
-                                    <input type="hidden" name="combination['. $variation_id .'][name]" value="'. $variation->name??null .'" class="form-control">
-                                    <input type="text" hidden name="combination['. $variation_id .'][id]" value="'. $variation->id??null .'" class="form-control">
-                                </td>
-                                <td>
-                                    <input type="text" name="combination['. $variation_id .'][artikul]" value="'. $variation->partnum??null .'" class="form-control">
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="delete_variantion(this, \''. $variation->id .'\')"><i class="las la-trash"></i></button>
-                                </td>
-                            </tr>
-                        ';
+                                    </td>
+                                    <td>
+                                        <label for="" class="control-label">' . $variation->name . '</label>
+                                        <input type="hidden" name="combination[' . $index . '][name]" value="' . implode(", ", $combination) . '" class="form-control">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="combination[' . $index . '][artikul]" value="'. $variation->partnum .'" class="form-control">
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="delete_variant(this)"><i class="las la-trash"></i></button>
+                                    </td>
+                                </tr>
+                            ';
                     }else{
                         $content = $content . '
                             <tr class="variant">
@@ -703,7 +702,7 @@ class ElementController extends Controller
                     $variation->qty = 0;
                     $variation->rating = 0;
                     $variation->user_id = Auth::user()->id;
-                    dd($variation);
+                    // dd($variation);
                     $variation->save();
                     foreach (Language::all() as $language) {
                         $variation_translation = VariationTranslation::firstOrNew(['lang' => $language->code, 'variation_id' => $variation->id]);
