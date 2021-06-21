@@ -71,18 +71,17 @@ class VariationSycronizer extends Command
         $variations=Variation::withTrashed()->get();
         foreach($variations as $variation){
             try{
-                $variation=$variation;
                 $color=Color::where('id', $variation->color_id)->first();
-                $this->info( explode(" ", $variation->characterisics));
-                $attributes=Characteristic::whereIn('id', explode(", ", $variation->characteristics))->pluck('name');
+                $attributes=Characteristic::whereIn('id', explode(",", $variation->characteristics))->pluck('name');
                 $variation_name=$variation->element->name;
-                if(is_array($attributes)){
-                    $variation_name=$variation_name.', '.implode(",", $attributes);
+                // dd( $attributes);
+                foreach($attributes as $attribute){
+                    $variation_name=$variation_name.', '.$attribute;
                 }
-
                 if($color->name){
                     $variation_name=$variation_name.', '.$color->name;
                 }
+                var_dump($variation_name);
                 $variation->name=$variation_name;
                 $variation->slug = SlugService::createSlug(Variation::class, 'slug', ($variation_name));
                 $variation->save();
