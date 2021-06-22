@@ -350,6 +350,12 @@ class ElementController extends Controller
                                 </tr>
                             ';
                     }else{
+                        if($element=Element::findOrFail($request->element_id)){
+                            $element_name=$element->name;
+                        }else{
+                            $element_name=null;
+                        }
+
                         $content = $content . '
                             <tr class="variant">
                                 <td>
@@ -386,7 +392,7 @@ class ElementController extends Controller
                                     </div>
                                 </td>
                                 <td>
-                                    <label for="" class="control-label">' . implode(", ", $combination) . '</label>
+                                    <label for="" class="control-label">' . $element_name." ".implode(", ", $combination) . '</label>
                                     <input type="hidden" name="combination[' . $index . '][name]" value="' . implode(", ", $combination) . '" class="form-control">
                                 </td>
                                 <td>
