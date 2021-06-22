@@ -44,7 +44,7 @@ class ProductController extends Controller
 
     public function getAllProducts(Request $request)
     {
-        return new ProductCollection(getPublishedProducts('product', ['random', 'where' => [['name', 'like', '%' . $request->get('q') . '%']]])->get());
+        return new ProductCollection(getPublishedProducts('product', ['where' => [['name', 'like', '%' . $request->get('q') . '%']]])->get());
     }
 
     public function index()
@@ -449,14 +449,14 @@ class ProductController extends Controller
 
     public function home()
     {
-        return new ProductCollection(getPublishedProducts('element', ['random'])->take(50)->get());
+        return new ProductCollection(getPublishedProducts('element')->take(50)->get());
         // return new ProductCollection(Product::inRandomOrder()->take(50)->get());
     }
 
     public function freeShippingProduct()
     {
         // return $this->admin();
-        return new ProductCollection(getPublishedProducts('element', ['where' => [['delivery_type', 'free']], 'random'], [], [])->limit(12)->get());
+        return new ProductCollection(getPublishedProducts('element', ['where' => [['delivery_type', 'free']]], [], [])->limit(12)->get());
 
         // return response()->json([
 
