@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Cviebrock\EloquentSluggable\Services\SlugService;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
@@ -82,8 +83,17 @@ class Variation extends Model
         try{
             $variation=$this->variation;
             $color=Color::where('id', $variation->color_id)->first();
-            $attributes=Attribute::whereIn('id', explode(", ", $variation->characteristics))->get();
-            $variation->name=$variation->element->name." ".implode(", ", $attributes->pluck('name'))." ".$color->name;
+            $attributes=Characteristic::whereIn('id', explode(",", $variation->characteristics))->pluck('name');
+            $variation_name=$variation->element->name;
+            // dd( $attributes);
+            foreach($attributes as $attribute){
+                $variation_name=$variation_name.', '.$attribute;
+            }
+            if($color->name){
+                $variation_name=$variation_name.', '.$color->name;
+            }
+            $variation->name=$variation_name;
+            $variation->slug = SlugService::createSlug(Variation::class, 'slug', ($variation_name));
             $variation->save();
         }catch(Exception $e){
             // dd($e->getMessage());

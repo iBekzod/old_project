@@ -309,8 +309,143 @@ class SellerElementController extends Controller
         return response()->json(['success' => false, 'message' => 'server']);
     }
 
+    // public function make_all_combination(Request $request)
+    // {
+    //     try {
+    //         if ($request->method() == 'GET') {
+    //             $data = null;
+    //             $variations = [];
+    //             $ids = [];
+    //             $count_color_ids = 0;
+    //             $count_attribute_ids = 0;
+    //             if ($request->has('choice_groups')) {
+    //                 foreach ($request->choice_groups as $value_ids) {
+    //                     $selected_attributes = Characteristic::whereIn('id', $value_ids)->pluck('name')->toArray();
+    //                     $variations[] = $selected_attributes;
+    //                     $attribute_ids = Characteristic::whereIn('id', $value_ids)->pluck('id')->toArray();
+    //                     $ids[] = $attribute_ids;
+    //                     $count_attribute_ids = count($attribute_ids);
+    //                 }
+    //             }
+    //             if ($request->has('color_ids')) {
+    //                 $color_ids = $request->color_ids;
+    //                 $selected_colors = Color::whereIn('id', $color_ids)->pluck('name')->toArray();
+    //                 $variations[] = $selected_colors;
+    //                 $color_ids = Color::whereIn('id', $color_ids)->pluck('id')->toArray();
+    //                 $ids[] = $color_ids;
+    //                 $count_color_ids = count($color_ids);
+    //             }
+    //             $combinations = Combinations::makeCombinations($variations);
+    //             $combination_ids = Combinations::makeCombinations($ids);
+    //             $content = null;
+    //             $content = $content . '
+    //             <div style="overflow-y: scroll; ">
+    //                 <table class="table table-bordered" >
+    //                     <thead>
+    //                     <tr>
+    //                         <td class="text-center">
+    //                             <label for="" class="control-label">' . translate('#') . '</label>
+    //                         </td>
+    //                         <td class="text-center">
+    //                             <label class="col-form-label" for="signinSrEmails">' . translate('Variation Image') . '
+    //                                     <small>' . translate('(290x300)') . '</small></label>
+    //                         </td>
+    //                         <td class="text-center">
+    //                             <label class="col-form-label" for="signinSrEmails">' . translate('Gallery Images') . '
+    //                                     <small>' . translate('(600x600)') . '</small></label>
+    //                         </td>
+    //                         <td class="text-center">
+    //                             <label for="" class="control-label">' . translate('Name') . '</label>
+    //                         </td>
+    //                         <td class="text-center">
+    //                             <label for="" class="control-label">' . translate('Artikul') . '</label>
+    //                         </td>
+    //                         <td class="text-center">
+    //                             <label for="" class="control-label">' . translate('Delete') . '</label>
+    //                         </td>
+
+    //                     </tr>
+    //                     </thead>
+    //                     <tbody>';
+    //             foreach ($combinations as $index => $combination) {
+    //                 if ($count_color_ids > 0 && $count_attribute_ids > 0) {
+    //                     $my_colors = array_slice($combination_ids[$index], -1);
+    //                     $my_attributes = array_slice($combination_ids[$index], 0, -1);
+    //                 } else if ($count_color_ids == 0 && $count_attribute_ids > 0) {
+    //                     $my_colors = [];
+    //                     $my_attributes = $combination_ids[$index];
+    //                 } else if ($count_color_ids > 0 && $count_attribute_ids == 0) {
+    //                     $my_colors = $combination_ids[$index];
+    //                     $my_attributes = [];
+    //                 } else {
+    //                     $my_colors = [];
+    //                     $my_attributes = [];
+    //                 }
+    //                 // dd($my_attributes);
+    //                 $content = $content . '
+    //                     <tr class="variant">
+    //                         <td>
+    //                             <label for="" class="control-label">' . ($index + 1) . '</label>
+    //                             <input type="hidden" name="combination[' . $index . '][color_id]" value="' . implode(", ", $my_colors) . '">
+    //                             <input type="hidden" name="combination[' . $index . '][attribute_id]" value="' . implode(", ", $my_attributes) . '">
+    //                         </td>
+    //                         <td>
+    //                             <div class="form-group">
+    //                                     <div class="input-group" data-toggle="aizuploader" data-type="image">
+    //                                         <div class="input-group-prepend">
+    //                                             <div
+    //                                                 class="input-group-text bg-soft-secondary font-weight-medium">' . translate('Browse') . '</div>
+    //                                         </div>
+    //                                         <input type="hidden" name="combination[' . $index . '][thumbnail_img]" value=""
+    //                                                class="selected-files">
+    //                                     </div>
+    //                                     <div class="file-preview box sm">
+    //                                     </div>
+    //                             </div>
+    //                         </td>
+    //                         <td>
+    //                             <div class="form-group">
+    //                                 <div class="input-group" data-toggle="aizuploader" data-type="image" data-multiple="true">
+    //                                     <div class="input-group-prepend">
+    //                                         <div class="input-group-text bg-soft-secondary font-weight-medium">' . translate('Browse') . '</div>
+    //                                     </div>
+    //                                     <input type="hidden" name="combination[' . $index . '][photos]" value="" class="selected-files">
+    //                                 </div>
+    //                                 <div class="file-preview box sm">
+    //                                 </div>
+    //                             </div>
+    //                         </td>
+    //                         <td>
+    //                             <label for="" class="control-label">' . implode(", ", $combination) . '</label>
+    //                             <input type="hidden" name="combination[' . $index . '][name]" value="' . implode(", ", $combination) . '" class="form-control">
+    //                         </td>
+    //                         <td>
+    //                             <input type="text" name="combination[' . $index . '][artikul]" value="" class="form-control">
+    //                         </td>
+    //                         <td>
+    //                             <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="delete_variant(this)"><i class="las la-trash"></i></button>
+    //                         </td>
+    //                     </tr>
+    //                     ';
+    //             }
+    //             $content = $content . '</tbody>
+    //                 </table>
+    //             </div>
+    //             ';
+    //             $data = $content;
+    //             return response()->json(['success' => true, 'message' => $combination_ids, 'data' => $data]);
+    //         }
+    //     } catch (\Exception $exception) {
+    //         dd($exception);
+    //         return response()->json(['success' => false, 'message' => $exception->getMessage()]);
+    //     }
+    //     return response()->json(['success' => false, 'message' => 'server']);
+    // }
+
+
     public function make_all_combination(Request $request)
     {
+        // dd($request->element_id);
         try {
             if ($request->method() == 'GET') {
                 $data = null;
@@ -381,67 +516,122 @@ class SellerElementController extends Controller
                         $my_colors = [];
                         $my_attributes = [];
                     }
-                    // dd($my_attributes);
-                    $content = $content . '
-                        <tr class="variant">
-                            <td>
-                                <label for="" class="control-label">' . ($index + 1) . '</label>
-                                <input type="hidden" name="combination[' . $index . '][color_id]" value="' . implode(", ", $my_colors) . '">
-                                <input type="hidden" name="combination[' . $index . '][attribute_id]" value="' . implode(", ", $my_attributes) . '">
-                            </td>
-                            <td>
-                                <div class="form-group">
-                                        <div class="input-group" data-toggle="aizuploader" data-type="image">
-                                            <div class="input-group-prepend">
-                                                <div
-                                                    class="input-group-text bg-soft-secondary font-weight-medium">' . translate('Browse') . '</div>
+                    // dd(implode(", ", $my_colors));
+                    // dd($my_variations->where('color_id', implode(", ", $my_colors))->where('characteristics', implode(", ", $my_attributes))->first());
+                    $vars=[];
+                    if($request->has('element_id') && Element::findOrFail($request->element_id) && $my_variations=Variation::where('element_id', $request->element_id)->where('user_id', auth()->id())->where('color_id', implode(", ", $my_colors))->where('characteristics', implode(", ", $my_attributes))->first()){
+                        $variation=$my_variations;//->where('color_id', implode(", ", $my_colors))->where('characteristics', implode(", ", $my_attributes))->first();
+                        $content = $content . '
+                                <tr class="variant">
+                                    <td>
+                                        <input type="hidden" name="combination[' . $index . '][variation_id]" value="' . $variation->id . '">
+                                        <label for="" class="control-label">' . ($index + 1) . '</label>
+                                        <input type="hidden" name="combination[' . $index . '][color_id]" value="' . implode(", ", $my_colors) . '">
+                                        <input type="hidden" name="combination[' . $index . '][attribute_id]" value="' . implode(", ", $my_attributes) . '">
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                                <div class="input-group" data-toggle="aizuploader" data-type="image">
+                                                    <div class="input-group-prepend">
+                                                        <div
+                                                            class="input-group-text bg-soft-secondary font-weight-medium">' . translate('Browse') . '</div>
+                                                    </div>
+                                                    <div class="form-control file-amount"></div>
+                                                    <input type="hidden" name="combination[' . $index . '][thumbnail_img]" value="'. $variation->thumbnail_img .'"
+                                                        class="selected-files">
+                                                </div>
+                                                <div class="file-preview box sm">
+                                                </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <div class="input-group" data-toggle="aizuploader" data-type="image" data-multiple="true">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text bg-soft-secondary font-weight-medium">' . translate('Browse') . '</div>
+                                                </div>
+                                                <div class="form-control file-amount"></div>
+                                                <input type="hidden" name="combination[' . $index . '][photos]" value="'. $variation->photos .'" class="selected-files">
                                             </div>
-                                            <input type="hidden" name="combination[' . $index . '][thumbnail_img]" value=""
-                                                   class="selected-files">
+                                            <div class="file-preview box sm">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <label for="" class="control-label">' . $variation->name . '</label>
+                                        <input type="hidden" name="combination[' . $index . '][name]" value="' . implode(", ", $combination) . '" class="form-control">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="combination[' . $index . '][artikul]" value="'. $variation->partnum .'" class="form-control">
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="delete_variant(this)"><i class="las la-trash"></i></button>
+                                    </td>
+                                </tr>
+                            ';
+                    }else{
+                        $content = $content . '
+                            <tr class="variant">
+                                <td>
+                                    <label for="" class="control-label">' . ($index + 1) . '</label>
+                                    <input type="hidden" name="combination[' . $index . '][color_id]" value="' . implode(", ", $my_colors) . '">
+                                    <input type="hidden" name="combination[' . $index . '][attribute_id]" value="' . implode(", ", $my_attributes) . '">
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                            <div class="input-group" data-toggle="aizuploader" data-type="image">
+                                                <div class="input-group-prepend">
+                                                    <div
+                                                        class="input-group-text bg-soft-secondary font-weight-medium">' . translate('Browse') . '</div>
+                                                </div>
+                                                <div class="form-control file-amount"></div>
+                                                <input type="hidden" name="combination[' . $index . '][thumbnail_img]" value=""
+                                                    class="selected-files">
+                                            </div>
+                                            <div class="file-preview box sm">
+                                            </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <div class="input-group" data-toggle="aizuploader" data-type="image" data-multiple="true">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text bg-soft-secondary font-weight-medium">' . translate('Browse') . '</div>
+                                            </div>
+                                            <div class="form-control file-amount"></div>
+                                            <input type="hidden" name="combination[' . $index . '][photos]" value="" class="selected-files">
                                         </div>
                                         <div class="file-preview box sm">
                                         </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group">
-                                    <div class="input-group" data-toggle="aizuploader" data-type="image" data-multiple="true">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text bg-soft-secondary font-weight-medium">' . translate('Browse') . '</div>
-                                        </div>
-                                        <input type="hidden" name="combination[' . $index . '][photos]" value="" class="selected-files">
                                     </div>
-                                    <div class="file-preview box sm">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <label for="" class="control-label">' . implode(", ", $combination) . '</label>
-                                <input type="hidden" name="combination[' . $index . '][name]" value="' . implode(", ", $combination) . '" class="form-control">
-                            </td>
-                            <td>
-                                <input type="text" name="combination[' . $index . '][artikul]" value="" class="form-control">
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="delete_variant(this)"><i class="las la-trash"></i></button>
-                            </td>
-                        </tr>
+                                </td>
+                                <td>
+                                    <label for="" class="control-label">' . implode(", ", $combination) . '</label>
+                                    <input type="hidden" name="combination[' . $index . '][name]" value="' . implode(", ", $combination) . '" class="form-control">
+                                </td>
+                                <td>
+                                    <input type="text" name="combination[' . $index . '][artikul]" value="" class="form-control">
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="delete_variant(this)"><i class="las la-trash"></i></button>
+                                </td>
+                            </tr>
                         ';
+                    }
                 }
                 $content = $content . '</tbody>
                     </table>
                 </div>
                 ';
                 $data = $content;
-                return response()->json(['success' => true, 'message' => $combination_ids, 'data' => $data]);
+                return response()->json(['success' => true, 'message' => $vars, 'data' => $data]);
             }
         } catch (\Exception $exception) {
-            dd($exception);
+            // dd($exception);
             return response()->json(['success' => false, 'message' => $exception->getMessage()]);
         }
         return response()->json(['success' => false, 'message' => 'server']);
     }
-
 
 
     public function remove_variation(Request $request)
@@ -822,9 +1012,21 @@ class SellerElementController extends Controller
         $element->pdf = $request->pdf;
         if ($element->save()) {
             if ($request->has('combination')) {
-                if ($request->is_new_combination) {
-                    Variation::where('element_id', $element->id)->where('user_id', Auth::user()->id)->delete();
-                    foreach ($request->combination as $variant) {
+                foreach ($request->combination as $variant) {
+                    if(array_key_exists('variation_id',$variant) && $variation = Variation::findOrFail($variant['variation_id'])){
+                        $variation->name = $variant['name'];
+                        $variation->thumbnail_img = $variant['thumbnail_img'];
+                        if ($variant['name'] != null) {
+                            if ($variation->slug != $variant['name'])
+                                $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
+                        }
+                        $variation->partnum = $variant['artikul'];
+                        $variation->color_id = (int)$variant['color_id'];
+                        $variation->characteristics = $variant['attribute_id'];
+                        $variation->photos = $variant['photos'];
+                        $variation->user_id = Auth::user()->id;
+                        $variation->save();
+                    }else{
                         $variation = new Variation;
                         $variation->element_id = $element->id;
                         $variation->name = $element->name . " " . $variant['name'];
@@ -840,44 +1042,12 @@ class SellerElementController extends Controller
                         $variation->user_id = Auth::user()->id;
                         $variation->save();
                     }
-                } else {
-                    $variations = Variation::where('element_id', $element->id)->where('user_id', Auth::user()->id);
-                    foreach ($request->combination as $variant) {
-                        if ($variation = $variations->where('name', $variant['name'])->firstOrFail()) {
-                            $variation->name = $variant['name'];
-                            $variation->thumbnail_img = $variant['thumbnail_img'];
-                            if ($variant['name'] != null) {
-                                if ($variation->slug != $variant['name'])
-                                    $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
-                            }
-                            $variation->partnum = $variant['artikul'];
-                            $variation->color_id = (int)$variant['color_id'];
-                            $variation->characteristics = $variant['attribute_id'];
-                            $variation->photos = $variant['photos'];
-                            $variation->user_id = Auth::user()->id;
-                            $variation->save();
-                        } else {
-                            $variation = new Variation;
-                            $variation->element_id = $element->id;
-                            $variation->name = $element->name . " " . $variant['name'];
-                            $variation->thumbnail_img = $variant['thumbnail_img'];
-                            $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
-                            $variation->partnum = $variant['artikul'];
-                            $variation->color_id = (int)$variant['color_id'];
-                            $variation->characteristics = $variant['attribute_id'];
-                            $variation->photos = $variant['photos'];
-                            $variation->num_of_sale = 0;
-                            $variation->qty = 0;
-                            $variation->rating = 0;
-                            $variation->user_id = Auth::user()->id;
-                            $variation->save();
-                        }
-                        foreach (Language::all() as $language) {
-                            $variation_translation = VariationTranslation::firstOrNew(['lang' => $language->code, 'variation_id' => $variation->id]);
-                            $variation_translation->name = $variation->name;
-                            $variation_translation->save();
-                        }
+                    foreach (Language::all() as $language) {
+                        $variation_translation = VariationTranslation::firstOrNew(['lang' => $language->code, 'variation_id' => $variation->id]);
+                        $variation_translation->name = $variation->name;
+                        $variation_translation->save();
                     }
+
                 }
             }
             foreach (Language::all() as $language) {

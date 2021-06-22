@@ -40,7 +40,7 @@
                         <form class="form form-horizontal mar-top" action="{{ route('seller.elements.update', $element->id)}}" method="POST"
                             enctype="multipart/form-data" id="choice_form">
                             <input name="_method" type="hidden" value="POST">
-                            <input type="hidden" name="id" value="{{ $element->id }}">
+                            <input type="hidden" id="element_id" value="{{ $element->id }}" name="element_id">
                             <input type="hidden" name="lang" value="{{ $lang }}">
                             <input type="hidden" name="is_new_combination" id="is_new_combination" value="{{ true }}">
                             @csrf
@@ -285,6 +285,9 @@
                                                     <tr id="variant_{{ $combination->id }}" >
                                                         <td>
                                                             <label for="" class="control-label">{{ ($index+1) }}</label>
+                                                            <input type="hidden" name="combination[{{ $index }}][variation_id]" value="{{ $combination->id }}">
+                                                            <input type="hidden" name="combination[{{ $index }}][color_id]" value="{{ $combination->color_id??null }}">
+                                                            <input type="hidden" name="combination[{{ $index }}][attribute_id]" value="{{ $combination->characteristics??null }}">
                                                         </td>
                                                         <td>
                                                             <div class="form-group">
@@ -648,12 +651,13 @@
                 color_ids.push(val.getAttribute('data-id'))
             })
             // alert("Colors: "+color_ids)
-
+            element_id=$('#element_id').val();
             $('#collected_variations').val(choice_groups);
             $.ajax({
                 type:'GET',
                 url:'{{ route('seller.elements.make_all_combination') }}',
                 data:{
+                    element_id:element_id,
                     selected_attribute_ids: attribute_ids,
                     choice_groups: choice_groups,
                     color_ids: color_ids

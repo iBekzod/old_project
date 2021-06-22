@@ -41,6 +41,7 @@ class ProductSyncronizer extends Command
     public function handle()
     {
         $products=Product::all();
+        /*
         foreach($products as $product){
             $this->info($product);
              if($variation=Variation::where('id',$product->variation_id)->first()){
@@ -64,6 +65,16 @@ class ProductSyncronizer extends Command
                 }
              }
         }
-        $this->info('Successfully run');
+        */
+        foreach($products as $product){
+            $this->info($product->name);
+             if($variation=Variation::where('id',$product->variation_id)->first()){
+                 $product->name=$variation->name;
+                 $product->slug=$variation->slug;
+                 $product->save();
+             }
+        }
+
+        $this->info('Successfully changed');
     }
 }
