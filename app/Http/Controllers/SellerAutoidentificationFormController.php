@@ -43,6 +43,8 @@ class SellerAutoidentificationFormController extends Controller
              $array=$request->all();
             //    dd($array);
             $seller=new Seller;
+            $user=new User;
+            $user->registration_step='active';
             $data = array();
             $i = 0;
             foreach (json_decode(BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element) {
@@ -64,9 +66,12 @@ class SellerAutoidentificationFormController extends Controller
              $time=time();
              $date=date("d/m/Y",$time);
             //   dd($date);
-            if($seller->save()){
-                return view('frontend.user.seller.seller_autoidentification')->with('array', $array)->with('seller',$seller,)->with('date',$date);
+            if($user->save()){
+                if($seller->save()){
+                    return view('frontend.user.seller.seller_autoidentification')->with('array', $array)->with('seller',$seller,)->with('date',$date);
+                }
             }
+
 
 
 

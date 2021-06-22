@@ -71,6 +71,7 @@ class HomeController extends Controller
                     $user->name = $request->name;
                     $user->phone =$request->phone;
                     $user->email = $request->email;
+                    $user->registration_step='active';
                     $user->user_type = "seller";
                     $user->email_verified_at = now();
                     $user->password = Hash::make($request->password);
