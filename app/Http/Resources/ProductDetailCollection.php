@@ -24,80 +24,80 @@ class ProductDetailCollection extends ResourceCollection
         $element=Element::findOrFail($variation->element_id);
         try{
             $data = [
-            'id' => (integer) $product->id,
-            'name' => $product->getTranslation('name'),
-            'added_by' => $product->added_by,
-            'variant' => $this->makeVariation($product)??[],
-            'variations' => $this->makeVariations($product)??[],
-            'user' => [
-                'name' => $product->user->name,
-                'email' => $product->user->email,
-                'avatar' => $product->user->avatar,
-                'avatar_original' => api_asset($product->user->avatar_original),
-                'shop_name' => $product->added_by == 'admin' ? '' : $product->user->shop->name,
-                'shop_logo' => $product->added_by == 'admin' ? '' : uploaded_asset($product->user->shop->logo),
-                'shop_link' => $product->added_by == 'admin' ? '' : route('shops.info', $product->user->shop->id)
-            ],
-            'selers'=>$this->getSellers($product),
-            'brand' => [
-                'name' => $element != null ? $element->name : null,
-                'logo' => $element != null ? api_asset($element->logo) : null,
-                'links' => [
-                    'products' => $element != null ? route('api.products.brand', $element->brand_id) : null
-                ]
-            ],
-            'photos' => $this->convertPhotos(explode(',', $element->photos)),
-            'thumbnail_image' => api_asset($variation->thumbnail_img),
-            'base_price' => (double) homeBasePrice($product->id),
-            'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
-            'currency_code'=>defaultCurrency(),
-            'exchange_rate'=>defaultExchangeRate(),
-            'todays_deal' => (integer) $product->todays_deal,
-            'featured' =>(integer) $product->featured,
-            'unit' => $element->unit,
-            'discount' => (integer) $product->discount,
-            'discount_type' => $product->discount_type,
-            'tax' => (double) $product->tax,
-            'tax_type' => $product->tax_type,
-            'rating' => (double) $product->rating,
-            'number_of_sales' => (integer) $product->num_of_sale,
-            'current_stock' => (integer) $product->qty,
-            'tag' => explode(',', $element->tags),
-            'slug' => $product->slug,
-            'unit' => $element->unit,
-            'qty'=>$product->qty,
-            'video_link' => $element->video_link,
-            'video_provider' => $element->video_provider,
-            'rating' => (double) $product->rating,
-            'rating_count' => (integer) Review::where(['product_id' => $product->id])->count(),
-            'description' => $product->getTranslation('description'),
-            'reviews' => new ReviewCollection(Review::where('product_id', $product->id)->latest()->get()),
-            'price_lower' => (double) convertCurrency($products->min('price'), $product->currency_id),
-            'price_higher' => (double) convertCurrency($products->max('price'), $product->currency_id),
-            'choice_options' => $this->convertToChoiceOptions(json_decode($element->variations)),
-            'short_characteristics' => $this->convertToShortCharacteristics(json_decode($element->characteristics)),
-            'colors' => new ProductColorCollection(json_decode($element->variation_colors)),
-            'shipping_type' => $product->delivery_type,
-            'shipping_cost' => $this->calculateShippingCost($product),
-            'characteristics' => $this->convertToCharacteristics(json_decode($element->characteristics, true)),
+                'id' => (integer) $product->id,
+                'name' => $product->getTranslation('name'),
+                'added_by' => $product->added_by,
+                'variant' => $this->makeVariation($product)??[],
+                'variations' => $this->makeVariations($product)??[],
+                'user' => [
+                    'name' => $product->user->name,
+                    'email' => $product->user->email,
+                    'avatar' => $product->user->avatar,
+                    'avatar_original' => api_asset($product->user->avatar_original),
+                    'shop_name' => $product->added_by == 'admin' ? '' : $product->user->shop->name,
+                    'shop_logo' => $product->added_by == 'admin' ? '' : uploaded_asset($product->user->shop->logo),
+                    'shop_link' => $product->added_by == 'admin' ? '' : route('shops.info', $product->user->shop->id)
+                ],
+                'selers'=>$this->getSellers($product),
+                'brand' => [
+                    'name' => $element != null ? $element->name : null,
+                    'logo' => $element != null ? api_asset($element->logo) : null,
+                    'links' => [
+                        'products' => $element != null ? route('api.products.brand', $element->brand_id) : null
+                    ]
+                ],
+                'photos' => $this->convertPhotos(explode(',', $element->photos)),
+                'thumbnail_image' => api_asset($variation->thumbnail_img),
+                'base_price' => (double) homeBasePrice($product->id),
+                'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
+                'currency_code'=>defaultCurrency(),
+                'exchange_rate'=>defaultExchangeRate(),
+                'todays_deal' => (integer) $product->todays_deal,
+                'featured' =>(integer) $product->featured,
+                'unit' => $element->unit,
+                'discount' => (integer) $product->discount,
+                'discount_type' => $product->discount_type,
+                'tax' => (double) $product->tax,
+                'tax_type' => $product->tax_type,
+                'rating' => (double) $product->rating,
+                'number_of_sales' => (integer) $product->num_of_sale,
+                'current_stock' => (integer) $product->qty,
+                'tag' => explode(',', $element->tags),
+                'slug' => $product->slug,
+                'unit' => $element->unit,
+                'qty'=>$product->qty,
+                'video_link' => $element->video_link,
+                'video_provider' => $element->video_provider,
+                'rating' => (double) $product->rating,
+                'rating_count' => (integer) Review::where(['product_id' => $product->id])->count(),
+                'description' => $product->getTranslation('description'),
+                'reviews' => new ReviewCollection(Review::where('product_id', $product->id)->latest()->get()),
+                'price_lower' => (double) convertCurrency($products->min('price'), $product->currency_id),
+                'price_higher' => (double) convertCurrency($products->max('price'), $product->currency_id),
+                'choice_options' => $this->convertToChoiceOptions(json_decode($element->variations)),
+                'short_characteristics' => $this->convertToShortCharacteristics(json_decode($element->characteristics)),
+                'colors' => new ProductColorCollection(json_decode($element->variation_colors)),
+                'shipping_type' => $product->delivery_type,
+                'shipping_cost' => $this->calculateShippingCost($product),
+                'characteristics' => $this->convertToCharacteristics(json_decode($element->characteristics, true)),
 
-            'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??null,
-            'category'=>[
-                'name' => $element->category->name,
-                'banner' => api_asset($element->category->banner),
-                'icon' => $element->category->icon,
+                'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??null,
+                'category'=>[
+                    'name' => $element->category->name,
+                    'banner' => api_asset($element->category->banner),
+                    'icon' => $element->category->icon,
+                    'links' => [
+                        'products' => route('api.products.category', $element->category_id),
+                        'sub_categories' => route('subCategories.index', $element->category_id)
+                    ]
+                ],
                 'links' => [
-                    'products' => route('api.products.category', $element->category_id),
-                    'sub_categories' => route('subCategories.index', $element->category_id)
-                ]
-            ],
-            'links' => [
-                'reviews' => route('api.reviews.index', $product->id),
-                'related' => route('products.related', $product->id)
-            ],
-
-        ];
+                    'reviews' => route('api.reviews.index', $product->id),
+                    'related' => route('products.related', $product->id)
+                ],
+            ];
         } catch (\Exception $th) {
+            return null;
             // dd($th->getMessage());
         }
         return $data;
@@ -241,7 +241,13 @@ class ProductDetailCollection extends ResourceCollection
 
 
     protected function getSellers($item){
-        $products=Product::where('variation_id', $item->variation_id)->get();
+        // $variation=Variation::findOrFail($item->variation_id);
+        // if($variation_ids=Variation::where('color_id', $variation->color_id)->where('characteristics', $variation->characteristics)->where('element_id', $item->element_id)->pluck('id')){
+        //     $products=Product::whereIn('variation_id', $variation_ids)->get();
+        // }else{
+        //     $products=Product::where('variation_id', $item->variation_id)->get();
+        // }
+        $products=Product::where('name', $item->name)->get();
         $sellers=array();
         foreach($products as $product){
             $sellers[]=[
@@ -269,7 +275,7 @@ class ProductDetailCollection extends ResourceCollection
 
 
     protected function calculateShippingCost($product){
-        
+
         return 0;
     }
 }
