@@ -109,14 +109,14 @@ class HomeController extends Controller
                 return back();
             }
             $user = $request->user();
-            auth()->login($user, true);
+
             // dd($user->registration_step);
             if ($user->registration_step='active_1') {
-            //    TODO::   return redirect()->route('keldi');
+                 return redirect()->route('seller.login');
             }
 
 
-
+            auth()->login($user, true);
             return view('frontend.user.seller.dashboard');
             // if($user->email_verified_at == null){
             //     return response()->json(['message' => 'Please verify your account', 'user' => null], 401);
