@@ -13,8 +13,6 @@ class SellerAutoidentificationFormController extends Controller
 {
    public function seller_autoidentification_form_save(Request $request)
    {
-
-
              $validation = array();
             foreach (json_decode(BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element) {
                 if ($element->type) {
@@ -44,7 +42,7 @@ class SellerAutoidentificationFormController extends Controller
             //    dd($array);
             $seller=new Seller;
             $user=new User;
-            $user->registration_step='active';
+            $user->registration_step='active_2';
             $data = array();
             $i = 0;
             foreach (json_decode(BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element) {

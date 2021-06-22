@@ -71,7 +71,7 @@ class HomeController extends Controller
                     $user->name = $request->name;
                     $user->phone =$request->phone;
                     $user->email = $request->email;
-                    $user->registration_step='active';
+                    $user->registration_step='active_1';
                     $user->user_type = "seller";
                     $user->email_verified_at = now();
                     $user->password = Hash::make($request->password);
@@ -105,10 +105,18 @@ class HomeController extends Controller
                 'remember_me' => 'boolean'
             ]);
             $credentials = request(['email', 'password']);
-            if (!Auth::attempt($credentials))
+            if (!Auth::attempt($credentials)){
                 return back();
+            }
             $user = $request->user();
             auth()->login($user, true);
+            // dd($user->registration_step);
+            if ($user->registration_step='active_1') {
+            //    TODO::   return redirect()->route('keldi');
+            }
+
+
+
             return view('frontend.user.seller.dashboard');
             // if($user->email_verified_at == null){
             //     return response()->json(['message' => 'Please verify your account', 'user' => null], 401);
