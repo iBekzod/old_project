@@ -13,8 +13,11 @@ class SellerDeliveryFormController extends Controller
    public function seller_delivery_form_save(Request $request)
    {
             //  dd($request->all());
+            $user=new User;
+            $user->registration_step='active';
            $selection=json_decode($request->seller_document);
-            $user=$selection->user_id;
+            $users=$selection->user_id;
+
             // dd($user);
         //    dd($selection);
           $date=$request->date;
@@ -22,7 +25,9 @@ class SellerDeliveryFormController extends Controller
         //  dd($data);
         // $time=time();
         // $date=date("d/m/Y",$time);
-       return view('frontend.user.seller.seller_delivery')->with('seller',$selection)->with('date',$date)->with('user_id', $user);
+        if($user->save()){
+            return view('frontend.user.seller.seller_delivery')->with('seller',$selection)->with('date',$date)->with('user_id', $users);
+        }
    }
    public function seller_page_form_save(Request $request)
    {
@@ -31,6 +36,8 @@ class SellerDeliveryFormController extends Controller
         'user_id'=>'required'
        ]);
         //  dd($request->all());
+        $user=new User;
+        $user->registration_step='active';
     $user_id=$request->user_id;
     $user = User::findOrFail($user_id);
 //     if( $seller = Seller::findOrFail($user)==false){
@@ -40,7 +47,10 @@ class SellerDeliveryFormController extends Controller
     // $users = $seller->user;
     // dd($users);
     auth()->login($user, true);
-    return view('frontend.user.seller.dashboard');
+    if ($user->save()) {
+        return view('frontend.user.seller.dashboard');
+    }
+
 
     // if( auth()){
     //     return redirect('seller.login.id')->with('seller_id',$user_id);
