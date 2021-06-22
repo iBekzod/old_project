@@ -12,7 +12,6 @@
                                     {{ translate('Login to your account.')}}
                                 </h1>
                             </div>
-
                             <div class="px-4 py-3 py-lg-4">
                                 <div class="">
                                     <form class="form-default" role="form" action="{{ route('seller.login') }}" method="POST">
