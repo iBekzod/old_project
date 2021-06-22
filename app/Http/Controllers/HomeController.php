@@ -111,18 +111,22 @@ class HomeController extends Controller
             $user = $request->user();
 
             // dd($user->registration_step);
-            if ($user->registration_step='active_1') {
-                 return redirect()->route('seller.login');
-            }
+        //     if ($user->registration_step='active_1') {
+        //          return redirect()->route('seller.login');
+        //     }
+        //     if ($user->registration_step='active_2') {
+        //         return redirect()->route('seller.login');
+        //    }
+        //    if ($user->registration_step='active_3') {
+        //     return redirect()->route('seller.login');
+        //    }
+        //    if ($user->registration_step='active_4') {
+        //     return redirect()->route('seller.login');
+        //    }
 
 
             auth()->login($user, true);
-            return view('frontend.user.seller.dashboard');
-            // if($user->email_verified_at == null){
-            //     return response()->json(['message' => 'Please verify your account', 'user' => null], 401);
-            // }
-            // $tokenResult = $user->createToken('Personal Access Token');
-            // return $this->loginSuccess($tokenResult, $user);
+            return view('frontend.user.seller.dashboard')
 
                 // if($user=User::where('email', $request->email)->where('password', bcrypt($request->password))->first()){
                 //    auth()->login($user, true);

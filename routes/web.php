@@ -82,6 +82,7 @@ Route::post('/seller/login', 'HomeController@seller_login')->name('seller.login'
 
 
 Route::post('seller/autoidentification/form','SellerAutoidentificationFormController@seller_autoidentification_form_save')->name('seller.autoidentification');
+// Route::get('seller/autoidentification/form/ridirect','SellerAutoidentificationFormController@seller_autoidentification_form_save')->name('seller.autoidentification.redirect');
 
 Route::post('seller/delivery/form','SellerDeliveryFormController@seller_delivery_form_save')->name('seller.delivery');
 Route::post('seller/gape/form','SellerDeliveryFormController@seller_page_form_save')->name('seller.page');
