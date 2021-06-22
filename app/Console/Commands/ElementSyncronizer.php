@@ -9,7 +9,7 @@ use Cviebrock\EloquentSluggable\Services\SlugService;
 use Exception;
 use Illuminate\Console\Command;
 
-class ProductSyncronizer extends Command
+class ElementSyncronizer extends Command
 {
     /**
      * The name and signature of the console command.
