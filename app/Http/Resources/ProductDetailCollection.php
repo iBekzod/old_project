@@ -165,7 +165,7 @@ class ProductDetailCollection extends ResourceCollection
                             'name'=>$characteristic->getTranslation('name')
                         ];
                     }
-                    if( is_array($items) && count($items)>1 && $number>0){
+                    if( is_array($items) && count($items)==1 && $number>0){
                         $collected_characteristics[]=[
                             'id'=>$attribute->id,
                             'attribute'=>$attribute->getTranslation('name'),
