@@ -34,6 +34,107 @@ use \Cviebrock\EloquentSluggable\Services\SlugService;
 
 class ElementController extends Controller
 {
+    public function elementsIndex(Request $request)
+    {
+        // dd($request->all());
+        $type = 'All';
+        $col_name = null;
+        $query = null;
+        $sort_search = null;
+        $seller_id = null;
+
+        $category_id = 0;
+        $sub_category_id = 0;
+        $sub_sub_category_id = 0;
+        $user_id=Auth::user()->id;
+        $elements = Element::where('published', true)->orWhere(function($query) use ($user_id) {
+            $query->where('user_id', $user_id);
+            $query->where('published', false);
+        });
+
+        if ($request->has('user_id') && $request->user_id != null) {
+            $elements = $elements->where('user_id', $request->user_id);
+            $seller_id = $request->user_id;
+        }
+
+        if ($request->has('type') && $request->type != null) {
+            $var = explode(",", $request->type);
+            $col_name = $var[0];
+            $query = $var[1];
+            $elements = $elements->orderBy($col_name, $query);
+            $sort_type = $request->type;
+        }
+        if ($request->has('search') && $request->search != null) {
+            $elements = $elements->where('name', 'like', '%' . $request->search . '%');
+            $sort_search = $request->search;
+        }
+        if ($request->has('category_id') && $request->category_id != null && $request->category_id != 0) {
+            $category_id = $request->category_id;
+            $sub_category_ids = Category::where('parent_id', $category_id)->pluck('id');
+            $sub_sub_category_ids = Category::whereIn('parent_id', $sub_category_ids)->pluck('id');
+            $elements = $elements->whereIn('category_id', $sub_sub_category_ids);
+            if ($request->has('sub_category_id') && $request->sub_category_id != null && $request->sub_category_id != 0) {
+                $sub_category_id = $request->sub_category_id;
+                $sub_sub_category_ids = Category::whereIn('parent_id', $sub_category_ids)->pluck('id');
+                $elements = $elements->whereIn('category_id', $sub_sub_category_ids);
+                if ($request->has('sub_sub_category_id') && $request->sub_sub_category_id != null && $request->sub_sub_category_id != 0) {
+                    $sub_sub_category_id = $request->sub_sub_category_id;
+                    $elements = $elements->where('category_id', $sub_sub_category_id);
+                }
+            }
+        }
+
+        // if ($request->has('category_id') && $request->category_id != null && $request->category_id != 0) {
+        //     $filter_category_ids=array();
+        //     $category=Category::where('id', $request->category_id)->first();
+        //     $category_id = $request->category_id;
+        //     $sub_category_ids = Category::where('parent_id', $category_id)->pluck('id');
+        //     $filter_category_ids = Category::whereIn('parent_id', $sub_category_ids)->pluck('id');
+        //     if ($request->has('sub_category_id') && $request->sub_category_id != null && $request->sub_category_id != 0
+        //             && $sub_category=$category->childrenCategories->where('id', $request->sub_category_id)->first()) {
+        //         $sub_category_id=$sub_category->id;
+        //         if ($request->has('sub_sub_category_id') && $request->sub_sub_category_id != null && $request->sub_sub_category_id != 0
+        //         && $sub_sub_category=$sub_category->childrenCategories->where('id', $request->sub_sub_category_id)->first()) {
+        //             $sub_sub_category_id=$sub_sub_category->id;
+        //             $filter_category_ids=[];
+        //             $filter_category_ids[]=$request->sub_sub_category_id;
+        //         }else{
+        //             $filter_category_ids=$sub_category->childrenCategories->pluck('id');
+        //         }
+        //     }
+        //     $elements = $elements->whereIn('category_id', $filter_category_ids);
+        // }
+        $elements = $elements->latest()->paginate(15);
+        foreach ($elements as $element) {
+            if (Product::where('element_id', $element->id)->where('user_id', $user_id)->exists()) {
+                $element->cloned = true;
+            } else {
+                $element->cloned = false;
+            }
+        }
+
+        $categories = Category::where('level', 0)->get();
+        $sub_categories = Category::where('parent_id', $category_id)->get();
+        $sub_sub_categories = Category::where('parent_id', $sub_category_id)->get();
+
+        return view(
+            'backend.product.elements.index',
+            compact(
+                'elements',
+                'type',
+                'seller_id',
+                'col_name',
+                'query',
+                'sort_search',
+                'category_id',
+                'sub_category_id',
+                'sub_sub_category_id',
+                'categories',
+                'sub_categories',
+                'sub_sub_categories',
+            )
+        );
+    }
     public function changeOnModerationAccept(Request $request, $id)
     {
         $element = Element::findOrFail($id);
@@ -418,57 +519,6 @@ class ElementController extends Controller
         }
         return response()->json(['success' => false, 'message' => 'server']);
     }
-
-
-    // public function make_choice_options(Request $request)
-    // {
-    //     try {
-    //         if ($request->method() == 'GET') {
-    //             if ($request->has('id')) {
-    //                 $element = Element::where('id', $request->id)->firstOrFail();
-    //             }
-
-    //             $category = Category::findOrFail($request->category_id);
-    //             $element_attributes = $category->attributes->groupBy('branch_id');
-    //             $data = null;
-    //             foreach ($element_attributes as $branch => $attributes) {
-    //                 $data = $data . '<div class="card">
-    //                                     <div class="card-header">
-    //                                         <h5 class="mb-0 h6">' . Branch::where('id', $branch)->first()->getTranslation('name',$request->lang) . '</h5>
-    //                                     </div>
-    //                                     <div class="card-body">';
-    //                 $content = null;
-    //                 foreach ($attributes as $attribute) {
-    //                     $content = $content . '<input type="hidden" name="choice_options[' . $attribute->id . ']" value="' . $attribute->id . '">
-    //                         <div class="form-group row">
-    //                             <label class="col-md-3 col-form-label"  for="signinSrEmail">' . $attribute->getTranslation('name',$request->lang) . '</label>
-    //                             <div class="col-md-8">
-    //                                 <select class="form-control js-example-basic-multiple"  multiple name="choice_options[' . $attribute->id . '][]">';
-
-    //                     $options = null;
-    //                     foreach ($attribute->characteristics as $value) {
-    //                         $options = $options . '<option';
-    //                         if ($request->has('id') && $element->characteristics != null && in_array($value->id, json_decode($element->characteristics, true))) {
-    //                             $options = $options . 'selected';
-    //                         }
-    //                         $options = $options . ' value = "' . $value->id . '" > ' . $value->getTranslation('name',$request->lang) . ' </option >';
-    //                     }
-
-    //                     $content = $content . $options . '</select>
-    //                             </div>
-    //                         </div>';
-    //                 }
-    //                 $data = $data . $content . '</div>
-    //                             </div>';
-    //             }
-    //             return response()->json(['success' => true, 'message' => 'get', 'data' => $data]);
-    //         }
-    //     } catch (\Exception $exception) {
-    //         return response()->json(['success' => false, 'message' => $exception->getMessage()]);
-    //     }
-    //     return response()->json(['success' => false, 'message' => 'server']);
-    // }
-
     public function remove_variation(Request $request)
     {
         if ($variation = Variation::findOrFail($request->id)) {
