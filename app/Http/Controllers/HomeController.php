@@ -71,7 +71,7 @@ class HomeController extends Controller
                     $user->name = $request->name;
                     $user->phone =$request->phone;
                     $user->email = $request->email;
-                    $user->registration_step='active';
+                    $user->registration_step='active_1';
                     $user->user_type = "seller";
                     $user->email_verified_at = now();
                     $user->password = Hash::make($request->password);
@@ -82,39 +82,59 @@ class HomeController extends Controller
                     }
             }
             else if($request->method() === 'GET'){
-               if(Auth::check()){
-                   return redirect()->route('admin');
-               }
-               if($request->has('referral_code')){
-                   Cookie::queue('referral_code', $request->referral_code, 43200);
-               }
-               //   dd("sdufyydsfkkkg");
+            //    if(Auth::check()){
+            //        return redirect()->route('admin');
+            //    }
+
                   return view('frontend.user_registration');
            }
            return back();
         }
 
-
     public function seller_login(Request $request)
     {
 
         if ($request->method() === 'POST') {
+
+
+        //     $user = $request->user();
+        //     $user->registration_step='active';
+        //     $user->save();
+
+        //     if ($user->registration_step=='active') {
+        //         return redirect()->route('user.registration');
+        //        // return 'keldi';
+        //    }
             $request->validate([
                 'email' => 'required|string|email',
                 'password' => 'required|string',
                 'remember_me' => 'boolean'
             ]);
+
+
             $credentials = request(['email', 'password']);
-            if (!Auth::attempt($credentials))
+            if (!Auth::attempt($credentials)){
                 return back();
+            }
+
             $user = $request->user();
+            if ($user->registration_step=='active_1') {
+                 return redirect()->route('user.autoidentification');
+                // return 'keldi';
+            }
+        //     if ($user->registration_step=='active_2') {
+        //         return redirect()->route('user.autoidentification');
+        //    }
+        //    if ($user->registration_step=='active_3') {
+        //     return redirect()->route('seller.login');
+        //    }
+        //    if ($user->registration_step=='active_4') {
+        //     return redirect()->route('seller.login');
+        //    }
+
+
             auth()->login($user, true);
             return view('frontend.user.seller.dashboard');
-            // if($user->email_verified_at == null){
-            //     return response()->json(['message' => 'Please verify your account', 'user' => null], 401);
-            // }
-            // $tokenResult = $user->createToken('Personal Access Token');
-            // return $this->loginSuccess($tokenResult, $user);
 
                 // if($user=User::where('email', $request->email)->where('password', bcrypt($request->password))->first()){
                 //    auth()->login($user, true);
@@ -124,9 +144,9 @@ class HomeController extends Controller
                 //     return 'error';
                 // }
         }else if($request->method() === 'GET'){
-                    if(Auth::check()){
-                        return redirect()->route('home');
-                    }
+                    // if(Auth::check()){
+                    //     return redirect()->route('home');
+                    // }
                     // dd("sadfafguyasdgfd");
                       return view('frontend.user_login');
         }

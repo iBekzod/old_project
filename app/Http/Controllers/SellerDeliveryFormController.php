@@ -14,7 +14,7 @@ class SellerDeliveryFormController extends Controller
    {
             //  dd($request->all());
             $user=new User;
-            $user->registration_step='active';
+            $user->registration_step='active_3';
            $selection=json_decode($request->seller_document);
             $users=$selection->user_id;
 
@@ -37,7 +37,8 @@ class SellerDeliveryFormController extends Controller
        ]);
         //  dd($request->all());
         $user=new User;
-        $user->registration_step='active';
+        $user->registration_step='active_4';
+        // dd($user->registration_step);
     $user_id=$request->user_id;
     $user = User::findOrFail($user_id);
 //     if( $seller = Seller::findOrFail($user)==false){
@@ -50,6 +51,8 @@ class SellerDeliveryFormController extends Controller
     if ($user->save()) {
         return view('frontend.user.seller.dashboard');
     }
+
+
 
 
     // if( auth()){
