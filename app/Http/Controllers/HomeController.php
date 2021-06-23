@@ -82,13 +82,10 @@ class HomeController extends Controller
                     }
             }
             else if($request->method() === 'GET'){
-               if(Auth::check()){
-                   return redirect()->route('admin');
-               }
-               if($request->has('referral_code')){
-                   Cookie::queue('referral_code', $request->referral_code, 43200);
-               }
-               //   dd("sdufyydsfkkkg");
+            //    if(Auth::check()){
+            //        return redirect()->route('admin');
+            //    }
+
                   return view('frontend.user_registration');
            }
            return back();
@@ -111,22 +108,23 @@ class HomeController extends Controller
             $user = $request->user();
 
             // dd($user->registration_step);
-        //     if ($user->registration_step='active_1') {
-        //          return redirect()->route('seller.login');
-        //     }
-        //     if ($user->registration_step='active_2') {
-        //         return redirect()->route('seller.login');
-        //    }
-        //    if ($user->registration_step='active_3') {
-        //     return redirect()->route('seller.login');
-        //    }
-        //    if ($user->registration_step='active_4') {
-        //     return redirect()->route('seller.login');
-        //    }
+            if ($user->registration_step=='active_1') {
+                 return redirect()->route('user.registration');
+                // return 'keldi';
+            }
+            if ($user->registration_step=='active_2') {
+                return redirect()->route('seller.login');
+           }
+           if ($user->registration_step=='active_3') {
+            return redirect()->route('seller.login');
+           }
+           if ($user->registration_step=='active_4') {
+            return redirect()->route('seller.login');
+           }
 
 
             auth()->login($user, true);
-            return view('frontend.user.seller.dashboard')
+            return view('frontend.user.seller.dashboard');
 
                 // if($user=User::where('email', $request->email)->where('password', bcrypt($request->password))->first()){
                 //    auth()->login($user, true);
@@ -136,9 +134,9 @@ class HomeController extends Controller
                 //     return 'error';
                 // }
         }else if($request->method() === 'GET'){
-                    if(Auth::check()){
-                        return redirect()->route('home');
-                    }
+                    // if(Auth::check()){
+                    //     return redirect()->route('home');
+                    // }
                     // dd("sadfafguyasdgfd");
                       return view('frontend.user_login');
         }

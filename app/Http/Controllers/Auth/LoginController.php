@@ -161,7 +161,7 @@ class LoginController extends Controller
             $redirect_route = 'login';
         }
         else{
-            $redirect_route = 'login';
+            $redirect_route = 'user.login';
         }
 
         $this->guard()->logout();
