@@ -46,14 +46,16 @@ class SellerElementController extends Controller
         $category_id = 0;
         $sub_category_id = 0;
         $sub_sub_category_id = 0;
+        $user_id=Auth::user()->id;
+        $elements = Element::where('published', true)->orWhere(function($query) use ($user_id) {
+            $query->where('user_id', $user_id);
+            $query->where('published', false);
+        });
 
-
-
-        $elements = Element::where('parent_id', null)->where('published', true)->where('user_id', '<>', Auth::user()->id);
-        // if ($request->has('user_id') && $request->user_id != null) {
-        //     $elements = $elements->where('user_id', $request->user_id);
-        //     $seller_id = $request->user_id;
-        // }
+        if ($request->has('user_id') && $request->user_id != null) {
+            $elements = $elements->where('user_id', $request->user_id);
+            $seller_id = $request->user_id;
+        }
 
         if ($request->has('category_id') && $request->category_id != null && $request->category_id != 0) {
             $category_id = $request->category_id;
@@ -86,7 +88,7 @@ class SellerElementController extends Controller
         $elements = $elements->latest()->paginate(15);
         foreach ($elements as $element) {
             // dd(Element::where('parent_id', $element->id)->where('user_id', Auth::user()->id)->first());
-            if (Element::where('parent_id', $element->id)->where('user_id', Auth::user()->id)->first()) {
+            if (Element::where('parent_id', $element->id)->where('user_id', $user_id)->first()) {
                 $element->cloned = true;
             } else {
                 $element->cloned = false;

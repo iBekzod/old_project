@@ -73,6 +73,7 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
     Route::get('/elements/make_attribute_variations', 'ElementController@make_attribute_variations')->name('elements.make_attribute_variations');
     Route::get('/elements/make_all_combination', 'ElementController@make_all_combination')->name('elements.make_all_combination');
     Route::get('/element/products', 'ElementController@elementProducts')->name('element.products.edit');
+    Route::get('/element/index', 'ElementController@elementsIndex')->name('elements.index');
     // Route::get('/elements/make_choice_options', 'ElementController@make_choice_options')->name('elements.make_choice_options');
     // Route::post('/elements/make_choice_options', 'ElementController@make_choice_options')->name('elements.make_choice_options');
 	Route::post('/elements/published', 'ElementController@updatePublished')->name('elements.published');
