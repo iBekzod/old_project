@@ -8,6 +8,7 @@ use Auth;
 use App\Seller;
 use App\BusinessSetting;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class SellerAutoidentificationFormController extends Controller
 {
@@ -39,11 +40,12 @@ class SellerAutoidentificationFormController extends Controller
             // TODO::tak seller navicatdatoldirish kere inn validate save and login register pdf to html
 
              $request->validate($validation);
-             $array=$request->all();
             //    dd($array);
+
             $seller=new Seller;
             $user=new User;
             $user->registration_step='active_2';
+            $array=array();
             $data = array();
             $i = 0;
             foreach (json_decode(BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element) {
@@ -52,11 +54,13 @@ class SellerAutoidentificationFormController extends Controller
                     $item['type'] = $element->type;
                     $item['label'] = $element->label;
                     $item['value'] = $request[$element->label];
-                    // dd($request[]);
+                    $array[$element->label]=$request[$element->label];
                 }
                 array_push($data, $item);
                 $i++;
             }
+            // dd($element->type);
+            // dd($array);
             $seller->user_id=$request->user_id;
             $seller->verification_info = json_encode($data);
             //    dd($data);
@@ -70,11 +74,22 @@ class SellerAutoidentificationFormController extends Controller
                     return view('frontend.user.seller.seller_autoidentification')->with('array', $array)->with('seller',$seller,)->with('date',$date);
                 }
             }
-        }
-        // elseif($request->method() === 'GET'){
-        //     return view('frontend.user.seller.seller_autoidentification');
+        }else if($request->method() === 'GET'){
+            // $array=array();
+            // foreach (json_decode(BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element) {
+            //     if ($element->type) {
+            //         $array[$element->label]=$request[$element->label];
+            //     }
+            // }
+            // // $seller->verification_info = json_encode($data);
+            // $time=time();
+            // $date=date("d/m/Y",$time);
+            $user_id=auth()->id();
+            // dd($user_id);
+            // ->with('seller',$seller,)
+             return view('frontend.user.seller.seller_autoidentification')->with('array', $array)->with('date',$date);
 
-        // }
+        }
 
 
 

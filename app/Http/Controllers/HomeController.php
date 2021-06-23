@@ -96,15 +96,6 @@ class HomeController extends Controller
 
         if ($request->method() === 'POST') {
 
-
-        //     $user = $request->user();
-        //     $user->registration_step='active';
-        //     $user->save();
-
-        //     if ($user->registration_step=='active') {
-        //         return redirect()->route('user.registration');
-        //        // return 'keldi';
-        //    }
             $request->validate([
                 'email' => 'required|string|email',
                 'password' => 'required|string',
@@ -118,6 +109,7 @@ class HomeController extends Controller
             }
 
             $user = $request->user();
+            auth()->login($user, true);
             if ($user->registration_step=='active_1') {
                  return redirect()->route('user.autoidentification');
                 // return 'keldi';
@@ -133,7 +125,7 @@ class HomeController extends Controller
         //    }
 
 
-            auth()->login($user, true);
+
             return view('frontend.user.seller.dashboard');
 
                 // if($user=User::where('email', $request->email)->where('password', bcrypt($request->password))->first()){

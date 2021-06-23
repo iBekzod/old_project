@@ -34,7 +34,8 @@
                     <div class="selection" id="selection" >
                         <div class="row">
                             <div class="col-md-12 mt-4 text-center">
-                               <h5> <b>ДОГОВОР  <span class="text-danger">{{$array['user_id']}}</span></b> </h5>
+                                {{-- {{$array['user_id']}} --}}
+                               <h5> <b>ДОГОВОР  <span class="text-danger">{{$seller['user_id']}}</span></b> </h5>
                                {{-- <h1>{{$seller}}</h1> --}}
                                <p>О предоставлении информационных услуг на онлайн торговой платформе "TINFIS"</p>
                             </div>
