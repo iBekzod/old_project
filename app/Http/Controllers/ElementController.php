@@ -83,6 +83,27 @@ class ElementController extends Controller
                 }
             }
         }
+
+        // if ($request->has('category_id') && $request->category_id != null && $request->category_id != 0) {
+        //     $filter_category_ids=array();
+        //     $category=Category::where('id', $request->category_id)->first();
+        //     $category_id = $request->category_id;
+        //     $sub_category_ids = Category::where('parent_id', $category_id)->pluck('id');
+        //     $filter_category_ids = Category::whereIn('parent_id', $sub_category_ids)->pluck('id');
+        //     if ($request->has('sub_category_id') && $request->sub_category_id != null && $request->sub_category_id != 0
+        //             && $sub_category=$category->childrenCategories->where('id', $request->sub_category_id)->first()) {
+        //         $sub_category_id=$sub_category->id;
+        //         if ($request->has('sub_sub_category_id') && $request->sub_sub_category_id != null && $request->sub_sub_category_id != 0
+        //         && $sub_sub_category=$sub_category->childrenCategories->where('id', $request->sub_sub_category_id)->first()) {
+        //             $sub_sub_category_id=$sub_sub_category->id;
+        //             $filter_category_ids=[];
+        //             $filter_category_ids[]=$request->sub_sub_category_id;
+        //         }else{
+        //             $filter_category_ids=$sub_category->childrenCategories->pluck('id');
+        //         }
+        //     }
+        //     $elements = $elements->whereIn('category_id', $filter_category_ids);
+        // }
         $elements = $elements->latest()->paginate(15);
         foreach ($elements as $element) {
             if (Product::where('element_id', $element->id)->where('user_id', $user_id)->exists()) {
