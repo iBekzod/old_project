@@ -91,36 +91,46 @@ class HomeController extends Controller
            return back();
         }
 
-
     public function seller_login(Request $request)
     {
 
         if ($request->method() === 'POST') {
+
+
+        //     $user = $request->user();
+        //     $user->registration_step='active';
+        //     $user->save();
+
+        //     if ($user->registration_step=='active') {
+        //         return redirect()->route('user.registration');
+        //        // return 'keldi';
+        //    }
             $request->validate([
                 'email' => 'required|string|email',
                 'password' => 'required|string',
                 'remember_me' => 'boolean'
             ]);
+
+
             $credentials = request(['email', 'password']);
             if (!Auth::attempt($credentials)){
                 return back();
             }
-            $user = $request->user();
 
-            // dd($user->registration_step);
+            $user = $request->user();
             if ($user->registration_step=='active_1') {
-                 return redirect()->route('user.registration');
+                 return redirect()->route('user.autoidentification');
                 // return 'keldi';
             }
-            if ($user->registration_step=='active_2') {
-                return redirect()->route('seller.login');
-           }
-           if ($user->registration_step=='active_3') {
-            return redirect()->route('seller.login');
-           }
-           if ($user->registration_step=='active_4') {
-            return redirect()->route('seller.login');
-           }
+        //     if ($user->registration_step=='active_2') {
+        //         return redirect()->route('user.autoidentification');
+        //    }
+        //    if ($user->registration_step=='active_3') {
+        //     return redirect()->route('seller.login');
+        //    }
+        //    if ($user->registration_step=='active_4') {
+        //     return redirect()->route('seller.login');
+        //    }
 
 
             auth()->login($user, true);
