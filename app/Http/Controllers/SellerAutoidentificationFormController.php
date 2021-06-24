@@ -74,21 +74,15 @@ class SellerAutoidentificationFormController extends Controller
                     return view('frontend.user.seller.seller_autoidentification')->with('array', $array)->with('seller',$seller,)->with('date',$date);
                 }
             }
-        }else if($request->method() === 'GET'){
-            // $array=array();
-            // foreach (json_decode(BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element) {
-            //     if ($element->type) {
-            //         $array[$element->label]=$request[$element->label];
-            //     }
-            // }
-            // // $seller->verification_info = json_encode($data);
-            // $time=time();
-            // $date=date("d/m/Y",$time);
-            $user_id=auth()->id();
+        }
+        else if($request->method() === 'GET'){
+            $user_id = auth()->id();
+            $user = User::findOrFail($user_id);
             // dd($user_id);
-            // ->with('seller',$seller,)
-             return view('frontend.user.seller.seller_autoidentification')->with('array', $array)->with('date',$date);
-
+            return view('frontend.user.seller.form_second')->with('user_id',$user_id);
+        }
+        else{
+            return back();
         }
 
 

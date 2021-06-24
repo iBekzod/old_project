@@ -1,7 +1,7 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-
+{{-- @dd($user_id); --}}
 	<div class=" offset-sm-1 col-sm-10">
 
 		<div class="card">
@@ -15,7 +15,7 @@
 						<div class=" offset-lg-1 col-lg-11 form-horizontal" id="form">
                             @if ($user_id)
                                 <input type="text" hidden name="user_id" value={{$user_id}}>
-                            @else
+                             @else
                             <h1>user_id not found</h1>
                             @endif
 
