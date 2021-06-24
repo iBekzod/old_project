@@ -29,7 +29,9 @@ class SellerDeliveryFormController extends Controller
             if ($user->save()) {
                 return view('frontend.user.seller.seller_delivery')->with('seller', $selection)->with('date', $date)->with('user_id', $users);
             }
-        } else if ($request->method() === 'POST') {
+        }
+        else if ($request->method() === 'POST') {
+            
         }
     }
     public function seller_page_form_save(Request $request)
@@ -56,7 +58,7 @@ class SellerDeliveryFormController extends Controller
             }
         }
         else if ($request->method() === 'POST') {
-            
+
         }
 
     }

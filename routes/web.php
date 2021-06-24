@@ -86,6 +86,8 @@ Route::get('seller/autoidentification/form','SellerAutoidentificationFormControl
 
 
 Route::post('seller/delivery/form','SellerDeliveryFormController@seller_delivery_form_save')->name('seller.delivery');
+Route::get('seller/delivery/form','SellerDeliveryFormController@seller_delivery_form_save')->name('seller.delivery');
+
 Route::post('seller/gape/form','SellerDeliveryFormController@seller_page_form_save')->name('seller.page');
 
 Route::get('/', 'HomeController@index')->name('home');

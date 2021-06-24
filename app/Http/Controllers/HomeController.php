@@ -110,13 +110,14 @@ class HomeController extends Controller
 
             $user = $request->user();
             auth()->login($user, true);
-            if ($user->registration_step=='active_1') {
-                  return redirect()->route('seller.autoidentification');
-                //  return 'keldi';
-            }
-        //     if ($user->registration_step=='active_2') {
-        //         return redirect()->route('user.autoidentification');
-        //    }
+            // if ($user->registration_step=='active_1') {
+            //       return redirect()->route('seller.autoidentification');
+            //     //  return 'keldi';
+            // }
+            if ($user->registration_step=='active_2') {
+                // return redirect()->route('seller.delivery');
+                return 'keldi';
+           }
         //    if ($user->registration_step=='active_3') {
         //     return redirect()->route('seller.login');
         //    }
