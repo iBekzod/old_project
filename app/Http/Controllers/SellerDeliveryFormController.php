@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Seller;
 use App\Shop;
 use App\User;
+use App\BusinessSetting;
+use PhpParser\Node\Stmt\If_;
 
 class SellerDeliveryFormController extends Controller
 {
@@ -31,11 +33,10 @@ class SellerDeliveryFormController extends Controller
                 return view('frontend.user.seller.seller_delivery')->with('seller', $selection)->with('date', $date)->with('user_id', $users);
             }
         }
-        else if ($request->method() === 'POST') {
+        else if ($request->method() === 'GET') {
             $user_id = auth()->id();
-            // dd(auth());
-              $user = User::findOrFail($user_id);
-              dd($user);
+                 return redirect()->route('seller.autoidentification'); ;
+
         }
     }
     public function seller_page_form_save(Request $request)
@@ -52,10 +53,10 @@ class SellerDeliveryFormController extends Controller
             if ($user->save()) {
                 return view('frontend.user.seller.dashboard');
             }
-        }
-        else if ($request->method() === 'POST') {
+        }  else if ($request->method() === 'GET') {
+            $user_id = auth()->id();
+                 return redirect()->route('seller.autoidentification'); ;
 
         }
-
     }
 }

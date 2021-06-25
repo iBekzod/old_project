@@ -121,8 +121,11 @@ class HomeController extends Controller
             if ($user->registration_step == 'active_3') {
                 return redirect()->route('seller.page');
             }
-            
-            return view('frontend.user.seller.dashboard');
+            else{
+                return view('frontend.user.seller.dashboard');
+            }
+
+
 
             // if($user=User::where('email', $request->email)->where('password', bcrypt($request->password))->first()){
             //    auth()->login($user, true);

@@ -69,7 +69,7 @@ class SellerAutoidentificationFormController extends Controller
             // dd($array);
             $seller->user_id=$user_id;
             $seller->verification_info = json_encode($data);
-            //    dd($data);
+            //    dd(json_encode($data));
             // $seller->save();
             //    dd($seller);
              $time=time();
