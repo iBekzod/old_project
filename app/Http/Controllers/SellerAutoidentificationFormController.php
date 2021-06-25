@@ -41,9 +41,15 @@ class SellerAutoidentificationFormController extends Controller
 
              $request->validate($validation);
             //    dd($array);
-
-            $seller=new Seller;
-            $user=new User;
+            $user_id = auth()->id();
+            //  dd($user_id);
+            $user = User::findOrFail($user_id);
+            if(Seller::where('user_id', $user_id)->exists()){
+                $seller=Seller::where('user_id', $user_id)->first();
+            }else{
+                $seller=new Seller;
+            }
+            //  dd($user);
             $user->registration_step='active_2';
             $array=array();
             $data = array();
@@ -61,7 +67,7 @@ class SellerAutoidentificationFormController extends Controller
             }
             // dd($element->type);
             // dd($array);
-            $seller->user_id=$request->user_id;
+            $seller->user_id=$user_id;
             $seller->verification_info = json_encode($data);
             //    dd($data);
             // $seller->save();
@@ -69,6 +75,10 @@ class SellerAutoidentificationFormController extends Controller
              $time=time();
              $date=date("d/m/Y",$time);
             //   dd($date);
+            // $user->save();
+            //  $seller->save();
+            // dd($seller);
+            // dd($user);
             if($user->save()){
                 if($seller->save()){
                     return view('frontend.user.seller.seller_autoidentification')->with('array', $array)->with('seller',$seller,)->with('date',$date);
@@ -76,7 +86,7 @@ class SellerAutoidentificationFormController extends Controller
             }
         }
         else if($request->method() === 'GET'){
-            $user_id = auth()->id();
+             $user_id = auth()->id();
             // dd(auth());
             //  $user = User::findOrFail($user_id);
             //  dd($user);

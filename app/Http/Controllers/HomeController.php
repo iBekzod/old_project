@@ -77,6 +77,7 @@ class HomeController extends Controller
                     $user->password = Hash::make($request->password);
                     // $user->save();
                     if($user->save()){
+                        auth()->login($user, true);
                         return view('frontend.user.seller.form_second')->with('user_id',$user->id);
                         // return 'keldi';
                     }
