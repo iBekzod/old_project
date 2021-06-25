@@ -13,11 +13,11 @@
 					@csrf
 					<div class="row">
 						<div class=" offset-lg-1 col-lg-11 form-horizontal" id="form">
-                            @if ($user_id)
+                            {{-- @if ($user_id)
                                 <input type="text" hidden name="user_id" value={{$user_id}}>
                              @else
                             <h1>user_id not found</h1>
-                            @endif
+                            @endif --}}
 
 							@foreach (json_decode(\App\BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element)
                                 {{-- @if($element->type=='select')

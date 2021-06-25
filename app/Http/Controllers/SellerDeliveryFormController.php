@@ -14,7 +14,8 @@ class SellerDeliveryFormController extends Controller
     {
         if ($request->method() === 'POST') {
             //  dd($request->all());
-            $user = new User;
+            $user_id = auth()->id();
+            $user = User::findOrFail($user_id);
             $user->registration_step = 'active_3';
             $selection = json_decode($request->seller_document);
             $users = $selection->user_id;
@@ -31,7 +32,10 @@ class SellerDeliveryFormController extends Controller
             }
         }
         else if ($request->method() === 'POST') {
-            
+            $user_id = auth()->id();
+            // dd(auth());
+              $user = User::findOrFail($user_id);
+              dd($user);
         }
     }
     public function seller_page_form_save(Request $request)
@@ -41,17 +45,9 @@ class SellerDeliveryFormController extends Controller
                 'user_id' => 'required'
             ]);
             //  dd($request->all());
-            $user = new User;
-            $user->registration_step = 'active_4';
-            // dd($user->registration_step);
             $user_id = $request->user_id;
             $user = User::findOrFail($user_id);
-            //     if( $seller = Seller::findOrFail($user)==false){
-            //   return 'error';
-            //     }
-            // $seller = Seller::findOrFail(decrypt($user));
-            // $users = $seller->user;
-            // dd($users);
+            $user->registration_step = 'active_4';
             auth()->login($user, true);
             if ($user->save()) {
                 return view('frontend.user.seller.dashboard');
