@@ -268,33 +268,33 @@ if (!function_exists('getPublishedProducts')) {
         if ($type == 'variation') {
             return $products;
         }
-        $element_id_list=removeDuplicatesFromElement($products->groupBy('element_id')->pluck('element_id')->toArray());
-        $element_ids = [];
-        $elements = $products->get()->groupBy('element_id');
-        foreach ($elements as $element_id => $models) {
-            if(in_array($element_id, $element_id_list)){
-                $element_ids[] = Product::where('element_id', $element_id)->inRandomOrder()->first()->id;
-            }
-        }
-        $products = $products->whereIn('id', $element_ids);
+        // $element_id_list=removeDuplicatesFromElement($products->groupBy('element_id')->pluck('element_id')->toArray());
+        // $element_ids = [];
+        // $elements = $products->get()->groupBy('element_id');
+        // foreach ($elements as $element_id => $models) {
+        //     if(in_array($element_id, $element_id_list)){
+        //         $element_ids[] = Product::where('element_id', $element_id)->inRandomOrder()->first()->id;
+        //     }
+        // }
+        // $products = $products->whereIn('id', $element_ids);
         if ($type == 'element') {
             return $products;
         }
         return $products;
     }
 }
-if (!function_exists('filterProductByRelation')) {
-    function removeDuplicatesFromElement($element_ids){
-        $element_id_list=[];
-        if(is_array($element_ids)){
-            $elements = Element::whereIn('id', $element_ids)->get()->groupBy('name');
-            foreach($elements as $name=>$element){
-                $element_id_list[]=$element[rand(0, count($element)-1)]->id;
-            }
-        }
-        return $element_id_list;
-    }
-}
+// if (!function_exists('filterProductByRelation')) {
+//     function removeDuplicatesFromElement($element_ids){
+//         $element_id_list=[];
+//         if(is_array($element_ids)){
+//             $elements = Element::whereIn('id', $element_ids)->get()->groupBy('name');
+//             foreach($elements as $name=>$element){
+//                 $element_id_list[]=$element[rand(0, count($element)-1)]->id;
+//             }
+//         }
+//         return $element_id_list;
+//     }
+// }
 if (!function_exists('filterProductByRelation')) {
     function filterProductByRelation($products, $relation_name, $conditions)
     {

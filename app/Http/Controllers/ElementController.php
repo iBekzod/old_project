@@ -51,7 +51,6 @@ class ElementController extends Controller
             $query->where('user_id', $user_id);
             $query->where('published', false);
         });
-
         if ($request->has('user_id') && $request->user_id != null) {
             $elements = $elements->where('user_id', $request->user_id);
             $seller_id = $request->user_id;
@@ -104,6 +103,7 @@ class ElementController extends Controller
         //     }
         //     $elements = $elements->whereIn('category_id', $filter_category_ids);
         // }
+        $elements = $elements->where('category_id', 2114);
         $elements = $elements->latest()->paginate(15);
         foreach ($elements as $element) {
             if (Product::where('element_id', $element->id)->where('user_id', $user_id)->exists()) {

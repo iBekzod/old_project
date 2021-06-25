@@ -107,4 +107,9 @@ class Variation extends Model
        return $result; // do not ignore it eloquent calculates this value and returns this, not just to ignore
 
     }
+
+    public function user()
+     {
+         return $this->belongsTo(User::class);
+     }
 }
