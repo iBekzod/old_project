@@ -47,10 +47,11 @@ class ElementController extends Controller
         $sub_category_id = 0;
         $sub_sub_category_id = 0;
         $user_id=Auth::user()->id;
-        $elements = Element::where('published', true)->orWhere(function($query) use ($user_id) {
-            $query->where('user_id', $user_id);
-            $query->where('published', false);
-        });
+        $elements = Element::where('published', true);
+        // ->orWhere(function($query) use ($user_id) {
+        //     dd($query);
+        //     $query->where('user_id', $user_id)->where('published', false);
+        // });
         if ($request->has('user_id') && $request->user_id != null) {
             $elements = $elements->where('user_id', $request->user_id);
             $seller_id = $request->user_id;
@@ -646,7 +647,7 @@ class ElementController extends Controller
     {
         // dd($request);
         $element = new Element;
-        $element->added_by = $request->added_by;
+        $element->added_by = Auth::user()->user_type;
         $element->category_id = $request->category_id;
         $element->brand_id = $request->brand_id;
         $element->barcode = $request->barcode;
@@ -742,7 +743,7 @@ class ElementController extends Controller
         if ($element->save()) {
             if ($request->has('combination')) {
                 foreach ($request->combination as $variant) {
-                    if (Variation::where('name', $variant['name'])->where('element_id', $element->id)->where('user_id', Auth::user()->id)->first()) {
+                    if (Variation::where('characteristics', $variant['attribute_id'])->where('element_id', $element->id)->where('color_id', $variant['color_id'])->exists()) {
                         continue;
                     }
                     $variation = new Variation;
@@ -915,7 +916,7 @@ class ElementController extends Controller
         if ($element->save()) {
             if ($request->has('combination')) {
                 foreach ($request->combination as $variant) {
-                    if(array_key_exists('variation_id',$variant) && $variation = Variation::findOrFail($variant['variation_id'])){
+                    if((array_key_exists('variation_id',$variant) && $variation = Variation::findOrFail($variant['variation_id'])) || ($variation=Variation::where('characteristics', $variant['attribute_id'])->where('element_id', $element->id)->where('color_id', $variant['color_id'])->first() && $variation->user_id==auth()->id())){
                         $variation->name = $variant['name'];
                         $variation->thumbnail_img = $variant['thumbnail_img'];
                         if ($variant['name'] != null) {

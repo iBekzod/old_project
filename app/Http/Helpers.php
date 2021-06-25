@@ -269,14 +269,12 @@ if (!function_exists('getPublishedProducts')) {
             return $products;
         }
         // $element_id_list=removeDuplicatesFromElement($products->groupBy('element_id')->pluck('element_id')->toArray());
-        // $element_ids = [];
-        // $elements = $products->get()->groupBy('element_id');
-        // foreach ($elements as $element_id => $models) {
-        //     if(in_array($element_id, $element_id_list)){
-        //         $element_ids[] = Product::where('element_id', $element_id)->inRandomOrder()->first()->id;
-        //     }
-        // }
-        // $products = $products->whereIn('id', $element_ids);
+        $element_ids = [];
+        $elements = $products->get()->groupBy('element_id');
+        foreach ($elements as $element_id => $models) {
+            $element_ids[] = Product::where('element_id', $element_id)->inRandomOrder()->first()->id;
+        }
+        $products = $products->whereIn('id', $element_ids);
         if ($type == 'element') {
             return $products;
         }
