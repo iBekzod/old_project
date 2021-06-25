@@ -43,10 +43,27 @@ class ElementSyncronizer extends Command
     public function handle()
     {
         $elements=Element::withTrashed()->get();
+        //syncronize slugs
+        // foreach($elements as $element){
+        //     $this->info($element->name);
+        //     $element->slug=SlugService::createSlug(Element::class, 'slug', ($element->name));
+        //     $element->save();
+        // }
+
+        //syncronize parent child
         foreach($elements as $element){
-            $this->info($element->name);
-            $element->slug=SlugService::createSlug(Element::class, 'slug', ($element->name));
-            $element->save();
+            if($element->parent_id != null){
+                $products=Product::where('element_id', $element->id)->get();
+                foreach($products as $product){
+                    $product->forceDelete();
+                }
+                $variations=Variation::where('element_id', $element->id)->get();
+                foreach($variations as $variation){
+                    $variation->forceDelete();
+                }
+                $element->forceDelete();
+            }
+
         }
 
         $this->info('Successfully changed');

@@ -67,7 +67,7 @@ class VariationSycronizer extends Command
         */
 
         //Change variation name by element and characteristics
-
+        /*
         $variations=Variation::withTrashed()->get();
         foreach($variations as $variation){
             try{
@@ -85,6 +85,22 @@ class VariationSycronizer extends Command
                 $variation->name=$variation_name;
                 $variation->slug = SlugService::createSlug(Variation::class, 'slug', ($variation_name));
                 $variation->save();
+            }catch(Exception $e){
+                $this->info($e->getMessage());
+            }
+        }
+        */
+
+        //Remove variation duplicates
+        $unique_data=Variation::groupBy(['color_id', 'element_id', 'characteristics'])->pluck('id');
+        $variations=Variation::whereNotIn('id',$unique_data)->withTrashed()->get();
+        foreach($variations as $variation){
+            try{
+                $products=Product::where('variation_id', $variation->id)->get();
+                foreach($products as $product){
+                    $product->forceDelete();
+                }
+                $variation->forceDelete();
             }catch(Exception $e){
                 $this->info($e->getMessage());
             }
