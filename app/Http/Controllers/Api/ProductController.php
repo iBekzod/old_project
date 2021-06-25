@@ -248,7 +248,7 @@ class ProductController extends Controller
 
     public function todaysDeal()
     {
-        return new ProductCollection(getPublishedProducts('element', ['where' => [['todays_deal', 1]]], [], ['random'])->paginate(10));
+        return new ProductCollection(getPublishedProducts('element', ['where' => [['todays_deal', 1]]], [], [])->paginate(10));
     }
 
     public function flashDeal()
@@ -318,7 +318,7 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         if ($element = Element::findOrFail($product->element_id)) {
-            return new ProductCollection(getPublishedProducts('variation', [], [], ['where' => [['category_id', $element->category_id]], 'random'])->paginate(10));
+            return new ProductCollection(getPublishedProducts('variation', ['where' => [['id','<>', $product->id]]], [], ['where' => [['category_id', $element->category_id]], 'random'])->paginate(10));
         }
         return response()->json([
             'message' => translate('Такого продукта не существует.')
@@ -469,7 +469,7 @@ class ProductController extends Controller
         $brand = Brand::where('slug', $name)->first();
         $element_conditions['where'][] = ['brand_id', $brand->id];
         $product_conditions['orderBy'][] = ['num_of_sale' => 'desc'];
-        $products = getPublishedProducts('product', $product_conditions, [], $element_conditions)->paginate(12);
+        $products = getPublishedProducts('element', $product_conditions, [], $element_conditions)->paginate(12);
         $min_price = ($products->count() > 0) ? homeDiscountedBasePrice($products[0]->id) : 0;
         $max_price = ($products->count() > 0) ? homeDiscountedBasePrice($products[0]->id) : 0;
         foreach ($products as $product) {

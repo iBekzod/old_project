@@ -17,7 +17,7 @@
             <thead>
                 <tr>
                     <td class="text-center">
-                        <label for="" class="control-label">{{ translate('Slug') }}</label>
+                        <label for="" class="control-label">{{ translate('Name') }}</label>
                     </td>
                     <td class="text-center">
                         <label for="" class="control-label">{{ translate('SKU') }}</label>

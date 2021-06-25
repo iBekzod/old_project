@@ -255,12 +255,12 @@ class ProductController extends Controller
                 if ($variation = Variation::findOrFail($variant["id"])) {
                     $product = new Product;
                     $product->element_id=$element->id;
-                    // if(Auth::user()->user_type == 'seller' && $shop_name=Auth::user()->shop->name){
-                    //     $product_name = $variation->name . " by " . (Auth::user()->shop->name)??null;
-                    // }else{
-                    $product_name = $variation->name;
-                    // }
-                    // $product_name = $variation->name . " " . Auth::user()->name??null . " ".$variant["price"];
+                    if(Auth::user()->user_type == 'seller' && $shop_name=Auth::user()->shop->name){
+                        $product_name = $variation->name . " от " . (Auth::user()->shop->name)??null;
+                    }else{
+                        $product_name = $variation->name;
+                    }
+                    $product_name = $variation->name . " " . Auth::user()->name??null . " ".$variant["price"];
                     $product->name = $product_name;
                     $product->added_by = Auth::user()->user_type;
                     $product->user_id = $user_id;

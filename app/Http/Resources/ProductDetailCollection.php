@@ -25,7 +25,7 @@ class ProductDetailCollection extends ResourceCollection
         try{
             $data = [
                 'id' => (integer) $product->id,
-                'name' => $product->getTranslation('name'),
+                'name' => $variation->getTranslation('name'),
                 'added_by' => $product->added_by,
                 'variant' => $this->makeVariation($product)??[],
                 'variations' => $this->makeVariations($product)??[],
@@ -270,12 +270,10 @@ class ProductDetailCollection extends ResourceCollection
             ];
         }
         return $sellers;
-
     }
 
 
     protected function calculateShippingCost($product){
-
         return 0;
     }
 }

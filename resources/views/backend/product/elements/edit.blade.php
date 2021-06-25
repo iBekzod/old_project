@@ -243,7 +243,8 @@
                         <button type="button" class="mb-3 btn btn-info" onclick="update_attribute_combination()">{{ translate('Generate variations') }}</button>
                     </div>
                     <div id="variation_div">
-                        <div style="overflow-y: scroll; ">
+                        @include('backend.product.elements.variation_combination', ['combinations'=>$element->combinations])
+                        {{-- <div style="overflow-y: scroll; ">
                             <table class="table table-bordered" >
                                 <thead>
                                 <tr>
@@ -322,7 +323,7 @@
                                 @endforeach
                             </tbody>
                             </table>
-                        </div>
+                        </div> --}}
 
                     </div>
                     <input type="hidden" name="collected_variations[]" id="collected_variations" >
