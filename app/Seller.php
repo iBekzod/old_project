@@ -23,6 +23,7 @@ class Seller extends Model
 
     public function getVerificationInfoAttribute($value)
     {
-        return json_decode($value);
+        return json_decode($value,true);
+    
     }
 }
