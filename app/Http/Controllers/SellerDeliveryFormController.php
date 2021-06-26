@@ -18,14 +18,18 @@ class SellerDeliveryFormController extends Controller
             //  dd($request->all());
             $user_id = auth()->id();
             $user = User::findOrFail($user_id);
+            $selection=array();
+            if(Seller::where('user_id', $user_id)->exists()){
+                $seller=Seller::where('user_id', $user_id)->first();
+
+                foreach (($seller->verification_info) as  $element) {
+                    $selection[$element['label']]=$element['value'];
+                }
+            }
+            // dd($selection);
             $user->registration_step = 'active_3';
-            $selection = json_decode($request->seller_document);
-             $date=$selection->created_at;
-
-            // dd($user);
-            //    dd($selection);
-
-
+            // $seller=Seller::findOrFail($user_id);
+             $date=$seller->created_at;
             if ($user->save()) {
                 // return 'ketti';
                 return view('frontend.user.seller.seller_delivery')->with('seller', $selection)->with('user_id', $user_id)->with('date', $date);
@@ -64,8 +68,23 @@ class SellerDeliveryFormController extends Controller
                 return view('frontend.user.seller.dashboard');
             }
         }  else if ($request->method() === 'GET') {
-            $user_id = auth()->id();
-                 return redirect()->route('seller.autoidentification'); ;
+
+
+                 $user_id = auth()->id();
+                 $user = User::findOrFail($user_id);
+                //  $selection=array();
+                 if(Seller::where('user_id', $user_id)->exists()){
+                     $seller=Seller::where('user_id', $user_id)->first();
+                     foreach (($seller->verification_info) as  $element) {
+                         $selection[$element['label']]=$element['value'];
+                     }
+                    dd($selection);
+                      dd($selection);
+                    $date=$seller->created_at;
+                    // dd($date);
+                     return view('frontend.user.seller.seller_delivery')->with('seller', $selection)->with('user_id', $user_id)->with('date',$date);
+
+                  }
 
         }
     }
