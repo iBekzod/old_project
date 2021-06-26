@@ -29,7 +29,7 @@
 					@csrf
                     {{-- <input type="text"  name="seller_document[]" hidden value="{!!$array!!}"> --}}
                     <input type="text" name="seller_document" hidden value="{{$seller}}">
-                    <input type="text" name="date" hidden  value="{{$date}}">
+                    {{-- <input type="text" name="date" hidden  value="{{$date}}"> --}}
                     {{-- TODO::html codni inpudga tiqib bazaga saxranit qilish kere va danlilarni ham jonatish kere --}}
                     <div class="selection" id="selection" >
                         <div class="row">
@@ -47,7 +47,7 @@
                             </div>
                             <div class=" offset-md-6 col-md-4">
                                  <div class="right">
-                                   <p>{{$date}} года.</p>
+                                   <p>{{$seller['created_at']}} года.</p>
                                  </div>
                             </div>
                         </div>

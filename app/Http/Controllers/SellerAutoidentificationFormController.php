@@ -72,8 +72,7 @@ class SellerAutoidentificationFormController extends Controller
             //    dd(json_encode($data));
             // $seller->save();
             //    dd($seller);
-             $time=time();
-             $date=date("d/m/Y",$time);
+
             //   dd($date);
             // $user->save();
             //  $seller->save();
@@ -81,15 +80,16 @@ class SellerAutoidentificationFormController extends Controller
             // dd($user);
             if($user->save()){
                 if($seller->save()){
-                    return view('frontend.user.seller.seller_autoidentification')->with('array', $array)->with('seller',$seller,)->with('date',$date);
+                    return view('frontend.user.seller.seller_autoidentification')->with('array', $array)->with('seller',$seller);
                 }
             }
         }
         else if($request->method() === 'GET'){
              $user_id = auth()->id();
-            // dd(auth());
-            //  $user = User::findOrFail($user_id);
-            //  dd($user);
+             $user = User::findOrFail($user_id);
+             if(Seller::where('user_id', $user_id)->exists()){
+                 $seller=Seller::where('user_id', $user_id)->first();
+             }
             return view('frontend.user.seller.form_second')->with('user_id',$user_id);
         }
         else{

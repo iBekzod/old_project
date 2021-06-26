@@ -13,25 +13,8 @@
 					@csrf
 					<div class="row">
 						<div class=" offset-lg-1 col-lg-11 form-horizontal" id="form">
-                            {{-- @if ($user_id)
-                                <input type="text" hidden name="user_id" value={{$user_id}}>
-                             @else
-                            <h1>user_id not found</h1>
-                            @endif --}}
 
 							@foreach (json_decode(\App\BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element)
-                                {{-- @if($element->type=='select')
-                                <div class="form-group row" id="category">
-                                    <label class="col-lg-3 col-from-label">{{translate('Category')}}</label>
-                                    <div class="col-lg-8">
-                                        <select class="form-control aiz-selectpicker" name="{{$element->label}}"
-                                                data-selected="" data-live-search="true" required>
-                                            @foreach (json_decode($element->options, true) as $option)
-                                                <option value="{{ $option }}">{{ $option }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div> --}}
 
                                 @if($element->type=='text')
                                 <div class="form-group row" id="category">
