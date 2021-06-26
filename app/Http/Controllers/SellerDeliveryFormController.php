@@ -19,15 +19,16 @@ class SellerDeliveryFormController extends Controller
             $user_id = auth()->id();
             $user = User::findOrFail($user_id);
             $user->registration_step = 'active_3';
-            $seller=Seller::findOrFail($user_id);
-            dd($request->all());
+            $selection = json_decode($request->seller_document);
+             $date=$selection->created_at;
 
             // dd($user);
             //    dd($selection);
 
 
             if ($user->save()) {
-                return view('frontend.user.seller.seller_delivery')->with('user_id', $user_id);
+                // return 'ketti';
+                return view('frontend.user.seller.seller_delivery')->with('seller', $selection)->with('user_id', $user_id)->with('date', $date);
             }
         }
         else if ($request->method() === 'GET') {
@@ -46,19 +47,17 @@ class SellerDeliveryFormController extends Controller
 
                 return view('frontend.user.seller.seller_autoidentification')->with('array', $array)->with('seller',$seller);
 
-            }else{
-                return redirect()->route('seller.autoidentification');
-            }
-        }
+             }
+            //  else{
+            //     return redirect()->route('seller.autoidentification');
+            // }
+        };
     }
     public function seller_page_form_save(Request $request)
     {
         if ($request->method() === 'POST') {
-            $request->validate([
-                'user_id' => 'required'
-            ]);
-            //  dd($request->all());
-            $user_id = $request->user_id;
+
+            $user_id = auth()->id();
             $user = User::findOrFail($user_id);
             $user->registration_step = 'active_4';
             if ($user->save()) {

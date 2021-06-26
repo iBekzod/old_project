@@ -28,8 +28,8 @@
                 <form action="{{route('seller.delivery')}}" method="post">
 					@csrf
                     {{-- <input type="text"  name="seller_document[]" hidden value="{!!$array!!}"> --}}
-                    {{-- <input type="text" name="seller_document" hidden value="{{$seller}}">
-                    <input type="text" name="date" hidden  value="{{$date}}"> --}}
+                    <input type="text" name="seller_document" hidden value="{{$seller}}">
+                    {{-- <input type="text" name="date" hidden  value="{{$date}}"> --}}
                     {{-- TODO::html codni inpudga tiqib bazaga saxranit qilish kere va danlilarni ham jonatish kere --}}
                     <div class="selection" id="selection" >
                         <div class="row">
