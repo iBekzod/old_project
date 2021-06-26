@@ -162,7 +162,7 @@
                                                 </label>
                                             </td> --}}
                                             <td class="text-right">
-                                                <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
+                                                <a  @if(auth()->id()!=$element->user_id) hidden @endif class="btn btn-soft-primary btn-icon btn-circle btn-sm"
                                                        href="{{route('seller.elements.edit', ['id'=>$element->id, 'lang'=>env('DEFAULT_LANGUAGE')] )}}"
                                                        title="{{ translate('Edit') }}">
                                                         <i class="las la-edit"></i>
