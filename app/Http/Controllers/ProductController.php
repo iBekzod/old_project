@@ -17,6 +17,7 @@ use DB;
 use Illuminate\Support\Str;
 use Artisan;
 use App\Product_Warehouse;
+use App\User;
 use App\Warehouse;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
 use Exception;
@@ -256,11 +257,11 @@ class ProductController extends Controller
                     $product = new Product;
                     $product->element_id=$element->id;
                     if(Auth::user()->user_type == 'seller' && $shop_name=Auth::user()->shop->name){
-                        $product_name = $variation->name . " от " . (Auth::user()->shop->name)??null;
+                        $product_name = $variation->name . " от " . $shop_name??Auth::user()->name;
                     }else{
-                        $product_name = $variation->name;
+                        $product_name = $variation->name. " от " . Auth::user()->name;
                     }
-                    $product_name = $variation->name . " " . Auth::user()->name??null . " ".$variant["price"];
+                    // $product_name = $variation->name . " " . Auth::user()->name??null . " ".$variant["price"];
                     $product->name = $product_name;
                     $product->added_by = Auth::user()->user_type;
                     $product->user_id = $user_id;
@@ -388,28 +389,22 @@ class ProductController extends Controller
         if (Auth::user()->user_type == 'seller') {
             $user_id = Auth::user()->id;
         } else {
-            $user_id = \App\User::where('user_type', 'admin')->first()->id;
+            $user_id = User::where('user_type', 'admin')->first()->id;
         }
+        $user=User::findOrFail($user_id);
         $element = Element::findOrFail($request->id);
-
         if ($request->has('variation')) {
             foreach ($request->variation as $variant) {
-                // dd($request);
-                if ($product=Product::findOrFail($variant["id"])){
-                    //  $product->variation;
-                     $variation = Variation::findOrFail($variant["variation_id"]);
-                    // dd($variation);
-                    // $product_name = $variation->name . " " . Auth::user()->name??null . " ".$variant["price"];
-                    // dd($product);
-                    // $product_name = $variation->name . " ".$variant["price"];
-                    // if($shop_name=Auth::user()->shop->name){
-                    //     $product_name = $variation->name . " by " . (Auth::user()->shop->name)??null;
-                    // }else{
-                    //     $product_name = $variation->name;
-                    // }
-                    $product_name = $variation->name;
+                // dd($variant["id"]);
+                if ($product=Product::where('id',(int)$variant["id"])->first()){
+                    $variation = Variation::where('id',(int)$variant["variation_id"])->first();
+                    if($user->user_type == 'seller' && $shop_name=$user->shop->name){
+                        $product_name = $variation->name . " от " . $shop_name??$user->name;
+                    }else{
+                        $product_name = $variation->name. " от " . $user->name;
+                    }
                     $product->name = $product_name;
-                    $product->added_by = Auth::user()->user_type;
+                    $product->added_by = $user->user_type;
                     $product->user_id = $user_id;
                     if ($product->slug != SlugService::createSlug(Product::class, 'slug', slugify($variant["slug"])))
                         $product->slug = SlugService::createSlug(Product::class, 'slug', slugify($variant["slug"]));
@@ -437,30 +432,51 @@ class ProductController extends Controller
                     $product->qty = (int)$variant["quantity"];
                     $product->tax = (float)$variant["tax"];
                     $product->tax_type = $variant["tax_type"];
-                    // $product->barcode = rand(10000, 999999);
                     $product->variation_id = $variation->id;
                     $product->element_id=$element->id;
                     $product->save();
-                    // try{
-                    //     if ($product->save()) {
-                    //         $products = Product::where('variation_id', $variation->id);
-                    //         if(count($products->get())>0){
-                    //             $min_price=$products->min("price");
-                    //             $lowest_price_list=$products->where('price', $min_price)->pluck('id');
-                    //             $lowest_price_id=$lowest_price_list[rand(0, count($lowest_price_list)-1)];
-                    //             $variation->lowest_price_id=$lowest_price_id;
-                    //             $variation->qty=$products->sum('qty');
-                    //             $variation->num_of_sale=$products->sum('num_of_sale');
-                    //             $variation->prices=$products->pluck('price');
-                    //             $variation->rating=(double)$products->sum('rating')/$products->count();
-                    //             $variation->save();
-                    //         }
-
-                    //     }
-                    // }catch(Exception $e){
-                    //     // dd($e->getMessage());
-                    // }
-
+                }else if((int)$variant["quantity"]>0){
+                    $product = new Product;
+                    $product->element_id=$element->id;
+                    $variation = Variation::where('id',(int)$variant["variation_id"])->first();
+                    if($user->user_type == 'seller' && $shop_name=$user->shop->name){
+                        $product_name = $variation->name . " от " . $shop_name??$user->name;
+                    }else{
+                        $product_name = $variation->name. " от " . $user->name;
+                    }
+                    $product->name = $product_name;
+                    $product->added_by = $user->user_type;
+                    $product->user_id = $user_id;
+                    $product->slug = SlugService::createSlug(Product::class, 'slug', $product_name);
+                    $product->currency_id = (int)$variant["currency"];
+                    $product->price = (float)$variant["price"];
+                    $product->discount = (float)$variant["discount"];
+                    $product->discount_type = $variant["discount_type"];
+                    if (array_key_exists('todays_deal', $variant)) {
+                        ($variant["todays_deal"] == "on") ? $product->todays_deal = true : $product->todays_deal = false;
+                    } else {
+                        $product->todays_deal = false;
+                    }
+                    if (array_key_exists('published', $variant)) {
+                        ($variant["published"] == "on") ? $product->published = true : $product->published = false;
+                    } else {
+                        $product->published = false;
+                    }
+                    if (array_key_exists('featured', $variant)) {
+                        ($variant["featured"] == "on") ? $product->featured = true : $product->featured = false;
+                    } else {
+                        $product->featured = false;
+                    }
+                    $product->delivery_type = $variant["delivery_type"];
+                    $product->sku = $variant["sku"];
+                    $product->qty = (int)$variant["quantity"];
+                    $product->tax = (float)$variant["tax"];
+                    $product->tax_type = $variant["tax_type"];
+                    $product->rating = 0;
+                    $product->earn_point = 0;
+                    $product->num_of_sale = 0;
+                    $product->variation_id = $variation->id;
+                    $product->save();
                 }
             }
         }

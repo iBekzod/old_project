@@ -1062,27 +1062,51 @@ class ElementController extends Controller
     //     return back();
     // }
 
+    // public function elementProducts(Request $request)
+    // {
+    //     try {
+    //         $element = Element::findOrFail($request->id);
+    //         $combinations = Variation::where('element_id', $request->id);
+    //         $variation_ids = $combinations->pluck('id');
+    //         // dd($variation_ids);
+    //         if (count($variation_ids) > 0) {
+    //             $lang = default_language();
+    //             $currencies = Currency::where('status', true)->get();
+    //             if (Product::where('user_id', $element->user_id)->whereIn('variation_id', $variation_ids)->exists()) {
+    //                 $products = Product::where('user_id', auth()->id())->whereIn('variation_id', $variation_ids)->get();
+    //                 return view('backend.product.products.edit_product', compact('element', 'products', 'currencies', 'lang'));
+    //             }
+    //             $combinations = $combinations->get();
+    //             return view('backend.product.products.create_product', compact('element', 'combinations', 'currencies', 'lang'));
+    //         }
+    //     } catch (\Exception $e) {
+    //         dd($e->getMessage());
+    //     }
+
+    //     return back();
+    // }
+
     public function elementProducts(Request $request)
     {
         try {
             $element = Element::findOrFail($request->id);
-            $combinations = Variation::where('element_id', $request->id);
-            $variation_ids = $combinations->pluck('id');
-            // dd($variation_ids);
-            if (count($variation_ids) > 0) {
-                $lang = default_language();
-                $currencies = Currency::where('status', true)->get();
-                if (Product::where('user_id', $element->user_id)->whereIn('variation_id', $variation_ids)->exists()) {
-                    $products = Product::where('user_id', auth()->id())->whereIn('variation_id', $variation_ids)->get();
-                    return view('backend.product.products.edit_product', compact('element', 'products', 'currencies', 'lang'));
+            $combinations = Variation::where('element_id', $element->id)->get();
+            $lang = default_language();
+            $currencies = Currency::where('status', true)->get();
+            foreach($combinations as $variation){
+                //->where('user_id', auth()->id())
+                if($product=Product::where('variation_id', $variation->id)->where('element_id', $element->id)->first()){
+                    $variation->is_new=false;
+                    $variation->variant=$product;
+                }else{
+                    $variation->is_new=true;
+                    $variation->variant=null;
                 }
-                $combinations = $combinations->get();
-                return view('backend.product.products.create_product', compact('element', 'combinations', 'currencies', 'lang'));
             }
+            return view('backend.product.products.edit_product', compact('element', 'combinations', 'currencies', 'lang'));
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            // dd($e->getMessage());
         }
-
         return back();
     }
 }
