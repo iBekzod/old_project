@@ -30,7 +30,7 @@ use App\Product_Warehouse;
 use App\VariationTranslation;
 use App\Warehouse;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
-
+use Illuminate\Support\Facades\View;
 
 class ElementController extends Controller
 {
@@ -104,7 +104,7 @@ class ElementController extends Controller
         //     }
         //     $elements = $elements->whereIn('category_id', $filter_category_ids);
         // }
-        $elements = $elements->where('category_id', 2114);
+        // $elements = $elements->where('category_id', 2114);
         $elements = $elements->latest()->paginate(15);
         foreach ($elements as $element) {
             if (Product::where('element_id', $element->id)->where('user_id', $user_id)->exists()) {
@@ -327,7 +327,6 @@ class ElementController extends Controller
 
     public function make_all_combination(Request $request)
     {
-        // dd($request->element_id);
         try {
             if ($request->method() == 'GET') {
                 $data = null;
@@ -377,10 +376,6 @@ class ElementController extends Controller
                             <td class="text-center">
                                 <label for="" class="control-label">' . translate('Artikul') . '</label>
                             </td>
-                            <td class="text-center">
-                                <label for="" class="control-label">' . translate('Delete') . '</label>
-                            </td>
-
                         </tr>
                         </thead>
                         <tbody>';
@@ -398,113 +393,22 @@ class ElementController extends Controller
                         $my_colors = [];
                         $my_attributes = [];
                     }
-                    // dd(implode(", ", $my_colors));
-                    // dd($my_variations->where('color_id', implode(", ", $my_colors))->where('characteristics', implode(", ", $my_attributes))->first());
                     $vars=[];
-                    if($request->has('element_id') && Element::findOrFail($request->element_id) && $my_variations=Variation::where('element_id', $request->element_id)->where('user_id', auth()->id())->where('color_id', implode(", ", $my_colors))->where('characteristics', implode(", ", $my_attributes))->first()){
-                        $variation=$my_variations;//->where('color_id', implode(", ", $my_colors))->where('characteristics', implode(", ", $my_attributes))->first();
-                        $content = $content . '
-                                <tr class="variant">
-                                    <td>
-                                        <input type="hidden" name="combination[' . $index . '][variation_id]" value="' . $variation->id . '">
-                                        <label for="" class="control-label">' . ($index + 1) . '</label>
-                                        <input type="hidden" name="combination[' . $index . '][color_id]" value="' . implode(", ", $my_colors) . '">
-                                        <input type="hidden" name="combination[' . $index . '][attribute_id]" value="' . implode(", ", $my_attributes) . '">
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                                <div class="input-group" data-toggle="aizuploader" data-type="image">
-                                                    <div class="input-group-prepend">
-                                                        <div
-                                                            class="input-group-text bg-soft-secondary font-weight-medium">' . translate('Browse') . '</div>
-                                                    </div>
-                                                    <div class="form-control file-amount"></div>
-                                                    <input type="hidden" name="combination[' . $index . '][thumbnail_img]" value="'. $variation->thumbnail_img .'"
-                                                        class="selected-files">
-                                                </div>
-                                                <div class="file-preview box sm">
-                                                </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                            <div class="input-group" data-toggle="aizuploader" data-type="image" data-multiple="true">
-                                                <div class="input-group-prepend">
-                                                    <div class="input-group-text bg-soft-secondary font-weight-medium">' . translate('Browse') . '</div>
-                                                </div>
-                                                <div class="form-control file-amount"></div>
-                                                <input type="hidden" name="combination[' . $index . '][photos]" value="'. $variation->photos .'" class="selected-files">
-                                            </div>
-                                            <div class="file-preview box sm">
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <label for="" class="control-label">' . $variation->name . '</label>
-                                        <input type="hidden" name="combination[' . $index . '][name]" value="' . implode(", ", $combination) . '" class="form-control">
-                                    </td>
-                                    <td>
-                                        <input type="text" name="combination[' . $index . '][artikul]" value="'. $variation->partnum .'" class="form-control">
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="delete_variant(this)"><i class="las la-trash"></i></button>
-                                    </td>
-                                </tr>
-                            ';
-                    }else{
-                        if($element=Element::findOrFail($request->element_id)){
-                            $element_name=$element->name;
-                        }else{
-                            $element_name=null;
-                        }
 
-                        $content = $content . '
-                            <tr class="variant">
-                                <td>
-                                    <label for="" class="control-label">' . ($index + 1) . '</label>
-                                    <input type="hidden" name="combination[' . $index . '][color_id]" value="' . implode(", ", $my_colors) . '">
-                                    <input type="hidden" name="combination[' . $index . '][attribute_id]" value="' . implode(", ", $my_attributes) . '">
-                                </td>
-                                <td>
-                                    <div class="form-group">
-                                            <div class="input-group" data-toggle="aizuploader" data-type="image">
-                                                <div class="input-group-prepend">
-                                                    <div
-                                                        class="input-group-text bg-soft-secondary font-weight-medium">' . translate('Browse') . '</div>
-                                                </div>
-                                                <div class="form-control file-amount"></div>
-                                                <input type="hidden" name="combination[' . $index . '][thumbnail_img]" value=""
-                                                    class="selected-files">
-                                            </div>
-                                            <div class="file-preview box sm">
-                                            </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group">
-                                        <div class="input-group" data-toggle="aizuploader" data-type="image" data-multiple="true">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text bg-soft-secondary font-weight-medium">' . translate('Browse') . '</div>
-                                            </div>
-                                            <div class="form-control file-amount"></div>
-                                            <input type="hidden" name="combination[' . $index . '][photos]" value="" class="selected-files">
-                                        </div>
-                                        <div class="file-preview box sm">
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <label for="" class="control-label">' . $element_name." ".implode(", ", $combination) . '</label>
-                                    <input type="hidden" name="combination[' . $index . '][name]" value="' . implode(", ", $combination) . '" class="form-control">
-                                </td>
-                                <td>
-                                    <input type="text" name="combination[' . $index . '][artikul]" value="" class="form-control">
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="delete_variant(this)"><i class="las la-trash"></i></button>
-                                </td>
-                            </tr>
-                        ';
+                    if($request->has('element_id') && $element=Element::findOrFail($request->element_id) && $my_variation=Variation::where('element_id', $request->element_id)->where('user_id', auth()->id())->where('color_id', implode(", ", $my_colors))->where('characteristics', implode(", ", $my_attributes))->first()){
+                        $my_variation->edit=true;
+                        // $my_variation->name=$element->name.", ".$my_variation->name;
+                        $content = $content.View::make('backend.product.elements.single_variation_combination', ['combination'=>$my_variation, 'index'=>$index])->render();
+                    }else{
+                        $element_name=$request->element_name;
+                        $my_variation=(object)[
+                            'edit'=>false,
+                            'color_id'=>implode(", ", $my_colors),
+                            'attribute_id'=>implode(", ", $my_attributes),
+                            'full_name'=>$element_name.", ".implode(", ", $combination),
+                            'name'=>implode(", ", $combination)
+                        ];
+                        $content = $content . View::make('backend.product.elements.single_variation_combination', ['combination'=>$my_variation, 'index'=>$index])->render();
                     }
                 }
                 $content = $content . '</tbody>
@@ -515,8 +419,7 @@ class ElementController extends Controller
                 return response()->json(['success' => true, 'message' => $vars, 'data' => $data]);
             }
         } catch (\Exception $exception) {
-            // dd($exception);
-            return response()->json(['success' => false, 'message' => $exception->getMessage()]);
+            return response()->json(['success' => false, 'message' => $exception->getTrace()]);
         }
         return response()->json(['success' => false, 'message' => 'server']);
     }
@@ -647,6 +550,7 @@ class ElementController extends Controller
     {
         // dd($request);
         $element = new Element;
+        $element->published = false;
         $element->added_by = Auth::user()->user_type;
         $element->category_id = $request->category_id;
         $element->brand_id = $request->brand_id;
@@ -748,9 +652,9 @@ class ElementController extends Controller
                     }
                     $variation = new Variation;
                     $variation->element_id = $element->id;
-                    $variation->name = $element->name . " " . $variant['name'];
+                    $variation->name = $element->name . ", " . $variant['name'];
                     $variation->thumbnail_img = $variant['thumbnail_img'];
-                    $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
+                    $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($element->name . ", " . $variant['name']));
                     $variation->partnum = $variant['artikul'];
                     $variation->color_id = (int)$variant['color_id'];
                     $variation->characteristics = $variant['attribute_id'];

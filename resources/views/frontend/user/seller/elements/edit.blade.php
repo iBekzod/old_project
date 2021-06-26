@@ -76,7 +76,7 @@
                                             data-selected="{{ $element->brand_id??null }}"  data-live-search="true">
                                                 <option value="">{{ ('Select Brand') }}</option>
                                                 @foreach ($brands as $brand)
-                                                    <option value="{{ $brand->id }}">{{ $brand->getTranslation('name', $lang) }}</option>
+                                                    <option value="{{ $brand->id }}" @if($brand->id==$element->brand_id) selected @endif>{{ $brand->getTranslation('name', $lang) }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -100,7 +100,7 @@
                                         <label class="col-lg-3 col-from-label">{{translate('Total Weight')}}</label>
                                         <div class="col-lg-8">
                                             <input type="text" class="form-control" name="weight" type="number" min="0" step="0.01"
-                                                placeholder="{{ translate('weight (kg)') }}" value="" required>
+                                                placeholder="{{ translate('weight (kg)') }}" value="{{$element->weight}}" required>
                                         </div>
                                     </div>
                                     <div class="form-group row">

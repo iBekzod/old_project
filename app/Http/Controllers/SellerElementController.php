@@ -31,10 +31,113 @@ use App\VariationTranslation;
 use App\Warehouse;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
 use Exception;
+use Illuminate\Support\Facades\View;
 
 class SellerElementController extends Controller
 {
 
+    public function elementsIndex(Request $request)
+    {
+        // dd($request->all());
+        $type = 'All';
+        $col_name = null;
+        $query = null;
+        $sort_search = null;
+        $seller_id = null;
+
+        $category_id = 0;
+        $sub_category_id = 0;
+        $sub_sub_category_id = 0;
+        $user_id=Auth::user()->id;
+        $elements = Element::where('published', true);
+        // ->orWhere(function($query) use ($user_id) {
+        //     dd($query);
+        //     $query->where('user_id', $user_id)->where('published', false);
+        // });
+        if ($request->has('user_id') && $request->user_id != null) {
+            $elements = $elements->where('user_id', $request->user_id);
+            $seller_id = $request->user_id;
+        }
+
+        if ($request->has('type') && $request->type != null) {
+            $var = explode(",", $request->type);
+            $col_name = $var[0];
+            $query = $var[1];
+            $elements = $elements->orderBy($col_name, $query);
+            $sort_type = $request->type;
+        }
+        if ($request->has('search') && $request->search != null) {
+            $elements = $elements->where('name', 'like', '%' . $request->search . '%');
+            $sort_search = $request->search;
+        }
+        if ($request->has('category_id') && $request->category_id != null && $request->category_id != 0) {
+            $category_id = $request->category_id;
+            $sub_category_ids = Category::where('parent_id', $category_id)->pluck('id');
+            $sub_sub_category_ids = Category::whereIn('parent_id', $sub_category_ids)->pluck('id');
+            $elements = $elements->whereIn('category_id', $sub_sub_category_ids);
+            if ($request->has('sub_category_id') && $request->sub_category_id != null && $request->sub_category_id != 0) {
+                $sub_category_id = $request->sub_category_id;
+                $sub_sub_category_ids = Category::whereIn('parent_id', $sub_category_ids)->pluck('id');
+                $elements = $elements->whereIn('category_id', $sub_sub_category_ids);
+                if ($request->has('sub_sub_category_id') && $request->sub_sub_category_id != null && $request->sub_sub_category_id != 0) {
+                    $sub_sub_category_id = $request->sub_sub_category_id;
+                    $elements = $elements->where('category_id', $sub_sub_category_id);
+                }
+            }
+        }
+
+        // if ($request->has('category_id') && $request->category_id != null && $request->category_id != 0) {
+        //     $filter_category_ids=array();
+        //     $category=Category::where('id', $request->category_id)->first();
+        //     $category_id = $request->category_id;
+        //     $sub_category_ids = Category::where('parent_id', $category_id)->pluck('id');
+        //     $filter_category_ids = Category::whereIn('parent_id', $sub_category_ids)->pluck('id');
+        //     if ($request->has('sub_category_id') && $request->sub_category_id != null && $request->sub_category_id != 0
+        //             && $sub_category=$category->childrenCategories->where('id', $request->sub_category_id)->first()) {
+        //         $sub_category_id=$sub_category->id;
+        //         if ($request->has('sub_sub_category_id') && $request->sub_sub_category_id != null && $request->sub_sub_category_id != 0
+        //         && $sub_sub_category=$sub_category->childrenCategories->where('id', $request->sub_sub_category_id)->first()) {
+        //             $sub_sub_category_id=$sub_sub_category->id;
+        //             $filter_category_ids=[];
+        //             $filter_category_ids[]=$request->sub_sub_category_id;
+        //         }else{
+        //             $filter_category_ids=$sub_category->childrenCategories->pluck('id');
+        //         }
+        //     }
+        //     $elements = $elements->whereIn('category_id', $filter_category_ids);
+        // }
+        // $elements = $elements->where('category_id', 2114);
+        $elements = $elements->latest()->paginate(15);
+        foreach ($elements as $element) {
+            if (Product::where('element_id', $element->id)->where('user_id', $user_id)->exists()) {
+                $element->cloned = true;
+            } else {
+                $element->cloned = false;
+            }
+        }
+
+        $categories = Category::where('level', 0)->get();
+        $sub_categories = Category::where('parent_id', $category_id)->get();
+        $sub_sub_categories = Category::where('parent_id', $sub_category_id)->get();
+
+        return view(
+            'frontend.user.seller.elements.index',
+            compact(
+                'elements',
+                'type',
+                'seller_id',
+                'col_name',
+                'query',
+                'sort_search',
+                'category_id',
+                'sub_category_id',
+                'sub_sub_category_id',
+                'categories',
+                'sub_categories',
+                'sub_sub_categories',
+            )
+        );
+    }
     public function clone_elements(Request $request)
     {
         $type = 'In House';
@@ -447,7 +550,6 @@ class SellerElementController extends Controller
 
     public function make_all_combination(Request $request)
     {
-        // dd($request->element_id);
         try {
             if ($request->method() == 'GET') {
                 $data = null;
@@ -497,10 +599,6 @@ class SellerElementController extends Controller
                             <td class="text-center">
                                 <label for="" class="control-label">' . translate('Artikul') . '</label>
                             </td>
-                            <td class="text-center">
-                                <label for="" class="control-label">' . translate('Delete') . '</label>
-                            </td>
-
                         </tr>
                         </thead>
                         <tbody>';
@@ -518,112 +616,22 @@ class SellerElementController extends Controller
                         $my_colors = [];
                         $my_attributes = [];
                     }
-                    // dd(implode(", ", $my_colors));
-                    // dd($my_variations->where('color_id', implode(", ", $my_colors))->where('characteristics', implode(", ", $my_attributes))->first());
                     $vars=[];
-                    if($request->has('element_id') && Element::findOrFail($request->element_id) && $my_variations=Variation::where('element_id', $request->element_id)->where('user_id', auth()->id())->where('color_id', implode(", ", $my_colors))->where('characteristics', implode(", ", $my_attributes))->first()){
-                        $variation=$my_variations;//->where('color_id', implode(", ", $my_colors))->where('characteristics', implode(", ", $my_attributes))->first();
-                        $content = $content . '
-                                <tr class="variant">
-                                    <td>
-                                        <input type="hidden" name="combination[' . $index . '][variation_id]" value="' . $variation->id . '">
-                                        <label for="" class="control-label">' . ($index + 1) . '</label>
-                                        <input type="hidden" name="combination[' . $index . '][color_id]" value="' . implode(", ", $my_colors) . '">
-                                        <input type="hidden" name="combination[' . $index . '][attribute_id]" value="' . implode(", ", $my_attributes) . '">
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                                <div class="input-group" data-toggle="aizuploader" data-type="image">
-                                                    <div class="input-group-prepend">
-                                                        <div
-                                                            class="input-group-text bg-soft-secondary font-weight-medium">' . translate('Browse') . '</div>
-                                                    </div>
-                                                    <div class="form-control file-amount"></div>
-                                                    <input type="hidden" name="combination[' . $index . '][thumbnail_img]" value="'. $variation->thumbnail_img .'"
-                                                        class="selected-files">
-                                                </div>
-                                                <div class="file-preview box sm">
-                                                </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                            <div class="input-group" data-toggle="aizuploader" data-type="image" data-multiple="true">
-                                                <div class="input-group-prepend">
-                                                    <div class="input-group-text bg-soft-secondary font-weight-medium">' . translate('Browse') . '</div>
-                                                </div>
-                                                <div class="form-control file-amount"></div>
-                                                <input type="hidden" name="combination[' . $index . '][photos]" value="'. $variation->photos .'" class="selected-files">
-                                            </div>
-                                            <div class="file-preview box sm">
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <label for="" class="control-label">' . $variation->name . '</label>
-                                        <input type="hidden" name="combination[' . $index . '][name]" value="' . implode(", ", $combination) . '" class="form-control">
-                                    </td>
-                                    <td>
-                                        <input type="text" name="combination[' . $index . '][artikul]" value="'. $variation->partnum .'" class="form-control">
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="delete_variant(this)"><i class="las la-trash"></i></button>
-                                    </td>
-                                </tr>
-                            ';
+
+                    if($request->has('element_id') && $element=Element::findOrFail($request->element_id) && $my_variation=Variation::where('element_id', $request->element_id)->where('user_id', auth()->id())->where('color_id', implode(", ", $my_colors))->where('characteristics', implode(", ", $my_attributes))->first()){
+                        $my_variation->edit=true;
+                        // $my_variation->name=$element->name.", ".$my_variation->name;
+                        $content = $content.View::make('backend.product.elements.single_variation_combination', ['combination'=>$my_variation, 'index'=>$index])->render();
                     }else{
-                        if($element=Element::findOrFail($request->element_id)){
-                            $element_name=$element->name;
-                        }else{
-                            $element_name=null;
-                        }
-                        $content = $content . '
-                            <tr class="variant">
-                                <td>
-                                    <label for="" class="control-label">' . ($index + 1) . '</label>
-                                    <input type="hidden" name="combination[' . $index . '][color_id]" value="' . implode(", ", $my_colors) . '">
-                                    <input type="hidden" name="combination[' . $index . '][attribute_id]" value="' . implode(", ", $my_attributes) . '">
-                                </td>
-                                <td>
-                                    <div class="form-group">
-                                            <div class="input-group" data-toggle="aizuploader" data-type="image">
-                                                <div class="input-group-prepend">
-                                                    <div
-                                                        class="input-group-text bg-soft-secondary font-weight-medium">' . translate('Browse') . '</div>
-                                                </div>
-                                                <div class="form-control file-amount"></div>
-                                                <input type="hidden" name="combination[' . $index . '][thumbnail_img]" value=""
-                                                    class="selected-files">
-                                            </div>
-                                            <div class="file-preview box sm">
-                                            </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group">
-                                        <div class="input-group" data-toggle="aizuploader" data-type="image" data-multiple="true">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text bg-soft-secondary font-weight-medium">' . translate('Browse') . '</div>
-                                            </div>
-                                            <div class="form-control file-amount"></div>
-                                            <input type="hidden" name="combination[' . $index . '][photos]" value="" class="selected-files">
-                                        </div>
-                                        <div class="file-preview box sm">
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <label for="" class="control-label">' . implode(", ", $combination) . '</label>
-                                    <input type="hidden" name="combination[' . $index . '][name]" value="' .$element_name." ". implode(", ", $combination) . '" class="form-control">
-                                </td>
-                                <td>
-                                    <input type="text" name="combination[' . $index . '][artikul]" value="" class="form-control">
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="delete_variant(this)"><i class="las la-trash"></i></button>
-                                </td>
-                            </tr>
-                        ';
+                        $element_name=$request->element_name;
+                        $my_variation=(object)[
+                            'edit'=>false,
+                            'color_id'=>implode(", ", $my_colors),
+                            'attribute_id'=>implode(", ", $my_attributes),
+                            'full_name'=>$element_name.", ".implode(", ", $combination),
+                            'name'=>implode(", ", $combination)
+                        ];
+                        $content = $content . View::make('backend.product.elements.single_variation_combination', ['combination'=>$my_variation, 'index'=>$index])->render();
                     }
                 }
                 $content = $content . '</tbody>
@@ -634,8 +642,7 @@ class SellerElementController extends Controller
                 return response()->json(['success' => true, 'message' => $vars, 'data' => $data]);
             }
         } catch (\Exception $exception) {
-            // dd($exception);
-            return response()->json(['success' => false, 'message' => $exception->getMessage()]);
+            return response()->json(['success' => false, 'message' => $exception->getTrace()]);
         }
         return response()->json(['success' => false, 'message' => 'server']);
     }
@@ -768,6 +775,8 @@ class SellerElementController extends Controller
     {
         // dd($request);
         $element = new Element;
+        $element->published = false;
+        $element->is_accepted = false;
         $element->added_by = $request->added_by;
         $element->category_id = $request->category_id;
         $element->brand_id = $request->brand_id;
@@ -861,9 +870,9 @@ class SellerElementController extends Controller
                     }
                     $variation = new Variation;
                     $variation->element_id = $element->id;
-                    $variation->name = $element->name . " " . $variant['name'];
+                    $variation->name = $element->name . ", " . $variant['name'];
                     $variation->thumbnail_img = $variant['thumbnail_img'];
-                    $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variant['name']));
+                    $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($element->name . ", " . $variant['name']));
                     $variation->partnum = $variant['artikul'];
                     $variation->color_id = (int)$variant['color_id'];
                     $variation->characteristics = $variant['attribute_id'];
@@ -1020,7 +1029,7 @@ class SellerElementController extends Controller
         if ($element->save()) {
             if ($request->has('combination')) {
                 foreach ($request->combination as $variant) {
-                    if(array_key_exists('variation_id',$variant) && $variation = Variation::findOrFail($variant['variation_id'])){
+                    if((array_key_exists('variation_id',$variant) && $variation = Variation::findOrFail($variant['variation_id'])) || ($variation=Variation::where('characteristics', $variant['attribute_id'])->where('element_id', $element->id)->where('color_id', $variant['color_id'])->first() && $variation->user_id==auth()->id())){
                         $variation->name = $variant['name'];
                         $variation->thumbnail_img = $variant['thumbnail_img'];
                         if ($variant['name'] != null) {
@@ -1153,25 +1162,48 @@ class SellerElementController extends Controller
 
 
 
-
     public function elementProducts(Request $request)
     {
-        $element = Element::findOrFail($request->id);
-        $combinations = Variation::where('element_id', $element->id);
-        $variation_ids = $combinations->pluck('id');
-        if (count($variation_ids) > 0) {
+        try {
+            $element = Element::findOrFail($request->id);
+            $combinations = Variation::where('element_id', $element->id)->get();
             $lang = default_language();
             $currencies = Currency::where('status', true)->get();
-
-            if (Product::where('user_id', auth()->id())->whereIn('variation_id', $variation_ids)->exists()) {
-                $products = Product::where('user_id', auth()->id())->whereIn('variation_id', $variation_ids)->get();
-                return view('frontend.user.seller.products.edit_product', compact('element', 'products', 'currencies', 'lang'));
+            foreach($combinations as $variation){
+                //->where('user_id', auth()->id())
+                if($product=Product::where('variation_id', $variation->id)->where('element_id', $element->id)->first()){
+                    $variation->is_new=false;
+                    $variation->variant=$product;
+                }else{
+                    $variation->is_new=true;
+                    $variation->variant=null;
+                }
             }
-            $combinations = $combinations->get();
-            return view('frontend.user.seller.products.create_product', compact('element', 'combinations', 'currencies', 'lang'));
-        } else {
-            flash(translate('There is no variations created for this element. Please create variation first!'))->error();
+            return view('frontend.user.seller.products.edit_product', compact('element', 'combinations', 'currencies', 'lang'));
+        } catch (\Exception $e) {
+            // dd($e->getMessage());
         }
         return back();
     }
+
+    // public function elementProducts(Request $request)
+    // {
+    //     $element = Element::findOrFail($request->id);
+    //     $combinations = Variation::where('element_id', $element->id);
+    //     $variation_ids = $combinations->pluck('id');
+    //     if (count($variation_ids) > 0) {
+    //         $lang = default_language();
+    //         $currencies = Currency::where('status', true)->get();
+
+    //         if (Product::where('user_id', auth()->id())->whereIn('variation_id', $variation_ids)->exists()) {
+    //             $products = Product::where('user_id', auth()->id())->whereIn('variation_id', $variation_ids)->get();
+    //             return view('frontend.user.seller.products.edit_product', compact('element', 'products', 'currencies', 'lang'));
+    //         }
+    //         $combinations = $combinations->get();
+    //         return view('frontend.user.seller.products.create_product', compact('element', 'combinations', 'currencies', 'lang'));
+    //     } else {
+    //         flash(translate('There is no variations created for this element. Please create variation first!'))->error();
+    //     }
+    //     return back();
+    // }
 }

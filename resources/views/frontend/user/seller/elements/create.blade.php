@@ -43,7 +43,92 @@
                             @csrf
                             <input type="hidden" name="lang" value="{{ $lang ?? default_language() }}">
                             <input type="hidden" name="added_by" value="seller">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0 h6">{{ translate('Element Information') }}</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-from-label">{{ translate('Element Name') }} <i
+                                                class="las la-language text-danger"
+                                                title="{{ translate('Translatable') }}"></i></label>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control" name="name"  id="element_name"
+                                                placeholder="{{ translate('Element Name') }}" value="" required>
+                                        </div>
+                                    </div>
 
+                                    <div class="form-group row" id="brand">
+                                        <label class="col-lg-3 col-from-label">{{ translate('Brand') }}</label>
+                                        <div class="col-lg-8">
+                                            <select class="form-control aiz-selectpicker" name="brand_id" id="brand_id"
+                                                data-live-search="true" required>
+                                                <option value="">{{ 'Select Brand' }}</option>
+                                                @foreach ($brands as $brand)
+                                                    <option value="{{ $brand->id }}">
+                                                        {{ $brand->getTranslation('name') }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    @php
+                                        $units=['kg', 'pcs', 'litre', 'complect']
+                                    @endphp
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-from-label">{{translate('Unit')}}</label>
+                                        <div class="col-lg-8">
+                                            <select class="form-control aiz-selectpicker" name="unit" id="unit"
+                                                    data-live-search="true" required>
+                                                    <option value="">{{ translate('Select Unit') }}</option>
+                                                @foreach ($units as $unit)
+                                                    <option value="{{ $unit }}">{{ translate($unit) }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" id="weight_id">
+                                        <label class="col-lg-3 col-from-label">{{translate('Total Weight')}}</label>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control" name="weight" type="number" min="0" step="0.01"
+                                                placeholder="{{ translate('weight (kg)') }}" value="" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-from-label">{{ translate('Tags') }}</label>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control aiz-tag-input" name="tags[]" id="tags"
+                                                value="" placeholder="{{ translate('Type to add a tag') }}"
+                                                data-role="tagsinput" required>
+                                        </div>
+                                    </div>
+                                    @php
+                                        $pos_addon = \App\Addon::where('unique_identifier', 'pos_system')->first();
+                                    @endphp
+                                    @if ($pos_addon != null && $pos_addon->activated == 1)
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-from-label">{{ translate('Barcode') }}</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" class="form-control" name="barcode"
+                                                    placeholder="{{ translate('Barcode') }}" value="">
+                                            </div>
+                                        </div>
+                                    @endif
+                                    @php
+                                        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
+                                    @endphp
+                                    @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
+                                        <div class="form-group row">
+                                            <label class="col-md-3 col-from-label">{{ translate('Refundable') }}</label>
+                                            <div class="col-md-8">
+                                                <label class="aiz-switch aiz-switch-success mb-0">
+                                                    <input type="checkbox" name="refundable" checked>
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
                             <div class="card">
                                 <div class="card-header">
                                     <h5 class="mb-0 h6">{{ translate('Element Category') }}</h5>
@@ -146,93 +231,7 @@
                                     <input type="hidden" name="collected_variations[]" id="collected_variations">
                                 </div>
                             </div>
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5 class="mb-0 h6">{{ translate('Element Information') }}</h5>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <label class="col-lg-3 col-from-label">{{ translate('Element Name') }} <i
-                                                class="las la-language text-danger"
-                                                title="{{ translate('Translatable') }}"></i></label>
-                                        <div class="col-lg-8">
-                                            <input type="text" class="form-control" name="name"
-                                                placeholder="{{ translate('Element Name') }}" value="" required
-                                                onchange="update_sku()">
-                                        </div>
-                                    </div>
 
-                                    <div class="form-group row" id="brand">
-                                        <label class="col-lg-3 col-from-label">{{ translate('Brand') }}</label>
-                                        <div class="col-lg-8">
-                                            <select class="form-control aiz-selectpicker" name="brand_id" id="brand_id"
-                                                data-live-search="true">
-                                                <option value="">{{ 'Select Brand' }}</option>
-                                                @foreach ($brands as $brand)
-                                                    <option value="{{ $brand->id }}">
-                                                        {{ $brand->getTranslation('name') }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    @php
-                                        $units=['kg', 'pcs', 'litre', 'complect']
-                                    @endphp
-                                    <div class="form-group row">
-                                        <label class="col-lg-3 col-from-label">{{translate('Unit')}}</label>
-                                        <div class="col-lg-8">
-                                            <select class="form-control aiz-selectpicker" name="unit" id="unit"
-                                                    data-live-search="true" required>
-                                                    <option value="">{{ translate('Select Unit') }}</option>
-                                                @foreach ($units as $unit)
-                                                    <option value="{{ $unit }}">{{ translate($unit) }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row" id="weight_id">
-                                        <label class="col-lg-3 col-from-label">{{translate('Total Weight')}}</label>
-                                        <div class="col-lg-8">
-                                            <input type="text" class="form-control" name="weight" type="number" min="0" step="0.01"
-                                                placeholder="{{ translate('weight (kg)') }}" value="" required>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-lg-3 col-from-label">{{ translate('Tags') }}</label>
-                                        <div class="col-lg-8">
-                                            <input type="text" class="form-control aiz-tag-input" name="tags[]" id="tags"
-                                                value="" placeholder="{{ translate('Type to add a tag') }}"
-                                                data-role="tagsinput" required>
-                                        </div>
-                                    </div>
-                                    @php
-                                        $pos_addon = \App\Addon::where('unique_identifier', 'pos_system')->first();
-                                    @endphp
-                                    @if ($pos_addon != null && $pos_addon->activated == 1)
-                                        <div class="form-group row">
-                                            <label class="col-lg-3 col-from-label">{{ translate('Barcode') }}</label>
-                                            <div class="col-lg-8">
-                                                <input type="text" class="form-control" name="barcode"
-                                                    placeholder="{{ translate('Barcode') }}" value="">
-                                            </div>
-                                        </div>
-                                    @endif
-                                    @php
-                                        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
-                                    @endphp
-                                    @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
-                                        <div class="form-group row">
-                                            <label class="col-md-3 col-from-label">{{ translate('Refundable') }}</label>
-                                            <div class="col-md-8">
-                                                <label class="aiz-switch aiz-switch-success mb-0">
-                                                    <input type="checkbox" name="refundable" checked>
-                                                    <span></span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
                             <div class="card">
                                 <div class="card-header">
                                     <h5 class="mb-0 h6">{{ translate('Element Images') }}</h5>
@@ -505,6 +504,11 @@
         }
 
         function update_attribute_combination() {
+            var $element_name = $('#element_name').val();
+            if($element_name.length<3){
+                console.log("Element name is not full:"+$('#element_name').val())
+                return;
+            }
             attribute_ids = []
             $('#selected_variations option:selected').each(function(index, val) {
                 attribute_ids.push(val.getAttribute('data-id'))
@@ -534,7 +538,8 @@
                 data: {
                     selected_attribute_ids: attribute_ids,
                     choice_groups: choice_groups,
-                    color_ids: color_ids
+                    color_ids: color_ids,
+                    element_name: $element_name
                 },
                 success: function(data) {
                     $('#variation_div').html(" ")
