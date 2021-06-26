@@ -72,14 +72,14 @@ class SellerDeliveryFormController extends Controller
 
                  $user_id = auth()->id();
                  $user = User::findOrFail($user_id);
-                //  $selection=array();
+                  $selection=array();
                  if(Seller::where('user_id', $user_id)->exists()){
                      $seller=Seller::where('user_id', $user_id)->first();
                      foreach (($seller->verification_info) as  $element) {
                          $selection[$element['label']]=$element['value'];
                      }
-                    dd($selection);
-                      dd($selection);
+                    // dd($selection);
+                    //   dd($selection);
                     $date=$seller->created_at;
                     // dd($date);
                      return view('frontend.user.seller.seller_delivery')->with('seller', $selection)->with('user_id', $user_id)->with('date',$date);
