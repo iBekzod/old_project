@@ -775,8 +775,8 @@ class SellerElementController extends Controller
     {
         // dd($request);
         $element = new Element;
-        $element->published = false;
-        $element->is_accepted = false;
+        $element->published = true;
+        $element->is_accepted = true;
         $element->added_by = $request->added_by;
         $element->category_id = $request->category_id;
         $element->brand_id = $request->brand_id;
