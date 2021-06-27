@@ -395,9 +395,9 @@ class ElementController extends Controller
                     }
                     $vars=[];
 
-                    if($request->has('element_id') && $element=Element::findOrFail($request->element_id) && $my_variation=Variation::where('element_id', $request->element_id)->where('user_id', auth()->id())->where('color_id', implode(", ", $my_colors))->where('characteristics', implode(", ", $my_attributes))->first()){
+                    if($request->has('element_id') && $element=Element::where('id',$request->element_id)->first() && $my_variation=Variation::where('element_id', $request->element_id)->where('user_id', auth()->id())->where('color_id', implode(", ", $my_colors))->where('characteristics', implode(", ", $my_attributes))->first()){
                         $my_variation->edit=true;
-                        // $my_variation->name=$element->name.", ".$my_variation->name;
+                        $my_variation->full_name= $request->element_name.", ".implode(", ", $combination);
                         $content = $content.View::make('backend.product.elements.single_variation_combination', ['combination'=>$my_variation, 'index'=>$index])->render();
                     }else{
                         $element_name=$request->element_name;

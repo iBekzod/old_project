@@ -34,7 +34,7 @@
             </div>
         </td>
         <td>
-            <label for="" class="control-label">{{ $combination->name }}</label>
+            <label for="" class="control-label">{{ $combination->full_name }}</label>
             <input type="hidden" name="combination[{{ $index }}][name]" value="{{ $combination->name??null }}" class="form-control">
             <input type="text" hidden name="combination[{{ $index }}][id]" value="{{ $combination->id??null }}" class="form-control">
         </td>

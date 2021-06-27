@@ -63,7 +63,7 @@
                                                 class="las la-language text-danger"
                                                 title="{{translate('Translatable')}}"></i></label>
                                         <div class="col-lg-8">
-                                            <input type="text" class="form-control" name="name"
+                                            <input type="text" class="form-control" name="name" id="element_name"
                                                 placeholder="{{translate('Element Name')}}"
                                                 value="{{ $element->name }}" required onchange="update_sku()">
                                         </div>
@@ -131,7 +131,7 @@
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-from-label">{{translate('Refundable')}}</label>
                                             <div class="col-lg-8">
-                                                <label class="aiz-switch aiz-switch-success mb-0" style="margin-top:5px;">
+                                                <label class="mb-0 aiz-switch aiz-switch-success" style="margin-top:5px;">
                                                     <input type="checkbox" name="refundable"
                                                         @if ($element->refundable == 1) checked @endif>
                                                     <span class="slider round"></span></label>
@@ -627,6 +627,11 @@
             });
         }
         function update_attribute_combination(){
+            var $element_name = $('#element_name').val();
+            if($element_name.length<3){
+                console.log("Element name is not full:"+$('#element_name').val())
+                return;
+            }
             // $('.variant').remove();
             // alert("Combination changed")
             attribute_ids = []
@@ -660,7 +665,8 @@
                     element_id:element_id,
                     selected_attribute_ids: attribute_ids,
                     choice_groups: choice_groups,
-                    color_ids: color_ids
+                    color_ids: color_ids,
+                    element_name: $element_name
                 },
                 success:function(data){
                     $('#variation_div').html(" ")
