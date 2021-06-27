@@ -223,11 +223,11 @@ Route::group(['prefix' =>'seller', 'middleware' => ['seller', 'verified', 'user'
     Route::get('/products/create','ProductController@create')->name('products.create');
 	Route::get('/products/{id}/edit','ProductController@seller_product_edit')->name('seller.products.edit');
 
-    Route::get('elements/all','SellerElementController@seller_elements')->name('seller.elements.all');
-	Route::get('elements/clone','SellerElementController@clone_elements')->name('seller.elements.clone');
-	Route::post('elements/clone/selected','SellerElementController@clone_selected_elements')->name('seller.elements.clone.selected');
+    Route::get('elements/all','SellerElementController@elementsIndex')->name('seller.elements.all');
+	// Route::get('elements/clone','SellerElementController@clone_elements')->name('seller.elements.clone');
+	// Route::post('elements/clone/selected','SellerElementController@clone_selected_elements')->name('seller.elements.clone.selected');
 	Route::get('elements/variation/remove','SellerElementController@remove_variation')->name('seller.elements.variation.remove');
-	Route::get('elements/seller','SellerElementController@seller_elements')->name('seller.elements.seller');
+	Route::get('elements/seller','SellerElementController@elementsIndex')->name('seller.elements.seller');
 	Route::get('elements/manage','SellerElementController@manageElements')->name('seller.elements.manage');
 	Route::get('elements/manage/{id}/accept','SellerElementController@changeOnModerationAccept')->name('seller.elements.manage.change.accept');
 	Route::get('elements/manage/{id}/refuse','SellerElementController@changeOnModerationRefuse')->name('seller.elements.manage.change.refuse');

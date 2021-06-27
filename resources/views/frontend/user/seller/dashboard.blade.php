@@ -156,7 +156,7 @@
                                 <br>
                                 <div class="text-center">
                                     <a href="{{ route('seller.elements.create')}}" class="btn btn-primary d-inline-block">{{ translate('Add New Element')}}</a>
-                                    <a href="{{ route('seller.elements.clone')}}" class="btn btn-primary d-inline-block">{{ translate('Clone Element')}}</a>
+                                    {{-- <a href="{{ route('seller.elements.clone')}}" class="btn btn-primary d-inline-block">{{ translate('Clone Element')}}</a> --}}
                                 </div>
                               </div>
                           </div>

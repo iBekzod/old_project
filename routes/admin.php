@@ -55,8 +55,8 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::post('/elements/update/{id}','ElementController@update')->name('elements.update');
 	Route::get('/elements/destroy/{id}', 'ElementController@destroy')->name('elements.destroy');
     Route::get('/elements/variation/remove','ElementController@remove_variation')->name('elements.variation.remove');
-    Route::get('/elements/admin','ElementController@admin_elements')->name('elements.admin');
-	Route::get('/elements/seller','ElementController@seller_elements')->name('elements.seller');
+    Route::get('/elements/admin','ElementController@elementsIndex')->name('elements.admin');
+	Route::get('/elements/seller','ElementController@elementsIndex')->name('elements.seller');
 	Route::get('/elements/all','ElementController@elementsIndex')->name('elements.all');
 	Route::get('/elements/manage','ElementController@manageElements')->name('elements.manage');
 	Route::get('/elements/manage/{id}/accept','ElementController@changeOnModerationAccept')->name('elements.manage.change.accept');

@@ -15,18 +15,6 @@
             @endif
         </div>
     </div>
-    {{-- <section class="py-5">
-        <div class="container">
-            <div class="d-flex align-items-start">
-                <div class="aiz-user-panel">
-                    <div class="mt-2 mb-3 text-left aiz-titlebar">
-                        <div class="row align-items-center">
-                            <div class="col-md-6">
-                                <h1 class="h3">{{ translate('All sample elements') }}</h1>
-                            </div>
-                        </div>
-                    </div>
-                    <br> --}}
 
     <div class="card">
         <form class="" id="sort_elements" action="" method="GET">
@@ -68,7 +56,7 @@
                             name="user_id" onchange="sort_elements()">
                         <option value="">{{ translate('All Sellers') }}</option>
                         @foreach (App\User::where('user_type', '=', 'admin')->orWhere('user_type', '=', 'seller')->get() as $key => $seller)
-                            <option value="{{ $seller->id }}"  @if ($seller->id == $seller_id) selected @endif>{{ $seller->name }}</option>
+                            <option value="{{ $seller->id }}"  @if(isset($seller_id) && $seller->id == $seller_id) selected @endif>{{ $seller->name }}</option>
                         @endforeach
                     </select>
                 </div>

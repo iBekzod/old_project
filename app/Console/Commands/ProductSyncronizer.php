@@ -40,7 +40,7 @@ class ProductSyncronizer extends Command
      */
     public function handle()
     {
-        $products=Product::all();
+        // $products=Product::all();
         /*
         foreach($products as $product){
             $this->info($product);
@@ -66,15 +66,25 @@ class ProductSyncronizer extends Command
              }
         }
         */
+        //Slug syncronization
+        // foreach($products as $product){
+        //     $this->info($product->name);
+        //      if($variation=Variation::where('id',$product->variation_id)->first()){
+        //          $product->name=$variation->name;
+        //          $product->slug=$variation->slug;
+        //          $product->save();
+        //      }
+        // }
+
+        // $this->info('Successfully changed');
+
+        //Clean Products
+        $products=Product::withTrashed()->get();
         foreach($products as $product){
-            $this->info($product->name);
-             if($variation=Variation::where('id',$product->variation_id)->first()){
-                 $product->name=$variation->name;
-                 $product->slug=$variation->slug;
-                 $product->save();
-             }
+            $product->forceDelete();
+            $product->product_translations()->delete();
         }
 
-        $this->info('Successfully changed');
+        $this->info('Successfully cleaned');
     }
 }

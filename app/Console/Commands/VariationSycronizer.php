@@ -92,19 +92,28 @@ class VariationSycronizer extends Command
         */
 
         //Remove variation duplicates
-        $unique_data=Variation::groupBy(['color_id', 'element_id', 'characteristics'])->pluck('id');
-        $variations=Variation::whereNotIn('id',$unique_data)->withTrashed()->get();
+        // $unique_data=Variation::groupBy(['color_id', 'element_id', 'characteristics'])->pluck('id');
+        // $variations=Variation::whereNotIn('id',$unique_data)->withTrashed()->get();
+        // foreach($variations as $variation){
+        //     try{
+        //         $products=Product::where('variation_id', $variation->id)->get();
+        //         foreach($products as $product){
+        //             $product->forceDelete();
+        //         }
+        //         $variation->forceDelete();
+        //     }catch(Exception $e){
+        //         $this->info($e->getMessage());
+        //     }
+        // }
+        // $this->info('Successfully generated translations');
+
+        //Clean Variations
+        $variations=Variation::withTrashed()->get();
         foreach($variations as $variation){
-            try{
-                $products=Product::where('variation_id', $variation->id)->get();
-                foreach($products as $product){
-                    $product->forceDelete();
-                }
-                $variation->forceDelete();
-            }catch(Exception $e){
-                $this->info($e->getMessage());
-            }
+            $variation->forceDelete();
+            $variation->variation_translations()->delete();
         }
-        $this->info('Successfully generated translations');
+
+        $this->info('Successfully cleaned');
     }
 }

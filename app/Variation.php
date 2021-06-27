@@ -93,7 +93,7 @@ class Variation extends Model
                 $variation_name=$variation_name.', '.$color->name;
             }
             $variation->name=$variation_name;
-            $variation->slug = SlugService::createSlug(Variation::class, 'slug', ($variation_name));
+            $variation->slug = SlugService::createSlug(Variation::class, 'slug', slugify($variation_name));
             $variation->save();
         }catch(Exception $e){
             // dd($e->getMessage());
