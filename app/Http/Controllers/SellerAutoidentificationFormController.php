@@ -9,6 +9,7 @@ use App\Seller;
 use App\BusinessSetting;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
+use Illuminate\Support\Carbon;
 
 class SellerAutoidentificationFormController extends Controller
 {
@@ -21,23 +22,7 @@ class SellerAutoidentificationFormController extends Controller
                     $validation[$element->label] = 'required';
                 }
             }
-            // "Форма_собственности" => "Laborum Ullam nesci"
-            // "Юридическое_название_вендора" => "Repudiandae laborum"
-            // "Название_магазина" => "Eu aut irure expedit"
-            // "Адрес_регистрации_вендора" => "Dolore nihil in veri"
-            // "Физический_адрес_вендора" => "Deserunt necessitati"
-            // "ИНН" => "8"
-            // "Название_банка" => "Cum aut dicta sint a"
-            // "МФО_банка" => "86"
-            // "РС" => "11"
-            // "ФИО_директора" => "Sunt in exercitation"
-            // "Тел_директора" => "97"
-            // "Электронная_почта_директора" => "mugafyd@mailinator.com"
-            // "ФИО_менеджера_ответственного_за_сотрудничество" => "16"
-            // "Тел_менеджера" => "33"
-            // "Электронная_почта_менеджера" => "liqax@mailinator.com"
 
-            // TODO::tak seller navicatdatoldirish kere inn validate save and login register pdf to html
 
              $request->validate($validation);
             //    dd($array);
@@ -65,22 +50,13 @@ class SellerAutoidentificationFormController extends Controller
                 array_push($data, $item);
                 $i++;
             }
-            // dd($element->type);
-            // dd($array);
             $seller->user_id=$user_id;
             $seller->verification_info = json_encode($data);
-            //    dd(json_encode($data));
-            // $seller->save();
-            //    dd($seller);
-
-            //   dd($date);
-            // $user->save();
-            //  $seller->save();
-            // dd($seller);
-            // dd($user);
+            $date=Carbon::parse($seller->created_at)->format('d-m-Y');
+            // dd($date);
             if($user->save()){
                 if($seller->save()){
-                    return view('frontend.user.seller.seller_autoidentification')->with('array', $array)->with('seller',$seller);
+                    return view('frontend.user.seller.seller_autoidentification')->with('array', $array)->with('seller',$seller)->with('date',$date);
                 }
             }
         }

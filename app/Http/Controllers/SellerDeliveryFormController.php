@@ -9,6 +9,7 @@ use App\Shop;
 use App\User;
 use App\BusinessSetting;
 use PhpParser\Node\Stmt\If_;
+use Carbon\Carbon;
 
 class SellerDeliveryFormController extends Controller
 {
@@ -29,7 +30,7 @@ class SellerDeliveryFormController extends Controller
             // dd($selection);
             $user->registration_step = 'active_3';
             // $seller=Seller::findOrFail($user_id);
-             $date=$seller->created_at;
+            $date=Carbon::parse($seller->created_at)->format('d-m-Y');
             if ($user->save()) {
                 // return 'ketti';
                 return view('frontend.user.seller.seller_delivery')->with('seller', $selection)->with('user_id', $user_id)->with('date', $date);
@@ -48,14 +49,16 @@ class SellerDeliveryFormController extends Controller
                 foreach (($seller->verification_info) as  $element) {
                     $array[$element['label']]=$element['value'];
                 }
+                $date=Carbon::parse($seller->created_at)->format('d-m-Y');
+                //  dd($date);
 
-                return view('frontend.user.seller.seller_autoidentification')->with('array', $array)->with('seller',$seller);
+                return view('frontend.user.seller.seller_autoidentification')->with('array', $array)->with('seller',$seller)->with('date',$date);
 
              }
-            //  else{
-            //     return redirect()->route('seller.autoidentification');
-            // }
-        };
+             else{
+                return back();
+            }
+        }
     }
     public function seller_page_form_save(Request $request)
     {
@@ -80,7 +83,7 @@ class SellerDeliveryFormController extends Controller
                      }
                     // dd($selection);
                     //   dd($selection);
-                    $date=$seller->created_at;
+                    $date=Carbon::parse($seller->created_at)->format('d-m-Y');
                     // dd($date);
                      return view('frontend.user.seller.seller_delivery')->with('seller', $selection)->with('user_id', $user_id)->with('date',$date);
 

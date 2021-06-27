@@ -45,9 +45,6 @@
                         <div class="col-md-12 mt-4 text-center my-2">
                         <h5> <b>Договор на оказание курьерских услуг № {{$user_id}}</b> </h5>
                         </div>
-                        {{-- <div class="col-md-12 mt-4 text-center">
-                            <h1 class="text-danger">{{ $seller['Название_магазина'] }}</h1>
-                        </div> --}}
                         <div class="col-md-4">
                             <p> {{$date}}_ года. </p>
                         </div>

@@ -60,7 +60,7 @@ class HomeController extends Controller
 
             $request->validate([
                 'name' => 'required|min:3',
-                'phone' => 'required|max:9|unique:users',
+                'phone' => 'required|min:8|max:9|unique:users',
                 'country_code' => 'required',
                 'email' => 'required|unique:users|max:255',
                 'password' => 'required|min:6',

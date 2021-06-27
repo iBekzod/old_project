@@ -47,7 +47,7 @@
                             </div>
                             <div class=" offset-md-6 col-md-4">
                                  <div class="right">
-                                   <p>{{$seller['created_at']}} года.</p>
+                                   <p>{{$date}} года.</p>
                                  </div>
                             </div>
                         </div>
