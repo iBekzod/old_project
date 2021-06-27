@@ -550,7 +550,7 @@ class ElementController extends Controller
     {
         // dd($request);
         $element = new Element;
-        $element->published = false;
+        $element->published = true;
         $element->added_by = Auth::user()->user_type;
         $element->category_id = $request->category_id;
         $element->brand_id = $request->brand_id;
