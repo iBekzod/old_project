@@ -99,9 +99,11 @@
                                         <th width="30%">{{ translate('Name') }}</th>
                                         <th data-breakpoints="md">{{ translate('Category') }}</th>
                                         <th data-breakpoints="md">{{ translate('Current Qty') }}</th>
+                                        <th data-breakpoints="md">{{ translate('Sale Qty') }}</th>
                                         <th>{{ translate('Base Price') }}</th>
+                                        <th>{{ translate('Currency') }}</th>
                                         <th data-breakpoints="md">{{ translate('Published') }}</th>
-                                        <th data-breakpoints="md" class="text-right">{{ translate('Options') }}</th>
+                                        <th data-breakpoints="md" >{{ translate('Options') }}</th>
                                         <th data-breakpoints="md" class="text-right">{{ translate('Is Accepted?') }}</th>
                                     </tr>
                                 </thead>
@@ -113,28 +115,18 @@
                                             <td>
                                                 <a href="{{ route('product', $product->slug) }}" target="_blank"
                                                     class="text-reset">
-                                                    {{ $product->getTranslation('name') }}
+                                                    {{ $product->variation->getTranslation('name') }}
                                                 </a>
                                             </td>
                                             <td>
-                                                @if ($product->category != null)
-                                                    {{ $product->category->getTranslation('name') }}
+                                                @if ($product->element->category != null)
+                                                    {{ $product->element->category->getTranslation('name') }}
                                                 @endif
                                             </td>
-                                            <td>
-                                                @php
-                                                    $qty = 0;
-                                                    if ($product->variant_product) {
-                                                        foreach ($product->stocks as $key => $stock) {
-                                                            $qty += $stock->qty;
-                                                        }
-                                                    } else {
-                                                        $qty = $product->current_stock;
-                                                    }
-                                                    echo $qty;
-                                                @endphp
-                                            </td>
-                                            <td>{{ $product->unit_price }}</td>
+                                            <td>{{$product->qty}}</td>
+                                            <td>{{$product->num_of_sale}}</td>
+                                            <td>{{ $product->price }}</td>
+                                            <td>{{ $product->currency->code }}</td>
                                             <td>
                                                 <label class="mb-0 aiz-switch aiz-switch-success">
                                                     <input onchange="update_published(this)" value="{{ $product->id }}"
@@ -148,7 +140,7 @@
                                                 {{-- <a class="btn btn-soft-info btn-icon btn-circle btn-sm" href="{{route('seller.products.characteristics', ['id'=>$product->id])}}" title="{{ translate('Characteristics') }}">
                                                     <i class="las la-list"></i>
                                                 </a> --}}
-                                                {{-- <a class="btn btn-soft-info btn-icon btn-circle btn-sm" href="{{route('seller.products.edit', ['id'=>$product->id, 'lang'=default_language()])}}" title="{{ translate('Edit') }}"> --}}
+                                                <a class="btn btn-soft-info btn-icon btn-circle btn-sm" href="{{ route('seller.elements.products.edit', ['id'=> $product->element_id, 'lang'=>default_language()]) }}" title="{{ translate('Edit') }}">
                                                 <i class="las la-edit"></i>
                                                 </a>
                                                 {{-- <a href="{{route('products.duplicate', $product->id)}}" class="btn btn-soft-success btn-icon btn-circle btn-sm"  title="{{ translate('Duplicate') }}">
@@ -156,7 +148,7 @@
                     						  </a> --}}
                                                 <a href="#"
                                                     class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
-                                                    data-href="{{ route('products.destroy', $product->id) }}"
+                                                    data-href="{{ route('seller.products.destroy', $product->id) }}"
                                                     title="{{ translate('Delete') }}">
                                                     <i class="las la-trash"></i>
                                                 </a>

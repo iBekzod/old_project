@@ -99,71 +99,63 @@
                     </tr>
                     </thead>
                     <tbody>
-{{--                    @dd($variations)--}}
-                    @foreach($variations as $key => $variation)
+{{--                    @dd($products)--}}
+                    @foreach($products as $key => $product)
                         <tr>
-                            <td>{{ ($key+1) + ($variations->currentPage() - 1)*$variations->perPage() }}</td>
+                            <td>{{ ($key+1) + ($products->currentPage() - 1)*$products->perPage() }}</td>
                             <td>
-                                <a href="{{ url('single_product/'.$variation->slug) }}" target="_blank">
+                                <a href="{{ url('single_product/'.$product->slug) }}" target="_blank">
                                     <div class="form-group row">
                                         <div class="col-lg-4">
-                                            <img src="{{ ($variation)?uploaded_asset($variation->thumbnail_img)??static_asset('assets/img/placeholder.jpg'):null}}" alt="Image"
+                                            <img src="{{ ($product->variation)?uploaded_asset($product->variation->thumbnail_img)??static_asset('assets/img/placeholder.jpg'):null}}" alt="Image"
                                                     class="w-50px">
                                         </div>
                                         <div class="col-lg-8">
-                                            <span class="text-muted">{{  $variation->getTranslation('name')??null}}</span>
+                                            <span class="text-muted">{{  ($product->variation)?$product->variation->getTranslation('name'):null}}</span>
                                         </div>
                                     </div>
                                 </a>
                             </td>
                             @if($type == 'Seller' || $type == 'All')
-                                <td>{{ ($variation->product)?$variation->product->user->name??null:null }}</td>
+                                <td>{{ ($product)?$product->user->name??null:null }}</td>
                             @endif
-                            <td>{{ $variation->num_of_sale??0 }} {{translate('times')}}</td>
+                            <td>{{ $product->num_of_sale??0 }} {{translate('times')}}</td>
                             <td>
-                                {{($variation->product)?$variation->product->qty??0:null}}
+                                {{($product)?$product->qty??0:null}}
                             </td>
-                            <td>{{ ($variation->product)?number_format(homeBasePrice($variation->product->id), 2):null }}</td>
-                            <td>{{ $variation->rating??0 }}</td>
-{{--                            <td>{{ $variation->product->currency->code }}</td>--}}
+                            <td>{{ ($product)?number_format(homeBasePrice($product->id), 2):null }}</td>
+                            <td>{{ $product->rating??0 }}</td>
+{{--                            <td>{{ $product->product->currency->code }}</td>--}}
                             <td>
                                 <label class="aiz-switch aiz-switch-success mb-0">
-                                    <input onchange="update_todays_deal(this)" value="{{ $variation->id }}"
-                                           type="checkbox" @if(($variation->product)?$variation->product->todays_deal:null == 1) checked @endif >
+                                    <input onchange="update_todays_deal(this)" value="{{ $product->id }}"
+                                           type="checkbox" @if(($product)?$product->todays_deal:null == 1) checked @endif >
                                     <span class="slider round"></span>
                                 </label>
                             </td>
 
                             <td>
                                 <label class="aiz-switch aiz-switch-success mb-0">
-                                    <input onchange="update_published(this)" value="{{ $variation->id }}"
-                                           type="checkbox" @if(($variation->product)?$variation->product->published:null == 1) checked @endif >
+                                    <input onchange="update_published(this)" value="{{ $product->id }}"
+                                           type="checkbox" @if(($product)?$product->published:null == 1) checked @endif >
                                     <span class="slider round"></span>
                                 </label>
                             </td>
                             <td>
                                 <label class="aiz-switch aiz-switch-success mb-0">
-                                    <input onchange="update_featured(this)" value="{{ $variation->id }}"
-                                           type="checkbox" @if(($variation->product)?$variation->product->featured:null == 1) checked @endif>
+                                    <input onchange="update_featured(this)" value="{{ $product->id }}"
+                                           type="checkbox" @if(($product)?$product->featured:null == 1) checked @endif>
                                     <span class="slider round"></span>
                                 </label>
                             </td>
                             <td class="text-right">
-                                {{--  @if ($type == 'Seller')
-                                    <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                       href="{{route('products.seller.edit', $variation->id )}}"
-                                       title="{{ translate('Edit') }}">
-                                        <i class="las la-edit"></i>
-                                    </a>
-                                @else
-                                    <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                       href="{{route('products.admin.edit', ['id'=>$variation->id] )}}"
-                                       title="{{ translate('Edit') }}">
-                                        <i class="las la-edit"></i>
-                                    </a>
-                                @endif  --}}
+                                <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
+                                    href="{{route('element.products.edit', ['id'=>$product->element->id] )}}"
+                                    title="{{ translate('Edit') }}">
+                                    <i class="las la-edit"></i>
+                                </a>
                                 <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
-                                   data-href="{{route('products.destroy', ['id'=>$variation->id])}}"
+                                   data-href="{{route('products.destroy', ['id'=>$product->id])}}"
                                    title="{{ translate('Delete') }}">
                                     <i class="las la-trash"></i>
                                 </a>
@@ -173,7 +165,7 @@
                     </tbody>
                 </table>
                 <div class="aiz-pagination">
-                    {{ $variations->appends(request()->input())->links() }}
+                    {{ $products->appends(request()->input())->links() }}
                 </div>
             </div>
     </div>
@@ -198,7 +190,7 @@
             } else {
                 var status = 0;
             }
-            $.post('{{ route('products.todays_deals') }}', {
+            $.post('{{ route('products.todays_deal') }}', {
                 _token: '{{ csrf_token() }}',
                 id: el.value,
                 status: status
@@ -217,7 +209,7 @@
             } else {
                 var status = 0;
             }
-            $.post('{{ route('products.publisheds') }}', {
+            $.post('{{ route('products.published') }}', {
                 _token: '{{ csrf_token() }}',
                 id: el.value,
                 status: status
@@ -236,7 +228,7 @@
             } else {
                 var status = 0;
             }
-            $.post('{{ route('products.featureds') }}', {
+            $.post('{{ route('products.featured') }}', {
                 _token: '{{ csrf_token() }}',
                 id: el.value,
                 status: status

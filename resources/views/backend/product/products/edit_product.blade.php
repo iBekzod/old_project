@@ -103,7 +103,16 @@
                                         <label class="mb-0 aiz-switch aiz-switch-success">
                                             <input type="checkbox"
                                                    onchange="change_switch(this.checked, 'todays_deal_change')"
-                                                   name="todays_deal" checked>
+                                                   name="todays_deal"  @if($element->todays_deal) checked @endif>
+                                            <span></span>
+                                        </label>
+                                    </td>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{ translate('Featured') }}</label>
+                                        <label class="mb-0 aiz-switch aiz-switch-success">
+                                            <input type="checkbox"
+                                                   onchange="change_switch(this.checked, 'featured_change')"
+                                                   name="featured" @if($element->featured) checked @endif>
                                             <span></span>
                                         </label>
                                     </td>
@@ -112,10 +121,14 @@
                                         <label class="mb-0 aiz-switch aiz-switch-success">
                                             <input type="checkbox"
                                                    onchange="change_switch(this.checked, 'published_change')"
-                                                   name="published" checked>
+                                                   name="published"  @if($element->published) checked @endif>
                                             <span></span>
                                         </label>
                                     </td>
+                                    <td>
+                                        {{translate('Delete')}}
+                                    </td>
+
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -208,16 +221,26 @@
                                                 </label>
                                             </td>
                                             <td>
+                                                <label class="aiz-switch aiz-switch-success mb-0">
+                                                    <input type="checkbox"
+                                                    name="variation[{{ $index }}][featured]"
+                                                    class="featured_change" @if($element->featured) checked @endif>
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </td>
+                                            <td>
                                                 <label class="mb-0 aiz-switch aiz-switch-success ">
                                                     <input type="checkbox" name="variation[{{ $index }}][published]"
                                                         class="published_change" @if ($element->published) checked @endif>
                                                     <span></span>
                                                 </label>
                                             </td>
-                                            {{-- <td>
-                                                <button type="button" class="btn btn-icon btn-sm btn-danger"
-                                                    onclick="delete_variant(this)"><i class="las la-trash"></i></button>
-                                            </td> --}}
+                                            <td>
+                                                
+                                                {{translate('Is new!')}}
+                                                {{-- <button type="button" class="btn btn-icon btn-sm btn-danger"
+                                                    onclick="delete_variant(this)"><i class="las la-trash"></i></button> --}}
+                                            </td>
                                         </tr>
                                     @else
                                         <tr class="variant">
@@ -250,7 +273,7 @@
                                                         name="variation[{{ $index }}][currency]">
                                                     @foreach($currencies as $currency)
                                                         <option class="currency_change" value="{{$currency->id}}"
-                                                            @if($currency->code==$combination->variant->currency_id) selected @endif>{{$currency->code}}</option>
+                                                            @if($currency->code==$combination->variant->currency->code) selected @endif>{{$currency->code}}</option>
                                                     @endforeach
                                                 </select>
                                             </td>
@@ -299,12 +322,27 @@
                                                 </label>
                                             </td>
                                             <td>
+                                                <label class="aiz-switch aiz-switch-success mb-0">
+                                                    <input type="checkbox"
+                                                    name="variation[{{ $index }}][featured]"
+                                                    class="featured_change" @if($combination->variant->seller_featured) checked @endif>
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </td>
+                                            <td>
                                                 <label class="mb-0 aiz-switch aiz-switch-success ">
                                                     <input type="checkbox" name="variation[{{ $index }}][published]"
                                                         class="published_change" @if($combination->variant->published) checked @endif>
                                                     <span></span>
                                                 </label>
                                             </td>
+                                            <td>
+                                                <a href="{{ route('products.destroy', $combination->variant->id) }}"
+                                                    class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
+                                                    title="{{ translate('Delete') }}">
+                                                    <i class="las la-trash"></i>
+                                                </a>
+                                            <td>
                                             {{-- <td>
                                                 <button type="button" class="btn btn-icon btn-sm btn-danger"
                                                         onclick="delete_variant(this)"><i class="las la-trash"></i></button>
@@ -324,7 +362,9 @@
         </form>
     </div>
 @endsection
-
+@section('modal')
+    @include('modals.delete_modal')
+@endsection
 @section('script')
     <script type="text/javascript">
         function change_input(value, class_name) {

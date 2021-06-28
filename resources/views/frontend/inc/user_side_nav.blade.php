@@ -91,12 +91,12 @@
                 </li> --}}
 
                 @if(Auth::user()->user_type == 'seller')
-                    {{-- <li class="aiz-side-nav-item">
+                    <li class="aiz-side-nav-item">
                         <a href="{{ route('seller.products') }}" class="aiz-side-nav-link {{ areActiveRoutes(['seller.products', 'seller.products.upload', 'seller.products.edit'])}}">
                             <i class="lab la-sketch aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{ translate('Products') }}</span>
                         </a>
-                    </li> --}}
+                    </li>
                     <li class="aiz-side-nav-item">
                         <a href="{{ route('seller.elements.all') }}" class="aiz-side-nav-link {{ areActiveRoutes(['seller.elements.all', 'seller.elements.create'])}}">
                             <i class="lab la-sketch aiz-side-nav-icon"></i>
@@ -117,14 +117,14 @@
                     </li> --}}
                 @endif
 
-                @if(\App\BusinessSetting::where('type', 'classified_product')->first()->value == 1)
+                {{-- @if(\App\BusinessSetting::where('type', 'classified_product')->first()->value == 1)
                     <li class="aiz-side-nav-item">
                         <a href="{{ route('customer_products.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['customer_products.index', 'customer_products.create', 'customer_products.edit'])}}">
                             <i class="lab la-sketch aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{ translate('Classified Products') }}</span>
                         </a>
                     </li>
-                @endif
+                @endif --}}
 
                 @if(Auth::user()->user_type == 'seller')
                     {{-- @if (\App\Addon::where('unique_identifier', 'pos_system')->first() != null && \App\Addon::where('unique_identifier', 'pos_system')->first()->activated)
