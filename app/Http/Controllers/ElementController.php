@@ -1000,7 +1000,7 @@ class ElementController extends Controller
             $currencies = Currency::where('status', true)->get();
             foreach($combinations as $variation){
                 //->where('user_id', auth()->id())
-                if($product=Product::where('variation_id', $variation->id)->where('element_id', $element->id)->first()){
+                if($product=Product::where('variation_id', $variation->id)->where('element_id', $element->id)->where('user_id', auth()->id())->first()){
                     $variation->is_new=false;
                     $variation->variant=$product;
                 }else{
@@ -1008,7 +1008,9 @@ class ElementController extends Controller
                     $variation->variant=null;
                 }
             }
-            return view('backend.product.products.edit_product', compact('element', 'combinations', 'currencies', 'lang'));
+            $seller_products=Product::where('element_id', $element->id)->where('user_id', '<>', auth()->id())->get()->groupBy('user_id');
+            // dd($seller_products);
+            return view('backend.product.products.edit_product', compact('element', 'seller_products', 'combinations', 'currencies', 'lang'));
         } catch (\Exception $e) {
             // dd($e->getMessage());
         }

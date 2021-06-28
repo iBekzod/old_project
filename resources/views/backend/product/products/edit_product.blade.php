@@ -236,7 +236,7 @@
                                                 </label>
                                             </td>
                                             <td>
-                                                
+
                                                 {{translate('Is new!')}}
                                                 {{-- <button type="button" class="btn btn-icon btn-sm btn-danger"
                                                     onclick="delete_variant(this)"><i class="las la-trash"></i></button> --}}
@@ -343,16 +343,16 @@
                                                     <i class="las la-trash"></i>
                                                 </a>
                                             <td>
-                                            {{-- <td>
-                                                <button type="button" class="btn btn-icon btn-sm btn-danger"
-                                                        onclick="delete_variant(this)"><i class="las la-trash"></i></button>
-                                            </td> --}}
                                         </tr>
                                     @endif
                                 @endforeach
+
+
                                 </tbody>
                             </table>
                         </div>
+
+
                     {{-- @endif --}}
                 </div>
                 <div class="mb-3 text-right">
@@ -360,7 +360,191 @@
                 </div>
             </div>
         </form>
-    </div>
+
+        @foreach ($seller_products as $seller_id=>$seller_products)
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0 h6">{{\App\User::find($seller_id)->name}}</h5>
+                </div>
+                <div class="card-body">
+                    <div style="overflow-y: scroll; ">
+                        <table class="table table-bordered" style="width:1800px">
+                            <thead>
+                                <tr>
+                                    <td class="text-center">
+                                        {{ translate('Image') }}
+                                    </td>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{ translate('Name') }}</label>
+                                    </td>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{ translate('SKU') }}</label>
+                                    </td>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{ translate('Price') }}</label>
+
+                                    </td>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{ translate('Currency') }}</label>
+
+                                    </td>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{ translate('Quantity') }}</label>
+
+                                    </td>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{ translate('Discount') }}</label>
+
+                                    </td>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{ translate('Discount Type') }}</label>
+
+                                    </td>
+                                    <td class="text-center">
+
+                                        <label for="" class="control-label">{{ translate('Delivery Type') }}</label>
+
+                                    </td>
+
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{ translate('Tax') }}</label>
+
+                                    </td>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{ translate('Tax type') }}</label>
+
+                                    </td>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{ translate('Todays deals') }}</label>
+
+                                    </td>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{ translate('Featured') }}</label>
+
+                                    </td>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{ translate('Published') }}</label>
+
+                                    </td>
+                                    {{-- <td>
+                                        {{translate('Delete')}}
+                                    </td> --}}
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($seller_products as $seller_product)
+                                    @php
+                                        $index=$seller_product->id;
+                                    @endphp
+                                    <tr class="variant">
+                                        <td>
+                                            <img src="{{ uploaded_asset($seller_product->variation->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}" height="50" width="50" style="object-fit: cover" style="display:inline-block;">
+                                        </td>
+                                        <td>
+                                            <label for="" class="control-label">{{$seller_product->variation->getTranslation('name')}}</label>
+                                            <input type="hidden" name="variation[{{ $index }}][id]"
+                                                value="{{$seller_product->id??null}}" class="form-control">
+                                            <input type="hidden" name="variation[{{ $index }}][variation_id]"
+                                                value="{{$index??null}}" class="form-control">
+                                            <input type="hidden" name="variation[{{ $index }}][slug]"
+                                                value="{{$seller_product->slug??null}}" class="form-control">
+                                            <input type="hidden" name="variation[{{ $index }}][name]"
+                                                value="{{$seller_product->name??null}}"
+                                                class="form-control">
+
+                                        </td>
+                                        <td>
+                                        <input type="text" name="variation[{{ $index }}][sku]" value="{{$seller_product->sku}}" class="form-control">
+                                        </td>
+                                        <td>
+                                            <input type="number" style="width: 100px;" name="variation[{{ $index }}][price]"
+                                                value="{{$seller_product->price??0}}" min="0" step="0.01"
+                                                class="form-control price_change" required>
+                                        </td>
+                                        <td>
+                                            <select class="form-control aiz-selectpicker "
+                                                    name="variation[{{ $index }}][currency]">
+                                                @foreach($currencies as $currency)
+                                                    <option class="currency_change" value="{{$currency->id}}"
+                                                        @if($currency->code==$seller_product->currency->code) selected @endif>{{$currency->code}}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="number" style="width: 100px;" name="variation[{{ $index }}][quantity]"
+                                                value="{{$seller_product->qty??0}}" min="0" step="0.01"
+                                                class="form-control quantity_change" required>
+                                        </td>
+                                        <td>
+                                            <input type="number" style="width: 100px;" name="variation[{{ $index }}][discount]" min="0"
+                                                step="0.01" class="form-control discount_change" required
+                                                value="{{$seller_product->discount??0}}">
+                                        </td>
+                                        <td>
+                                            <select class="form-control aiz-selectpicker discount_type_change"
+                                                    name="variation[{{ $index }}][discount_type]">
+                                                <option value="amount">{{translate('Flat')}}</option>
+                                                <option value="percent" selected>{{translate('Percent')}}</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select class="form-control aiz-selectpicker delivery_type_change"
+                                                    name="variation[{{ $index }}][delivery_type]">
+                                                    <option value="free" >{{translate('Free')}}</option>
+                                                    <option value="seller">{{translate('Self')}}</option>
+                                                    <option value="tinfis" selected>{{translate('TINFIS Cargo')}}</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="number" style="width: 100px;" name="variation[{{ $index }}][tax]"
+                                                value="{{$seller_product->tax??0}}" min="0" step="0.01"
+                                                class="form-control tax_change" required>
+                                        </td>
+                                        <td>
+                                            <select class="form-control aiz-selectpicker tax_type_change"
+                                                    name="variation[{{ $index }}][tax_type]">
+                                                <option value="amount">{{translate('Flat')}}</option>
+                                                <option value="percent" selected>{{translate('Percent')}}</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <label class="mb-0 aiz-switch aiz-switch-success">
+                                                <input type="checkbox" name="variation[{{ $index }}][todays_deal]"
+                                                    class="todays_deal_change" @if($seller_product->todays_deal) checked @endif>
+                                                <span></span>
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <label class="aiz-switch aiz-switch-success mb-0">
+                                                <input type="checkbox"
+                                                name="variation[{{ $index }}][featured]"
+                                                class="featured_change" @if($seller_product->seller_featured) checked @endif>
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <label class="mb-0 aiz-switch aiz-switch-success ">
+                                                <input type="checkbox" name="variation[{{ $index }}][published]"
+                                                    class="published_change" @if($seller_product->published) checked @endif>
+                                                <span></span>
+                                            </label>
+                                        </td>
+                                        {{-- <td>
+                                            <a href="{{ route('products.destroy', $seller_product->id) }}"
+                                                class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
+                                                title="{{ translate('Delete') }}">
+                                                <i class="las la-trash"></i>
+                                            </a>
+                                        <td> --}}
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        @endforeach
 @endsection
 @section('modal')
     @include('modals.delete_modal')
