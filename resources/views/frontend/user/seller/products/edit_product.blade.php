@@ -50,9 +50,9 @@
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Currency') }}</label>
                                         <select class="form-control aiz-selectpicker"  name="currency" onchange="change_selection(this.value, 'currency_change')" >
-                                            <option value="no">{{translate('Selected value')}}</option>
+                                            {{-- <option value="no">{{translate('Selected value')}}</option> --}}
                                             @foreach($currencies as $currency)
-                                                <option  value="{{$currency->code}}">{{$currency->code}}</option>
+                                                <option  value="{{$currency->code}}" @if($currency->code=='USD') selected @endif>{{$currency->code}}</option>
                                             @endforeach
                                         </select>
                                     </td>
@@ -69,15 +69,18 @@
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Discount Type') }}</label>
                                         <select class="form-control aiz-selectpicker" name="discount_type">
-                                            <option value="no">{{translate('Selected value')}}</option>
+                                            {{-- <option value="no">{{translate('Selected value')}}</option> --}}
                                             <option value="amount">{{translate('Flat')}}</option>
-                                            <option value="percent">{{translate('Percent')}}</option>
+                                            <option value="percent" selected>{{translate('Percent')}}</option>
                                         </select>
                                     </td>
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Delivery Type') }}</label>
                                         <select class="form-control aiz-selectpicker" name="delivery_type">
-                                            <option value="no">{{translate('Selected value')}}</option>
+                                            {{-- <option value="no">{{translate('Selected value')}}</option> --}}
+                                            <option value="free" >{{ translate('Free') }}</option>
+                                            <option value="seller">{{ translate('Self') }}</option>
+                                            <option value="tinfis" selected>{{ translate('TINFIS Cargo') }}</option>
                                         </select>
                                     </td>
 
@@ -89,9 +92,9 @@
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Tax type') }}</label>
                                         <select class="form-control aiz-selectpicker" name="tax_type">
-                                            <option value="no">{{translate('Selected value')}}</option>
+                                            {{-- <option value="no">{{translate('Selected value')}}</option> --}}
                                             <option value="amount">{{translate('Flat')}}</option>
-                                            <option value="percent">{{translate('Percent')}}</option>
+                                            <option value="percent" selected>{{translate('Percent')}}</option>
                                         </select>
                                     </td>
                                     <td class="text-center">
@@ -141,7 +144,7 @@
                                             </td>
                                             <td>
                                                 <input type="text" name="variation[{{ $index }}][sku]"
-                                                    value="{{ $combination->partnum }}" class="form-control">
+                                                    value="" class="form-control">
                                             </td>
 
                                             <td>
@@ -153,13 +156,8 @@
                                                 <select required class="form-control aiz-selectpicker "
                                                     name="variation[{{ $index }}][currency]">
                                                     @foreach ($currencies as $currency)
-                                                        @if ($currency->code == 'UZB')
-                                                            <option class="currency_change" value="{{ $currency->id }}"
-                                                                selected>{{ $currency->code }}</option>
-                                                        @else
-                                                            <option class="currency_change" value="{{ $currency->id }}">
-                                                                {{ $currency->code }}</option>
-                                                        @endif
+                                                    <option class="currency_change" value="{{ $currency->id }}"
+                                                        @if($currency->code=='USD') selected @endif>{{ $currency->code }}</option>
                                                     @endforeach
                                                 </select>
                                             </td>
@@ -183,9 +181,9 @@
                                             <td>
                                                 <select class="form-control aiz-selectpicker delivery_type_change"
                                                     name="variation[{{ $index }}][delivery_type]">
-                                                    <option value="free" selected>{{ translate('Free') }}</option>
+                                                    <option value="free" >{{ translate('Free') }}</option>
                                                     <option value="seller">{{ translate('Self') }}</option>
-                                                    <option value="tinfis">{{ translate('TINFIS Cargo') }}</option>
+                                                    <option value="tinfis" selected>{{ translate('TINFIS Cargo') }}</option>
                                                 </select>
                                             </td>
                                             <td>

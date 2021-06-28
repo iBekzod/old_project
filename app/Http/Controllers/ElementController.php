@@ -47,7 +47,8 @@ class ElementController extends Controller
         $sub_category_id = 0;
         $sub_sub_category_id = 0;
         $user_id=Auth::user()->id;
-        $elements = Element::where('published', true);
+        $elements = Element::where('deleted_at', '=', null);
+        // $elements = Element::where('published', true);
         // ->orWhere(function($query) use ($user_id) {
         //     dd($query);
         //     $query->where('user_id', $user_id)->where('published', false);
