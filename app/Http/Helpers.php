@@ -2,6 +2,7 @@
 
 use App\Currency;
 use App\BusinessSetting;
+use App\Category;
 use App\Http\HelperClasses\Colorcodeconverter;
 use App\Http\HelperClasses\Timezones;
 use App\Product;
@@ -246,6 +247,30 @@ if (!function_exists('slugify')) {
         // $string = preg_replace('/[-\s]+/', '-', $string);
         $string = transliterator_transliterate("Any-Latin; NFD; [:Nonspacing Mark:] Remove; NFC; [:Punctuation:] Remove; Lower();", $string);
         return $string;
+    }
+}
+if (!function_exists('getProductCategories')) {
+    function getProductCategories($items, $level=2, $type='product')
+    {
+        if($type=='element'){
+            $element_ids=$items->pluck('element_id');
+        }else{
+            //Type product and variation by default
+            $element_ids=$items->select('element_id')->distinct()->pluck('element_id');
+        }
+        $sub_sub_category_ids=Element::whereIn('id', $element_ids)->pluck('category_id');
+        $sub_sub_categories=Category::whereIn('id', $sub_sub_category_ids);
+        if($level==2){
+            return $sub_sub_categories;
+        }
+        $sub_category_ids=$sub_sub_categories->pluck('parent_id');
+        $sub_categories=Category::whereIn('id', $sub_category_ids);
+        if($level==1){
+            return $sub_categories;
+        }
+        $category_ids=$sub_categories->pluck('parent_id');
+        $categories=Category::whereIn('id', $category_ids);
+        return $categories;
     }
 }
 if (!function_exists('getPublishedProducts')) {
