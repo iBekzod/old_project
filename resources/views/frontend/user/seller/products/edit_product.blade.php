@@ -124,9 +124,9 @@
                                             <span></span>
                                         </label>
                                     </td>
-                                    <td>
+                                    {{-- <td>
                                         {{translate('Delete')}}
-                                    </td>
+                                    </td> --}}
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -233,11 +233,9 @@
                                                     <span></span>
                                                 </label>
                                             </td>
-                                            <td>
+                                            {{-- <td>
                                                 {{translate('Is new!')}}
-                                                {{-- <button type="button" class="btn btn-icon btn-sm btn-danger"
-                                                    onclick="delete_variant(this)"><i class="las la-trash"></i></button> --}}
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                     @else
                                         <tr class="variant">
@@ -338,17 +336,13 @@
                                                     <span></span>
                                                 </label>
                                             </td>
-                                            <td>
+                                            {{-- <td>
                                                 <a href="{{ route('seller.products.destroy', $combination->variant->id) }}"
                                                     class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
                                                     title="{{ translate('Delete') }}">
                                                     <i class="las la-trash"></i>
                                                 </a>
-                                            <td>
-                                            {{-- <td>
-                                                <button type="button" class="btn btn-icon btn-sm btn-danger"
-                                                        onclick="delete_variant(this)"><i class="las la-trash"></i></button>
-                                            </td> --}}
+                                            <td> --}}
                                         </tr>
                                     @endif
                                 @endforeach
