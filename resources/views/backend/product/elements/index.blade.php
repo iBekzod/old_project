@@ -1,7 +1,7 @@
 @extends('backend.layouts.app')
 
 @section('content')
-    <div class="aiz-titlebar text-left mt-1 mb-1">
+    <div class="mt-1 mb-1 text-left aiz-titlebar">
         <div class="row align-items-center">
             <div class="col-md-6">
                 <h1 class="h3">{{translate('All elements')}}</h1>
@@ -19,20 +19,20 @@
     <div class="card">
         <form class="" id="sort_elements" action="" method="GET">
             <div class="card-header row gutters-5">
-                {{-- <div class="ml-auto  my-1 col-md-2">
+                {{-- <div class="my-1 ml-auto col-md-2">
                     <div class="text-center col text-md-left">
                         <h5 class="mb-md-0 h6">{{ translate('Elements') }}</h5>
                     </div>
                 </div> --}}
-                <div class="ml-auto my-2 col-md-8">
-                    <div class="mb-0 form-group text-center col text-md-right">
+                <div class="my-2 ml-auto col-md-8">
+                    <div class="mb-0 text-center form-group col text-md-right">
                         <input type="text" class="form-control form-control-sm" id="search" name="search"  onchange="sort_elements()"
                             @isset($sort_search) value="{{ $sort_search }}" @endisset
                             placeholder="{{ translate('Type & Enter') }}">
                     </div>
                 </div>
-                <div class="ml-auto my-2 col-md-2">
-                    <div class="mb-0 form-group text-center col text-md-right">
+                <div class="my-2 ml-auto col-md-2">
+                    <div class="mb-0 text-center form-group col text-md-right">
                         <select class="form-control form-control-sm aiz-selectpicker" name="type" id="type"
                                 onchange="sort_elements()">
                             <option value="">{{ translate('Sort By') }}</option>
@@ -51,8 +51,8 @@
                         </select>
                     </div>
                 </div>
-                <div class="ml-auto my-2 col-md-2">
-                    <select class="form-control form-control-sm aiz-selectpicker mb-2 mb-md-0" id="user_id"
+                <div class="my-2 ml-auto col-md-2">
+                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" id="user_id"
                             name="user_id" onchange="sort_elements()">
                         <option value="">{{ translate('All Sellers') }}</option>
                         @foreach (App\User::where('user_type', '=', 'admin')->orWhere('user_type', '=', 'seller')->get() as $key => $seller)
@@ -66,7 +66,7 @@
                         <option value="0" @if($category_id == 0) selected @endif>{{ translate('All categories') }}</option>
                         @foreach ($categories as $key => $category)
                                 <option value="{{ $category->id }}" @if ($category->id == $category_id) selected @endif>
-                                    {{ $category->name }}
+                                    {{ $category->getTranslation('name', $lang) }}
                                 </option>
                         @endforeach
                     </select>
@@ -77,7 +77,7 @@
                         <option value="0"  @if($sub_category_id == 0) selected @endif>{{ translate('All sub categories') }}</option>
                         @foreach ($sub_categories as $key => $category)
                                 <option value="{{ $category->id }}" @if ($category->id == $sub_category_id) selected @endif>
-                                    {{ $category->name }}
+                                    {{ $category->getTranslation('name', $lang) }}
                                 </option>
                         @endforeach
                     </select>
@@ -88,7 +88,7 @@
                         <option value="0"  @if($sub_sub_category_id == 0) selected @endif>{{ translate('All sub sub categories') }}</option>
                         @foreach ($sub_sub_categories as $key => $category)
                                 <option value="{{ $category->id }}" @if ($category->id == $sub_sub_category_id) selected @endif>
-                                    {{ $category->name }}
+                                    {{ $category->getTranslation('name', $lang) }}
                                 </option>
                         @endforeach
                     </select>
@@ -129,7 +129,7 @@
                             </td>
                             {{-- <td>{!! strip_tags($element->getTranslation('description')) !!}</td> --}}
                             <td>
-                                <label class="aiz-switch aiz-switch-success mb-0">
+                                <label class="mb-0 aiz-switch aiz-switch-success">
                                     <input onchange="update_todays_deal(this)" value="{{ $element->id }}"
                                            type="checkbox" <?php if ($element->todays_deal == 1) echo "checked";?> >
                                     <span class="slider round"></span>
@@ -137,14 +137,14 @@
                             </td>
                             <td>{{ $element->rating }}</td>
                             <td>
-                                <label class="aiz-switch aiz-switch-success mb-0">
+                                <label class="mb-0 aiz-switch aiz-switch-success">
                                     <input onchange="update_published(this)" value="{{ $element->id }}"
                                            type="checkbox" <?php if ($element->published == 1) echo "checked";?> >
                                     <span class="slider round"></span>
                                 </label>
                             </td>
                             <td>
-                                <label class="aiz-switch aiz-switch-success mb-0">
+                                <label class="mb-0 aiz-switch aiz-switch-success">
                                     <input onchange="update_featured(this)" value="{{ $element->id }}"
                                            type="checkbox" <?php if ($element->featured == 1) echo "checked";?> >
                                     <span class="slider round"></span>
@@ -152,7 +152,7 @@
                             </td>
                             <td>{{ $element->user->name }}</td>
                             {{-- <td class="text-right">
-                                <label class="aiz-switch aiz-switch-success mb-0">
+                                <label class="mb-0 aiz-switch aiz-switch-success">
                                     <input disabled onchange="clone_selected(this)" value="{{ $element->id }}"
                                            type="checkbox" @if($element->cloned == true) checked @endif >
                                     <span class="slider round"></span>
