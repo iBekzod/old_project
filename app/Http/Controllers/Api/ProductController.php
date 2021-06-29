@@ -292,7 +292,7 @@ class ProductController extends Controller
 
     public function featured()
     {
-        return new ProductCollection(getPublishedProducts('variation', ['where' => [['featured', 1]]], [], ['random'])->get());
+        return new ProductCollection(getPublishedProducts('variation', ['where' => [['featured', 1]]], [], [])->get());
 
         // return new ProductCollection(Product::where('featured', 1)->where('is_accepted', 1)->inRandomOrder()->get());
     }
@@ -311,7 +311,7 @@ class ProductController extends Controller
 
     public function bestSeller()
     {
-        return new ProductCollection(getPublishedProducts('element', ['orderBy' => [['num_of_sale' => 'desc']]], [], ['random'])->paginate(20));
+        return new ProductCollection(getPublishedProducts('element', ['orderBy' => [['num_of_sale' => 'desc']]], [], [])->paginate(20));
     }
 
     public function related($id)
@@ -328,7 +328,7 @@ class ProductController extends Controller
     public function topFromSeller($id)
     {
         $product = Product::find($id);
-        return new ProductCollection(getPublishedProducts('product', ['where' => [['user_id', $product->user_id], ['is_accepted', 1]], 'random', 'orderBy' => [['num_of_sale' => 'desc']]], [], [])->limit(4)->get());
+        return new ProductCollection(getPublishedProducts('product', ['where' => [['user_id', $product->user_id]], 'random', 'orderBy' => [['num_of_sale' => 'desc']]], [], [])->limit(4)->get());
     }
 
     public function search()
