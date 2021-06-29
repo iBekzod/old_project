@@ -671,7 +671,7 @@ class ProductController extends Controller
             }
         }
         $all_colors=array_unique($all_colors);
-
+        //Attribute collection
         $all_attributes = array();
         $all_characteristics = array();
         foreach ($products->get() as $product) {
@@ -683,6 +683,9 @@ class ProductController extends Controller
         }
         $all_attributes=getAttributeFormat($all_attributes);
 
+        //Category collection
+        // $all_categories=getProductCategories($products, 0)->select(['id','name', 'slug', 'level'])->get()->toArray();
+        // dd($all_categories);
         $min_price =($products->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
         $max_price = ($products->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
         if($request->has('min_price')){
@@ -708,6 +711,7 @@ class ProductController extends Controller
             'products' => new ProductCollection($products),
             'attributes' => $all_attributes,
             'colors'=> new ProductColorCollection($all_colors),
+            // 'categories'=>$all_categories,
             'min_price' => $min_price ?? null,
             'max_price' => $max_price ?? null,
             'type' => $type ?? null
