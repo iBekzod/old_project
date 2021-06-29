@@ -228,7 +228,7 @@
                                             <select class="form-control aiz-selectpicker" data-live-search="true"
                                                     data-selected-text-format="count" name="colors[]" id="colors" multiple>
                                                 @foreach ($colors as $key => $color)
-                                                    <option data-id="{{$color->id}}" @if(is_array($variation_colors) && in_array($color->id, $variation_colors)) selected @endif value="{{$color->id}}"  data-content="<span><span class='mr-2 border rounded size-15px d-inline-block' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"></option>
+                                                    <option data-id="{{$color->id}}" @if(is_array($variation_colors) && in_array($color->id, $variation_colors)) selected @endif value="{{$color->id}}"  data-content="<span><span class='mr-2 border rounded size-15px d-inline-block' style='background:{{ $color->code }}'></span><span>{{ $color->getTranslation('name', $lang) }}</span></span>"></option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -252,7 +252,8 @@
                                         <button type="button" class="mb-3 btn btn-info" onclick="update_attribute_combination()">{{ translate('Generate variations') }}</button>
                                     </div>
                                     <div id="variation_div">
-                                        <div style="overflow-y: scroll; ">
+                                        @include('backend.product.elements.variation_combination', ['combinations'=>$element->combinations])
+                                        {{-- <div style="overflow-y: scroll; ">
                                             <table class="table table-bordered" >
                                                 <thead>
                                                 <tr>
@@ -330,7 +331,7 @@
                                                 @endforeach
                                             </tbody>
                                             </table>
-                                        </div>
+                                        </div> --}}
 
                                     </div>
                                     <input type="hidden" name="collected_variations[]" id="collected_variations" >
@@ -520,10 +521,10 @@
         $('#category_id').on('change', function () {
             update_attribute();
         });
-        // $('#selected_attribute_id').on('change', function () {
-        //     update_category_attribute();
-        //     update_attribute_combination();
-        // });
+        $('#selected_attribute_id').on('change', function () {
+            update_category_attribute();
+            // update_attribute_combination();
+        });
         // $('#colors').on('change', function () {
         //     update_attribute_combination()
         // });
@@ -545,6 +546,7 @@
                     $('#selected_attribute_id').html(" ")
                     if(data.success){
                         $('#selected_attribute_id').html(data.data)
+                        $('#selected_attribute_id').change()
                     }
                     update_category_attribute();
                 }
@@ -555,7 +557,7 @@
             $('#variant_'+variation_id).remove()
             $.ajax({
                 type:'GET',
-                url:'{{ route("seller.elements.variation.remove") }}',
+                url:'{{ route('seller.elements.variation.remove') }}',
                 data:{
                     id: variation_id
                 },
@@ -576,7 +578,7 @@
             });
             $.ajax({
                 type:'GET',
-                url:'{{ route('elements.make_selected_attribute_options') }}',
+                url:'{{ route('seller.elements.make_selected_attribute_options') }}',
                 data:{
                     selected_attribute_ids: $('#selected_attribute_id').val(),
                     choice_groups:choice_options,

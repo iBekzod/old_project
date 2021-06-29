@@ -387,7 +387,7 @@ class SellerElementController extends Controller
                     $selected_colors = Color::whereIn('id', $color_ids)->get();
                     $options = null;
                     foreach ($selected_colors as $color) {
-                        $options = $options . '<option selected value="' . $color->id . '" data-id="' . $color->id . '" value="" data-content="<span><span class=\'mr-2 border rounded size-15px d-inline-block\' style=\'background:' . $color->code . '\'></span><span>' . $color->name . '</span></span>"></option>';
+                        $options = $options . '<option selected value="' . $color->id . '" data-id="' . $color->id . '" value="" data-content="<span><span class=\'mr-2 border rounded size-15px d-inline-block\' style=\'background:' . $color->code . '\'></span><span>' . $color->getTranslation('name',$request->lang) . '</span></span>"></option>';
                     }
                     $data = $options;
                 }
