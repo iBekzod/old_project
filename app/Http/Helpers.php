@@ -21,6 +21,8 @@ use App\Utility\MimoUtility;
 use Twilio\Rest\Client;
 use App\Utility\sms\EskizSmsClient;
 use App\Notifications\EmailVerificationNotification;
+use Illuminate\Support\Facades\DB;
+
 //highlights the selected navigation on admin panel
 if (!function_exists('sendSMS')) {
     function sendSMS($to, $from, $text)
@@ -271,6 +273,26 @@ if (!function_exists('getProductCategories')) {
         $category_ids=$sub_categories->pluck('parent_id');
         $categories=Category::whereIn('id', $category_ids);
         return $categories;
+    }
+}
+
+if (!function_exists('searchItemByTranslation')) {
+    function searchItemByTranslation($table, $search_text=null, $search_field=null, $item_ids=[],  $lang=null)
+    {
+        $results=DB::table($table.'_translations');
+        if($search_field){
+            $results=$results->where($search_field, 'like', '%'.$search_text.'%');
+        }
+
+        if(count($item_ids)>0){
+            $results=$results->whereIn($table.'_id', $item_ids);
+        }
+
+        if($lang){
+            $results=$results->where('lang',$lang);
+        }
+
+        return $results->pluck($table.'_id');
     }
 }
 if (!function_exists('getPublishedProducts')) {
