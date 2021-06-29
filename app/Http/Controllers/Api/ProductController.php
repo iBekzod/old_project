@@ -14,6 +14,7 @@ use App\Http\Resources\FlashDealsCollection;
 use App\Attribute;
 use App\Brand;
 use App\Category;
+use App\Characteristic;
 use App\FlashDeal;
 use App\FlashDealProduct;
 use App\Product;
@@ -89,6 +90,7 @@ class ProductController extends Controller
 
     public function admin()
     {
+        // return getProductAttributes(getPublishedProducts('product', ['where' => [['added_by', 'admin']]])->get());
         return new ProductCollection(getPublishedProducts('product', ['where' => [['added_by', 'admin']]])->paginate(10));
     }
 
@@ -581,6 +583,8 @@ class ProductController extends Controller
             }
         }
 
+        // $non_paginate_products = filter_products($products)->get();
+
         //             $non_paginate_products = filter_products($products)->get();
 
         //             //Attribute Filter
@@ -662,10 +666,22 @@ class ProductController extends Controller
         //Color Filter
         $all_colors = array();
         foreach ($products->get() as $product) {
-            if ($product->variation->colors_id != null) {
-                $all_colors[]=$product->variation->colors_id;
+            if ($product->variation->color_id != null) {
+                $all_colors[]=$product->variation->color_id;
             }
         }
+        $all_colors=array_unique($all_colors);
+
+        $all_attributes = array();
+        $all_characteristics = array();
+        foreach ($products->get() as $product) {
+            $all_characteristics=array_unique(array_merge($all_characteristics, explode(', ', $product->variation->characteristics)));
+        }
+        foreach($all_characteristics as $characteristic){
+            $item=Characteristic::findOrFail($characteristic);
+            $all_attributes[$item->attribute_id][]=$characteristic;
+        }
+        $all_attributes=getAttributeFormat($all_attributes);
 
         $min_price =($products->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
         $max_price = ($products->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
@@ -690,7 +706,7 @@ class ProductController extends Controller
         $products = filter_products($products)->paginate(12)->appends(request()->query());
         return response()->json([
             'products' => new ProductCollection($products),
-            'attributes' => [],//$attributes,
+            'attributes' => $all_attributes,
             'colors'=> new ProductColorCollection($all_colors),
             'min_price' => $min_price ?? null,
             'max_price' => $max_price ?? null,

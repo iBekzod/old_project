@@ -1,8 +1,10 @@
 <?php
 
+use App\Attribute;
 use App\Currency;
 use App\BusinessSetting;
 use App\Category;
+use App\Characteristic;
 use App\Http\HelperClasses\Colorcodeconverter;
 use App\Http\HelperClasses\Timezones;
 use App\Product;
@@ -1192,5 +1194,58 @@ if (!function_exists('formatBytes')) {
         // $bytes /= (1 << (10 * $pow));
 
         return round($bytes, $precision) . ' ' . $units[$pow];
+    }
+}
+
+if (!function_exists('getProductAttributes')) {
+    function getProductAttributes($products){
+        // dd($products);
+        $result=[];
+        $attributes=[];
+        foreach($products as $product){
+            $attributes[]=json_decode($product->element->variations, true);
+        }
+
+        foreach($attributes as $attribute){
+            $result=array_merge_recursive($result, $attribute);
+        }
+        // return drupal_array_merge_deep_array($attributes);
+        // foreach($products as $product){
+        //     $attributes[]=getAttributeFormat(json_decode($product->element->variations));
+        // }
+        // $result=drupal_array_merge_deep_array($attributes);
+        // foreach($attributes as $attribute){
+
+        // }
+        // dd()
+        return $result;
+    }
+}
+if (!function_exists('getAttributeFormat')) {
+    function getAttributeFormat($attributes){
+        $collected_characteristics=[];
+        if ($attributes) {
+            foreach($attributes as $attribute_id=>$value_ids){
+                if( is_array($value_ids) && count($value_ids)>0){
+                    $characteristics=Characteristic::whereIn('id',$value_ids)->get();
+                    $attribute=Attribute::findOrFail($attribute_id);
+                    $items=array();
+                    foreach($characteristics as $characteristic){
+                        $items[]=[
+                            'id'=>$characteristic->id,
+                            'name'=>$characteristic->getTranslation('name', app()->getLocale())
+                        ];
+                    }
+                    if( is_array($items) && count($items)>0){
+                        $collected_characteristics[]=[
+                            'id'=>$attribute->id,
+                            'attribute'=>$attribute->getTranslation('name', app()->getLocale()),
+                            'values'=>$items
+                        ];
+                    }
+                }
+            }
+        }
+        return $collected_characteristics;
     }
 }
