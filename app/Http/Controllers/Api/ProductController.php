@@ -14,6 +14,7 @@ use App\Http\Resources\FlashDealsCollection;
 use App\Attribute;
 use App\Brand;
 use App\Category;
+use App\Characteristic;
 use App\FlashDeal;
 use App\FlashDealProduct;
 use App\Product;
@@ -89,6 +90,7 @@ class ProductController extends Controller
 
     public function admin()
     {
+        // return getProductAttributes(getPublishedProducts('product', ['where' => [['added_by', 'admin']]])->get());
         return new ProductCollection(getPublishedProducts('product', ['where' => [['added_by', 'admin']]])->paginate(10));
     }
 
@@ -581,6 +583,8 @@ class ProductController extends Controller
             }
         }
 
+        // $non_paginate_products = filter_products($products)->get();
+
         //             $non_paginate_products = filter_products($products)->get();
 
         //             //Attribute Filter
@@ -659,14 +663,59 @@ class ProductController extends Controller
             $products = filterProductByRelation($products, 'element', $element_conditions);
         }
 
-        //Color Filter
-        $all_colors = array();
-        foreach ($products->get() as $product) {
-            if ($product->variation->colors_id != null) {
-                $all_colors[]=$product->variation->colors_id;
+
+
+        //Filtering Attributes
+        $characteristic_id_list=array();
+        foreach(Attribute::all() as $attribute){
+            if ($request->has('attribute_' . $attribute->id)) {
+                $characteristic_ids=explode(',' , $attribute->id);
+                if(is_array($characteristic_ids) && count($characteristic_ids)>0){
+                    $characteristic_id_list=array_unique(array_merge($characteristic_id_list, $characteristic_ids));
+                }
             }
         }
 
+        $filtered_product_id_list=array();
+        foreach($products->get() as $product){
+            if(is_array(explode(', ', $product->characteristics))){
+                foreach(explode(', ', $product->characteristics) as $characteristic_id){
+                    if(in_array($characteristic_id, $characteristic_id_list)){
+                        $filtered_product_id_list[]=$product->id;
+                    }
+                }
+            }
+        }
+        if(count($filtered_product_id_list)>0){
+            $filtered_product_id_list=array_unique($filtered_product_id_list);
+            $products=$products->whereIn('id', $filtered_product_id_list);
+        }
+
+
+        //Attribute collection
+        $all_attributes = array();
+        $all_characteristics = array();
+        foreach ($products->get() as $product) {
+            $all_characteristics=array_unique(array_merge($all_characteristics, explode(', ', $product->variation->characteristics)));
+        }
+        foreach($all_characteristics as $characteristic){
+            $item=Characteristic::findOrFail($characteristic);
+            $all_attributes[$item->attribute_id][]=$characteristic;
+        }
+        $all_attributes=getAttributeFormat($all_attributes);
+
+        //Color Filter
+        $all_colors = array();
+        foreach ($products->get() as $product) {
+            if ($product->variation->color_id != null) {
+                $all_colors[]=$product->variation->color_id;
+            }
+        }
+        $all_colors=array_unique($all_colors);
+        
+        //Category collection
+        // $all_categories=getProductCategories($products, 0)->select(['id','name', 'slug', 'level'])->get()->toArray();
+        // dd($all_categories);
         $min_price =($products->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
         $max_price = ($products->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
         if($request->has('min_price')){
@@ -690,8 +739,9 @@ class ProductController extends Controller
         $products = filter_products($products)->paginate(12)->appends(request()->query());
         return response()->json([
             'products' => new ProductCollection($products),
-            'attributes' => [],//$attributes,
+            'attributes' => $all_attributes,
             'colors'=> new ProductColorCollection($all_colors),
+            // 'categories'=>$all_categories,
             'min_price' => $min_price ?? null,
             'max_price' => $max_price ?? null,
             'type' => $type ?? null

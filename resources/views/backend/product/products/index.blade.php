@@ -89,12 +89,12 @@
                         <th>{{translate('Num of Sale')}}</th>
                         <th>{{translate('Total Stock')}}</th>
                         <th>{{translate('Base Price')}}</th>
+                       {{-- <th>{{translate('Currency')}}</th> --}}
                         <th>{{translate('Rating')}}</th>
-{{--                        <th>{{translate('Currency')}}</th>--}}
-                        <th>{{translate('Todays Deal')}}</th>
+                        {{-- <th>{{translate('Todays Deal')}}</th>
 
                         <th>{{translate('Published')}}</th>
-                        <th>{{translate('Featured')}}</th>
+                        <th>{{translate('Featured')}}</th> --}}
                         <th class="text-right">{{translate('Options')}}</th>
                     </tr>
                     </thead>
@@ -124,9 +124,9 @@
                                 {{($product)?$product->qty??0:null}}
                             </td>
                             <td>{{ ($product)?number_format(homeBasePrice($product->id), 2):null }}</td>
+                            {{-- <td>{{ $product->currency->code }}</td> --}}
                             <td>{{ $product->rating??0 }}</td>
-{{--                            <td>{{ $product->product->currency->code }}</td>--}}
-                            <td>
+                            {{-- <td>
                                 <label class="aiz-switch aiz-switch-success mb-0">
                                     <input onchange="update_todays_deal(this)" value="{{ $product->id }}"
                                            type="checkbox" @if(($product)?$product->todays_deal:null == 1) checked @endif >
@@ -147,7 +147,7 @@
                                            type="checkbox" @if(($product)?$product->featured:null == 1) checked @endif>
                                     <span class="slider round"></span>
                                 </label>
-                            </td>
+                            </td> --}}
                             <td class="text-right">
                                 <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
                                     href="{{route('element.products.edit', ['id'=>$product->element->id] )}}"

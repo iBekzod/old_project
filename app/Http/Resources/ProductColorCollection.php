@@ -14,7 +14,7 @@ class ProductColorCollection extends ResourceCollection
                 $arr = [
                     'id'=>$color->id,
                     'hash' => $color->code,
-                    'name' => $color->getTranslation('name')
+                    'name' => $color->getTranslation('name', app()->getLocale())
                 ];
             }else{
                 $arr = [

@@ -1,7 +1,10 @@
 <?php
 
+use App\Attribute;
 use App\Currency;
 use App\BusinessSetting;
+use App\Category;
+use App\Characteristic;
 use App\Http\HelperClasses\Colorcodeconverter;
 use App\Http\HelperClasses\Timezones;
 use App\Product;
@@ -20,6 +23,8 @@ use App\Utility\MimoUtility;
 use Twilio\Rest\Client;
 use App\Utility\sms\EskizSmsClient;
 use App\Notifications\EmailVerificationNotification;
+use Illuminate\Support\Facades\DB;
+
 //highlights the selected navigation on admin panel
 if (!function_exists('sendSMS')) {
     function sendSMS($to, $from, $text)
@@ -246,6 +251,50 @@ if (!function_exists('slugify')) {
         // $string = preg_replace('/[-\s]+/', '-', $string);
         $string = transliterator_transliterate("Any-Latin; NFD; [:Nonspacing Mark:] Remove; NFC; [:Punctuation:] Remove; Lower();", $string);
         return $string;
+    }
+}
+if (!function_exists('getProductCategories')) {
+    function getProductCategories($items, $level=2, $type='product')
+    {
+        if($type=='element'){
+            $element_ids=$items->pluck('element_id');
+        }else{
+            //Type product and variation by default
+            $element_ids=$items->select('element_id')->distinct()->pluck('element_id');
+        }
+        $sub_sub_category_ids=Element::whereIn('id', $element_ids)->pluck('category_id');
+        $sub_sub_categories=Category::whereIn('id', $sub_sub_category_ids);
+        if($level==2){
+            return $sub_sub_categories;
+        }
+        $sub_category_ids=$sub_sub_categories->pluck('parent_id');
+        $sub_categories=Category::whereIn('id', $sub_category_ids);
+        if($level==1){
+            return $sub_categories;
+        }
+        $category_ids=$sub_categories->pluck('parent_id');
+        $categories=Category::whereIn('id', $category_ids);
+        return $categories;
+    }
+}
+
+if (!function_exists('searchItemByTranslation')) {
+    function searchItemByTranslation($table, $search_text=null, $search_field=null, $item_ids=[],  $lang=null)
+    {
+        $results=DB::table($table.'_translations');
+        if($search_field){
+            $results=$results->where($search_field, 'like', '%'.$search_text.'%');
+        }
+
+        if(count($item_ids)>0){
+            $results=$results->whereIn($table.'_id', $item_ids);
+        }
+
+        if($lang){
+            $results=$results->where('lang',$lang);
+        }
+
+        return $results->pluck($table.'_id');
     }
 }
 if (!function_exists('getPublishedProducts')) {
@@ -1145,5 +1194,58 @@ if (!function_exists('formatBytes')) {
         // $bytes /= (1 << (10 * $pow));
 
         return round($bytes, $precision) . ' ' . $units[$pow];
+    }
+}
+
+if (!function_exists('getProductAttributes')) {
+    function getProductAttributes($products){
+        // dd($products);
+        $result=[];
+        $attributes=[];
+        foreach($products as $product){
+            $attributes[]=json_decode($product->element->variations, true);
+        }
+
+        foreach($attributes as $attribute){
+            $result=array_merge_recursive($result, $attribute);
+        }
+        // return drupal_array_merge_deep_array($attributes);
+        // foreach($products as $product){
+        //     $attributes[]=getAttributeFormat(json_decode($product->element->variations));
+        // }
+        // $result=drupal_array_merge_deep_array($attributes);
+        // foreach($attributes as $attribute){
+
+        // }
+        // dd()
+        return $result;
+    }
+}
+if (!function_exists('getAttributeFormat')) {
+    function getAttributeFormat($attributes){
+        $collected_characteristics=[];
+        if ($attributes) {
+            foreach($attributes as $attribute_id=>$value_ids){
+                if( is_array($value_ids) && count($value_ids)>0){
+                    $characteristics=Characteristic::whereIn('id',$value_ids)->get();
+                    $attribute=Attribute::findOrFail($attribute_id);
+                    $items=array();
+                    foreach($characteristics as $characteristic){
+                        $items[]=[
+                            'id'=>$characteristic->id,
+                            'name'=>$characteristic->getTranslation('name', app()->getLocale())
+                        ];
+                    }
+                    if( is_array($items) && count($items)>0){
+                        $collected_characteristics[]=[
+                            'id'=>$attribute->id,
+                            'attribute'=>$attribute->getTranslation('name', app()->getLocale()),
+                            'values'=>$items
+                        ];
+                    }
+                }
+            }
+        }
+        return $collected_characteristics;
     }
 }

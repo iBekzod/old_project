@@ -42,6 +42,7 @@ class ElementController extends Controller
         $query = null;
         $sort_search = null;
         $seller_id = null;
+        $lang=default_language();
 
         $category_id = 0;
         $sub_category_id = 0;
@@ -134,6 +135,7 @@ class ElementController extends Controller
                 'categories',
                 'sub_categories',
                 'sub_sub_categories',
+                'lang'
             )
         );
     }
@@ -445,6 +447,7 @@ class ElementController extends Controller
         $col_name = null;
         $query = null;
         $sort_search = null;
+        $lang=default_language();
 
         $elements = Element::where('added_by', 'admin');
 
@@ -461,7 +464,7 @@ class ElementController extends Controller
             $sort_search = $request->search;
         }
         $elements = $elements->where('digital', 0)->orderBy('created_at', 'desc')->paginate(15);
-        return view('backend.product.elements.index', compact('elements', 'type', 'col_name', 'query', 'sort_search'));
+        return view('backend.product.elements.index', compact('elements', 'type', 'col_name', 'query', 'sort_search', 'lang'));
     }
 
     /**
@@ -475,6 +478,7 @@ class ElementController extends Controller
         $query = null;
         $seller_id = null;
         $sort_search = null;
+        $lang=default_language();
         $elements = Element::where('added_by', 'seller');
         if ($request->has('user_id') && $request->user_id != null) {
             $elements = $elements->where('user_id', $request->user_id);
@@ -496,7 +500,7 @@ class ElementController extends Controller
         $elements = $elements->where('digital', 0)->orderBy('created_at', 'desc')->paginate(15);
         $type = 'Seller';
 
-        return view('backend.product.elements.index', compact('elements', 'type', 'col_name', 'query', 'seller_id', 'sort_search'));
+        return view('backend.product.elements.index', compact('elements', 'type', 'col_name', 'query', 'seller_id', 'sort_search', 'lang'));
     }
 
     public function all_elements(Request $request)
@@ -505,6 +509,7 @@ class ElementController extends Controller
         $query = null;
         $seller_id = null;
         $sort_search = null;
+        $lang=default_language();
         $elements = Element::orderBy('created_at', 'desc');
         if ($request->has('user_id') && $request->user_id != null) {
             $elements = $elements->where('user_id', $request->user_id);
@@ -526,7 +531,7 @@ class ElementController extends Controller
         $elements = $elements->paginate(15);
         $type = 'All';
 
-        return view('backend.product.elements.index', compact('elements', 'type', 'col_name', 'query', 'seller_id', 'sort_search'));
+        return view('backend.product.elements.index', compact('elements', 'type', 'col_name', 'query', 'seller_id', 'sort_search', 'lang'));
     }
 
 

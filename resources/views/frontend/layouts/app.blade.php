@@ -176,7 +176,11 @@
     @yield('js')
 </head>
 <body>
-
+    @php
+        if(isset($lang) && $lang==null){
+            $lang=default_language();
+        }
+    @endphp
     <!-- aiz-main-wrapper -->
     <div class="aiz-main-wrapper d-flex flex-column">
 

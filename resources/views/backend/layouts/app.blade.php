@@ -57,7 +57,11 @@
 
 </head>
 <body class="">
-
+    @php
+        if(isset($lang) && $lang==null){
+            $lang=default_language();
+        }
+    @endphp
 	<div class="aiz-main-wrapper">
         @include('backend.inc.admin_sidenav')
 		<div class="aiz-content-wrapper">
