@@ -669,12 +669,13 @@ class ProductController extends Controller
         $characteristic_id_list=array();
         foreach(Attribute::all() as $attribute){
             if ($request->has('attribute_' . $attribute->id)) {
-                $characteristic_ids=explode(',' , $attribute->id);
-                if(is_array($characteristic_ids) && count($characteristic_ids)>0){
-                    $characteristic_id_list=array_unique(array_merge($characteristic_id_list, $characteristic_ids));
-                }
+                // $characteristic_ids=$request['attribute_' .$attribute->id];
+                // if(is_array($characteristic_ids) && count($characteristic_ids)>0){
+                $characteristic_id_list[]=$request['attribute_' .$attribute->id];
+                // }
             }
         }
+        $characteristic_id_list=array_unique($characteristic_id_list);
 
         $filtered_product_id_list=array();
         foreach($products->get() as $product){
