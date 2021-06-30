@@ -63,7 +63,7 @@ class ProductController extends Controller
 
     public function manageProducts(Request $request)
     {
-        $products = Product::where('is_accepted', 1)->latest()->paginate(10);
+        $products = Product::latest()->paginate(10);
         $type = 'Seller';
 
         return view('backend.product.manage', [
