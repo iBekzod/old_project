@@ -304,7 +304,7 @@ class HomeController extends Controller
 
     public function single_product($slug)
     {
-        return redirect(default_website() . 'product/' . $slug);
+        return redirect(default_website() . 'variant/' . $slug);
     }
 
     public function flash_deal_details($slug)
