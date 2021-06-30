@@ -663,14 +663,35 @@ class ProductController extends Controller
             $products = filterProductByRelation($products, 'element', $element_conditions);
         }
 
-        //Color Filter
-        $all_colors = array();
-        foreach ($products->get() as $product) {
-            if ($product->variation->color_id != null) {
-                $all_colors[]=$product->variation->color_id;
+
+
+        //Filtering Attributes
+        $characteristic_id_list=array();
+        foreach(Attribute::all() as $attribute){
+            if ($request->has('attribute_' . $attribute->id)) {
+                $characteristic_ids=explode(',' , $attribute->id);
+                if(is_array($characteristic_ids) && count($characteristic_ids)>0){
+                    $characteristic_id_list=array_unique(array_merge($characteristic_id_list, $characteristic_ids));
+                }
             }
         }
-        $all_colors=array_unique($all_colors);
+
+        $filtered_product_id_list=array();
+        foreach($products->get() as $product){
+            if(is_array(explode(', ', $product->characteristics))){
+                foreach(explode(', ', $product->characteristics) as $characteristic_id){
+                    if(in_array($characteristic_id, $characteristic_id_list)){
+                        $filtered_product_id_list[]=$product->id;
+                    }
+                }
+            }
+        }
+        if(count($filtered_product_id_list)>0){
+            $filtered_product_id_list=array_unique($filtered_product_id_list);
+            $products=$products->whereIn('id', $filtered_product_id_list);
+        }
+
+
         //Attribute collection
         $all_attributes = array();
         $all_characteristics = array();
@@ -683,6 +704,15 @@ class ProductController extends Controller
         }
         $all_attributes=getAttributeFormat($all_attributes);
 
+        //Color Filter
+        $all_colors = array();
+        foreach ($products->get() as $product) {
+            if ($product->variation->color_id != null) {
+                $all_colors[]=$product->variation->color_id;
+            }
+        }
+        $all_colors=array_unique($all_colors);
+        
         //Category collection
         // $all_categories=getProductCategories($products, 0)->select(['id','name', 'slug', 'level'])->get()->toArray();
         // dd($all_categories);
