@@ -666,31 +666,65 @@ class ProductController extends Controller
 
 
         //Filtering Attributes
+        // $characteristic_id_list=array();
+        // foreach(Attribute::all() as $attribute){
+        //     if ($request->has('attribute_' . $attribute->id)) {
+        //         // $characteristic_ids=$request['attribute_' .$attribute->id];
+        //         // if(is_array($characteristic_ids) && count($characteristic_ids)>0){
+        //         $characteristic_id_list[]=$request['attribute_' .$attribute->id];
+        //         // }
+        //     }
+        // }
+        // $characteristic_id_list=array_unique($characteristic_id_list);
+        
+        // $color_id_list=array();
+        // if ($request->has('colors')) {
+        //     $color_id_list=$request->colors;
+        //     $filtered_color_id_list=array();
+        //     if(count($color_id_list)>0){
+        //         foreach(Variation::all() as $variation){
+        //             if(is_array(explode(',', $variation->characteristics))){
+        //                 foreach(explode(',', $variation->characteristics) as $characteristic_id){
+        //                     if(in_array($characteristic_id, $characteristic_id_list)){
+        //                         // if(count($color_id_list)>0){
+    
+        //                         // }
+        //                         $filtered_product_id_list[]=$product->id;
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //         if(count($filtered_product_id_list)>0){
+        //             $filtered_product_id_list=array_unique($filtered_product_id_list);
+        //             $products=$products->whereIn('id', $filtered_product_id_list);
+        //         }
+        //     } 
+        // }  
         $characteristic_id_list=array();
-        foreach(Attribute::all() as $attribute){
-            if ($request->has('attribute_' . $attribute->id)) {
-                // $characteristic_ids=$request['attribute_' .$attribute->id];
-                // if(is_array($characteristic_ids) && count($characteristic_ids)>0){
-                $characteristic_id_list[]=$request['attribute_' .$attribute->id];
-                // }
-            }
-        }
-        $characteristic_id_list=array_unique($characteristic_id_list);
-
-        $filtered_product_id_list=array();
-        foreach($products->get() as $product){
-            if(is_array(explode(', ', $product->characteristics))){
-                foreach(explode(', ', $product->characteristics) as $characteristic_id){
-                    if(in_array($characteristic_id, $characteristic_id_list)){
-                        $filtered_product_id_list[]=$product->id;
+        if ($request->has('attributes')) {
+            $characteristic_id_list=$request->attributes;
+            $filtered_product_id_list=array();
+            if(count($characteristic_id_list)>0){
+                foreach($products->get() as $product){
+                    if(is_array(explode(', ', $product->characteristics))){
+                        foreach(explode(', ', $product->characteristics) as $characteristic_id){
+                            if(in_array($characteristic_id, $characteristic_id_list)){
+                                // if(count($color_id_list)>0){
+    
+                                // }
+                                $filtered_product_id_list[]=$product->id;
+                            }
+                        }
                     }
                 }
-            }
-        }
-        if(count($filtered_product_id_list)>0){
-            $filtered_product_id_list=array_unique($filtered_product_id_list);
-            $products=$products->whereIn('id', $filtered_product_id_list);
-        }
+                if(count($filtered_product_id_list)>0){
+                    $filtered_product_id_list=array_unique($filtered_product_id_list);
+                    $products=$products->whereIn('id', $filtered_product_id_list);
+                }
+            }            
+        }  
+
+        
 
 
         //Attribute collection
