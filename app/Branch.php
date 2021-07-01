@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 class Branch extends Model
 {
+    protected $fillable = [ 'name'];
     public function getTranslation($field = '', $lang = false)
     {
         $lang = $lang == false ?  app()->getLocale() : $lang;

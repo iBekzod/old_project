@@ -582,73 +582,6 @@ class ProductController extends Controller
                 $element_conditions['where'][] = ['brand_id', $brand->id];
             }
         }
-
-        // $non_paginate_products = filter_products($products)->get();
-
-        //             $non_paginate_products = filter_products($products)->get();
-
-        //             //Attribute Filter
-
-        //             $attributes = array();
-        //             foreach ($non_paginate_products as $key => $product) {
-        //                 if($product->attributes != null && is_array(json_decode($product->attributes))){
-        //                     foreach (json_decode($product->attributes) as $key => $value) {
-        //                         $flag = false;
-        //                         $pos = 0;
-        //                         foreach ($attributes as $key => $attribute) {
-        //                             if($attribute['id'] == $value){
-        //                                 $flag = true;
-        //                                 $pos = $key;
-        //                                 break;
-        //                             }
-        //                         }
-        //                         if(!$flag){
-        //                             $item['id'] = $value;
-        //                             $item['values'] = array();
-        //                             foreach (json_decode($product->choice_options) as $key => $choice_option) {
-        //                                 if($choice_option->attribute_id == $value){
-        //                                     $item['values'] = $choice_option->values;
-        //                                     break;
-        //                                 }
-        //                             }
-        //                             array_push($attributes, $item);
-        //                         }
-        //                         else {
-        //                             foreach (json_decode($product->choice_options) as $key => $choice_option) {
-        //                                 if($choice_option->attribute_id == $value){
-        //                                     foreach ($choice_option->values as $key => $value) {
-        //                                         if(!in_array($value, $attributes[$pos]['values'])){
-        //                                             array_push($attributes[$pos]['values'], $value);
-        //                                         }
-        //                                     }
-        //                                 }
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             }
-
-        //             $selected_attributes = array();
-        //             foreach ($attributes as $key => $attribute) {
-        //                 $attr = Attribute::find($attribute['id']);
-        //                 if ($attr != null)
-        //                 {
-        //                     $attributes[$key]['attr'] = $attr;
-        //                     if ($request->has('attribute_' . $attribute['id'])) {
-        //                         foreach ($request['attribute_' . $attribute['id']] as $key => $value) {
-        //                             $str = '"' . $value . '"';
-        //                             $products = $products->where('choice_options', 'like', '%' . $str . '%');
-        //                         }
-
-        //                         $item['id'] = $attribute['id'];
-        //                         $item['values'] = $request['attribute_' . $attribute['id']];
-        //                         array_push($selected_attributes, $item);
-        //                     }
-        //                 }else{
-        //                     unset($attributes[$key]);
-        //                 }
-        //             }
-
         $query = $request->q;
         if($query != null){
             $searchController = new SearchController;
@@ -747,29 +680,43 @@ class ProductController extends Controller
             }
         }
         $all_colors=array_unique($all_colors);
-        
+
         //Category collection
-        // $all_categories=getProductCategories($products, 0)->select(['id','name', 'slug', 'level'])->get()->toArray();
+        // $all_categories=getProductCategories($products, 0)->select(['id','name', 'slug', 'level'])->get();
         // dd($all_categories);
         $min_price =($products->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
         $max_price = ($products->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
         if($request->has('min_price')){
             $min_price = $request->min_price;
             $product_conditions['where'][] = ['price', '>=', $min_price];
+        }else{
+            foreach ($products as $product) {
+                $unit_price = homeDiscountedBasePrice($product->id);
+                if ($min_price > $unit_price) {
+                    $min_price = $unit_price;
+                }
+            }
         }
         if($request->has('max_price')){
             $max_price = $request->max_price;
             $product_conditions['where'][] = ['price', '<=', $max_price];
-        }
-        foreach ($products as $product) {
-            $unit_price = homeDiscountedBasePrice($product->id);
-            if ($min_price > $unit_price) {
-                $min_price = $unit_price;
-            }
-            if ($max_price < $unit_price) {
-                $max_price = $unit_price;
+        }else{
+            foreach ($products as $product) {
+                $unit_price = homeDiscountedBasePrice($product->id);
+                if ($max_price < $unit_price) {
+                    $max_price = $unit_price;
+                }
             }
         }
+        // foreach ($products as $product) {
+        //     $unit_price = homeDiscountedBasePrice($product->id);
+        //     if ($min_price > $unit_price) {
+        //         $min_price = $unit_price;
+        //     }
+        //     if ($max_price < $unit_price) {
+        //         $max_price = $unit_price;
+        //     }
+        // }
         // $all_colors=$products->pluck('color_id');
         $products = filter_products($products)->paginate(12)->appends(request()->query());
         return response()->json([
