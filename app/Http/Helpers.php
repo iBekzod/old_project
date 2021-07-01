@@ -490,8 +490,8 @@ if (!function_exists('home_price')) {
     function home_price($id)
     {
         $product = Product::findOrFail($id);
-        $lowest_price = $product->unit_price;
-        $highest_price = $product->unit_price;
+        $lowest_price = $product->price;
+        $highest_price = $product->price;
 
         if ($product->variant_product) {
             foreach ($product->stocks as $key => $stock) {
@@ -529,8 +529,8 @@ if (!function_exists('home_discounted_price')) {
     {
         return 0;
         $product = Product::findOrFail($id);
-        $lowest_price = $product->unit_price;
-        $highest_price = $product->unit_price;
+        $lowest_price = $product->price;
+        $highest_price = $product->price;
 
         if ($product->variant_product) {
             foreach ($product->stocks as $key => $stock) {
@@ -613,7 +613,7 @@ if (!function_exists('home_discounted_base_price')) {
     {
         return 0;
         if ($product = Product::findOrFail($id)) {
-            $price = $product->unit_price;
+            $price = $product->price;
 
             $flash_deals = \App\FlashDeal::where('status', 1)->get();
             $inFlashDeal = false;
@@ -745,8 +745,8 @@ if (!function_exists('homePrice')) {
     {
         return 0;
         $product = Product::findOrFail($id);
-        $lowest_price = $product->unit_price;
-        $highest_price = $product->unit_price;
+        $lowest_price = $product->price;
+        $highest_price = $product->price;
 
         if ($product->variant_product) {
             foreach ($product->stocks as $key => $stock) {
@@ -779,8 +779,8 @@ if (!function_exists('homeDiscountedPrice')) {
     {
         return 0;
         $product = Product::findOrFail($id);
-        $lowest_price = $product->unit_price;
-        $highest_price = $product->unit_price;
+        $lowest_price = $product->price;
+        $highest_price = $product->price;
 
         if ($product->variant_product) {
             foreach ($product->stocks as $key => $stock) {
