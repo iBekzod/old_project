@@ -234,7 +234,7 @@ Route::group(['prefix' =>'seller', 'middleware' => ['seller', 'verified', 'user'
     Route::get('elements/create','SellerElementController@create')->name('seller.elements.create');
     // Route::post('elements/store','SellerElementController@store')->name('seller.elements.store');
 	Route::get('elements/{id}/edit','SellerElementController@seller_element_edit')->name('seller.elements.edit');
-	Route::post('elements/todays_deal', 'SellerElementController@updateTodaysDeal')->name('seller.elements.todays_deal');
+	Route::post('elements/todays_deal', 'SellerElementController@updateTodaysDeals')->name('seller.elements.todays_deal');
 	Route::post('elements/featured', 'SellerElementController@updateFeatured')->name('seller.elements.featured');
     Route::get('elements/make_selected_attribute_options', 'SellerElementController@make_selected_attribute_options')->name('seller.elements.make_selected_attribute_options');
     Route::get('elements/make_attribute_options', 'SellerElementController@make_attribute_options')->name('seller.elements.make_attribute_options');
@@ -283,8 +283,9 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('/products/published', 'SellerProductController@updatePublished')->name('seller.products.published');
 	Route::post('/products/accepted', 'SellerProductController@updateAccepted')->name('seller.products.accepted');
 	Route::post('/products/publisheds', 'SellerProductController@updatePublisheds')->name('seller.products.publisheds');
+    Route::post('/products/todays_deal', 'SellerProductController@updateTodaysDeal')->name('seller.products.todays_deal');
 
-	Route::post('/products/seller/featured', 'SellerProductController@updateSellerFeatured')->name('seller.products.seller.featured');
+	Route::post('/products/seller/featured', 'SellerProductController@updateSellerFeatured')->name('seller.products.featured');
 
     Route::post('/elements/store/','SellerElementController@store')->name('seller.elements.store');
 	Route::post('/elements/update/{id}','SellerElementController@update')->name('seller.elements.update');

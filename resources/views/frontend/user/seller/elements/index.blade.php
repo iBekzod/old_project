@@ -103,11 +103,12 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th width="20%">{{ translate('Name') }}</th>
-                                        <th>{{translate('Todays Deal')}}</th>
+                                        <th width="40%">{{ translate('Name') }}</th>
+                                        {{-- <th width="60%">{{ translate('Description') }}</th> --}}
+                                        {{-- <th>{{translate('Todays Deal')}}</th> --}}
                                         <th>{{translate('Rating')}}</th>
-                                        <th>{{translate('Published')}}</th>
-                                        <th>{{translate('Featured')}}</th>
+                                        {{-- <th>{{translate('Published')}}</th> --}}
+                                        {{-- <th>{{translate('Featured')}}</th> --}}
                                         {{-- <th width="60%">{{ translate('Description') }}</th> --}}
                                         <th>{{ translate('Added By') }}</th>
                                         {{-- <th>{{ translate('Is cloned') }}</th> --}}
@@ -131,28 +132,29 @@
                                                 </div>
                                             </td>
                                             {{-- <td>{!! strip_tags($element->getTranslation('description')) !!}</td> --}}
-                                            <td>
+                                            {{-- <td>
                                                 <label class="aiz-switch aiz-switch-success mb-0">
-                                                    <input onchange="update_todays_deal(this)" value="{{ $element->id }}"
-                                                           type="checkbox" <?php if ($element->todays_deal == 1) echo "checked";?> >
+                                                    <input  @if(auth()->id()!=$element->user_id) disabled  @endif onchange="update_todays_deal(this)" value="{{ $element->id }}"
+                                                           type="checkbox" @if ($element->todays_deal == 1) checked @endif >
                                                     <span class="slider round"></span>
                                                 </label>
-                                            </td>
+                                            </td> --}}
+                                            {{-- <td>{!! strip_tags($element->getTranslation('description')) !!}</td> --}}
                                             <td>{{ $element->rating }}</td>
-                                            <td>
+                                            {{-- <td>
                                                 <label class="aiz-switch aiz-switch-success mb-0">
-                                                    <input onchange="update_published(this)" value="{{ $element->id }}"
-                                                           type="checkbox" <?php if ($element->published == 1) echo "checked";?> >
+                                                    <input @if(auth()->id()!=$element->user_id) disabled @endif  onchange="update_published(this)" value="{{ $element->id }}"
+                                                           type="checkbox" @if ($element->published == 1) checked @endif >
                                                     <span class="slider round"></span>
                                                 </label>
-                                            </td>
-                                            <td>
+                                            </td> --}}
+                                            {{-- <td>
                                                 <label class="aiz-switch aiz-switch-success mb-0">
-                                                    <input onchange="update_featured(this)" value="{{ $element->id }}"
-                                                           type="checkbox" <?php if ($element->featured == 1) echo "checked";?> >
+                                                    <input @if(auth()->id()!=$element->user_id) disabled @endif onchange="update_featured(this)" value="{{ $element->id }}"
+                                                           type="checkbox" @if ($element->featured == 1) checked @endif >
                                                     <span class="slider round"></span>
                                                 </label>
-                                            </td>
+                                            </td> --}}
                                             <td>{{ $element->user->name }}</td>
                                             {{-- <td class="text-right">
                                                 <label class="aiz-switch aiz-switch-success mb-0">

@@ -77,6 +77,7 @@ class SellerProductController extends Controller
             foreach ($request->variation as $variant) {
                 if ($variation = Variation::findOrFail($variant["id"])) {
                     $product = new Product;
+                    $product->is_accepted=false;
                     $product->element_id=$element->id;
                     // if(Auth::user()->user_type == 'seller' && $shop_name=Auth::user()->shop->name){
                     //     $product_name = $variation->name . " by " . (Auth::user()->shop->name)??null;
@@ -103,8 +104,8 @@ class SellerProductController extends Controller
                     } else {
                         $product->published = false;
                     }
-                    if (array_key_exists('seller_featured', $variant)) {
-                        ($variant["seller_featured"] == "on") ? $product->seller_featured = true : $product->seller_featured = false;
+                    if (array_key_exists('featured', $variant)) {
+                        ($variant["featured"] == "on") ? $product->seller_featured = true : $product->seller_featured = false;
                     } else {
                         $product->seller_featured = false;
                     }
@@ -225,9 +226,9 @@ class SellerProductController extends Controller
                         $product->published = false;
                     }
                     if (array_key_exists('featured', $variant)) {
-                        ($variant["featured"] == "on") ? $product->featured = true : $product->featured = false;
+                        ($variant["featured"] == "on") ? $product->seller_featured = true : $product->seller_featured = false;
                     } else {
-                        $product->featured = false;
+                        $product->seller_featured = false;
                     }
                     $product->delivery_type = $variant["delivery_type"];
                     $product->sku = $variant["sku"];
@@ -269,6 +270,7 @@ class SellerProductController extends Controller
                     } else {
                         $product->featured = false;
                     }
+                    $product->is_accepted=false;
                     $product->delivery_type = $variant["delivery_type"];
                     $product->sku = $variant["sku"];
                     $product->qty = (int)$variant["quantity"];
@@ -300,17 +302,18 @@ class SellerProductController extends Controller
     public function destroy($id)
     {
         try {
-            $variation = Variation::findOrFail($id);
-            $products = $variation->products;
-            foreach ($products as $product) {
-                $product->delete();
-            }
-            $variation->delete();
-            flash(translate('Variation has been deleted successfully'))->success();
+            $product = Product::withTrashed()->findOrFail($id);
+            // $products = $variation->products;
+            // foreach ($products as $product) {
+            //     $product->delete();
+            // }
+            // dd($product);
+            $product->forceDelete();
+            flash(translate('Product has been deleted successfully'))->success();
 
             Artisan::call('view:clear');
             Artisan::call('cache:clear');
-            return redirect()->route('seller.elements.all');
+            return redirect()->back();
         } catch (\Exception $e) {
             flash(translate('Something went wrong'))->error();
             return back();
@@ -340,8 +343,10 @@ class SellerProductController extends Controller
             }
         }
 
-        $product->save();
-        return 1;
+        if($product->save()){
+            return 1;
+        }
+        return 0;
     }
 
     public function updateFeatured(Request $request)

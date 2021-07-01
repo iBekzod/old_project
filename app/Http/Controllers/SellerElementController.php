@@ -23,7 +23,7 @@ use Auth;
 use App\SubSubCategory;
 use Session;
 use ImageOptimizer;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Artisan;
 use App\Product_Warehouse;
@@ -49,11 +49,16 @@ class SellerElementController extends Controller
         $sub_category_id = 0;
         $sub_sub_category_id = 0;
         $user_id=Auth::user()->id;
-        $elements = Element::where('published', true);
-        // ->orWhere(function($query) use ($user_id) {
-        //     dd($query);
-        //     $query->where('user_id', $user_id)->where('published', false);
-        // });
+        $elements = Element::where('deleted_at', '=', null);
+            // where(function ($query) {
+            //     $query->where('published', true);
+            // })->orWhere(function($query) use ($user_id) {
+            //     $query->where('user_id', $user_id)->where('published', false);
+            // });
+        // where('published', true)
+        //     ->orWhere(function($query) use ($user_id) {
+        //         $query->where('user_id', $user_id)->where('published', false);
+        //     });
         if ($request->has('user_id') && $request->user_id != null) {
             $elements = $elements->where('user_id', $request->user_id);
             $seller_id = $request->user_id;
@@ -77,7 +82,7 @@ class SellerElementController extends Controller
             $elements = $elements->whereIn('category_id', $sub_sub_category_ids);
             if ($request->has('sub_category_id') && $request->sub_category_id != null && $request->sub_category_id != 0) {
                 $sub_category_id = $request->sub_category_id;
-                $sub_sub_category_ids = Category::whereIn('parent_id', $sub_category_ids)->pluck('id');
+                $sub_sub_category_ids = Category::where('parent_id', $sub_category_id)->pluck('id');
                 $elements = $elements->whereIn('category_id', $sub_sub_category_ids);
                 if ($request->has('sub_sub_category_id') && $request->sub_sub_category_id != null && $request->sub_sub_category_id != 0) {
                     $sub_sub_category_id = $request->sub_sub_category_id;
@@ -107,6 +112,7 @@ class SellerElementController extends Controller
         //     $elements = $elements->whereIn('category_id', $filter_category_ids);
         // }
         // $elements = $elements->where('category_id', 2114);
+        // $element->published=false && auth()->id()!=$element->user_id
         $elements = $elements->latest()->paginate(15);
         foreach ($elements as $element) {
             if (Product::where('element_id', $element->id)->where('user_id', $user_id)->exists()) {
@@ -381,7 +387,7 @@ class SellerElementController extends Controller
                     $selected_colors = Color::whereIn('id', $color_ids)->get();
                     $options = null;
                     foreach ($selected_colors as $color) {
-                        $options = $options . '<option selected value="' . $color->id . '" data-id="' . $color->id . '" value="" data-content="<span><span class=\'mr-2 border rounded size-15px d-inline-block\' style=\'background:' . $color->code . '\'></span><span>' . $color->name . '</span></span>"></option>';
+                        $options = $options . '<option selected value="' . $color->id . '" data-id="' . $color->id . '" value="" data-content="<span><span class=\'mr-2 border rounded size-15px d-inline-block\' style=\'background:' . $color->code . '\'></span><span>' . $color->getTranslation('name',$request->lang) . '</span></span>"></option>';
                     }
                     $data = $options;
                 }
@@ -1171,7 +1177,7 @@ class SellerElementController extends Controller
             $currencies = Currency::where('status', true)->get();
             foreach($combinations as $variation){
                 //->where('user_id', auth()->id())
-                if($product=Product::where('variation_id', $variation->id)->where('element_id', $element->id)->first()){
+                if($product=Product::where('variation_id', $variation->id)->where('element_id', $element->id)->where('user_id', auth()->id())->first()){
                     $variation->is_new=false;
                     $variation->variant=$product;
                 }else{

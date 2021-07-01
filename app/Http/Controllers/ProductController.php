@@ -63,7 +63,7 @@ class ProductController extends Controller
 
     public function manageProducts(Request $request)
     {
-        $products = Product::where('is_accepted', 1)->latest()->paginate(10);
+        $products = Product::latest()->paginate(10);
         $type = 'Seller';
 
         return view('backend.product.manage', [
@@ -144,9 +144,9 @@ class ProductController extends Controller
         $query = null;
         $sort_search = null;
 
-        $variations = Variation::whereNotNull('element_id')->whereNotNull('lowest_price_id');
+        $products = Product::whereNotNull('element_id')->whereNotNull('lowest_price_id');
         if ($request->search != null) {
-            $variations = $variations
+            $products = $products
                 ->where('name', 'like', '%' . $request->search . '%');
             $sort_search = $request->search;
         }
@@ -154,12 +154,12 @@ class ProductController extends Controller
             $var = explode(",", $request->type);
             $col_name = $var[0];
             $query = $var[1];
-            $variations = $variations->orderBy($col_name, $query);
+            $products = $products->orderBy($col_name, $query);
             $sort_type = $request->type;
         }
-        $variations = $variations->orderBy('created_at', 'desc')->paginate(15);
+        $products = $products->orderBy('created_at', 'desc')->paginate(15);
         $type = 'In House';
-        return view('backend.product.products.index', compact('variations', 'type', 'col_name', 'query', 'sort_search'));
+        return view('backend.product.products.index', compact('products', 'type', 'col_name', 'query', 'sort_search'));
     }
 
     /**
@@ -174,13 +174,13 @@ class ProductController extends Controller
         $seller_id = null;
         $sort_search = null;
 
-        $variations = Variation::whereNotNull('element_id')->whereNotNull('lowest_price_id');
+        $products = Product::whereNotNull('element_id')->whereNotNull('lowest_price_id');
         if ($request->has('user_id') && $request->user_id != null) {
-            $variations = $variations->where('user_id', $request->user_id);
+            $products = $products->where('user_id', $request->user_id);
             $seller_id = $request->user_id;
         }
         if ($request->search != null) {
-            $variations = $variations
+            $products = $products
                 ->where('name', 'like', '%' . $request->search . '%');
             $sort_search = $request->search;
         }
@@ -188,12 +188,12 @@ class ProductController extends Controller
             $var = explode(",", $request->type);
             $col_name = $var[0];
             $query = $var[1];
-            $variations = $variations->orderBy($col_name, $query);
+            $products = $products->orderBy($col_name, $query);
             $sort_type = $request->type;
         }
-        $variations = $variations->orderBy('created_at', 'desc')->paginate(15);
+        $products = $products->orderBy('created_at', 'desc')->paginate(15);
         $type = 'Seller';
-        return view('backend.product.products.index', compact('variations', 'type', 'col_name', 'query', 'seller_id', 'sort_search'));
+        return view('backend.product.products.index', compact('products', 'type', 'col_name', 'query', 'seller_id', 'sort_search'));
     }
 
     public function all_products(Request $request)
@@ -203,13 +203,13 @@ class ProductController extends Controller
         $seller_id = null;
         $sort_search = null;
 
-        $variations = Variation::whereNotNull('element_id')->whereNotNull('lowest_price_id');
+        $products = Product::whereNotNull('element_id');
         if ($request->has('user_id') && $request->user_id != null) {
-            $variations = $variations->where('user_id', $request->user_id);
+            $products = $products->where('user_id', $request->user_id);
             $seller_id = $request->user_id;
         }
         if ($request->search != null) {
-            $variations = $variations
+            $products = $products
                 ->where('name', 'like', '%' . $request->search . '%');
             $sort_search = $request->search;
         }
@@ -217,13 +217,13 @@ class ProductController extends Controller
             $var = explode(",", $request->type);
             $col_name = $var[0];
             $query = $var[1];
-            $variations = $variations->orderBy($col_name, $query);
+            $products = $products->orderBy($col_name, $query);
             $sort_type = $request->type;
         }
-        $variations = $variations->orderBy('created_at', 'desc')->paginate(15);
+        $products = $products->orderBy('created_at', 'desc')->paginate(15);
         $type = 'All';
 
-        return view('backend.product.products.index', compact('variations', 'type', 'col_name', 'query', 'seller_id', 'sort_search'));
+        return view('backend.product.products.index', compact('products', 'type', 'col_name', 'query', 'seller_id', 'sort_search'));
     }
 
 
@@ -256,6 +256,7 @@ class ProductController extends Controller
                 if ($variation = Variation::findOrFail($variant["id"])) {
                     $product = new Product;
                     $product->element_id=$element->id;
+                    $product->is_accepted=true;
                     if(Auth::user()->user_type == 'seller' && $shop_name=Auth::user()->shop->name){
                         $product_name = $variation->name . " от " . $shop_name??Auth::user()->name;
                     }else{
@@ -374,6 +375,7 @@ class ProductController extends Controller
      */
     public function seller_product_edit($id)
     {
+
         $this->admin_product_edit($id);
     }
 
@@ -438,6 +440,7 @@ class ProductController extends Controller
                 }else if((int)$variant["quantity"]>0){
                     $product = new Product;
                     $product->element_id=$element->id;
+                    $product->is_accepted=true;
                     $variation = Variation::where('id',(int)$variant["variation_id"])->first();
                     if($user->user_type == 'seller' && $shop_name=$user->shop->name){
                         $product_name = $variation->name . " от " . $shop_name??$user->name;
@@ -498,22 +501,13 @@ class ProductController extends Controller
     public function destroy($id)
     {
         try {
-            $variation = Variation::findOrFail($id);
-            $products = $variation->products;
-            foreach ($products as $product) {
-                $product->delete();
-            }
-            $variation->delete();
-            flash(translate('Variation has been deleted successfully'))->success();
+            $product = Product::withTrashed()->findOrFail($id);
+            $product->forceDelete();
+            flash(translate('Product has been deleted successfully'))->success();
 
             Artisan::call('view:clear');
             Artisan::call('cache:clear');
-            return redirect()->route('elements.all');
-            // if (Auth::user()->user_type == 'admin') {
-            //     return redirect()->route('products.admin');
-            // } else {
-            //     return redirect()->route('seller.products');
-            // }
+            return redirect()->back();
         } catch (\Exception $e) {
             flash(translate('Something went wrong'))->error();
             return back();

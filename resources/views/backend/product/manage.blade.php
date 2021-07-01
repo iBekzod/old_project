@@ -29,6 +29,7 @@
                     <th>{{translate('Num of Sale')}}</th>
                     <th>{{translate('Total Stock')}}</th>
                     <th>{{translate('Base Price')}}</th>
+                    <th>{{translate('Todays deal')}}</th>
                     <th>{{translate('Published')}}</th>
                     <th>{{translate('Featured')}}</th>
                     <th class="text-right">{{translate('Accepted')}}</th>
@@ -59,7 +60,14 @@
                         <td>
                             {{$product->qty}}
                         </td>
-                        <td>{{ number_format($product->unit_price,2) }}</td>
+                        <td>{{ number_format($product->price,2) }}</td>
+                        <td>
+                            <label class="aiz-switch aiz-switch-success mb-0">
+                                <input onchange="update_todays_deal(this)" value="{{ $product->id }}"
+                                       type="checkbox" <?php if ($product->todays_deal == 1) echo "checked";?> >
+                                <span class="slider round"></span>
+                            </label>
+                        </td>
                         <td>
                             <label class="aiz-switch aiz-switch-success mb-0">
                                 <input onchange="update_published(this)" value="{{ $product->id }}"

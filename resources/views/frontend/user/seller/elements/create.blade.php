@@ -120,7 +120,7 @@
                                         <div class="form-group row">
                                             <label class="col-md-3 col-from-label">{{ translate('Refundable') }}</label>
                                             <div class="col-md-8">
-                                                <label class="aiz-switch aiz-switch-success mb-0">
+                                                <label class="mb-0 aiz-switch aiz-switch-success">
                                                     <input type="checkbox" name="refundable" checked>
                                                     <span></span>
                                                 </label>
@@ -453,7 +453,7 @@
             });
             $.ajax({
                 type:'GET',
-                url:'{{ route('elements.make_selected_attribute_options') }}',
+                url:'{{ route('seller.elements.make_selected_attribute_options') }}',
                 data:{
                     selected_attribute_ids: $('#selected_attribute_id').val(),
                     choice_groups:choice_options,

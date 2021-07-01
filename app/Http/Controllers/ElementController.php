@@ -42,12 +42,14 @@ class ElementController extends Controller
         $query = null;
         $sort_search = null;
         $seller_id = null;
+        $lang=default_language();
 
         $category_id = 0;
         $sub_category_id = 0;
         $sub_sub_category_id = 0;
         $user_id=Auth::user()->id;
-        $elements = Element::where('published', true);
+        $elements = Element::where('deleted_at', '=', null);
+        // $elements = Element::where('published', true);
         // ->orWhere(function($query) use ($user_id) {
         //     dd($query);
         //     $query->where('user_id', $user_id)->where('published', false);
@@ -133,6 +135,7 @@ class ElementController extends Controller
                 'categories',
                 'sub_categories',
                 'sub_sub_categories',
+                'lang'
             )
         );
     }
@@ -444,6 +447,7 @@ class ElementController extends Controller
         $col_name = null;
         $query = null;
         $sort_search = null;
+        $lang=default_language();
 
         $elements = Element::where('added_by', 'admin');
 
@@ -460,7 +464,7 @@ class ElementController extends Controller
             $sort_search = $request->search;
         }
         $elements = $elements->where('digital', 0)->orderBy('created_at', 'desc')->paginate(15);
-        return view('backend.product.elements.index', compact('elements', 'type', 'col_name', 'query', 'sort_search'));
+        return view('backend.product.elements.index', compact('elements', 'type', 'col_name', 'query', 'sort_search', 'lang'));
     }
 
     /**
@@ -474,6 +478,7 @@ class ElementController extends Controller
         $query = null;
         $seller_id = null;
         $sort_search = null;
+        $lang=default_language();
         $elements = Element::where('added_by', 'seller');
         if ($request->has('user_id') && $request->user_id != null) {
             $elements = $elements->where('user_id', $request->user_id);
@@ -495,7 +500,7 @@ class ElementController extends Controller
         $elements = $elements->where('digital', 0)->orderBy('created_at', 'desc')->paginate(15);
         $type = 'Seller';
 
-        return view('backend.product.elements.index', compact('elements', 'type', 'col_name', 'query', 'seller_id', 'sort_search'));
+        return view('backend.product.elements.index', compact('elements', 'type', 'col_name', 'query', 'seller_id', 'sort_search', 'lang'));
     }
 
     public function all_elements(Request $request)
@@ -504,6 +509,7 @@ class ElementController extends Controller
         $query = null;
         $seller_id = null;
         $sort_search = null;
+        $lang=default_language();
         $elements = Element::orderBy('created_at', 'desc');
         if ($request->has('user_id') && $request->user_id != null) {
             $elements = $elements->where('user_id', $request->user_id);
@@ -525,7 +531,7 @@ class ElementController extends Controller
         $elements = $elements->paginate(15);
         $type = 'All';
 
-        return view('backend.product.elements.index', compact('elements', 'type', 'col_name', 'query', 'seller_id', 'sort_search'));
+        return view('backend.product.elements.index', compact('elements', 'type', 'col_name', 'query', 'seller_id', 'sort_search', 'lang'));
     }
 
 
@@ -999,7 +1005,7 @@ class ElementController extends Controller
             $currencies = Currency::where('status', true)->get();
             foreach($combinations as $variation){
                 //->where('user_id', auth()->id())
-                if($product=Product::where('variation_id', $variation->id)->where('element_id', $element->id)->first()){
+                if($product=Product::where('variation_id', $variation->id)->where('element_id', $element->id)->where('user_id', auth()->id())->first()){
                     $variation->is_new=false;
                     $variation->variant=$product;
                 }else{
@@ -1007,7 +1013,9 @@ class ElementController extends Controller
                     $variation->variant=null;
                 }
             }
-            return view('backend.product.products.edit_product', compact('element', 'combinations', 'currencies', 'lang'));
+            $seller_products=Product::where('element_id', $element->id)->where('user_id', '<>', auth()->id())->get()->groupBy('user_id');
+            // dd($seller_products);
+            return view('backend.product.products.edit_product', compact('element', 'seller_products', 'combinations', 'currencies', 'lang'));
         } catch (\Exception $e) {
             // dd($e->getMessage());
         }

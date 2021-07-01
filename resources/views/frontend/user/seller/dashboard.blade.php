@@ -144,14 +144,19 @@
                                       </tr>
                                   </thead>
                                   <tbody>
-                                    {{-- @foreach (\App\Category::all() as $key => $category)
-                                        @if(count($category->products->where('user_id', Auth::user()->id))>0)
+                                      @php
+                                          $products=\App\Product::where('user_id', Auth::user()->id)->with('element')->get();
+                                          $category_list=[];
+                                          foreach($products as $product){
+                                            $category_list[$product->element->category_id][]=$product->element_id;
+                                          }
+                                      @endphp
+                                    @foreach ($category_list as $category_id=>$element_ids)
                                           <tr>
-                                              <td>{{ $category->getTranslation('name') }}</td>
-                                              <td>{{ count($category->products->where('user_id', Auth::user()->id)) }}</td>
+                                              <td>{{ \App\Category::where('id', $category_id)->first()->getTranslation('name') }}</td>
+                                              <td>{{ count($element_ids) }}</td>
                                           </tr>
-                                      @endif
-                                  @endforeach --}}
+                                  @endforeach
                                 </table>
                                 <br>
                                 <div class="text-center">
