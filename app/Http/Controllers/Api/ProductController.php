@@ -590,11 +590,11 @@ class ProductController extends Controller
             $product_conditions['where'][] = ['name', 'like', '%'.$query.'%'];
             $element_conditions['where'][] = ['tags', 'like', '%'.$query.'%'];
         }
-        if($request->has('min_price') && $min_price = $request->min_price){
-            $product_conditions['where'][] = ['price', '>=', $min_price];
+        if($request->has('min_price') && $selected_min_price = $request->min_price){
+            $product_conditions['where'][] = ['price', '>=', $selected_min_price];
         }
-        if($request->has('max_price') && $max_price = $request->max_price){
-            $product_conditions['where'][] = ['price', '<=', $max_price];
+        if($request->has('max_price') && $selected_max_price = $request->max_price){
+            $product_conditions['where'][] = ['price', '<=', $selected_max_price];
         }
         //Filtering Attributes
         $variations=Variation::where('deleted_at', '=', null);
@@ -696,6 +696,8 @@ class ProductController extends Controller
             // 'categories'=>$all_categories,
             'min_price' => $min_price ?? null,
             'max_price' => $max_price ?? null,
+            'selected_min_price'=>(isset($selected_min_price))?$selected_min_price:$min_price,
+            'selected_max_price'=>(isset($selected_max_price))?$selected_max_price:$max_price,
             'type' => $type ?? null
         ]);
     }
