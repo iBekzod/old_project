@@ -683,11 +683,12 @@ class ProductController extends Controller
         // dd("end");
 
         $products = $products->paginate(12);
+        $prices=[];
         foreach ($products as $product) {
             $prices[] = homeDiscountedBasePrice($product->id);
         }
-        $min_price =min($prices)??0;
-        $max_price =max($prices)??0;
+        $min_price =(count($prices)>0)?min($prices):0;
+        $max_price =(count($prices)>0)?max($prices):0;
 
         return response()->json([
             'products' => new ProductCollection($products),
