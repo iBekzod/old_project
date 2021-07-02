@@ -590,12 +590,6 @@ class ProductController extends Controller
             $product_conditions['where'][] = ['name', 'like', '%'.$query.'%'];
             $element_conditions['where'][] = ['tags', 'like', '%'.$query.'%'];
         }
-        if($request->has('min_price') && $selected_min_price = $request->min_price){
-            $product_conditions['where'][] = ['price', '>=', $selected_min_price];
-        }
-        if($request->has('max_price') && $selected_max_price = $request->max_price){
-            $product_conditions['where'][] = ['price', '<=', $selected_max_price];
-        }
         //Filtering Attributes
         $variations=Variation::where('deleted_at', '=', null);
         $color_id_list=array();
@@ -682,11 +676,29 @@ class ProductController extends Controller
 
         // dd("end");
 
+
+        $product_ids=[];
+        foreach ($products->get() as $product) {
+            $unit_price = homeDiscountedBasePrice($product->id);
+            if($request->has('min_price') && $selected_min_price = $request->min_price){
+                if($unit_price<=$selected_min_price){
+                    continue;
+                }
+            }
+            if($request->has('max_price') && $selected_max_price = $request->max_price){
+                if($unit_price>=$selected_max_price){
+                    continue;
+                }
+            }
+            $product_ids[]=$product->id;
+        }
+        $products = $products->whereIn('id', $product_ids);
         $products = $products->paginate(12);
         $prices=[];
         foreach ($products as $product) {
             $prices[] = homeDiscountedBasePrice($product->id);
         }
+
         $min_price =(count($prices)>0)?min($prices):0;
         $max_price =(count($prices)>0)?max($prices):0;
 
