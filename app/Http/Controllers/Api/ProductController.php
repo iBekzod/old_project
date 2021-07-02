@@ -529,7 +529,8 @@ class ProductController extends Controller
                 $product_conditions['where'][] = ['user_id', $seller->user_id];
             }
         }
-
+        $attribute_product_conditions=$product_conditions;
+        $attribute_element_conditions=$element_conditions;
         //Order by sorting type
         $sort_by = $request->sort_by;
         if ($sort_by != null) {
@@ -641,14 +642,18 @@ class ProductController extends Controller
             $product_conditions['whereIn'][] = ['variation_id' => $filtered_variation_id_list];
         }
         $products = Product::where('element_id', '<>', null);
+        $attribute_products = Product::where('element_id', '<>', null);
         $products = filterProductByRelation($products, 'product', $product_conditions);
+        $attribute_products = filterProductByRelation($attribute_products, 'product', $attribute_product_conditions);
         if( is_array($element_conditions)){
             $products = filterProductByRelation($products, 'element', $element_conditions);
+            $attribute_products = filterProductByRelation($attribute_products, 'element', $attribute_element_conditions);
         }
+
         //Attribute collection
         $all_attributes = array();
         $all_characteristics = array();
-        foreach ($products->get() as $product) {
+        foreach ($attribute_products->get() as $product) {
             $all_characteristics=array_unique(array_merge($all_characteristics, explode(', ', $product->variation->characteristics)));
         }
         foreach($all_characteristics as $characteristic){
@@ -659,7 +664,7 @@ class ProductController extends Controller
 
         //Color Collection
         $all_colors = array();
-        foreach ($products->get() as $product) {
+        foreach ($attribute_products->get() as $product) {
             if ($product->variation->color_id != null) {
                 $all_colors[]=$product->variation->color_id;
             }
@@ -671,19 +676,19 @@ class ProductController extends Controller
         // dd($all_categories);
 
         //Price collection
-        $min_price =($products->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
-        $max_price = ($products->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
-        foreach ($products as $product) {
-            $unit_price = homeDiscountedBasePrice($product->id);
-            if ($min_price > $unit_price) {
-                $min_price = $unit_price;
-            }
-            if ($max_price < $unit_price) {
-                $max_price = $unit_price;
-            }
-        }
+        // $min_price =($products->get()->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
+        // $max_price = ($products->get()->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
+        // dd($max_price);
 
-        $products = $products->paginate(12)->appends(request()->query());
+        // dd("end");
+
+        $products = $products->paginate(12);
+        foreach ($products as $product) {
+            $prices[] = homeDiscountedBasePrice($product->id);
+        }
+        $min_price =min($prices)??0;
+        $max_price =max($prices)??0;
+
         return response()->json([
             'products' => new ProductCollection($products),
             'attributes' => $all_attributes,
