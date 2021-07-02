@@ -529,7 +529,8 @@ class ProductController extends Controller
                 $product_conditions['where'][] = ['user_id', $seller->user_id];
             }
         }
-
+        $attribute_product_conditions=$product_conditions;
+        $attribute_element_conditions=$element_conditions;
         //Order by sorting type
         $sort_by = $request->sort_by;
         if ($sort_by != null) {
@@ -589,12 +590,6 @@ class ProductController extends Controller
             $product_conditions['where'][] = ['name', 'like', '%'.$query.'%'];
             $element_conditions['where'][] = ['tags', 'like', '%'.$query.'%'];
         }
-        if($request->has('min_price') && $min_price = $request->min_price){
-            $product_conditions['where'][] = ['price', '>=', $min_price];
-        }
-        if($request->has('max_price') && $max_price = $request->max_price){
-            $product_conditions['where'][] = ['price', '<=', $max_price];
-        }
         //Filtering Attributes
         $variations=Variation::where('deleted_at', '=', null);
         $color_id_list=array();
@@ -641,14 +636,18 @@ class ProductController extends Controller
             $product_conditions['whereIn'][] = ['variation_id' => $filtered_variation_id_list];
         }
         $products = Product::where('element_id', '<>', null);
+        $attribute_products = Product::where('element_id', '<>', null);
         $products = filterProductByRelation($products, 'product', $product_conditions);
+        $attribute_products = filterProductByRelation($attribute_products, 'product', $attribute_product_conditions);
         if( is_array($element_conditions)){
             $products = filterProductByRelation($products, 'element', $element_conditions);
+            $attribute_products = filterProductByRelation($attribute_products, 'element', $attribute_element_conditions);
         }
+
         //Attribute collection
         $all_attributes = array();
         $all_characteristics = array();
-        foreach ($products->get() as $product) {
+        foreach ($attribute_products->get() as $product) {
             $all_characteristics=array_unique(array_merge($all_characteristics, explode(', ', $product->variation->characteristics)));
         }
         foreach($all_characteristics as $characteristic){
@@ -659,7 +658,7 @@ class ProductController extends Controller
 
         //Color Collection
         $all_colors = array();
-        foreach ($products->get() as $product) {
+        foreach ($attribute_products->get() as $product) {
             if ($product->variation->color_id != null) {
                 $all_colors[]=$product->variation->color_id;
             }
@@ -671,19 +670,38 @@ class ProductController extends Controller
         // dd($all_categories);
 
         //Price collection
-        $min_price =($products->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
-        $max_price = ($products->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
-        foreach ($products as $product) {
+        // $min_price =($products->get()->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
+        // $max_price = ($products->get()->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
+        // dd($max_price);
+
+        // dd("end");
+
+
+        $product_ids=[];
+        foreach ($products->get() as $product) {
             $unit_price = homeDiscountedBasePrice($product->id);
-            if ($min_price > $unit_price) {
-                $min_price = $unit_price;
+            if($request->has('min_price') && $selected_min_price = $request->min_price){
+                if($unit_price<=$selected_min_price){
+                    continue;
+                }
             }
-            if ($max_price < $unit_price) {
-                $max_price = $unit_price;
+            if($request->has('max_price') && $selected_max_price = $request->max_price){
+                if($unit_price>=$selected_max_price){
+                    continue;
+                }
             }
+            $product_ids[]=$product->id;
+        }
+        $products = $products->whereIn('id', $product_ids);
+        $products = $products->paginate(12);
+        $prices=[];
+        foreach ($products as $product) {
+            $prices[] = homeDiscountedBasePrice($product->id);
         }
 
-        $products = $products->paginate(12)->appends(request()->query());
+        $min_price =(count($prices)>0)?min($prices):0;
+        $max_price =(count($prices)>0)?max($prices):0;
+
         return response()->json([
             'products' => new ProductCollection($products),
             'attributes' => $all_attributes,
@@ -691,6 +709,8 @@ class ProductController extends Controller
             // 'categories'=>$all_categories,
             'min_price' => $min_price ?? null,
             'max_price' => $max_price ?? null,
+            'selected_min_price'=>(isset($selected_min_price))?$selected_min_price:$min_price,
+            'selected_max_price'=>(isset($selected_max_price))?$selected_max_price:$max_price,
             'type' => $type ?? null
         ]);
     }

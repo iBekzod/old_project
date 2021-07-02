@@ -100,7 +100,7 @@
 @endif
 
 
-@if(Auth::user()->user_type == 'admin' || in_array('1', json_decode(Auth::user()->staff->role->permissions)))
+{{-- @if(Auth::user()->user_type == 'admin' || in_array('1', json_decode(Auth::user()->staff->role->permissions)))
     <div class="row gutters-10">
         <div class="col-md-6">
             <div class="card">
@@ -123,7 +123,7 @@
             </div>
         </div>
     </div>
-@endif
+@endif --}}
 
 <div class="card">
     <div class="card-header">
@@ -131,7 +131,7 @@
     </div>
     <div class="card-body">
         <div class="aiz-carousel gutters-10 half-outside-arrow" data-items="6" data-xl-items="5" data-lg-items="4" data-md-items="3" data-sm-items="2" data-arrows='true'>
-            @foreach (filter_products(\App\Element::where('published', 1)->orderBy('num_of_sale', 'desc'))->limit(12)->get() as $key => $product)
+            @foreach (filter_products(\App\Product::where('published', 1)->orderBy('num_of_sale', 'desc'))->groupBy('element_id')->limit(12)->get() as $key => $product)
                 <div class="carousel-box">
                     <div class="aiz-card-box border border-light rounded shadow-sm hov-shadow-md mb-2 has-transition bg-white">
                         <div class="position-relative">
@@ -139,18 +139,18 @@
                                 <img
                                     class="img-fit lazyload mx-auto h-210px"
                                     src="{{ static_asset('assets/img/placeholder.jpg') }}"
-                                    data-src="{{ uploaded_asset($product->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}"
-                                    alt="{{  $product->name  }}"
+                                    data-src="{{ uploaded_asset($product->variation->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}"
+                                    alt="{{  $product->variation->name  }}"
                                     onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
                                 >
 {{--                            </a>--}}
                         </div>
                         <div class="p-md-3 p-2 text-left">
                             <div class="fs-15">
-                                @if(home_base_price($product->id) != home_discounted_base_price($product->id))
-                                    <del class="fw-600 opacity-50 mr-1">{{ home_base_price($product->id) }}</del>
+                                @if(homeBasePrice($product->id) != homeDiscountedBasePrice($product->id))
+                                    <del class="fw-600 opacity-50 mr-1">{{ homeBasePrice($product->id) }}</del>
                                 @endif
-                                <span class="fw-700 text-primary">{{ home_discounted_base_price($product->id) }}</span>
+                                <span class="fw-700 text-primary">{{ homeDiscountedBasePrice($product->id) }}</span>
                             </div>
                             <div class="rating rating-sm mt-1">
                                 {{ renderStarRating($product->rating) }}
@@ -268,168 +268,166 @@
             }
         }
     });
-    var sfs = {
-            labels: [
-                @foreach ($lvl0Categories as $key => $category)
-                '{{ $category->getTranslation('name') }}',
-                @endforeach
-            ],
-            datasets: [
-                @foreach ($lvl0Categories as $key => $category)
-                {{ \App\Product::sum('num_of_sale') }},
-                @endforeach
-            ]
-    }
-    AIZ.plugins.chart('#graph-1',{
-        type: 'bar',
-        data: {
-            labels: [
-                @foreach ($lvl0Categories as $key => $category)
-                '{{ $category->getTranslation('name') }}',
-                @endforeach
-            ],
-            datasets: [{
-                label: '{{ translate('Number of sale') }}',
-                data: [
-{{--                    @foreach ($lvl0Categories as $key => $category)--}}
-{{--                        @php--}}
-{{--                            $category_ids = \App\Utility\CategoryUtility::children_ids($category->id);--}}
-{{--                            $category_ids[] = $category->id;--}}
-{{--                        @endphp--}}
-{{--                    {{ \App\Product::whereIn('category_id', $category_ids)->sum('num_of_sale') }},--}}
-{{--                    @endforeach--}}
-                ],
-                backgroundColor: [
-                    @foreach ($lvl0Categories as $key => $category)
-                        'rgba(55, 125, 255, 0.4)',
-                    @endforeach
-                ],
-                borderColor: [
-                    @foreach ($lvl0Categories as $key => $category)
-                        'rgba(55, 125, 255, 1)',
-                    @endforeach
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    gridLines: {
-                        color: '#f2f3f8',
-                        zeroLineColor: '#f2f3f8'
-                    },
-                    ticks: {
-                        fontColor: "#8b8b8b",
-                        fontFamily: 'Poppins',
-                        fontSize: 10,
-                        beginAtZero: true
-                    }
-                }],
-                xAxes: [{
-                    gridLines: {
-                        color: '#f2f3f8'
-                    },
-                    ticks: {
-                        fontColor: "#8b8b8b",
-                        fontFamily: 'Poppins',
-                        fontSize: 10
-                    }
-                }]
-            },
-            legend:{
-                labels: {
-                    fontFamily: 'Poppins',
-                    boxWidth: 10,
-                    usePointStyle: true
-                },
-                onClick: function () {
-                    return '';
-                },
-            }
-        }
-    });
-    AIZ.plugins.chart('#graph-2',{
-        type: 'bar',
-        data: {
-            labels: [
-{{--                @foreach ($lvl0Categories as $key => $category)--}}
-{{--                '{{ $category->getTranslation('name') }}',--}}
-{{--                @endforeach--}}
-            ],
-            datasets: [{
-                label: '{{ translate('Number of Stock') }}',
-                data: [
-{{--                    @foreach ($lvl0Categories as $key => $category)--}}
-{{--                        @php--}}
-{{--                            $category_ids = \App\Utility\CategoryUtility::children_ids($category->id);--}}
-{{--                            $category_ids[] = $category->id;--}}
-
-{{--                            $products = \App\Product::whereIn('category_id', $category_ids)->get();--}}
-{{--                            $qty = 0;--}}
-{{--                            foreach ($products as $key => $product) {--}}
-{{--                                if ($product->variant_product) {--}}
-{{--                                    foreach ($product->stocks as $key => $stock) {--}}
-{{--                                        $qty += $stock->qty;--}}
-{{--                                    }--}}
-{{--                                }--}}
-{{--                                else {--}}
-{{--                                    $qty = $product->current_stock;--}}
-{{--                                }--}}
-{{--                            }--}}
-{{--                        @endphp--}}
-{{--                        {{ $qty }},--}}
-{{--                    @endforeach--}}
-                ],
-                backgroundColor: [
-                    @foreach ($lvl0Categories as $key => $category)
-                        'rgba(253, 57, 149, 0.4)',
-                    @endforeach
-                ],
-                borderColor: [
-                    @foreach ($lvl0Categories as $key => $category)
-                        'rgba(253, 57, 149, 1)',
-                    @endforeach
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    gridLines: {
-                        color: '#f2f3f8',
-                        zeroLineColor: '#f2f3f8'
-                    },
-                    ticks: {
-                        fontColor: "#8b8b8b",
-                        fontFamily: 'Poppins',
-                        fontSize: 10,
-                        beginAtZero: true
-                    }
-                }],
-                xAxes: [{
-                    gridLines: {
-                        color: '#f2f3f8'
-                    },
-                    ticks: {
-                        fontColor: "#8b8b8b",
-                        fontFamily: 'Poppins',
-                        fontSize: 10
-                    }
-                }]
-            },
-            legend:{
-                labels: {
-                    fontFamily: 'Poppins',
-                    boxWidth: 10,
-                    usePointStyle: true
-                },
-                onClick: function () {
-                    return '';
-                },
-            }
-        }
-    });
+    // var sfs = {
+    //         labels: [
+    //             @foreach ($lvl0Categories as $key => $category)
+    //             '{{ $category->getTranslation('name') }}',
+    //             @endforeach
+    //         ],
+    //         datasets: [
+    //             @foreach ($lvl0Categories as $key => $category)
+    //             {{ \App\Product::sum('num_of_sale') }},
+    //             @endforeach
+    //         ]
+    // }
+    // AIZ.plugins.chart('#graph-1',{
+    //     type: 'bar',
+    //     data: {
+    //         labels: [
+    //             @foreach ($lvl0Categories as $key => $category)
+    //             '{{ $category->getTranslation('name') }}',
+    //             @endforeach
+    //         ],
+    //         datasets: [{
+    //             label: '{{ translate('Number of sale') }}',
+    //             data: [
+    //                 @foreach ($lvl0Categories as $key => $category)
+    //                     @php
+    //                         $category_ids = \App\Utility\CategoryUtility::children_ids($category->id);
+    //                         $category_ids[] = $category->id;
+    //                     @endphp
+    //                     {{
+    //                         \App\Product::whereHas('element', function ($relation) use ($category_ids) {
+    //                             $relation->whereIn('category_id', $category_ids);
+    //                         })->sum('num_of_sale')
+    //                     ,
+    //                 @endforeach
+    //             ],
+    //             backgroundColor: [
+    //                 @foreach ($lvl0Categories as $key => $category)
+    //                     'rgba(55, 125, 255, 0.4)',
+    //                 @endforeach
+    //             ],
+    //             borderColor: [
+    //                 @foreach ($lvl0Categories as $key => $category)
+    //                     'rgba(55, 125, 255, 1)',
+    //                 @endforeach
+    //             ],
+    //             borderWidth: 1
+    //         }]
+    //     },
+    //     options: {
+    //         scales: {
+    //             yAxes: [{
+    //                 gridLines: {
+    //                     color: '#f2f3f8',
+    //                     zeroLineColor: '#f2f3f8'
+    //                 },
+    //                 ticks: {
+    //                     fontColor: "#8b8b8b",
+    //                     fontFamily: 'Poppins',
+    //                     fontSize: 10,
+    //                     beginAtZero: true
+    //                 }
+    //             }],
+    //             xAxes: [{
+    //                 gridLines: {
+    //                     color: '#f2f3f8'
+    //                 },
+    //                 ticks: {
+    //                     fontColor: "#8b8b8b",
+    //                     fontFamily: 'Poppins',
+    //                     fontSize: 10
+    //                 }
+    //             }]
+    //         },
+    //         legend:{
+    //             labels: {
+    //                 fontFamily: 'Poppins',
+    //                 boxWidth: 10,
+    //                 usePointStyle: true
+    //             },
+    //             onClick: function () {
+    //                 return '';
+    //             },
+    //         }
+    //     }
+    // });
+    // AIZ.plugins.chart('#graph-2',{
+    //     type: 'bar',
+    //     data: {
+    //         labels: [
+    //             @foreach ($lvl0Categories as $key => $category)
+    //                 '{{ $category->getTranslation('name') ',
+    //             @endforeach
+    //         ],
+    //         datasets: [{
+    //             label: '{{ translate('Number of Stock') ',
+    //             data: [
+    //                 @foreach ($lvl0Categories as $key => $category)
+    //                     'rgba(253, 57, 149, 0.4)',
+    //                 @endforeach
+    //                 @foreach ($lvl0Categories as $key => $category)
+    //                     @php
+    //                         $category_ids = \App\Utility\CategoryUtility::children_ids($category->id);
+    //                         $category_ids[] = $category->id;
+    //                     @endphp
+    //                     {{
+    //                         \App\Product::whereHas('element', function ($relation) use ($category_ids) {
+    //                             $relation->whereIn('category_id', $category_ids);
+    //                         })->sum('qty')
+    //                     ,
+    //                 @endforeach
+    //             ],
+    //             backgroundColor: [
+    //                 @foreach ($lvl0Categories as $key => $category)
+    //                     'rgba(253, 57, 149, 0.4)',
+    //                 @endforeach
+    //             ],
+    //             borderColor: [
+    //                 @foreach ($lvl0Categories as $key => $category)
+    //                     'rgba(253, 57, 149, 1)',
+    //                 @endforeach
+    //             ],
+    //             borderWidth: 1
+    //         }]
+    //     },
+    //     options: {
+    //         scales: {
+    //             yAxes: [{
+    //                 gridLines: {
+    //                     color: '#f2f3f8',
+    //                     zeroLineColor: '#f2f3f8'
+    //                 },
+    //                 ticks: {
+    //                     fontColor: "#8b8b8b",
+    //                     fontFamily: 'Poppins',
+    //                     fontSize: 10,
+    //                     beginAtZero: true
+    //                 }
+    //             }],
+    //             xAxes: [{
+    //                 gridLines: {
+    //                     color: '#f2f3f8'
+    //                 },
+    //                 ticks: {
+    //                     fontColor: "#8b8b8b",
+    //                     fontFamily: 'Poppins',
+    //                     fontSize: 10
+    //                 }
+    //             }]
+    //         },
+    //         legend:{
+    //             labels: {
+    //                 fontFamily: 'Poppins',
+    //                 boxWidth: 10,
+    //                 usePointStyle: true
+    //             },
+    //             onClick: function () {
+    //                 return '';
+    //             },
+    //         }
+    //     }
+    // });
 </script>
 @endsection
