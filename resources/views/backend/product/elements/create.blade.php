@@ -26,6 +26,11 @@
 @endsection
 
 @section('content')
+@php
+    if(!isset($lang)){
+        $lang=default_language();
+    }
+@endphp
     <div class="mt-2 mb-3 text-left aiz-titlebar">
         <h1 class="mb-0 h6">{{ translate('Create Element') }}</h5>
     </div>

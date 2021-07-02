@@ -29,6 +29,11 @@
 @endsection
 
 @section('content')
+@php
+    if(!isset($lang)){
+        $lang=default_language();
+    }
+@endphp
     <section class="py-1">
         <div class="container">
             <div class="d-flex align-items-start">
