@@ -320,7 +320,7 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         if ($element = Element::findOrFail($product->element_id)) {
-            return new ProductCollection(getPublishedProducts('variation', ['where' => [['id','<>', $product->id]]], [], ['where' => [['category_id', $element->category_id]], 'random'])->paginate(10));
+            return new ProductCollection(getPublishedProducts('variation', ['where' => [['id', '<>', $product->id]]], [], ['where' => [['category_id', $element->category_id]], 'random'])->paginate(10));
         }
         return response()->json([
             'message' => translate('Такого продукта не существует.')
@@ -502,7 +502,7 @@ class ProductController extends Controller
     {
         $product_conditions['where'][] = ['published', 1];
         $product_conditions[] = 'random';
-        $element_conditions=[];
+        $element_conditions = [];
         //Filtering by brand slug
         if ($type == 'brand') {
             if ($brand = Brand::where('slug', $request->id)->firstOrFail()) {
@@ -529,8 +529,8 @@ class ProductController extends Controller
                 $product_conditions['where'][] = ['user_id', $seller->user_id];
             }
         }
-        $attribute_product_conditions=$product_conditions;
-        $attribute_element_conditions=$element_conditions;
+        $attribute_product_conditions = $product_conditions;
+        $attribute_element_conditions = $element_conditions;
         //Order by sorting type
         $sort_by = $request->sort_by;
         if ($sort_by != null) {
@@ -584,62 +584,61 @@ class ProductController extends Controller
             }
         }
 
-        if($request->has('q') && $query = $request->q){
+        if ($request->has('q') && $query = $request->q) {
             // $searchController = new SearchController;
             // $searchController->store($request);
-            $product_conditions['where'][] = ['name', 'like', '%'.$query.'%'];
-            $element_conditions['where'][] = ['tags', 'like', '%'.$query.'%'];
+            $product_conditions['where'][] = ['name', 'like', '%' . $query . '%'];
+            $element_conditions['where'][] = ['tags', 'like', '%' . $query . '%'];
         }
         //Filtering Attributes
-        $variations=Variation::where('deleted_at', '=', null);
-        $color_id_list=array();
-        $has_color=false;
-        if ($request->has('color') && count($request->color)>0) {
-            $color_id_list=$request->color;
-            $has_color=true;
+        $variations = Variation::where('deleted_at', '=', null);
+        $color_id_list = array();
+        $has_color = false;
+        if ($request->has('color') && count($request->color) > 0) {
+            $color_id_list = $request->color;
+            $has_color = true;
         }
-        $characteristic_id_list=array();
-        $has_characteristic=false;
-        $filtered_variation_id_list=array();
-        if ($request->has('attribute') && count($request->attribute)>0) {
-            $characteristic_id_list=$request->attribute;
-            $has_characteristic=true;
+        $characteristic_id_list = array();
+        $has_characteristic = false;
+        $filtered_variation_id_list = array();
+        if ($request->has('attribute') && count($request->attribute) > 0) {
+            $characteristic_id_list = $request->attribute;
+            $has_characteristic = true;
         }
-        foreach($variations->get() as $variation){
-            $is_valid=false;
-            if($has_characteristic){
-                if(is_array(explode(',', $variation->characteristics))){
-                    foreach(explode(',', $variation->characteristics) as $characteristic_id){
-                        if(in_array($characteristic_id, $characteristic_id_list)){
+        foreach ($variations->get() as $variation) {
+            $is_valid = false;
+            if ($has_characteristic) {
+                if (is_array(explode(',', $variation->characteristics))) {
+                    foreach (explode(',', $variation->characteristics) as $characteristic_id) {
+                        if (in_array($characteristic_id, $characteristic_id_list)) {
                             if ($has_color) {
-                                if(in_array($variation->color_id, $color_id_list)){
-                                    $is_valid=true;
+                                if (in_array($variation->color_id, $color_id_list)) {
+                                    $is_valid = true;
                                 }
-                            }else{
-                                $is_valid=true;
+                            } else {
+                                $is_valid = true;
                             }
-
                         }
                     }
                 }
-            }else if($has_color) {
-                if(in_array($variation->color_id, $color_id_list)){
-                    $is_valid=true;
+            } else if ($has_color) {
+                if (in_array($variation->color_id, $color_id_list)) {
+                    $is_valid = true;
                 }
             }
-            if($is_valid){
-                $filtered_variation_id_list[]=$variation->id;
+            if ($is_valid) {
+                $filtered_variation_id_list[] = $variation->id;
             }
         }
-        if(count($filtered_variation_id_list)>0){
-            $filtered_variation_id_list=array_unique($filtered_variation_id_list);
+        if (count($filtered_variation_id_list) > 0) {
+            $filtered_variation_id_list = array_unique($filtered_variation_id_list);
             $product_conditions['whereIn'][] = ['variation_id' => $filtered_variation_id_list];
         }
         $products = Product::where('element_id', '<>', null);
         $attribute_products = Product::where('element_id', '<>', null);
         $products = filterProductByRelation($products, 'product', $product_conditions);
         $attribute_products = filterProductByRelation($attribute_products, 'product', $attribute_product_conditions);
-        if( is_array($element_conditions)){
+        if (is_array($element_conditions)) {
             $products = filterProductByRelation($products, 'element', $element_conditions);
             $attribute_products = filterProductByRelation($attribute_products, 'element', $attribute_element_conditions);
         }
@@ -648,25 +647,27 @@ class ProductController extends Controller
         $all_attributes = array();
         $all_characteristics = array();
         foreach ($attribute_products->get() as $product) {
-            $all_characteristics=array_unique(array_merge($all_characteristics, explode(', ', $product->variation->characteristics)));
+            $all_characteristics = array_unique(array_merge($all_characteristics, explode(', ', $product->variation->characteristics)));
         }
-        foreach($all_characteristics as $characteristic){
-            $item=Characteristic::findOrFail($characteristic);
-            $all_attributes[$item->attribute_id][]=$characteristic;
+        foreach ($all_characteristics as $characteristic) {
+            $item = Characteristic::findOrFail($characteristic);
+            $all_attributes[$item->attribute_id][] = $characteristic;
         }
-        $all_attributes=getAttributeFormat($all_attributes);
+        $all_attributes = getAttributeFormat($all_attributes);
 
         //Color Collection
         $all_colors = array();
         foreach ($attribute_products->get() as $product) {
             if ($product->variation->color_id != null) {
-                $all_colors[]=$product->variation->color_id;
+                $all_colors[] = $product->variation->color_id;
             }
         }
-        $all_colors=array_unique($all_colors);
+        $all_colors = array_unique($all_colors);
 
         //Category collection
-        // $all_categories=getProductCategories($products, 0)->select(['id','name', 'slug', 'level'])->get();
+        $all_categories = getProductCategories($attribute_products, 0)->select(['id','name', 'slug', 'level'])->get();
+
+
         // dd($all_categories);
 
         //Price collection
@@ -677,40 +678,40 @@ class ProductController extends Controller
         // dd("end");
 
 
-        $product_ids=[];
+        $product_ids = [];
         foreach ($products->get() as $product) {
             $unit_price = homeDiscountedBasePrice($product->id);
-            if($request->has('min_price') && $selected_min_price = $request->min_price){
-                if($unit_price<=$selected_min_price){
+            if ($request->has('min_price') && $selected_min_price = $request->min_price) {
+                if ($unit_price <= $selected_min_price) {
                     continue;
                 }
             }
-            if($request->has('max_price') && $selected_max_price = $request->max_price){
-                if($unit_price>=$selected_max_price){
+            if ($request->has('max_price') && $selected_max_price = $request->max_price) {
+                if ($unit_price >= $selected_max_price) {
                     continue;
                 }
             }
-            $product_ids[]=$product->id;
+            $product_ids[] = $product->id;
         }
         $products = $products->whereIn('id', $product_ids);
         $products = $products->paginate(12);
-        $prices=[];
+        $prices = [];
         foreach ($products as $product) {
             $prices[] = homeDiscountedBasePrice($product->id);
         }
 
-        $min_price =(count($prices)>0)?min($prices):0;
-        $max_price =(count($prices)>0)?max($prices):0;
+        $min_price = (count($prices) > 0) ? min($prices) : 0;
+        $max_price = (count($prices) > 0) ? max($prices) : 0;
 
         return response()->json([
             'products' => new ProductCollection($products),
             'attributes' => $all_attributes,
-            'colors'=> new ProductColorCollection($all_colors),
-            // 'categories'=>$all_categories,
+            'colors' => new ProductColorCollection($all_colors),
+            'categories'=>$all_categories,
             'min_price' => $min_price ?? null,
             'max_price' => $max_price ?? null,
-            'selected_min_price'=>(isset($selected_min_price))?$selected_min_price:$min_price,
-            'selected_max_price'=>(isset($selected_max_price))?$selected_max_price:$max_price,
+            'selected_min_price' => (isset($selected_min_price)) ? $selected_min_price : $min_price,
+            'selected_max_price' => (isset($selected_max_price)) ? $selected_max_price : $max_price,
             'type' => $type ?? null
         ]);
     }

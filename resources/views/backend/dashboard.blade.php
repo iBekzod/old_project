@@ -131,11 +131,11 @@
     </div>
     <div class="card-body">
         <div class="aiz-carousel gutters-10 half-outside-arrow" data-items="6" data-xl-items="5" data-lg-items="4" data-md-items="3" data-sm-items="2" data-arrows='true'>
-            @foreach (filter_products(\App\Product::where('published', 1)->orderBy('num_of_sale', 'desc'))->groupBy('element_id')->limit(12)->get() as $key => $product)
+            @foreach (getPublishedProducts('product', [['orderBy'=>['num_of_sale' => 'desc']]])->groupBy('element_id')->limit(12)->get() as $key => $product)
                 <div class="carousel-box">
                     <div class="aiz-card-box border border-light rounded shadow-sm hov-shadow-md mb-2 has-transition bg-white">
                         <div class="position-relative">
-{{--                            <a href="{{ route('product', $product->slug??"") }}" class="d-block">--}}
+                            <a href="{{ url('single_product/'.$product->slug) }}" target="_blank">
                                 <img
                                     class="img-fit lazyload mx-auto h-210px"
                                     src="{{ static_asset('assets/img/placeholder.jpg') }}"
@@ -143,14 +143,14 @@
                                     alt="{{  $product->variation->name  }}"
                                     onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
                                 >
-{{--                            </a>--}}
+                            </a>
                         </div>
                         <div class="p-md-3 p-2 text-left">
                             <div class="fs-15">
                                 @if(homeBasePrice($product->id) != homeDiscountedBasePrice($product->id))
-                                    <del class="fw-600 opacity-50 mr-1">{{ homeBasePrice($product->id) }}</del>
+                                    <del class="fw-600 opacity-50 mr-1">{{ homeBasePrice($product->id) }} {{defaultCurrency()}}</del>
                                 @endif
-                                <span class="fw-700 text-primary">{{ homeDiscountedBasePrice($product->id) }}</span>
+                                <span class="fw-700 text-primary">{{ homeDiscountedBasePrice($product->id) }} {{defaultCurrency()}}</span>
                             </div>
                             <div class="rating rating-sm mt-1">
                                 {{ renderStarRating($product->rating) }}
