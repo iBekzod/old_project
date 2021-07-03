@@ -25,11 +25,7 @@ class SupportTicketController extends Controller
 
     public function admin_index(Request $request)
     {
-        // return 'keldi';
-        $sender_id = auth()->id();
-        // $user = User::findOrFail($user_id);
-        $conversation=Conversation::findOrFail($sender_id);
-        dd($conversation);
+
         $sort_search =null;
         $tickets = Ticket::orderBy('created_at', 'desc');
         if ($request->has('search')){
