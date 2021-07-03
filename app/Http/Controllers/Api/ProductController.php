@@ -21,6 +21,7 @@ use App\Product;
 use App\Shop;
 use App\Color;
 use App\Element;
+use App\Http\Resources\CategoryCollection;
 use App\Http\Resources\ElementCollection;
 use App\Http\Resources\ProductColorCollection;
 use App\Http\Resources\VariationCollection;
@@ -504,30 +505,51 @@ class ProductController extends Controller
         $product_conditions[] = 'random';
         $element_conditions = [];
         //Filtering by brand slug
-        if ($type == 'brand') {
-            if ($brand = Brand::where('slug', $request->id)->firstOrFail()) {
-                $element_conditions['where'][] = ['brand_id', $brand->id];
-            }
-        }
+        switch ($type) {
+            case 'brand':
+                if ($brand = Brand::where('slug', $request->id)->firstOrFail()) {
+                    $element_conditions['where'][] = ['brand_id', $brand->id];
+                }
+                break;
+            case 'flashdeals':
+                if ($flash_deal = FlashDeal::where('slug', $request->id)->firstOrFail()) {
+                    $product_ids = FlashDealProduct::where('flash_deal_id', $flash_deal->id)->pluck('product_id');
+                    $product_conditions['whereIn'][] = ['id' => $product_ids];
+                }
+                break;
+            case 'category':
+                if ($categoryA = Category::where('slug', $request->id)->firstOrFail()) {
+                    $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
+                    $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                }
+                break;
+            case 'seller':
+                if ($seller = Shop::select('user_id')->where('slug', $request->id)->firstOrFail()) {
+                    $product_conditions['where'][] = ['user_id', $seller->user_id];
+                }
+                break;
+            case 'new':
+                $product_conditions['where'][] = ['todays_deal', 1];
+                break;
+            case 'popular':
+                $product_conditions['where'][] = ['featured', 1];
+                break;
+            case 'recommendation':
+                $product_conditions['where'][] = ['seller_featured', 1];
+                break;
+            case 'stock':
+                $product_conditions['where'][] = ['discount', '>', 0];
+                break;
+            case 'freeDelevery':
+                $product_conditions['where'][] = ['delivery_type', 'free'];
+                break;
+            case 'installment':
+                $product_conditions['where'][] = ['delivery_type', 'free'];
+                break;
 
-        if ($type == 'flashdeals') {
-            if ($flash_deal = FlashDeal::where('slug', $request->id)->firstOrFail()) {
-                $product_ids = FlashDealProduct::where('flash_deal_id', $flash_deal->id)->pluck('product_id');
-                $product_conditions['whereIn'][] = ['id' => $product_ids];
-            }
-        }
-
-        if ($type == 'category') {
-            if ($categoryA = Category::where('slug', $request->id)->firstOrFail()) {
-                $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
-                $element_conditions['whereIn'][] = ['category_id' => $category_ids];
-            }
-        }
-
-        if ($type == 'seller') {
-            if ($seller = Shop::select('user_id')->where('slug', $request->id)->firstOrFail()) {
-                $product_conditions['where'][] = ['user_id', $seller->user_id];
-            }
+            default:
+                # code...
+                break;
         }
         $attribute_product_conditions = $product_conditions;
         $attribute_element_conditions = $element_conditions;
@@ -665,7 +687,7 @@ class ProductController extends Controller
         $all_colors = array_unique($all_colors);
 
         //Category collection
-        $all_categories = getProductCategories($attribute_products, 0)->select(['id','name', 'slug', 'level'])->get();
+        $all_categories = getProductCategories($attribute_products, 0)->get();
 
 
         // dd($all_categories);
@@ -707,7 +729,7 @@ class ProductController extends Controller
             'products' => new ProductCollection($products),
             'attributes' => $all_attributes,
             'colors' => new ProductColorCollection($all_colors),
-            'categories'=>$all_categories,
+            'categories' => new CategoryCollection($all_categories),
             'min_price' => $min_price ?? null,
             'max_price' => $max_price ?? null,
             'selected_min_price' => (isset($selected_min_price)) ? $selected_min_price : $min_price,
