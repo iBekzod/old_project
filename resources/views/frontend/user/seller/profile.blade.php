@@ -55,42 +55,11 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-2 col-form-label">{{ translate('Text') }}</label>
-                                <div class="col-md-10">
-                                    <input type="password" class="form-control" placeholder="{{ translate('New Password') }}" name="new_password">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-2 col-form-label">{{ translate('Your Password') }}</label>
-                                <div class="col-md-10">
-                                    <input type="password" class="form-control" placeholder="{{ translate('New Password') }}" name="new_password">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-2 col-form-label">{{ translate('Your Password') }}</label>
-                                <div class="col-md-10">
-                                    <input type="password" class="form-control" placeholder="{{ translate('New Password') }}" name="new_password">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-2 col-form-label">{{ translate('Your Password') }}</label>
-                                <div class="col-md-10">
-                                    <input type="password" class="form-control" placeholder="{{ translate('New Password') }}" name="new_password">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-2 col-form-label">{{ translate('Your Password') }}</label>
-                                <div class="col-md-10">
-                                    <input type="password" class="form-control" placeholder="{{ translate('New Password') }}" name="new_password">
-                                </div>
-                            </div>
-                            <div class="form-group row">
                                 <label class="col-md-2 col-form-label">{{ translate('Confirm Password') }}</label>
                                 <div class="col-md-10">
                                     <input type="password" class="form-control" placeholder="{{ translate('Confirm Password') }}" name="confirm_password">
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
@@ -178,30 +147,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="row">
-                            <label class="col-md-3 col-form-label">{{ translate('Bank Name') }}</label>
-                            <div class="col-md-9">
-                                <input type="text" class="mb-3 form-control" placeholder="{{ translate('Bank Name')}}" value="{{ Auth::user()->seller->bank_name }}" name="bank_name">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label class="col-md-3 col-form-label">{{ translate('Bank Account Name') }}</label>
-                            <div class="col-md-9">
-                                <input type="text" class="mb-3 form-control" placeholder="{{ translate('Bank Account Name')}}" value="{{ Auth::user()->seller->bank_acc_name }}" name="bank_acc_name">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label class="col-md-3 col-form-label">{{ translate('Bank Account Number') }}</label>
-                            <div class="col-md-9">
-                                <input type="text" class="mb-3 form-control" placeholder="{{ translate('Bank Account Number')}}" value="{{ Auth::user()->seller->bank_acc_no }}" name="bank_acc_no">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label class="col-md-3 col-form-label">{{ translate('Bank Routing Number') }}</label>
-                            <div class="col-md-9">
-                                <input type="number" lang="en" class="mb-3 form-control" placeholder="{{ translate('Bank Routing Number')}}" value="{{ Auth::user()->seller->bank_routing_no }}" name="bank_routing_no">
-                            </div>
-                        </div>
+
                       </div>
                   </div>
                   <div class="mb-0 text-right form-group">
@@ -209,6 +155,54 @@
                   </div>
                 </form>
                 <br>
+
+                <!--Seller Verification Form -->
+                <form action="" method="POST">
+                   @csrf
+                   <div class="card">
+                       <div class="card-header">
+                        <h5 class="mb-0 h6">{{ translate('Seller Verification Form')}}</h5>
+                       </div>
+                       <div class="card-body">
+                        <div class="form-group row">
+                            <div class=" col-lg-12 form-horizontal" id="form">
+
+                                @foreach (json_decode(\App\BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element)
+
+                                    @if($element->type=='text')
+                                    <div class="form-group row" id="category">
+                                        <label class="col-lg-3 col-from-label mb-2"> {{translate($element->label)}}</label>
+                                        <div class="col-lg-9">
+                                        <input class="form-control" type="text" name="{{($element->label)}}" required>
+                                        </div>
+                                    </div>
+                                    @elseif($element->type=='number')
+                                    <div class="form-group row" id="category">
+                                        <label class="col-lg-3 col-from-label mb-2"> {{translate($element->label)}}</label>
+                                        <div class="col-lg-9">
+                                        <input class="form-control" type="number" name="{{($element->label)}}" required>
+                                        </div>
+                                    </div>
+                                    @elseif($element->type=='email')
+                                    <div class="form-group row" id="category">
+                                        <label class="col-lg-3 col-from-label mb-2"> {{translate($element->label)}}</label>
+                                        <div class="col-lg-9">
+                                        <input class="form-control" type="email" name="{{($element->label)}}" required>
+                                        </div>
+                                    </div>
+                                    @endif
+
+
+                                @endforeach
+                                <div class="mb-0 text-right form-group">
+                                    <button type="submit" class="btn btn-primary">{{translate('Update Form')}}</button>
+                                </div>
+                            </div>
+
+                        </div>
+                       </div>
+                   </div>
+                </form>
 
                 <!-- Change Email -->
                 <form action="{{ route('user.change.email') }}" method="POST">

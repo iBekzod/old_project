@@ -211,6 +211,7 @@ class HomeController extends Controller
             return view('frontend.user.customer.profile', compact('addresses'));
         } elseif (Auth::user()->user_type == 'seller') {
             $addresses = Auth::user()->addresses;
+            
             return view('frontend.user.seller.profile', compact('addresses'));
         }
     }
