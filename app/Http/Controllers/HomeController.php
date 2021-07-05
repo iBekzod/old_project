@@ -211,10 +211,34 @@ class HomeController extends Controller
             return view('frontend.user.customer.profile', compact('addresses'));
         } elseif (Auth::user()->user_type == 'seller') {
             $addresses = Auth::user()->addresses;
-            
             return view('frontend.user.seller.profile', compact('addresses'));
         }
     }
+
+
+    // public function profile()
+    // {
+    //     //  dd(Auth::user()->user_type);
+    //     if (Auth::user()->user_type == 'customer') {
+    //         $addresses = Auth::user()->addresses;
+    //         return view('frontend.user.customer.profile', compact('addresses'));
+    //     } elseif (Auth::user()->user_type == 'seller') {
+
+    //                 //  return "keldi";
+
+    //           $addresses = Auth::user()->addresses;
+    //         //   dd($addresses);
+    //         $sellers = Seller::orderBy('created_at', 'desc');
+    //         $sellers = $sellers->paginate(15);
+
+    //         dd($sellers[0]->verification_info[0]);
+
+    //         return view('frontend.user.seller.profile', compact('addresses'));
+    //     }
+    //     else{
+    //         return back();
+    //     }
+    // }
 
     public function customer_update_profile(Request $request)
     {
