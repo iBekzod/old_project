@@ -165,7 +165,7 @@
                                             </td> --}}
                                             <td class="text-right">
                                                 <a  @if(auth()->id()!=$element->user_id) hidden @endif class="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                                       href="{{route('seller.elements.edit', ['id'=>$element->id, , 'lang'=>$lang] )}}"
+                                                       href="{{route('seller.elements.edit', ['id'=>$element->id, 'lang'=>$lang] )}}"
                                                        title="{{ translate('Edit') }}">
                                                         <i class="las la-edit"></i>
                                                     </a>
