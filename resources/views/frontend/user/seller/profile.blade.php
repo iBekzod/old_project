@@ -166,28 +166,27 @@
                        <div class="card-body">
                         <div class="form-group row">
                             <div class=" col-lg-12 form-horizontal" id="form">
-
-                                @foreach (json_decode(\App\BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element)
-
-                                    @if($element->type=='text')
+                                {{-- @dd(Auth::user()->seller->verification_info) --}}
+                                @foreach (Auth::user()->seller->verification_info as $element)
+                                    @if($element['type']=='text')
                                     <div class="form-group row" id="category">
-                                        <label class="col-lg-3 col-from-label mb-2"> {{translate($element->label)}}</label>
+                                        <label class="col-lg-3 col-from-label mb-2"> {{translate($element['label'])}}</label>
                                         <div class="col-lg-9">
-                                        <input class="form-control" type="text" name="{{($element->label)}}" required>
+                                        <input class="form-control" type="text" value={{$element['value']}} name="{{($element['label'])}}" required>
                                         </div>
                                     </div>
-                                    @elseif($element->type=='number')
+                                    @elseif($element['type']=='number')
                                     <div class="form-group row" id="category">
-                                        <label class="col-lg-3 col-from-label mb-2"> {{translate($element->label)}}</label>
+                                        <label class="col-lg-3 col-from-label mb-2"> {{translate($element['label'])}}</label>
                                         <div class="col-lg-9">
-                                        <input class="form-control" type="number" name="{{($element->label)}}" required>
+                                        <input class="form-control" type="number" value={{$element['value']}}  name="{{($element['label'])}}" required>
                                         </div>
                                     </div>
-                                    @elseif($element->type=='email')
+                                    @elseif($element['type']=='email')
                                     <div class="form-group row" id="category">
-                                        <label class="col-lg-3 col-from-label mb-2"> {{translate($element->label)}}</label>
+                                        <label class="col-lg-3 col-from-label mb-2"> {{translate($element['label'])}}</label>
                                         <div class="col-lg-9">
-                                        <input class="form-control" type="email" name="{{($element->label)}}" required>
+                                        <input class="form-control" type="email" value={{$element['value']}}  name="{{($element['label'])}}" required>
                                         </div>
                                     </div>
                                     @endif
