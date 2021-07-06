@@ -1,6 +1,11 @@
 @extends('frontend.layouts.app')
 
 @section('content')
+    @php
+        if(!isset($lang)){
+            $lang=default_language();
+        }
+    @endphp
     <section class="py-2">
         <div class="container">
             <div class="d-flex align-items-start">
@@ -169,7 +174,7 @@
                                                        title="{{ translate('Edit') }}">
                                                         <i class="las la-edit"></i>
                                                     </a>
-                                                <a href="{{route('seller.elements.products.edit', ['id'=>$element->id, , 'lang'=>$lang])}}" class="btn btn-soft-primary btn-icon btn-circle btn-sm"
+                                                <a href="{{route('seller.elements.products.edit', ['id'=>$element->id, 'lang'=>$lang])}}" class="btn btn-soft-primary btn-icon btn-circle btn-sm"
                                                     title="{{ translate('Products') }}">
                                                     <i class="las la-clipboard-list"></i>
                                                 </a>

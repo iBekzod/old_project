@@ -295,7 +295,7 @@ class ProductController extends Controller
 
     public function featured()
     {
-        return new ProductCollection(getPublishedProducts('variation', ['where' => [['featured', 1]]], [], [])->get());
+        return new ProductCollection(getPublishedProducts('element', ['where' => [['featured', 1]]], [], [])->get());
 
         // return new ProductCollection(Product::where('featured', 1)->where('is_accepted', 1)->inRandomOrder()->get());
     }

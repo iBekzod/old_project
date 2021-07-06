@@ -645,8 +645,9 @@
                     if(data.success){
 
                         $('#variation_div').html(data.data)
-                        $('.js-example-basic-multiple').select2();
-                        // $('.selected-files').trigger('click');
+                        AIZ.uploader.initForInput();
+                        AIZ.uploader.removeAttachment();
+                        AIZ.uploader.previewGenerate();
                     }
                 }
             });
