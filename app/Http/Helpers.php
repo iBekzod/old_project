@@ -927,7 +927,7 @@ function translate($key, $lang = null)
     $translation_def = Translation::where('lang', default_language())->where('lang_key', $key)->first();
     if ($translation_def == null) {
 
-        if (env('DEMO_MODE') == 'Off') {
+        // if (env('DEMO_MODE') == 'Off') {
             foreach (Language::all() as $language) {
                 // Translations
                 $translation_def = Translation::firstOrNew(['lang' => $language->code, 'lang_key' => $key, 'lang_value'=>$key]);
@@ -936,7 +936,7 @@ function translate($key, $lang = null)
                 $translation_def->lang_value = $key;
                 $translation_def->save();
             }
-        }
+        // }
         // $translation_def = new Translation;
         // $translation_def->lang = env('DEFAULT_LANGUAGE', 'en');
         // $translation_def->lang_key = $key;
