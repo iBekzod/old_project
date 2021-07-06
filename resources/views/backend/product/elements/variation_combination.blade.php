@@ -30,6 +30,7 @@
         @foreach($combinations as $index=>$combination)
             @php
                 $combination->edit=true;
+                if(!$combination->full_name)$combination->full_name=$combination->name
             @endphp
             @include('backend.product.elements.single_variation_combination', ['combination'=>$combination, 'index'=>$index])
         @endforeach
