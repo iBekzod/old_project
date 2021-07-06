@@ -157,7 +157,7 @@
                 <br>
 
                 <!--Seller Verification Form -->
-                <form action="" method="POST">
+                <form action="{{ route('update.autoidentification') }}" method="POST">
                    @csrf
                    <div class="card">
                        <div class="card-header">
