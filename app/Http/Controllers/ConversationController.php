@@ -43,7 +43,8 @@ class ConversationController extends Controller
             // return view('backend.support.conversations.index', compact('conversations'));
 
             $conversation=Conversation::latest()->paginate(15);
-            //  dd($conversation);
+            // $conversation->sender_id=Conversation::sender_id
+            //   dd($conversation);
             return view('backend.support.conversations.index')->with('conversations',$conversation);
         }
         else {
@@ -170,8 +171,11 @@ class ConversationController extends Controller
         elseif($conversation->receiver_id == Auth::user()->id) {
             $conversation->receiver_viewed = 1;
         }
-        $conversation->save();
-        return view('backend.support.conversations.show', compact('conversation'));
+        if( $conversation->save()){
+            return view('backend.support.conversations.show', compact('conversation'));
+        }
+
+
     }
 
     /**
