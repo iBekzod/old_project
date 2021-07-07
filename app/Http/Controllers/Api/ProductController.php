@@ -115,7 +115,7 @@ class ProductController extends Controller
         $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
         $product_conditions['where'][] = ['published', 1];
         // $product_conditions['where'][]=['featured',1];
-        $product_conditions[] = 'random';
+        // $product_conditions[] = 'random';
         //Filtering by category slug
         $element_conditions['whereIn'][] = ['category_id' => $category_ids];
 
@@ -188,7 +188,7 @@ class ProductController extends Controller
         $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
         $product_conditions['where'][] = ['published', 1];
         $product_conditions['where'][] = ['featured', 1];
-        $product_conditions[] = 'random';
+        // $product_conditions[] = 'random';
         //Filtering by category slug
         $element_conditions['whereIn'][] = ['category_id' => $category_ids];
 
@@ -232,7 +232,7 @@ class ProductController extends Controller
         $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
         $product_conditions['where'][] = ['published', 1];
         $product_conditions['where'][] = ['is_accepted', 1];
-        $product_conditions[] = 'random';
+        // $product_conditions[] = 'random';
         //Filtering by category slug
         $element_conditions['whereIn'][] = ['category_id' => $category_ids];
 
@@ -245,12 +245,17 @@ class ProductController extends Controller
 
     public function brand($id)
     {
-        return new ProductCollection(getPublishedProducts('element', [], [], ['random', 'where' => [['brand_id', $id]]])->paginate(10));
+        return new ProductCollection(getPublishedProducts('element', [], [], [ 'where' => [['brand_id', $id]]])->paginate(10));
     }
 
     public function todaysDeal()
     {
         return new ProductCollection(getPublishedProducts('element', ['where' => [['todays_deal', 1]]], [], [])->paginate(10));
+    }
+
+    public function newProducts()
+    {
+        return new ProductCollection(getPublishedProducts('element', ['orderBy' => [['created_at'=>'desc']]], [], [])->paginate(10));
     }
 
     public function flashDeal()
@@ -501,7 +506,7 @@ class ProductController extends Controller
     public function searchPr($type, $products, $request)
     {
         $product_conditions['where'][] = ['published', 1];
-        $product_conditions[] = 'random';
+        // $product_conditions[] = 'random';
         $element_conditions=[];
         //Filtering by brand slug
         if ($type == 'brand') {
