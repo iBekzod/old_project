@@ -689,8 +689,8 @@ class ProductController extends Controller
             $all_characteristics = array_unique(array_merge($all_characteristics, explode(',', $product->variation->characteristics)));
         }
         foreach ($all_characteristics as $characteristic) {
-            $item = Characteristic::findOrFail($characteristic);
-            $all_attributes[$item->attribute_id][] = $characteristic;
+            if($item = Characteristic::where('id',$characteristic)->first())            
+                $all_attributes[$item->attribute_id][] = $characteristic;
         }
         $all_attributes = getAttributeFormat($all_attributes);
 
