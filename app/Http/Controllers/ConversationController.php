@@ -10,6 +10,7 @@ use Auth;
 use App\Product;
 use Mail;
 use App\Mail\ConversationMailManager;
+use App\User;
 
 class ConversationController extends Controller
 {
@@ -45,6 +46,12 @@ class ConversationController extends Controller
             $conversation=Conversation::latest()->paginate(15);
             // $conversation->sender_id=Conversation::sender_id
             //   dd($conversation);
+            //  $user_id=auth()->id();
+            //  dd($user_id);
+            //  $user=User::findOrFail($user_id);
+            //  dd($user);
+
+            // dd( Auth::user()->seller);
             return view('backend.support.conversations.index')->with('conversations',$conversation);
         }
         else {

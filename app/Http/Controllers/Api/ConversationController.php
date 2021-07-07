@@ -9,6 +9,7 @@ use App\Message;
 use App\Product;
 use Illuminate\Http\Request;
 use App\Http\Resources\ConversationCollection;
+use App\User;
 use Auth;
 
 class ConversationController extends Controller
@@ -57,7 +58,9 @@ class ConversationController extends Controller
             'msg' => 'required'
          ]);
           $support_ticket = new Conversation;
+
           $support_ticket->sender_id =$request->user_id;
+
           $support_ticket->receiver_id = $request->product_id;
           $support_ticket->type = $request->type??'conversation';
           $support_ticket->msg = json_encode($request->msg);
