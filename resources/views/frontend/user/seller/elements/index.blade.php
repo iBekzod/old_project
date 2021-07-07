@@ -1,6 +1,11 @@
 @extends('frontend.layouts.app')
 
 @section('content')
+    @php
+        if(!isset($lang)){
+            $lang=default_language();
+        }
+    @endphp
     <section class="py-2">
         <div class="container">
             <div class="d-flex align-items-start">
@@ -12,7 +17,7 @@
                                 <h1 class="h3">{{ translate('All elements') }}</h1>
                             </div>
                             <div class="col-md-6 text-md-right">
-                                <a href="{{ route('seller.elements.create') }}" class="btn btn-circle btn-info">
+                                <a href="{{ route('seller.elements.create', ['lang'=>$lang]) }}" class="btn btn-circle btn-info">
                                     <span>{{ translate('Add New Element') }}</span>
                                 </a>
                             </div>
@@ -165,11 +170,11 @@
                                             </td> --}}
                                             <td class="text-right">
                                                 <a  @if(auth()->id()!=$element->user_id) hidden @endif class="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                                       href="{{route('seller.elements.edit', ['id'=>$element->id, 'lang'=>env('DEFAULT_LANGUAGE')] )}}"
+                                                       href="{{route('seller.elements.edit', ['id'=>$element->id, 'lang'=>$lang] )}}"
                                                        title="{{ translate('Edit') }}">
                                                         <i class="las la-edit"></i>
                                                     </a>
-                                                <a href="{{route('seller.elements.products.edit', ['id'=>$element->id])}}" class="btn btn-soft-primary btn-icon btn-circle btn-sm"
+                                                <a href="{{route('seller.elements.products.edit', ['id'=>$element->id, 'lang'=>$lang])}}" class="btn btn-soft-primary btn-icon btn-circle btn-sm"
                                                     title="{{ translate('Products') }}">
                                                     <i class="las la-clipboard-list"></i>
                                                 </a>

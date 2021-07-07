@@ -38,8 +38,13 @@ class ConversationController extends Controller
     public function admin_index()
     {
         if (BusinessSetting::where('type', 'conversation_system')->first()->value == 1) {
-            $conversations = Conversation::orderBy('created_at', 'desc')->get();
-            return view('backend.support.conversations.index', compact('conversations'));
+
+            // $conversations = Conversation::orderBy('created_at', 'desc')->get();
+            // return view('backend.support.conversations.index', compact('conversations'));
+
+            $conversation=Conversation::latest()->paginate(20);
+            // dd($conversation);
+            return view('backend.support.conversations.index')->with('conversations',$conversation);
         }
         else {
             flash(translate('Conversation is disabled at this moment'))->warning();

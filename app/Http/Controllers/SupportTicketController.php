@@ -9,7 +9,7 @@ use Auth;
 use App\TicketReply;
 use App\Mail\SupportMailManager;
 use Mail;
-
+use App\Conversation;
 class SupportTicketController extends Controller
 {
     /**
@@ -25,6 +25,7 @@ class SupportTicketController extends Controller
 
     public function admin_index(Request $request)
     {
+
         $sort_search =null;
         $tickets = Ticket::orderBy('created_at', 'desc');
         if ($request->has('search')){

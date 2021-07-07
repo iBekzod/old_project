@@ -206,14 +206,17 @@ class HomeController extends Controller
 
     public function profile(Request $request)
     {
+        // dd($request->all());
         if (Auth::user()->user_type == 'customer') {
             $addresses = Auth::user()->addresses;
             return view('frontend.user.customer.profile', compact('addresses'));
         } elseif (Auth::user()->user_type == 'seller') {
+            //  dd(Auth::user()->seller->verification_info);
             $addresses = Auth::user()->addresses;
             return view('frontend.user.seller.profile', compact('addresses'));
         }
     }
+
 
     public function customer_update_profile(Request $request)
     {

@@ -8,7 +8,7 @@
             </div>
             @if($type != 'Seller')
                 <div class="col-md-6 text-md-right">
-                    <a href="{{ route('elements.create') }}" class="btn btn-circle btn-info">
+                    <a href="{{ route('elements.create', ['lang'=>$lang]) }}" class="btn btn-circle btn-info">
                         <span>{{translate('Add New Element')}}</span>
                     </a>
                 </div>
@@ -160,11 +160,11 @@
                             </td> --}}
                             <td class="text-right">
                                 <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                       href="{{route('elements.admin.edit', ['id'=>$element->id, 'lang'=>env('DEFAULT_LANGUAGE')] )}}"
+                                       href="{{route('elements.admin.edit', ['id'=>$element->id, 'lang'=>$lang] )}}"
                                        title="{{ translate('Edit') }}">
                                         <i class="las la-edit"></i>
                                     </a>
-                                <a href="{{route('element.products.edit', ['id'=>$element->id])}}" class="btn btn-soft-primary btn-icon btn-circle btn-sm"
+                                <a href="{{route('element.products.edit', ['id'=>$element->id, 'lang'=>$lang])}}" class="btn btn-soft-primary btn-icon btn-circle btn-sm"
                                     title="{{ translate('Products') }}">
                                     <i class="las la-clipboard-list"></i>
                                 </a>

@@ -29,6 +29,11 @@
 @endsection
 
 @section('content')
+@php
+    if(!isset($lang)){
+        $lang=default_language();
+    }
+@endphp
     <section class="py-1">
         <div class="container">
             <div class="d-flex align-items-start">
@@ -547,7 +552,9 @@
                     // console.log(data.message);
                     if (data.success) {
                         $('#variation_div').html(data.data)
-                        $('.js-example-basic-multiple').select2();
+                        AIZ.uploader.initForInput();
+                        AIZ.uploader.removeAttachment();
+                        AIZ.uploader.previewGenerate();
                     }
                 }
             });
