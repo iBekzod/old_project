@@ -582,6 +582,10 @@ class ProductController extends Controller
 
         //Новинки
         if ($request->has('new') && $request->new) {
+            $product_conditions['orderBy'][] = ['created_at' => 'desc'];
+        }
+        //Deal
+        if ($request->has('todaysDeal') && $request->new) {
             $product_conditions['where'][] = ['todays_deal', 1];
         }
         //Популярные
@@ -674,7 +678,8 @@ class ProductController extends Controller
         $all_attributes = array();
         $all_characteristics = array();
         foreach ($attribute_products->get() as $product) {
-            $all_characteristics = array_unique(array_merge($all_characteristics, explode(', ', $product->variation->characteristics)));
+            if($product->variation)
+            $all_characteristics = array_unique(array_merge($all_characteristics, explode(',', $product->variation->characteristics)));
         }
         foreach ($all_characteristics as $characteristic) {
             $item = Characteristic::findOrFail($characteristic);
@@ -685,7 +690,7 @@ class ProductController extends Controller
         //Color Collection
         $all_colors = array();
         foreach ($attribute_products->get() as $product) {
-            if ($product->variation->color_id != null) {
+            if (($product->variation)  && $product->variation->color_id != null) {
                 $all_colors[] = $product->variation->color_id;
             }
         }
