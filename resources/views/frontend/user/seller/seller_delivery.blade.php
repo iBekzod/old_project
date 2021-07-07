@@ -910,7 +910,7 @@
                     </div>
                     <div class="row">
                         <div class=" col-md-12  form-group text-right  mr-4 mt-4 ">
-                            <button type="submit" class="btn btn-primary py-2">{{translate('я согласен')}}</button>
+                            <button type="submit" class="btn btn-primary py-2">{{translate('я принимаю')}}</button>
                         </div>
                     </div>
                 </form>

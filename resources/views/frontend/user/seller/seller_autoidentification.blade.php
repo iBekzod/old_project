@@ -352,7 +352,7 @@
                                        </div>
                                        <div class="col-md-6">
                                            <p>Руководитель <br>
-                                              <b> <span class="text-dark">{{ $array['ФИО_директора']?? null }}</span></b>
+                                              <b> <span class="text-danger">{{ $array['ФИО_директора']?? null }}</span></b>
                                            </p>
                                       </div>
                                    </div>
