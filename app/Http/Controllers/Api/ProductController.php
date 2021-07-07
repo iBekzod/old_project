@@ -46,6 +46,7 @@ class ProductController extends Controller
 
     public function getAllProducts(Request $request)
     {
+        // return new ProductCollection(getPublishedProducts('element')->get());
         return new ProductCollection(getPublishedProducts('product', ['where' => [['name', 'like', '%' . $request->get('q') . '%']]])->get());
     }
 
@@ -246,17 +247,17 @@ class ProductController extends Controller
 
     public function brand($id)
     {
-        return new ProductCollection(getPublishedProducts('element', [], [], [ 'where' => [['brand_id', $id]]])->paginate(10));
+        return new ProductCollection(getPublishedProducts('element', [], [], [ 'where' => [['brand_id', $id]]])->paginate(12));
     }
 
     public function todaysDeal()
     {
-        return new ProductCollection(getPublishedProducts('element', ['where' => [['todays_deal', 1]]], [], [])->paginate(10));
+        return new ProductCollection(getPublishedProducts('element', [], [], ['where' => [['todays_deal', 1]]])->paginate(12));
     }
 
     public function newProducts()
     {
-        return new ProductCollection(getPublishedProducts('element', ['orderBy' => [['created_at'=>'desc']]], [], [])->paginate(10));
+        return new ProductCollection(getPublishedProducts('element', ['orderBy' => [['created_at'=>'desc']]], [], [])->paginate(12));
     }
 
     public function flashDeal()
@@ -300,7 +301,7 @@ class ProductController extends Controller
 
     public function featured()
     {
-        return new ProductCollection(getPublishedProducts('element', ['where' => [['featured', 1]]], [], [])->get());
+        return new ProductCollection(getPublishedProducts('element', [], [], ['where' => [['featured', 1]]])->paginate(12));
 
         // return new ProductCollection(Product::where('featured', 1)->where('is_accepted', 1)->inRandomOrder()->get());
     }
@@ -319,14 +320,14 @@ class ProductController extends Controller
 
     public function bestSeller()
     {
-        return new ProductCollection(getPublishedProducts('element', ['orderBy' => [['num_of_sale' => 'desc']]], [], [])->paginate(20));
+        return new ProductCollection(getPublishedProducts('element', ['orderBy' => [['num_of_sale' => 'desc']]], [], [])->paginate(12));
     }
 
     public function related($id)
     {
         $product = Product::find($id);
         if ($element = Element::findOrFail($product->element_id)) {
-            return new ProductCollection(getPublishedProducts('variation', ['where' => [['id', '<>', $product->id]]], [], ['where' => [['category_id', $element->category_id]], 'random'])->paginate(10));
+            return new ProductCollection(getPublishedProducts('variation', ['where' => [['id', '<>', $product->id]]], [], ['where' => [['category_id', $element->category_id]], 'random'])->paginate(12));
         }
         return response()->json([
             'message' => translate('Такого продукта не существует.')
@@ -464,7 +465,7 @@ class ProductController extends Controller
     public function freeShippingProduct()
     {
         // return $this->admin();
-        return new ProductCollection(getPublishedProducts('element', ['where' => [['delivery_type', 'free']]], [], [])->limit(12)->get());
+        return new ProductCollection(getPublishedProducts('element', ['where' => [['delivery_type', 'free']]], [], [])->paginate(12));
 
         // return response()->json([
 
@@ -689,7 +690,7 @@ class ProductController extends Controller
             $all_characteristics = array_unique(array_merge($all_characteristics, explode(',', $product->variation->characteristics)));
         }
         foreach ($all_characteristics as $characteristic) {
-            if($item = Characteristic::where('id',$characteristic)->first())            
+            if($item = Characteristic::where('id',$characteristic)->first())
                 $all_attributes[$item->attribute_id][] = $characteristic;
         }
         $all_attributes = getAttributeFormat($all_attributes);

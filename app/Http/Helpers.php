@@ -300,7 +300,7 @@ if (!function_exists('searchItemByTranslation')) {
 if (!function_exists('getPublishedProducts')) {
     function getPublishedProducts($type = 'product', $product_conditions = [], $variation_conditions = [], $element_conditions = [])
     {
-        $published_condition=[['qty', '>', 0], ['is_accepted', 1], ['published', 1], ['variation_id', '<>', null], ['element_id', '<>', null], ['deleted_at', '=', null],];
+        $published_condition=[['qty', '>', 0], ['is_accepted', 1], ['published', 1], ['variation_id', '<>', null], ['element_id', '<>', null], ['deleted_at', '=', null]];
         $products = Product::where($published_condition);
         $products = filterProductByRelation($products, 'product', $product_conditions);
         $products = filterProductByRelation($products, 'variation', $variation_conditions);
@@ -311,7 +311,7 @@ if (!function_exists('getPublishedProducts')) {
         $variations = $products->get()->groupBy('variation_id');
         $variation_ids = [];
         foreach ($variations as $variation_id => $models) {
-            $variation_ids[] = Product::where('variation_id', $variation_id)->inRandomOrder()->first()->id;
+            $variation_ids[] = $models->random()->id;
         }
         $products = $products->whereIn('id', $variation_ids);
         if ($type == 'variation') {
@@ -321,7 +321,7 @@ if (!function_exists('getPublishedProducts')) {
         $element_ids = [];
         $elements = $products->get()->groupBy('element_id');
         foreach ($elements as $element_id => $models) {
-            $element_ids[] = Product::where('element_id', $element_id)->inRandomOrder()->first()->id;
+            $element_ids[] = $models->random()->id;
         }
         $products = $products->whereIn('id', $element_ids);
         if ($type == 'element') {
