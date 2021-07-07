@@ -42,8 +42,8 @@ class ConversationController extends Controller
             // $conversations = Conversation::orderBy('created_at', 'desc')->get();
             // return view('backend.support.conversations.index', compact('conversations'));
 
-            $conversation=Conversation::latest()->paginate(20);
-            // dd($conversation);
+            $conversation=Conversation::latest()->paginate(15);
+            //  dd($conversation);
             return view('backend.support.conversations.index')->with('conversations',$conversation);
         }
         else {
