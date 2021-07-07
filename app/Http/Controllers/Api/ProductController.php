@@ -501,7 +501,7 @@ class ProductController extends Controller
 
     public function getAllBySlug($type, Request $request)
     {
-        $products = Product::where('variation_id', '<>', null);
+        $products = getPublishedProducts('product');//Product::where('variation_id', '<>', null);
         return $this->searchPr($type, $products, $request);
     }
     public function searchPr($type, $products, $request)
