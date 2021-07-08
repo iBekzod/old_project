@@ -173,11 +173,11 @@ class ProductController extends Controller
             $product_conditions['where'][] = ['delivery_type', 'free'];
         }
 
-        $products = Product::where('element_id', '<>', null);
-        $products = filterProductByRelation($products, 'product', $product_conditions);
-        $products = filterProductByRelation($products, 'element', $element_conditions);
-        $products = filter_products($products)->paginate(10)->appends(request()->query());
-        return new ProductCollection($products);
+        // $products = Product::where('element_id', '<>', null);
+        // $products = filterProductByRelation($products, 'product', $product_conditions);
+        // $products = filterProductByRelation($products, 'element', $element_conditions);
+        // $products = filter_products($products)->paginate(10)->appends(request()->query());
+        return new ProductCollection(getPublishedProducts('element', $product_conditions, [], $element_conditions)->inRandomOrder()->paginate(12));
     }
 
     public function featuredCategoryProducts($slug)
@@ -188,18 +188,18 @@ class ProductController extends Controller
         }
         $categoryA = Category::where('slug', $slug)->firstOrFail();
         $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
-        $product_conditions['where'][] = ['published', 1];
+        // $product_conditions['where'][] = ['published', 1];
         $product_conditions['where'][] = ['featured', 1];
         // $product_conditions[] = 'random';
         //Filtering by category slug
         $element_conditions['whereIn'][] = ['category_id' => $category_ids];
 
 
-        $products = Product::where('element_id', '<>', null);
-        $products = filterProductByRelation($products, 'product', $product_conditions);
-        $products = filterProductByRelation($products, 'element', $element_conditions);
+        // $products = Product::where('element_id', '<>', null);
+        // $products = filterProductByRelation($products, 'product', $product_conditions);
+        // $products = filterProductByRelation($products, 'element', $element_conditions);
 
-        return new ProductCollection($products->inRandomOrder()->paginate(12));
+        return new ProductCollection(getPublishedProducts('element', $product_conditions, [], $element_conditions)->inRandomOrder()->paginate(12));
     }
 
     public function subCategory($id)
@@ -209,17 +209,17 @@ class ProductController extends Controller
         }
         $categoryA = Category::where('slug', $id)->firstOrFail();
         $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
-        $product_conditions['where'][] = ['published', 1];
-        $product_conditions['where'][] = ['is_accepted', 1];
+        // $product_conditions['where'][] = ['published', 1];
+        // $product_conditions['where'][] = ['is_accepted', 1];
         $product_conditions[] = 'random';
         //Filtering by category slug
         $element_conditions['whereIn'][] = ['category_id' => $category_ids];
 
-        $products = Product::where('element_id', '<>', null);
-        $products = filterProductByRelation($products, 'product', $product_conditions);
-        $products = filterProductByRelation($products, 'element', $element_conditions);
+        // $products = Product::where('element_id', '<>', null);
+        // $products = filterProductByRelation($products, 'product', $product_conditions);
+        // $products = filterProductByRelation($products, 'element', $element_conditions);
 
-        return new ProductCollection($products->inRandomOrder()->paginate(10));
+        return new ProductCollection(getPublishedProducts('element', $product_conditions, [], $element_conditions)->inRandomOrder()->paginate(12));
     }
 
     public function subSubCategory($id)
@@ -238,11 +238,11 @@ class ProductController extends Controller
         //Filtering by category slug
         $element_conditions['whereIn'][] = ['category_id' => $category_ids];
 
-        $products = Product::where('element_id', '<>', null);
-        $products = filterProductByRelation($products, 'product', $product_conditions);
-        $products = filterProductByRelation($products, 'element', $element_conditions);
+        // $products = Product::where('element_id', '<>', null);
+        // $products = filterProductByRelation($products, 'product', $product_conditions);
+        // $products = filterProductByRelation($products, 'element', $element_conditions);
 
-        return new ProductCollection($products->inRandomOrder()->paginate(10));
+        return new ProductCollection(getPublishedProducts('element', $product_conditions, [], $element_conditions)->inRandomOrder()->paginate(12));
     }
 
     public function brand($id)
@@ -754,5 +754,12 @@ class ProductController extends Controller
             'selected_max_price' => (isset($selected_max_price)) ? $selected_max_price : $max_price,
             'type' => $type ?? null
         ]);
+    }
+
+    public function calculateDeliveryCost(Request $request){
+        $user_id=8;//$request->user_id;
+        $product_id=290;//$request->product_id;
+        $user_address_id=$request->user_address_id;
+
     }
 }
