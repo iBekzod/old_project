@@ -167,35 +167,42 @@
                         <div class="form-group row">
                             <div class=" col-lg-12 form-horizontal" id="form">
                                 {{-- @dd(Auth::user()->seller->verification_info) --}}
-                                @foreach (Auth::user()->seller->verification_info as $element)
-                                    @if($element['type']=='text')
-                                    <div class="form-group row" id="category">
-                                        <label class="col-lg-3 col-from-label mb-2"> {{translate($element['label'])}}</label>
-                                        <div class="col-lg-9">
-                                        <input class="form-control" type="text" value={{$element['value']}} name="{{($element['label'])}}" required>
+                                @if (isset(Auth::user()->seller->verification_info))
+                                {{-- @dd('keldi'); --}}
+                                    @foreach (Auth::user()->seller->verification_info as $element)
+                                        @if($element['type']=='text')
+                                        <div class="form-group row" id="category">
+                                            <label class="col-lg-3 col-from-label mb-2"> {{translate($element['label'])}}</label>
+                                            <div class="col-lg-9">
+                                            <input class="form-control" type="text" value={{$element['value']}} name="{{($element['label'])}}" required>
+                                            </div>
                                         </div>
-                                    </div>
-                                    @elseif($element['type']=='number')
-                                    <div class="form-group row" id="category">
-                                        <label class="col-lg-3 col-from-label mb-2"> {{translate($element['label'])}}</label>
-                                        <div class="col-lg-9">
-                                        <input class="form-control" type="number" value={{$element['value']}}  name="{{($element['label'])}}" required>
+                                        @elseif($element['type']=='number')
+                                        <div class="form-group row" id="category">
+                                            <label class="col-lg-3 col-from-label mb-2"> {{translate($element['label'])}}</label>
+                                            <div class="col-lg-9">
+                                            <input class="form-control" type="number" value={{$element['value']}}  name="{{($element['label'])}}" required>
+                                            </div>
                                         </div>
-                                    </div>
-                                    @elseif($element['type']=='email')
-                                    <div class="form-group row" id="category">
-                                        <label class="col-lg-3 col-from-label mb-2"> {{translate($element['label'])}}</label>
-                                        <div class="col-lg-9">
-                                        <input class="form-control" type="email" value={{$element['value']}}  name="{{($element['label'])}}" required>
+                                        @elseif($element['type']=='email')
+                                        <div class="form-group row" id="category">
+                                            <label class="col-lg-3 col-from-label mb-2"> {{translate($element['label'])}}</label>
+                                            <div class="col-lg-9">
+                                            <input class="form-control" type="email" value={{$element['value']}}  name="{{($element['label'])}}" required>
+                                            </div>
                                         </div>
-                                    </div>
-                                    @endif
+                                        @endif
+                                        <div class="mb-0 text-right form-group">
+                                            <button type="submit" class="btn btn-primary">{{translate('Update Form')}}</button>
+                                        </div>
+                                    @endforeach
+                                @else
+                                  <div class="card">
+                                      {{translate('you do not have a Seller Confirmation Form')}}
+                                  </div>
+                                @endif
 
 
-                                @endforeach
-                                <div class="mb-0 text-right form-group">
-                                    <button type="submit" class="btn btn-primary">{{translate('Update Form')}}</button>
-                                </div>
                             </div>
 
                         </div>
