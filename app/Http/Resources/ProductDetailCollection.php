@@ -70,7 +70,7 @@ class ProductDetailCollection extends ResourceCollection
                 'video_provider' => $element->video_provider,
                 'rating' => (double) $product->rating,
                 'rating_count' => (integer) Review::where(['product_id' => $product->id])->count(),
-                'description' => $product->getTranslation('description'),
+                'description' => $element->getTranslation('description'),
                 'reviews' => new ReviewCollection(Review::where('product_id', $product->id)->latest()->get()),
                 'price_lower' => (double) convertCurrency($products->min('price'), $product->currency_id),
                 'price_higher' => (double) convertCurrency($products->max('price'), $product->currency_id),
