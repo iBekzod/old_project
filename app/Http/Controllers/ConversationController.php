@@ -44,12 +44,18 @@ class ConversationController extends Controller
             // return view('backend.support.conversations.index', compact('conversations'));
 
             $conversation=Conversation::latest()->paginate(15);
-            // $conversation->sender_id=Conversation::sender_id
-            //   dd($conversation);
-            //  $user_id=auth()->id();
-            //  dd($user_id);
-            //  $user=User::findOrFail($user_id);
-            //  dd($user);
+        //    dd($conversation);
+
+        // $string = "Here is use big string of your paragraph or description.";
+
+            // change 15 top what ever text length you want to show.
+            //  dd($stringCut);
+            //  $endPoint = strrpos($string,12);
+            //  dd( $endPoint);
+            // $string = $endPoint;
+            // substr($stringCut, 0, $endPoint):substr($stringCut, 0);
+        // }
+        // dd($string);
 
             // dd( Auth::user()->seller);
             return view('backend.support.conversations.index')->with('conversations',$conversation);

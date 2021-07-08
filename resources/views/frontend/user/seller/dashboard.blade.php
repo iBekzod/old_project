@@ -197,11 +197,11 @@
                               <p>{{ translate('Manage & organize your shop')}}</p>
                               <a href="{{ route('shops.index') }}" class="btn btn-soft-primary">{{ translate('Go to setting')}}</a>
                           </div>
-                          <div class="bg-white mt-4 p-4 text-center">
+                          {{-- <div class="bg-white mt-4 p-4 text-center">
                               <div class="h5 fw-600">{{ translate('Payment')}}</div>
                               <p>{{ translate('Configure your payment method')}}</p>
                               <a href="{{ route('profile') }}" class="btn btn-soft-primary">{{ translate('Configure Now')}}</a>
-                          </div>
+                          </div> --}}
                       </div>
                   </div>
 
