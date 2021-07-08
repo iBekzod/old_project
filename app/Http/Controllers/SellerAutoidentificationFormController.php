@@ -79,15 +79,19 @@ class SellerAutoidentificationFormController extends Controller
                 if ($element->type) {
 
                    $validation[$element->label] = 'required';
-                //    dd('keldi');
+                    // dd('keldi');
 
                 }
             }
               $request->validate($validation);
             //    dd( $request->validate($validation));
             $user_id = auth()->id();
-            $seller=Seller::findOrFail($user_id);
-
+            // dd($user_id);
+            if (Seller::where('user_id', $user_id)->exists()) {
+                $seller = Seller::where('user_id', $user_id)->first();
+            }
+            // $seller=Seller::findOrFail($user_id);
+            //   dd($seller);
             $data = array();
             $i = 0;
             foreach (json_decode(BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element) {
@@ -98,7 +102,7 @@ class SellerAutoidentificationFormController extends Controller
                     $item['value'] = $request[$element->label];
                     $array[$element->label] = $request[$element->label];
                 }
-                dd($item);
+                // dd($item);
                 array_push($data, $item);
                 $i++;
             }
