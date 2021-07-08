@@ -8,6 +8,7 @@ use App\User;
 use Auth;
 use App\Seller;
 use App\BusinessSetting;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
 use Illuminate\Support\Carbon;
@@ -25,7 +26,7 @@ class SellerAutoidentificationFormController extends Controller
             }
 
             $request->validate($validation);
-            //    dd($array);
+            //   dd($request->all());
             $user_id = auth()->id();
             //  dd($user_id);
             $user = User::findOrFail($user_id);
@@ -34,6 +35,14 @@ class SellerAutoidentificationFormController extends Controller
             } else {
                 $seller = new Seller;
             }
+            if (Shop::where('user_id', $user_id)->exists()) {
+                $shop = Shop::where('user_id', $user_id)->first();
+            } else {
+                $shop = new Shop;
+            }
+
+
+            // dd($shop);
             //  dd($user);
             $user->registration_step = 'active_2';
             $array = array();
@@ -50,13 +59,24 @@ class SellerAutoidentificationFormController extends Controller
                 array_push($data, $item);
                 $i++;
             }
+            // dd($data);
             $seller->user_id = $user_id;
             $seller->verification_info = json_encode($data);
+            //  dd($user_id);
+            $shop->user_id =$user_id;
+            $shop->name = $request->Название_магазина;
+            $shop->address = $request->Адрес_регистрации_вендора;
+            $shop->slug = SlugService::createSlug(Shop::class, 'slug', slugify($request->Название_магазина));
+            // dd($shop);
+            //   dd($seller->verification_info);
             $date = Carbon::parse($seller->created_at)->format('d-m-Y');
+            // dd($array);
             // dd($date);
             if ($user->save()) {
                 if ($seller->save()) {
-                    return view('frontend.user.seller.seller_autoidentification')->with('array', $array)->with('seller', $seller)->with('date', $date);
+                    if($shop->save()){
+                        return view('frontend.user.seller.seller_autoidentification')->with('array', $array)->with('seller', $seller)->with('date', $date);
+                    }
                 }
             }
         } else if ($request->method() === 'GET') {

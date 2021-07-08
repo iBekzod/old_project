@@ -67,6 +67,7 @@ class SellerDeliveryFormController extends Controller
             $user_id = auth()->id();
             $user = User::findOrFail($user_id);
             $user->registration_step = 'active_4';
+            
             if ($user->save()) {
                 return view('frontend.user.seller.dashboard');
             }
