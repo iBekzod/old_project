@@ -167,7 +167,7 @@
                           </div>
                       </div>
                       <div class="col-md-4">
-                          @if (\App\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated)
+                          {{-- @if (\App\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated)
 
                               <div class="card">
                                   <div class="card-header">
@@ -191,7 +191,7 @@
                                       </div>
                                   </div>
                               </div>
-                          @endif
+                          @endif --}}
                           <div class="bg-white mt-4 p-4 text-center">
                               <div class="h5 fw-600">{{ translate('Shop')}}</div>
                               <p>{{ translate('Manage & organize your shop')}}</p>

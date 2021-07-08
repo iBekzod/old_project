@@ -461,10 +461,10 @@
                                                 class="form-control price_change" required>
                                         </td>
                                         <td>
-                                            <select class="form-control aiz-selectpicker "
+                                            <select class="form-control aiz-selectpicker " class="currency_change"
                                                     name="variation[{{ $index }}][currency]">
                                                 @foreach($currencies as $currency)
-                                                    <option class="currency_change" value="{{$currency->id}}"
+                                                    <option value="{{$currency->id}}"
                                                         @if($currency->code==$seller_product->currency->code) selected @endif>{{$currency->code}}</option>
                                                 @endforeach
                                             </select>
@@ -556,8 +556,12 @@
         }
 
         function change_selection(value, class_name) {
+
+            $("." + class_name+'  select').val(value).change();
             document.querySelectorAll("." + class_name).forEach(el => {
-                console.log(el)
+                console.log(el);
+                // alert("count")
+                // el.val(value).change();
                 // if(el.value === value){
                 //     el.selected = true
                 // } else {
