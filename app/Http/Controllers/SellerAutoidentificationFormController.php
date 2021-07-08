@@ -84,7 +84,7 @@ class SellerAutoidentificationFormController extends Controller
                 }
             }
               $request->validate($validation);
-            //   dd( $request->validate($validation));
+            //    dd( $request->validate($validation));
             $user_id = auth()->id();
             $seller=Seller::findOrFail($user_id);
 
@@ -98,17 +98,12 @@ class SellerAutoidentificationFormController extends Controller
                     $item['value'] = $request[$element->label];
                     $array[$element->label] = $request[$element->label];
                 }
+                dd($item);
                 array_push($data, $item);
                 $i++;
             }
             $seller->verification_info = json_encode($data);
-
-
-
-            // if ($seller->save()) {
-            //     flash('Your autoidentification form update has been updated successfully!')->success();
-            //     return back();
-            // }
+            // dd($seller->verification_info[0]);
             if ($seller->save()) {
                 flash(translate('Your autoidentification form update has been updated successfully!'))->success();
                 return back();

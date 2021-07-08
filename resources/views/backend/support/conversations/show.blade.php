@@ -5,11 +5,58 @@
 <div class="col-lg-12">
     <div class="card">
         <div class="card-header">
-            <h5 class="card-title">#{{ $conversation->title }} (Between @if($conversation->sender != null) {{ $conversation->sender->name }} @endif and @if($conversation->receiver != null) {{ $conversation->receiver->name }} @endif)
-            </h5>
+               <h5 class="card-title">full information</h5>
+
+            {{-- <h5 class="card-title">#{{ $conversation->title }} (Between @if($conversation->sender != null) {{ $conversation->sender->name }} @endif and @if($conversation->receiver != null) {{ $conversation->receiver->name }} @endif)
+            </h5> --}}
+        </div>
+         {{-- @dd($conversation); --}}
+         <div class="card-body">
+                <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <b>Type: </b>
+                            {{ $conversation->type }}
+                        </li>
+                        <li class="list-group-item">
+                            <b>User name: </b>
+                            {{$conversation->sender_id}}
+                        </li>
+                        <li class="list-group-item">
+                            <b>product name: </b>
+                            {{$conversation->receiver_id}}
+                        </li>
+                        <li class="list-group-item mb-2">
+                            <b>created ad :</b>
+                            {{ $conversation->created_at }}
+                        </li>
+                            <div class="card">
+                                <div class="card-header text-center">
+                                   <h5>Message</h5>
+                                </div>
+                                <div class="card-body">
+                                    {{$conversation->msg}}
+                                </div>
+                            </div>
+                </ul>
+            {{-- @dd(Auth::user()->id); --}}
+            @if (Auth::user()->id == $conversation->receiver_id)
+                <form action="{{ route('messages.store') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="conversation_id" value="{{ $conversation->id }}">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <textarea class="form-control" rows="4" name="message" placeholder="{{ translate('Type your reply') }}" required></textarea>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-info">{{translate('Send')}}</button>
+                    </div>
+                </form>
+            @endif
         </div>
 
-        <div class="card-body">
+        {{-- <div class="card-body">
             <ul class="list-group list-group-flush">
                 @foreach($conversation->messages as $message)
                     <li class="list-group-item">
@@ -35,6 +82,7 @@
                     </li>
                 @endforeach
             </ul>
+            @dd(Auth::user()->id);
             @if (Auth::user()->id == $conversation->receiver_id)
                 <form action="{{ route('messages.store') }}" method="POST">
                     @csrf
@@ -50,7 +98,8 @@
                     </div>
                 </form>
             @endif
-        </div>
+        </div> --}}
+
     </div>
 </div>
 

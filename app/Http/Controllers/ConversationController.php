@@ -10,6 +10,7 @@ use Auth;
 use App\Product;
 use Mail;
 use App\Mail\ConversationMailManager;
+use App\User;
 
 class ConversationController extends Controller
 {
@@ -42,8 +43,15 @@ class ConversationController extends Controller
             // $conversations = Conversation::orderBy('created_at', 'desc')->get();
             // return view('backend.support.conversations.index', compact('conversations'));
 
-            $conversation=Conversation::latest()->paginate(20);
-            // dd($conversation);
+            $conversation=Conversation::latest()->paginate(15);
+            // $conversation->sender_id=Conversation::sender_id
+            //   dd($conversation);
+            //  $user_id=auth()->id();
+            //  dd($user_id);
+            //  $user=User::findOrFail($user_id);
+            //  dd($user);
+
+            // dd( Auth::user()->seller);
             return view('backend.support.conversations.index')->with('conversations',$conversation);
         }
         else {
@@ -170,8 +178,11 @@ class ConversationController extends Controller
         elseif($conversation->receiver_id == Auth::user()->id) {
             $conversation->receiver_viewed = 1;
         }
-        $conversation->save();
-        return view('backend.support.conversations.show', compact('conversation'));
+        if( $conversation->save()){
+            return view('backend.support.conversations.show', compact('conversation'));
+        }
+
+
     }
 
     /**

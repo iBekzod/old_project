@@ -19,7 +19,7 @@ Route::prefix('v1/auth')->group(function () {
         Route::get('logout', 'Api\AuthController@logout');
         Route::get('user', 'Api\AuthController@user');
     });
-});
+}); 
 
 Route::prefix('v1')->group(function () {
     Route::get('/verification/form', 'Api\VerificationController@form');
