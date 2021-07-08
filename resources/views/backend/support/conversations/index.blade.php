@@ -33,9 +33,24 @@
                     <tr>
                         <td style="width: 3%">{{$key+1}}</td>
                         <td style="width: 7%">{{ $conversation->type }}</td>
-                        <td style="width: 7%">{{$conversation->sender_id}}</td>
-                        <td style="width: 7%">{{$conversation->receiver_id}}</td>
-                        <td style="width: 20%">{{$conversation->msg}}</td>
+                        <td style="width: 7%">
+                            @if(App\User::where('id',$conversation->sender_id)->exists())
+                              {{ App\User::where('id',$conversation->sender_id)->first()->name}}
+                            @endif
+                        </td>
+                        <td style="width: 7%">@if(App\Product::where('id',$conversation->receiver_id)->exists()){{ App\Product::where('id',$conversation->receiver_id)->first()->user->name}}@endif</td>
+                        <td style="width: 20%">
+                            @php
+                            $string=json_decode($conversation->msg, true)['content'];
+                            // dd($string);
+                                 if (strlen($string)>30) {
+                             $stringCut = substr($string, 0,30);
+                              }
+                              echo $string;
+
+                            @endphp
+
+                           </td>
                         {{-- <td>
                             @if ($conversation->sender != null)
                                 {{ $conversation->sender_id }}
