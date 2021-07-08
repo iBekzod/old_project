@@ -301,6 +301,8 @@ if (!function_exists('getPublishedProducts')) {
     function getPublishedProducts($type = 'product', $product_conditions = [], $variation_conditions = [], $element_conditions = [])
     {
         $published_condition=[['qty', '>', 0], ['is_accepted', 1], ['published', 1], ['variation_id', '<>', null], ['element_id', '<>', null], ['deleted_at', '=', null]];
+        $element_conditions['where'][] = ['is_accepted', 1];
+        $element_conditions['where'][] = ['published', 1];
         $products = Product::where($published_condition);
         $products = filterProductByRelation($products, 'product', $product_conditions);
         $products = filterProductByRelation($products, 'variation', $variation_conditions);
