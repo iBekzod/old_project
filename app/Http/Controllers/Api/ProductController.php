@@ -535,6 +535,14 @@ class ProductController extends Controller
                     $element_conditions['whereIn'][] = ['category_id' => $category_ids];
                 }
                 break;
+            case 'categoryAll':
+                $category_ids = Category::where('level', '=', 2)->pluck('id');
+                $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                break;
+            case 'categoryPopular':
+                $category_ids = Category::where('featured', 1)->where('level', '=', 2)->pluck('id');
+                $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                break;
             case 'seller':
                 if ($seller = Shop::select('user_id')->where('slug', $request->id)->firstOrFail()) {
                     $product_conditions['where'][] = ['user_id', $seller->user_id];
