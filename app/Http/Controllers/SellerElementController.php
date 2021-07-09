@@ -782,7 +782,7 @@ class SellerElementController extends Controller
         // dd($request);
         $element = new Element;
         $element->published = true;
-        $element->is_accepted = true;
+        $element->is_accepted = false;
         $element->added_by = $request->added_by;
         $element->category_id = $request->category_id;
         $element->brand_id = $request->brand_id;
@@ -1019,11 +1019,11 @@ class SellerElementController extends Controller
         $element->meta_description = $request->meta_description;
         $element->meta_img = $request->meta_img;
 
-        if (Auth::user()->user_type == 'seller') {
-            $element->user_id = Auth::user()->id;
-        } else {
-            $element->user_id = \App\User::where('user_type', 'admin')->first()->id;
-        }
+        // if (Auth::user()->user_type == 'seller') {
+        //     $element->user_id = Auth::user()->id;
+        // } else {
+        //     $element->user_id = \App\User::where('user_type', 'admin')->first()->id;
+        // }
         if ($element->meta_title == null) {
             $element->meta_title = $element->name;
         }
@@ -1046,7 +1046,7 @@ class SellerElementController extends Controller
                         $variation->color_id = (int)$variant['color_id'];
                         $variation->characteristics = $variant['attribute_id'];
                         $variation->photos = $variant['photos'];
-                        $variation->user_id = Auth::user()->id;
+                        // $variation->user_id = Auth::user()->id;
                         $variation->save();
                     }else{
                         $variation = new Variation;
@@ -1142,7 +1142,7 @@ class SellerElementController extends Controller
     public function updatePublished(Request $request)
     {
         $element = Element::findOrFail($request->id);
-        $element->published = $request->status;
+        // $element->published = $request->status;
         $element->on_moderation = 1;
 
         if ($element->added_by == 'seller' && \App\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated) {

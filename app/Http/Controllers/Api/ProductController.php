@@ -763,6 +763,6 @@ class ProductController extends Controller
         $user_id=8;//$request->user_id;
         $product_id=290;//$request->product_id;
         $user_address_id=$request->user_address_id;
-        
+
     }
 }
