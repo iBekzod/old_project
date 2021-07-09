@@ -1025,4 +1025,20 @@ class ElementController extends Controller
         }
         return back();
     }
+
+
+    public function updateAccepted(Request $request)
+    {
+        if($element = Element::findOrFail($request->id)){
+            $element->update([
+                'on_moderation' => 0,
+                'published' => 1,
+                'is_accepted' => 1
+            ]);
+            return 1;
+        }else{
+            return 0;
+        }
+
+    }
 }

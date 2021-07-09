@@ -102,7 +102,7 @@
                         <th>#</th>
                         <th width="20%">{{ translate('Name') }}</th>
                         <th>{{translate('Todays Deal')}}</th>
-                        <th>{{translate('Rating')}}</th>
+                        {{-- <th>{{translate('Rating')}}</th> --}}
                         <th>{{translate('Published')}}</th>
                         <th>{{translate('Featured')}}</th>
                         {{-- <th width="60%">{{ translate('Description') }}</th> --}}
@@ -135,7 +135,7 @@
                                     <span class="slider round"></span>
                                 </label>
                             </td>
-                            <td>{{ $element->rating }}</td>
+                            {{-- <td>{{ $element->rating }}</td> --}}
                             <td>
                                 <label class="mb-0 aiz-switch aiz-switch-success">
                                     <input onchange="update_published(this)" value="{{ $element->id }}"
@@ -151,6 +151,13 @@
                                 </label>
                             </td>
                             <td>{{ $element->user->name }}</td>
+                            <td class="text-right">
+                                <label class="aiz-switch aiz-switch-success mb-0">
+                                    <input onchange="update_accepted(this)" value="{{ $element->id }}"
+                                           type="checkbox" @if($element->is_accepted == 1) checked @endif>
+                                    <span class="slider round"></span>
+                                </label>
+                            </td>
                             {{-- <td class="text-right">
                                 <label class="mb-0 aiz-switch aiz-switch-success">
                                     <input disabled onchange="clone_selected(this)" value="{{ $element->id }}"
@@ -234,6 +241,24 @@
             }, function (data) {
                 if (data == 1) {
                     AIZ.plugins.notify('success', '{{ translate('Featured elements updated successfully') }}');
+                } else {
+                    AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
+                }
+            });
+        }
+        function update_accepted(el) {
+            if (el.checked) {
+                var status = 1;
+            } else {
+                var status = 0;
+            }
+            $.post('{{ route('elements.accepted') }}', {
+                _token: '{{ csrf_token() }}',
+                id: el.value,
+                status: status
+            }, function (data) {
+                if (data == 1) {
+                    AIZ.plugins.notify('success', '{{ translate('Accepted products updated successfully') }}');
                 } else {
                     AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
                 }
