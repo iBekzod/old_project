@@ -108,6 +108,7 @@
                         {{-- <th width="60%">{{ translate('Description') }}</th> --}}
                         <th>{{ translate('Added By') }}</th>
                         {{-- <th>{{ translate('Is cloned') }}</th> --}}
+                        <th class="text-right">{{translate('Accepted')}}</th>
                         <th class="text-right">{{translate('Options')}}</th>
                     </tr>
                 </thead>
