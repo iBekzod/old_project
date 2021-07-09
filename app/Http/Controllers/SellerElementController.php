@@ -1019,11 +1019,11 @@ class SellerElementController extends Controller
         $element->meta_description = $request->meta_description;
         $element->meta_img = $request->meta_img;
 
-        if (Auth::user()->user_type == 'seller') {
-            $element->user_id = Auth::user()->id;
-        } else {
-            $element->user_id = \App\User::where('user_type', 'admin')->first()->id;
-        }
+        // if (Auth::user()->user_type == 'seller') {
+        //     $element->user_id = Auth::user()->id;
+        // } else {
+        //     $element->user_id = \App\User::where('user_type', 'admin')->first()->id;
+        // }
         if ($element->meta_title == null) {
             $element->meta_title = $element->name;
         }
@@ -1046,7 +1046,7 @@ class SellerElementController extends Controller
                         $variation->color_id = (int)$variant['color_id'];
                         $variation->characteristics = $variant['attribute_id'];
                         $variation->photos = $variant['photos'];
-                        $variation->user_id = Auth::user()->id;
+                        // $variation->user_id = Auth::user()->id;
                         $variation->save();
                     }else{
                         $variation = new Variation;

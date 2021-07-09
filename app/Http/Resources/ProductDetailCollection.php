@@ -247,7 +247,7 @@ class ProductDetailCollection extends ResourceCollection
         // }else{
         //     $products=Product::where('variation_id', $item->variation_id)->get();
         // }
-        $products=Product::where('name', $item->name)->get();
+        $products=Product::where('variant_id', $item->variant_id)->get();
         $sellers=array();
         foreach($products as $product){
             $sellers[]=[
