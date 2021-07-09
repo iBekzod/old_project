@@ -509,7 +509,7 @@
                             @if(Auth::user()->user_type == 'admin' || in_array('16', json_decode(Auth::user()->staff->role->permissions)))
                                 <li class="aiz-side-nav-item">
                                     <a href="{{ route('conversations.found_it_cheaper') }}"
-                                       class="aiz-side-nav-link {{ areActiveRoutes(['conversations.admin_index', 'conversations.admin_show'])}}">
+                                       class="aiz-side-nav-link {{ areActiveRoutes(['conversations.found_it_cheaper', 'conversations.admin_show'])}}">
                                         <span class="aiz-side-nav-text">{{translate('Found it cheaper')}}</span>
                                         @if (count($conversation) > 0)
                                             <span class="badge badge-info">{{ count($conversation) }}</span>
