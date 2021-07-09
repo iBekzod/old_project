@@ -97,8 +97,8 @@ class ProductDetailCollection extends ResourceCollection
                 ],
             ];
         } catch (\Exception $th) {
-            return null;
-            // dd($th->getMessage());
+            // return null;
+            return ($th->getMessage());
         }
         return $data;
     }
@@ -247,7 +247,7 @@ class ProductDetailCollection extends ResourceCollection
         // }else{
         //     $products=Product::where('variation_id', $item->variation_id)->get();
         // }
-        $products=Product::where('variant_id', $item->variant_id)->get();
+        $products=Product::where('variation_id', $item->variation_id)->get();
         $sellers=array();
         foreach($products as $product){
             $sellers[]=[
