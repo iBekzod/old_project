@@ -66,6 +66,36 @@ class ConversationController extends Controller
         }
     }
 
+
+    public function found_it_cheaper()
+    {
+        if (BusinessSetting::where('type', 'conversation_system')->first()->value == 1) {
+
+            // $conversations = Conversation::orderBy('created_at', 'desc')->get();
+            // return view('backend.support.conversations.index', compact('conversations'));
+
+            $conversation=Conversation::latest()->paginate(15);
+        //    dd($conversation);
+
+        // $string = "Here is use big string of your paragraph or description.";
+
+            // change 15 top what ever text length you want to show.
+            //  dd($stringCut);
+            //  $endPoint = strrpos($string,12);
+            //  dd( $endPoint);
+            // $string = $endPoint;
+            // substr($stringCut, 0, $endPoint):substr($stringCut, 0);
+        // }
+        // dd($string);
+
+            // dd( Auth::user()->seller);
+            return view('backend.support.conversations.cheaper')->with('conversations',$conversation);
+        }
+        else {
+            flash(translate('Conversation is disabled at this moment'))->warning();
+            return back();
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *

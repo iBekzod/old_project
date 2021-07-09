@@ -227,6 +227,7 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 
 	//conversation of seller customer
 	Route::get('conversations','ConversationController@admin_index')->name('conversations.admin_index');
+    Route::get('conversation/found_it_cheaper','ConversationController@found_it_cheaper')->name('conversations.found_it_cheaper');
 	Route::get('conversations/{id}/show','ConversationController@admin_show')->name('conversations.admin_show');
 
     Route::post('/sellers/profile_modal', 'SellerController@profile_modal')->name('sellers.profile_modal');
