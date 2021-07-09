@@ -7,7 +7,7 @@
         <h5 class="mb-0 h6">{{translate('Conversations')}}</h5>
     </div>
     <div class="card-body pr-0 mr-0">
-        <table class=" text-center pr-0 mr-0" cellspacing="0" width="100%">
+        <table class=" text-center pr-0 mr-0" cellspacing="0"  width="100%">
             <thead>
                 <tr>
                     <th>#</th>
@@ -29,14 +29,28 @@
             </thead>
             <tbody>
                 {{-- @dd($conversations) --}}
-
                     @foreach ($conversations as $key => $conversation)
                     <tr>
-                        <td>{{$key+1}}</td>
-                        <td>{{ $conversation->type }}</td>
-                        <td>{{$conversation->sender_id}}</td>
-                        <td>{{$conversation->receiver_id}}</td>
-                        <td>{{$conversation->msg}}</td>
+                        <td style="width: 3%">{{$key+1}}</td>
+                        <td style="width: 7%">{{ $conversation->type }}</td>
+                        <td style="width: 7%">
+                            @if(App\User::where('id',$conversation->sender_id)->exists())
+                              {{ App\User::where('id',$conversation->sender_id)->first()->name}}
+                            @endif
+                        </td>
+                        <td style="width: 7%">@if(App\Product::where('id',$conversation->receiver_id)->exists()){{ App\Product::where('id',$conversation->receiver_id)->first()->user->name}}@endif</td>
+                        <td style="width: 20%">
+                            @php
+                            $string=json_decode($conversation->msg, true)['content'];
+                            // dd($string);
+                                 if (strlen($string)>30) {
+                             $stringCut = substr($string, 0,30);
+                              }
+                              echo $string;
+
+                            @endphp
+
+                           </td>
                         {{-- <td>
                             @if ($conversation->sender != null)
                                 {{ $conversation->sender_id }}
@@ -53,8 +67,8 @@
                                 @endif
                             @endif
                         </td> --}}
-                        <td>{{ $conversation->created_at }}</td>
-                        <td class="">
+                        <td style="width: 15%">{{ $conversation->created_at }}</td>
+                        <td style="width: 8%">
                             <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{route('conversations.admin_show', encrypt($conversation->id))}}" title="{{ translate('View') }}">
                                 <i class="las la-eye"></i>
                             </a>

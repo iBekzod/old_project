@@ -68,7 +68,7 @@
                                     </td>
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Discount Type') }}</label>
-                                        <select class="form-control aiz-selectpicker" name="discount_type">
+                                        <select class="form-control aiz-selectpicker" name="discount_type"  onchange="change_selection(this.value, 'discount_type_change')" >
                                             {{-- <option value="no">{{translate('Selected value')}}</option> --}}
                                             <option value="amount">{{translate('Flat')}}</option>
                                             <option value="percent" selected>{{translate('Percent')}}</option>
@@ -77,7 +77,7 @@
                                     <td class="text-center">
 
                                         <label for="" class="control-label">{{ translate('Delivery Type') }}</label>
-                                        <select class="form-control aiz-selectpicker" name="delivery_type">
+                                        <select class="form-control aiz-selectpicker" name="delivery_type"  onchange="change_selection(this.value, 'delivery_type_change')" >
                                             {{-- <option value="no">{{translate('Selected value')}}</option> --}}
                                             <option value="free" >{{ translate('Free') }}</option>
                                             <option value="seller">{{ translate('Self') }}</option>
@@ -92,7 +92,7 @@
                                     </td>
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Tax type') }}</label>
-                                        <select class="form-control aiz-selectpicker" name="tax_type">
+                                        <select class="form-control aiz-selectpicker" name="tax_type"  onchange="change_selection(this.value, 'tax_type_change')" >
                                             {{-- <option value="no">{{translate('Selected value')}}</option> --}}
                                             <option value="amount">{{translate('Flat')}}</option>
                                             <option value="percent" selected>{{translate('Percent')}}</option>
@@ -461,10 +461,9 @@
                                                 class="form-control price_change" required>
                                         </td>
                                         <td>
-                                            <select class="form-control aiz-selectpicker "
-                                                    name="variation[{{ $index }}][currency]">
+                                            <select class="form-control aiz-selectpicker " name="variation[{{ $index }}][currency]">
                                                 @foreach($currencies as $currency)
-                                                    <option class="currency_change" value="{{$currency->id}}"
+                                                    <option value="{{$currency->id}}"
                                                         @if($currency->code==$seller_product->currency->code) selected @endif>{{$currency->code}}</option>
                                                 @endforeach
                                             </select>
@@ -557,12 +556,17 @@
 
         function change_selection(value, class_name) {
             document.querySelectorAll("." + class_name).forEach(el => {
-                console.log(el)
-                // if(el.value === value){
-                //     el.selected = true
-                // } else {
-                //     el.seleted = false
-                // }
+                console.log(el);
+                if(el.text == value){
+                    if(!el.hasAttribute('selected')){
+                        el.setAttribute('selected', '');
+                    }
+                    // el.selected = true
+                } else {
+                    el.removeAttribute("selected");
+                    // el.selected = false;
+                }
+                // el.onchange();
             })
         }
 

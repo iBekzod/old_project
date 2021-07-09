@@ -90,7 +90,7 @@
             				</div>
             			</div>
             		</div>
-                    @if (\App\BusinessSetting::where('type', 'classified_product')->first()->value)
+                    {{-- @if (\App\BusinessSetting::where('type', 'classified_product')->first()->value)
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-header">
@@ -112,7 +112,7 @@
                                 </div>
                             </div>
                         </div>
-                    @endif
+                    @endif --}}
             	</div>
             </div>
         </div>
