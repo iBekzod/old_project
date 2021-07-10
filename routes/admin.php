@@ -285,6 +285,7 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	//Shipping Configuration
 	Route::get('/shipping_configuration', 'BusinessSettingsController@shipping_configuration')->name('shipping_configuration.index');
 	Route::post('/shipping_configuration/update', 'BusinessSettingsController@shipping_configuration_update')->name('shipping_configuration.update');
+	Route::post('/seller_configuration/update', 'SellerSettingsController@seller_configuration_update')->name('seller_configuration.update');
 
 	// Route::resource('pages', 'PageController');
 	// Route::get('/pages/destroy/{id}', 'PageController@destroy')->name('pages.destroy');

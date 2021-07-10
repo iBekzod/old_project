@@ -9,6 +9,72 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0 h6">{{translate('Delivery Cost per kg')}}</h5>
+                </div>
+                <form action="{{ route('seller_configuration.update') }}" method="POST" enctype="multipart/form-data">
+                  <div class="card-body">
+                      @csrf
+                      <input type="hidden" name="type" value="kg_weight_price">
+                      <div class="form-group">
+                          <div class="col-lg-12">
+                              <input class="form-control" type="text" name="kg_weight_price" value="{{ \App\SellerSetting::where('type', 'kg_weight_price')->first()->value }}">
+                          </div>
+                      </div>
+                      <div class="form-group mb-0 text-right">
+                          <button type="submit" class="btn btn-sm btn-primary">{{translate('Save')}}</button>
+                      </div>
+                  </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0 h6">{{translate('Express percent')}}</h5>
+                </div>
+                <form action="{{ route('seller_configuration.update') }}" method="POST" enctype="multipart/form-data">
+                  <div class="card-body">
+                      @csrf
+                      <input type="hidden" name="type" value="express_percent">
+                      <div class="form-group">
+                          <div class="col-lg-12">
+                              <input class="form-control" type="text" name="express_percent" value="{{ \App\SellerSetting::where('type', 'express_percent')->first()->value }}">
+                          </div>
+                      </div>
+                      <div class="form-group mb-0 text-right">
+                          <button type="submit" class="btn btn-sm btn-primary">{{translate('Save')}}</button>
+                      </div>
+                  </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0 h6">{{translate('Express distance')}}</h5>
+                </div>
+                <form action="{{ route('seller_configuration.update') }}" method="POST" enctype="multipart/form-data">
+                  <div class="card-body">
+                      @csrf
+                      <input type="hidden" name="type" value="express_distance">
+                      <div class="form-group">
+                          <div class="col-lg-12">
+                              <input class="form-control" type="text" name="express_distance" value="{{ \App\SellerSetting::where('type', 'express_distance')->first()->value }}">
+                          </div>
+                      </div>
+                      <div class="form-group mb-0 text-right">
+                          <button type="submit" class="btn btn-sm btn-primary">{{translate('Save')}}</button>
+                      </div>
+                  </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
