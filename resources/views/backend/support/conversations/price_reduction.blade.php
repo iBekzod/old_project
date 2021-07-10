@@ -18,13 +18,6 @@
                     <th>{{ translate('Date') }}</th>
                     {{-- <th>{{translate('Receiver')}}</th>
                     <th width="10%">{{translate('Options')}}</th> --}}
-
-
-                    {{-- <th>{{ translate('Date') }}</th>
-                    <th>{{translate('Title')}}</th>
-                    <th>{{translate('Sender')}}</th>
-                    <th>{{translate('Receiver')}}</th>
-                    <th width="10%">{{translate('Options')}}</th> --}}
                 </tr>
             </thead>
 
