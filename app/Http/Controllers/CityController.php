@@ -9,6 +9,16 @@ use App\CityTranslation;
 use App\Language;
 class CityController extends Controller
 {
+    public function regions($country_id, $region_id)
+    {
+        $regions=(City::where('country_id', $country_id)->where('parent_id', $region_id)->get());
+        return $regions;
+    }
+
+    public function countries()
+    {
+        return Country::where('status', 1)->get();
+    }
     /**
      * Display a listing of the resource.
      *
