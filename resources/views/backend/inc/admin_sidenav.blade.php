@@ -980,12 +980,12 @@
                                     <span class="aiz-side-nav-text">{{translate('Google reCAPTCHA')}}</span>
                                 </a>
                             </li>
-                            <li class="aiz-side-nav-item">
+                            {{-- <li class="aiz-side-nav-item">
                                 <a href="{{route('shipping_configuration.index')}}"
                                    class="aiz-side-nav-link {{ areActiveRoutes(['shipping_configuration.index','shipping_configuration.edit','shipping_configuration.update'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Shipping Configuration')}}</span>
                                 </a>
-                            </li>
+                            </li> --}}
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('countries.index')}}"
                                    class="aiz-side-nav-link {{ areActiveRoutes(['countries.index','countries.edit','countries.update'])}}">
