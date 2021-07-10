@@ -541,6 +541,9 @@ class ProductController extends Controller
                 }
                 break;
             case 'new':
+                $product_conditions['orderBy'][] = ['created_at' => 'desc'];
+                break;
+            case 'todaysDeal':
                 $product_conditions['where'][] = ['todays_deal', 1];
                 break;
             case 'popular':
