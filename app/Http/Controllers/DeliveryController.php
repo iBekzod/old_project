@@ -14,7 +14,7 @@ class DeliveryController extends Controller
      */
     public function index()
     {
-        $deliveries = Delivery::orderBy('distance', 'asc')->paginate(15);
+        $deliveries = Delivery::where('user_id', auth()->id())->orderBy('distance', 'asc')->paginate(15);
         return view('backend.setup_configurations.deliveries.index', compact('deliveries'));
     }
 
@@ -89,7 +89,7 @@ class DeliveryController extends Controller
         $delivery->price = $request->price;
         $delivery->save();
         flash(translate('Delivery has been updated successfully'))->success();
-        return redirect()->back();
+        return $this->index();
     }
 
     /**
