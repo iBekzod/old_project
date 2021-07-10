@@ -16,7 +16,7 @@ class AttributeCollection extends ResourceCollection
                     'id'=>$data->id,
                     'name'=>$data->getTranslation('name'),
                     'branch_id'=>$data->branch_id,
-                   'combination'=>$data->combination
+                    'combination'=>$data->combination
                 ];
             })
         ];

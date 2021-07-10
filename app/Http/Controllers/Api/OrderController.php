@@ -14,7 +14,7 @@ use App\Coupon;
 use App\CouponUsage;
 use App\BusinessSetting;
 use App\User;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -92,14 +92,15 @@ class OrderController extends Controller
 
         foreach ($cartItems as $cartItem) {
             $product = Product::findOrFail($cartItem->product_id);
-            if ($cartItem->variation) {
-                $cartItemVariation = $cartItem->variation;
-                $product_stocks = $product->stocks->where('variant', $cartItem->variation)->first();
+            if ($product->variation) {
+                $cartItemVariation = $product->variation;
+                $product_stocks = $product->first();
                 $product_stocks->qty -= $cartItem->quantity;
                 $product_stocks->save();
             } else {
+                //TODO: add current_stock column to product
                 $product->update([
-                    'current_stock' => DB::raw('current_stock - ' . $cartItem->quantity)
+                    'num_of_sale' => DB::raw('num_of_sale - ' . $cartItem->quantity)
                 ]);
             }
 
@@ -212,7 +213,9 @@ class OrderController extends Controller
             'city' => 'required',
             'postal_code' => 'required',
             'phone' => 'required',
-            'set_default' => 'required|integer'
+            'set_default' => 'required|integer',
+            'longitude' =>'required',
+            'latitude' =>'required',
         ]);
 
         if ($request->user('api')) {
@@ -225,7 +228,9 @@ class OrderController extends Controller
                 'city' => $request->get('city'),
                 'postal_code' => $request->get('postal_code'),
                 'phone' => $request->get('phone'),
-                'set_default' => $request->get('set_default')
+                'set_default' => $request->get('set_default'),
+                'longitude' => $request->get('longitude'),
+                'latitude' => $request->get('latitude'),
             ]);
 
             $addresses = $user->addresses;
@@ -280,6 +285,9 @@ class OrderController extends Controller
         $obj->postal_code = $address->postal_code;
         $obj->phone = $address->phone;
         $obj->checkout_type = $address->checkout_type;
+        $obj->longitude = $address->longitude;
+        $obj->latitude = $address->latitude;
+
 
         $shippingAddress = $obj;
         $cartItems = $request->cart_products;
@@ -346,7 +354,7 @@ class OrderController extends Controller
             $product = Product::findOrFail($cartItem['id']);
             if ($cartItem['variation']) {
                 $cartItemVariation = $cartItem['variation'];
-                $product_stocks = $product->stocks->where('variant', $cartItem['variation'])->first();
+                $product_stocks = $product->first();
                 $product_stocks->qty -= $cartItem['quantity'];
                 $product_stocks->save();
             } else {
