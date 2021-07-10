@@ -228,7 +228,7 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::get('/pick_up_points/destroy/{id}', 'PickupPointController@destroy')->name('pick_up_points.destroy');
 
 	//conversation of seller customer
-	Route::get('conversations','ConversationController@admin_index')->name('conversations.admin_index');
+	Route::get('conversations','ConversationController@product_queries')->name('conversations.admin_index');
     Route::get('conversation/found_it_cheaper','ConversationController@found_it_cheaper')->name('conversations.found_it_cheaper');
     Route::get('conversation/price_reduction','ConversationController@price_reduction')->name('conversation.price_reduction');
     Route::get('conversation/report_description','ConversationController@report_description')->name('conversation.report_description');

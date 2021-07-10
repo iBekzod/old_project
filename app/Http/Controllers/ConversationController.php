@@ -43,6 +43,36 @@ class ConversationController extends Controller
             // $conversations = Conversation::orderBy('created_at', 'desc')->get();
             // return view('backend.support.conversations.index', compact('conversations'));
 
+            $tickets=Conversation::latest()->paginate(15);
+        //    dd($conversation);
+
+        // $string = "Here is use big string of your paragraph or description.";
+
+            // change 15 top what ever text length you want to show.
+            //  dd($stringCut);
+            //  $endPoint = strrpos($string,12);
+            //  dd( $endPoint);
+            // $string = $endPoint;
+            // substr($stringCut, 0, $endPoint):substr($stringCut, 0);
+        // }
+        // dd($string);
+
+            // dd( Auth::user()->seller);
+            return view('backend.support.support_tickets.index')->with('conversations',$tickets);
+        }
+        else {
+            flash(translate('Conversation is disabled at this moment'))->warning();
+            return back();
+        }
+    }
+
+    public function product_queries()
+    {
+        if (BusinessSetting::where('type', 'conversation_system')->first()->value == 1) {
+
+            // $conversations = Conversation::orderBy('created_at', 'desc')->get();
+            // return view('backend.support.conversations.index', compact('conversations'));
+
             $conversation=Conversation::latest()->paginate(15);
         //    dd($conversation);
 
