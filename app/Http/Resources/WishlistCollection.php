@@ -41,6 +41,7 @@ class WishlistCollection extends ResourceCollection
                             ]
                         ];
                 }
+                return null;
             })
         ];
     }

@@ -22,16 +22,16 @@ class CartController extends Controller
     {
         $product = Product::findOrFail($request->id);
 
-        $variant = $request->variant;
-        $color = $request->color;
+        $variant = $product->variation;
+        $color = $product->color;
         $tax = 0;
 
-        if ($variant == '' && $color == '')
-            $price = $product->unit_price;
-        else {
-            $product_stock = $product->stocks->where('variant', $variant)->first();
-            $price = $product_stock->price;
-        }
+        // if ($variant == '' && $color == '')
+        $price = $product->price;
+        // else {
+        //     $product_stock = $product->stocks->where('variant', $variant)->first();
+        //     $price = $product_stock->price;
+        // }
 
         //discount calculation based on flash deal and regular discount
         //calculation of taxes
@@ -86,7 +86,7 @@ class CartController extends Controller
     {
         $cart = Cart::find($request->id);
         if ($cart != null) {
-            if ($cart->product->stocks->where('variant', $cart->variation)->first()->qty >= $request->quantity) {
+            if ($cart->product->qty >= $request->quantity) {
                 $cart->update([
                     'quantity' => $request->quantity
                 ]);

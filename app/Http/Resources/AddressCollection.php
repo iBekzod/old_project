@@ -18,7 +18,9 @@ class AddressCollection extends ResourceCollection
                     'city' => $data->city,
                     'postal_code' => $data->postal_code,
                     'phone' => $data->phone,
-                    'set_default' => $data->set_default
+                    'set_default' => $data->set_default,
+                    'longitude' => $data->longitude,
+                    'latitude' => $data->latitude
                 ];
             })
         ];
