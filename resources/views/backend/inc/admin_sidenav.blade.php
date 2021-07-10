@@ -517,7 +517,7 @@
                                     </a>
                                 </li>
                             @endif
-                            @if(Auth::user()->user_type == 'admin' || in_array('16', json_decode(Auth::user()->staff->role->permissions)))
+                            {{-- @if(Auth::user()->user_type == 'admin' || in_array('16', json_decode(Auth::user()->staff->role->permissions)))
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('conversation.price_reduction') }}"
                                    class="aiz-side-nav-link {{ areActiveRoutes(['conversation.price_reduction', 'conversations.admin_show'])}}">
@@ -527,7 +527,7 @@
                                     @endif
                                 </a>
                             </li>
-                        @endif
+                        @endif --}}
                         @if(Auth::user()->user_type == 'admin' || in_array('16', json_decode(Auth::user()->staff->role->permissions)))
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('conversation.report_description') }}"
