@@ -309,6 +309,10 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::resource('warehouse', 'WarehouseController')->except([
 		'create'
 	]);
+    Route::resource('deliveries', 'DeliveryController')->except([
+		'create', 'show', 'destroy'
+	]);
+    Route::get('deliveries/destroy/{id}', 'DeliveryController@destroy')->name('deliveries.destroy');
 	Route::post('importwarehouse', 'WarehouseController@importWarehouse')->name('warehouse.import');
 	Route::post('warehouse/deletebyselection', 'WarehouseController@deleteBySelection');
 	Route::get('warehouse/lims_warehouse_search', 'WarehouseController@limsWarehouseSearch')->name('warehouse.search');

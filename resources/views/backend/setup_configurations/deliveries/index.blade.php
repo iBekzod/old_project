@@ -44,20 +44,6 @@
         </div>
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header row gutters-5">
-                    <div class="col text-center text-md-left">
-                        <h5 class="mb-md-0 h6">{{ translate('Deliveries') }}</h5>
-                    </div>
-                    <div class="col-md-4">
-                        <form class="" id="sort_cities" action="" method="GET">
-                            <div class="input-group input-group-sm">
-                                <input type="text" class="form-control" id="search" name="search" @isset($sort_search)
-                                    value="{{ $sort_search }}" @endisset
-                                    placeholder="{{ translate('Type name & Enter') }}">
-                            </div>
-                        </form>
-                    </div>
-                </div>
                 <div class="card-body">
                     <table class="table aiz-table mb-0">
                         <thead>
@@ -76,12 +62,12 @@
                                     <td>{{ $delivery->price }}</td>
                                     <td class="text-right">
                                         <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                            href="{{ route('deliveries.edit', ['id' => $city->id, 'lang' => env('DEFAULT_LANGUAGE')]) }}"
+                                            href="{{ route('deliveries.edit', ['delivery' => $delivery->id, 'lang' => env('DEFAULT_LANGUAGE')]) }}"
                                             title="{{ translate('Edit') }}">
                                             <i class="las la-edit"></i>
                                         </a>
                                         <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
-                                            data-href="{{ route('deliveries.destroy', $city->id) }}"
+                                            data-href="{{ route('deliveries.destroy', $delivery->id) }}"
                                             title="{{ translate('Delete') }}">
                                             <i class="las la-trash"></i>
                                         </a>
