@@ -535,6 +535,14 @@ class ProductController extends Controller
                     $element_conditions['whereIn'][] = ['category_id' => $category_ids];
                 }
                 break;
+            case 'categoryAll':
+                $category_ids = Category::where('level', '=', 2)->pluck('id');
+                $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                break;
+            case 'categoryPopular':
+                $category_ids = Category::where('featured', 1)->where('level', '=', 2)->pluck('id');
+                $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                break;
             case 'seller':
                 if ($seller = Shop::select('user_id')->where('slug', $request->id)->firstOrFail()) {
                     $product_conditions['where'][] = ['user_id', $seller->user_id];
@@ -542,15 +550,27 @@ class ProductController extends Controller
                 break;
             case 'new':
                 $product_conditions['orderBy'][] = ['created_at' => 'desc'];
+                if ($request->id!="list" && $categoryA = Category::where('slug', $request->id)->firstOrFail()) {
+                    $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
+                    $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                }
                 break;
-            case 'todaysDeal':
+            case 'todays_deal':
                 $product_conditions['where'][] = ['todays_deal', 1];
                 break;
             case 'popular':
-                $product_conditions['where'][] = ['featured', 1];
+                $product_conditions['where'][] = ['todays_deal', 1];
+                if ($request->id!="list" && $categoryA = Category::where('slug', $request->id)->firstOrFail()) {
+                    $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
+                    $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                }
                 break;
             case 'recommendation':
-                $product_conditions['where'][] = ['seller_featured', 1];
+                $product_conditions['where'][] = ['featured', 1];
+                if ($request->id!="list" && $categoryA = Category::where('slug', $request->id)->firstOrFail()) {
+                    $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
+                    $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                }
                 break;
             case 'stock':
                 $product_conditions['where'][] = ['discount', '>', 0];
@@ -601,11 +621,11 @@ class ProductController extends Controller
         }
         //Популярные
         if ($request->has('popular') && $request->popular) {
-            $product_conditions['where'][] = ['featured', 1];
+            $product_conditions['where'][] = ['todays_deal', 1];
         }
         //Рекомендуемые
         if ($request->has('recommendation') && $request->recommendation) {
-            $product_conditions['where'][] = ['seller_featured', 1];
+            $product_conditions['where'][] = ['featured', 1];
         }
         //Акции
         if ($request->has('stock') && $request->stock) {

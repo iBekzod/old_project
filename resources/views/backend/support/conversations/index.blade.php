@@ -11,7 +11,6 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>{{ translate('Type') }}</th>
                     <th>{{translate('Sender')}}</th>
                     <th>{{translate('Receiver')}}</th>
                     <th>{{translate('Title')}}</th>
@@ -32,13 +31,12 @@
                     @foreach ($conversations as $key => $conversation)
                     <tr>
                         <td style="width: 3%">{{$key+1}}</td>
-                        <td style="width: 7%">{{ $conversation->type }}</td>
-                        <td style="width: 7%">
+                        <td style="width: 10%">
                             @if(App\User::where('id',$conversation->sender_id)->exists())
                               {{ App\User::where('id',$conversation->sender_id)->first()->name}}
                             @endif
                         </td>
-                        <td style="width: 7%">@if(App\Product::where('id',$conversation->receiver_id)->exists()){{ App\Product::where('id',$conversation->receiver_id)->first()->user->name}}@endif</td>
+                        <td style="width: 11%">@if(App\Product::where('id',$conversation->receiver_id)->exists()){{ App\Product::where('id',$conversation->receiver_id)->first()->user->name}}@endif</td>
                         <td style="width: 20%">
                             @php
                             $string=json_decode($conversation->msg, true)['content'];
