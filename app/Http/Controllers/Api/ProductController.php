@@ -20,11 +20,13 @@ use App\FlashDealProduct;
 use App\Product;
 use App\Shop;
 use App\Color;
+use App\Delivery;
 use App\Element;
 use App\Http\Resources\CategoryCollection;
 use App\Http\Resources\ElementCollection;
 use App\Http\Resources\ProductColorCollection;
 use App\Http\Resources\VariationCollection;
+use App\User;
 // use App\Seller;
 use Illuminate\Http\Request;
 use App\Utility\CategoryUtility;
@@ -783,9 +785,18 @@ class ProductController extends Controller
     }
 
     public function calculateDeliveryCost(Request $request){
-        $user_id=8;//$request->user_id;
-        $product_id=290;//$request->product_id;
-        $user_address_id=$request->user_address_id;
-
+        $user=User::findOrFail($request->user_id);
+        $product=Product::findOrFail($request->user_id)->user();
+        $seller=$product->user();
+        $user_address=$user->addresses()->where('set_default', 1)->first();
+        $seller_address=$seller->addresses()->where('set_default', 1)->first();
+        $distance=$this->calculateDistance($user_address->latitude,$user_address->longitude,$seller_address->latitude,$seller_address->longitude );
+        $delivery_metrics=Delivery::orderBy('distance', 'asc')->where('distance', '>', $distance)->first();
+        $weight_price=\App\SellerSetting::where('type', 'kg_weight_price')->where('user_id', $seller->id)->first()->value;
+        $delivery_cost= $delivery_metrics->price*$distance+$weight_price*$product->weight;
+        return $delivery_cost;
+    }
+    public function calculateDistance($from_lat, $from_long, $to_lat, $to_long){
+        return 10;
     }
 }
