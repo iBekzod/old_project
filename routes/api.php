@@ -6,6 +6,8 @@
 
 // use Illuminate\Routing\Route;
 
+use Razorpay\Api\Api;
+
 Route::prefix('v1/auth')->group(function () {
     Route::post('login', 'Api\AuthController@login');
     Route::post('signinByPhoneNumber', 'Api\AuthController@signinByPhoneNumber');
@@ -19,7 +21,7 @@ Route::prefix('v1/auth')->group(function () {
         Route::get('logout', 'Api\AuthController@logout');
         Route::get('user', 'Api\AuthController@user');
     });
-}); 
+});
 
 Route::prefix('v1')->group(function () {
     Route::get('/verification/form', 'Api\VerificationController@form');
@@ -164,6 +166,7 @@ Route::prefix('v1')->group(function () {
     Route::post('payments/pay/wallet', 'Api\WalletController@processPayment')->middleware('auth:api');
     Route::post('payments/pay/cod', 'Api\PaymentController@cashOnDelivery')->middleware('auth:api');
     Route::post('post/support_ticket','Api\ConversationController@postConversations');
+    Route::post('post/subscriber','Api\SubscriberController@postSubscribers');
 
     Route::post('order/store', 'Api\OrderController@store')->middleware('auth:api');
 
