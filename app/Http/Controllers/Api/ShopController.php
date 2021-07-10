@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Brand;
+use App\Element;
+use App\Http\Resources\BrandCollection;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ShopCollection;
 use App\Product;
@@ -63,18 +66,19 @@ class ShopController extends Controller
     public function newProducts($id)
     {
         $shop = Shop::where('slug', $id)->firstOrFail();
-
         return new ProductCollection(getPublishedProducts('product', ['where' => [['user_id', $shop->user_id]], 'orderBy' => [['created_at'=>'desc']]])->limit(10)->get());
     }
 
     public function brands($id)
     {
 
-        // $shop = Shop::where('slug', $id)->firstOrFail();
-
+        $shop = Shop::where('slug', $id)->firstOrFail();
+        $product_element_ids=getPublishedProducts('product', ['where' => [['user_id', $shop->user_id]]])->pluck('element_id');
+        $brand_ids=Element::whereIn('id', $product_element_ids)->pluck('brand_id');
+        $brands=Brand::whereIn('id', $brand_ids)->get();
         // $product_by_brands=Product::select('brand_id')->where('user_id', $shop->user_id)->distinct()->get()->toArray();
-        // return response()->json([
-        //     'shop'=>$product_by_brands
-        //     ]);
+        return response()->json([
+            'brands'=> new BrandCollection($brands),
+        ]);
     }
 }
