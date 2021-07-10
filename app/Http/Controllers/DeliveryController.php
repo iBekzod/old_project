@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Delivery;
 use Illuminate\Http\Request;
 
 class DeliveryController extends Controller
@@ -13,7 +14,8 @@ class DeliveryController extends Controller
      */
     public function index()
     {
-        //
+        $deliveries = Delivery::where('user_id', auth()->id())->orderBy('distance', 'asc')->paginate(15);
+        return view('backend.setup_configurations.deliveries.index', compact('deliveries'));
     }
 
     /**
@@ -34,7 +36,14 @@ class DeliveryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $delivery = Delivery::firstOrNew([
+            'user_id'=>$request->user_id = auth()->id(),
+            'distance'=>$request->distance = $request->distance,
+            'price'=>$request->price = $request->price,
+            ]);
+        $delivery->save();
+        flash(translate('Delivery has been inserted successfully'))->success();
+        return redirect()->back();
     }
 
     /**
@@ -56,7 +65,8 @@ class DeliveryController extends Controller
      */
     public function edit($id)
     {
-        //
+         $delivery  = Delivery::findOrFail($id);
+         return view('backend.setup_configurations.deliveries.edit', compact('delivery'));
     }
 
     /**
@@ -68,7 +78,18 @@ class DeliveryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $delivery = Delivery::firstOrNew([
+            'user_id'=>$request->user_id = auth()->id(),
+            'distance'=>$request->distance = $request->distance,
+            'price'=>$request->price = $request->price,
+            ]);
+        $delivery = Delivery::findOrFail($id);
+        $delivery->user_id = auth()->id();
+        $delivery->distance = $request->distance;
+        $delivery->price = $request->price;
+        $delivery->save();
+        flash(translate('Delivery has been updated successfully'))->success();
+        return $this->index();
     }
 
     /**
@@ -79,6 +100,8 @@ class DeliveryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Delivery::destroy($id);
+        flash(translate('Delivery has been deleted successfully'))->success();
+        return redirect()->route('deliveries.index');
     }
 }

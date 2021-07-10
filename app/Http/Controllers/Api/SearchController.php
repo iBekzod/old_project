@@ -41,7 +41,7 @@ class SearchController extends Controller
             }
         }
 
-        $products = filter_products(Product::where('published', 1)->where('name', 'like', '%'.$request->search.'%'))->get()->take(3);
+        $products = getPublishedProducts('product', ['where' => [['name', 'like', '%'.$request->search.'%']]])->get()->take(3);
 
         $categories = Category::where('name', 'like', '%'.$request->search.'%')->get()->take(3);
 
@@ -106,8 +106,8 @@ class SearchController extends Controller
             }
         }
         $category_id=$request->get('category_id');
-        $products = filter_products(Product::where('published', 1)
-            ->where('name', 'like', '%' . $request->search . '%'))
+        $products = getPublishedProducts('product')
+            ->where('name', 'like', '%' . $request->search . '%')
             ->whereHas('element', function ($relation) use ($category_id) {
                 $relation->where('category_id', $category_id);
             })

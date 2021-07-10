@@ -285,6 +285,7 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	//Shipping Configuration
 	Route::get('/shipping_configuration', 'BusinessSettingsController@shipping_configuration')->name('shipping_configuration.index');
 	Route::post('/shipping_configuration/update', 'BusinessSettingsController@shipping_configuration_update')->name('shipping_configuration.update');
+	Route::post('/seller_configuration/update', 'SellerSettingsController@seller_configuration_update')->name('seller_configuration.update');
 
 	// Route::resource('pages', 'PageController');
 	// Route::get('/pages/destroy/{id}', 'PageController@destroy')->name('pages.destroy');
@@ -309,6 +310,10 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::resource('warehouse', 'WarehouseController')->except([
 		'create'
 	]);
+    Route::resource('deliveries', 'DeliveryController')->except([
+		'create', 'show', 'destroy'
+	]);
+    Route::get('deliveries/destroy/{id}', 'DeliveryController@destroy')->name('deliveries.destroy');
 	Route::post('importwarehouse', 'WarehouseController@importWarehouse')->name('warehouse.import');
 	Route::post('warehouse/deletebyselection', 'WarehouseController@deleteBySelection');
 	Route::get('warehouse/lims_warehouse_search', 'WarehouseController@limsWarehouseSearch')->name('warehouse.search');

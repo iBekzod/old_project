@@ -30,8 +30,8 @@ class SubCategoryController extends Controller
         $category_collection->additional['category'] = Category::where('id', $id)->orWhere('slug', $id)->with('parent')->first();
         $category_collection->additional['category']['tag'] = $this->getTags($category->childrenCategories);
         $category_collection->additional['category']['brands'] = $this->getBrands($category->childrenCategories);
-        $category_collection->additional['category']['min_price'] = filter_products(\App\Product::query())->get()->min('price');
-        $category_collection->additional['category']['max_price'] = filter_products(\App\Product::query())->get()->max('price');
+        $category_collection->additional['category']['min_price'] = getPublishedProducts('product')->get()->min('price');
+        $category_collection->additional['category']['max_price'] = getPublishedProducts('product')->get()->max('price');
         $category_collection->additional['category']->banner = api_asset($category_collection->additional['category']->banner);
         $category_collection->additional['category']['breadcrumbs'] = $category->parentCategoryHierarchy;
 
@@ -124,152 +124,92 @@ class SubCategoryController extends Controller
         $category = \App\Category::where('id', $id)->orWhere('slug', $id)->first();
 
         if ($category != null) {
-            return $this->search($request, $category->id);
+            $request->id = $category->slug;
+            return $this->searchPr('category', $request);
         }
 
         abort(404);
     }
 
-    public function search($request, $category_id = null, $brand_id = null)
+    public function searchPr($type, $request)
     {
-        $query = $request->q;
-        $sort_by = $request->sort_by;
-        $min_price = $request->min_price;
-        $max_price = $request->max_price;
-        $seller_id = $request->seller_id;
-        // if($min_price != null && $max_price != null){
-        //     $products = $products->where('unit_price', '>=', $min_price)->where('unit_price', '<=', $max_price);
-        // }
-
-
-
-
-        // $non_paginate_products = filter_products($products)->get();
-
-        // //Attribute Filter
-
-        // $attributes = array();
-        // foreach ($non_paginate_products as $key => $product) {
-        //     if($product->attributes != null && is_array(json_decode($product->attributes))){
-        //         foreach (json_decode($product->attributes) as $key => $value) {
-        //             $flag = false;
-        //             $pos = 0;
-        //             foreach ($attributes as $key => $attribute) {
-        //                 if($attribute['id'] == $value){
-        //                     $flag = true;
-        //                     $pos = $key;
-        //                     break;
-        //                 }
-        //             }
-        //             if(!$flag){
-        //                 $item['id'] = $value;
-        //                 $item['values'] = array();
-        //                 foreach (json_decode($product->choice_options) as $key => $choice_option) {
-        //                     if($choice_option->attribute_id == $value){
-        //                         $item['values'] = $choice_option->values;
-        //                         break;
-        //                     }
-        //                 }
-        //                 array_push($attributes, $item);
-        //             }
-        //             else {
-        //                 foreach (json_decode($product->choice_options) as $key => $choice_option) {
-        //                     if($choice_option->attribute_id == $value){
-        //                         foreach ($choice_option->values as $key => $value) {
-        //                             if(!in_array($value, $attributes[$pos]['values'])){
-        //                                 array_push($attributes[$pos]['values'], $value);
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
-        // $selected_attributes = array();
-        // foreach ($attributes as $key => $attribute) {
-        //     $attr = Attribute::find($attribute['id']);
-        //     if ($attr != null)
-        //     {
-        //         $attributes[$key]['attr'] = $attr;
-        //     }else{
-        //         unset($attributes[$key]);
-        //     }
-        // }
-
-        // foreach ($attributes as $key => $attribute) {
-        //     if ($request->has('attribute_'.$attribute['id'])) {
-        //         foreach ($request['attribute_'.$attribute['id']] as $key => $value) {
-        //             $str = '"'.$value.'"';
-        //             $products = $products->where('choice_options', 'like', '%'.$str.'%');
-        //         }
-
-        //         $item['id'] = $attribute['id'];
-        //         $item['values'] = $request['attribute_'.$attribute['id']];
-        //         $item['attr'] = $attr;
-        //         array_push($selected_attributes, $item);
-        //     }
-        // }
-
-
-        // //Color Filter
-        // $all_colors = array();
-
-        // foreach ($non_paginate_products as $key => $product) {
-        //     if ($product->colors != null) {
-        //         foreach (json_decode($product->colors) as $key => $color) {
-        //             if(!in_array($color, $all_colors)){
-        //                 array_push($all_colors, $color);
-        //             }
-        //         }
-        //     }
-        // }
-
-        // $selected_color = null;
-
-        // if($request->has('color')){
-        //     $str = '"'.$request->color.'"';
-        //     $products = $products->where('colors', 'like', '%'.$str.'%');
-        //     $selected_color = $request->color;
-        // }
-
-
-        // $products = filter_products($products)->paginate(12)->appends(request()->query());
-
-        // return response()->json([
-        //     'products' => new ProductCollection($products),
-        //     'attributes' => $attributes
-        // ], 200);
-
-
-        $product_conditions['where'][] = ['published', 1];
-        $product_conditions[] = 'random';
+        $product_conditions=[];
+        $element_conditions=[];
         //Filtering by brand slug
-        if ($brand_id != null) {
-            if ($brand = Brand::where('id', $brand_id)->firstOrFail()) {
-                $element_conditions['where'][] = ['brand_id', $brand->id];
-            }
-        }else if($request->brand != null){
-            if ($brand = Brand::where('slug', $request->brand)->firstOrFail()) {
-                $element_conditions['where'][] = ['brand_id', $brand->id];
-            }
-        }
-
-        if ($category_id != null) {
-            if ($categoryA = Category::where('id', $category_id)->firstOrFail()) {
-                $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
+        switch ($type) {
+            case 'brand':
+                if ($brand = Brand::where('slug', $request->id)->firstOrFail()) {
+                    $element_conditions['where'][] = ['brand_id', $brand->id];
+                }
+                break;
+            case 'flashdeals':
+                if ($flash_deal = FlashDeal::where('slug', $request->id)->firstOrFail()) {
+                    $product_ids = FlashDealProduct::where('flash_deal_id', $flash_deal->id)->pluck('product_id');
+                    $product_conditions['whereIn'][] = ['id' => $product_ids];
+                }
+                break;
+            case 'category':
+                if ($categoryA = Category::where('slug', $request->id)->firstOrFail()) {
+                    $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
+                    $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                }
+                break;
+            case 'categoryAll':
+                $category_ids = Category::where('level', '=', 2)->pluck('id');
                 $element_conditions['whereIn'][] = ['category_id' => $category_ids];
-            }
-        }
+                break;
+            case 'categoryPopular':
+                $category_ids = Category::where('featured', 1)->where('level', '=', 2)->pluck('id');
+                $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                break;
+            case 'seller':
+                if ($seller = Shop::select('user_id')->where('slug', $request->id)->firstOrFail()) {
+                    $product_conditions['where'][] = ['user_id', $seller->user_id];
+                }
+                break;
+            case 'new':
+                $product_conditions['orderBy'][] = ['created_at' => 'desc'];
+                if ($request->id!="list" && $categoryA = Category::where('slug', $request->id)->firstOrFail()) {
+                    $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
+                    $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                }
+                break;
+            case 'todays_deal':
+                $product_conditions['where'][] = ['todays_deal', 1];
+                break;
+            case 'popular':
+                $product_conditions['where'][] = ['todays_deal', 1];
+                if ($request->id!="list" && $categoryA = Category::where('slug', $request->id)->firstOrFail()) {
+                    $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
+                    $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                }
+                break;
+            case 'recommendation':
+                $product_conditions['where'][] = ['featured', 1];
+                if ($request->id!="list" && $categoryA = Category::where('slug', $request->id)->firstOrFail()) {
+                    $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
+                    $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                }
+                break;
+            case 'stock':
+                $product_conditions['where'][] = ['discount', '>', 0];
+                break;
+            case 'freeDelevery':
+                $product_conditions['where'][] = ['delivery_type', 'free'];
+                break;
+            case 'installment':
+                $product_conditions['where'][] = ['delivery_type', 'free'];
+                break;
 
-        if ($seller_id != null) {
-            if ($seller = Seller::findOrFail($seller_id)->user) {
-                $product_conditions['where'][] = ['user_id', $seller->id];
-            }
+            default:
+                # code...
+                break;
         }
-
+        $products_count=getPublishedProducts('product', $product_conditions, [], $element_conditions)->count();
+        $attribute_product_conditions = $product_conditions;
+        $attribute_element_conditions = $element_conditions;
         //Order by sorting type
+        $sort_by = $request->sort_by;
         if ($sort_by != null) {
             switch ($sort_by) {
                 case 'newest':
@@ -290,71 +230,173 @@ class SubCategoryController extends Controller
             }
         }
 
-        // //Новинки
-        // if ($request->has('new') && $request->new) {
-        //     $product_conditions['where'][] = ['todays_deal', 1];
-        // }
-        // //Популярные
-        // if ($request->has('popular') && $request->popular) {
-        //     $product_conditions['where'][] = ['featured', 1];
-        // }
-        // //Рекомендуемые
-        // if ($request->has('recommendation') && $request->recommendation) {
-        //     $product_conditions['where'][] = ['seller_featured', 1];
-        // }
-        // //Акции
-        // if ($request->has('stock') && $request->stock) {
-        //     $product_conditions['where'][] = ['discount', '>', 0];
-        // }
-        // //Бесплатная доставка
-        // if ($request->has('freeDelevery') && $request->freeDelevery) {
-        //     $product_conditions['where'][] = ['delivery_type', 'free'];
-        // }
-        // //Доступно в рассрочку
-        // if ($request->has('installment') && $request->installment) {
-        //     $product_conditions['where'][] = ['delivery_type', 'free'];
-        // }
-        if($query != null){
-            $searchController = new SearchController;
-            $searchController->store($request);
-            $product_conditions['where'][] = ['name', 'like', '%'.$query.'%'];
-            // $products = $products->where('name', 'like', '%'.$query.'%');//->orWhere('tags', 'like', '%'.$query.'%');
+        //Новинки
+        if ($request->has('new') && $request->new) {
+            $product_conditions['orderBy'][] = ['created_at' => 'desc'];
         }
-        // if($query != null){
-        //     $searchController = new SearchController;
-        //     $searchController->store($request);
-        //     $products = $products->where('name', 'like', '%'.$query.'%')->orWhere('tags', 'like', '%'.$query.'%');
+        //Deal
+        if ($request->has('todaysDeal') && $request->new) {
+            $product_conditions['where'][] = ['todays_deal', 1];
+        }
+        //Популярные
+        if ($request->has('popular') && $request->popular) {
+            $product_conditions['where'][] = ['todays_deal', 1];
+        }
+        //Рекомендуемые
+        if ($request->has('recommendation') && $request->recommendation) {
+            $product_conditions['where'][] = ['featured', 1];
+        }
+        //Акции
+        if ($request->has('stock') && $request->stock) {
+            $product_conditions['where'][] = ['discount', '>', 0];
+        }
+        //Бесплатная доставка
+        if ($request->has('freeDelevery') && $request->freeDelevery) {
+            $product_conditions['where'][] = ['delivery_type', 'free'];
+        }
+        //Доступно в рассрочку
+        if ($request->has('installment') && $request->installment) {
+            $product_conditions['where'][] = ['delivery_type', 'free'];
+        }
+
+        if ($request->has('brand') && $request->brand) {
+            if ($brand = Brand::where('slug', $request->brand)->firstOrFail()) {
+                $element_conditions['where'][] = ['brand_id', $brand->id];
+            }
+        }
+
+        if ($request->has('q') && $query = $request->q) {
+            // $searchController = new SearchController;
+            // $searchController->store($request);
+            $product_conditions['where'][] = ['name', 'like', '%' . $query . '%'];
+            $element_conditions['where'][] = ['tags', 'like', '%' . $query . '%'];
+        }
+        //Filtering Attributes
+        $variations = Variation::where('deleted_at', '=', null);
+        $color_id_list = array();
+        $has_color = false;
+        if ($request->has('color') && count($request->color) > 0) {
+            $color_id_list = $request->color;
+            $has_color = true;
+        }
+        $characteristic_id_list = array();
+        $has_characteristic = false;
+        $filtered_variation_id_list = array();
+        if ($request->has('attribute') && count($request->attribute) > 0) {
+            $characteristic_id_list = $request->attribute;
+            $has_characteristic = true;
+        }
+        foreach ($variations->get() as $variation) {
+            $is_valid = false;
+            if ($has_characteristic) {
+                if (is_array(explode(',', $variation->characteristics))) {
+                    foreach (explode(',', $variation->characteristics) as $characteristic_id) {
+                        if (in_array($characteristic_id, $characteristic_id_list)) {
+                            if ($has_color) {
+                                if (in_array($variation->color_id, $color_id_list)) {
+                                    $is_valid = true;
+                                }
+                            } else {
+                                $is_valid = true;
+                            }
+                        }
+                    }
+                }
+            } else if ($has_color) {
+                if (in_array($variation->color_id, $color_id_list)) {
+                    $is_valid = true;
+                }
+            }
+            if ($is_valid) {
+                $filtered_variation_id_list[] = $variation->id;
+            }
+        }
+        if (count($filtered_variation_id_list) > 0) {
+            $filtered_variation_id_list = array_unique($filtered_variation_id_list);
+            $product_conditions['whereIn'][] = ['variation_id' => $filtered_variation_id_list];
+        }
+        $products = getPublishedProducts('product', $product_conditions, [], $element_conditions);
+        $attribute_products = getPublishedProducts('product', $attribute_product_conditions, [], $attribute_element_conditions);
+        // $products = Product::where('element_id', '<>', null);
+        // $attribute_products = Product::where('element_id', '<>', null);
+        // $products = filterProductByRelation($products, 'product', $product_conditions);
+        // $attribute_products = filterProductByRelation($attribute_products, 'product', $attribute_product_conditions);
+        // if (is_array($element_conditions)) {
+        //     $products = filterProductByRelation($products, 'element', $element_conditions);
+        //     $attribute_products = filterProductByRelation($attribute_products, 'element', $attribute_element_conditions);
         // }
-        $products = Product::where('element_id', '<>', null);
-        $products = filterProductByRelation($products, 'product', $product_conditions);
-        $products = filterProductByRelation($products, 'element', $element_conditions);
-        $min_price =($products->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
-        $max_price = ($products->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
-        if($request->has('min_price')){
-            $min_price = $request->min_price;
-            $product_conditions['where'][] = ['price', '>=', $min_price];
+
+        //Attribute collection
+        $all_attributes = array();
+        $all_characteristics = array();
+        foreach ($attribute_products->get() as $product) {
+            if($product->variation)
+            $all_characteristics = array_unique(array_merge($all_characteristics, explode(',', $product->variation->characteristics)));
         }
-        if($request->has('max_price')){
-            $max_price = $request->max_price;
-            $product_conditions['where'][] = ['price', '<=', $max_price];
+        foreach ($all_characteristics as $characteristic) {
+            if($item = Characteristic::where('id',$characteristic)->first())
+                $all_attributes[$item->attribute_id][] = $characteristic;
         }
-        foreach ($products as $product) {
+        $all_attributes = getAttributeFormat($all_attributes);
+
+        //Color Collection
+        $all_colors = array();
+        foreach ($attribute_products->get() as $product) {
+            if (($product->variation)  && $product->variation->color_id != null) {
+                $all_colors[] = $product->variation->color_id;
+            }
+        }
+        $all_colors = array_unique($all_colors);
+
+        //Category collection
+        $all_categories = getProductCategories($attribute_products, 0)->get();
+
+
+        // dd($all_categories);
+
+        //Price collection
+        // $min_price =($products->get()->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
+        // $max_price = ($products->get()->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
+        // dd($max_price);
+
+        // dd("end");
+
+
+        $product_ids = [];
+        foreach ($products->get() as $product) {
             $unit_price = homeDiscountedBasePrice($product->id);
-            if ($min_price > $unit_price) {
-                $min_price = $unit_price;
+            if ($request->has('min_price') && $selected_min_price = $request->min_price) {
+                if ($unit_price <= $selected_min_price) {
+                    continue;
+                }
             }
-            if ($max_price < $unit_price) {
-                $max_price = $unit_price;
+            if ($request->has('max_price') && $selected_max_price = $request->max_price) {
+                if ($unit_price >= $selected_max_price) {
+                    continue;
+                }
             }
+            $product_ids[] = $product->id;
         }
-        // $all_colors=$products->pluck('color_id');
-        $products = filter_products($products)->paginate(12)->appends(request()->query());
+        $products = $products->whereIn('id', $product_ids);
+        $products = $products->paginate(50);
+        $prices = [];
+        foreach ($products as $product) {
+            $prices[] = homeDiscountedBasePrice($product->id);
+        }
+
+        $min_price = (count($prices) > 0) ? min($prices) : 0;
+        $max_price = (count($prices) > 0) ? max($prices) : 0;
+
         return response()->json([
             'products' => new ProductCollection($products),
-            'attributes' => [],//$attributes,
-            // 'colors'=>new ProductColorCollection($all_colors),
+            'products_count'=>$products_count??count($products),
+            'attributes' => $all_attributes,
+            'colors' => new ProductColorCollection($all_colors),
+            'categories' => new CategoryCollection($all_categories),
             'min_price' => $min_price ?? null,
             'max_price' => $max_price ?? null,
+            'selected_min_price' => (isset($selected_min_price)) ? $selected_min_price : $min_price,
+            'selected_max_price' => (isset($selected_max_price)) ? $selected_max_price : $max_price,
             'type' => $type ?? null
         ]);
     }

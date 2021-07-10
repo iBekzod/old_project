@@ -43,7 +43,7 @@ class SellerController extends Controller
     public function shopFeaturedProducts($id)
     {
         $shop = Shop::where('id', $id)->with('user')->firstOrFail();
-        $featuredProducts = new ProductCollection(getPublishedProducts('product', ['orderBy' => [['created_at', 'desc']],'where' => [['user_id', $shop->user_id]]])->paginate(24));
+        $featuredProducts = new ProductCollection(getPublishedProducts('product', ['orderBy' => [['created_at', 'desc']],'where' => [['user_id', $shop->user_id],['seller_featured', 1]]])->paginate(24));
         // $featuredProducts = \App\Product::where('user_id', $shop->user_id)
         //     ->where('published', 1)
         //     ->orderBy('created_at', 'desc'  )
