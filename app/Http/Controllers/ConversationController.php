@@ -104,6 +104,24 @@ class ConversationController extends Controller
             return back();
         }
     }
+    public function report_description()
+    {
+        if (BusinessSetting::where('type', 'conversation_system')->first()->value == 1) {
+
+            // $conversations = Conversation::orderBy('created_at', 'desc')->get();
+            // return view('backend.support.conversations.index', compact('conversations'));
+
+            $conversation=Conversation::latest()->paginate(15);
+        // dd($string);
+
+            // dd( Auth::user()->seller);
+            return view('backend.support.conversations.price_reduction')->with('conversations',$conversation);
+        }
+        else {
+            flash(translate('Conversation is disabled at this moment'))->warning();
+            return back();
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *
