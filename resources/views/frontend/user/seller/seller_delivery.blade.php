@@ -384,7 +384,7 @@
                             <div class="col-md-12">
                                 <div class="row">
                                         <div class="col-md-6"><p>Название: ООО «BMG HI-TECH</p> </div>
-                                        <div class="col-md-6"><p>Название: <span class="text-danger">{{$seller['Название_магазина']}}</span></p> </div>
+                                        <div class="col-md-6"><p>Название: <span class="text-danger pl-2">{{$seller['Форма_собственности']}}</span><< <span class="text-danger">{{$seller['Юридическое_название_вендора']}}</span>>></p> </div>
                                 </div>
                                 <div class="row">
                                         <div class="col-md-6"><p>Адрес: 100029 г. Ташкент, Мирабадский р-он   ул. Афросиаб 12 б </p></div>

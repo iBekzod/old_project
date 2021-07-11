@@ -17,7 +17,7 @@ class SellerAutoidentificationFormController extends Controller
 {
     public function seller_autoidentification_form_save(Request $request)
     {
-        dd($request->all());
+        //  dd($request->all());
         if ($request->method() === 'POST') {
             $validation = array();
             foreach (json_decode(BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element) {
@@ -27,7 +27,7 @@ class SellerAutoidentificationFormController extends Controller
             }
 
             $request->validate($validation);
-               dd($request->all());
+            //    dd($request->all());
             $user_id = auth()->id();
             //  dd($user_id);
             $user = User::findOrFail($user_id);
