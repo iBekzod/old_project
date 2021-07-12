@@ -10,10 +10,15 @@ use App\Http\Resources\ProductCollection;
 use App\Http\Resources\SearchProductCollection;
 use App\Attribute;
 use App\Category;
+use App\Characteristic;
+use App\FlashDeal;
+use App\FlashDealProduct;
 use App\Http\Resources\ProductColorCollection;
 use App\Product;
 use App\Seller;
+use App\Shop;
 use App\Utility\CategoryUtility;
+use App\Variation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
