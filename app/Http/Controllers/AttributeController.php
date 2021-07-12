@@ -96,15 +96,16 @@ class AttributeController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         $attribute = Attribute::findOrFail($id);
-        if($attribute->name == $request->name){
-            flash(translate('Attribute has same name'))->success();
-            return back();
-        }
+        // if($attribute->name == $request->name){
+        //     flash(translate('Attribute has same name'))->success();
+        //     return back();
+        // }
         $attribute->name = $request->name;
         $attribute->combination = false;
         if($request->has('branch_id')) $attribute->branch_id = $request->branch_id;
-        if($request->has('edit_branch_'.$attribute->id)) $attribute->branch_id = $request->input('edit_branch_'.$attribute->id);
+        if($request->has('edit_branch_attribute_'.$attribute->id)) $attribute->branch_id = $request->input('edit_branch_attribute_'.$attribute->id);
         $attribute->save();
         if(AttributeTranslation::where('attribute_id' , $attribute->id)->where('lang' , default_language())->first()){
             foreach (Language::all() as $language) {

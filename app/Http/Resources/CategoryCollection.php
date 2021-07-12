@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Category;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class CategoryCollection extends ResourceCollection
@@ -11,6 +12,10 @@ class CategoryCollection extends ResourceCollection
         return [
             'data' => $this->collection->map(function($data) {
 //                try {
+                $children=[];
+                if($data->level==0 || $data->level==1){
+                    $children = new CategoryCollection(Category::where('parent_id', $data->id)->get());
+                }
                 return [
                     'id'=>$data->id,
                     'name' => $data->getTranslation('name'),
@@ -18,6 +23,7 @@ class CategoryCollection extends ResourceCollection
                     'banner' => $data->banner ? api_asset($data->banner) : 'public/images/default-image.jpg',
                     'icon' => api_asset($data->icon),
                     'featured'=>$data->featured,
+                    'children'=>$children,
                     // 'brands' => brandsOfCategory($data->id),
                     'links' => [
                         'products' => route('api.products.category', $data->id),
