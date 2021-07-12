@@ -786,7 +786,7 @@ class ProductController extends Controller
 
     public function calculateDeliveryCost(Request $request){
         $user=User::findOrFail($request->user_id);
-        $product=Product::findOrFail($request->user_id)->user();
+        $product=Product::findOrFail($request->product_id)->user();
         $seller=$product->user();
         $user_address=$user->addresses()->where('set_default', 1)->first();
         $seller_address=$seller->addresses()->where('set_default', 1)->first();
