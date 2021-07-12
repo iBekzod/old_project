@@ -776,6 +776,7 @@ class ProductController extends Controller
             'attributes' => $all_attributes,
             'colors' => new ProductColorCollection($all_colors),
             'categories' => new CategoryCollection($all_categories),
+            'categories_with_children'=>$all_categories->with('childrenCategories'),
             'min_price' => $min_price ?? null,
             'max_price' => $max_price ?? null,
             'selected_min_price' => (isset($selected_min_price)) ? $selected_min_price : $min_price,

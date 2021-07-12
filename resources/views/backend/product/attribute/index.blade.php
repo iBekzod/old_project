@@ -94,9 +94,10 @@
                                                                        value="{{ $attribute->getTranslation('name') }}">
                                                             </div>
                                                             <div class="form-group  row mb-3">
-                                                                <label for="edit_branch_{{$attribute->id}}">{{translate('Branch')}}</label>
-                                                                <select class="form-control aiz-selectpicker" name="edit_branch_{{$attribute->id}}"
-                                                                    id="edit_branch_{{$attribute->id}}" data-live-search="true" required>
+                                                                <label for="edit_branch_attribute_{{$attribute->id}}">{{translate('Branch')}}</label>
+                                                                <select class="form-control" name="edit_branch_attribute_{{$attribute->id}}"
+                                                                    {{-- id="edit_branch_{{$attribute->id}}"  --}}
+                                                                    data-live-search="true" required>
                                                                     @foreach ($branches as $item)
                                                                          <option  @if(isset($branch) && $item->id==$branch->id) selected @endif
                                                                           value="{{ $item->id }}">{{ $item->getTranslation('name') }}</option>
