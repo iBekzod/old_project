@@ -171,31 +171,32 @@
                                 {{-- @dd('keldi'); --}}
                                     @foreach (Auth::user()->seller->verification_info as $element)
                                         @if($element['type']=='text')
-                                        <div class="form-group row" id="category">
+                                        <div class="form-group row" >
                                             <label class="col-lg-3 col-from-label mb-2"> {{translate($element['label'])}}</label>
                                             <div class="col-lg-9">
-                                            <input class="form-control" type="text" value={{$element['value']}} name="{{($element['label'])}}" required>
+                                            <input class="form-control" type="text" value="{{$element['value']}}" name="{{($element['label'])}}" required>
                                             </div>
                                         </div>
                                         @elseif($element['type']=='number')
-                                        <div class="form-group row" id="category">
+                                        <div class="form-group row">
                                             <label class="col-lg-3 col-from-label mb-2"> {{translate($element['label'])}}</label>
                                             <div class="col-lg-9">
-                                            <input class="form-control" type="number" value={{$element['value']}}  name="{{($element['label'])}}" required>
+                                            <input class="form-control" type="number" value="{{$element['value']}}"  name="{{($element['label'])}}" required>
                                             </div>
                                         </div>
                                         @elseif($element['type']=='email')
-                                        <div class="form-group row" id="category">
+                                        <div class="form-group row" >
                                             <label class="col-lg-3 col-from-label mb-2"> {{translate($element['label'])}}</label>
                                             <div class="col-lg-9">
-                                            <input class="form-control" type="email" value={{$element['value']}}  name="{{($element['label'])}}" required>
+                                            <input class="form-control" type="email" value="{{$element['value']}}"  name="{{($element['label'])}}" required>
                                             </div>
                                         </div>
                                         @endif
-                                        <div class="mb-0 text-right form-group">
-                                            <button type="submit" class="btn btn-primary">{{translate('Update Form')}}</button>
-                                        </div>
+
                                     @endforeach
+                                    <div class="mb-0 text-right form-group">
+                                        <button type="submit" class="btn btn-primary">{{translate('Update Form')}}</button>
+                                    </div>
                                 @else
                                   <div class="card">
                                       {{translate('you do not have a Seller Confirmation Form')}}

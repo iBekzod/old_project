@@ -15,13 +15,33 @@
 						<div class=" offset-lg-1 col-lg-11 form-horizontal" id="form">
 
 							@foreach (json_decode(\App\BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element)
-
                                 @if($element->type=='text')
                                 <div class="form-group row" id="category">
-                                    <label class="col-lg-3 col-from-label mb-2"> {{translate($element->label)}}</label>
-                                    <div class="col-lg-8">
-                                    <input class="form-control" type="text" name="{{($element->label)}}" required>
-                                    </div>
+                                    @if ($element->label=='Форма_собственности')
+
+                                      <label class="col-lg-3 col-from-label mb-2"> {{translate($element->label)}}</label>
+                                      <div class="col-lg-8">
+                                        <select name="{{($element->label)}}" class="form-control py-2">
+                                            <option value="OАО">OАО</option>
+                                            <option value="ЗАО">ЗАО</option>
+                                            <option value="ООО">ООО</option>
+                                            <option value="Частное предприятие">Частное предприятие</option>
+                                            <option value="Частный предприниматель">Частный предприниматель</option>
+                                            <option value="СП">СП</option>
+                                            <option value="ИП">ИП</option>
+                                            <option value="ГУП">ГУП</option>
+                                            <option value="Семейное предприятие">Семейное предприятие</option>
+                                            <option value="Фермерское хозяйство">Фермерское хозяйство</option>
+                                            <option value="Частное лицо">Частное лицо</option>
+                                        </select>
+                                      </div>
+
+                                    @else
+                                        <label class="col-lg-3 col-from-label mb-2"> {{translate($element->label)}}</label>
+                                        <div class="col-lg-8">
+                                            <input class="form-control" type="text" name="{{($element->label)}}" required>
+                                        </div>
+                                    @endif
                                 </div>
                                 @elseif($element->type=='number')
                                 <div class="form-group row" id="category">
@@ -38,8 +58,6 @@
                                     </div>
                                 </div>
                                 @endif
-
-
                             @endforeach
 
                             <div class="form-group text-right  mr-4 mt-3 ">
