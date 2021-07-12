@@ -88,26 +88,7 @@ class ConversationController extends Controller
         }
     }
 
-    // public function price_reduction()
-    // {
-    //     if (BusinessSetting::where('type', 'conversation_system')->first()->value == 1) {
 
-    //         // $conversations = Conversation::orderBy('created_at', 'desc')->get();
-    //         // return view('backend.support.conversations.index', compact('conversations'));
-
-    //         $conversation=Conversation::latest()->paginate(15);
-    //     // dd($string);
-
-    //         // dd( Auth::user()->seller);
-    //         return view('backend.support.conversations.price_reduction')->with('conversations',$conversation);
-    //     }
-    //     else {
-    //         flash(translate('Conversation is disabled at this moment'))->warning();
-    //         return back();
-    //     }
-    // }
-
-    
     public function report_description()
     {
         if (BusinessSetting::where('type', 'conversation_system')->first()->value == 1) {
@@ -119,7 +100,7 @@ class ConversationController extends Controller
         // dd($string);
 
             // dd( Auth::user()->seller);
-            return view('backend.support.conversations.price_reduction')->with('conversations',$conversation);
+            return view('backend.support.conversations.report_description')->with('conversations',$conversation);
         }
         else {
             flash(translate('Conversation is disabled at this moment'))->warning();
