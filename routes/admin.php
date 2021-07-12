@@ -229,7 +229,7 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 
 	//conversation of seller customer
 	Route::get('conversations','ConversationController@product_queries')->name('conversations.admin_index');
-    Route::get('conversation/found_it_cheaper','ConversationController@found_it_cheaper')->name('conversations.found_it_cheaper');
+    Route::get('conversation/found_it_cheaper','FoundItCheaperController@index')->name('conversations.found_it_cheaper');
     // Route::get('conversation/price_reduction','ConversationController@price_reduction')->name('conversation.price_reduction');
     Route::get('conversation/report_description','ConversationController@report_description')->name('conversation.report_description');
     Route::get('conversation/support_service','ConversationController@support_service')->name('conversation.support_service');
