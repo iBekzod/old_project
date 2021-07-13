@@ -8,6 +8,6 @@ class FoundItCheaper extends Model
 {
 
     protected $fillable = [
-       'user_id','email','links','price'
+       'product_id','email','links','price','currency_id'
     ];
 }
