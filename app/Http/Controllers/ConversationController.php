@@ -68,63 +68,6 @@ class ConversationController extends Controller
         }
     }
 
-
-    // public function found_it_cheaper()
-    // {
-    //     if (BusinessSetting::where('type', 'conversation_system')->first()->value == 1) {
-
-    //         // $conversations = Conversation::orderBy('created_at', 'desc')->get();
-    //         // return view('backend.support.conversations.index', compact('conversations'));
-
-    //         $conversation=Conversation::latest()->paginate(15);
-    //     // dd($string);
-
-    //         // dd( Auth::user()->seller);
-    //         return view('backend.support.conversations.cheaper')->with('conversations',$conversation);
-    //     }
-    //     else {
-    //         flash(translate('Conversation is disabled at this moment'))->warning();
-    //         return back();
-    //     }
-    // }
-
-
-    public function report_description()
-    {
-        if (BusinessSetting::where('type', 'conversation_system')->first()->value == 1) {
-
-            // $conversations = Conversation::orderBy('created_at', 'desc')->get();
-            // return view('backend.support.conversations.index', compact('conversations'));
-
-            $conversation=Conversation::latest()->paginate(15);
-        // dd($string);
-
-            // dd( Auth::user()->seller);
-            return view('backend.support.conversations.report_description')->with('conversations',$conversation);
-        }
-        else {
-            flash(translate('Conversation is disabled at this moment'))->warning();
-            return back();
-        }
-    }
-    public function support_service()
-    {
-        if (BusinessSetting::where('type', 'conversation_system')->first()->value == 1) {
-
-            // $conversations = Conversation::orderBy('created_at', 'desc')->get();
-            // return view('backend.support.conversations.index', compact('conversations'));
-
-            $conversation=Conversation::latest()->paginate(15);
-        //   dd($conversation);
-
-            // dd( Auth::user()->seller);
-            return view('backend.support.conversations.support_service')->with('conversations',$conversation);
-        }
-        else {
-            flash(translate('Conversation is disabled at this moment'))->warning();
-            return back();
-        }
-    }
     /**
      * Show the form for creating a new resource.
      *
@@ -281,13 +224,18 @@ class ConversationController extends Controller
      */
     public function destroy($id)
     {
-        $conversation = Conversation::findOrFail(decrypt($id));
-        foreach ($conversation->messages as $key => $message) {
-            $message->delete();
+        if($conversation = Conversation::findOrFail(decrypt($id))){
+            if($conversation){
+                $conversation->delete();
+            }
+            flash(translate('FoundItCheaper has been deleted successfully'))->success();
+                return back();
         }
-        if(Conversation::destroy(decrypt($id))){
-            flash(translate('Conversation has been deleted successfully'))->success();
-            return back();
-        }
+        // if(Conversation::destroy(decrypt($id))){
+        //     flash(translate('Conversation has been deleted successfully'))->success();
+        //     return back();
+        // }
+
+
     }
 }

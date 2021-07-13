@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Country;
 use Illuminate\Http\Request;
 use App\FoundItCheaper;
 
@@ -17,7 +18,7 @@ class FoundItCheaperController extends Controller
         $found_it_cheaper=FoundItCheaper::latest()->paginate(15);
         // dd($found_it_cheaper);
         // return view('backend.marketing.subscribers.index', compact('subscribers'));
-         return view('backend.support.conversations.cheaper')->with('found_it_cheapers',$found_it_cheaper);
+         return view('backend.support.found_it_cheapers.cheaper')->with('found_it_cheapers',$found_it_cheaper);
     }
 
     /**
@@ -27,7 +28,7 @@ class FoundItCheaperController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -59,7 +60,12 @@ class FoundItCheaperController extends Controller
      */
     public function show($id)
     {
-        //
+        // dd($id);
+        $found_it_cheaper=FoundItCheaper::findOrFail(decrypt($id));
+        //  dd($found_it_cheaper);
+        if($found_it_cheaper){
+                return view('backend.support.found_it_cheapers.show', compact('found_it_cheaper'));
+        }
     }
 
     /**
@@ -92,4 +98,14 @@ class FoundItCheaperController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+    public function destroy($id)
+    {
+        if($found_it_cheaper = FoundItCheaper::findOrFail(decrypt($id))){
+            if($found_it_cheaper){
+                $found_it_cheaper->delete();
+            }
+            flash(translate('FoundItCheaper has been deleted successfully'))->success();
+                return back();
+        }
+    }
 }
