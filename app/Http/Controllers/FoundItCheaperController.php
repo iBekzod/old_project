@@ -15,7 +15,7 @@ class FoundItCheaperController extends Controller
     public function index()
     {
         $found_it_cheaper=FoundItCheaper::latest()->paginate(15);
-        dd($found_it_cheaper);
+        // dd($found_it_cheaper);
         // return view('backend.marketing.subscribers.index', compact('subscribers'));
          return view('backend.support.conversations.cheaper')->with('found_it_cheapers',$found_it_cheaper);
     }
@@ -91,10 +91,5 @@ class FoundItCheaperController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        Subscriber::destroy($id);
-        flash(translate('Subscriber has been deleted successfully'))->success();
-        return redirect()->route('subscribers.index');
-    }
+
 }

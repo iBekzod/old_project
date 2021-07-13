@@ -20,19 +20,19 @@ class FoundItCheaperController extends Controller
 
 
         $request->validate([
-            'user_id'=>'required',
+            'product_id'=>'required',
             'email' => 'required',
             'links'=> 'required',
-            'price'=> 'required'
+            'price'=> 'required',
+            'currency_id'=>'required'
 
          ]);
-
-       
          $found_it_cheaper=FoundItCheaper::firstOrNew([
-                       'user_id'=>$request->user_id,
+                       'product_id'=>$request->product_id,
                        'email'=>$request->email,
                        'links'=>$request->links,
-                       'price'=>$request->price
+                       'price'=>$request->price,
+                       'currency_id'=>$request->currency_id
                    ]);
           if($found_it_cheaper->save()){
             return response()->json([
