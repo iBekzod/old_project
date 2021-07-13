@@ -78,7 +78,8 @@
     <script>
         $(document).ready(function() {
             $('.selection').select2({
-                tags: true
+                tags: true,
+                tokenSeparators: ['#']
             });
         });
     </script>

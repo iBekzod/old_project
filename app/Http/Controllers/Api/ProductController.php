@@ -761,16 +761,18 @@ class ProductController extends Controller
             $product_ids[] = $product->id;
         }
         $products = $products->whereIn('id', $product_ids);
-        $products = $products->paginate(50);
+        $product_prices = $products->paginate(50);
         $prices = [];
-        foreach ($products as $product) {
+        foreach ($product_prices as $product) {
             $prices[] = homeDiscountedBasePrice($product->id);
         }
 
         $min_price = (count($prices) > 0) ? min($prices) : 0;
         $max_price = (count($prices) > 0) ? max($prices) : 0;
 
+        $products=$products->paginate(50);
         return response()->json([
+            'product_type'=>'product',
             'products' => new ProductCollection($products),
             'products_count'=>$products_count??count($products),
             'attributes' => $all_attributes,
