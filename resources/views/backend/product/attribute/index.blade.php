@@ -251,7 +251,8 @@
                         $('#attribute_id').val(id)
                         // alert($('#attribute_id').val())
                         $('.js-example-basic-multiple').select2({
-                            tags: true
+                            tags: true,
+                            tokenSeparators: ['#']
                         });
                     }
                 }

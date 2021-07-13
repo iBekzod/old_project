@@ -90,7 +90,8 @@
     <script>
         $(function () {
             $('.select2-attr').select2({
-                tags: true
+                tags: true,
+                tokenSeparators: ['#']
             })
         })
     </script>
