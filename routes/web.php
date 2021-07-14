@@ -317,7 +317,9 @@ Route::group(['middleware' => ['auth']], function(){
 
     Route::get('/found_it_cheapers/destroy/{id}','FoundItCheaperController@destroy')->name('found_it_cheapers.destroy');
 
-    Route::get('report_description.destroy/{id}','ReportDescriptionController@destroy')->name('report_description.destroy');
+    Route::get('report_description/destroy/{id}','ReportDescriptionController@destroy')->name('report_description.destroy');
+
+    Route::get('support_service/destroy/{id}','SupportServiceController@destroy')->name('support_service.destroy');
 
 	//Product Bulk Upload
 	Route::get('/product-bulk-upload/index', 'ProductBulkUploadController@index')->name('product_bulk_upload.index');
