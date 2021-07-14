@@ -22,6 +22,7 @@ use App\Shop;
 use App\Color;
 use App\Delivery;
 use App\Element;
+use App\Http\Resources\BrandCollection;
 use App\Http\Resources\CategoryCollection;
 use App\Http\Resources\ElementCollection;
 use App\Http\Resources\ProductColorCollection;
@@ -612,7 +613,13 @@ class ProductController extends Controller
                     break;
             }
         }
-
+        //Category
+        if ($request->has('category') && $request->category) {
+            if ($categoryA = Category::where('slug', $request->category)->firstOrFail()) {
+                $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
+                $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+            }
+        }
         //Новинки
         if ($request->has('new') && $request->new) {
             $product_conditions['orderBy'][] = ['created_at' => 'desc'];
@@ -652,7 +659,7 @@ class ProductController extends Controller
             // $searchController = new SearchController;
             // $searchController->store($request);
             $product_conditions['where'][] = ['name', 'like', '%' . $query . '%'];
-            $element_conditions['where'][] = ['tags', 'like', '%' . $query . '%'];
+            // $element_conditions['where'][] = ['tags', 'like', '%' . $query . '%'];
         }
         //Filtering Attributes
         $variations = Variation::where('deleted_at', '=', null);
@@ -712,7 +719,8 @@ class ProductController extends Controller
         //Attribute collection
         $all_attributes = array();
         $all_characteristics = array();
-        foreach ($attribute_products->get() as $product) {
+        $tmp_products = $attribute_products->get();
+        foreach ($tmp_products as $product) {
             if($product->variation)
             $all_characteristics = array_unique(array_merge($all_characteristics, explode(',', $product->variation->characteristics)));
         }
@@ -724,15 +732,22 @@ class ProductController extends Controller
 
         //Color Collection
         $all_colors = array();
-        foreach ($attribute_products->get() as $product) {
+        $brands=[];
+        $brand_ids=[];
+        foreach ($tmp_products as $product) {
             if (($product->variation)  && $product->variation->color_id != null) {
                 $all_colors[] = $product->variation->color_id;
+
             }
+            $brand_ids[] = $product->element->brand->id;
         }
         $all_colors = array_unique($all_colors);
 
+        if(count($brand_ids)>0){
+            $brands=Brand::whereIn('id', $brand_ids)->get();
+        }
         //Category collection
-        $all_categories = getProductCategories($attribute_products, 0)->get();
+
 
 
         // dd($all_categories);
@@ -746,43 +761,55 @@ class ProductController extends Controller
 
 
         $product_ids = [];
-        foreach ($products->get() as $product) {
+        foreach ($tmp_products as $product) {
             $unit_price = homeDiscountedBasePrice($product->id);
-            if ($request->has('min_price') && $selected_min_price = $request->min_price) {
-                if ($unit_price <= $selected_min_price) {
+            if ($request->has('min_price') && $selected_min_price = (double)$request->min_price) {
+                if ($unit_price < $selected_min_price) {
                     continue;
                 }
             }
-            if ($request->has('max_price') && $selected_max_price = $request->max_price) {
-                if ($unit_price >= $selected_max_price) {
+            if ($request->has('max_price') && $selected_max_price = (double)$request->max_price) {
+                if ($unit_price > $selected_max_price) {
                     continue;
                 }
             }
             $product_ids[] = $product->id;
         }
         $products = $products->whereIn('id', $product_ids);
-        $product_prices = $products->paginate(50);
+
         $prices = [];
-        foreach ($product_prices as $product) {
+        foreach ($tmp_products as $product) {
             $prices[] = homeDiscountedBasePrice($product->id);
         }
 
         $min_price = (count($prices) > 0) ? min($prices) : 0;
         $max_price = (count($prices) > 0) ? max($prices) : 0;
 
+        if($request->has('product_type')){
+            $product_type=$request->product_type;
+            if($product_type=='variation'){
+                groupByDistinctRelation( $products, 'variation_id');
+            }else if($product_type=='element'){
+                groupByDistinctRelation( $products, 'element_id');
+            }
+        }else{
+            $product_type='product';
+        }
+        $all_categories = getProductCategories($attribute_products, 0)->get();
         $products=$products->paginate(50);
         return response()->json([
-            'product_type'=>'product',
             'products' => new ProductCollection($products),
             'products_count'=>$products_count??count($products),
             'attributes' => $all_attributes,
             'colors' => new ProductColorCollection($all_colors),
             'categories' => new CategoryCollection($all_categories),
+            'brands' => (count($brands)>0)?new BrandCollection($brands):[],
             'min_price' => $min_price ?? null,
             'max_price' => $max_price ?? null,
             'selected_min_price' => (isset($selected_min_price)) ? $selected_min_price : $min_price,
             'selected_max_price' => (isset($selected_max_price)) ? $selected_max_price : $max_price,
-            'type' => $type ?? null
+            'type' => $type ?? null,
+            'product_type'=>$product_type,
         ]);
     }
 

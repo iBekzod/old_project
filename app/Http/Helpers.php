@@ -310,40 +310,29 @@ if (!function_exists('getPublishedProducts')) {
         if ($type == 'product') {
             return $products;
         }
-        $variations = $products->get()->groupBy('variation_id');
-        $variation_ids = [];
-        foreach ($variations as $variation_id => $models) {
-            $variation_ids[] = $models->random()->id;
-        }
-        $products = $products->whereIn('id', $variation_ids);
+        $products = groupByDistinctRelation($products, 'variation_id');
         if ($type == 'variation') {
             return $products;
         }
         // $element_id_list=removeDuplicatesFromElement($products->groupBy('element_id')->pluck('element_id')->toArray());
-        $element_ids = [];
-        $elements = $products->get()->groupBy('element_id');
-        foreach ($elements as $element_id => $models) {
-            $element_ids[] = $models->random()->id;
-        }
-        $products = $products->whereIn('id', $element_ids);
+        $products = groupByDistinctRelation($products, 'element_id');
         if ($type == 'element') {
             return $products;
         }
         return $products;
     }
 }
-// if (!function_exists('filterProductByRelation')) {
-//     function removeDuplicatesFromElement($element_ids){
-//         $element_id_list=[];
-//         if(is_array($element_ids)){
-//             $elements = Element::whereIn('id', $element_ids)->get()->groupBy('name');
-//             foreach($elements as $name=>$element){
-//                 $element_id_list[]=$element[rand(0, count($element)-1)]->id;
-//             }
-//         }
-//         return $element_id_list;
-//     }
-// }
+if (!function_exists('groupByDistinctRelation')) {
+    function groupByDistinctRelation($products, $relation_column='element_id'){
+        $relation_ids = [];
+        $relations = $products->get()->groupBy($relation_column);
+        foreach ($relations as $relation_id => $models) {
+            $relation_ids[] = $models->random()->id;
+        }
+        $products = $products->whereIn('id', $relation_ids);
+        return $products;
+    }
+}
 if (!function_exists('filterProductByRelation')) {
     function filterProductByRelation($products, $relation_name, $conditions)
     {
