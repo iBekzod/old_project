@@ -510,7 +510,7 @@
                                 <li class="aiz-side-nav-item">
                                     <a href="{{ route('conversations.found_it_cheaper') }}"
                                        class="aiz-side-nav-link {{ areActiveRoutes(['conversations.found_it_cheaper', 'conversations.admin_show'])}}">
-                                        <span class="aiz-side-nav-text">{{translate('Found it cheaper')}}</span>
+                                          <span class="aiz-side-nav-text">{{translate('Found it cheaper')}}</span>
                                         @if (count($conversation) > 0)
                                             <span class="badge badge-info">{{ count($conversation) }}</span>
                                         @endif

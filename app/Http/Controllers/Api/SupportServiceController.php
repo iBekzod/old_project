@@ -6,33 +6,30 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Http\Resources\ConversationCollection;
-use App\FoundItCheaper;
+ use App\SupportService;
 use App\User;
 use Auth;
 
-class FoundItCheaperController extends Controller
+class SupportServiceController extends Controller
 {
 
-    public function postFoundItCheaper(Request $request)
+    public function postSupportService(Request $request)
     {
-
-
         $request->validate([
-            'product_id'=>'required',
+            'user_id'=>'sometimes',
+            'name' => 'required|min:3',
+            'phone' => 'required|min:8|max:13',
             'email' => 'required',
-            'links'=> 'required',
-            'price'=> 'required',
-            'currency_id'=>'required'
-
+            'message'=> 'required'
          ]);
-         $found_it_cheaper=FoundItCheaper::firstOrNew([
-                       'product_id'=>$request->product_id,
+         $support_service=SupportService::firstOrNew([
+                       'user_id'=>$request->user_id,
+                       'name'=>$request->name,
+                       'phone'=>$request->phone,
                        'email'=>$request->email,
-                       'links'=>$request->links,
-                       'price'=>$request->price,
-                       'currency_id'=>$request->currency_id
+                       'message'=>$request->message
                    ]);
-          if($found_it_cheaper->save()){
+          if($support_service->save()){
             return response()->json([
                 'message' => translate('Message has been send to seller')
            ]);
