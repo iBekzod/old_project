@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\SupportService;
 use Illuminate\Http\Request;
 // use App\FoundItCheaper;
 
@@ -14,11 +15,10 @@ class SupportServiceController extends Controller
      */
     public function index()
     {
-        return "came";
-        // $found_it_cheaper=FoundItCheaper::latest()->paginate(15);
-        // // dd($found_it_cheaper);
-        // // return view('backend.marketing.subscribers.index', compact('subscribers'));
-        //  return view('backend.support.found_it_cheapers.cheaper')->with('found_it_cheapers',$found_it_cheaper);
+        // return "came";
+        $support_service=SupportService::latest()->paginate(15);
+        // dd($support_service);
+         return view('backend.support.support_service.support_service')->with('support_service',$support_service);
     }
 
     /**
@@ -61,11 +61,11 @@ class SupportServiceController extends Controller
     public function show($id)
     {
         // dd($id);
-        // $found_it_cheaper=FoundItCheaper::findOrFail(decrypt($id));
-        // //  dd($found_it_cheaper);
-        // if($found_it_cheaper){
-        //         return view('backend.support.found_it_cheapers.show', compact('found_it_cheaper'));
-        // }
+        $support_service=SupportService::findOrFail(decrypt($id));
+        //  dd($found_it_cheaper);
+        if($support_service){
+                return view('backend.support.support_service.show', compact('support_service'));
+        }
     }
 
     /**
@@ -100,12 +100,12 @@ class SupportServiceController extends Controller
 
     public function destroy($id)
     {
-        // if($found_it_cheaper = FoundItCheaper::findOrFail(decrypt($id))){
-        //     if($found_it_cheaper){
-        //         $found_it_cheaper->delete();
-        //     }
-        //     flash(translate('FoundItCheaper has been deleted successfully'))->success();
-        //         return back();
-        // }
+        if($support_service = SupportService::findOrFail(decrypt($id))){
+            if($support_service){
+                $support_service->delete();
+            }
+            flash(translate('FoundItCheaper has been deleted successfully'))->success();
+                return back();
+        }
     }
 }

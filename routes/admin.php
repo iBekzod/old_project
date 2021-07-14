@@ -236,6 +236,7 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::get('conversations/{id}/show','ConversationController@admin_show')->name('conversations.admin_show');
     Route::get('found_it_cheaper/{id}/show', 'FoundItCheaperController@show')->name('found_it_cheapers.admin_show');
     Route::get('report_description/{id}/show','ReportDescriptionController@show')->name('report_description.admin_show');
+    Route::get('support_service/{id}/show','SupportServiceController@show')->name('support_service.admin_show');
 
     Route::post('/sellers/profile_modal', 'SellerController@profile_modal')->name('sellers.profile_modal');
     Route::post('/sellers/approved', 'SellerController@updateApproved')->name('sellers.approved');
