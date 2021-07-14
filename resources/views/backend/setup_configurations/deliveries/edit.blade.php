@@ -15,14 +15,19 @@
                     @csrf
 
                     <div class="form-group mb-3">
-                        <label for="name">{{ translate('To Distance (km)') }}</label>
+                        <label for="distance">{{ translate('To Distance (km)') }}</label>
                         <input type="number" min="0" step="0.01"
                             name="distance" class="form-control" required value="{{ $delivery->distance }}">
                     </div>
                     <div class="form-group mb-3">
-                        <label for="name">{{ translate('Cost per km (sums)') }}</label>
+                        <label for="price">{{ translate('Cost per km (sums)') }}</label>
                         <input type="number" min="0" step="0.01"
                             name="price" class="form-control" required value="{{ $delivery->price }}">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="days">{{ translate('Duration (days)') }}</label>
+                        <input type="number" min="0" step="1"
+                            name="days" class="form-control" required value="{{ $delivery->days }}">
                     </div>
                     <div class="form-group mb-3 text-right">
                         <button type="submit" class="btn btn-primary">{{ translate('Update') }}</button>
