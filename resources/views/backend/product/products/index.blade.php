@@ -6,13 +6,13 @@
             <div class="col-md-6">
                 <h1 class="h3">{{translate('All products')}}</h1>
             </div>
-            @if($type != 'Seller')
+            {{-- @if($type != 'Seller')
                 <div class="col-md-6 text-md-right">
                     <a href="{{ route('products.create') }}" class="btn btn-circle btn-info">
                         <span>{{translate('Add New Product')}}</span>
                     </a>
                 </div>
-            @endif
+            @endif --}}
         </div>
     </div>
     <br>

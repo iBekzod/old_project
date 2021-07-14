@@ -841,17 +841,23 @@ if (!function_exists('brandsOfCategory')) {
     function brandsOfCategory($category_id)
     {
         $brands = [];
-        $subCategories = SubCategory::where('category_id', $category_id)->get();
-        foreach ($subCategories as $subCategory) {
-            $subSubCategories = SubSubCategory::where('sub_category_id', $subCategory->id)->get();
-            foreach ($subSubCategories as $subSubCategory) {
-                $brand = json_decode($subSubCategory->brands);
-                foreach ($brand as $b) {
-                    if (in_array($b, $brands)) continue;
-                    array_push($brands, $b);
-                }
-            }
+        if($category=Category::where('id', $category_id)->first()){
+            $brands=$category->brands()->get();
         }
+        // $category_brands=Element::where('category_id', $category_id)->select('brand_id')->get();
+        // dd(Category::decendantsAndSelf())
+        // dd($category_brands->toArray());
+        // $subCategories = Category::where('parent_id', $category_id)->get();
+        // foreach ($subCategories as $subCategory) {
+        //     $subSubCategories = Category::where('parent_id', $subCategory->id)->get();
+        //     foreach ($subSubCategories as $subSubCategory) {
+        //         $brand = json_decode($subSubCategory->brands);
+        //         foreach ($brand as $b) {
+        //             if (in_array($b, $brands)) continue;
+        //             array_push($brands, $b);
+        //         }
+        //     }
+        // }
         return $brands;
     }
 }

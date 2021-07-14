@@ -10,13 +10,14 @@ class CategorySubCategoryCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection->map(function($data) {
+                $brands=brandsOfCategory($data->id);
                 return [
                     'id'=>$data->id,
                     'name' => $data->getTranslation('name'),
                     'banner' => $data->banner ? api_asset($data->banner) : 'public/images/default-image.jpg',
                     'slug' => $data->slug,
                     'icon' => api_asset($data->icon),
-                    // 'brands' => brandsOfCategory($data->id),
+                    'brands' => (count($brands)>0)?new BrandCollection($brands):[],
                     'sub_categories' => $data->categories,
                     'links' => [
                         'products' => route('api.products.category', $data->id),

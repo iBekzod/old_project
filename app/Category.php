@@ -46,6 +46,20 @@ class Category extends Model
     	return $this->hasMany(Element::class);
     }
 
+    public function elements(){
+        $category_ids = $this->descendants()->pluck('id');
+        $category_ids[] = $this->getKey();
+    	return Element::whereIn('category_id', $category_ids);
+    }
+
+    public function brands(){
+        $category_ids = $this->descendants()->pluck('id');
+        $category_ids[] = $this->getKey();
+        $brand_ids=$this->elements()->distinct('brand_id')->pluck('brand_id');
+    	return Brand::whereIn('id', $brand_ids);
+    }
+
+
     public function classified_products(){
     	return $this->hasMany(CustomerProduct::class);
     }
