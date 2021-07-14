@@ -784,7 +784,7 @@
                 @if(Auth::user()->user_type == 'admin' || in_array('14', json_decode(Auth::user()->staff->role->permissions)))
                     <li class="aiz-side-nav-item">
                         <a href="#" class="aiz-side-nav-link">
-                            <i class="las la-dharmachakra aiz-side-nav-icon"></i>
+                            <i class="las la-language aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{translate('Translations')}}</span>
                             <span class="aiz-side-nav-arrow"></span>
                         </a>
@@ -907,7 +907,39 @@
                         </ul>
                     </li>
                 @endif
+                {{-- Delivery --}}
+                @if(Auth::user()->user_type == 'admin' || in_array('14', json_decode(Auth::user()->staff->role->permissions)))
+                    <li class="aiz-side-nav-item">
+                        <a href="#" class="aiz-side-nav-link">
+                            <i class="las la-truck aiz-side-nav-icon"></i>
+                            <span class="aiz-side-nav-text">{{translate('Delivery')}}</span>
+                            <span class="aiz-side-nav-arrow"></span>
+                        </a>
+
+                        <ul class="aiz-side-nav-list level-2">
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('countries.index')}}"
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['countries.index','countries.edit','countries.update'])}}">
+                                    <span class="aiz-side-nav-text">{{translate('Shipping Countries')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('cities.index')}}"
+                                class="aiz-side-nav-link {{ areActiveRoutes(['cities.index','cities.edit','cities.update'])}}">
+                                    <span class="aiz-side-nav-text">{{translate('Shipping Cities')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('deliveries.index')}}"
+                                class="aiz-side-nav-link {{ areActiveRoutes(['deliveries.index','deliveries.edit','deliveries.update'])}}">
+                                    <span class="aiz-side-nav-text">{{translate('Deliveries')}}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                @endif
             <!-- Setup & Configurations -->
+
                 @if(Auth::user()->user_type == 'admin' || in_array('14', json_decode(Auth::user()->staff->role->permissions)))
                     <li class="aiz-side-nav-item">
                         <a href="#" class="aiz-side-nav-link">
@@ -986,24 +1018,8 @@
                                     <span class="aiz-side-nav-text">{{translate('Shipping Configuration')}}</span>
                                 </a>
                             </li> --}}
-                            <li class="aiz-side-nav-item">
-                                <a href="{{route('countries.index')}}"
-                                   class="aiz-side-nav-link {{ areActiveRoutes(['countries.index','countries.edit','countries.update'])}}">
-                                    <span class="aiz-side-nav-text">{{translate('Shipping Countries')}}</span>
-                                </a>
-                            </li>
-                            <li class="aiz-side-nav-item">
-                                <a href="{{route('cities.index')}}"
-                                   class="aiz-side-nav-link {{ areActiveRoutes(['cities.index','cities.edit','cities.update'])}}">
-                                    <span class="aiz-side-nav-text">{{translate('Shipping Cities')}}</span>
-                                </a>
-                            </li>
-                            <li class="aiz-side-nav-item">
-                                <a href="{{route('deliveries.index')}}"
-                                   class="aiz-side-nav-link {{ areActiveRoutes(['deliveries.index','deliveries.edit','deliveries.update'])}}">
-                                    <span class="aiz-side-nav-text">{{translate('Deliveries')}}</span>
-                                </a>
-                            </li>
+
+
                         </ul>
                     </li>
                 @endif

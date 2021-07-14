@@ -328,10 +328,10 @@ class ProductController extends Controller
 
     public function related($id)
     {
-        $product = Product::find($id);
-        if ($element = Element::findOrFail($product->element_id)) {
-            return new ProductCollection(getPublishedProducts('variation', ['where' => [['id', '<>', $product->id]]], [], ['where' => [['category_id', $element->category_id]], 'random'])->paginate(12));
+        if ($product = Product::where('id', $id)->first()) {
+            return new ProductCollection(getPublishedProducts('variation', ['where' => [['id', '<>', $product->id]]], [], ['where' => [['category_id', $product->element->category_id]], 'random'])->paginate(12));
         }
+        return [];
         return response()->json([
             'message' => translate('Такого продукта не существует.')
         ], 404);
