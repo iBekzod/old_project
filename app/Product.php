@@ -77,6 +77,7 @@ class Product extends Model
 
      public function product_translations()
      {
+         
          return $this->hasMany(ProductTranslation::class);
      }
 
@@ -98,6 +99,11 @@ class Product extends Model
      public function orderDetails()
      {
          return $this->hasMany(OrderDetail::class);
+     }
+
+     public function brands()
+     {
+         return $this->element->brand;
      }
 
      public function reviews()

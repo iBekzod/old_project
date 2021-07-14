@@ -40,6 +40,7 @@ class DeliveryController extends Controller
             'user_id'=>$request->user_id = auth()->id(),
             'distance'=>$request->distance = $request->distance,
             'price'=>$request->price = $request->price,
+            'days'=>$request->days = $request->days,
             ]);
         $delivery->save();
         flash(translate('Delivery has been inserted successfully'))->success();
@@ -87,6 +88,7 @@ class DeliveryController extends Controller
         $delivery->user_id = auth()->id();
         $delivery->distance = $request->distance;
         $delivery->price = $request->price;
+        $delivery->days = $request->days;
         $delivery->save();
         flash(translate('Delivery has been updated successfully'))->success();
         return $this->index();

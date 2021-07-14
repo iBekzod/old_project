@@ -82,6 +82,7 @@
                 </div>
                 <div class="card-body">
                     <form action="{{ route('deliveries.store') }}" method="POST">
+                        @method("POST")
                         @csrf
                         <div class="row">
                             <div class="col">
@@ -94,8 +95,15 @@
                             <div class="col">
                                 <div class="form-group mb-3">
                                     <label for="name">{{ translate('Cost per km (sums)') }}</label>
-                                    <input type="number" min="0" step="0.01" placeholder="{{ translate('Distance (km)') }}"
+                                    <input type="number" min="0" step="0.01" placeholder="{{ translate('Cost per km (sums)') }}"
                                         name="price" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group mb-3">
+                                    <label for="name">{{ translate('Duration (days)') }}</label>
+                                    <input type="number" min="0" step="1" placeholder="{{ translate('in days') }}"
+                                        name="days" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col">
@@ -117,6 +125,7 @@
                                 <th>#</th>
                                 <th>{{ translate('To Distance (km)') }}</th>
                                 <th>{{ translate('Cost per km (sums)') }}</th>
+                                <th>{{ translate('Duration (days)') }}</th>
                                 <th class="text-right">{{ translate('Options') }}</th>
                             </tr>
                         </thead>
@@ -126,6 +135,7 @@
                                     <td>{{ $key + 1 + ($deliveries->currentPage() - 1) * $deliveries->perPage() }}</td>
                                     <td>{{ $delivery->distance }}</td>
                                     <td>{{ $delivery->price }}</td>
+                                    <td>{{ $delivery->days }}</td>
                                     <td class="text-right">
                                         <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
                                             href="{{ route('deliveries.edit', ['delivery' => $delivery->id, 'lang' => env('DEFAULT_LANGUAGE')]) }}"
