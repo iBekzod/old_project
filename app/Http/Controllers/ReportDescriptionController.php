@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Country;
+use App\ReportDescription;
 use Illuminate\Http\Request;
 // use App\FoundItCheaper;
 
@@ -15,11 +16,11 @@ class ReportDescriptionController extends Controller
      */
     public function index()
     {
-        return "came";
-        // $found_it_cheaper=FoundItCheaper::latest()->paginate(15);
-        // // dd($found_it_cheaper);
-        // // return view('backend.marketing.subscribers.index', compact('subscribers'));
-        //  return view('backend.support.found_it_cheapers.cheaper')->with('found_it_cheapers',$found_it_cheaper);
+        // return "came";
+        $report_description=ReportDescription::latest()->paginate(15);
+        //  dd($report_description);
+        // return view('backend.marketing.subscribers.index', compact('subscribers'));
+         return view('backend.support.report_description.report_description')->with('report_description',$report_description);
     }
 
     /**
@@ -62,11 +63,11 @@ class ReportDescriptionController extends Controller
     public function show($id)
     {
         // dd($id);
-        // $found_it_cheaper=FoundItCheaper::findOrFail(decrypt($id));
-        // //  dd($found_it_cheaper);
-        // if($found_it_cheaper){
-        //         return view('backend.support.found_it_cheapers.show', compact('found_it_cheaper'));
-        // }
+        $report_description=ReportDescription::findOrFail(decrypt($id));
+        //   dd($report_description);
+        if($report_description){
+                return view('backend.support.report_description.show', compact('report_description'));
+        }
     }
 
     /**
@@ -101,12 +102,12 @@ class ReportDescriptionController extends Controller
 
     public function destroy($id)
     {
-        // if($found_it_cheaper = FoundItCheaper::findOrFail(decrypt($id))){
-        //     if($found_it_cheaper){
-        //         $found_it_cheaper->delete();
-        //     }
-        //     flash(translate('FoundItCheaper has been deleted successfully'))->success();
-        //         return back();
-        // }
+        if($report_description = ReportDescription::findOrFail(decrypt($id))){
+            if($report_description){
+                $report_description->delete();
+            }
+            flash(translate('FoundItCheaper has been deleted successfully'))->success();
+                return back();
+        }
     }
 }
