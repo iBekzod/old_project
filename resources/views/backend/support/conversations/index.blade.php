@@ -44,7 +44,7 @@
                                  if (strlen($string)>30) {
                              $stringCut = substr($string, 0,30);
                               }
-                              echo $string;
+                               echo $stringCut." ...";
 
                             @endphp
 

@@ -315,6 +315,8 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('conversations/refresh','ConversationController@refresh')->name('conversations.refresh');
 	Route::resource('messages','MessageController');
 
+    Route::get('/found_it_cheapers/destroy/{id}','FoundItCheaperController@destroy')->name('found_it_cheapers.destroy');
+
 	//Product Bulk Upload
 	Route::get('/product-bulk-upload/index', 'ProductBulkUploadController@index')->name('product_bulk_upload.index');
 	Route::post('/bulk-product-upload', 'ProductBulkUploadController@bulk_upload')->name('bulk_product_upload');
