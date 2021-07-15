@@ -39,12 +39,15 @@
                         <td style="width: 11%">@if(App\Product::where('id',$conversation->receiver_id)->exists()){{ App\Product::where('id',$conversation->receiver_id)->first()->user->name}}@endif</td>
                         <td style="width: 20%">
                             @php
-                            $string=json_decode($conversation->msg, true)['content'];
+                            $string=$conversation->msg;
                             // dd($string);
-                                 if (strlen($string)>30) {
-                             $stringCut = substr($string, 0,30);
+                                 if (strlen($string)>20) {
+                             $string = substr($string, 0,20);
+                             echo $string." ...";
+                              }else {
+                                   echo $string;
                               }
-                               echo $stringCut." ...";
+
 
                             @endphp
 
