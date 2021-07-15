@@ -222,20 +222,24 @@ class ConversationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    // public function destroy($id)
+    // {
+    //     if($conversation = Conversation::findOrFail(decrypt($id))){
+    //         if($conversation){
+    //             $conversation->delete();
+    //         }
+    //         flash(translate('FoundItCheaper has been deleted successfully'))->success();
+    //             return back();
+    //     }
+    // }
+    
+     public function destroy($id)
     {
-        if($conversation = Conversation::findOrFail(decrypt($id))){
-            if($conversation){
-                $conversation->delete();
-            }
-            flash(translate('FoundItCheaper has been deleted successfully'))->success();
-                return back();
+        $conversation = Conversation::findOrFail(decrypt($id));
+        if($conversation){
+            $conversation->delete();
         }
-        // if(Conversation::destroy(decrypt($id))){
-        //     flash(translate('Conversation has been deleted successfully'))->success();
-        //     return back();
-        // }
-
-
+        flash(translate('Conversation has been deleted successfully'))->success();
+        return back();
     }
 }
