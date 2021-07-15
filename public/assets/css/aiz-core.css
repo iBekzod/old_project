@@ -5746,9 +5746,15 @@ div.footable-loader > span.fooicon:after {
     content: "\f00d";
     font-size: 20px;
 }
-.modal-content .modal-body {
+/* .modal-content .modal-body {
     padding: 20px 25px;
     max-height: 80vh;
+} */
+.overflow{
+  background-color: #fff;
+  width: 100% !important;
+  height: 65% !important;
+  overflow: auto !important;
 }
 .modal-content .modal-footer {
     display: -webkit-box;
