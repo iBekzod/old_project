@@ -30,7 +30,7 @@ class ParentCategoryCollection extends ResourceCollection
                         'banner' => $sub_sub_category->banner ? api_asset($sub_sub_category->banner) : 'public/images/default-image.jpg',
                         'icon' => api_asset($sub_sub_category->icon),
                         'featured' => $sub_sub_category->featured,
-                        'parent' => $sub_sub_category->parent,
+                        'children' => [],
                         'brands' => (count($sub_sub_category_brands) > 0) ? new BrandCollection($sub_sub_category_brands) : [],
                         'links' => [
                             'products' => route('api.products.category', $sub_sub_category->id),
@@ -40,14 +40,14 @@ class ParentCategoryCollection extends ResourceCollection
                 }
                 $sub_category = Category::where('id', $sub_category_id)->first();
                 $sub_category_brands = brandsOfCategory($sub_category->id);
-                $data_sub_category = [
+                $data_sub_category[] = [
                     'id' => $sub_category->id,
                     'name' => $sub_category->getTranslation('name'),
                     'slug' => $sub_category->slug,
                     'banner' => $sub_category->banner ? api_asset($sub_category->banner) : 'public/images/default-image.jpg',
                     'icon' => api_asset($sub_category->icon),
                     'featured' => $sub_category->featured,
-                    'children' => $data_sub_sub_category,
+                    'children' =>  ['data' => $data_sub_sub_category],
                     'brands' => (count($sub_category_brands) > 0) ? new BrandCollection($sub_category_brands) : [],
                     'links' => [
                         'products' => route('api.products.category', $sub_category->id),
@@ -65,7 +65,7 @@ class ParentCategoryCollection extends ResourceCollection
                 'banner' => $category->banner ? api_asset($category->banner) : 'public/images/default-image.jpg',
                 'icon' => api_asset($category->icon),
                 'featured' => $category->featured,
-                'children' => $data_sub_category,
+                'children' => ['data' => $data_sub_category] ,
                 'brands' => (count($category_brands) > 0) ? new BrandCollection($category_brands) : [],
                 'links' => [
                     'products' => route('api.products.category', $category->id),

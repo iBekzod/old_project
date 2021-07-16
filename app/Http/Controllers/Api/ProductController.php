@@ -803,11 +803,11 @@ class ProductController extends Controller
         $sub_sub_category_ids = array_unique($sub_sub_category_ids);
         $sub_sub_categories=Category::whereIn('id',$sub_sub_category_ids)->where('level',2)->get();
         // $all_categories=Category::whereIn('id',$sub_sub_category_ids)->get();
-        $all_categories = getProductCategories($attribute_products, 0)->get();
-        // dd($all_categories->all());
-        foreach($all_categories as $category){
-            $all_categories['sub_sub_category_ids']=$sub_sub_category_ids;
-        }
+        // $all_categories = getProductCategories($attribute_products, 0)->get();
+        // // dd($all_categories->all());
+        // foreach($all_categories as $category){
+        //     $all_categories['sub_sub_category_ids']=$sub_sub_category_ids;
+        // }
         // dd($sub_sub_category_ids);
         $products=$products->paginate(50);
         return response()->json([
