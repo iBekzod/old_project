@@ -25,6 +25,7 @@ use App\Element;
 use App\Http\Resources\BrandCollection;
 use App\Http\Resources\CategoryCollection;
 use App\Http\Resources\ElementCollection;
+use App\Http\Resources\ParentCategoryCollection;
 use App\Http\Resources\ProductColorCollection;
 use App\Http\Resources\VariationCollection;
 use App\User;
@@ -788,21 +789,35 @@ class ProductController extends Controller
         if($request->has('product_type')){
             $product_type=$request->product_type;
             if($product_type=='variation'){
-                groupByDistinctRelation( $products, 'variation_id');
+                $products = groupByDistinctRelation( $products, 'variation_id');
             }else if($product_type=='element'){
-                groupByDistinctRelation( $products, 'element_id');
+                $products = groupByDistinctRelation( $products, 'element_id');
             }
         }else{
             $product_type='product';
         }
+        $sub_sub_category_ids=[];
+        foreach($tmp_products as $product){
+            $sub_sub_category_ids[]=$product->element->category->id;
+        }
+        $sub_sub_category_ids = array_unique($sub_sub_category_ids);
+        $sub_sub_categories=Category::whereIn('id',$sub_sub_category_ids)->where('level',2)->get();
+        // $all_categories=Category::whereIn('id',$sub_sub_category_ids)->get();
         $all_categories = getProductCategories($attribute_products, 0)->get();
+        // dd($all_categories->all());
+        foreach($all_categories as $category){
+            $all_categories['sub_sub_category_ids']=$sub_sub_category_ids;
+        }
+        // dd($sub_sub_category_ids);
         $products=$products->paginate(50);
         return response()->json([
+            // 'categories' => new CategoryCollection($all_categories),
+            'categories' => new ParentCategoryCollection($sub_sub_categories),
             'products' => new ProductCollection($products),
             'products_count'=>$products_count??count($products),
             'attributes' => $all_attributes,
             'colors' => new ProductColorCollection($all_colors),
-            'categories' => new CategoryCollection($all_categories),
+
             'brands' => (count($brands)>0)?new BrandCollection($brands):[],
             'min_price' => $min_price ?? null,
             'max_price' => $max_price ?? null,
