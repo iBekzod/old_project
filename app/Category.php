@@ -8,6 +8,7 @@ use Kalnoy\Nestedset\NodeTrait;
 use Rennokki\QueryCache\Traits\QueryCacheable;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
 {
@@ -15,6 +16,7 @@ class Category extends Model
         NodeTrait::replicate as replicateNode;
         Sluggable::replicate as replicateSlug;
     }
+    use SoftDeletes;
     public function replicate(array $except = null)
     {
         $instance = $this->replicateNode($except);
