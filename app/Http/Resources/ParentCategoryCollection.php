@@ -17,10 +17,10 @@ class ParentCategoryCollection extends ResourceCollection
         }
         $sub_sub_categories = $sub_sub_categories->groupBy(['category', 'sub_category']);
         $data = [];
-        $data_sub_category = [];
-        $data_sub_sub_category = [];
         foreach ($sub_sub_categories as $category_id => $sub_categories) {
+            $data_sub_category = [];
             foreach ($sub_categories as $sub_category_id => $sub_sub_categories) {
+                $data_sub_sub_category = [];
                 foreach ($sub_sub_categories as $sub_sub_category) {
                     $sub_sub_category_brands = brandsOfCategory($sub_sub_category->id);
                     $data_sub_sub_category[] = [
