@@ -3,10 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Attribute extends Model
 {
     protected $table="attributes";
+    use SoftDeletes;
     public function getTranslation($field = '', $lang = false)
     {
         $lang = $lang == false ?  app()->getLocale() : $lang;
