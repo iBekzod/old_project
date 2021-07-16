@@ -18,9 +18,9 @@ class Conversation extends Model
         return $this->belongsTo(User::class, 'receiver_id');
     }
 
-    public function delete()
-    {
-        $this->messages()->delete();
-        return parent::delete();
-    }
+    // public function delete()
+    // {
+    //     $this->delete();
+    //     return parent::delete();
+    // }
 }

@@ -185,11 +185,11 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="modal-body">
-                            <div class="form-group">
+                        <div class="modal-body ">
+                            <div class="form-group overflow">
                                 <input type="hidden" name="id" id="attribute_id" value="">
-                                <select class="form-control js-example-basic-multiple"
-                                        multiple name="characteristics[]"
+                                <select class="form-control js-example-basic-multiple  "
+                                        multiple name="characteristics[] "
                                         id="characteristics">
                                 </select>
                             </div>

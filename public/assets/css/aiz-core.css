@@ -5747,8 +5747,14 @@ div.footable-loader > span.fooicon:after {
     font-size: 20px;
 }
 .modal-content .modal-body {
-    padding: 20px 25px;
-    max-height: 80vh;
+    padding: 10px ;
+    max-height:80vh;
+}
+.overflow{
+  background-color: #fff;
+  width: 100% !important;
+  height: 400px !important;
+  overflow:auto !important;
 }
 .modal-content .modal-footer {
     display: -webkit-box;
@@ -5761,11 +5767,14 @@ div.footable-loader > span.fooicon:after {
     -ms-flex-pack: end;
     justify-content: flex-end;
     position: relative;
-    padding: 10px 25px;
+    padding: 15px ;
     border-top: 1px solid #ebedf2;
     min-height: 60px;
     background-color: transparent;
 }
+/* .modal-content{
+   width:550px !important;
+} */
 .modal.fade .modal-dialog.modal-dialog-zoom {
     -webkit-transform: translate(0, 0) scale(0.8);
     transform: translate(0, 0) scale(0.8);
