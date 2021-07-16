@@ -6,12 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 use App;
 use Rennokki\QueryCache\Traits\QueryCacheable;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Characteristic extends Model
 {
     protected $table= "characteristics";
     protected $fillable = ['attribute_id', 'name', 'slug'];
     use Sluggable;
+    use SoftDeletes;
     public function sluggable(): array
     {
         return [
