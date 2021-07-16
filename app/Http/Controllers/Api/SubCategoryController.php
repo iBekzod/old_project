@@ -26,7 +26,7 @@ class SubCategoryController extends Controller
 {
     public function index(Request $request, $id)
     {
-        $category = Category::where('slug', $id)
+        $category = Category::where('slug', $id)->orWhere('id', $id)
             ->with(['products', 'childrenCategories', 'parentCategoryHierarchy'])
             ->firstOrFail();
 
@@ -127,12 +127,11 @@ class SubCategoryController extends Controller
     public function searchByAttrs($request, $id)
     {
         $category = \App\Category::where('id', $id)->orWhere('slug', $id)->first();
-
         if ($category != null) {
             $request->id = $category->slug;
-            return $this->searchPr('category', $request);
+            $productController=new ProductController();
+            return $productController->searchPr('category', $request);
         }
-
         abort(404);
     }
 
@@ -234,7 +233,13 @@ class SubCategoryController extends Controller
                     break;
             }
         }
-
+        //Category
+        if ($request->has('category') && $request->category) {
+            if ($categoryA = Category::where('slug', $request->category)->firstOrFail()) {
+                $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
+                $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+            }
+        }
         //Новинки
         if ($request->has('new') && $request->new) {
             $product_conditions['orderBy'][] = ['created_at' => 'desc'];
@@ -274,7 +279,7 @@ class SubCategoryController extends Controller
             // $searchController = new SearchController;
             // $searchController->store($request);
             $product_conditions['where'][] = ['name', 'like', '%' . $query . '%'];
-            $element_conditions['where'][] = ['tags', 'like', '%' . $query . '%'];
+            // $element_conditions['where'][] = ['tags', 'like', '%' . $query . '%'];
         }
         //Filtering Attributes
         $variations = Variation::where('deleted_at', '=', null);
@@ -322,19 +327,11 @@ class SubCategoryController extends Controller
         }
         $products = getPublishedProducts('product', $product_conditions, [], $element_conditions);
         $attribute_products = getPublishedProducts('product', $attribute_product_conditions, [], $attribute_element_conditions);
-        // $products = Product::where('element_id', '<>', null);
-        // $attribute_products = Product::where('element_id', '<>', null);
-        // $products = filterProductByRelation($products, 'product', $product_conditions);
-        // $attribute_products = filterProductByRelation($attribute_products, 'product', $attribute_product_conditions);
-        // if (is_array($element_conditions)) {
-        //     $products = filterProductByRelation($products, 'element', $element_conditions);
-        //     $attribute_products = filterProductByRelation($attribute_products, 'element', $attribute_element_conditions);
-        // }
-
         //Attribute collection
         $all_attributes = array();
         $all_characteristics = array();
-        foreach ($attribute_products->get() as $product) {
+        $tmp_products = $attribute_products->get();
+        foreach ($tmp_products as $product) {
             if($product->variation)
             $all_characteristics = array_unique(array_merge($all_characteristics, explode(',', $product->variation->characteristics)));
         }
@@ -346,63 +343,78 @@ class SubCategoryController extends Controller
 
         //Color Collection
         $all_colors = array();
-        foreach ($attribute_products->get() as $product) {
+        $brands=[];
+        $brand_ids=[];
+        foreach ($tmp_products as $product) {
             if (($product->variation)  && $product->variation->color_id != null) {
                 $all_colors[] = $product->variation->color_id;
+
             }
+            $brand_ids[] = $product->element->brand->id;
         }
         $all_colors = array_unique($all_colors);
 
-        //Category collection
-        $all_categories = getProductCategories($attribute_products, 0)->get();
-
-
-        // dd($all_categories);
-
-        //Price collection
-        // $min_price =($products->get()->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
-        // $max_price = ($products->get()->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
-        // dd($max_price);
-
-        // dd("end");
-
-
+        if(count($brand_ids)>0){
+            $brands=Brand::whereIn('id', $brand_ids)->get();
+        }
         $product_ids = [];
-        foreach ($products->get() as $product) {
+        foreach ($tmp_products as $product) {
             $unit_price = homeDiscountedBasePrice($product->id);
-            if ($request->has('min_price') && $selected_min_price = $request->min_price) {
-                if ($unit_price <= $selected_min_price) {
+            if ($request->has('min_price') && $selected_min_price = (double)$request->min_price) {
+                if ($unit_price < $selected_min_price) {
                     continue;
                 }
             }
-            if ($request->has('max_price') && $selected_max_price = $request->max_price) {
-                if ($unit_price >= $selected_max_price) {
+            if ($request->has('max_price') && $selected_max_price = (double)$request->max_price) {
+                if ($unit_price > $selected_max_price) {
                     continue;
                 }
             }
             $product_ids[] = $product->id;
         }
         $products = $products->whereIn('id', $product_ids);
-        $products = $products->paginate(50);
+
         $prices = [];
-        foreach ($products as $product) {
+        foreach ($tmp_products as $product) {
             $prices[] = homeDiscountedBasePrice($product->id);
         }
 
         $min_price = (count($prices) > 0) ? min($prices) : 0;
         $max_price = (count($prices) > 0) ? max($prices) : 0;
 
+        if($request->has('product_type')){
+            $product_type=$request->product_type;
+            if($product_type=='variation'){
+                $products = groupByDistinctRelation( $products, 'variation_id');
+            }else if($product_type=='element'){
+                $products = groupByDistinctRelation( $products, 'element_id');
+            }
+        }else{
+            $product_type='product';
+        }
+        $sub_sub_category_ids=[];
+        foreach($tmp_products as $product){
+            $sub_sub_category_ids[]=$product->element->category->id;
+        }
+        $sub_sub_category_ids = array_unique($sub_sub_category_ids);
+        $sub_sub_categories=Category::whereIn('id',$sub_sub_category_ids)->where('level',2)->get();
+        // $all_categories = getProductCategories($attribute_products, 0)->get();
+        $products=$products->paginate(50);
         return response()->json([
+            // 'categories' => new CategoryCollection($all_categories),
+            'categories' => new ParentCategoryCollection($sub_sub_categories),
             'products' => new ProductCollection($products),
             'products_count'=>$products_count??count($products),
             'attributes' => $all_attributes,
             'colors' => new ProductColorCollection($all_colors),
-            'categories' => new CategoryCollection($all_categories),
+
+            'brands' => (count($brands)>0)?new BrandCollection($brands):[],
             'min_price' => $min_price ?? null,
             'max_price' => $max_price ?? null,
             'selected_min_price' => (isset($selected_min_price)) ? $selected_min_price : $min_price,
             'selected_max_price' => (isset($selected_max_price)) ? $selected_max_price : $max_price,
-            'type' => $type ?? null
+            'type' => $type ?? null,
+            'product_type'=>$product_type,
         ]);
     }
 }

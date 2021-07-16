@@ -507,8 +507,8 @@ class ProductController extends Controller
     public function getAllBySlug($type, Request $request)
     {
         try {
-            $products = getPublishedProducts('product');//Product::where('variation_id', '<>', null);
-            $result =  $this->searchPr($type, $products, $request);
+            // $products = getPublishedProducts('product');//Product::where('variation_id', '<>', null);
+            $result =  $this->searchPr($type, $request);
         } catch (\Exception $e) {
             return [
                 'message'=>$e->getMessage()
@@ -516,7 +516,7 @@ class ProductController extends Controller
         }
         return $result;
     }
-    public function searchPr($type, $products, $request)
+    public function searchPr($type, $request)
     {
         $product_conditions=[];
         $element_conditions=[];
@@ -708,15 +708,6 @@ class ProductController extends Controller
         }
         $products = getPublishedProducts('product', $product_conditions, [], $element_conditions);
         $attribute_products = getPublishedProducts('product', $attribute_product_conditions, [], $attribute_element_conditions);
-        // $products = Product::where('element_id', '<>', null);
-        // $attribute_products = Product::where('element_id', '<>', null);
-        // $products = filterProductByRelation($products, 'product', $product_conditions);
-        // $attribute_products = filterProductByRelation($attribute_products, 'product', $attribute_product_conditions);
-        // if (is_array($element_conditions)) {
-        //     $products = filterProductByRelation($products, 'element', $element_conditions);
-        //     $attribute_products = filterProductByRelation($attribute_products, 'element', $attribute_element_conditions);
-        // }
-
         //Attribute collection
         $all_attributes = array();
         $all_characteristics = array();
@@ -747,20 +738,6 @@ class ProductController extends Controller
         if(count($brand_ids)>0){
             $brands=Brand::whereIn('id', $brand_ids)->get();
         }
-        //Category collection
-
-
-
-        // dd($all_categories);
-
-        //Price collection
-        // $min_price =($products->get()->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
-        // $max_price = ($products->get()->count()>0)? homeDiscountedBasePrice($products->first()->id) : 0;
-        // dd($max_price);
-
-        // dd("end");
-
-
         $product_ids = [];
         foreach ($tmp_products as $product) {
             $unit_price = homeDiscountedBasePrice($product->id);
@@ -802,13 +779,7 @@ class ProductController extends Controller
         }
         $sub_sub_category_ids = array_unique($sub_sub_category_ids);
         $sub_sub_categories=Category::whereIn('id',$sub_sub_category_ids)->where('level',2)->get();
-        // $all_categories=Category::whereIn('id',$sub_sub_category_ids)->get();
         // $all_categories = getProductCategories($attribute_products, 0)->get();
-        // // dd($all_categories->all());
-        // foreach($all_categories as $category){
-        //     $all_categories['sub_sub_category_ids']=$sub_sub_category_ids;
-        // }
-        // dd($sub_sub_category_ids);
         $products=$products->paginate(50);
         return response()->json([
             // 'categories' => new CategoryCollection($all_categories),
