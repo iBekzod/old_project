@@ -5753,7 +5753,8 @@ div.footable-loader > span.fooicon:after {
 .overflow{
   background-color: #fff;
   width: 100% !important;
-  height: 400px !important;
+  height: 50vh !important;
+  margin: 0 auto;
   overflow:auto !important;
 }
 .modal-content .modal-footer {
