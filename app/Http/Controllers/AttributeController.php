@@ -160,10 +160,11 @@ class AttributeController extends Controller
         $values=$request->get('characteristics');
         if($values){
             foreach ($values as $value){
-                $characteristic=Characteristic::firstOrNew([
+                $characteristic=Characteristic::withTrashed()->firstOrNew([
                     'name'=>$value,
                     'attribute_id'=>$attribute->id
                 ]);
+                if ($characteristic->trashed()) $characteristic->restore();
                 if($characteristic->save()){
                     foreach (Language::all() as $language) {
                         $characteristic_translation = CharacteristicTranslation::firstOrNew(['lang' => $language->code, 'characteristic_id' => $characteristic->id]);

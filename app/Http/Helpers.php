@@ -1227,7 +1227,7 @@ if (!function_exists('getAttributeFormat')) {
         if ($attributes) {
             foreach($attributes as $attribute_id=>$value_ids){
                 if( is_array($value_ids) && count($value_ids)>0){
-                    $characteristics=Characteristic::whereIn('id',$value_ids)->get();
+                    $characteristics=Characteristic::withTrashed()->whereIn('id',$value_ids)->get();
                     $attribute=Attribute::findOrFail($attribute_id);
                     $items=array();
                     foreach($characteristics as $characteristic){
