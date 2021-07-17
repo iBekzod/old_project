@@ -120,7 +120,7 @@ class ProductDetailCollection extends ResourceCollection
         $collected_characteristics=[];
         if ($attributes) {
             foreach($attributes as $attribute_id=>$value_ids){
-                $characteristics=Characteristic::whereIn('id',$value_ids)->get();
+                $characteristics=Characteristic::withTrashed()->whereIn('id',$value_ids)->get();
                 $attribute=Attribute::findOrFail($attribute_id);
                 $branch=Branch::findOrFail($attribute->branch_id);
                 $items=array();
@@ -156,7 +156,7 @@ class ProductDetailCollection extends ResourceCollection
         if ($attributes) {
             foreach($attributes as $attribute_id=>$value_ids){
                 if( is_array($value_ids) && count($value_ids)>0){
-                    $characteristics=Characteristic::whereIn('id',$value_ids)->get();
+                    $characteristics=Characteristic::withTrashed()->whereIn('id',$value_ids)->get();
                     $attribute=Attribute::findOrFail($attribute_id);
                     $items=array();
                     foreach($characteristics as $characteristic){
@@ -184,7 +184,7 @@ class ProductDetailCollection extends ResourceCollection
         if ($attributes) {
             foreach($attributes as $attribute_id=>$value_ids){
                 if( is_array($value_ids) && count($value_ids)>0){
-                    $characteristics=Characteristic::whereIn('id',$value_ids)->get();
+                    $characteristics=Characteristic::withTrashed()->whereIn('id',$value_ids)->get();
                     $attribute=Attribute::findOrFail($attribute_id);
                     $items=array();
                     foreach($characteristics as $characteristic){
