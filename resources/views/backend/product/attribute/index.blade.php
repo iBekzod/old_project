@@ -1,4 +1,15 @@
 @extends('backend.layouts.app')
+<style>
+
+.overflow{
+  background-color: #fff;
+  width: 100% !important;
+  height: 50vh !important;
+  margin: 0 auto;
+  overflow:auto !important;
+}
+
+</style>
 
 @section('content')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
