@@ -298,7 +298,7 @@ if (!function_exists('searchItemByTranslation')) {
     }
 }
 if (!function_exists('getPublishedProducts')) {
-    function getPublishedProducts($type = 'product', $product_conditions = [], $variation_conditions = [], $element_conditions = [])
+    function getPublishedProducts($type = 'product', $product_conditions = [], $variation_conditions = [], $element_conditions = [], $is_random=true)
     {
         $published_condition=[['qty', '>', 0], ['is_accepted', 1], ['published', 1], ['variation_id', '<>', null], ['element_id', '<>', null], ['deleted_at', '=', null]];
         $element_conditions['where'][] = ['is_accepted', 1];
@@ -310,12 +310,12 @@ if (!function_exists('getPublishedProducts')) {
         if ($type == 'product') {
             return $products;
         }
-        $products = groupByDistinctRelation($products, 'variation_id');
+        $products = groupByDistinctRelation($products, 'variation_id', $is_random);
         if ($type == 'variation') {
             return $products;
         }
         // $element_id_list=removeDuplicatesFromElement($products->groupBy('element_id')->pluck('element_id')->toArray());
-        $products = groupByDistinctRelation($products, 'element_id');
+        $products = groupByDistinctRelation($products, 'element_id', $is_random);
         if ($type == 'element') {
             return $products;
         }
@@ -323,12 +323,19 @@ if (!function_exists('getPublishedProducts')) {
     }
 }
 if (!function_exists('groupByDistinctRelation')) {
-    function groupByDistinctRelation($products, $relation_column='element_id'){
+    function groupByDistinctRelation($products, $relation_column='element_id', $is_random=true){
         $relation_ids = [];
         $relations = $products->get()->groupBy($relation_column);
-        foreach ($relations as $relation_id => $models) {
-            $relation_ids[] = $models->random()->id;
+        if($is_random){
+            foreach ($relations as $relation_id => $models) {
+                $relation_ids[] = $models->random()->id;
+            }
+        }else{
+            foreach ($relations as $relation_id => $models) {
+                $relation_ids[] = $models->first()->id;
+            }
         }
+
         $products = $products->whereIn('id', $relation_ids);
         return $products;
     }
