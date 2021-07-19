@@ -8,6 +8,7 @@ use App\Seller;
 use App\Shop;
 use App\User;
 use App\BusinessSetting;
+use App\SellerSetting;
 use PhpParser\Node\Stmt\If_;
 use Carbon\Carbon;
 
@@ -68,6 +69,14 @@ class SellerDeliveryFormController extends Controller
             $user = User::findOrFail($user_id);
             $user->registration_step = 'active_4';
             
+            $admin=User::where('user_type', 'admin')->first();
+            $settings = SellerSetting::where('user_id',  $admin->id);
+            foreach($settings as $setting){
+                $new_setting = $setting->replicate();
+                $new_setting->user_id = $user_id;
+                $new_setting->save();
+            }
+
             if ($user->save()) {
                 return view('frontend.user.seller.dashboard');
             }
