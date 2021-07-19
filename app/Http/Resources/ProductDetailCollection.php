@@ -84,7 +84,7 @@ class ProductDetailCollection extends ResourceCollection
                 'shipping_cost' => $this->calculateShippingCost($product),
                 'characteristics' => $this->convertToCharacteristics(json_decode($element->characteristics, true)),
 
-                'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??null,
+                'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??[],
                 'category'=>[
                     'name' => $element->category->name,
                     'banner' => api_asset($element->category->banner),

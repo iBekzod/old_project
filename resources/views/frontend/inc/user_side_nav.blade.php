@@ -89,7 +89,6 @@
                         <span class="aiz-side-nav-text">{{ translate('Wishlist') }}</span>
                     </a>
                 </li> --}}
-
                 @if(Auth::user()->user_type == 'seller')
                     <li class="aiz-side-nav-item">
                         <a href="{{ route('seller.products') }}" class="aiz-side-nav-link {{ areActiveRoutes(['seller.products', 'seller.products.upload', 'seller.products.edit'])}}">
@@ -101,6 +100,12 @@
                         <a href="{{ route('seller.elements.all') }}" class="aiz-side-nav-link {{ areActiveRoutes(['seller.elements.all', 'seller.elements.create'])}}">
                             <i class="lab la-sketch aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{ translate('Elements') }}</span>
+                        </a>
+                    </li>
+                    <li class="aiz-side-nav-item">
+                        <a href="{{route('seller.deliveries.index')}}"
+                        class="aiz-side-nav-link {{ areActiveRoutes(['seller.deliveries.index','seller.deliveries.edit','seller.deliveries.update'])}}">
+                            <span class="aiz-side-nav-text">{{translate('Deliveries')}}</span>
                         </a>
                     </li>
                     {{-- <li class="aiz-side-nav-item">

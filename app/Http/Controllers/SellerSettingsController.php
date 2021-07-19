@@ -146,13 +146,13 @@ class SellerSettingsController extends Controller
     }
 
     public function seller_configuration_update(Request $request){
-        $seller_settings = SellerSetting::where('user_id', auth()->id())->where('type', $request->type)->first();
+        $seller_settings = SellerSetting::firstOrNew(['user_id'=> auth()->id(), 'type'=> $request->type]);
         $seller_settings->value = $request[$request->type];
         if($request->has('relation_id')){
             $seller_settings->relation_id = $request->relation_id;
         }
         $seller_settings->save();
-        return back();
+        return redirect()->back();
     }
 
 
