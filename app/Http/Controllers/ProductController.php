@@ -27,10 +27,18 @@ class ProductController extends Controller
     public function updateAccepted(Request $request)
     {
         if($product = Product::findOrFail($request->id)){
-            $product->update([
-                'on_moderation' => 0,
-                'is_accepted' => 1
-            ]);
+            if($product->is_accepted){
+                $product->update([
+                    'on_moderation' => 0,
+                    'is_accepted' => 0
+                ]);
+            }else{
+                $product->update([
+                    'on_moderation' => 0,
+                    'is_accepted' => 1
+                ]);
+            }
+
             return 1;
         }else{
             return 0;
