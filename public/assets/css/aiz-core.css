@@ -5746,18 +5746,17 @@ div.footable-loader > span.fooicon:after {
     content: "\f00d";
     font-size: 20px;
 }
+
 .modal-content .modal-body {
+    padding: 20px 25px;
+    max-height: 80vh;
+}
+
+/* .modal-content .modal-body {
     padding: 10px ;
     max-height:80vh;
-}
-.overflow{
-  background-color: #fff;
-  width: 100% !important;
-  height: 50vh !important;
-  margin: 0 auto;
-  overflow:auto !important;
-}
-.modal-content .modal-footer {
+} */
+/* .modal-content .modal-footer {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -5769,6 +5768,22 @@ div.footable-loader > span.fooicon:after {
     justify-content: flex-end;
     position: relative;
     padding: 15px ;
+    border-top: 1px solid #ebedf2;
+    min-height: 60px;
+    background-color: transparent;
+} */
+.modal-content .modal-footer {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+    position: relative;
+    padding: 10px 25px;
     border-top: 1px solid #ebedf2;
     min-height: 60px;
     background-color: transparent;

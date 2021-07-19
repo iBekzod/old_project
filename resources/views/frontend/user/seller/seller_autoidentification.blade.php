@@ -361,9 +361,13 @@
                     </div>
 
                     <div class="row">
-                        <div class=" col-md-12  form-group text-right  mr-4 mt-3 ">
+                        <div class=" col-md-6  form-group text-right  pr-4 mt-3 ">
                             <button type="submit" class="btn btn-primary py-2">{{translate('я принимаю')}}</button>
                         </div>
+                        <div class=" col-md-6  form-group text-right  mt-3 ">
+                            <a href="#" class="btn btn-primary py-2">{{translate('pdf')}}</a>
+                        </div>
+
                     </div>
                 </form>
             </div>

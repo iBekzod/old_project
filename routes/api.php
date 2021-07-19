@@ -167,7 +167,7 @@ Route::prefix('v1')->group(function () {
     Route::post('payments/pay/cod', 'Api\PaymentController@cashOnDelivery')->middleware('auth:api');
 
     //  {{communication}}
-    Route::post('post/support_ticket','Api\ConversationController@postConversations');
+    Route::post('post/conversation','Api\ConversationController@postConversations');
     Route::post('post/subscriber','Api\SubscriberController@postSubscribers');
     Route::post('post/found_it_cheaper','Api\FoundItCheaperController@postFoundItCheaper');
     Route::post('post/report_description','Api\ReportDescriptionController@postReportDescription');
