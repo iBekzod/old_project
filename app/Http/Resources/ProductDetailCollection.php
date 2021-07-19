@@ -19,6 +19,9 @@ class ProductDetailCollection extends ResourceCollection
     public function toArray($request)
     {
         $product=Product::where('slug', $request->id)->first();
+        if(!($product->is_accepted && $product->published)){
+            return [];
+        }
         $variation=Variation::findOrFail($product->variation_id);
         $products=Product::where('variation_id', $variation->id)->get();
         $element=Element::findOrFail($variation->element_id);
@@ -35,7 +38,7 @@ class ProductDetailCollection extends ResourceCollection
                     'avatar' => $product->user->avatar,
                     'avatar_original' => api_asset($product->user->avatar_original),
                     'shop_name' => $product->added_by == 'admin' ? '' : $product->user->shop->name,
-                    'shop_logo' => $product->added_by == 'admin' ? '' : uploaded_asset($product->user->shop->logo),
+                    'shop_logo' => $product->added_by == 'admin' ? '' : api_asset($product->user->shop->logo),
                     'shop_link' => $product->added_by == 'admin' ? '' : route('shops.info', $product->user->shop->id)
                 ],
                 'selers'=>$this->getSellers($product),
@@ -251,16 +254,28 @@ class ProductDetailCollection extends ResourceCollection
         $sellers=array();
         foreach($products as $product){
             $sellers[]=[
-                'is_current'=>($item->id==$product->id),
-                'slug' => $product->slug,
-                'base_price' => (double) homeBasePrice($product->id),
-                'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
-                'currency_code'=>defaultCurrency(),
-                'exchange_rate'=>defaultExchangeRate(),
-                'discount' => (integer) $product->discount,
+                'product'=>[
+                    'id' => (integer) $product->id,
+                    'thumbnailImage' => $product->added_by == 'admin' ? api_asset(get_setting('system_logo_black'))??static_asset('assets/img/logo.png') : api_asset($product->user->shop->logo),
+                    'name' => $product->variation->getTranslation('name'),
+                    'variant' => $this->makeVariation($product)??[],
+                    'base_price' => (double) homeBasePrice($product->id),
+                    'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
+                    'currency_code'=>defaultCurrency(),
+                    'exchange_rate'=>defaultExchangeRate(),
+                    'discount' => (integer) $product->discount,
+                    'discount_type' => $product->discount_type,
+                    'slug' => $product->slug,
+                    'links' => [
+                        'reviews' => route('api.reviews.index', $product->id),
+                        'related' => route('products.related', $product->id)
+                    ],
+                ],
+                'name' => $product->user->name,
                 'shipping_type' => $product->delivery_type,
                 'shipping_cost' => $this->calculateShippingCost($product),
-                'name' => $product->user->name,
+                'is_current'=>($item->id==$product->id),
+                'seller_name' => $product->user->name,
                 'email' => $product->user->email,
                 'avatar' => $product->user->avatar,
                 'avatar_original' => api_asset($product->user->avatar_original),
