@@ -85,7 +85,8 @@ Route::post('seller/autoidentification/form','SellerAutoidentificationFormContro
 Route::get('seller/autoidentification/form','SellerAutoidentificationFormController@seller_autoidentification_form_save')->name('seller.autoidentification');
 Route::post('seller/autoidentification/form/update', 'SellerAutoidentificationFormController@Seller_autoidentification_form_update')->name('update.autoidentification');
 
-
+//  pdf
+Route::get('/pdf/file','SellerDeliveryFormController@generatorPDF');
 Route::post('seller/delivery/form','SellerDeliveryFormController@seller_delivery_form_save')->name('seller.delivery');
 Route::get('seller/delivery/form','SellerDeliveryFormController@seller_delivery_form_save')->name('seller.delivery');
 
@@ -405,5 +406,3 @@ Route::get('/{slug}', 'PageController@show_custom_page')->name('custom-pages.sho
 Route::get('map', 'Test\MapController@index');
 // Route::get('/return_back', 'HomeController@return_back')->name('return_back');
 Route::get('resolve-dependencies','ResolveDependenciesController@resolveDependencyManually');
-
-

@@ -8,6 +8,7 @@ use App\Seller;
 use App\Shop;
 use App\User;
 use App\BusinessSetting;
+use Barryvdh\DomPDF\Facade as PDF;
 use PhpParser\Node\Stmt\If_;
 use Carbon\Carbon;
 
@@ -67,7 +68,7 @@ class SellerDeliveryFormController extends Controller
             $user_id = auth()->id();
             $user = User::findOrFail($user_id);
             $user->registration_step = 'active_4';
-            
+
             if ($user->save()) {
                 return view('frontend.user.seller.dashboard');
             }
@@ -92,4 +93,44 @@ class SellerDeliveryFormController extends Controller
 
         }
     }
+    //  public function generatorPDF()
+    // {
+    // //   return 'came';
+
+    //   // retreive all records from db
+    //   $data =Seller::all();
+
+    //   // share data to view
+    //   view()->share('employee',$data);
+    //   $pdf = PDF::loadView('pdf_view', $data);
+
+    //   // download PDF file with download method
+    //   return $pdf->download('pdf_file.pdf');
+    // }
+
+
+public function generatorPDF() {
+    //  $user_id = auth()->id();
+    //         $user = User::findOrFail($user_id);
+    //         $selection=array();
+    //         if(Seller::where('user_id', $user_id)->exists()){
+    //             $seller=Seller::where('user_id', $user_id)->first();
+
+    //             foreach (($seller->verification_info) as  $element) {
+    //                 $selection[$element['label']]=$element['value'];
+    //             }
+    //         }
+    //         // dd($selection);
+    //         $user->registration_step = 'active_3';
+    //         // $seller=Seller::findOrFail($user_id);
+    //         $date=Carbon::parse($seller->created_at)->format('d-m-Y');
+    // $data=[['array', $array],['seller',$seller],['date'=>$date]];
+    // // return 'came';
+    //   $pdf = PDF::loadView('frontend.user.seller.seller_delivery', $data); // <--- load your view into theDOM wrapper;
+    //   $path = public_path('pdf_docs/'); // <--- folder to store the pdf documents into the server;
+    //   $fileName =  time().'.'. 'pdf' ; // <--giving the random filename,
+    //   $pdf->save($path . '/' . $fileName);
+    //   $generated_pdf_link = url('pdf_docs/'.$fileName);
+    //   return response()->json($generated_pdf_link);
+  }
 }
