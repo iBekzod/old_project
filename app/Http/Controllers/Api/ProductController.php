@@ -520,6 +520,7 @@ class ProductController extends Controller
     {
         $product_conditions=[];
         $element_conditions=[];
+        $is_random=true;
         //Filtering by brand slug
         switch ($type) {
             case 'brand':
@@ -558,6 +559,7 @@ class ProductController extends Controller
                     $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
                     $element_conditions['whereIn'][] = ['category_id' => $category_ids];
                 }
+                $is_random=false;
                 break;
             case 'todays_deal':
                 $product_conditions['where'][] = ['todays_deal', 1];
@@ -596,6 +598,7 @@ class ProductController extends Controller
         //Order by sorting type
         $sort_by = $request->sort_by;
         if ($sort_by != null) {
+            $is_random=false;
             switch ($sort_by) {
                 case 'newest':
                     $product_conditions['orderBy'][] = ['created_at' => 'desc'];
@@ -623,6 +626,7 @@ class ProductController extends Controller
         }
         //Новинки
         if ($request->has('new') && $request->new) {
+            $is_random=false;
             $product_conditions['orderBy'][] = ['created_at' => 'desc'];
         }
         //Deal
@@ -657,6 +661,7 @@ class ProductController extends Controller
         }
 
         if ($request->has('q') && $query = $request->q) {
+            $is_random=false;
             // $searchController = new SearchController;
             // $searchController->store($request);
             $product_conditions['where'][] = ['name', 'like', '%' . $query . '%'];
@@ -706,8 +711,8 @@ class ProductController extends Controller
             $filtered_variation_id_list = array_unique($filtered_variation_id_list);
             $product_conditions['whereIn'][] = ['variation_id' => $filtered_variation_id_list];
         }
-        $products = getPublishedProducts('product', $product_conditions, [], $element_conditions);
-        $attribute_products = getPublishedProducts('product', $attribute_product_conditions, [], $attribute_element_conditions);
+        $products = getPublishedProducts('product', $product_conditions, [], $element_conditions, $is_random);
+        $attribute_products = getPublishedProducts('product', $attribute_product_conditions, [], $attribute_element_conditions, $is_random);
         //Attribute collection
         $all_attributes = array();
         $all_characteristics = array();
@@ -766,9 +771,9 @@ class ProductController extends Controller
         if($request->has('product_type')){
             $product_type=$request->product_type;
             if($product_type=='variation'){
-                $products = groupByDistinctRelation( $products, 'variation_id');
+                $products = groupByDistinctRelation( $products, 'variation_id', $is_random);
             }else if($product_type=='element'){
-                $products = groupByDistinctRelation( $products, 'element_id');
+                $products = groupByDistinctRelation( $products, 'element_id', $is_random);
             }
         }else{
             $product_type='product';
@@ -788,7 +793,7 @@ class ProductController extends Controller
             'products_count'=>$products_count??count($products),
             'attributes' => $all_attributes,
             'colors' => new ProductColorCollection($all_colors),
-
+            
             'brands' => (count($brands)>0)?new BrandCollection($brands):[],
             'min_price' => $min_price ?? null,
             'max_price' => $max_price ?? null,

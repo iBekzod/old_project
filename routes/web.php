@@ -274,6 +274,16 @@ Route::group(['prefix' =>'seller', 'middleware' => ['seller', 'verified', 'user'
 	Route::get('/digitalproducts', 'HomeController@seller_digital_product_list')->name('seller.digitalproducts');
 	Route::get('/digitalproducts/upload', 'HomeController@show_digital_product_upload_form')->name('seller.digitalproducts.upload');
 	Route::get('/digitalproducts/{id}/edit', 'HomeController@show_digital_product_edit_form')->name('seller.digitalproducts.edit');
+
+
+    Route::resource('deliveries', 'SellerDeliveryController')->except([
+		'seller.create', 'seller.show', 'seller.destroy'
+	]);
+    Route::get('deliveries', 'SellerDeliveryController@index')->name('seller.deliveries.index');
+    Route::post('deliveries/edit/{id}', 'SellerDeliveryController@edit')->name('seller.deliveries.edit');
+    Route::get('deliveries/destroy/{id}', 'SellerDeliveryController@destroy')->name('seller.deliveries.destroy');
+	Route::post('/seller_configuration/update', 'SellerSettingsController@seller_configuration_update')->name('seller.seller_configuration.update');
+
 });
 
 Route::group(['middleware' => ['auth']], function(){

@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Element;
+use App\FlashDealProduct;
 use App\Product;
 use App\Variation;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -43,6 +44,7 @@ class ProductCollection extends ResourceCollection
                     'qty' => (integer) $variation->qty,
                     'variant' => $product,
                     'variations' => $products,
+                    'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??[],
                     'links' => [
                         'details' => route('products.show', $product->id),
                         'reviews' => route('api.reviews.index', $product->id),

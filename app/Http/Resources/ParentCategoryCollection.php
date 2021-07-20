@@ -25,6 +25,7 @@ class ParentCategoryCollection extends ResourceCollection
                     $sub_sub_category_brands = brandsOfCategory($sub_sub_category->id);
                     $data_sub_sub_category[] = [
                         'id' => $sub_sub_category->id,
+                        'level'=>$sub_sub_category->level,
                         'name' => $sub_sub_category->getTranslation('name'),
                         'slug' => $sub_sub_category->slug,
                         'banner' => $sub_sub_category->banner ? api_asset($sub_sub_category->banner) : 'public/images/default-image.jpg',
@@ -42,6 +43,7 @@ class ParentCategoryCollection extends ResourceCollection
                 $sub_category_brands = brandsOfCategory($sub_category->id);
                 $data_sub_category[] = [
                     'id' => $sub_category->id,
+                    'level'=>$sub_category->level,
                     'name' => $sub_category->getTranslation('name'),
                     'slug' => $sub_category->slug,
                     'banner' => $sub_category->banner ? api_asset($sub_category->banner) : 'public/images/default-image.jpg',
@@ -60,6 +62,7 @@ class ParentCategoryCollection extends ResourceCollection
             $category_brands = brandsOfCategory($category->id);
             $data[] = [
                 'id' => $category->id,
+                'level'=>$category->level,
                 'name' => $category->getTranslation('name'),
                 'slug' => $category->slug,
                 'banner' => $category->banner ? api_asset($category->banner) : 'public/images/default-image.jpg',
