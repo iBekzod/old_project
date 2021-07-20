@@ -80,7 +80,8 @@ class SellerAutoidentificationFormController extends Controller
                     }
                 }
             }
-        } else if ($request->method() === 'GET') {
+        } else if ($request->method() === 'GET')
+        {
             $user_id = auth()->id();
             $user = User::findOrFail($user_id);
             if (Seller::where('user_id', $user_id)->exists()) {
