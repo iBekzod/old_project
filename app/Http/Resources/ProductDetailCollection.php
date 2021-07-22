@@ -22,9 +22,9 @@ class ProductDetailCollection extends ResourceCollection
         if(!($product->is_accepted && $product->published)){
             return [];
         }
-        $variation=Variation::findOrFail($product->variation_id);
-        $products=Product::where('variation_id', $variation->id)->get();
-        $element=Element::findOrFail($variation->element_id);
+        $variation=Variation::withTrashed()->find($product->variation_id);
+        $products=getPublishedProducts('product', ['where'=>[['variation_id', $variation->id]]], [], []);
+        $element=Element::withTrashed()->find($variation->element_id);
         try{
             $data = [
                 'id' => (integer) $product->id,
@@ -124,8 +124,8 @@ class ProductDetailCollection extends ResourceCollection
         if ($attributes) {
             foreach($attributes as $attribute_id=>$value_ids){
                 $characteristics=Characteristic::withTrashed()->whereIn('id',$value_ids)->get();
-                $attribute=Attribute::findOrFail($attribute_id);
-                $branch=Branch::findOrFail($attribute->branch_id);
+                $attribute=Attribute::withTrashed()->find($attribute_id);
+                $branch=Branch::find($attribute->branch_id);
                 $items=array();
                 foreach($characteristics as $characteristic){
                     $items[]=[
@@ -160,7 +160,7 @@ class ProductDetailCollection extends ResourceCollection
             foreach($attributes as $attribute_id=>$value_ids){
                 if( is_array($value_ids) && count($value_ids)>0){
                     $characteristics=Characteristic::withTrashed()->whereIn('id',$value_ids)->get();
-                    $attribute=Attribute::findOrFail($attribute_id);
+                    $attribute=Attribute::withTrashed()->find($attribute_id);
                     $items=array();
                     foreach($characteristics as $characteristic){
                         $items[]=[
@@ -188,7 +188,7 @@ class ProductDetailCollection extends ResourceCollection
             foreach($attributes as $attribute_id=>$value_ids){
                 if( is_array($value_ids) && count($value_ids)>0){
                     $characteristics=Characteristic::withTrashed()->whereIn('id',$value_ids)->get();
-                    $attribute=Attribute::findOrFail($attribute_id);
+                    $attribute=Attribute::withTrashed()->find($attribute_id);
                     $items=array();
                     foreach($characteristics as $characteristic){
                         $items[]=[

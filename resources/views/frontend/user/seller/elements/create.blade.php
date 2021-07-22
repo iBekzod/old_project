@@ -192,7 +192,7 @@
                                                 data-selected-text-format="count" name="colors[]" id="colors" multiple>
                                                 @foreach (\App\Color::orderBy('name', 'asc')->get() as $key => $color)
                                                     <option data-id="{{ $color->id }}" value="{{ $color->id }}"
-                                                        data-content="<span><span class='mr-2 border rounded size-15px d-inline-block' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>">
+                                                        data-content="<span><span class='mr-2 border rounded size-15px d-inline-block' style='background:{{ $color->code }}'></span><span>{{ $color->getTranslation('name') }}</span></span>">
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -406,6 +406,9 @@
 @endsection
 @section('script')
     <script type="text/javascript">
+        $('#choice_form').submit(function (event) {
+            event.preventDefault();
+        });
         function add_more_customer_choice_option(i, name) {
             $('#customer_choice_options').append(
                 '<div class="form-group row"><div class="col-md-3"><input type="hidden" name="choice_no[]" value="' +

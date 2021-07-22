@@ -16,9 +16,9 @@ class ProductCollection extends ResourceCollection
         return [
             'data' => $this->collection->map(function($data) {
                 try {
-                    $product=Product::findOrFail($data->id);
-                    $variation=Variation::findOrFail($product->variation_id);
-                    $element=Element::findOrFail($variation->element_id);
+                    $product=Product::find($data->id);
+                    $variation=Variation::find($product->variation_id);
+                    $element=Element::find($variation->element_id);
                     $products=Product::where('variation_id', $product->variation_id)->get();
                 } catch (\Exception $th) {
                     return null;//($th->getMessage());

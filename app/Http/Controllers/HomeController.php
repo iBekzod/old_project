@@ -550,6 +550,7 @@ class HomeController extends Controller
 
     public function show_product_upload_form(Request $request)
     {
+        return redirect()->route('seller.elements.all');
         if (\App\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated) {
             //       if(Auth::user()->seller->remaining_uploads > 0){
             $categories = Category::where('parent_id', null)
