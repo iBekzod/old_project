@@ -219,12 +219,12 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 
 	//Support_Ticket seller
 	Route::get('support_ticket/seller','SupportTicketController@seller_admin_index')->name('support_ticket_seller.admin_index');
-	Route::get('support_ticket/seller/{id}/show','SupportTicketController@admin_show')->name('support_ticket.admin_show');
+	Route::get('support_ticket/seller/{id}/show','SupportTicketController@seller_admin_show')->name('support_ticket_seller.admin_show');
 	Route::post('support_ticket/seller/reply','SupportTicketController@admin_store')->name('support_ticket.admin_store');
 
     //  Support_Ticket user
     Route::get('support_ticket/user','SupportTicketController@user_admin_index')->name('support_ticket_user.admin_index');
-	Route::get('support_ticket/user/{id}/show','SupportTicketController@admin_show')->name('support_ticket.admin_show');
+	// Route::get('support_ticket/user/{id}/show','SupportTicketController@admin_show')->name('support_ticket.admin_show');
 	Route::post('support_ticket/user/reply','SupportTicketController@admin_store')->name('support_ticket.admin_store');
 
 	//Pickup_Points

@@ -181,12 +181,12 @@ class SupportTicketController extends Controller
         return view('frontend.user.support_ticket.show', compact('ticket','ticket_replies'));
     }
 
-    public function admin_show($id)
+    public function seller_admin_show($id)
     {
         $ticket = Ticket::findOrFail(decrypt($id));
         $ticket->viewed = 1;
         $ticket->save();
-        return view('backend.support.support_tickets.show', compact('ticket'));
+        return view('backend.support.support_tickets_seller.show', compact('ticket'));
     }
 
     /**
