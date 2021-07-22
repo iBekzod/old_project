@@ -23,7 +23,7 @@ class SupportTicketController extends Controller
         return view('frontend.user.support_ticket.index', compact('tickets'));
     }
 
-    public function admin_index(Request $request)
+    public function seller_admin_index(Request $request)
     {
     //    dd($request->all());
         $sort_search =null;
@@ -35,9 +35,24 @@ class SupportTicketController extends Controller
 
         }
         $tickets = $tickets->paginate(15);
-        return view('backend.support.support_tickets.index', compact('tickets', 'sort_search'));
+        return view('backend.support.support_tickets_seller.index', compact('tickets', 'sort_search'));
     }
 
+
+    public function user_admin_index(Request $request)
+    {
+    //    dd($request->all());
+        $sort_search =null;
+        $tickets = Ticket::orderBy('created_at', 'desc');
+        // dd($tickets);
+        if ($request->has('search')){
+            $sort_search = $request->search;
+            $tickets = $tickets->where('code', 'like', '%'.$sort_search.'%');
+
+        }
+        $tickets = $tickets->paginate(15);
+        return view('backend.support.support_tickets_user.index', compact('tickets', 'sort_search'));
+    }
     /**
      * Show the form for creating a new resource.
      *
