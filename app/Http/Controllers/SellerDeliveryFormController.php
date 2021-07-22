@@ -86,7 +86,9 @@ class SellerDeliveryFormController extends Controller
             if ($user->save()) {
                 return view('frontend.user.seller.dashboard');
             }
-        }  else if ($request->method() === 'GET') {
+        }
+        else if ($request->method() === 'GET')
+        {
 
 
                  $user_id = auth()->id();
@@ -136,7 +138,6 @@ public function generatorPDF() {
         }
     }
     // dd($selection);
-    $user->registration_step = 'active_3';
     // $seller=Seller::findOrFail($user_id);
     $date=Carbon::parse($seller->created_at)->format('d-m-Y');
             // dd($date);
@@ -147,10 +148,21 @@ public function generatorPDF() {
     //   $generated_pdf_link = url('pdf_docs/'.$fileName);
     //   return response()->json($generated_pdf_link);
 
+     $array=[$selection,$user_id,$date];
+        // dd($array);
+    //  dd($user->id);
 
-      $pdf = PDF::loadView('frontend.user.seller.pdf.pdf_file'); // <--- load your view into theDOM wrapper;
-      return $pdf->download('downlaod.pdf');
-      return back();
+    // $array=['selection','user_id','date'];
+    // dd($array);
+
+    // $user->user_id=12;
+    //  dd($array);
+    //   dd($array[0]['Форма_собственности']);
+    // view()->share('employee',$user);
+
+    $pdf = PDF::loadView('frontend.user.seller.pdf.pdf_file'); // <--- load your view into theDOM wrapper;
+    return $pdf->stream('downlaod.pdf');
+    return back();
   }
 }
 
