@@ -1,13 +1,15 @@
-{{-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
 
 
-<style>
+
+
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+     <title>Document</title>
+     <style>
     .card{
         width: 85% !important;
         margin: 0 auto;
@@ -37,20 +39,17 @@
         margin: 0 auto;
     }
 </style>
-</head>
-<body>
-
+ </head>
+ <body>
     <div class=" offset-sm-1 col-sm-10">
         <div class="card">
             <div class="container px-5" id="selection">
-                <form action="{{route('seller.page')}}" method="POST">
-                    @csrf
                     <div class="row">
                         <div class="col-md-12 mt-4 text-center my-2">
-                        <h5> <b>Договор на оказание курьерских услуг № {{$user_id}}</b> </h5>
+                        <h5> <b>Договор на оказание курьерских услуг № <span class="text-danger">id qoyiladi</span> </b> </h5>
                         </div>
                         <div class="col-md-4">
-                            <p> {{$date}}_ года. </p>
+                            <p><span class="text-danger">voqt qoyiladi</span>_ года. </p>
                         </div>
                         <div class=" offset-md-4 col-md-4">
                             <div class="right">
@@ -61,7 +60,7 @@
                    </div>
                     <div class="row">
                             <div class="col-md-12">
-                                <p>Общество с Ограниченной Ответственностью <b>«TINFIS Cargo»</b> , в лице директора Каримова Д.Р. действующего на основании Устава, именуемое в дальнейшем «Исполнитель», с одной стороны, и « <span class="text-danger">{{$seller['Название_магазина']}}</span>  », в лице руководителя <span class="text-danger">{{$seller['ФИО_директора']}}</span> , действующего на основании  Устава, именуемое в дальнейшем «Заказчик», с другой стороны, вместе именуемые в дальнейшем «Стороны» и по отдельности «Сторона», заключили настоящий договор о нижеследующем:
+                                <p>Общество с Ограниченной Ответственностью <b>«TINFIS Cargo»</b> , в лице директора Каримова Д.Р. действующего на основании Устава, именуемое в дальнейшем «Исполнитель», с одной стороны, и « <span class="text-danger">magazin nomi</span>  », в лице руководителя <span class="text-danger">derectiri FIO</span> , действующего на основании  Устава, именуемое в дальнейшем «Заказчик», с другой стороны, вместе именуемые в дальнейшем «Стороны» и по отдельности «Сторона», заключили настоящий договор о нижеследующем:
                                 </p>
                             </div>
                             <div class="col-md-12">
@@ -388,39 +387,39 @@
                             <div class="col-md-12">
                                 <div class="row">
                                         <div class="col-md-6"><p>Название: ООО «BMG HI-TECH</p> </div>
-                                        <div class="col-md-6"><p>Название: <span class="text-danger pl-2">{{$seller['Форма_собственности']}}</span><< <span class="text-danger">{{$seller['Юридическое_название_вендора']}}</span>>></p> </div>
+                                        <div class="col-md-6"><p>Название: <span class="text-danger pl-2">OOO</span><< <span class="text-danger">yuridicheskiy nazvaniya</span>>></p> </div>
                                 </div>
                                 <div class="row">
                                         <div class="col-md-6"><p>Адрес: 100029 г. Ташкент, Мирабадский р-он   ул. Афросиаб 12 б </p></div>
-                                        <div class="col-md-6"><p>Адрес: <span class="text-danger">{{$seller['Адрес_регистрации_вендора']}}</span></p> </div>
+                                        <div class="col-md-6"><p>Адрес: <span class="text-danger">adres register</span></p> </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6"><p>Банк: Алока банк </p> </div>
-                                    <div class="col-md-6"><p> Банк: <span class="text-danger">{{$seller['Название_банка']}}</span></p></div>
+                                    <div class="col-md-6"><p> Банк: <span class="text-danger">bank nomi}</span></p></div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6"><p>МФО: 00401</p> </div>
-                                    <div class="col-md-6"><p>МФО: <span class="text-danger">{{$seller['МФО_банка']}}</span></p> </div>
+                                    <div class="col-md-6"><p>МФО: <span class="text-danger">mfo banka}</span></p> </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6"><p>р/с: 2020 8000 2009 7992 2001 </p></div>
-                                    <div class="col-md-6"><p>р/с: <span class="text-danger">{{$seller['РС']}}</span></p> </div>
+                                    <div class="col-md-6"><p>р/с: <span class="text-danger">ps</span></p> </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6"><p>ИНН: 306018564 </p> </div>
-                                    <div class="col-md-6"><p> ИНН: <span class="text-danger">{{$seller['ИНН']}}</span></p></div>
+                                    <div class="col-md-6"><p> ИНН: <span class="text-danger">inn</span></p></div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <p>Тел раб: 78 150 8 150</p>
                                     </div>
-                                    <div class="col-md-6"> <p>Тел раб: <span class="text-danger">{{$seller['Тел_директора']}}</span></p>  </div>
+                                    <div class="col-md-6"> <p>Тел раб: <span class="text-danger">nomet director</span></p>  </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <p>e-mail: bmgventure@gmail.com </p>
                                     </div>
-                                    <div class="col-md-6"> <p>e-mail:   <span class="text-danger">{{$seller['Электронная_почта_директора']}}</span></p>  </div>
+                                    <div class="col-md-6"> <p>e-mail:   <span class="text-danger">email derictor</span></p>  </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
@@ -428,7 +427,7 @@
                                             /Джаббаров И.Г./</p>
                                     </div>
                                     <div class="col-md-6">
-                                        <p>Руководитель <br><span class="text-danger">{{$seller['ФИО_директора']}}</span>
+                                        <p>Руководитель <br><span class="text-danger">FIO directora</span>
                                             <b></b>
                                         </p>
                                     </div>
@@ -913,38 +912,10 @@
 
                     </div>
                     <div class="row">
-                        <div class=" col-md-12  form-group text-right  mr-4 mt-4 ">
-                            <button type="submit" class="btn btn-primary py-2">{{translate('я принимаю')}}</button>
-                        </div>
                     </div>
-                </form>
             </div>
         </div>
 	</div>
-
-</body>
-</html> --}}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-     Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum, error excepturi placeat nemo reprehenderit tenetur voluptate repudiandae consectetur tempora debitis magnam repellat quia animi suscipit veniam ipsum ad cum quibusdam.
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-
+ </body>
+ </html>
 

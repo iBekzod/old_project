@@ -217,10 +217,15 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
     Route::post('/reviews/published', 'ReviewController@updatePublished')->name('reviews.published');
 //    Route::post('/reviews/publisheds', 'ReviewController@updatePublisheds')->name('reviews.publisheds');
 
-	//Support_Ticket
-	Route::get('support_ticket/','SupportTicketController@admin_index')->name('support_ticket.admin_index');
-	Route::get('support_ticket/{id}/show','SupportTicketController@admin_show')->name('support_ticket.admin_show');
-	Route::post('support_ticket/reply','SupportTicketController@admin_store')->name('support_ticket.admin_store');
+	//Support_Ticket seller
+	Route::get('support_ticket/seller','SupportTicketController@seller_admin_index')->name('support_ticket_seller.admin_index');
+	Route::get('support_ticket/seller/{id}/show','SupportTicketController@admin_show')->name('support_ticket.admin_show');
+	Route::post('support_ticket/seller/reply','SupportTicketController@admin_store')->name('support_ticket.admin_store');
+
+    //  Support_Ticket user
+    Route::get('support_ticket/user','SupportTicketController@user_admin_index')->name('support_ticket_user.admin_index');
+	Route::get('support_ticket/user/{id}/show','SupportTicketController@admin_show')->name('support_ticket.admin_show');
+	Route::post('support_ticket/user/reply','SupportTicketController@admin_store')->name('support_ticket.admin_store');
 
 	//Pickup_Points
 	Route::resource('pick_up_points','PickupPointController');
