@@ -34,7 +34,7 @@ use Mail;
 use App\Utility\TranslationUtility;
 use App\Utility\CategoryUtility;
 use Illuminate\Auth\Events\PasswordReset;
-
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class HomeController extends Controller
 {
@@ -110,6 +110,7 @@ class HomeController extends Controller
 
             $user = $request->user();
             auth()->login($user, true);
+
             if ($user->registration_step == 'active_1') {
                 return redirect()->route('seller.autoidentification');
                 //  return 'keldi';
@@ -119,11 +120,17 @@ class HomeController extends Controller
                 // return 'keldi';
             }
             if ($user->registration_step == 'active_3') {
-                return redirect()->route('seller.page');
+                $shop = Auth::user()->shop;
+                return view('frontend.user.seller.shop', compact('shop'));
             }
-            else{
-                return view('frontend.user.seller.dashboard');
-            }
+
+
+            // if ($user->registration_step == 'active_3') {
+            //     return redirect()->route('seller.page');
+            // }
+            // else{
+            //     return view('frontend.user.seller.dashboard');
+            // }
 
 
 
