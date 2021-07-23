@@ -78,25 +78,46 @@ class HomeController extends Controller
             $user->email_verified_at = now();
             $user->password = Hash::make($request->password);
 
+
             $countries=Country::where('status', 1)->first();
             $regions=City::where('type', 'region')->get();
-            // dd($regions);
+            //  dd($regions);
             $cities=City::where('type', 'district')->orWhere('type', 'city')->get();
 
 
              if($countries->id){
                 $country_id=$countries->id;
-                $region_id = City::where('country_id', $country_id)->pluck('name');
-                 dd($region_id);
-                $district_id =City::whereIn('parent_id', $region_id)->pluck('name');
-                dd($district_id);
+                // dd($country_id);
+                $region_id = City::where('country_id', $country_id)->pluck('id');
+                //  dd($region_id);
+                 $district_id =City::whereIn('parent_id', $region_id)->pluck('name');
+                //  dd($district_id);
+                //  $home=$regions->whereIn('category_id', $district_id);
+                //  dd($home);
+                // dd($district_id);
+                 if ($region_id) {
+                            $region_ids = City::whereIn('parent_id', $region_id)->pluck('name');
+                            dd($region_ids);
+
+                  }
 
              }
 
 
+            //  if($countries->id){
+            //     $country_id=$countries->id;
+            //     $region_id = City::where('country_id', $country_id)->pluck('name');
+            //     //  dd($region_id);
+            //     $district_id =City::whereIn('parent_id', $region_id)->pluck('name');
+            //      dd($district_id);
+            //     if ($region_id) {
+            //                 $region_ids = City::whereIn('parent_id', $region_id)->pluck('id');
+            //                 dd($region_ids);
+
+            //  }
 
 
-            // if ( && $request->category_id != null && $request->category_id != 0) {
+            // if ( category_id != null ) {
             //     $category_id = $request->category_id;
             //     $sub_category_ids = Category::where('parent_id', $category_id)->pluck('id');
             //     $sub_sub_category_ids = Category::whereIn('parent_id', $sub_category_ids)->pluck('id');
@@ -1119,7 +1140,8 @@ class HomeController extends Controller
             }
         } else {
             flash("Verification code mismatch")->error();
-            return back();
+
+           return back();
         }
 
    }
