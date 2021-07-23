@@ -14,6 +14,8 @@
 					<div class="row">
 						<div class=" offset-lg-1 col-lg-11 form-horizontal" id="form">
 
+                            
+
 							@foreach (json_decode(\App\BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element)
                                 @if($element->type=='text')
                                 <div class="form-group row" id="category">

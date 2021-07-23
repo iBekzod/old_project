@@ -24,6 +24,8 @@ use App\Color;
 use App\Order;
 use App\BusinessSetting;
 use App\Category;
+use App\City;
+use App\Country;
 use App\Element;
 use App\Http\Controllers\SearchController;
 use ImageOptimizer;
@@ -75,6 +77,42 @@ class HomeController extends Controller
             $user->user_type = "seller";
             $user->email_verified_at = now();
             $user->password = Hash::make($request->password);
+
+            $countries=Country::where('status', 1)->first();
+            $regions=City::where('type', 'region')->get();
+            // dd($regions);
+            $cities=City::where('type', 'district')->orWhere('type', 'city')->get();
+
+
+             if($countries->id){
+                $country_id=$countries->id;
+                $region_id = City::where('country_id', $country_id)->pluck('name');
+                 dd($region_id);
+                $district_id =City::whereIn('parent_id', $region_id)->pluck('name');
+                dd($district_id);
+
+             }
+
+
+
+
+            // if ( && $request->category_id != null && $request->category_id != 0) {
+            //     $category_id = $request->category_id;
+            //     $sub_category_ids = Category::where('parent_id', $category_id)->pluck('id');
+            //     $sub_sub_category_ids = Category::whereIn('parent_id', $sub_category_ids)->pluck('id');
+            //     $elements = $elements->whereIn('category_id', $sub_sub_category_ids);
+            //     if ($request->has('sub_category_id') && $request->sub_category_id != null && $request->sub_category_id != 0) {
+            //         $sub_category_id = $request->sub_category_id;
+            //         $sub_sub_category_ids = Category::whereIn('parent_id', $sub_category_ids)->pluck('id');
+            //         $elements = $elements->whereIn('category_id', $sub_sub_category_ids);
+            //         if ($request->has('sub_sub_category_id') && $request->sub_sub_category_id != null && $request->sub_sub_category_id != 0) {
+            //             $sub_sub_category_id = $request->sub_sub_category_id;
+            //             $elements = $elements->where('category_id', $sub_sub_category_id);
+            //         }
+            //     }
+            // }
+
+
             // $user->save();
             if ($user->save()) {
                 auth()->login($user, true);
@@ -1083,5 +1121,6 @@ class HomeController extends Controller
             flash("Verification code mismatch")->error();
             return back();
         }
-    }
+
+   }
 }
