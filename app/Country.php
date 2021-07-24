@@ -16,6 +16,10 @@ class Country extends Model
         return $this->hasMany(CountryTranslation::class);
     }
 
+    public function regions(){
+        return $this->hasMany(City::class)->where('type', 'region');
+    }
+
     public function delete()
     {
         $this->country_translations()->delete();
