@@ -18,8 +18,8 @@ class AddressController extends Controller
         $address = new Address;
         $address->user_id = $request->user_id;
         $address->address = $request->address;
-        $address->country = $request->country;
-        $address->city = $request->city;
+        $address->region_id = $request->region_id;
+        $address->city_id = $request->city_id;
         $address->postal_code = $request->postal_code;
         $address->phone = $request->phone;
         $address->longitude = $request->longitude;
