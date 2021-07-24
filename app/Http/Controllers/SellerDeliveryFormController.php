@@ -15,6 +15,7 @@ use App\SellerSetting;
 
 use PhpParser\Node\Stmt\If_;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class SellerDeliveryFormController extends Controller
 {
@@ -22,23 +23,41 @@ class SellerDeliveryFormController extends Controller
     {
         if ($request->method() === 'POST') {
             //  dd($request->all());
-            $user_id = auth()->id();
-            $user = User::findOrFail($user_id);
-            $selection=array();
-            if(Seller::where('user_id', $user_id)->exists()){
-                $seller=Seller::where('user_id', $user_id)->first();
+            // $user_id = auth()->id();
+            // $user = User::findOrFail($user_id);
+            // $selection=array();
+            // if(Seller::where('user_id', $user_id)->exists()){
+            //     $seller=Seller::where('user_id', $user_id)->first();
 
-                foreach (($seller->verification_info) as  $element) {
-                    $selection[$element['label']]=$element['value'];
-                }
-            }
-            // dd($selection);
+            //     foreach (($seller->verification_info) as  $element) {
+            //         $selection[$element['label']]=$element['value'];
+            //     }
+            // }
+            // // dd($selection);
+            // $user->registration_step = 'active_3';
+            // // $seller=Seller::findOrFail($user_id);
+            // $date=Carbon::parse($seller->created_at)->format('d-m-Y');
+            // if ($user->save()) {
+            //     // return 'ketti';
+            //     return view('frontend.user.seller.seller_delivery')->with('seller', $selection)->with('user_id', $user_id)->with('date', $date);
+            // }
+
+             $user_id = auth()->id();
+            $user = User::findOrFail($user_id);
             $user->registration_step = 'active_3';
-            // $seller=Seller::findOrFail($user_id);
-            $date=Carbon::parse($seller->created_at)->format('d-m-Y');
+
+
+
+            $admin=User::where('user_type', 'admin')->first();
+            $settings = SellerSetting::where('user_id',  $admin->id);
+            foreach($settings as $setting){
+                $new_setting = $setting->replicate();
+                $new_setting->user_id = $user_id;
+                $new_setting->save();
+            }
             if ($user->save()) {
-                // return 'ketti';
-                return view('frontend.user.seller.seller_delivery')->with('seller', $selection)->with('user_id', $user_id)->with('date', $date);
+                  $shop = Auth::user()->shop;
+                  return view('frontend.user.seller.shop', compact('shop'));
             }
         }
         else if ($request->method() === 'GET') {
@@ -159,6 +178,7 @@ public function generatorPDF() {
     //  dd($array);
     //   dd($array[0]['Форма_собственности']);
     // view()->share('employee',$user);
+
 
     $pdf = PDF::loadView('frontend.user.seller.pdf.pdf_file'); // <--- load your view into theDOM wrapper;
     return $pdf->stream('downlaod.pdf');

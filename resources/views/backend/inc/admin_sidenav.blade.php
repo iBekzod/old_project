@@ -491,7 +491,7 @@
                                         @endif
                                     </a>
                                 </li>
-                                <li class="aiz-side-nav-item">
+                                {{-- <li class="aiz-side-nav-item">
                                     <a href="{{ route('support_ticket_user.admin_index') }}"
                                        class="aiz-side-nav-link {{ areActiveRoutes(['support_ticket_user.admin_index', 'support_ticket.admin_show'])}}">
                                         <span class="aiz-side-nav-text">{{translate('Ticket user ')}}</span>
@@ -499,7 +499,7 @@
                                         class="badge badge-info">{{ $support_ticket }}</span>
                                         @endif
                                     </a>
-                                </li>
+                                </li> --}}
                             @endif
 
                             @php

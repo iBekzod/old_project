@@ -24,6 +24,8 @@ use App\Color;
 use App\Order;
 use App\BusinessSetting;
 use App\Category;
+use App\City;
+use App\Country;
 use App\Element;
 use App\Http\Controllers\SearchController;
 use ImageOptimizer;
@@ -34,7 +36,7 @@ use Mail;
 use App\Utility\TranslationUtility;
 use App\Utility\CategoryUtility;
 use Illuminate\Auth\Events\PasswordReset;
-
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class HomeController extends Controller
 {
@@ -75,6 +77,63 @@ class HomeController extends Controller
             $user->user_type = "seller";
             $user->email_verified_at = now();
             $user->password = Hash::make($request->password);
+
+
+            $countries=Country::where('status', 1)->first();
+            $regions=City::where('type', 'region')->get();
+            //  dd($regions);
+            $cities=City::where('type', 'district')->orWhere('type', 'city')->get();
+
+
+             if($countries->id){
+                $country_id=$countries->id;
+                // dd($country_id);
+                $region_id = City::where('country_id', $country_id)->pluck('id');
+                //  dd($region_id);
+                 $district_id =City::whereIn('parent_id', $region_id)->pluck('name');
+                //  dd($district_id);
+                //  $home=$regions->whereIn('category_id', $district_id);
+                //  dd($home);
+                // dd($district_id);
+                 if ($region_id) {
+                            $region_ids = City::whereIn('parent_id', $region_id)->pluck('name');
+                            dd($region_ids);
+
+                  }
+
+             }
+
+
+            //  if($countries->id){
+            //     $country_id=$countries->id;
+            //     $region_id = City::where('country_id', $country_id)->pluck('name');
+            //     //  dd($region_id);
+            //     $district_id =City::whereIn('parent_id', $region_id)->pluck('name');
+            //      dd($district_id);
+            //     if ($region_id) {
+            //                 $region_ids = City::whereIn('parent_id', $region_id)->pluck('id');
+            //                 dd($region_ids);
+
+            //  }
+
+
+            // if ( category_id != null ) {
+            //     $category_id = $request->category_id;
+            //     $sub_category_ids = Category::where('parent_id', $category_id)->pluck('id');
+            //     $sub_sub_category_ids = Category::whereIn('parent_id', $sub_category_ids)->pluck('id');
+            //     $elements = $elements->whereIn('category_id', $sub_sub_category_ids);
+            //     if ($request->has('sub_category_id') && $request->sub_category_id != null && $request->sub_category_id != 0) {
+            //         $sub_category_id = $request->sub_category_id;
+            //         $sub_sub_category_ids = Category::whereIn('parent_id', $sub_category_ids)->pluck('id');
+            //         $elements = $elements->whereIn('category_id', $sub_sub_category_ids);
+            //         if ($request->has('sub_sub_category_id') && $request->sub_sub_category_id != null && $request->sub_sub_category_id != 0) {
+            //             $sub_sub_category_id = $request->sub_sub_category_id;
+            //             $elements = $elements->where('category_id', $sub_sub_category_id);
+            //         }
+            //     }
+            // }
+
+
             // $user->save();
             if ($user->save()) {
                 auth()->login($user, true);
@@ -110,6 +169,7 @@ class HomeController extends Controller
 
             $user = $request->user();
             auth()->login($user, true);
+
             if ($user->registration_step == 'active_1') {
                 return redirect()->route('seller.autoidentification');
                 //  return 'keldi';
@@ -119,11 +179,17 @@ class HomeController extends Controller
                 // return 'keldi';
             }
             if ($user->registration_step == 'active_3') {
-                return redirect()->route('seller.page');
+                $shop = Auth::user()->shop;
+                return view('frontend.user.seller.shop', compact('shop'));
             }
-            else{
-                return view('frontend.user.seller.dashboard');
-            }
+
+
+            // if ($user->registration_step == 'active_3') {
+            //     return redirect()->route('seller.page');
+            // }
+            // else{
+            //     return view('frontend.user.seller.dashboard');
+            // }
 
 
 
@@ -1074,7 +1140,9 @@ class HomeController extends Controller
             }
         } else {
             flash("Verification code mismatch")->error();
-            return back();
+
+           return back();
         }
-    }
+
+   }
 }
