@@ -524,18 +524,18 @@ class ProductController extends Controller
         //Filtering by brand slug
         switch ($type) {
             case 'brand':
-                if ($brand = Brand::where('slug', $request->id)->firstOrFail()) {
+                if ($request->id!="list" && $brand = Brand::where('slug', $request->id)->firstOrFail()) {
                     $element_conditions['where'][] = ['brand_id', $brand->id];
                 }
                 break;
             case 'flashdeals':
-                if ($flash_deal = FlashDeal::where('slug', $request->id)->firstOrFail()) {
+                if ($request->id!="list" && $flash_deal = FlashDeal::where('slug', $request->id)->firstOrFail()) {
                     $product_ids = FlashDealProduct::where('flash_deal_id', $flash_deal->id)->pluck('product_id');
                     $product_conditions['whereIn'][] = ['id' => $product_ids];
                 }
                 break;
             case 'category':
-                if ($categoryA = Category::where('slug', $request->id)->firstOrFail()) {
+                if ($request->id!="list" && $categoryA = Category::where('slug', $request->id)->firstOrFail()) {
                     $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
                     $element_conditions['whereIn'][] = ['category_id' => $category_ids];
                 }
