@@ -305,7 +305,7 @@ class ProductController extends Controller
 
     public function featured()
     {
-        return new ProductCollection(getPublishedProducts('element', [], [], ['where' => [['featured', 1]]])->paginate(12));
+        return new ProductCollection(getPublishedProducts('element', [], [], ['where' => [['featured', 1]]])->inRandomOrder()->paginate(12));
 
         // return new ProductCollection(Product::where('featured', 1)->where('is_accepted', 1)->inRandomOrder()->get());
     }
@@ -330,7 +330,7 @@ class ProductController extends Controller
     public function related($id)
     {
         if ($product = Product::where('id', $id)->first()) {
-            return new ProductCollection(getPublishedProducts('variation', ['where' => [['id', '<>', $product->id]]], [], ['where' => [['category_id', $product->element->category_id]], 'random'])->paginate(12));
+            return new ProductCollection(getPublishedProducts('variation', ['where' => [['id', '<>', $product->id]]], [], ['where' => [['category_id', $product->element->category_id]], 'random'])->inRandomOrder()->paginate(12));
         }
         return [];
         return response()->json([
@@ -469,7 +469,7 @@ class ProductController extends Controller
     public function freeShippingProduct()
     {
         // return $this->admin();
-        return new ProductCollection(getPublishedProducts('element', ['where' => [['delivery_type', 'free']]], [], [])->paginate(12));
+        return new ProductCollection(getPublishedProducts('element', ['where' => [['delivery_type', 'free']]], [], [])->inRandomOrder()->paginate(12));
 
         // return response()->json([
 
@@ -793,7 +793,7 @@ class ProductController extends Controller
             'products_count'=>$products_count??count($products),
             'attributes' => $all_attributes,
             'colors' => new ProductColorCollection($all_colors),
-            
+
             'brands' => (count($brands)>0)?new BrandCollection($brands):[],
             'min_price' => $min_price ?? null,
             'max_price' => $max_price ?? null,

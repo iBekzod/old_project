@@ -297,13 +297,33 @@ if (!function_exists('searchItemByTranslation')) {
         return $results->pluck($table.'_id');
     }
 }
-if (!function_exists('getPublishedProducts')) {
-    function getPublishedProducts($type = 'product', $product_conditions = [], $variation_conditions = [], $element_conditions = [], $is_random=true)
+if (!function_exists('filterPublishedProducts')) {
+    function filterPublishedProducts($products)
     {
         $published_condition=[['qty', '>', 0], ['is_accepted', 1], ['published', 1], ['variation_id', '<>', null], ['element_id', '<>', null], ['deleted_at', '=', null]];
         $element_conditions['where'][] = ['is_accepted', 1];
         $element_conditions['where'][] = ['published', 1];
-        $products = Product::where($published_condition);
+        $products = $products->where($published_condition);
+        $products = filterProductByRelation($products, 'element', $element_conditions);
+        return $products;
+    }
+}
+if (!function_exists('hasSuchAttribute')) {
+    function hasSuchAttribute($product, $attribute_id)
+    {
+        if(isset($attribute_id) && isset($product->variation->characteristics)){
+            $attribute_ids=explode(',', $product->variation->characteristics);
+            if(in_array($attribute_id, $attribute_ids)){
+                return true;
+            }
+        }
+        return false;
+    }
+}
+if (!function_exists('getPublishedProducts')) {
+    function getPublishedProducts($type = 'product', $product_conditions = [], $variation_conditions = [], $element_conditions = [], $is_random=true)
+    {
+        $products = filterPublishedProducts(Product::where('deleted_at', '=', null));
         $products = filterProductByRelation($products, 'product', $product_conditions);
         $products = filterProductByRelation($products, 'variation', $variation_conditions);
         $products = filterProductByRelation($products, 'element', $element_conditions);
