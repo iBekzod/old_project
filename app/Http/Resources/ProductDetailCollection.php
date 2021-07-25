@@ -51,10 +51,11 @@ class ProductDetailCollection extends ResourceCollection
                 ],
                 'selers'=>$this->getSellers($product),
                 'brand' => [
-                    'name' => $element != null ? $element->name : null,
-                    'logo' => $element != null ? api_asset($element->logo) : null,
+                    'name' => $element != null ? $element->brand->getTranslation('name'),
+                    'slug' => $element != null ? $element->brand->slug : null,
+                    'logo' => $element != null ? api_asset($element->brand->logo) : null,
                     'links' => [
-                        'products' => $element != null ? route('api.products.brand', $element->brand_id) : null
+                        'products' => route('api.products.brand', $element->brand->id)
                     ]
                 ],
                 'photos' => $this->convertPhotos(explode(',', $element->photos)),
