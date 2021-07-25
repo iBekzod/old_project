@@ -240,7 +240,7 @@
                                         <div class="col-lg-8">
                                             <select class="form-control aiz-selectpicker" data-live-search="true"
                                                     data-selected-text-format="count" name="selected_variations[]" id="selected_variations" multiple>
-                                                @foreach (\App\Attribute::whereIn('id', $characteristic_attributes)->get() as $attribute)
+                                                @foreach (\App\Attribute::where('combination', true)->whereIn('id', $characteristic_attributes)->get() as $attribute)
                                                     <option value="{{ $attribute->id }}" data-id="{{ $attribute->id }}"
                                                         @if(is_array($variation_attributes) && in_array($attribute->id, $variation_attributes))  selected @endif
                                                         >{{ $attribute->getTranslation('name', $lang) }}</option>
