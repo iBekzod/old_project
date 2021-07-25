@@ -353,6 +353,7 @@ class ProductDetailCollection extends ResourceCollection
     }
 
     protected function calculateShippingCost($product){
+        return 20000;
         if(auth()){
             $user=User::where('id',60)->first();
             $address =$user->addresses->first(); //Address::where('id', 4)->first(); //
