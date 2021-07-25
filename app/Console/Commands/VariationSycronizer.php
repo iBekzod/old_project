@@ -106,14 +106,13 @@ class VariationSycronizer extends Command
         //     }
         // }
         // $this->info('Successfully generated translations');
-
         //Clean Variations
         $variations=Variation::withTrashed()->get();
         foreach($variations as $variation){
-            $variation->forceDelete();
             $variation->variation_translations()->delete();
+            $variation->forceDelete();
         }
-
+        
         $this->info('Successfully cleaned');
     }
 }
