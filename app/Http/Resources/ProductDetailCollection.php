@@ -51,7 +51,7 @@ class ProductDetailCollection extends ResourceCollection
                 ],
                 'selers'=>$this->getSellers($product),
                 'brand' => [
-                    'name' => $element != null ? $element->brand->getTranslation('name'),
+                    'name' => $element != null ? $element->brand->getTranslation('name'):null,
                     'slug' => $element != null ? $element->brand->slug : null,
                     'logo' => $element != null ? api_asset($element->brand->logo) : null,
                     'links' => [
