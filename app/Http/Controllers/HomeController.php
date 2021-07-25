@@ -79,60 +79,13 @@ class HomeController extends Controller
             $user->password = Hash::make($request->password);
 
 
-            $countries=Country::where('status', 1)->first();
+            $countries=Country::where('id',234)->first();
             $regions=City::where('type', 'region')->get();
-            //  dd($regions);
+            //   dd($regions);
             $cities=City::where('type', 'district')->orWhere('type', 'city')->get();
 
 
-             if($countries->id){
-                $country_id=$countries->id;
-                // dd($country_id);
-                $region_id = City::where('country_id', $country_id)->pluck('id');
-                //  dd($region_id);
-                 $district_id =City::whereIn('parent_id', $region_id)->pluck('name');
-                //  dd($district_id);
-                //  $home=$regions->whereIn('category_id', $district_id);
-                //  dd($home);
-                // dd($district_id);
-                 if ($region_id) {
-                            $region_ids = City::whereIn('parent_id', $region_id)->pluck('name');
-                            dd($region_ids);
-
-                  }
-
-             }
-
-
-            //  if($countries->id){
-            //     $country_id=$countries->id;
-            //     $region_id = City::where('country_id', $country_id)->pluck('name');
-            //     //  dd($region_id);
-            //     $district_id =City::whereIn('parent_id', $region_id)->pluck('name');
-            //      dd($district_id);
-            //     if ($region_id) {
-            //                 $region_ids = City::whereIn('parent_id', $region_id)->pluck('id');
-            //                 dd($region_ids);
-
-            //  }
-
-
-            // if ( category_id != null ) {
-            //     $category_id = $request->category_id;
-            //     $sub_category_ids = Category::where('parent_id', $category_id)->pluck('id');
-            //     $sub_sub_category_ids = Category::whereIn('parent_id', $sub_category_ids)->pluck('id');
-            //     $elements = $elements->whereIn('category_id', $sub_sub_category_ids);
-            //     if ($request->has('sub_category_id') && $request->sub_category_id != null && $request->sub_category_id != 0) {
-            //         $sub_category_id = $request->sub_category_id;
-            //         $sub_sub_category_ids = Category::whereIn('parent_id', $sub_category_ids)->pluck('id');
-            //         $elements = $elements->whereIn('category_id', $sub_sub_category_ids);
-            //         if ($request->has('sub_sub_category_id') && $request->sub_sub_category_id != null && $request->sub_sub_category_id != 0) {
-            //             $sub_sub_category_id = $request->sub_sub_category_id;
-            //             $elements = $elements->where('category_id', $sub_sub_category_id);
-            //         }
-            //     }
-            // }
-
+           
 
             // $user->save();
             if ($user->save()) {
