@@ -81,8 +81,10 @@ class ProductSyncronizer extends Command
         //Clean Products
         $products=Product::withTrashed()->get();
         foreach($products as $product){
-            $product->forceDelete();
+            $product->reviews()->delete();
+            $product->wishlists()->delete();
             $product->product_translations()->delete();
+            $product->forceDelete();
         }
 
         $this->info('Successfully cleaned');

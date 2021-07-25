@@ -10,10 +10,15 @@ class City extends Model
     protected $fillable = [
         'country_id', 'parent_id', 'distance', 'name', 'type'
     ];
-    
+
     public function country()
     {
         return $this->belongsTo(Country::class);
+    }
+
+    public function children()
+    {
+        return $this->hasMany(City::class, 'parent_id');
     }
 
     public function parent()

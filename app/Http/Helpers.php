@@ -1,5 +1,6 @@
 <?php
 
+use App\Address;
 use App\Attribute;
 use App\Currency;
 use App\BusinessSetting;
@@ -15,6 +16,7 @@ use App\OtpConfiguration;
 use App\Upload;
 use App\Translation;
 use App\City;
+use App\Delivery;
 use App\Element;
 use App\Language;
 use App\Utility\TranslationUtility;
@@ -297,13 +299,33 @@ if (!function_exists('searchItemByTranslation')) {
         return $results->pluck($table.'_id');
     }
 }
-if (!function_exists('getPublishedProducts')) {
-    function getPublishedProducts($type = 'product', $product_conditions = [], $variation_conditions = [], $element_conditions = [], $is_random=true)
+if (!function_exists('filterPublishedProducts')) {
+    function filterPublishedProducts($products)
     {
         $published_condition=[['qty', '>', 0], ['is_accepted', 1], ['published', 1], ['variation_id', '<>', null], ['element_id', '<>', null], ['deleted_at', '=', null]];
         $element_conditions['where'][] = ['is_accepted', 1];
         $element_conditions['where'][] = ['published', 1];
-        $products = Product::where($published_condition);
+        $products = $products->where($published_condition);
+        $products = filterProductByRelation($products, 'element', $element_conditions);
+        return $products;
+    }
+}
+if (!function_exists('hasSuchAttribute')) {
+    function hasSuchAttribute($product, $attribute_id)
+    {
+        if(isset($attribute_id) && isset($product->variation->characteristics)){
+            $attribute_ids=explode(',', $product->variation->characteristics);
+            if(in_array($attribute_id, $attribute_ids)){
+                return true;
+            }
+        }
+        return false;
+    }
+}
+if (!function_exists('getPublishedProducts')) {
+    function getPublishedProducts($type = 'product', $product_conditions = [], $variation_conditions = [], $element_conditions = [], $is_random=true)
+    {
+        $products = filterPublishedProducts(Product::where('deleted_at', '=', null));
         $products = filterProductByRelation($products, 'product', $product_conditions);
         $products = filterProductByRelation($products, 'variation', $variation_conditions);
         $products = filterProductByRelation($products, 'element', $element_conditions);
@@ -1255,4 +1277,58 @@ if (!function_exists('getAttributeFormat')) {
         }
         return $collected_characteristics;
     }
+}
+
+
+
+ function calculateDeliveryCost($product, $address_id){
+    $seller=$product->user;
+    $seller_address=$seller->addresses->first();
+    $customer_address=Address::where('id', $address_id)->first();
+    return calculateAllDeliveryCost($seller_address, $customer_address, calculateWeightCost($product, $seller));
+}
+
+ function calculateWeightCost($product){
+    // return 5000;
+    $weight_setting=\App\SellerSetting::where('type', 'kg_weight_price')->where('user_id', $product->user_id)->first();
+    $weight_price=convertCurrency((double)$weight_setting->value, (int)$weight_setting->relation_id);
+    return $weight_price*((double)$product->weight);
+}
+
+ function calculateAllDeliveryCost($seller_address, $client_address, $weight_cost=0){
+    //region -> Viloyat
+    //city -> Shahar yoki tuman
+    $all_distance=-1;
+    $delivery_cost=0;
+    if($seller_address->region->id==$client_address->region->id){
+        $all_distance=$seller_address->city->distance+$client_address->city->distance;
+    }else{
+        $distance_between_regions=DB::table('delivery')->where('seller_region_id', $seller_address->region->id)->where('client_region_id', $client_address->region->id)->first();
+        if($distance_between_regions==null){
+            $distance_between_regions=DB::table('delivery')->where('seller_region_id', $client_address->region->id)->where('client_region_id', $seller_address->region->id)->first();
+        }
+        if($distance_between_regions){
+            $all_distance=$seller_address->city->distance + $distance_between_regions->distance + $client_address->city->distance;
+        }else{
+            $all_distance=-2;
+        }
+    }
+    if($all_distance>0){
+        $delivery_metrics=Delivery::orderBy('distance', 'asc')->where('distance', '>', $all_distance)->first();
+        $delivery_cost= $delivery_metrics->price*$all_distance+$weight_cost;
+        return $delivery_cost;
+    }
+    return $all_distance;
+}
+function calculateShipping($request){
+    $product=Product::where('id', $request['product_id'])->first();
+    if($request['type']=='precise' && $request['address_id']!=null){
+        return calculateDeliveryCost($product, $request['address_id']);
+    }else{
+        $user_region=City::where('id', $request['region_id'])->where('type', 'region');
+        $address=Address::firstOrNew(['region_id'=>$user_region->id]);
+        $address->save();
+        return calculateDeliveryCost($product, $address->id);;
+    }
+    return 0;
 }
