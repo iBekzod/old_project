@@ -6,6 +6,8 @@ namespace App\Http\Controllers\Api;
 // use App\Http\Resources\CategoryCollection;
 // use App\Http\Resources\FlashDealProductCollection;
 // use App\Http\Resources\FreeShippingProductsCollection;
+
+use App\Address;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductDetailCollection;
 use App\Http\Resources\SearchProductCollection;
@@ -15,6 +17,7 @@ use App\Attribute;
 use App\Brand;
 use App\Category;
 use App\Characteristic;
+use App\City;
 use App\FlashDeal;
 use App\FlashDealProduct;
 use App\Product;
@@ -33,6 +36,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Utility\CategoryUtility;
 use App\Variation;
+use Illuminate\Support\Facades\DB;
 
 // use Illuminate\Http\Resources\Json\ResourceCollection;
 // use phpDocumentor\Reflection\Types\Integer;
@@ -804,19 +808,32 @@ class ProductController extends Controller
         ]);
     }
 
-    public function calculateDeliveryCost(Request $request){
-        $user=User::findOrFail($request->user_id);
-        $product=Product::findOrFail($request->product_id)->user();
-        $seller=$product->user();
-        $user_address=$user->addresses()->where('set_default', 1)->first();
-        $seller_address=$seller->addresses()->where('set_default', 1)->first();
-        $distance=$this->calculateDistance($user_address->latitude,$user_address->longitude,$seller_address->latitude,$seller_address->longitude );
-        $delivery_metrics=Delivery::orderBy('distance', 'asc')->where('distance', '>', $distance)->first();
-        $weight_price=\App\SellerSetting::where('type', 'kg_weight_price')->where('user_id', $seller->id)->first()->value;
-        $delivery_cost= $delivery_metrics->price*$distance+$weight_price*$product->weight;
-        return $delivery_cost;
-    }
-    public function calculateDistance($from_lat, $from_long, $to_lat, $to_long){
-        return 10;
+    // public function calculateDeliveryCost(Request $request){
+    //     $user=User::findOrFail($request->user_id);
+    //     $product=Product::findOrFail($request->product_id)->user();
+    //     $seller=$product->user();
+    //     $user_address=$user->addresses()->where('set_default', 1)->first();
+    //     $seller_address=$seller->addresses()->where('set_default', 1)->first();
+    //     $distance=$this->calculateDistance($user_address->latitude,$user_address->longitude,$seller_address->latitude,$seller_address->longitude );
+    //     $delivery_metrics=Delivery::orderBy('distance', 'asc')->where('distance', '>', $distance)->first();
+    //     $weight_price=\App\SellerSetting::where('type', 'kg_weight_price')->where('user_id', $seller->id)->first()->value;
+    //     $delivery_cost= $delivery_metrics->price*$distance+$weight_price*$product->weight;
+    //     return $delivery_cost;
+    // }
+    // public function calculateDistance($from_lat, $from_long, $to_lat, $to_long){
+    //     return 10;
+    // }
+
+    function calculateShipping(Request $request){
+        $product=Product::find($request->product_id);
+        if($request->has('type') && $request->type='precise' && $request->has('address_id')){
+            return calculateDeliveryCost($product, $request->address_id);
+        }else{
+            $user_region=City::where('id', $request->region_id)->where('type', 'region');
+            $address=Address::firstOrNew(['region_id'=>$user_region->id]);
+            $address->save();
+            return calculateDeliveryCost($product, $address->id);;
+        }
+        return 0;
     }
 }
