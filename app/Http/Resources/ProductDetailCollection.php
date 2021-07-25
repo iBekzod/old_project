@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Address;
 use App\Attribute as AppAttribute;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use App\Review;
@@ -10,9 +11,14 @@ use App\Branch;
 use App\Characteristic;
 use App\Element;
 use App\FlashDealProduct;
+use App\Country;
+use App\Delivery;
 use App\Product;
+use App\User;
 use App\Variation;
 use Attribute as GlobalAttribute;
+use Illuminate\Support\Facades\DB;
+use Auth;
 
 class ProductDetailCollection extends ResourceCollection
 {
@@ -25,8 +31,10 @@ class ProductDetailCollection extends ResourceCollection
         $variation=Variation::withTrashed()->find($product->variation_id);
         $products=getPublishedProducts('product', ['where'=>[['variation_id', $variation->id]]], [], []);
         $element=Element::withTrashed()->find($variation->element_id);
+        $seller_products=getPublishedProducts('product', ['where'=>[['user_id', $product->user_id],['element_id', $product->element_id]]], [], [])->get();
         try{
             $data = [
+                // 'special_shipping_cost'=>$this->calculateDeliveryCost($product, $product->user, auth()->user()),
                 'id' => (integer) $product->id,
                 'name' => $variation->getTranslation('name'),
                 'added_by' => $product->added_by,
@@ -77,7 +85,8 @@ class ProductDetailCollection extends ResourceCollection
                 'reviews' => new ReviewCollection(Review::where('product_id', $product->id)->latest()->get()),
                 'price_lower' => (double) convertCurrency($products->min('price'), $product->currency_id),
                 'price_higher' => (double) convertCurrency($products->max('price'), $product->currency_id),
-                'choice_options' => $this->convertToChoiceOptions(json_decode($element->variations)),
+                // 'choice_options' => $this->convertToChoiceOptions(json_decode($product->variation, true), $product),
+                'choice_options' => $this->convertToChoiceOptions($seller_products),
                 'short_characteristics' => $this->convertToShortCharacteristics(json_decode($element->characteristics)),
                 'colors' => new ProductColorCollection(json_decode($element->variation_colors)),
                 'shipping_type' => $product->delivery_type,
@@ -86,7 +95,7 @@ class ProductDetailCollection extends ResourceCollection
 
                 'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??[],
                 'category'=>[
-                    'name' => $element->category->name,
+                    'name' => $element->category->getTranslation('name'),
                     'banner' => api_asset($element->category->banner),
                     'icon' => $element->category->icon,
                     'links' => [
@@ -124,8 +133,11 @@ class ProductDetailCollection extends ResourceCollection
         if ($attributes) {
             foreach($attributes as $attribute_id=>$value_ids){
                 $characteristics=Characteristic::withTrashed()->whereIn('id',$value_ids)->get();
-                $attribute=Attribute::withTrashed()->find($attribute_id);
-                $branch=Branch::find($attribute->branch_id);
+                $attribute=Attribute::withTrashed()->where('id',$attribute_id)->first();
+                $branch=Branch::where('id',$attribute->branch_id)->first();
+                if(!(isset($attribute) && isset($branch))){
+                    continue;
+                }
                 $items=array();
                 foreach($characteristics as $characteristic){
                     $items[]=[
@@ -144,6 +156,7 @@ class ProductDetailCollection extends ResourceCollection
                     ];
                 }
             }
+
             foreach($result as $key => $value){
                 $newarray[$value['id']]['id'] = $value['id'];
                 $newarray[$value['id']]['title'] = $value['title'];
@@ -160,7 +173,10 @@ class ProductDetailCollection extends ResourceCollection
             foreach($attributes as $attribute_id=>$value_ids){
                 if( is_array($value_ids) && count($value_ids)>0){
                     $characteristics=Characteristic::withTrashed()->whereIn('id',$value_ids)->get();
-                    $attribute=Attribute::withTrashed()->find($attribute_id);
+                    $attribute=Attribute::withTrashed()->where('id',$attribute_id)->first();
+                    if(!(isset($attribute))){
+                        continue;
+                    }
                     $items=array();
                     foreach($characteristics as $characteristic){
                         $items[]=[
@@ -182,32 +198,81 @@ class ProductDetailCollection extends ResourceCollection
         return $collected_characteristics;
     }
 
-    protected function convertToChoiceOptions($attributes){
-        $collected_characteristics=[];
-        if ($attributes) {
-            foreach($attributes as $attribute_id=>$value_ids){
-                if( is_array($value_ids) && count($value_ids)>0){
-                    $characteristics=Characteristic::withTrashed()->whereIn('id',$value_ids)->get();
-                    $attribute=Attribute::withTrashed()->find($attribute_id);
-                    $items=array();
-                    foreach($characteristics as $characteristic){
-                        $items[]=[
-                            'id'=>$characteristic->id,
-                            'name'=>$characteristic->getTranslation('name')
-                        ];
-                    }
-                    if( is_array($items) && count($items)>0){
-                        $collected_characteristics[]=[
-                            'id'=>$attribute->id,
-                            'attribute'=>$attribute->getTranslation('name'),
-                            'values'=>$items
-                        ];
+    protected function convertToChoiceOptions($products){
+        $color_ids=[];
+        $characteristic_ids=[];
+        if(count($products)>0){
+            foreach($products as $product){
+                if($product->variation->characteristics)$characteristic_ids=array_unique(array_merge($characteristic_ids, explode(',', $product->variation->characteristics)));
+                if($product->color_id)$color_ids=array_unique(array_merge($color_ids, $product->color_id));
+            }
+            $attributes=Characteristic::withTrashed()->whereIn('id', $characteristic_ids)->get()->groupBy('attribute_id');
+            $collected_characteristics=[];
+            // dd($characteristic_ids);
+            if ($attributes) {
+                foreach($attributes as $attribute_id=>$models){
+                    if( is_array($models) && count($models)>0){
+                        $characteristics=$models;
+                        $attribute=Attribute::withTrashed()->where('id',$attribute_id)->first();
+                        if(!(isset($attribute))){
+                            continue;
+                        }
+                        $items=array();
+                        foreach($characteristics as $characteristic){
+                            $items[]=[
+                                'id'=>$characteristic->id,
+                                'is_active'=>hasSuchAttribute($product, $characteristic->id),
+                                'name'=>$characteristic->getTranslation('name')
+                            ];
+                        }
+                        // dd($items);
+                        if( is_array($items) && count($items)>0){
+                            $collected_characteristics[]=[
+                                'id'=>$attribute->id,
+                                'attribute'=>$attribute->getTranslation('name'),
+                                'values'=>$items
+                            ];
+                        }
                     }
                 }
             }
         }
+
         return $collected_characteristics;
     }
+    // protected function convertToChoiceOptions($attributes, $product){
+    //     $collected_characteristics=[];
+    //     // dd($attributes);
+    //     if ($attributes) {
+    //         foreach($attributes as $attribute_id=>$value_ids){
+
+    //             if( is_array($value_ids) && count($value_ids)>0){
+    //                 $characteristics=Characteristic::withTrashed()->whereIn('id', $value_ids)->get();
+    //                 $attribute=Attribute::withTrashed()->where('id',$attribute_id)->first();
+    //                 if(!(isset($attribute))){
+    //                     continue;
+    //                 }
+    //                 $items=array();
+    //                 foreach($characteristics as $characteristic){
+    //                     $items[]=[
+    //                         'id'=>$characteristic->id,
+    //                         'is_active'=>hasSuchAttribute($product, $characteristic->id),
+    //                         'name'=>$characteristic->getTranslation('name')
+    //                     ];
+    //                 }
+    //                 // dd($items);
+    //                 if( is_array($items) && count($items)>0){
+    //                     $collected_characteristics[]=[
+    //                         'id'=>$attribute->id,
+    //                         'attribute'=>$attribute->getTranslation('name'),
+    //                         'values'=>$items
+    //                     ];
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return $collected_characteristics;
+    // }
 
     protected function convertPhotos($data){
         $result = array();
@@ -287,8 +352,17 @@ class ProductDetailCollection extends ResourceCollection
         return $sellers;
     }
 
-
     protected function calculateShippingCost($product){
+        if(auth()){
+            $user=User::where('id',60)->first();
+            $address =$user->addresses->first(); //Address::where('id', 4)->first(); //
+            return [
+                'from'=>$address->city->name.", " .$address->region->name,
+                'to'=>$address->city->name.", " .$address->region->name,
+                'cost'=>calculateShipping(['product_id'=>$product->id, 'type'=>'precise', 'address_id'=>$address->id])];
+        }else{
+            return calculateShipping(['product_id'=>$product->id, 'region_id'=>57]);
+        }
         return 0;
     }
 }

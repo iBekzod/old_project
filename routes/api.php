@@ -158,6 +158,7 @@ Route::prefix('v1')->group(function () {
     Route::get('user/shipping/address/{id}', 'Api\AddressController@addresses')->middleware('auth:api');
     Route::post('user/shipping/create', 'Api\AddressController@createShippingAddress')->middleware('auth:api');
     Route::get('user/shipping/delete/{id}', 'Api\AddressController@deleteShippingAddress')->middleware('auth:api');
+    Route::get('user/shipping/cost/{product_id}/{region_id}', 'Api\ProductController@calculateShipping')->middleware('auth:api');
 
     Route::post('coupon/apply', 'Api\CouponController@apply')->middleware('auth:api');
 

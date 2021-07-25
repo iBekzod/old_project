@@ -14,12 +14,12 @@ class Address extends Model
 
     public function city()
     {
-        return $this->belongsTo(City::class, 'city_id');
+        return $this->belongsTo(City::class, 'city_id')->whereIn('type', ['district', 'city']);
     }
 
     public function region()
     {
-        return $this->belongsTo(City::class, 'region_id');
+        return $this->belongsTo(City::class, 'region_id')->whereIn('type', ['region']);
     }
 
     public function user()
