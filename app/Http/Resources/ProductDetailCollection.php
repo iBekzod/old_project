@@ -2,8 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Address;
-use App\Attribute as AppAttribute;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use App\Review;
 use App\Attribute;
@@ -11,14 +9,9 @@ use App\Branch;
 use App\Characteristic;
 use App\Element;
 use App\FlashDealProduct;
-use App\Country;
-use App\Delivery;
 use App\Product;
 use App\User;
 use App\Variation;
-use Attribute as GlobalAttribute;
-use Illuminate\Support\Facades\DB;
-use Auth;
 
 class ProductDetailCollection extends ResourceCollection
 {
