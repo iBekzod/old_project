@@ -354,7 +354,8 @@ class ProductDetailCollection extends ResourceCollection
             return [
                 'from'=>$address->city->name.", " .$address->region->name,
                 'to'=>$address->city->name.", " .$address->region->name,
-                'cost'=>calculateShipping(['product_id'=>$product->id, 'type'=>'precise', 'address_id'=>$address->id])];
+                'cost'=>calculateShipping(['product_id'=>$product->id, 'type'=>'precise', 'address_id'=>$address->id])
+            ];
         }else{
             return calculateShipping(['product_id'=>$product->id, 'region_id'=>57]);
         }
