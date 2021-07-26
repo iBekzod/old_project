@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Attribute extends Model
 {
     protected $table="attributes";
-    protected $fillable = [
-        'id', 'branch_id', 'name', 'combination'
-    ];
+    // protected $fillable = [
+    //     'id', 'branch_id', 'name', 'combination'
+    // ];
     use SoftDeletes;
     public function getTranslation($field = '', $lang = false)
     {

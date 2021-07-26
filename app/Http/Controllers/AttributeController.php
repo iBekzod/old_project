@@ -96,11 +96,12 @@ class AttributeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // dd($request->all());
-        $attribute = Attribute::withTrashed()->firstOrNew([
-            'id'=>$id,
-            'name'=>$request->name
-        ]);
+        $attribute = Attribute::where('id',$id)->first();
+        $attribute->name=$request->name;
+        // $attribute = Attribute::withTrashed()->firstOrNew([
+        //     'id'=>$id,
+        //     'name'=>$request->name
+        // ]);
         // if($attribute->name == $request->name){
         //     flash(translate('Attribute has same name'))->success();
         //     return back();
