@@ -1328,18 +1328,18 @@ if (!function_exists('getAttributeFormat')) {
     }
     return $all_distance;
 }
-function calculateShipping($request){
-    $product=Product::where('id', $request['product_id'])->first();
-    if($request['type']=='precise' && $request['address_id']!=null){
-        return calculateDeliveryCost($product, $request['address_id']);
-    }else{
-        $user_region=City::where('id', $request['region_id'])->where('type', 'region');
-        $address=Address::firstOrNew(['region_id'=>$user_region->id]);
-        $address->save();
-        return calculateDeliveryCost($product, $address->id);;
-    }
-    return 0;
-}
+// function calculateShipping($request){
+//     $product=Product::where('id', $request['product_id'])->first();
+//     if($request['type']=='precise' && $request['address_id']!=null){
+//         return calculateDeliveryCost($product, $request['address_id']);
+//     }else{
+//         $user_region=City::where('id', $request['region_id'])->where('type', 'region');
+//         $address=Address::firstOrNew(['region_id'=>$user_region->id]);
+//         $address->save();
+//         return calculateDeliveryCost($product, $address->id);
+//     }
+//     return 0;
+// }
 
 function getUserAddress(){
     $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>getDefaultCity(), 'region_id'=>getDefaultRegion()]);

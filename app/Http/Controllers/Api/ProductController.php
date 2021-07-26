@@ -824,16 +824,16 @@ class ProductController extends Controller
     //     return 10;
     // }
 
-    function calculateShipping(Request $request){
-        $product=Product::find($request->product_id);
-        if($request->has('type') && $request->type='precise' && $request->has('address_id')){
-            return calculateDeliveryCost($product, $request->address_id);
-        }else{
-            $user_region=City::where('id', $request->region_id)->where('type', 'region');
-            $address=Address::firstOrNew(['region_id'=>$user_region->id]);
-            $address->save();
-            return calculateDeliveryCost($product, $address->id);;
-        }
-        return 0;
-    }
+    // function calculateShipping(Request $request){
+    //     $product=Product::find($request->product_id);
+    //     if($request->has('type') && $request->type='precise' && $request->has('address_id')){
+    //         return calculateDeliveryCost($product, $request->address_id);
+    //     }else{
+    //         $user_region=City::where('id', $request->region_id)->where('type', 'region');
+    //         $address=Address::firstOrNew(['region_id'=>$user_region->id]);
+    //         $address->save();
+    //         return calculateDeliveryCost($product, $address->id);;
+    //     }
+    //     return 0;
+    // }
 }

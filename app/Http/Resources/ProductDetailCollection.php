@@ -347,11 +347,13 @@ class ProductDetailCollection extends ResourceCollection
     }
 
     protected function calculateShippingCost($product){
+        // dd(request()->ip());
         if($product->delivery_type=='free'){
             return 0;
         }else {
             $address=getUserAddress();
-            return calculateShipping(['product_id'=>$product->id, 'type'=>'precise', 'address_id'=>$address->id]);
+            return calculateDeliveryCost($product, $address->id);
+            // return calculateShipping(['product_id'=>$product->id, 'type'=>'precise', 'address_id'=>$address->id]);
         }
 
     }
