@@ -104,7 +104,7 @@ class ProductDetailCollection extends ResourceCollection
             ];
         } catch (\Exception $th) {
             // return null;
-            return ($th->getMessage());
+            return ($th->getTrace());
         }
         return $data;
     }
@@ -347,18 +347,12 @@ class ProductDetailCollection extends ResourceCollection
     }
 
     protected function calculateShippingCost($product){
-        return 20000;
-        if(auth()){
-            $user=User::where('id',60)->first();
-            $address =$user->addresses->first(); //Address::where('id', 4)->first(); //
-            return [
-                'from'=>$address->city->name.", " .$address->region->name,
-                'to'=>$address->city->name.", " .$address->region->name,
-                'cost'=>calculateShipping(['product_id'=>$product->id, 'type'=>'precise', 'address_id'=>$address->id])
-            ];
-        }else{
-            return calculateShipping(['product_id'=>$product->id, 'region_id'=>57]);
+        if($product->delivery_type=='free'){
+            return 0;
+        }else {
+            $address=getUserAddress();
+            return calculateShipping(['product_id'=>$product->id, 'type'=>'precise', 'address_id'=>$address->id]);
         }
-        return 0;
+
     }
 }

@@ -25,6 +25,9 @@ use App\Utility\MimoUtility;
 use Twilio\Rest\Client;
 use App\Utility\sms\EskizSmsClient;
 use App\Notifications\EmailVerificationNotification;
+use App\SellerSetting;
+use App\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 //highlights the selected navigation on admin panel
@@ -1289,9 +1292,13 @@ if (!function_exists('getAttributeFormat')) {
 }
 
  function calculateWeightCost($product){
-    // return 5000;
-    $weight_setting=\App\SellerSetting::where('type', 'kg_weight_price')->where('user_id', $product->user_id)->first();
-    $weight_price=convertCurrency((double)$weight_setting->value, (int)$weight_setting->relation_id);
+    $weight_price=0;
+    if($weight_setting=SellerSetting::where('type', 'kg_weight_price')->where('user_id', $product->user_id)->first()){
+        $weight_price=convertCurrency((double)$weight_setting->value, (int)$weight_setting->relation_id);
+    }else if($weight_setting=SellerSetting::where('type', 'kg_weight_price')->first()){
+        $weight_price=convertCurrency((double)$weight_setting->value, (int)$weight_setting->relation_id);
+    }
+
     return $weight_price*((double)$product->weight);
 }
 
@@ -1307,6 +1314,7 @@ if (!function_exists('getAttributeFormat')) {
         if($distance_between_regions==null){
             $distance_between_regions=DB::table('delivery')->where('seller_region_id', $client_address->region->id)->where('client_region_id', $seller_address->region->id)->first();
         }
+        // dd($client_address);
         if($distance_between_regions){
             $all_distance=$seller_address->city->distance + $distance_between_regions->distance + $client_address->city->distance;
         }else{
@@ -1331,4 +1339,47 @@ function calculateShipping($request){
         return calculateDeliveryCost($product, $address->id);;
     }
     return 0;
+}
+
+function getUserAddress(){
+    $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>getDefaultCity(), 'region_id'=>getDefaultRegion()]);
+    if(Auth::check()){
+        $user=User::where('id',auth()->id())->first();
+        if(count($user->addresses)==1){
+            $address=$user->addresses->first();
+        }else if(count($user->addresses)>1){
+            $address=$user->addresses->where('set_default', 1)->first();
+        }else if($user_setting=SellerSetting::where('type', 'default_address')->where('user_id', auth()->id())->first()){
+            $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>$user_setting->value, 'region_id'=>$user_setting->relation_id]);
+        }else if($user_setting=SellerSetting::where('type', 'default_address')->first()){
+            $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>$user_setting->value, 'region_id'=>$user_setting->relation_id]);
+        }
+    }
+    $address->save();
+    return $address;
+}
+
+function getCompanyAddress(){
+    $user=User::where('user_type', 'admin')->first();
+    if(count($user->addresses)==1){
+        $address=$user->addresses->first();
+    }else if(count($user->addresses)>1){
+        $address=$user->addresses->where('set_default', 1)->first();
+    }else if($user_setting=SellerSetting::where('type', 'default_address')->where('user_id', auth()->id())->first()){
+        $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>$user_setting->value, 'region_id'=>$user_setting->relation_id]);
+    }else if($user_setting=SellerSetting::where('type', 'default_address')->first()){
+        $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>$user_setting->value, 'region_id'=>$user_setting->relation_id]);
+    }else{
+        $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>getDefaultCity(), 'region_id'=>getDefaultRegion()]);
+    }
+    $address->save();
+    return $address;
+}
+
+function getDefaultCity(){
+    return 57;
+}
+
+function getDefaultRegion(){
+    return 281;
 }
