@@ -347,6 +347,7 @@ class ProductDetailCollection extends ResourceCollection
     }
 
     protected function calculateShippingCost($product){
+        return 20000;
         // dd(request()->ip());
         if($product->delivery_type=='free'){
             return 0;
