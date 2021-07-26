@@ -27,7 +27,7 @@ class ProductDetailCollection extends ResourceCollection
         $seller_products=getPublishedProducts('product', ['where'=>[['user_id', $product->user_id],['element_id', $product->element_id]]], [], [])->get();
         try{
             $data = [
-                // 'special_shipping_cost'=>$this->calculateDeliveryCost($product, $product->user, auth()->user()),
+                'express_shipping_cost'=>$this->calculateShippingCost($product, true),
                 'id' => (integer) $product->id,
                 'name' => $variation->getTranslation('name'),
                 'added_by' => $product->added_by,
@@ -103,6 +103,7 @@ class ProductDetailCollection extends ResourceCollection
                 ],
             ];
         } catch (\Exception $th) {
+            // dd($th->getMessage());
             // return null;
             return ($th->getTrace());
         }
@@ -303,12 +304,6 @@ class ProductDetailCollection extends ResourceCollection
 
 
     protected function getSellers($item){
-        // $variation=Variation::findOrFail($item->variation_id);
-        // if($variation_ids=Variation::where('color_id', $variation->color_id)->where('characteristics', $variation->characteristics)->where('element_id', $item->element_id)->pluck('id')){
-        //     $products=Product::whereIn('variation_id', $variation_ids)->get();
-        // }else{
-        //     $products=Product::where('variation_id', $item->variation_id)->get();
-        // }
         $products=Product::where('variation_id', $item->variation_id)->get();
         $sellers=array();
         foreach($products as $product){
@@ -346,14 +341,14 @@ class ProductDetailCollection extends ResourceCollection
         return $sellers;
     }
 
-    protected function calculateShippingCost($product){
-        return 20000;
+    protected function calculateShippingCost($product, $is_express=false){
+        // return 20000;
         // dd(request()->ip());
         if($product->delivery_type=='free'){
             return 0;
         }else {
             $address=getUserAddress();
-            return calculateDeliveryCost($product, $address->id);
+            return calculateDeliveryCost($product, $address->id, $is_express);
             // return calculateShipping(['product_id'=>$product->id, 'type'=>'precise', 'address_id'=>$address->id]);
         }
 
