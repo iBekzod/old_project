@@ -19,12 +19,18 @@ class AttributeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         // CoreComponentRepository::instantiateShopRepository();
-        $attributes = Attribute::orderBy('created_at', 'desc')->paginate(15);
+        $attributes = Attribute::orderBy('created_at', 'desc');
         $branches = Branch::all();
-        return view('backend.product.attribute.index', compact('attributes', 'branches'));
+        $sort_search = null;
+        if ($request->has('search') && $request->search != null) {
+            $attributes = $attributes->where('name', 'like', '%' . $request->search . '%');
+            $sort_search = $request->search;
+        }
+        $attributes = $attributes->paginate(15);
+        return view('backend.product.attribute.index', compact('attributes', 'sort_search', 'branches'));
     }
 
     /**

@@ -115,17 +115,29 @@ class BranchController extends Controller
         return redirect()->route('branches.index');
     }
 
-    public function arribute_index($id){
+    public function arribute_index($id, Request $request){
         if($id){
             $branch = Branch::findOrFail($id);
             $branches = Branch::all();
-            $attributes=$branch->attributes()->paginate(15);
-            return view('backend.product.attribute.index', compact('attributes', 'branch', 'branches'));
+            $attributes=$branch->attributes();
+            $sort_search = null;
+            if ($request->has('search') && $request->search != null) {
+                $attributes = $attributes->where('name', 'like', '%' . $request->search . '%');
+                $sort_search = $request->search;
+            }
+            $attributes = $attributes->paginate(15);
+
+            return view('backend.product.attribute.index', compact('attributes', 'branch', 'branches', 'sort_search'));
         }else{
             $branch = null;
             $branches = Branch::all();
-            $attributes=Attribute::where('branch_id', '=', null)->paginate(15);
-            return view('backend.product.attribute.index', compact('attributes', 'branch', 'branches'));
+            $attributes=Attribute::where('branch_id', '=', null);
+            if ($request->has('search') && $request->search != null) {
+                $attributes = $attributes->where('name', 'like', '%' . $request->search . '%');
+                $sort_search = $request->search;
+            }
+            $attributes = $attributes->paginate(15);
+            return view('backend.product.attribute.index', compact('attributes', 'branch', 'branches', 'sort_search'));
 
         }
         flash(translate('Branch has no attributes'))->message();
