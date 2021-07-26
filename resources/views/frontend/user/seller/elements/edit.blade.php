@@ -505,9 +505,9 @@
 @endsection
 @section('script')
     <script type="text/javascript">
-        $('#choice_form').submit(function (event) {
-            event.preventDefault();
-        });
+        // $('#choice_form').submit(function (event) {
+        //     event.preventDefault();
+        // });
         function add_more_customer_choice_option(i, name) {
             $('#customer_choice_options').append('<div class="form-group row"><div class="col-md-3"><input type="hidden" name="choice_no[]" value="' + i + '"><input type="text" class="form-control" name="choice[]" value="' + name + '" placeholder="{{ translate('Choice Title') }}" readonly></div><div class="col-md-8"><input type="text" class="form-control aiz-tag-input" name="choice_options_' + i + '[]" placeholder="{{ translate('Enter choice values') }}" data-on-change="update_sku"></div></div>');
 
