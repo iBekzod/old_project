@@ -79,18 +79,31 @@ class HomeController extends Controller
             $user->password = Hash::make($request->password);
 
 
-            $countries=Country::where('id',234)->first();
-            $regions=City::where('type', 'region')->get();
-            //   dd($regions);
-            $cities=City::where('type', 'district')->orWhere('type', 'city')->get();
+            // $countries=Country::where('id',234)->first();
+            // $regions=City::where('type', 'region')->get();
+            // //   dd($regions);
+            // $cities=City::where('type', 'district')->orWhere('type', 'city')->get();
 
 
-           
+            $country=Country::where('id', 234)->first();
+            dd($country->regions->pluck('name', 'id'));
+            // dd($country->id);
+            $region=$country->regions->first();
+            dd($region->id);
+            dd($region->children->pluck('name', 'id'));
+
+
+
+            $categories = Category::where('level', 0)->get();
+            $sub_categories = Category::where('parent_id', $category_id)->get();
+            $sub_sub_categories = Category::where('parent_id', $sub_category_id)->get();
+
+            // TODO::hamma kereli dalniylay jonatilishi kere
 
             // $user->save();
             if ($user->save()) {
                 auth()->login($user, true);
-                return view('frontend.user.seller.form_second')->with('user_id', $user->id);
+                return view('frontend.user.seller.form_second',compact('user_id','country'));
                 // return 'keldi';
             }
         } else if ($request->method() === 'GET') {

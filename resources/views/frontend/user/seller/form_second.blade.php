@@ -11,10 +11,45 @@
 			<div class="card-body">
 				<form action="{{ route('seller.autoidentification') }}" method="post">
 					@csrf
+                    <div class="row">
+                        <div class="ml-auto col-md-4">
+                            <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
+                                id="category_id" name="category_id" onchange="sort_elements()">
+                                <option value="0" @if($category_id == 0) selected @endif>{{ translate('All categories') }}</option>
+                                @foreach ($categories as $key => $category)
+                                        <option value="{{ $category->id }}" @if ($category->id == $category_id) selected @endif>
+                                            {{ $category->getTranslation('name', $lang) }}
+                                        </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="ml-auto col-md-4">
+                            <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
+                                id="sub_category_id" name="sub_category_id" onchange="sort_elements()">
+                                <option value="0"  @if($sub_category_id == 0) selected @endif>{{ translate('All sub categories') }}</option>
+                                @foreach ($sub_categories as $key => $category)
+                                        <option value="{{ $category->id }}" @if ($category->id == $sub_category_id) selected @endif>
+                                            {{ $category->getTranslation('name', $lang) }}
+                                        </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="ml-auto col-md-4">
+                            <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
+                                id="sub_sub_category_id" name="sub_sub_category_id" onchange="sort_elements()">
+                                <option value="0"  @if($sub_sub_category_id == 0) selected @endif>{{ translate('All sub sub categories') }}</option>
+                                @foreach ($sub_sub_categories as $key => $category)
+                                        <option value="{{ $category->id }}" @if ($category->id == $sub_sub_category_id) selected @endif>
+                                            {{ $category->getTranslation('name', $lang) }}
+                                        </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
 					<div class="row">
 						<div class=" offset-lg-1 col-lg-11 form-horizontal" id="form">
 
-                            
+
 
 							@foreach (json_decode(\App\BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element)
                                 @if($element->type=='text')
