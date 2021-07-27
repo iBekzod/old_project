@@ -258,6 +258,7 @@ class ProductController extends Controller
         } else {
             $user_id = \App\User::where('user_type', 'admin')->first()->id;
         }
+        $user=User::findOrFail($user_id);
         $element = Element::findOrFail($request->element_id);
         if ($request->has('variation')) {
             foreach ($request->variation as $variant) {
@@ -265,14 +266,15 @@ class ProductController extends Controller
                     $product = new Product;
                     $product->element_id=$element->id;
                     $product->is_accepted=true;
-                    if(Auth::user()->user_type == 'seller' && $shop_name=Auth::user()->shop->name){
-                        $product_name = $variation->name . " от " . $shop_name??Auth::user()->name;
+                    
+                    if($user->user_type == 'seller' && $shop_name=$user->shop->name){
+                        $product_name = $variation->name . " от " . $shop_name??$user->name;
                     }else{
-                        $product_name = $variation->name. " от " . Auth::user()->name;
+                        $product_name = $variation->name. " от " . $user->name;
                     }
                     // $product_name = $variation->name . " " . Auth::user()->name??null . " ".$variant["price"];
                     $product->name = $product_name;
-                    $product->added_by = Auth::user()->user_type;
+                    $product->added_by = $user->user_type;
                     $product->user_id = $user_id;
                     $product->slug = SlugService::createSlug(Product::class, 'slug', slugify($product_name));
                     $product->currency_id = (int)$variant["currency"];
@@ -416,8 +418,8 @@ class ProductController extends Controller
                     $product->name = $product_name;
                     $product->added_by = $user->user_type;
                     $product->user_id = $user_id;
-                    if ($product->slug != SlugService::createSlug(Product::class, 'slug', slugify($variant["slug"])))
-                        $product->slug = SlugService::createSlug(Product::class, 'slug', slugify($variant["slug"]));
+                    if ($product->slug != SlugService::createSlug(Product::class, 'slug', slugify($product_name)))
+                        $product->slug = SlugService::createSlug(Product::class, 'slug', slugify($product_name));
                     $product->currency_id = (int)$variant["currency"];
                     $product->price = (float)$variant["price"];
                     $product->discount = (float)$variant["discount"];
