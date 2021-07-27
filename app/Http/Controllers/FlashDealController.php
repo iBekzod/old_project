@@ -162,7 +162,7 @@ class FlashDealController extends Controller
             if(FlashDealTranslation::where('flash_deal_id' , $flash_deal->id)->where('lang' , default_language())->first()){
                 foreach (Language::all() as $language){
                     $flash_deal_translation = FlashDealTranslation::firstOrNew(['lang' => $language->code, 'flash_deal_id' => $flash_deal->id]);
-                    $flash_deal_translation->name = $request->name;
+                    // $flash_deal_translation->name = $request->name;
                     $flash_deal_translation->title = $request->title;
                     $flash_deal_translation->save();
                 }
