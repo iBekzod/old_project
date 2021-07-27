@@ -11,39 +11,38 @@
 			<div class="card-body">
 				<form action="{{ route('seller.autoidentification') }}" method="post">
 					@csrf
-                    <div class="row">
-                        <div class="ml-auto col-md-4">
-                            <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
-                                id="category_id" name="category_id" onchange="sort_elements()">
-                                <option value="0" @if($category_id == 0) selected @endif>{{ translate('All categories') }}</option>
-                                @foreach ($categories as $key => $category)
-                                        <option value="{{ $category->id }}" @if ($category->id == $category_id) selected @endif>
-                                            {{ $category->getTranslation('name', $lang) }}
-                                        </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="ml-auto col-md-4">
-                            <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
-                                id="sub_category_id" name="sub_category_id" onchange="sort_elements()">
-                                <option value="0"  @if($sub_category_id == 0) selected @endif>{{ translate('All sub categories') }}</option>
-                                @foreach ($sub_categories as $key => $category)
-                                        <option value="{{ $category->id }}" @if ($category->id == $sub_category_id) selected @endif>
-                                            {{ $category->getTranslation('name', $lang) }}
-                                        </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="ml-auto col-md-4">
-                            <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
-                                id="sub_sub_category_id" name="sub_sub_category_id" onchange="sort_elements()">
-                                <option value="0"  @if($sub_sub_category_id == 0) selected @endif>{{ translate('All sub sub categories') }}</option>
-                                @foreach ($sub_sub_categories as $key => $category)
-                                        <option value="{{ $category->id }}" @if ($category->id == $sub_sub_category_id) selected @endif>
-                                            {{ $category->getTranslation('name', $lang) }}
-                                        </option>
-                                @endforeach
-                            </select>
+                    <div class="row mb-3">
+                        <div class=" offset-lg-1 col-lg-11 ">
+                                <div class=" col-lg-5 pl-0" style="display:inline-block">
+                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
+                                        id="country_id" name="country_id" onchange="sort_elements()">
+                                        <option value="0">{{ translate('All countries') }}</option>
+
+                                        {{-- <option value="{{$country->id}}">{{$country->name}}</option> --}}
+                                        @foreach ($countrys as $countryes)
+                                                <option value="{{$countryes->id}}">
+                                                    {{$countryes->name}}
+
+                                                </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class=" col-lg-3" style="display:inline-block">
+                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
+                                        id="country_id" name="country_id" onchange="sort_elements()">
+                                        <option value="0">{{ translate('All countries') }}</option>
+
+
+                                    </select>
+                                </div>
+                                <div class="col-lg-3" style="display:inline-block">
+                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
+                                        id="country_id" name="country_id" onchange="sort_elements()">
+                                        <option value="0">{{ translate('All countries') }}</option>
+
+                                       
+                                    </select>
+                                </div>
                         </div>
                     </div>
 					<div class="row">
@@ -116,21 +115,10 @@
 	<script type="text/javascript">
 
 
+
+
 	</script>
 @endsection
 
 
 
-
-{{-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-
-</body>
-</html> --}}
