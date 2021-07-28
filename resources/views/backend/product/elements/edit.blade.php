@@ -231,7 +231,7 @@
                         <div class="col-lg-8">
                             <select class="form-control aiz-selectpicker" data-live-search="true"
                                     data-selected-text-format="count" name="selected_variations[]" id="selected_variations" multiple>
-                                @foreach (\App\Attribute::whereIn('id', $characteristic_attributes)->get() as $attribute)
+                                @foreach (\App\Attribute::where('combination', true)->whereIn('id', $characteristic_attributes)->get() as $attribute)
                                     <option value="{{ $attribute->id }}" data-id="{{ $attribute->id }}"
                                         @if(is_array($variation_attributes) && in_array($attribute->id, $variation_attributes))  selected @endif
                                         >{{ $attribute->getTranslation('name', $lang) }}</option>
@@ -493,9 +493,9 @@
 @endsection
 @section('script')
     <script type="text/javascript">
-        $('#choice_form').submit(function (event) {
-            event.preventDefault();
-        });
+        // $('#choice_form').submit(function (event) {
+        //     event.preventDefault();
+        // });
         function add_more_customer_choice_option(i, name) {
             $('#customer_choice_options').append('<div class="form-group row"><div class="col-md-3"><input type="hidden" name="choice_no[]" value="' + i + '"><input type="text" class="form-control" name="choice[]" value="' + name + '" placeholder="{{ translate('Choice Title') }}" readonly></div><div class="col-md-8"><input type="text" class="form-control aiz-tag-input" name="choice_options_' + i + '[]" placeholder="{{ translate('Enter choice values') }}" data-on-change="update_sku"></div></div>');
 

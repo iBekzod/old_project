@@ -406,9 +406,9 @@
 @endsection
 @section('script')
     <script type="text/javascript">
-        $('#choice_form').submit(function (event) {
-            event.preventDefault();
-        });
+        // $('#choice_form').submit(function (event) {
+        //     event.preventDefault();
+        // });
         function add_more_customer_choice_option(i, name) {
             $('#customer_choice_options').append(
                 '<div class="form-group row"><div class="col-md-3"><input type="hidden" name="choice_no[]" value="' +

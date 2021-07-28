@@ -79,12 +79,12 @@ class SellerProductController extends Controller
                     $product = new Product;
                     $product->is_accepted=false;
                     $product->element_id=$element->id;
-                    // if(Auth::user()->user_type == 'seller' && $shop_name=Auth::user()->shop->name){
-                    //     $product_name = $variation->name . " by " . (Auth::user()->shop->name)??null;
-                    // }else{
-                    //     $product_name = $variation->name;
-                    // }
-                    $product_name = $variation->name;
+                    if(Auth::user()->user_type == 'seller' && $shop_name=Auth::user()->shop->name){
+                        $product_name = $variation->name . " от " . $shop_name??Auth::user()->shop->name;
+                    }else{
+                        $product_name = $variation->name. " от " . Auth::user()->name;
+                    }
+                    // $product_name = $variation->name;
                     // . " ".$variant["price"];
                     $product->name = $product_name;
                     $product->added_by = Auth::user()->user_type;
@@ -209,8 +209,8 @@ class SellerProductController extends Controller
                     $product->name = $product_name;
                     $product->added_by = $user->user_type;
                     $product->user_id = $user_id;
-                    if ($product->slug != SlugService::createSlug(Product::class, 'slug', slugify($variant["slug"])))
-                        $product->slug = SlugService::createSlug(Product::class, 'slug', slugify($variant["slug"]));
+                    if ($product->slug != SlugService::createSlug(Product::class, 'slug', slugify($product_name)))
+                        $product->slug = SlugService::createSlug(Product::class, 'slug', slugify($product_name));
                     $product->currency_id = (int)$variant["currency"];
                     $product->price = (float)$variant["price"];
                     $product->discount = (float)$variant["discount"];
@@ -250,7 +250,7 @@ class SellerProductController extends Controller
                     $product->name = $product_name;
                     $product->added_by = $user->user_type;
                     $product->user_id = $user_id;
-                    $product->slug = SlugService::createSlug(Product::class, 'slug', $product_name);
+                    $product->slug = SlugService::createSlug(Product::class, 'slug',  slugify($product_name));
                     $product->currency_id = (int)$variant["currency"];
                     $product->price = (float)$variant["price"];
                     $product->discount = (float)$variant["discount"];
