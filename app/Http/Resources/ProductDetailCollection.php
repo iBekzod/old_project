@@ -28,7 +28,7 @@ class ProductDetailCollection extends ResourceCollection
         try{
             $data = [
                 'shipping_type' => $product->delivery_type,
-                'shipping_cost' => $this->calculateShippingCost($product),
+                'shipping_cost' => $this->calculateShippingCost($product, false),
                 'express_shipping_cost'=>$this->calculateShippingCost($product, true),
                 'id' => (integer) $product->id,
                 'name' => $variation->getTranslation('name'),
@@ -79,8 +79,8 @@ class ProductDetailCollection extends ResourceCollection
                 'rating_count' => (integer) Review::where(['product_id' => $product->id])->count(),
                 'description' => $element->getTranslation('description'),
                 'reviews' => new ReviewCollection(Review::where('product_id', $product->id)->latest()->get()),
-                'price_lower' => (double) convertCurrency($products->min('price'), $product->currency_id),
-                'price_higher' => (double) convertCurrency($products->max('price'), $product->currency_id),
+                'price_lower' => (double) convertCurrency($seller_products->min('price'), $product->currency_id),
+                'price_higher' => (double) convertCurrency($seller_products->max('price'), $product->currency_id),
                 // 'choice_options' => $this->convertToChoiceOptions(json_decode($product->variation, true), $product),
                 'choice_options' => $this->convertToChoiceOptions($seller_products),
                 'short_characteristics' => $this->convertToShortCharacteristics(json_decode($element->characteristics)),
@@ -345,13 +345,13 @@ class ProductDetailCollection extends ResourceCollection
     protected function calculateShippingCost($product, $is_express=false){
         // return 20000;
         // dd(request()->ip());
-        if($product->delivery_type=='free'){
-            return 0;
-        }else {
-            $address=getUserAddress();
-            return calculateDeliveryCost($product, $address->id, $is_express);
+        // if($product->delivery_type=='free'){
+        //     return 0;
+        // }else {
+        $address=getUserAddress();
+        return calculateDeliveryCost($product, $address->id, $is_express);
             // return calculateShipping(['product_id'=>$product->id, 'type'=>'precise', 'address_id'=>$address->id]);
-        }
+        // }
 
     }
 }

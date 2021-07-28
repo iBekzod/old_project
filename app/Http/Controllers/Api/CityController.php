@@ -17,6 +17,15 @@ class CityController extends Controller
     {
         return new CityCollection(City::where('country_id', $country_id)->where('parent_id', $region_id)->get());
     }
+    public function countryRegions($country_id)
+    {
+        return new CityCollection(City::where('country_id', $country_id)->where('type', 'region')->get());
+    }
+
+    public function regionCities($region_id)
+    {
+        return new CityCollection(City::where('parent_id', $region_id)->whereIn('type', ['city', 'district'])->get());
+    }
 
     public function countries()
     {
