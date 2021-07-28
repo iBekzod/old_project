@@ -12,12 +12,14 @@
 
     <title>@yield('meta_title', get_setting('website_name').' | '.get_setting('site_motto'))</title>
 
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {{-- <meta name="robots" content="index, follow"> --}}
     <meta name="description" content="@yield('meta_description', get_setting('meta_description') )" />
     <meta name="keywords" content="@yield('meta_keywords', get_setting('meta_keywords') )">
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
