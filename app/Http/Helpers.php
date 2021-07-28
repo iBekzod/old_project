@@ -1383,6 +1383,9 @@ if (!function_exists('getAttributeFormat')) {
     }else{
         $delivery_cost=-2;//distance not found
     }
+    if($delivery_cost>0){
+        $delivery_cost=convertCurrency((double)$delivery_cost, Currency::where('code', defaultCurrency())->first()->id);
+    }
     // dd($weight_cost);
     if($delivery_metrics){
         return [
@@ -1391,7 +1394,7 @@ if (!function_exists('getAttributeFormat')) {
         ];
     }else{
         return [
-            'days'=>1,
+            'days'=>-1,
             'cost'=>$delivery_cost
         ];
     }

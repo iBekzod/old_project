@@ -520,6 +520,24 @@ class ProductController extends Controller
         }
         return $result;
     }
+    public function getCategoryProducts($id){
+        $category_ids=Category::where('id', $id)->orWhere('slug', $id)->where('level', '=', 2)->pluck('id');
+        $product_ids=[];
+        if(count($category_ids)>0){
+            $element_ids=Element::whereIn('category_id', $category_ids)->pluck('id')??[];
+            $product_ids=Product::whereIn('element_id', $element_ids)->pluck('id');
+        }
+        return $product_ids;
+    }
+    public function getBrandProducts($id){
+        $brand_ids=Brand::where('id', $id)->orWhere('slug', $id)->pluck('id');
+        $product_ids=[];
+        if(count($brand_ids)>0){
+            $element_ids=Element::whereIn('brand_id', $brand_ids)->pluck('id')??[];
+            $product_ids=Product::whereIn('element_id', $element_ids)->pluck('id');
+        }
+        return $product_ids;
+    }
     public function searchPr($type, $request)
     {
         $product_conditions=[];
@@ -528,8 +546,8 @@ class ProductController extends Controller
         //Filtering by brand slug
         switch ($type) {
             case 'brand':
-                if ($request->id!="list" && $brand = Brand::where('slug', $request->id)->firstOrFail()) {
-                    $element_conditions['where'][] = ['brand_id', $brand->id];
+                if ($request->id!="list") {
+                    $product_conditions['whereIn'][] = ['id' => $this->getBrandProducts($request->id)];
                 }
                 break;
             case 'flashdeals':
@@ -539,18 +557,18 @@ class ProductController extends Controller
                 }
                 break;
             case 'category':
-                if ($request->id!="list" && $categoryA = Category::where('slug', $request->id)->firstOrFail()) {
-                    $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
-                    $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                if ($request->id!="list") {
+                    $product_conditions['whereIn'][] = ['id' => $this->getCategoryProducts($request->id)];
                 }
                 break;
             case 'categoryAll':
-                $category_ids = Category::where('level', '=', 2)->pluck('id');
-                $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                $element_conditions['where'][] = ['category_id' , '<>', null];
                 break;
             case 'categoryPopular':
-                $category_ids = Category::where('featured', 1)->where('level', '=', 2)->pluck('id');
-                $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                $product_conditions['where'][] = ['todays_deal', 1];
+                if ($request->id!="list") {
+                    $product_conditions['whereIn'][] = ['id' => $this->getCategoryProducts($request->id)];
+                }
                 break;
             case 'seller':
                 if ($seller = Shop::select('user_id')->where('slug', $request->id)->firstOrFail()) {
@@ -559,9 +577,8 @@ class ProductController extends Controller
                 break;
             case 'new':
                 $product_conditions['orderBy'][] = ['created_at' => 'desc'];
-                if ($request->id!="list" && $categoryA = Category::where('slug', $request->id)->firstOrFail()) {
-                    $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
-                    $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                if ($request->id!="list") {
+                    $product_conditions['whereIn'][] = ['id' => $this->getCategoryProducts($request->id)];
                 }
                 $is_random=false;
                 break;
@@ -570,16 +587,14 @@ class ProductController extends Controller
                 break;
             case 'popular':
                 $product_conditions['where'][] = ['todays_deal', 1];
-                if ($request->id!="list" && $categoryA = Category::where('slug', $request->id)->firstOrFail()) {
-                    $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
-                    $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                if ($request->id!="list") {
+                    $product_conditions['whereIn'][] = ['id' => $this->getCategoryProducts($request->id)];
                 }
                 break;
             case 'recommendation':
                 $product_conditions['where'][] = ['featured', 1];
-                if ($request->id!="list" && $categoryA = Category::where('slug', $request->id)->firstOrFail()) {
-                    $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
-                    $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                if ($request->id!="list") {
+                    $product_conditions['whereIn'][] = ['id' => $this->getCategoryProducts($request->id)];
                 }
                 break;
             case 'stock':
@@ -623,10 +638,11 @@ class ProductController extends Controller
         }
         //Category
         if ($request->has('category') && $request->category) {
-            if ($categoryA = Category::where('slug', $request->category)->firstOrFail()) {
-                $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
-                $element_conditions['whereIn'][] = ['category_id' => $category_ids];
-            }
+            $product_conditions['whereIn'][] = ['id' => $this->getCategoryProducts($request->category)];
+            // if ($categoryA = Category::where('slug', $request->category)->firstOrFail()) {
+            //     $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
+            //     $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+            // }
         }
         //Новинки
         if ($request->has('new') && $request->new) {
@@ -659,9 +675,7 @@ class ProductController extends Controller
         }
 
         if ($request->has('brand') && $request->brand) {
-            if ($brand = Brand::where('slug', $request->brand)->firstOrFail()) {
-                $element_conditions['where'][] = ['brand_id', $brand->id];
-            }
+            $product_conditions['whereIn'][] = ['id' => $this->getBrandProducts($request->id)];
         }
 
         if ($request->has('q') && $query = $request->q) {
