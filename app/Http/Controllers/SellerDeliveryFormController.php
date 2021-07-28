@@ -15,6 +15,7 @@ use App\SellerSetting;
 
 use PhpParser\Node\Stmt\If_;
 use Carbon\Carbon;
+use Dompdf\Dompdf;
 use Illuminate\Support\Facades\Auth;
 
 class SellerDeliveryFormController extends Controller
@@ -179,9 +180,10 @@ public function generatorPDF() {
     //   dd($array[0]['Форма_собственности']);
     // view()->share('employee',$user);
 
-
+    $dompdf = new PDF();
     $pdf = PDF::loadView('frontend.user.seller.pdf.pdf_file'); // <--- load your view into theDOM wrapper;
     return $pdf->stream('downlaod.pdf');
+    $dompdf->load_html($chain, 'UTF-8');
     return back();
   }
 }
