@@ -11,8 +11,12 @@
 			<div class="card-body">
 				<form action="{{ route('seller.autoidentification') }}" method="post">
 					@csrf
-                    <div class="row mb-3">
-                        <div class=" offset-lg-1 col-lg-11 ">
+                    <div class="row mb-4">
+                        <div class=" offset-lg-1 col-lg-11 form-horizontal">
+                                <div class=" col-lg-11 mb-3 form-horizontal">
+                                    <h5 class="mb-0">{{translate('Address Seller')}}</h5>
+                                    <hr>
+                                </div>
                                 <div class=" col-lg-5 pl-0" style="display:inline-block">
                                     <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
                                         id="country-dd" name="country_id" onchange="sort_elements()">

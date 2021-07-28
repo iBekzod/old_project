@@ -84,7 +84,7 @@ class HomeController extends Controller
             // //   dd($regions);
             // $cities=City::where('type', 'district')->orWhere('type', 'city')->get();
 
-           $countrys=Country::where('status',0)->get();
+           $countrys=Country::where('status',1)->get();
         //    dd($countrys);
             // $country=Country::where('id', 234)->first();
             // $country_id=$country->id;
