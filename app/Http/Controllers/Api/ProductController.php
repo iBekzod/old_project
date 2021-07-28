@@ -779,7 +779,7 @@ class ProductController extends Controller
         $products = $products->whereIn('id', $product_ids);
 
         $prices = [];
-        foreach ($tmp_products as $product) {
+        foreach ($tmp_products as $product){
             $prices[] = homeDiscountedBasePrice($product->id);
         }
 
@@ -850,4 +850,15 @@ class ProductController extends Controller
     //     }
     //     return 0;
     // }
+    public function setLocationSetting(Request $request){
+        DB::table('ip_addresses')
+            ->updateOrInsert(
+                ['ip' => $request->ip()],
+                [
+                    'region_id' => $request->region_id??getDefaultRegion(),
+                    'city_id' => $request->city_id??getDefaultCity(),
+                    'language_id' => $request->language_id??defaultLanguage()
+                ]
+            );
+    }
 }

@@ -200,6 +200,14 @@ if (!function_exists('default_language')) {
     }
 }
 
+//highlights the selected navigation on frontend
+if (!function_exists('defaultLanguage')) {
+    function defaultLanguage()
+    {
+        return env("DEFAULT_LANGUAGE", 'ru');
+    }
+}
+
 if (!function_exists('default_website')) {
     function default_website()
     {
@@ -1384,7 +1392,7 @@ if (!function_exists('getAttributeFormat')) {
         $delivery_cost=-2;//distance not found
     }
     if($delivery_cost>0){
-        $delivery_cost=convertCurrency((double)$delivery_cost, Currency::where('code', defaultCurrency())->first()->id);
+        // $delivery_cost=convertCurrency((double)$delivery_cost, Currency::where('code', defaultCurrency())->first()->id);
     }
     // dd($weight_cost);
     if($delivery_metrics){
