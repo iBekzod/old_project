@@ -11,10 +11,44 @@
 			<div class="card-body">
 				<form action="{{ route('seller.autoidentification') }}" method="post">
 					@csrf
+                    <div class="row mb-3">
+                        <div class=" offset-lg-1 col-lg-11 ">
+                                <div class=" col-lg-5 pl-0" style="display:inline-block">
+                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
+                                        id="country-dd" name="country_id" onchange="sort_elements()">
+                                        <option value="0">{{ translate('All countries') }}</option>
+
+                                        {{-- <option value="{{$country->id}}">{{$country->name}}</option> --}}
+                                        @foreach ($countrys as $data)
+                                                <option value="{{$data->id}}">
+                                                    {{$data->name}}
+
+                                                </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class=" col-lg-3" style="display:inline-block">
+                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
+                                    id="state-dd" name="region_id" onchange="sort_elements()">
+                                        {{-- <option value="0">{{ translate('All countries') }}</option> --}}
+
+
+                                    </select>
+                                </div>
+                                <div class="col-lg-3" style="display:inline-block">
+                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
+                                    id="city-dd"  name="city_id" onchange="sort_elements()">
+                                        {{-- <option value="0">{{ translate('All countries') }}</option> --}}
+
+
+                                    </select>
+                                </div>
+                        </div>
+                    </div>
 					<div class="row">
 						<div class=" offset-lg-1 col-lg-11 form-horizontal" id="form">
 
-                            
+
 
 							@foreach (json_decode(\App\BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element)
                                 @if($element->type=='text')
@@ -80,22 +114,54 @@
 @section('script')
 	<script type="text/javascript">
 
+$(document).ready(function () {
+            $('#country-dd').on('change', function () {
+                var idCountry = this.value;
+                $("#state-dd").html('');
+                $.ajax({
+                    url: "{{url('api/fetch-states')}}",
+                    type: "POST",
+                    data: {
+                        country_id: idCountry,
+                        _token: '{{csrf_token()}}'
+                    },
+                    dataType: 'json',
+                    success: function (result) {
+                        $('#state-dd').html('<option value="">Select State</option>');
+                        $.each(result.states, function (key, value) {
+                            $("#state-dd").append('<option value="' + value
+                                .id + '">' + value.name + '</option>');
+                        });
+                        $('#city-dd').html('<option value="">Select City</option>');
+                    }
+                });
+            });
+            $('#state-dd').on('change', function () {
+                var idState = this.value;
+                $("#city-dd").html('');
+                $.ajax({
+                    url: "{{url('api/fetch-cities')}}",
+                    type: "POST",
+                    data: {
+                        state_id: idState,
+                        _token: '{{csrf_token()}}'
+                    },
+                    dataType: 'json',
+                    success: function (res) {
+                        // alert(res.cities);
+                        $('#city-dd').html('<option value="">Select City</option>');
+                        $.each(res.cities, function (key, value) {
+                            $("#city-dd").append('<option value="' + value
+                                .id + '">' + value.name + '</option>');
+                        });
+                    }
+                });
+            });
+        });
+
 
 	</script>
 @endsection
 
 
 
-
-{{-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-
-</body>
-</html> --}}

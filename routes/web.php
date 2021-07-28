@@ -64,6 +64,10 @@ Route::get('/seller/registration', 'HomeController@seller_registration')->name('
 
 Route::post('/seller/registration', 'HomeController@seller_registration')->name('seller.registration');
 
+// country-state-city-dropdown-with-ajax
+Route::post('api/fetch-states','HomeController@fetchState');
+Route::post('api/fetch-cities','HomeController@fetchCity');
+
 // Route::post('/users/login', 'HomeController@user_login')->name('user.login.submit');
 // Route::post('/users/login/cart', 'HomeController@cart_login')->name('cart.login.submit');
 
