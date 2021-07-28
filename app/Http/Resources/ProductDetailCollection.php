@@ -27,6 +27,8 @@ class ProductDetailCollection extends ResourceCollection
         $seller_products=getPublishedProducts('product', ['where'=>[['user_id', $product->user_id],['element_id', $product->element_id]]], [], [])->get();
         try{
             $data = [
+                'shipping_type' => $product->delivery_type,
+                'shipping_cost' => $this->calculateShippingCost($product),
                 'express_shipping_cost'=>$this->calculateShippingCost($product, true),
                 'id' => (integer) $product->id,
                 'name' => $variation->getTranslation('name'),
@@ -83,8 +85,7 @@ class ProductDetailCollection extends ResourceCollection
                 'choice_options' => $this->convertToChoiceOptions($seller_products),
                 'short_characteristics' => $this->convertToShortCharacteristics(json_decode($element->characteristics)),
                 'colors' => new ProductColorCollection(json_decode($element->variation_colors)),
-                'shipping_type' => $product->delivery_type,
-                'shipping_cost' => $this->calculateShippingCost($product),
+
                 'characteristics' => $this->convertToCharacteristics(json_decode($element->characteristics, true)),
 
                 'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??[],

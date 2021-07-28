@@ -1290,7 +1290,7 @@ if (!function_exists('getAttributeFormat')) {
         $customer_address=Address::where('id', $address_id)->first();
         return calculateAllDeliveryCost($seller_address, $customer_address, calculateWeightCost($product), $is_express);
     }else{
-        return -3;
+        return -2;
     }
 
 }
@@ -1311,6 +1311,7 @@ if (!function_exists('getAttributeFormat')) {
     $all_distance=-1;
     $delivery_cost=0;
     $inline_cost=0;
+    $delivery_metrics=null;
     if($seller_address->region->id==$client_address->region->id){
         $inline_cost=$seller_address->city->inside_price;
         $all_distance=0;
@@ -1377,13 +1378,23 @@ if (!function_exists('getAttributeFormat')) {
         }else{
             $delivery_cost= $delivery_metrics->price*$all_distance+$weight_cost;
         }
-        return $delivery_cost;
     }else if($all_distance==0){
         $delivery_cost = $weight_cost;
     }else{
         $delivery_cost=-2;//distance not found
     }
-    return $delivery_cost;
+    // dd($weight_cost);
+    if($delivery_metrics){
+        return [
+            'days'=>$delivery_metrics->days,
+            'cost'=>$delivery_cost
+        ];
+    }else{
+        return [
+            'days'=>1,
+            'cost'=>$delivery_cost
+        ];
+    }
 }
 // function calculateShipping($request){
 //     $product=Product::where('id', $request['product_id'])->first();
