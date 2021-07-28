@@ -121,24 +121,32 @@ class HomeController extends Controller
     }
     public function fetchState(Request $request)
     {
-          if(Country::where('country_id',$request->country_id)){
-               $country=Country::where('id',$request->country_id);
-                $data['states'] = $country->regions->get(["name", "id"]);
+          if(City::where('country_id',$request->country_id)->exists()){
+               $regions=City::where('type','region')->where('country_id',$request->country_id);
+                $data['states'] = $regions->get(["name", "id"]);
                 return response()->json($data);
           }
+          else{
+              return 'error';
+            }
 
     }
 
     public function fetchCity(Request $request)
     {
 
-        if(Country::where('country_id',$request->country_id)){
-            $country=Country::where('id',$request->country_id);
-             $data['states'] = $country->regions->get(["name", "id"]);
-             return response()->json($data);
-       }
-        $data['cities'] = City::where("state_id",$request->state_id)->get(["name", "id"]);
-        return response()->json($data);
+         if($region=City::where('id',$request->state_id)->first()){
+            // dd(City::where('parent_id',$request->state_id)->get());
+            $data['cities'] = City::where('parent_id',$request->state_id)->get(["name", "id"]);
+            // dd($data);
+                return response()->json($data);
+          }
+          else{
+              return 'error';
+            }
+
+        // $data['cities'] = City::where("state_id",$request->state_id)->get(["name", "id"]);
+        // return response()->json($data);
     }
 
     public function seller_login(Request $request)
@@ -231,6 +239,7 @@ class HomeController extends Controller
     }
 
     /**
+     *
      * Show the admin dashboard.
      *
      * @return \Illuminate\Http\Response
@@ -256,7 +265,7 @@ class HomeController extends Controller
         //     return view('frontend.user.customer.dashboard');
         // }
         else {
-            return $this->admin_dashboard();
+            return $this->index();
             // abort(404);
         }
     }
@@ -354,7 +363,7 @@ class HomeController extends Controller
         if (auth()->user() != null) {
             return $this->dashboard();
         }
-        return redirect()->route('login');
+          return redirect()->route('login');
     }
 
     public function home()

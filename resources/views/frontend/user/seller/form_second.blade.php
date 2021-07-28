@@ -15,13 +15,13 @@
                         <div class=" offset-lg-1 col-lg-11 ">
                                 <div class=" col-lg-5 pl-0" style="display:inline-block">
                                     <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
-                                        id="country_id" name="country_id" onchange="sort_elements()">
+                                        id="country-dd" name="country_id" onchange="sort_elements()">
                                         <option value="0">{{ translate('All countries') }}</option>
 
                                         {{-- <option value="{{$country->id}}">{{$country->name}}</option> --}}
-                                        @foreach ($countrys as $countryes)
-                                                <option value="{{$countryes->id}}">
-                                                    {{$countryes->name}}
+                                        @foreach ($countrys as $data)
+                                                <option value="{{$data->id}}">
+                                                    {{$data->name}}
 
                                                 </option>
                                         @endforeach
@@ -29,18 +29,18 @@
                                 </div>
                                 <div class=" col-lg-3" style="display:inline-block">
                                     <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
-                                        id="country_id" name="country_id" onchange="sort_elements()">
-                                        <option value="0">{{ translate('All countries') }}</option>
+                                    id="state-dd" name="region_id" onchange="sort_elements()">
+                                        {{-- <option value="0">{{ translate('All countries') }}</option> --}}
 
 
                                     </select>
                                 </div>
                                 <div class="col-lg-3" style="display:inline-block">
                                     <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
-                                        id="country_id" name="country_id" onchange="sort_elements()">
-                                        <option value="0">{{ translate('All countries') }}</option>
+                                    id="city-dd"  name="city_id" onchange="sort_elements()">
+                                        {{-- <option value="0">{{ translate('All countries') }}</option> --}}
 
-                                       
+
                                     </select>
                                 </div>
                         </div>
@@ -114,7 +114,50 @@
 @section('script')
 	<script type="text/javascript">
 
-
+$(document).ready(function () {
+            $('#country-dd').on('change', function () {
+                var idCountry = this.value;
+                $("#state-dd").html('');
+                $.ajax({
+                    url: "{{url('api/fetch-states')}}",
+                    type: "POST",
+                    data: {
+                        country_id: idCountry,
+                        _token: '{{csrf_token()}}'
+                    },
+                    dataType: 'json',
+                    success: function (result) {
+                        $('#state-dd').html('<option value="">Select State</option>');
+                        $.each(result.states, function (key, value) {
+                            $("#state-dd").append('<option value="' + value
+                                .id + '">' + value.name + '</option>');
+                        });
+                        $('#city-dd').html('<option value="">Select City</option>');
+                    }
+                });
+            });
+            $('#state-dd').on('change', function () {
+                var idState = this.value;
+                $("#city-dd").html('');
+                $.ajax({
+                    url: "{{url('api/fetch-cities')}}",
+                    type: "POST",
+                    data: {
+                        state_id: idState,
+                        _token: '{{csrf_token()}}'
+                    },
+                    dataType: 'json',
+                    success: function (res) {
+                        // alert(res.cities);
+                        $('#city-dd').html('<option value="">Select City</option>');
+                        $.each(res.cities, function (key, value) {
+                            $("#city-dd").append('<option value="' + value
+                                .id + '">' + value.name + '</option>');
+                        });
+                    }
+                });
+            });
+        });
 
 
 	</script>
