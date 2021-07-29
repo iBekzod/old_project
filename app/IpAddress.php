@@ -21,4 +21,10 @@ class IpAddress extends Model
     {
         return $this->belongsTo(City::class, 'region_id')->whereIn('type', ['region']);
     }
+
+
+    public function language()
+    {
+        return $this->belongsTo(Language::class, 'language_id');
+    }
 }

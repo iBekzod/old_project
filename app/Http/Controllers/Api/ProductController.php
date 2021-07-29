@@ -31,6 +31,7 @@ use App\Http\Resources\ElementCollection;
 use App\Http\Resources\ParentCategoryCollection;
 use App\Http\Resources\ProductColorCollection;
 use App\Http\Resources\VariationCollection;
+use App\IpAddress;
 use App\User;
 // use App\Seller;
 use Illuminate\Http\Request;
@@ -851,16 +852,29 @@ class ProductController extends Controller
     //     return 0;
     // }
     public function setLocationSetting(Request $request){
-        $ip_address=DB::table('ip_addresses')
-            ->updateOrInsert(
-                ['ip' => $request->ip()],
-                [
-                    'region_id' => $request->region_id??getDefaultRegion(),
-                    'city_id' => $request->city_id??getDefaultCity(),
-                    'language_id' => $request->language_id??defaultLanguage()
-                ]
-            );
-
+        $client_ip=getClientIp();
+        $ip_address=IpAddress::firstOrNew(['ip' =>  $client_ip]);
+        if($request->has('region_id')){
+            $ip_address->region_id=$request->region_id;
+        }
+        if($request->has('language_id')){
+            $ip_address->language_id=$request->language_id;
+        }
+        if($request->has('city_id')){
+            $ip_address->city_id=$request->city_id;
+        }
+        if($request->has('data')){
+            $ip_address->data=$request->data;
+        }
+        $ip_address->save();
         return response()->json($ip_address);
     }
+
+    public function getLocationSetting(Request $request){
+        $client_ip=getClientIp();
+        $ip_address=IpAddress::where('ip', $client_ip)->first();
+        return response()->json($ip_address);
+    }
+
+
 }

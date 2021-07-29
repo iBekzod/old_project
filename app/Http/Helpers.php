@@ -18,6 +18,7 @@ use App\Translation;
 use App\City;
 use App\Delivery;
 use App\Element;
+use App\IpAddress;
 use App\Language;
 use App\Utility\TranslationUtility;
 use App\Utility\CategoryUtility;
@@ -1433,27 +1434,29 @@ function getUserAddress(){
         }else if($user_setting=SellerSetting::where('type', 'default_address')->first()){
             $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>$user_setting->value, 'region_id'=>$user_setting->relation_id]);
         }
+    }else if($ip_address=IpAddress::where('ip', getClientIp())->first()){
+        $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>$ip_address->city_id??getDefaultCity(), 'region_id'=>$ip_address->region_id??getDefaultRegion()]);
     }
     $address->save();
     return $address;
 }
 
-function getCompanyAddress(){
-    $user=User::where('user_type', 'admin')->first();
-    if(count($user->addresses)==1){
-        $address=$user->addresses->first();
-    }else if(count($user->addresses)>1){
-        $address=$user->addresses->where('set_default', 1)->first();
-    }else if($user_setting=SellerSetting::where('type', 'default_address')->where('user_id', auth()->id())->first()){
-        $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>$user_setting->value, 'region_id'=>$user_setting->relation_id]);
-    }else if($user_setting=SellerSetting::where('type', 'default_address')->first()){
-        $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>$user_setting->value, 'region_id'=>$user_setting->relation_id]);
-    }else{
-        $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>getDefaultCity(), 'region_id'=>getDefaultRegion()]);
-    }
-    $address->save();
-    return $address;
-}
+// function getCompanyAddress(){
+//     $user=User::where('user_type', 'admin')->first();
+//     if(count($user->addresses)==1){
+//         $address=$user->addresses->first();
+//     }else if(count($user->addresses)>1){
+//         $address=$user->addresses->where('set_default', 1)->first();
+//     }else if($user_setting=SellerSetting::where('type', 'default_address')->where('user_id', auth()->id())->first()){
+//         $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>$user_setting->value, 'region_id'=>$user_setting->relation_id]);
+//     }else if($user_setting=SellerSetting::where('type', 'default_address')->first()){
+//         $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>$user_setting->value, 'region_id'=>$user_setting->relation_id]);
+//     }else{
+//         $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>getDefaultCity(), 'region_id'=>getDefaultRegion()]);
+//     }
+//     $address->save();
+//     return $address;
+// }
 
 function getDefaultCity(){
     return 57;
@@ -1461,4 +1464,20 @@ function getDefaultCity(){
 
 function getDefaultRegion(){
     return 281;
+}
+
+if (!function_exists('getClientIp')) {
+    function getClientIp(){
+        foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR') as $key){
+            if (array_key_exists($key, $_SERVER) === true){
+                foreach (explode(',', $_SERVER[$key]) as $ip){
+                    $ip = trim($ip); // just to be safe
+                    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false){
+                        return $ip;
+                    }
+                }
+            }
+        }
+        return request()->ip(); // it will return server ip when no client ip found
+    }
 }
