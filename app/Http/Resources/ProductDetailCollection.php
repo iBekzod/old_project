@@ -55,6 +55,7 @@ class ProductDetailCollection extends ResourceCollection
                 ],
                 'photos' => $this->convertPhotos(explode(',', $element->photos)),
                 'thumbnail_image' => api_asset($variation->thumbnail_img),
+                'earn_point'=>($product->earn_point!=0)?$product->earn_point:calculateProductClubPoint($product->id),
                 'base_price' => (double) homeBasePrice($product->id),
                 'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
                 'currency_code'=>defaultCurrency(),

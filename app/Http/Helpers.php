@@ -1468,3 +1468,8 @@ if (!function_exists('getClientIp')) {
         return request()->ip(); // it will return server ip when no client ip found
     }
 }
+
+function calculateProductClubPoint($id){
+    $product = Product::findOrFail($id);
+    return ((int)(homeBasePrice($product->id)*0.01/1000));
+}

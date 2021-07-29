@@ -112,7 +112,7 @@
                                     </td>
                                     <td>{{ homeBasePrice($product->id) }}</td>
                                     <td>{{ $product->rating }}</td>
-                                    <td>{{ ($product->earn_point!=0)?$product->earn_point:((int)(homeBasePrice($product->id)*0.01/1000)) }}</td>
+                                    <td>{{ calculateProductClubPoint($product->id) }}</td>
                                     <td class="text-right">
                                         <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{route('product_club_point.edit', encrypt($product->id))}}" title="{{ translate('Edit') }}">
                                             <i class="las la-edit"></i>
