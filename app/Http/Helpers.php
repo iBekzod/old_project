@@ -1307,74 +1307,64 @@ if (!function_exists('getAttributeFormat')) {
     }
 }
 
-
-
  function calculateDeliveryCost($product, $address_id, $is_express=false){
+     //region -> Viloyat
+    //city -> Shahar yoki tuman
     $seller=$product->user;
     if($seller_address=$seller->addresses->first()){
-        $customer_address=Address::where('id', $address_id)->first();
-        return calculateAllDeliveryCost($seller_address, $customer_address, calculateWeightCost($product), $is_express);
-    }else{
-        return -2;
-    }
-
-}
-
- function calculateWeightCost($product){
-    $weight_price=0;
-    if($weight_setting=SellerSetting::where('type', 'kg_weight_price')->where('user_id', $product->user_id)->first()){
-        $weight_price=convertCurrency((double)$weight_setting->value, (int)$weight_setting->relation_id);
-    }else if($weight_setting=SellerSetting::where('type', 'kg_weight_price')->first()){
-        $weight_price=convertCurrency((double)$weight_setting->value, (int)$weight_setting->relation_id);
-    }
-    return $weight_price*((double)$product->element->weight);
-}
-
- function calculateAllDeliveryCost($seller_address, $client_address, $weight_cost=0, $is_express=false){
-    //region -> Viloyat
-    //city -> Shahar yoki tuman
-    $all_distance=-1;
-    $delivery_cost=0;
-    $inline_cost=0;
-    $delivery_metrics=null;
-    if($seller_address->region->id==$client_address->region->id){
-        $inline_cost=$seller_address->city->inside_price;
-        $all_distance=0;
-    }else{
-        $distance_between_regions=DB::table('delivery')->where('seller_region_id', $seller_address->region->id)->where('client_region_id', $client_address->region->id)->first();
-        if($distance_between_regions==null){
-            $distance_between_regions=DB::table('delivery')->where('seller_region_id', $client_address->region->id)->where('client_region_id', $seller_address->region->id)->first();
-        }
-        if($distance_between_regions){
-            if($client_address->city->distance==0){
-                $inline_cost=$inline_cost+$client_address->city->inside_price;
-            }
-            if($seller_address->city->distance==0){
-                $inline_cost=$inline_cost+$seller_address->city->inside_price;
-            }
-            $all_distance=$seller_address->city->distance + $distance_between_regions->distance + $client_address->city->distance;
+        $client_address=Address::where('id', $address_id)->first();
+        $all_distance=-1;
+        $delivery_cost=0;
+        $inline_cost=0;
+        $delivery_metrics=null;
+        $weight_cost=calculateWeightCost($product);
+        if($seller_address->region->id==$client_address->region->id){
+            $inline_cost=$seller_address->city->inside_price;
+            $all_distance=0;
         }else{
-            $all_distance=-2;//distance not found
+            $distance_between_regions=DB::table('delivery')->where('seller_region_id', $seller_address->region->id)->where('client_region_id', $client_address->region->id)->first();
+            if($distance_between_regions==null){
+                $distance_between_regions=DB::table('delivery')->where('seller_region_id', $client_address->region->id)->where('client_region_id', $seller_address->region->id)->first();
+            }
+            if($distance_between_regions){
+                if($client_address->city->distance==0){
+                    $inline_cost+=$client_address->city->inside_price;
+                }
+                if($seller_address->city->distance==0){
+                    $inline_cost+=$seller_address->city->inside_price;
+                }
+                $all_distance=$seller_address->city->distance + $distance_between_regions->distance + $client_address->city->distance;
+            }else{
+                $all_distance=-2;//distance not found
+            }
         }
-    }
 
-    if($all_distance>0){
-        if($delivery_metrics=Delivery::orderBy('distance', 'asc')->where('user_id', $seller_address->user_id)->where('distance', '>', $all_distance)->first()){
-        }else{
-            $delivery_metrics=Delivery::orderBy('distance', 'asc')->where('distance', '>', $all_distance)->first();
-        }
-        // dd( $delivery_metrics);
+        if($all_distance>0){
+            if($delivery_metrics=Delivery::orderBy('distance', 'asc')->where('user_id', $seller_address->user_id)->where('distance', '>', $all_distance)->first()){
+            }else{
+                $delivery_metrics=Delivery::orderBy('distance', 'asc')->where('distance', '>', $all_distance)->first();
+            }
+            // dd( $delivery_metrics);
 
-        if($is_express){
-            $express_percent=-1;
-            if($express_percent_model=SellerSetting::where('type', 'express_percent')->where('user_id', $seller_address->user_id)->first()){
-                if($express_distance_model=SellerSetting::where('type', 'express_distance')->where('user_id', $seller_address->user_id)->first()){
-                    if($express_distance_model->value>$all_distance){
-                        $express_percent=$express_percent_model->value;
+            if($is_express){
+                $express_percent=-1;
+                if($express_percent_model=SellerSetting::where('type', 'express_percent')->where('user_id', $seller_address->user_id)->first()){
+                    if($express_distance_model=SellerSetting::where('type', 'express_distance')->where('user_id', $seller_address->user_id)->first()){
+                        if($express_distance_model->value>$all_distance){
+                            $express_percent=$express_percent_model->value;
+                        }else{
+                            $express_percent=-2;
+                        }
                     }else{
-                        $express_percent=-2;
+                        $express_distance_model=SellerSetting::where('type', 'express_distance')->first();
+                        if($express_distance_model->value>$all_distance){
+                            $express_percent=$express_percent_model->value;
+                        }else{
+                            $express_percent=-2;
+                        }
                     }
                 }else{
+                    $express_percent_model=SellerSetting::where('type', 'express_percent')->first();
                     $express_distance_model=SellerSetting::where('type', 'express_distance')->first();
                     if($express_distance_model->value>$all_distance){
                         $express_percent=$express_percent_model->value;
@@ -1382,60 +1372,58 @@ if (!function_exists('getAttributeFormat')) {
                         $express_percent=-2;
                     }
                 }
-            }else{
-
-                $express_percent_model=SellerSetting::where('type', 'express_percent')->first();
-                $express_distance_model=SellerSetting::where('type', 'express_distance')->first();
-                if($express_distance_model->value>$all_distance){
-                    $express_percent=$express_percent_model->value;
+                if($express_percent>0){
+                    $delivery_cost= ($delivery_metrics->price*$all_distance)*(100+$express_percent)/100+$weight_cost;
+                }else if($express_percent==0){
+                    $delivery_cost= ($delivery_metrics->price*$all_distance)+$weight_cost;
                 }else{
-                    $express_percent=-2;
+                    $delivery_cost = -3; //Not valid
                 }
-            }
-
-            if($express_percent>0){
-                $delivery_cost= ($delivery_metrics->price*$all_distance)*(100+$express_percent)/100+$weight_cost;
-            }else if($express_percent==0){
-                $delivery_cost= ($delivery_metrics->price*$all_distance)+$weight_cost;
             }else{
-                $delivery_cost = -3; //Not valid
+                $delivery_cost= $delivery_metrics->price*$all_distance+$weight_cost;
             }
+        }else if($all_distance==0){
+            $delivery_cost += $weight_cost;
         }else{
-            $delivery_cost= $delivery_metrics->price*$all_distance+$weight_cost;
+            $delivery_cost=-2;//distance not found
         }
-    }else if($all_distance==0){
-        $delivery_cost = $weight_cost;
-    }else{
-        $delivery_cost=-2;//distance not found
-    }
-    if($delivery_cost>0){
-        $delivery_cost=convertCurrency((double)$delivery_cost, Currency::where('code', defaultCurrency())->first()->id);
-    }
-    // dd($weight_cost);
-    if($delivery_metrics){
-        return [
-            'days'=>$delivery_metrics->days,
-            'cost'=>$delivery_cost
-        ];
+        if($delivery_cost>0){
+            $delivery_cost=convertCurrency((double)$delivery_cost, Currency::where('code', defaultCurrency())->first()->id);
+        }
+        // dd($weight_cost);
+        if($delivery_metrics){
+            return [
+                'days'=>$delivery_metrics->days,
+                'cost'=>$delivery_cost
+            ];
+        }else{
+            return [
+                'days'=>-1,
+                'cost'=>$delivery_cost
+            ];
+        }
     }else{
         return [
             'days'=>-1,
-            'cost'=>$delivery_cost
-        ];
+            'cost'=>-1
+        ];;
     }
+
 }
-// function calculateShipping($request){
-//     $product=Product::where('id', $request['product_id'])->first();
-//     if($request['type']=='precise' && $request['address_id']!=null){
-//         return calculateDeliveryCost($product, $request['address_id']);
-//     }else{
-//         $user_region=City::where('id', $request['region_id'])->where('type', 'region');
-//         $address=Address::firstOrNew(['region_id'=>$user_region->id]);
-//         $address->save();
-//         return calculateDeliveryCost($product, $address->id);
-//     }
-//     return 0;
-// }
+
+function getAdmin(){
+    return User::where('user_type', 'admin')->first();
+}
+ function calculateWeightCost($product){
+     ($product->shipping_type='tinfis')?$user_id=getAdmin():$user_id=$product->user_id;
+    $weight_price=0;
+    if($weight_setting=SellerSetting::where('type', 'kg_weight_price')->where('user_id', $user_id)->first()){
+        $weight_price=convertCurrency((double)$weight_setting->value, (int)$weight_setting->relation_id);
+    }else if($weight_setting=SellerSetting::where('type', 'kg_weight_price')->first()){
+        $weight_price=convertCurrency((double)$weight_setting->value, (int)$weight_setting->relation_id);
+    }
+    return $weight_price*((double)$product->element->weight);
+}
 
 function getUserAddress(){
     $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>getDefaultCity(), 'region_id'=>getDefaultRegion()]);
@@ -1456,23 +1444,6 @@ function getUserAddress(){
     $address->save();
     return $address;
 }
-
-// function getCompanyAddress(){
-//     $user=User::where('user_type', 'admin')->first();
-//     if(count($user->addresses)==1){
-//         $address=$user->addresses->first();
-//     }else if(count($user->addresses)>1){
-//         $address=$user->addresses->where('set_default', 1)->first();
-//     }else if($user_setting=SellerSetting::where('type', 'default_address')->where('user_id', auth()->id())->first()){
-//         $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>$user_setting->value, 'region_id'=>$user_setting->relation_id]);
-//     }else if($user_setting=SellerSetting::where('type', 'default_address')->first()){
-//         $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>$user_setting->value, 'region_id'=>$user_setting->relation_id]);
-//     }else{
-//         $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>getDefaultCity(), 'region_id'=>getDefaultRegion()]);
-//     }
-//     $address->save();
-//     return $address;
-// }
 
 function getDefaultCity(){
     return 57;
