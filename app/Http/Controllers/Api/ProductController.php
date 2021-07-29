@@ -851,7 +851,7 @@ class ProductController extends Controller
     //     return 0;
     // }
     public function setLocationSetting(Request $request){
-        DB::table('ip_addresses')
+        $ip_address=DB::table('ip_addresses')
             ->updateOrInsert(
                 ['ip' => $request->ip()],
                 [
@@ -860,5 +860,7 @@ class ProductController extends Controller
                     'language_id' => $request->language_id??defaultLanguage()
                 ]
             );
+
+        return response()->json($ip_address);
     }
 }
