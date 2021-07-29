@@ -21,60 +21,27 @@ class CartController extends Controller
     public function add(Request $request)
     {
         $product = Product::findOrFail($request->id);
-
-        $variant = $product->variation;
-        $color = $product->color;
-        $tax = 0;
-
-        // if ($variant == '' && $color == '')
-        $price = $product->price;
-        // else {
-        //     $product_stock = $product->stocks->where('variant', $variant)->first();
-        //     $price = $product_stock->price;
-        // }
-
-        //discount calculation based on flash deal and regular discount
-        //calculation of taxes
-        $flash_deals = FlashDeal::where('status', 1)->get();
-        $inFlashDeal = false;
-        foreach ($flash_deals as $flash_deal) {
-            if ($flash_deal != null && $flash_deal->status == 1  && strtotime(date('d-m-Y')) >= $flash_deal->start_date && strtotime(date('d-m-Y')) <= $flash_deal->end_date && FlashDealProduct::where('flash_deal_id', $flash_deal->id)->where('product_id', $product->id)->first() != null) {
-                $flash_deal_product = FlashDealProduct::where('flash_deal_id', $flash_deal->id)->where('product_id', $product->id)->first();
-                if($flash_deal_product->discount_type == 'percent'){
-                    $price -= ($price*$flash_deal_product->discount)/100;
-                }
-                elseif($flash_deal_product->discount_type == 'amount'){
-                    $price -= $flash_deal_product->discount;
-                }
-                $inFlashDeal = true;
-                break;
-            }
+        $tax=taxPrice($product->id);
+        $price = $product->price+$tax+discountPrice($product->id);
+        $address=getUserAddress();
+        $quantity=0;
+        $is_express=false;
+        if($request->has('is_express')){
+            $is_express=$request->is_express;
         }
-        if (!$inFlashDeal) {
-            if($product->discount_type == 'percent'){
-                $price -= ($price*$product->discount)/100;
-            }
-            elseif($product->discount_type == 'amount'){
-                $price -= $product->discount;
-            }
+        if($request->has('quantity')){
+            $quantity=$request->quantity;
         }
-
-        if ($product->tax_type == 'percent') {
-            $tax = ($price * $product->tax) / 100;
-        }
-        elseif ($product->tax_type == 'amount') {
-            $tax = $product->tax;
-        }
+        $shipping_cost = calculateDeliveryCost($product, $address->id, $is_express);
 
         Cart::updateOrCreate([
             'user_id' => $request->user_id,
-            'product_id' => $request->id,
-            'variation' => $variant
+            'product_id' => $request->id
         ], [
             'price' => $price,
             'tax' => $tax,
-            'shipping_cost' => 0,
-            'quantity' => DB::raw('quantity + 1')
+            'shipping_cost' =>$shipping_cost,
+            'quantity' => $quantity??DB::raw('quantity + 1')
         ]);
 
         return response()->json([

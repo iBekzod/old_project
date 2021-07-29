@@ -722,33 +722,43 @@ if (!function_exists('homeBasePrice')) {
         // return 0;
         $product = Product::findOrFail($id);
         $currency = $product->currency;
-        $price = $product->price;
-        if ($product->tax_type == 'percent') {
-            $price += ($price * $product->tax) / 100;
-        } elseif ($product->tax_type == 'amount') {
-            $price += $product->tax;
-        }
+        $price = $product->price + taxPrice($product->id);
         return convertCurrency($price, $currency->id);
     }
 }
 
-if (!function_exists('homeDiscountedBasePrice')) {
-    function homeDiscountedBasePrice($id)
+if (!function_exists('taxPrice')) {
+    function taxPrice($id)
     {
         // return 0;
         $product = Product::findOrFail($id);
-        $currency = $product->currency;
         $price = $product->price;
+        $tax=0;
+        if ($product->tax_type == 'percent') {
+            $tax = ($price * $product->tax) / 100;
+        } elseif ($product->tax_type == 'amount') {
+            $tax = $product->tax;
+        }
+        return $tax;
+    }
+}
 
+if (!function_exists('discountPrice')) {
+    function discountPrice($id)
+    {
+        // return 0;
+        $product = Product::findOrFail($id);
+        $price = $product->price;
+        $discount=0;
         $flash_deals = FlashDeal::where('status', 1)->get();
         $inFlashDeal = false;
         foreach ($flash_deals as $flash_deal) {
             if ($flash_deal != null && $flash_deal->status == 1 && strtotime(date('d-m-Y')) >= $flash_deal->start_date && strtotime(date('d-m-Y')) <= $flash_deal->end_date && FlashDealProduct::where('flash_deal_id', $flash_deal->id)->where('product_id', $id)->first() != null) {
                 $flash_deal_product = FlashDealProduct::where('flash_deal_id', $flash_deal->id)->where('product_id', $id)->first();
                 if ($flash_deal_product->discount_type == 'percent') {
-                    $price -= ($price * $flash_deal_product->discount) / 100;
+                    $discount -= ($price * $flash_deal_product->discount) / 100;
                 } elseif ($flash_deal_product->discount_type == 'amount') {
-                    $price -= $flash_deal_product->discount;
+                    $discount -= $flash_deal_product->discount;
                 }
                 $inFlashDeal = true;
                 break;
@@ -757,17 +767,23 @@ if (!function_exists('homeDiscountedBasePrice')) {
 
         if (!$inFlashDeal) {
             if ($product->discount_type == 'percent') {
-                $price -= ($price * $product->discount) / 100;
+                $discount -= ($price * $product->discount) / 100;
             } elseif ($product->discount_type == 'amount') {
-                $price -= $product->discount;
+                $discount -= $product->discount;
             }
         }
+        return $discount;
+    }
+}
 
-        if ($product->tax_type == 'percent') {
-            $price += ($price * $product->tax) / 100;
-        } elseif ($product->tax_type == 'amount') {
-            $price += $product->tax;
-        }
+
+if (!function_exists('homeDiscountedBasePrice')) {
+    function homeDiscountedBasePrice($id)
+    {
+        // return 0;
+        $product = Product::findOrFail($id);
+        $currency = $product->currency;
+        $price = $product->price+discountPrice($id)+taxPrice($id);
         return convertCurrency($price, $currency->id);
     }
 }
@@ -1393,7 +1409,7 @@ if (!function_exists('getAttributeFormat')) {
         $delivery_cost=-2;//distance not found
     }
     if($delivery_cost>0){
-        // $delivery_cost=convertCurrency((double)$delivery_cost, Currency::where('code', defaultCurrency())->first()->id);
+        $delivery_cost=convertCurrency((double)$delivery_cost, Currency::where('code', defaultCurrency())->first()->id);
     }
     // dd($weight_cost);
     if($delivery_metrics){
