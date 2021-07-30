@@ -6,7 +6,7 @@
             <div class="d-flex align-items-start">
                 @include('frontend.inc.user_side_nav')
                 <div class="aiz-user-panel">
-                    <div class="aiz-titlebar mt-2 mb-4">
+                    <div class="mt-2 mb-4 aiz-titlebar">
                         <div class="row align-items-center">
                             <div class="col-md-6">
                                 <h1 class="h3">{{ translate('My Flash Deals') }}</h1>
@@ -23,7 +23,7 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <table class="table aiz-table mb-0">
+                                    <table class="table mb-0 aiz-table">
                                         <thead>
                                         <tr>
                                             <th>#</th>
@@ -47,7 +47,7 @@
                                                 <td>{{ url('flash-deal/'.$flash_deal->slug) }}</td>
                                                 <td class="text-right">
                                                     <a class="btn btn-primary btn-icon btn-circle btn-sm"
-                                                       style="@if($flash_deal->on_moderation) background-color: red; @else background-color: green; @endif"
+                                                       style="@if(!$flash_deal->status) background-color: red; @else background-color: green; @endif"
                                                        title="{{ translate('Status') }}">
                                                         <i class="las la-check"></i>
                                                     </a>
