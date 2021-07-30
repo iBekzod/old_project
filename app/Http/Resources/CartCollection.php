@@ -14,7 +14,7 @@ class CartCollection extends ResourceCollection
                     'id' => $data->id,
                     'product' => [
                         'name' => $data->product->getTranslation('name'),
-                        'image' => api_asset($data->product->thumbnail_img)
+                        'image' => api_asset($data->product->variation->thumbnail_img)
                     ],
                     'variation' => $data->variation,
                     'price' => (double) $data->price,

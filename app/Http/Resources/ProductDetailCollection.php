@@ -27,6 +27,8 @@ class ProductDetailCollection extends ResourceCollection
         $seller_products=getPublishedProducts('product', ['where'=>[['user_id', $product->user_id],['element_id', $product->element_id]]], [], [])->get();
         try{
             $data = [
+                'shipping_type' => $product->delivery_type,
+                'shipping_cost' => $this->calculateShippingCost($product, false),
                 'express_shipping_cost'=>$this->calculateShippingCost($product, true),
                 'id' => (integer) $product->id,
                 'name' => $variation->getTranslation('name'),
@@ -53,6 +55,7 @@ class ProductDetailCollection extends ResourceCollection
                 ],
                 'photos' => $this->convertPhotos(explode(',', $element->photos)),
                 'thumbnail_image' => api_asset($variation->thumbnail_img),
+                'earn_point'=>($product->earn_point!=0)?$product->earn_point:calculateProductClubPoint($product->id),
                 'base_price' => (double) homeBasePrice($product->id),
                 'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
                 'currency_code'=>defaultCurrency(),
@@ -77,14 +80,13 @@ class ProductDetailCollection extends ResourceCollection
                 'rating_count' => (integer) Review::where(['product_id' => $product->id])->count(),
                 'description' => $element->getTranslation('description'),
                 'reviews' => new ReviewCollection(Review::where('product_id', $product->id)->latest()->get()),
-                'price_lower' => (double) convertCurrency($products->min('price'), $product->currency_id),
-                'price_higher' => (double) convertCurrency($products->max('price'), $product->currency_id),
+                'price_lower' => (double) convertCurrency($seller_products->min('price'), $product->currency_id),
+                'price_higher' => (double) convertCurrency($seller_products->max('price'), $product->currency_id),
                 // 'choice_options' => $this->convertToChoiceOptions(json_decode($product->variation, true), $product),
                 'choice_options' => $this->convertToChoiceOptions($seller_products),
                 'short_characteristics' => $this->convertToShortCharacteristics(json_decode($element->characteristics)),
                 'colors' => new ProductColorCollection(json_decode($element->variation_colors)),
-                'shipping_type' => $product->delivery_type,
-                'shipping_cost' => $this->calculateShippingCost($product),
+
                 'characteristics' => $this->convertToCharacteristics(json_decode($element->characteristics, true)),
 
                 'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??[],
@@ -344,13 +346,12 @@ class ProductDetailCollection extends ResourceCollection
     protected function calculateShippingCost($product, $is_express=false){
         // return 20000;
         // dd(request()->ip());
-        if($product->delivery_type=='free'){
-            return 0;
-        }else {
-            $address=getUserAddress();
-            return calculateDeliveryCost($product, $address->id, $is_express);
+        // if($product->delivery_type=='free'){
+        //     return 0;
+        // }else {
+        $address=getUserAddress();
+        return calculateDeliveryCost($product, $address->id, $is_express);
             // return calculateShipping(['product_id'=>$product->id, 'type'=>'precise', 'address_id'=>$address->id]);
-        }
-
+        // }
     }
 }

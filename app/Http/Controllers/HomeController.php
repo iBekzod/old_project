@@ -79,19 +79,36 @@ class HomeController extends Controller
             $user->password = Hash::make($request->password);
 
 
-            $countries=Country::where('id',234)->first();
-            $regions=City::where('type', 'region')->get();
-            //   dd($regions);
-            $cities=City::where('type', 'district')->orWhere('type', 'city')->get();
+            // $countries=Country::where('id',234)->first();
+            // $regions=City::where('type', 'region')->get();
+            // //   dd($regions);
+            // $cities=City::where('type', 'district')->orWhere('type', 'city')->get();
+
+           $countrys=Country::where('status',1)->get();
+        //    dd($countrys);
+            // $country=Country::where('id', 234)->first();
+            // $country_id=$country->id;
+            // dd();
+            // dd($country->name);
+
+            // $region=$country->regions->first();
+            // dd($region->id);
+            // dd($region->children->pluck('name', 'id'));
 
 
-           
+
+            // $categories = Category::where('level', 0)->get();
+            // $sub_categories = Category::where('parent_id', $category_id)->get();
+            // $sub_sub_categories = Category::where('parent_id', $sub_category_id)->get();
+
+            // TODO::hamma kereli dalniylay jonatilishi kere
 
             // $user->save();
             if ($user->save()) {
                 auth()->login($user, true);
-                return view('frontend.user.seller.form_second')->with('user_id', $user->id);
+                return view('frontend.user.seller.form_second',compact('countrys'));
                 // return 'keldi';
+
             }
         } else if ($request->method() === 'GET') {
             //    if(Auth::check()){
@@ -101,6 +118,35 @@ class HomeController extends Controller
             return view('frontend.user_registration');
         }
         return back();
+    }
+    public function fetchState(Request $request)
+    {
+          if(City::where('country_id',$request->country_id)->exists()){
+               $regions=City::where('type','region')->where('country_id',$request->country_id);
+                $data['states'] = $regions->get(["name", "id"]);
+                return response()->json($data);
+          }
+          else{
+              return 'error';
+            }
+
+    }
+
+    public function fetchCity(Request $request)
+    {
+
+         if($region=City::where('id',$request->state_id)->first()){
+            // dd(City::where('parent_id',$request->state_id)->get());
+            $data['cities'] = City::where('parent_id',$request->state_id)->get(["name", "id"]);
+            // dd($data);
+                return response()->json($data);
+          }
+          else{
+              return 'error';
+            }
+
+        // $data['cities'] = City::where("state_id",$request->state_id)->get(["name", "id"]);
+        // return response()->json($data);
     }
 
     public function seller_login(Request $request)
@@ -193,6 +239,7 @@ class HomeController extends Controller
     }
 
     /**
+     *
      * Show the admin dashboard.
      *
      * @return \Illuminate\Http\Response
@@ -218,7 +265,7 @@ class HomeController extends Controller
         //     return view('frontend.user.customer.dashboard');
         // }
         else {
-            return $this->admin_dashboard();
+            return $this->index();
             // abort(404);
         }
     }
@@ -316,7 +363,7 @@ class HomeController extends Controller
         if (auth()->user() != null) {
             return $this->dashboard();
         }
-        return redirect()->route('login');
+          return redirect()->route('login');
     }
 
     public function home()
