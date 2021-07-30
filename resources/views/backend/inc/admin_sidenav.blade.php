@@ -608,7 +608,7 @@
                 @endif
 
             <!-- Offline Payment Addon-->
-                @if ($offline_payment != null && $offline_payment->activated)
+                @if (false && $offline_payment != null && $offline_payment->activated)
                     @if(Auth::user()->user_type == 'admin' || in_array('16', json_decode(Auth::user()->staff->role->permissions)))
                         <li class="aiz-side-nav-item">
                             <a href="#" class="aiz-side-nav-link">
@@ -653,7 +653,7 @@
                 @endif
 
             <!-- Paytm Addon -->
-                @if ($paytm != null && $paytm->activated)
+                @if (false && $paytm != null && $paytm->activated)
                     @if(Auth::user()->user_type == 'admin' || in_array('17', json_decode(Auth::user()->staff->role->permissions)))
                         <li class="aiz-side-nav-item">
                             <a href="#" class="aiz-side-nav-link">
