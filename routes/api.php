@@ -197,6 +197,7 @@ Route::prefix('v1')->group(function () {
     // Route::get('/region/{id}/cities', 'Api\CityController@cities');
     Route::get('/region/{country_id}/{region_id}/cities', 'Api\CityController@regions');
     Route::get('register/me', 'Api\ProductController@setLocationSetting');
+    Route::get('get/me', 'Api\ProductController@getLocationSetting');
 
 });
 
