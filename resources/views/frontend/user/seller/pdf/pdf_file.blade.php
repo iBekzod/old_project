@@ -40,7 +40,7 @@
     }
 </style>
  </head>
- <body>
+ <body style="font-family:DejaVu Sans !important;">
     <div class=" offset-sm-1 col-sm-10">
         <div class="card">
             <div class="container px-5" id="selection">
