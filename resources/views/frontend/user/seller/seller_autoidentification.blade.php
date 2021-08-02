@@ -12,6 +12,8 @@
     .card{
         width: 85% !important;
         margin: 0 auto;
+        text-align: justify;
+        text-justify: inter-word;
     }
     .container{
         width: 95% !important;
