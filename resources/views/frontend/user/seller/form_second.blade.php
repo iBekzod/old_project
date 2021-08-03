@@ -1,7 +1,7 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-{{-- @dd($user_id); --}}
+
 	<div class=" offset-sm-1 col-sm-10">
 
 		<div class="card">
@@ -52,8 +52,6 @@
 					<div class="row">
 						<div class=" offset-lg-1 col-lg-11 form-horizontal" id="form">
 
-
-
 							@foreach (json_decode(\App\BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element)
                                 @if($element->type=='text')
                                 <div class="form-group row" id="category">
@@ -99,6 +97,24 @@
                                 </div>
                                 @endif
                             @endforeach
+                            <div class="google_maps pl-2" onload="initialize()">
+                                <div class=" col-lg-11 my-3  form-horizontal">
+                                    <h5 >{{translate('отметьте место на карте')}}</h5>
+
+                                </div>
+                                <div>
+                                    <input id="address" type="textbox" style="width:60%" value="rua tabapuã - vila olimpia - são paulo">
+                                    <input type="button" value="Geocode" onclick="codeAddress()">
+                                    <input type="text" id="lat"/>
+                                    <input type="text" id="lng"/>
+
+                                  </div>
+                                <div id="map" style="width: 95%; height:500px; ">
+
+                                </div>
+
+                            </div>
+
 
                             <div class="form-group text-right  mr-4 mt-3 ">
                                 <button type="submit" class="btn btn-primary py-2">{{translate('Save')}}</button>
@@ -109,6 +125,7 @@
 
 				</form>
 			</div>
+
 		</div>
 
 	</div>
@@ -118,53 +135,73 @@
 @section('script')
 	<script type="text/javascript">
 
-$(document).ready(function () {
-            $('#country-dd').on('change', function () {
-                var idCountry = this.value;
-                $("#state-dd").html('');
-                $.ajax({
-                    url: "{{url('api/fetch-states')}}",
-                    type: "POST",
-                    data: {
-                        country_id: idCountry,
-                        _token: '{{csrf_token()}}'
-                    },
-                    dataType: 'json',
-                    success: function (result) {
-                        $('#state-dd').html('<option value="">Select State</option>');
-                        $.each(result.states, function (key, value) {
-                            $("#state-dd").append('<option value="' + value
-                                .id + '">' + value.name + '</option>');
-                        });
-                        $('#city-dd').html('<option value="">Select City</option>');
-                    }
-                });
-            });
-            $('#state-dd').on('change', function () {
-                var idState = this.value;
-                $("#city-dd").html('');
-                $.ajax({
-                    url: "{{url('api/fetch-cities')}}",
-                    type: "POST",
-                    data: {
-                        state_id: idState,
-                        _token: '{{csrf_token()}}'
-                    },
-                    dataType: 'json',
-                    success: function (res) {
-                        // alert(res.cities);
-                        $('#city-dd').html('<option value="">Select City</option>');
-                        $.each(res.cities, function (key, value) {
-                            $("#city-dd").append('<option value="' + value
-                                .id + '">' + value.name + '</option>');
-                        });
-                    }
-                });
-            });
-        });
 
-
+        $(document).ready(function () {
+                    $('#country-dd').on('change', function () {
+                        var idCountry = this.value;
+                        $("#state-dd").html('');
+                        $.ajax({
+                            url: "{{url('api/fetch-states')}}",
+                            type: "POST",
+                            data: {
+                                country_id: idCountry,
+                                _token: '{{csrf_token()}}'
+                            },
+                            dataType: 'json',
+                            success: function (result) {
+                                $('#state-dd').html('<option value="">Select State</option>');
+                                $.each(result.states, function (key, value) {
+                                    $("#state-dd").append('<option value="' + value
+                                        .id + '">' + value.name + '</option>');
+                                });
+                                $('#city-dd').html('<option value="">Select City</option>');
+                            }
+                        });
+                    });
+                    $('#state-dd').on('change', function () {
+                        var idState = this.value;
+                        $("#city-dd").html('');
+                        $.ajax({
+                            url: "{{url('api/fetch-cities')}}",
+                            type: "POST",
+                            data: {
+                                state_id: idState,
+                                _token: '{{csrf_token()}}'
+                            },
+                            dataType: 'json',
+                            success: function (res) {
+                                // alert(res.cities);
+                                $('#city-dd').html('<option value="">Select City</option>');
+                                $.each(res.cities, function (key, value) {
+                                    $("#city-dd").append('<option value="' + value
+                                        .id + '">' + value.name + '</option>');
+                                });
+                            }
+                        });
+                    });
+                });
 	</script>
+
+    <script>
+        let map;
+
+            function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 41.311081, lng:  69.240562 },
+                zoom: 8,
+            });
+            }
+
+    </script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPEW1j0_XsP39Xm8Mo8XMM939vW6qbR2Q&callback=initMap&libraries=&v=weekly"
+      async
+    ></script>
+
+
+
+
+
 @endsection
 
 
