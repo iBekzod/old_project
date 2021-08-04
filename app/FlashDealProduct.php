@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Http\Resources\FlashDealCollection;
 use App\Product;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,6 +18,6 @@ class FlashDealProduct extends Model
 
     public function getFlashDealAttribute()
     {
-        return FlashDeal::where('id', $this->flash_deal_id)->first()??[];
+        return new FlashDealCollection(FlashDeal::where('id', $this->flash_deal_id)->get());
     }
 }
