@@ -183,7 +183,6 @@
 
 
      <script>
-          let map;
                    function initMap() {
                     const myLatlng = {lat: 41.311081, lng:  69.240562 };
                     const map = new google.maps.Map(document.getElementById("map"), {
@@ -200,8 +199,8 @@
                     infoWindow.open(map);
                     // Configure the click listener.
                     map.addListener("click", (mapsMouseEvent) => {
+                        // Close the current InfoWindow.
 
-                        addMarker(mapsMouseEvent.latLng);
                         infoWindow.close();
                         // Create a new InfoWindow.
                         infoWindow = new google.maps.InfoWindow({
@@ -214,22 +213,6 @@
                         infoWindow.open(map);
                     });
                     }
-
-
-
-
-
-
-function addMarker(position) {
-  const marker = new google.maps.Marker({
-    position,
-    map,
-  });
-  markers.push(marker);
-}
-
-
-
 
     </script>
 
