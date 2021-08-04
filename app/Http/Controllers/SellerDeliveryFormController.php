@@ -148,6 +148,7 @@ class SellerDeliveryFormController extends Controller
 public function generatorPDF() {
     // return 'came';
     $user_id = auth()->id();
+    // dd($user_id);
     $user = User::findOrFail($user_id);
     $selection=array();
     if(Seller::where('user_id', $user_id)->exists()){
@@ -157,18 +158,27 @@ public function generatorPDF() {
             $selection[$element['label']]=$element['value'];
         }
     }
-    // dd($selection);
+    // dd($seller->user_id);
+    //  dd($selection);
     // $seller=Seller::findOrFail($user_id);
     $date=Carbon::parse($seller->created_at)->format('d-m-Y');
             // dd($date);
 
-    //   $path = public_path('pdf_docs/'); // <--- folder to store the pdf documents into the server;
-    //   $fileName =  time().'.'. 'pdf' ; // <--giving the random filename,
-    //   $pdf->save($path . '/' . $fileName);
-    //   $generated_pdf_link = url('pdf_docs/'.$fileName);
-    //   return response()->json($generated_pdf_link);
 
-     $array=[$selection,$user_id,$date];
+
+            // ->with('selection', $selection)->with('seller', $seller)->with('date', $date)
+
+
+    $pdf = PDF::loadView('frontend.user.seller.pdf.pdf_file', compact('selection', 'date', 'seller')); // <--- load your view into theDOM wrapper;
+    return $pdf->stream('downlaod.pdf');
+    return back();
+  }
+}
+
+
+
+
+    //  $array=[$selection,$user_id,$date];
         // dd($array);
     //  dd($user->id);
 
@@ -180,10 +190,38 @@ public function generatorPDF() {
     //   dd($array[0]['Форма_собственности']);
     // view()->share('employee',$user);
 
-    $pdf = PDF::loadView('frontend.user.seller.pdf.pdf_file'); // <--- load your view into theDOM wrapper;
-    return $pdf->stream('downlaod.pdf');
-    return back();
-  }
-}
-
+    // $array = array();
+    // $data = array();
+    // $i = 0;
+    // foreach (json_decode(BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element) {
+    //     $item = array();
+    //     if ($element->type) {
+    //         $item['type'] = $element->type;
+    //         $item['label'] = $element->label;
+    //         $item['value'] = $request[$element->label];
+    //         $array[$element->label] = $request[$element->label];
+    //     }
+    //     array_push($data, $item);
+    //     $i++;
+    // }
+    // // dd($data);
+    // $seller->user_id = $user_id;
+    // $seller->verification_info = json_encode($data);
+    // //  dd($user_id);
+    // $shop->user_id =$user_id;
+    // $shop->name = $request->Название_магазина;
+    // $shop->address = $request->Адрес_регистрации_вендора;
+    // $shop->slug = SlugService::createSlug(Shop::class, 'slug', slugify($request->Название_магазина));
+    // // dd($shop);
+    // //   dd($seller->verification_info);
+    // $date = Carbon::parse($seller->created_at)->format('d-m-Y');
+    // // dd($array);
+    // // dd($date);
+    // if ($user->save()) {
+    //     if ($seller->save()) {
+    //         if($shop->save()){
+    //             return view('frontend.user.seller.seller_autoidentification')->with('array', $array)->with('seller', $seller)->with('date', $date);
+    //         }
+    //     }
+    // }
 // 'frontend.user.seller.seller_delivery')->with('seller', $selection)->with('user_id', $user_id)->with('date', $date);
