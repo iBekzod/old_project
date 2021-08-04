@@ -33,6 +33,8 @@ class ProductCollection extends ResourceCollection
                     'earn_point'=>($product->earn_point!=0)?$product->earn_point:calculateProductClubPoint($product->id),
                     'base_price' => (double) homeBasePrice($product->id),
                     'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
+                    'shipping_type' => $product->delivery_type,
+                    'shipping_cost' => $this->calculateShippingCost($product),
                     'currency_code'=>defaultCurrency(),
                     'exchange_rate'=>defaultExchangeRate(),
                     'todays_deal' => (integer) $product->todays_deal,
@@ -72,5 +74,10 @@ class ProductCollection extends ResourceCollection
             array_push($result, api_asset($item));
         }
         return $result;
+    }
+
+    protected function calculateShippingCost($product, $is_express=false){
+        $address=getUserAddress();
+        return calculateDeliveryCost($product, $address->id, $is_express);
     }
 }
