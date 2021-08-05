@@ -11,44 +11,7 @@
 			<div class="card-body">
 				<form action="{{ route('seller.autoidentification') }}" method="post">
 					@csrf
-                    <div class="row mb-4">
-                        <div class=" offset-lg-1 col-lg-11 form-horizontal">
-                                <div class=" col-lg-11 mb-3 form-horizontal">
-                                    <h5 class="mb-0">{{translate('Address Seller')}}</h5>
-                                    <hr>
-                                </div>
-                                <div class=" col-lg-5 pl-0" style="display:inline-block">
-                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
-                                        id="country-dd" name="country_id" onchange="sort_elements()">
-                                        <option value="0">{{ translate('All countries') }}</option>
 
-                                        {{-- <option value="{{$country->id}}">{{$country->name}}</option> --}}
-                                        @foreach ($countrys as $data)
-                                                <option value="{{$data->id}}">
-                                                    {{$data->name}}
-
-                                                </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class=" col-lg-3" style="display:inline-block">
-                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
-                                    id="state-dd" name="region_id" onchange="sort_elements()">
-                                        {{-- <option value="0">{{ translate('All countries') }}</option> --}}
-
-
-                                    </select>
-                                </div>
-                                <div class="col-lg-3" style="display:inline-block">
-                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
-                                    id="city-dd"  name="city_id" onchange="sort_elements()">
-                                        {{-- <option value="0">{{ translate('All countries') }}</option> --}}
-
-
-                                    </select>
-                                </div>
-                        </div>
-                    </div>
 					<div class="row">
 						<div class=" offset-lg-1 col-lg-11 form-horizontal" id="form">
 
@@ -97,20 +60,7 @@
                                 </div>
                                 @endif
                             @endforeach
-                            <div class="google_maps pl-2" onload="initialize()">
-                                <div class=" col-lg-11 my-3  form-horizontal">
-                                    <h5 >{{translate('отметьте место на карте')}}</h5>
 
-                                </div>
-                                <div>
-                                    <input id="address" type="textbox" style="width:60%" value="tashkent">
-                                    <input type="button" value="Geocode" onclick="codeAddress()">
-                                    <input type="text" id="lat"/>
-                                    <input type="text" id="lng"/>
-
-                                  </div>
-                                  <div id="map" style="height:300px;top:30px"></div>
-                                </div>
 
                             </div>
 
@@ -120,6 +70,58 @@
                             </div>
 						</div>
 
+                    </div>
+                    <div class="row my-4">
+                        <div class=" offset-lg-1 col-lg-11 form-horizontal">
+                                <div class=" col-lg-11 mb-3 form-horizontal">
+                                    <h5 class="mb-0">{{translate('Address Seller')}}</h5>
+                                    <hr>
+                                </div>
+                                <div class=" col-lg-5 pl-0" style="display:inline-block">
+                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
+                                        id="country-dd" name="country_id" onchange="sort_elements()">
+                                        <option value="0">{{ translate('All countries') }}</option>
+
+                                        {{-- <option value="{{$country->id}}">{{$country->name}}</option> --}}
+                                        @foreach ($countrys as $data)
+                                                <option value="{{$data->id}}">
+                                                    {{$data->name}}
+
+                                                </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class=" col-lg-3" style="display:inline-block">
+                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
+                                    id="state-dd" name="region_id" onchange="sort_elements()">
+                                        {{-- <option value="0">{{ translate('All countries') }}</option> --}}
+
+
+                                    </select>
+                                </div>
+                                <div class="col-lg-3" style="display:inline-block">
+                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
+                                    id="city-dd"  name="city_id" onchange="sort_elements()">
+                                        {{-- <option value="0">{{ translate('All countries') }}</option> --}}
+
+
+                                    </select>
+                                </div>
+                        </div>
+                        <div class="google_maps pl-2" onload="initialize()">
+                            <div class=" col-lg-11 my-3  form-horizontal">
+                                <h5 >{{translate('отметьте место на карте')}}</h5>
+
+                            </div>
+                            <div>
+                                <input id="address" type="textbox" style="width:60%" value="tashkent">
+                                <input type="button" value="Geocode" onclick="codeAddress()">
+                                <input type="text" id="lat"/>
+                                <input type="text" id="lng"/>
+
+                              </div>
+                              <div id="map" style="height:300px;top:30px"></div>
+                        </div>
                     </div>
 
 				</form>
@@ -183,7 +185,6 @@
 
 
      <script>
-          let map;
                    function initMap() {
                     const myLatlng = {lat: 41.311081, lng:  69.240562 };
                     const map = new google.maps.Map(document.getElementById("map"), {
@@ -200,8 +201,8 @@
                     infoWindow.open(map);
                     // Configure the click listener.
                     map.addListener("click", (mapsMouseEvent) => {
+                        // Close the current InfoWindow.
 
-                        addMarker(mapsMouseEvent.latLng);
                         infoWindow.close();
                         // Create a new InfoWindow.
                         infoWindow = new google.maps.InfoWindow({
@@ -215,64 +216,9 @@
                     });
                     }
 
-
-
-
-
-
-function addMarker(position) {
-  const marker = new google.maps.Marker({
-    position,
-    map,
-  });
-  markers.push(marker);
-}
-
-
-
-
     </script>
 
-   {{-- <script>
-      var geocoder;
-      var map;
-      var mapOptions = {
-          zoom: 10,
-          center: { lat: 41.311081, lng:  69.240562 },
-        }
-      var marker;
 
-      function initialize() {
-        geocoder = new google.maps.Geocoder();
-        map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
-        codeAddress();
-      }
-
-      function codeAddress() {
-        var address = document.getElementById('address').value;
-        geocoder.geocode( { 'address': address}, function(results, status) {
-          if (status == google.maps.GeocoderStatus.OK) {
-            map.setCenter(results[0].geometry.location);
-            console.log(map);
-            if(marker)
-              marker.setMap(null);
-            marker = new google.maps.Marker({
-                map: map,
-                position: results[0].geometry.location,
-                draggable: true
-            });
-            google.maps.event.addListener(marker, "dragend", function() {
-              document.getElementById('lat').value = marker.Position().lat();
-              document.getElementById('lng').value = marker.Position().lng();
-            });
-            document.getElementById('lat').value = marker.Position().lat();
-            document.getElementById('lng').value = marker.Position().lng();
-          } else {
-            alert('Geocode was not successful for the following reason: ' + status);
-          }
-        });
-      }
-   </script> --}}
 
     <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPEW1j0_XsP39Xm8Mo8XMM939vW6qbR2Q&callback=initMap&libraries=&v=weekly"
