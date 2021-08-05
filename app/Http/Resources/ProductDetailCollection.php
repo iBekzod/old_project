@@ -328,6 +328,7 @@ class ProductDetailCollection extends ResourceCollection
                     ],
                 ],
                 'name' => $product->user->name,
+                'slug' => $product->added_by == 'admin' ? '' : $product->user->shop->slug,
                 'shipping_type' => $product->delivery_type,
                 'shipping_cost' => $this->calculateShippingCost($product),
                 'is_current'=>($item->id==$product->id),

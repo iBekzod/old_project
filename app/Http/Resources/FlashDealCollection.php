@@ -34,8 +34,14 @@ class FlashDealCollection extends ResourceCollection
             }
         }
         return [
+            "status"=> $flash_deal->status,
+            "featured"=> $flash_deal->featured,
+            "background_color"=> $flash_deal->background_color,
+            "text_color"=> $flash_deal->text_color,
+            "banner"=> api_asset($flash_deal->banner),
             'title' => $flash_deal->title,
             'slug'=>$flash_deal->slug,
+            'start_date' => $flash_deal->end_date,
             'end_date' => $flash_deal->end_date,
             'min_price'=>$min_price,
             'max_price'=>$max_price,
