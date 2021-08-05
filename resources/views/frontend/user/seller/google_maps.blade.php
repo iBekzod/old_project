@@ -60,7 +60,20 @@
                                 </div>
                                 @endif
                             @endforeach
+                            <div class="google_maps pl-2" onload="initialize()">
+                                <div class=" col-lg-11 my-3  form-horizontal">
+                                    <h5 >{{translate('отметьте место на карте')}}</h5>
 
+                                </div>
+                                <div>
+                                    <input id="address" type="textbox" style="width:60%" value="tashkent">
+                                    <input type="button" value="Geocode" onclick="codeAddress()">
+                                    <input type="text" id="lat"/>
+                                    <input type="text" id="lng"/>
+
+                                  </div>
+                                  <div id="map" style="height:300px;top:30px"></div>
+                                </div>
 
                             </div>
 
@@ -107,20 +120,6 @@
 
                                     </select>
                                 </div>
-                        </div>
-                        <div class="google_maps pl-2" onload="initialize()">
-                            <div class=" col-lg-11 my-3  form-horizontal">
-                                <h5 >{{translate('отметьте место на карте')}}</h5>
-
-                            </div>
-                            <div>
-                                <input id="address" type="textbox" style="width:60%" value="tashkent">
-                                <input type="button" value="Geocode" onclick="codeAddress()">
-                                <input type="text" id="lat"/>
-                                <input type="text" id="lng"/>
-
-                              </div>
-                              <div id="map" style="height:300px;top:30px"></div>
                         </div>
                     </div>
 
@@ -218,7 +217,46 @@
 
     </script>
 
+   {{-- <script>
+      var geocoder;
+      var map;
+      var mapOptions = {
+          zoom: 10,
+          center: { lat: 41.311081, lng:  69.240562 },
+        }
+      var marker;
 
+      function initialize() {
+        geocoder = new google.maps.Geocoder();
+        map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+        codeAddress();
+      }
+
+      function codeAddress() {
+        var address = document.getElementById('address').value;
+        geocoder.geocode( { 'address': address}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            map.setCenter(results[0].geometry.location);
+            console.log(map);
+            if(marker)
+              marker.setMap(null);
+            marker = new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location,
+                draggable: true
+            });
+            google.maps.event.addListener(marker, "dragend", function() {
+              document.getElementById('lat').value = marker.Position().lat();
+              document.getElementById('lng').value = marker.Position().lng();
+            });
+            document.getElementById('lat').value = marker.Position().lat();
+            document.getElementById('lng').value = marker.Position().lng();
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+        });
+      }
+   </script> --}}
 
     <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPEW1j0_XsP39Xm8Mo8XMM939vW6qbR2Q&callback=initMap&libraries=&v=weekly"
