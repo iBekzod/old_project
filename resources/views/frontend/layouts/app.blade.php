@@ -26,6 +26,49 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script src="/supportboard/js/min/jquery.min.js"></script>
     <script id="sbinit" src="/supportboard/js/main.js"></script>
+    <link href="https://developers.google.com/maps/documentation/javascript/examples/default.css" rel="stylesheet">
+    <script type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPEW1j0_XsP39Xm8Mo8XMM939vW6qbR2Q&sensor=false">
+    </script>
+    <script>
+      var geocoder;
+      var map;
+      var mapOptions = {
+          zoom: 12,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+      var marker;
+
+      function initialize() {
+        geocoder = new google.maps.Geocoder();
+        map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+        codeAddress();
+      }
+
+      function codeAddress() {
+        var address = document.getElementById('address').value;
+        geocoder.geocode( { 'address': address}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            map.setCenter(results[0].geometry.location);
+            if(marker)
+              marker.setMap(null);
+            marker = new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location,
+                draggable: true
+            });
+            google.maps.event.addListener(marker, "dragend", function() {
+              document.getElementById('lat').value = marker.getPosition().lat();
+              document.getElementById('lng').value = marker.getPosition().lng();
+            });
+            document.getElementById('lat').value = marker.getPosition().lat();
+            document.getElementById('lng').value = marker.getPosition().lng();
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+        });
+      }
+    </script>
     @php
         $code = '';
         if (Auth::check() && !isAdmin()) $code = 'var SB_AECOMMERCE_ACTIVE_USER = ' . Auth::user()->id . ';';
@@ -179,20 +222,7 @@
     @yield('css')
     @yield('js')
 </head>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-
-</body>
-</html>
-<body>
+<body onload="initialize()">
     @php
         if(isset($lang) && $lang==null){
             $lang=default_language();

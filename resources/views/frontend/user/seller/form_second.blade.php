@@ -15,115 +15,115 @@
 					<div class="row">
 						<div class=" offset-lg-1 col-lg-11 form-horizontal" id="form">
 
-							@foreach (json_decode(\App\BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element)
-                                @if($element->type=='text')
-                                <div class="form-group row" id="category">
-                                    @if ($element->label=='Форма_собственности')
 
-                                      <label class="col-lg-3 col-from-label mb-2"> {{translate($element->label)}}</label>
-                                      <div class="col-lg-8">
-                                        <select name="{{($element->label)}}" class="form-control py-2">
-                                            <option value="OАО">OАО</option>
-                                            <option value="ЗАО">ЗАО</option>
-                                            <option value="ООО">ООО</option>
-                                            <option value="Частное предприятие">Частное предприятие</option>
-                                            <option value="Частный предприниматель">Частный предприниматель</option>
-                                            <option value="СП">СП</option>
-                                            <option value="ИП">ИП</option>
-                                            <option value="ГУП">ГУП</option>
-                                            <option value="Семейное предприятие">Семейное предприятие</option>
-                                            <option value="Фермерское хозяйство">Фермерское хозяйство</option>
-                                            <option value="Частное лицо">Частное лицо</option>
-                                        </select>
-                                      </div>
+                           <div class="row">
+                               <div class="col-md-12">
+                                        @foreach (json_decode(\App\BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element)
+                                        @if($element->type=='text')
+                                        <div class="form-group row" id="category">
+                                            @if ($element->label=='Форма_собственности')
 
-                                    @else
-                                        <label class="col-lg-3 col-from-label mb-2"> {{translate($element->label)}}</label>
-                                        <div class="col-lg-8">
-                                            <input class="form-control" type="text" name="{{($element->label)}}" required>
+                                            <label class="col-lg-3 col-from-label mb-2"> {{translate($element->label)}}</label>
+                                            <div class="col-lg-8">
+                                                <select name="{{($element->label)}}" class="form-control py-2">
+                                                    <option value="OАО">OАО</option>
+                                                    <option value="ЗАО">ЗАО</option>
+                                                    <option value="ООО">ООО</option>
+                                                    <option value="Частное предприятие">Частное предприятие</option>
+                                                    <option value="Частный предприниматель">Частный предприниматель</option>
+                                                    <option value="СП">СП</option>
+                                                    <option value="ИП">ИП</option>
+                                                    <option value="ГУП">ГУП</option>
+                                                    <option value="Семейное предприятие">Семейное предприятие</option>
+                                                    <option value="Фермерское хозяйство">Фермерское хозяйство</option>
+                                                    <option value="Частное лицо">Частное лицо</option>
+                                                </select>
+                                            </div>
+
+                                            @else
+                                                <label class="col-lg-3 col-from-label mb-2"> {{translate($element->label)}}</label>
+                                                <div class="col-lg-8">
+                                                    <input class="form-control" type="text" name="{{($element->label)}}" required>
+                                                </div>
+                                            @endif
                                         </div>
-                                    @endif
-                                </div>
-                                @elseif($element->type=='number')
-                                <div class="form-group row" id="category">
-                                    <label class="col-lg-3 col-from-label mb-2"> {{translate($element->label)}}</label>
-                                    <div class="col-lg-8">
-                                    <input class="form-control" type="number" name="{{($element->label)}}" required>
+                                        @elseif($element->type=='number')
+                                        <div class="form-group row" id="category">
+                                            <label class="col-lg-3 col-from-label mb-2"> {{translate($element->label)}}</label>
+                                            <div class="col-lg-8">
+                                            <input class="form-control" type="number" name="{{($element->label)}}" required>
+                                            </div>
+                                        </div>
+                                        @elseif($element->type=='email')
+                                        <div class="form-group row" id="category">
+                                            <label class="col-lg-3 col-from-label mb-2"> {{translate($element->label)}}</label>
+                                            <div class="col-lg-8">
+                                            <input class="form-control" type="email" name="{{($element->label)}}" required>
+                                            </div>
+                                        </div>
+                                        @endif
+                                    @endforeach
+                               </div>
+                           </div>
+                           <div class="row">
+                                    <div class=" col-lg-11 my-2 form-horizontal">
+                                        <h5 class="mb-0">{{translate('Address Seller')}}</h5>
+                                        <hr>
                                     </div>
-                                </div>
-                                @elseif($element->type=='email')
-                                <div class="form-group row" id="category">
-                                    <label class="col-lg-3 col-from-label mb-2"> {{translate($element->label)}}</label>
-                                    <div class="col-lg-8">
-                                    <input class="form-control" type="email" name="{{($element->label)}}" required>
+                                    <div class=" col-lg-5 pl-0" style="display:inline-block">
+                                        <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
+                                            id="country-dd" name="country_id" onchange="sort_elements()">
+                                            <option value="0">{{ translate('All countries') }}</option>
+
+                                            {{-- <option value="{{$country->id}}">{{$country->name}}</option> --}}
+                                            @foreach ($countrys as $data)
+                                                    <option value="{{$data->id}}">
+                                                        {{$data->name}}
+
+                                                    </option>
+                                            @endforeach
+                                        </select>
                                     </div>
+                                    <div class=" col-lg-3" style="display:inline-block">
+                                        <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
+                                        id="state-dd" name="region_id" onchange="sort_elements()">
+                                            {{-- <option value="0">{{ translate('All countries') }}</option> --}}
+
+
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3" style="display:inline-block">
+                                        <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
+                                        id="city-dd"  name="city_id" onchange="sort_elements()">
+                                            {{-- <option value="0">{{ translate('All countries') }}</option> --}}
+
+
+                                        </select>
+                                    </div>
+                           </div>
+                           <div class="row">
+                             <div class="col-md-12 p-0">
+                                    <div>
+                                        <div class="row">
+
+                                        </div>
+                                        <input id="address" type="textbox" style="width:60%" value="tashkent">
+                                        <input type="button" value="Geocode" onclick="codeAddress()">
+                                        <input type="text" id="lat"/>
+                                        <input type="text" id="lng"/>
+
+                                    </div>
+                                    <div id="map_canvas" class="my-2" style="width:95%; height:300px;"></div>
+                             </div>
+                           </div>
+                            <div class="row">
+                                <div class="form-group text-right  mr-4 mt-3 ">
+                                    <button type="submit" class="btn btn-primary py-2">{{translate('Save')}}</button>
                                 </div>
-                                @endif
-                            @endforeach
-
-
                             </div>
-
-
-                            <div class="form-group text-right  mr-4 mt-3 ">
-                                <button type="submit" class="btn btn-primary py-2">{{translate('Save')}}</button>
-                            </div>
-						</div>
-
-                    </div>
-                    <div class="row my-4">
-                        <div class=" offset-lg-1 col-lg-11 form-horizontal">
-                                <div class=" col-lg-11 mb-3 form-horizontal">
-                                    <h5 class="mb-0">{{translate('Address Seller')}}</h5>
-                                    <hr>
-                                </div>
-                                <div class=" col-lg-5 pl-0" style="display:inline-block">
-                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
-                                        id="country-dd" name="country_id" onchange="sort_elements()">
-                                        <option value="0">{{ translate('All countries') }}</option>
-
-                                        {{-- <option value="{{$country->id}}">{{$country->name}}</option> --}}
-                                        @foreach ($countrys as $data)
-                                                <option value="{{$data->id}}">
-                                                    {{$data->name}}
-
-                                                </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class=" col-lg-3" style="display:inline-block">
-                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
-                                    id="state-dd" name="region_id" onchange="sort_elements()">
-                                        {{-- <option value="0">{{ translate('All countries') }}</option> --}}
-
-
-                                    </select>
-                                </div>
-                                <div class="col-lg-3" style="display:inline-block">
-                                    <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
-                                    id="city-dd"  name="city_id" onchange="sort_elements()">
-                                        {{-- <option value="0">{{ translate('All countries') }}</option> --}}
-
-
-                                    </select>
-                                </div>
                         </div>
-                        <div class="google_maps pl-2" onload="initialize()">
-                            <div class=" col-lg-11 my-3  form-horizontal">
-                                <h5 >{{translate('отметьте место на карте')}}</h5>
 
-                            </div>
-                            <div>
-                                <input id="address" type="textbox" style="width:60%" value="tashkent">
-                                <input type="button" value="Geocode" onclick="codeAddress()">
-                                <input type="text" id="lat"/>
-                                <input type="text" id="lng"/>
-
-                              </div>
-                              <div id="map" style="height:300px;top:30px"></div>
-                        </div>
-                    </div>
-
+					</div>
 				</form>
 			</div>
 
