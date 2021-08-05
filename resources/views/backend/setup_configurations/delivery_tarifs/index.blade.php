@@ -3,9 +3,9 @@
 @section('content')
     <div class="mt-2 mb-3 text-left aiz-titlebar">
         <div class="align-items-center d-flex justify-content-between">
-            <h1 class="h3">{{ translate('Delivery Prices') }}</h1>    
+            <h1 class="h3">{{ translate('Delivery tarifs') }}</h1>    
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
-                    {{ translate('Add New Delivery Price') }}
+                    {{ translate('Add New Delivery Tarif') }}
                 </button>
         </div>
     </div>
@@ -17,7 +17,7 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>{{ translate('Distance') }}</th>
+                                <th>{{ translate('Name') }}</th>
                                 <th>{{ translate('Cost per km (sums)') }}</th>
                                 <th>{{ translate('Duration (days)') }}</th>
                                 <th>{{ translate('Delivery Cost per kg')}}</th>
@@ -27,10 +27,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($deliveries as $key => $delivery)
+                            @foreach ($delivery_tarifs as $key => $delivery)
                                 <tr>
-                                    <td>{{ $key + 1 + ($deliveries->currentPage() - 1) * $deliveries->perPage() }}</td>
-                                    <td>{{ $delivery->distance }}</td>
+                                    <td>{{ $key + 1 + ($delivery_tarifs->currentPage() - 1) * $delivery_tarifs->perPage() }}</td>
+                                    <td>{{ $delivery->name }}</td>
                                     <td>{{ $delivery->distance_price }}</td>
                                     <td>{{ $delivery->days }}</td>
                                     <td>{{ $delivery->weight_price }}</td>
@@ -43,11 +43,11 @@
                                         <i class="las la-edit"></i>
                                     </a>
                                     <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
-                                        data-href="{{ route('deliveries.destroy', $delivery->id) }}"
+                                        data-href="{{ route('delivery_tarifs.destroy', $delivery->id) }}"
                                         title="{{ translate('Delete') }}">
                                         <i class="las la-trash"></i>
                                     </a>
-                                    <form class="p-4" action="{{ route('deliveries.update', $delivery->id) }}"
+                                    <form class="p-4" action="{{ route('delivery_tarifs.update', $delivery->id) }}"
                                         method="POST">
                                         <div class="overflow-hidden modal fade" id="EditModal_{{ $delivery->id }}"
                                             tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -56,7 +56,7 @@
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title">
-                                                            {{ translate('Edit Delivery Price') }}</h5>
+                                                            {{ translate('Edit Delivery tarif') }}</h5>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
@@ -67,8 +67,8 @@
                                                         <div class="mb-3 form-group row">
                                                             <label for="name">{{ translate('Name') }}</label>
                                                             <input type="text" placeholder="{{ translate('Name') }}"
-                                                                name="distance" class="form-control" required
-                                                                value="{{ $delivery->distance }}">
+                                                                name="name" class="form-control" required
+                                                                value="{{ $delivery->name }}">
                                                         </div>
                                                         <div class="mb-3 form-group row">
                                                             <label for="name">{{ translate('Cost per km (sums)') }}</label>
@@ -122,7 +122,7 @@
                         </tbody>
                     </table>
                     <div class="aiz-pagination">
-                        {{ $deliveries->appends(request()->input())->links() }}
+                        {{ $delivery_tarifs->appends(request()->input())->links() }}
                     </div>
                 </div>
             </div>
@@ -132,13 +132,13 @@
     </div>
 
     <!-- Modal -->
-    <form action="{{ route('deliveries.store') }}" class="overflow-hidden " method="POST">
+    <form action="{{ route('delivery_tarifs.store') }}" class="overflow-hidden " method="POST">
         <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">{{ translate('Add New Delivery Price') }}</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">{{ translate('Add New Delivery Tarif') }}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -148,7 +148,7 @@
                         <div class="mb-3 form-group row">
                             <label for="name">{{ translate('Name') }}</label>
                             <input type="text" placeholder="{{ translate('Name') }}"
-                                name="distance" class="form-control" required>
+                                name="name" class="form-control" required>
                         </div>
                         <div class="mb-3 form-group row">
                             <label for="name">{{ translate('Cost per km (sums)') }}</label>

@@ -3,16 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App;
 
-class Delivery extends Model
+class DeliveryTarif extends Model
 {
     protected $fillable = [
-        'user_id', 'distance', 'price'
+        'user_id', 'name', 'distance_price', 'days', 'weight_price', 'express_percent', 'express_hours'
     ];
     public $timestamps = false;
 
-    protected $table="delivery_price";
+    protected $table="delivery_tarif";
 
     public function user()
     {
