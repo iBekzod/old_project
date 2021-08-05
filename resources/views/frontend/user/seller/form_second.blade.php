@@ -72,7 +72,7 @@
                                     </div>
                                     <div class=" col-lg-5 pl-0" style="display:inline-block">
                                         <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
-                                            id="country-dd" name="country_id" onchange="sort_elements()">
+                                            id="country_dd" name="country_id" onchange="sort_elements()">
                                             <option value="0">{{ translate('All countries') }}</option>
 
                                             {{-- <option value="{{$country->id}}">{{$country->name}}</option> --}}
@@ -86,7 +86,7 @@
                                     </div>
                                     <div class=" col-lg-3" style="display:inline-block">
                                         <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
-                                        id="state-dd" name="region_id" onchange="sort_elements()">
+                                        id="state_dd" name="region_id" onchange="sort_elements()">
                                             {{-- <option value="0">{{ translate('All countries') }}</option> --}}
 
 
@@ -94,7 +94,7 @@
                                     </div>
                                     <div class="col-lg-3" style="display:inline-block">
                                         <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
-                                        id="city-dd"  name="city_id" onchange="sort_elements()">
+                                        id="city_dd"  name="city_id" onchange="sort_elements()">
                                             {{-- <option value="0">{{ translate('All countries') }}</option> --}}
 
 
@@ -107,10 +107,10 @@
                                         <div class="row">
 
                                         </div>
-                                        <input id="address" type="textbox" style="width:60%" value="tashkent">
+                                        <input id="address" type="textbox" style="width:60%" value="tashken">
                                         <input type="button" value="Geocode" onclick="codeAddress()">
-                                        <input type="text" id="lat"/>
-                                        <input type="text" id="lng"/>
+                                        <input type="text" id="lat" name="longitude"/>
+                                        <input type="text" id="lng" name="latitude"/>
 
                                     </div>
                                     <div id="map_canvas" class="my-2" style="width:95%; height:300px;"></div>
@@ -138,9 +138,9 @@
 
 
         $(document).ready(function () {
-                    $('#country-dd').on('change', function () {
+                    $('#country_dd').on('change', function () {
                         var idCountry = this.value;
-                        $("#state-dd").html('');
+                        $("#state_dd").html('');
                         $.ajax({
                             url: "{{url('api/fetch-states')}}",
                             type: "POST",
@@ -150,18 +150,18 @@
                             },
                             dataType: 'json',
                             success: function (result) {
-                                $('#state-dd').html('<option value="">Select State</option>');
+                                $('#state_dd').html('<option value="">Select State</option>');
                                 $.each(result.states, function (key, value) {
-                                    $("#state-dd").append('<option value="' + value
+                                    $("#state_dd").append('<option value="' + value
                                         .id + '">' + value.name + '</option>');
                                 });
-                                $('#city-dd').html('<option value="">Select City</option>');
+                                $('#city_dd').html('<option value="">Select City</option>');
                             }
                         });
                     });
-                    $('#state-dd').on('change', function () {
+                    $('#state_dd').on('change', function () {
                         var idState = this.value;
-                        $("#city-dd").html('');
+                        $("#city_dd").html('');
                         $.ajax({
                             url: "{{url('api/fetch-cities')}}",
                             type: "POST",
@@ -172,9 +172,9 @@
                             dataType: 'json',
                             success: function (res) {
                                 // alert(res.cities);
-                                $('#city-dd').html('<option value="">Select City</option>');
+                                $('#city_dd').html('<option value="">Select City</option>');
                                 $.each(res.cities, function (key, value) {
-                                    $("#city-dd").append('<option value="' + value
+                                    $("#city_dd").append('<option value="' + value
                                         .id + '">' + value.name + '</option>');
                                 });
                             }
