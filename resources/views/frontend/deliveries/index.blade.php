@@ -7,7 +7,7 @@
             <div class="d-flex align-items-start">
                 @include('frontend.inc.user_side_nav')
                 <div class="aiz-user-panel">
-                    <div class="aiz-titlebar mt-2 mb-4">
+                    <div class="mt-2 mb-4 aiz-titlebar">
                         <div class="row align-items-center">
                             <div class="col-md-6">
                                 <h1 class="h3">{{ translate('Delivery metrics') }}</h1>
@@ -37,7 +37,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="form-group mb-0 text-right">
+                                    <div class="mb-0 text-right form-group">
                                         <button type="submit" class="btn btn-sm btn-primary">{{translate('Save')}}</button>
                                     </div>
                                 </div>
@@ -58,7 +58,7 @@
                                             <input class="form-control" type="text" name="express_percent" value="{{ \App\SellerSetting::where('type', 'express_percent')->where('user_id', auth()->id())->first()->value??\App\SellerSetting::where('type', 'express_percent')->first()->value }}">
                                         </div>
                                     </div>
-                                    <div class="form-group mb-0 text-right">
+                                    <div class="mb-0 text-right form-group">
                                         <button type="submit" class="btn btn-sm btn-primary">{{translate('Save')}}</button>
                                     </div>
                                 </div>
@@ -80,7 +80,7 @@
                                             <input class="form-control" type="text" name="express_distance" value="{{ \App\SellerSetting::where('type', 'express_distance')->where('user_id', auth()->id())->first()->value??\App\SellerSetting::where('type', 'express_distance')->first()->value }}">
                                         </div>
                                     </div>
-                                    <div class="form-group mb-0 text-right">
+                                    <div class="mb-0 text-right form-group">
                                         <button type="submit" class="btn btn-sm btn-primary">{{translate('Save')}}</button>
                                     </div>
                                 </div>
@@ -100,28 +100,28 @@
                                         @csrf
                                         <div class="row">
                                             <div class="col">
-                                                <div class="form-group mb-3">
+                                                <div class="mb-3 form-group">
                                                     <label for="name">{{ translate('To Distance (km)') }}</label>
                                                     <input type="number" min="0" step="0.01" placeholder="{{ translate('Distance (km)') }}"
                                                         name="distance" class="form-control" required>
                                                 </div>
                                             </div>
                                             <div class="col">
-                                                <div class="form-group mb-3">
+                                                <div class="mb-3 form-group">
                                                     <label for="name">{{ translate('Cost per km (sums)') }}</label>
                                                     <input type="number" min="0" step="0.01" placeholder="{{ translate('Cost per km (sums)') }}"
                                                         name="price" class="form-control" required>
                                                 </div>
                                             </div>
                                             <div class="col">
-                                                <div class="form-group mb-3">
+                                                <div class="mb-3 form-group">
                                                     <label for="name">{{ translate('Duration (days)') }}</label>
                                                     <input type="number" min="0" step="1" placeholder="{{ translate('in days') }}"
                                                         name="days" class="form-control" required>
                                                 </div>
                                             </div>
                                             <div class="col">
-                                                <div class="form-group mt-4 text-right">
+                                                <div class="mt-4 text-right form-group">
                                                     <button type="submit" class="btn btn-primary">{{ translate('Add') }}</button>
                                                 </div>
                                             </div>
@@ -133,7 +133,7 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <table class="table aiz-table mb-0">
+                                    <table class="table mb-0 aiz-table">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -151,7 +151,7 @@
                                                     <td>{{ $delivery->price }}</td>
                                                     <td>{{ $delivery->days }}</td>
                                                     <td class="text-right">
-                                                        <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
+                                                        {{-- <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
                                                             href="{{ route('deliveries.edit', ['delivery' => $delivery->id, 'lang' => env('DEFAULT_LANGUAGE')]) }}"
                                                             title="{{ translate('Edit') }}">
                                                             <i class="las la-edit"></i>
@@ -160,7 +160,68 @@
                                                             data-href="{{ route('deliveries.destroy', $delivery->id) }}"
                                                             title="{{ translate('Delete') }}">
                                                             <i class="las la-trash"></i>
+                                                        </a> --}}
+
+                                                        <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="#"
+                                                            title="{{ translate('Edit') }}" data-toggle="modal"
+                                                            data-target="#EditModal_{{ $delivery->id }}">
+                                                            <i class="las la-edit"></i>
                                                         </a>
+
+                                                        <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
+                                                            data-href="{{ route('deliveries.destroy', $delivery->id) }}"
+                                                            title="{{ translate('Delete') }}">
+                                                            <i class="las la-trash"></i>
+                                                        </a>
+
+                                                        <form class="p-4" action="{{ route('deliveries.update', $delivery->id) }}"
+                                                            method="POST">
+                                                            <div class="overflow-hidden modal fade" id="EditModal_{{ $delivery->id }}"
+                                                                tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                                                aria-hidden="true">
+                                                                <div class="modal-dialog" role="document">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title">
+                                                                                {{ translate('Attribute Information') }}</h5>
+                                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                                aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <div class="mb-3 form-group row">
+                                                                                <label for="name">{{ translate('Name') }}<i
+                                                                                        class="las la-language text-danger"
+                                                                                        title="{{ translate('Translatable') }}"></i></label>
+                                                                                <input type="text" placeholder="{{ translate('Name') }}"
+                                                                                    name="name" class="form-control" required
+                                                                                    value="{{ $delivery->getTranslation('name') }}">
+                                                                            </div>
+                                                                            <div class="mb-3 form-group row">
+                                                                                <label
+                                                                                    for="edit_branch_attribute_{{ $delivery->id }}">{{ translate('Branch') }}</label>
+                                                                                <select class="form-control"
+                                                                                    name="edit_branch_attribute_{{ $delivery->id }}"
+                                                                                    {{-- id="edit_branch_{{$delivery->id}}" --}} data-live-search="true" required>
+                                                                                    @foreach ($branches as $item)
+                                                                                        <option @if (isset($branch) && $item->id == $branch->id) selected @endif
+                                                                                            value="{{ $item->id }}">
+                                                                                            {{ $item->getTranslation('name') }}</option>
+                                                                                    @endforeach
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-secondary"
+                                                                                data-dismiss="modal">{{ translate('Close') }}</button>
+                                                                            <button type="submit"
+                                                                                class="btn btn-primary">{{ translate('Save') }}</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
                                                     </td>
                                                 </tr>
                                             @endforeach

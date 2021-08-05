@@ -16,7 +16,7 @@ use App\OtpConfiguration;
 use App\Upload;
 use App\Translation;
 use App\City;
-use App\Delivery;
+use App\DeliveryPrice;
 use App\Element;
 use App\IpAddress;
 use App\Language;
@@ -1340,9 +1340,9 @@ if (!function_exists('getAttributeFormat')) {
         }
 
         if($all_distance>0){
-            if($delivery_metrics=Delivery::orderBy('distance', 'asc')->where('user_id', $seller_address->user_id)->where('distance', '>', $all_distance)->first()){
+            if($delivery_metrics=DeliveryPrice::orderBy('distance', 'asc')->where('user_id', $seller_address->user_id)->where('distance', '>', $all_distance)->first()){
             }else{
-                $delivery_metrics=Delivery::orderBy('distance', 'asc')->where('distance', '>', $all_distance)->first();
+                $delivery_metrics=DeliveryPrice::orderBy('distance', 'asc')->where('distance', '>', $all_distance)->first();
             }
             // dd( $delivery_metrics);
 
