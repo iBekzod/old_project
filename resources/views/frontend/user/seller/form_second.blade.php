@@ -103,15 +103,14 @@
                            </div>
                            <div class="row my-3">
                              <div class="col-md-12 p-0">
-                                    <div>
-                                        <div class="row">
-                                        </div>
+                                    <div class="form-inline justify-content-center">
+
                                         {{-- <input id="address" type="textbox" style="width:40%" value="tashken"> --}}
-                                        <input type="button" value="Geocode" onclick="codeAddress()"> <br>
-                                        <label for="lat">latitude:</label>
-                                        <input type="text" id="lat" name="latitude"/>
-                                        <label for="lat">longitude:</label>
-                                        <input type="text" id="lng" name="longitude"/>
+                                        <input type="button" class="btn-outline-info p-2 " style="display: inline-block" value="Geocode" onclick="codeAddress()"> <br>
+                                        <label for="lat" class="p-2">latitude:</label>
+                                        <input type="text" id="lat" class="p-2" name="latitude"/>
+                                        <label for="lat" class="p-2">longitude:</label>
+                                        <input type="text" id="lng" class="p-2" name="longitude"/>
 
                                     </div>
                                     <div id="map_canvas" class="my-2" style="width:95%; height:300px;"></div>
@@ -187,7 +186,7 @@
         var geocoder;
         var map;
         var mapOptions = {
-            zoom: 10,
+            zoom: 9,
             mapTypeId: google.maps.MapTypeId.ROADMAP
           }
         var marker;
@@ -197,6 +196,19 @@
           map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
           codeAddress();
         }
+
+        // var city_name=document.getElementById('city_dd').value;
+        //                 if (city_name==="") {
+        //                     var error="kemadi";
+        //                     console.log(error);
+        //                 }
+        //                 else{
+        //                        console.log(city_name);
+        //                         e = document.getElementById("city_dd");
+        //                         var value=e.options[e.selectedIndex].value;// get selected option value
+        //                         var address=e.options[e.selectedIndex].text;
+        //                         console.log(address);
+        //                 }
 
 
         function codeAddress() {
