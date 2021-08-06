@@ -100,16 +100,13 @@
 
                                         </select>
                                     </div>
-
-
                            </div>
                            <div class="row my-3">
                              <div class="col-md-12 p-0">
                                     <div>
                                         <div class="row">
-
                                         </div>
-                                        <input id="address" type="textbox" style="width:40%" value="tashken">
+                                        {{-- <input id="address" type="textbox" style="width:40%" value="tashken"> --}}
                                         <input type="button" value="Geocode" onclick="codeAddress()"> <br>
                                         <label for="lat">latitude:</label>
                                         <input type="text" id="lat" name="latitude"/>
@@ -203,40 +200,65 @@
 
 
         function codeAddress() {
-        var ali=document.getElementById('city_dd').value;
-        if (ali==="") {
-            var person="kemadi";
-          console.log(person);
-        }
-        else{
-             console.log(ali);
-             
+            var city_name=document.getElementById('city_dd').value;
+                        if (city_name==="") {
+                            var error="kemadi";
+                            console.log(error);
 
-        }
+                            var address = "toshkent";
+                            geocoder.geocode( { 'address': address}, function(results, status) {
+                                if (status == google.maps.GeocoderStatus.OK) {
+                                map.setCenter(results[0].geometry.location);
+                                if(marker)
+                                    marker.setMap(null);
+                                marker = new google.maps.Marker({
+                                    map: map,
+                                    position: results[0].geometry.location,
+                                    draggable: true
+                                });
+                                google.maps.event.addListener(marker, "dragend", function() {
+                                    document.getElementById('lat').value = marker.getPosition().lat();
+                                    document.getElementById('lng').value = marker.getPosition().lng();
+                                });
+                                document.getElementById('lat').value = marker.getPosition().lat();
+                                document.getElementById('lng').value = marker.getPosition().lng();
+                                } else {
+                                alert('Geocode was not successful for the following reason: ' + status);
+                                }
+                            });
+                        }
+                        else{
+                            console.log(city_name);
+                                e = document.getElementById("city_dd");
+                                var value=e.options[e.selectedIndex].value;// get selected option value
+                                var address=e.options[e.selectedIndex].text;
+                                // console.log(text);
+
+                            // var address = document.getElementById('address').value;
+                            geocoder.geocode( { 'address': address}, function(results, status) {
+                                if (status == google.maps.GeocoderStatus.OK) {
+                                map.setCenter(results[0].geometry.location);
+                                if(marker)
+                                    marker.setMap(null);
+                                marker = new google.maps.Marker({
+                                    map: map,
+                                    position: results[0].geometry.location,
+                                    draggable: true
+                                });
+                                google.maps.event.addListener(marker, "dragend", function() {
+                                    document.getElementById('lat').value = marker.getPosition().lat();
+                                    document.getElementById('lng').value = marker.getPosition().lng();
+                                });
+                                document.getElementById('lat').value = marker.getPosition().lat();
+                                document.getElementById('lng').value = marker.getPosition().lng();
+                                } else {
+                                alert('Geocode was not successful for the following reason: ' + status);
+                                }
+                            });
+
+                        }
 
 
-
-            var address = document.getElementById('address').value;
-          geocoder.geocode( { 'address': address}, function(results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-              map.setCenter(results[0].geometry.location);
-              if(marker)
-                marker.setMap(null);
-              marker = new google.maps.Marker({
-                  map: map,
-                  position: results[0].geometry.location,
-                  draggable: true
-              });
-              google.maps.event.addListener(marker, "dragend", function() {
-                document.getElementById('lat').value = marker.getPosition().lat();
-                document.getElementById('lng').value = marker.getPosition().lng();
-              });
-              document.getElementById('lat').value = marker.getPosition().lat();
-              document.getElementById('lng').value = marker.getPosition().lng();
-            } else {
-              alert('Geocode was not successful for the following reason: ' + status);
-            }
-          });
         }
       </script>
 
