@@ -202,9 +202,19 @@
         }
 
 
-
         function codeAddress() {
-        
+        var ali=document.getElementById('city_dd').value;
+        if (ali==="") {
+            var person="kemadi";
+          console.log(person);
+        }
+        else{
+             console.log(ali);
+             
+
+        }
+
+
 
             var address = document.getElementById('address').value;
           geocoder.geocode( { 'address': address}, function(results, status) {
