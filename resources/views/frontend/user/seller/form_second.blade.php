@@ -87,7 +87,7 @@
                                     <div class=" col-lg-3" style="display:inline-block">
                                         <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
                                         id="state_dd" name="region_id" onchange="sort_elements()">
-                                            {{-- <option value="0">{{ translate('All countries') }}</option> --}}
+                                            {{-- <option value="0">{{ translate('All regions') }}</option> --}}
 
 
                                         </select>
@@ -95,22 +95,26 @@
                                     <div class="col-lg-3" style="display:inline-block">
                                         <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
                                         id="city_dd"  name="city_id" onchange="sort_elements()">
-                                            {{-- <option value="0">{{ translate('All countries') }}</option> --}}
+                                            {{-- <option value="0">{{ translate('All citys') }}</option> --}}
 
 
                                         </select>
                                     </div>
+
+
                            </div>
-                           <div class="row">
+                           <div class="row my-3">
                              <div class="col-md-12 p-0">
                                     <div>
                                         <div class="row">
 
                                         </div>
-                                        <input id="address" type="textbox" style="width:60%" value="tashken">
-                                        <input type="button" value="Geocode" onclick="codeAddress()">
-                                        <input type="text" id="lat" name="longitude"/>
-                                        <input type="text" id="lng" name="latitude"/>
+                                        <input id="address" type="textbox" style="width:40%" value="tashken">
+                                        <input type="button" value="Geocode" onclick="codeAddress()"> <br>
+                                        <label for="lat">latitude:</label>
+                                        <input type="text" id="lat" name="latitude"/>
+                                        <label for="lat">longitude:</label>
+                                        <input type="text" id="lng" name="longitude"/>
 
                                     </div>
                                     <div id="map_canvas" class="my-2" style="width:95%; height:300px;"></div>
@@ -150,12 +154,12 @@
                             },
                             dataType: 'json',
                             success: function (result) {
-                                $('#state_dd').html('<option value="">Select State</option>');
+                                $('#state_dd').html('<option value="">All regions</option>');
                                 $.each(result.states, function (key, value) {
                                     $("#state_dd").append('<option value="' + value
                                         .id + '">' + value.name + '</option>');
                                 });
-                                $('#city_dd').html('<option value="">Select City</option>');
+                                $('#city_dd').html('<option value="">All citys</option>');
                             }
                         });
                     });
@@ -172,9 +176,9 @@
                             dataType: 'json',
                             success: function (res) {
                                 // alert(res.cities);
-                                $('#city_dd').html('<option value="">Select City</option>');
+                                $('#city_dd').html('<option value="">All citys</option>');
                                 $.each(res.cities, function (key, value) {
-                                    $("#city_dd").append('<option value="' + value
+                                var inform = $("#city_dd").append('<option value="' + value
                                         .id + '">' + value.name + '</option>');
                                 });
                             }
@@ -182,48 +186,54 @@
                     });
                 });
 	</script>
-
-
      <script>
-                   function initMap() {
-                    const myLatlng = {lat: 41.311081, lng:  69.240562 };
-                    const map = new google.maps.Map(document.getElementById("map"), {
-                        zoom: 4,
-                        center: myLatlng,
-                    });
-                    // Create the initial InfoWindow.
-                    let infoWindow = new google.maps.InfoWindow({
-                        content: "Click the map to get Lat/Lng!",
-                        position: myLatlng,
-                    });
+        var geocoder;
+        var map;
+        var mapOptions = {
+            zoom: 10,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+          }
+        var marker;
 
-
-                    infoWindow.open(map);
-                    // Configure the click listener.
-                    map.addListener("click", (mapsMouseEvent) => {
-                        // Close the current InfoWindow.
-
-                        infoWindow.close();
-                        // Create a new InfoWindow.
-                        infoWindow = new google.maps.InfoWindow({
-                        position: mapsMouseEvent.latLng,
-                        });
-                        console.log(mapsMouseEvent.latLng);
-                        infoWindow.setContent(
-                        JSON.stringify(mapsMouseEvent.latLng)
-                        );
-                        infoWindow.open(map);
-                    });
-                    }
-
-    </script>
+        function initialize() {
+          geocoder = new google.maps.Geocoder();
+          map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+          codeAddress();
+        }
 
 
 
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPEW1j0_XsP39Xm8Mo8XMM939vW6qbR2Q&callback=initMap&libraries=&v=weekly"
-      async
-    ></script>
+        function codeAddress() {
+        
+
+            var address = document.getElementById('address').value;
+          geocoder.geocode( { 'address': address}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+              map.setCenter(results[0].geometry.location);
+              if(marker)
+                marker.setMap(null);
+              marker = new google.maps.Marker({
+                  map: map,
+                  position: results[0].geometry.location,
+                  draggable: true
+              });
+              google.maps.event.addListener(marker, "dragend", function() {
+                document.getElementById('lat').value = marker.getPosition().lat();
+                document.getElementById('lng').value = marker.getPosition().lng();
+              });
+              document.getElementById('lat').value = marker.getPosition().lat();
+              document.getElementById('lng').value = marker.getPosition().lng();
+            } else {
+              alert('Geocode was not successful for the following reason: ' + status);
+            }
+          });
+        }
+      </script>
+
+
+
+
+
 
 
 
