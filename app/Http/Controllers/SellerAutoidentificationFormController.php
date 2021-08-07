@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Address;
 use Illuminate\Http\Request;
 use App\Shop;
 use App\User;
@@ -17,7 +18,7 @@ class SellerAutoidentificationFormController extends Controller
 {
     public function seller_autoidentification_form_save(Request $request)
     {
-        dd($request->all());
+        //   dd($request->all());
         if ($request->method() === 'POST') {
             $validation = array();
             foreach (json_decode(BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element) {
@@ -27,10 +28,28 @@ class SellerAutoidentificationFormController extends Controller
             }
 
             $request->validate($validation);
-            //    dd($request->all());
+            $request->validate([
+             'country_id'=>'required',
+             'region_id' =>'required',
+             'city_id' =>'required',
+             'latitude'=>'required',
+             'longitude'=>'required'
+            ]);
+            // dd($request->all());
+
+                //   dd($validation);
             $user_id = auth()->id();
             //  dd($user_id);
             $user = User::findOrFail($user_id);
+            // dd($user);
+            if(Address::where('user_id', $user_id)->exists()){
+                $address_full=Address::where('user_id', $user_id)->first();
+            }
+            else{
+                $address_full=new Address;
+            }
+            // $address_full= new Address;
+            dd($address_full);
             if (Seller::where('user_id', $user_id)->exists()) {
                 $seller = Seller::where('user_id', $user_id)->first();
             } else {
@@ -42,9 +61,9 @@ class SellerAutoidentificationFormController extends Controller
                 $shop = new Shop;
             }
 
-
-            // dd($shop);
-            //  dd($user);
+            // dd($address);
+            dd($shop);
+            dd($user);
             $user->registration_step = 'active_2';
             $array = array();
             $data = array();
@@ -63,11 +82,14 @@ class SellerAutoidentificationFormController extends Controller
             // dd($data);
             $seller->user_id = $user_id;
             $seller->verification_info = json_encode($data);
-            //  dd($user_id);
+             dd($user_id);
             $shop->user_id =$user_id;
             $shop->name = $request->Название_магазина;
             $shop->address = $request->Адрес_регистрации_вендора;
             $shop->slug = SlugService::createSlug(Shop::class, 'slug', slugify($request->Название_магазина));
+
+            // $address->user_id=$user_id;
+            // dd($address->user_id);
             // dd($shop);
             //   dd($seller->verification_info);
             $date = Carbon::parse($seller->created_at)->format('d-m-Y');
