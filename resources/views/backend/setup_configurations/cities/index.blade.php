@@ -52,8 +52,6 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col">
                                 <div class="form-group mb-3">
                                     <label for="name">{{ translate('Name') }}</label>
@@ -61,11 +59,30 @@
                                         class="form-control" required>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
+
                             <div class="col">
                                 <div class="form-group mb-3">
                                     <label for="name">{{ translate('Distance (km)') }}</label>
                                     <input type="number" min="0" step="0.01" placeholder="{{ translate('Distance (km)') }}"
                                         name="distance" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group mb-3">
+                                    <label for="name">{{ translate('Inside price (som)') }}</label>
+                                    <input type="number" min="0" step="0.01"
+                                        name="inside_price" value="0" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="form-group mb-3">
+                                    <label for="name">{{ translate('Has Express') }}</label>
+                                    <label class="mb-0 aiz-switch aiz-switch-success">
+                                        <input type="checkbox" name="has_express">
+                                        <span></span>
+                                    </label>
                                 </div>
                             </div>
                             <div class="col">
@@ -103,6 +120,8 @@
                                 <th>{{ translate('Country') }}</th>
                                 <th>{{ translate('Distance (km)') }}</th>
                                 <th>{{ translate('Type') }}</th>
+                                <th>{{ translate('Inside price') }}</th>
+                                <th>{{ translate('Has express') }}</th>
                                 <th class="text-right">{{ translate('Options') }}</th>
                             </tr>
                         </thead>
@@ -118,6 +137,12 @@
                                     </td>
                                     <td>{{ $city->distance }}</td>
                                     <td>{{ translate($city->type) }}</td>
+                                    <td>{{ $city->inside_price }}</td>
+                                    <td><label class="mb-0 aiz-switch aiz-switch-success">
+                                        <input type="checkbox" name="has_express" @if($city->has_express) checked @endif>
+                                        <span></span>
+                                    </label>
+                                    </td>
                                     <td class="text-right">
                                         <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
                                             href="{{ route('cities.edit', ['id' => $city->id, 'lang' => env('DEFAULT_LANGUAGE')]) }}"

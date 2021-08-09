@@ -8,7 +8,7 @@ use App;
 class City extends Model
 {
     protected $fillable = [
-        'country_id', 'parent_id', 'distance', 'name', 'type'
+        'country_id', 'parent_id', 'distance', 'name', 'type', 'inside_price', 'has_express'
     ];
 
     public function country()
