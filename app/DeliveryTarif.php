@@ -7,14 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 class DeliveryTarif extends Model
 {
     protected $fillable = [
-        'user_id', 'name', 'distance_price', 'days', 'weight_price', 'express_percent', 'express_hours'
+        'seller_region_id', 'client_region_id', 'distance'
     ];
     public $timestamps = false;
 
-    protected $table="delivery_tarif";
+    protected $table="delivery";
 
-    public function user()
+    public function from_region()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(City::class, 'seller_region_id');
+    }
+
+    public function to_region()
+    {
+        return $this->belongsTo(City::class, 'client_region_id');
     }
 }

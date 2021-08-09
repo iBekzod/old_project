@@ -319,16 +319,15 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	]);
     Route::get('deliveries', 'DeliveryPriceController@index')->name('deliveries.index');
     // Route::get('deliveries/{id}/edit', 'DeliveryPriceController@edit')->name('deliveries.edit');
-    Route::post('deliveries/{id}/edit', 'DeliveryPriceController@update')->name('deliveries.update');	
+    Route::post('deliveries/{id}/edit', 'DeliveryPriceController@update')->name('deliveries.update');
     Route::post('deliveries', 'DeliveryPriceController@store')->name('deliveries.store');
     Route::get('deliveries/destroy/{id}', 'DeliveryPriceController@destroy')->name('deliveries.destroy');
 
     Route::get('delivery_tarifs', 'DeliveryTarifController@index')->name('delivery_tarifs.index');
-    // Route::get('delivery_tarifs/{id}/edit', 'DeliveryTarifController@edit')->name('delivery_tarifs.edit');	
-    Route::post('delivery_tarifs/{id}/edit', 'DeliveryTarifController@update')->name('delivery_tarifs.update');	
+    Route::post('delivery_tarifs/{id}/edit', 'DeliveryTarifController@update')->name('delivery_tarifs.update');
     Route::post('delivery_tarifs', 'DeliveryTarifController@store')->name('delivery_tarifs.store');
     Route::get('delivery_tarifs/destroy/{id}', 'DeliveryTarifController@destroy')->name('delivery_tarifs.destroy');
-	
+
 	Route::post('importwarehouse', 'WarehouseController@importWarehouse')->name('warehouse.import');
 	Route::post('warehouse/deletebyselection', 'WarehouseController@deleteBySelection');
 	Route::get('warehouse/lims_warehouse_search', 'WarehouseController@limsWarehouseSearch')->name('warehouse.search');

@@ -125,10 +125,10 @@ Route::prefix('v1')->group(function () {
 //    Route::get('products/byBrand/{name}','Api\ProductController');
 
 
-    Route::get('carts/{id}', 'Api\CartController@index')->middleware('auth:api');
+    // Route::get('carts/{id}', 'Api\CartController@index')->middleware('auth:api');
     Route::post('carts/add', 'Api\CartController@add')->middleware('auth:api');
     Route::post('carts/change-quantity', 'Api\CartController@changeQuantity')->middleware('auth:api');
-    Route::apiResource('carts', 'Api\CartController')->only('destroy')->middleware('auth:api');
+    Route::apiResource('carts', 'Api\CartController')->except(['store', 'edit', 'update', 'show'])->middleware('auth:api');
 
     Route::get('reviews/product/{id}', 'Api\ReviewController@index')->name('api.reviews.index');
 

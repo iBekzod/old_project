@@ -948,7 +948,7 @@
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('delivery_tarifs.index')}}"
                                 class="aiz-side-nav-link {{ areActiveRoutes(['delivery_tarifs.index','delivery_tarifs.update','delivery_tarifs.store', 'delivery_tarifs.destroy'])}}">
-                                    <span class="aiz-side-nav-text">{{translate('Delivery tarifs')}}</span>
+                                    <span class="aiz-side-nav-text">{{translate('Distance between cities')}}</span>
                                 </a>
                             </li>
                         </ul>

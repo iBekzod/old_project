@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
-    public function index($id)
+    public function index()
     {
-        return new CartCollection(Cart::where('user_id', $id)->latest()->get());
+        return new CartCollection(Cart::where('user_id', auth()->id())->latest()->get());
     }
 
     public function add(Request $request)

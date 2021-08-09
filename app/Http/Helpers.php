@@ -17,6 +17,7 @@ use App\Upload;
 use App\Translation;
 use App\City;
 use App\DeliveryPrice;
+use App\DeliveryTarif;
 use App\Element;
 use App\IpAddress;
 use App\Language;
@@ -1319,7 +1320,12 @@ if (!function_exists('getAttributeFormat')) {
         $delivery_metrics=null;
         $weight_cost=calculateWeightCost($product);
         if($seller_address->region->id==$client_address->region->id){
-            $inline_cost=$seller_address->city->inside_price;
+            if($seller_address->city->id == $client_address->city->id){
+                $inline_cost=$seller_address->city->inside_price;
+            }else{
+                $inline_cost=$seller_address->city->inside_price;
+            }
+
             $all_distance=0;
         }else{
             $distance_between_regions=DB::table('delivery')->where('seller_region_id', $seller_address->region->id)->where('client_region_id', $client_address->region->id)->first();
@@ -1347,38 +1353,39 @@ if (!function_exists('getAttributeFormat')) {
             // dd( $delivery_metrics);
 
             if($is_express){
-                $express_percent=-1;
-                if($express_percent_model=SellerSetting::where('type', 'express_percent')->where('user_id', $seller_address->user_id)->first()){
-                    if($express_distance_model=SellerSetting::where('type', 'express_distance')->where('user_id', $seller_address->user_id)->first()){
-                        if($express_distance_model->value>$all_distance){
-                            $express_percent=$express_percent_model->value;
-                        }else{
-                            $express_percent=-2;
-                        }
-                    }else{
-                        $express_distance_model=SellerSetting::where('type', 'express_distance')->first();
-                        if($express_distance_model->value>$all_distance){
-                            $express_percent=$express_percent_model->value;
-                        }else{
-                            $express_percent=-2;
-                        }
-                    }
-                }else{
-                    $express_percent_model=SellerSetting::where('type', 'express_percent')->first();
-                    $express_distance_model=SellerSetting::where('type', 'express_distance')->first();
-                    if($express_distance_model->value>$all_distance){
-                        $express_percent=$express_percent_model->value;
-                    }else{
-                        $express_percent=-2;
-                    }
-                }
-                if($express_percent>0){
-                    $delivery_cost= ($delivery_metrics->price*$all_distance)*(100+$express_percent)/100+$weight_cost;
-                }else if($express_percent==0){
-                    $delivery_cost= ($delivery_metrics->price*$all_distance)+$weight_cost;
-                }else{
-                    $delivery_cost = -3; //Not valid
-                }
+
+                // $express_percent=-1;
+                // if($express_percent_model=SellerSetting::where('type', 'express_percent')->where('user_id', $seller_address->user_id)->first()){
+                //     if($express_distance_model=SellerSetting::where('type', 'express_distance')->where('user_id', $seller_address->user_id)->first()){
+                //         if($express_distance_model->value>$all_distance){
+                //             $express_percent=$express_percent_model->value;
+                //         }else{
+                //             $express_percent=-2;
+                //         }
+                //     }else{
+                //         $express_distance_model=SellerSetting::where('type', 'express_distance')->first();
+                //         if($express_distance_model->value>$all_distance){
+                //             $express_percent=$express_percent_model->value;
+                //         }else{
+                //             $express_percent=-2;
+                //         }
+                //     }
+                // }else{
+                //     $express_percent_model=SellerSetting::where('type', 'express_percent')->first();
+                //     $express_distance_model=SellerSetting::where('type', 'express_distance')->first();
+                //     if($express_distance_model->value>$all_distance){
+                //         $express_percent=$express_percent_model->value;
+                //     }else{
+                //         $express_percent=-2;
+                //     }
+                // }
+                // if($express_percent>0){
+                //     $delivery_cost= ($delivery_metrics->price*$all_distance)*(100+$express_percent)/100+$weight_cost;
+                // }else if($express_percent==0){
+                //     $delivery_cost= ($delivery_metrics->price*$all_distance)+$weight_cost;
+                // }else{
+                //     $delivery_cost = -3; //Not valid
+                // }
             }else{
                 $delivery_cost= $delivery_metrics->price*$all_distance+$weight_cost;
             }

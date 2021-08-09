@@ -5,14 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App;
 
-class
-
-
-
-
-
-
-City extends Model
+class City extends Model
 {
     protected $fillable = [
         'country_id', 'parent_id', 'distance', 'name', 'type'
