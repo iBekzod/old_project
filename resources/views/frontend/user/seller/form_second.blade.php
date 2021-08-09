@@ -72,7 +72,7 @@
                                     </div>
                                     <div class=" col-lg-5 pl-0" style="display:inline-block">
                                         <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
-                                            id="country_dd" name="country_id" onchange="sort_elements()">
+                                            id="country_dd" name="country_id">
                                             <option value="0">{{ translate('All countries') }}</option>
 
                                             {{-- <option value="{{$country->id}}">{{$country->name}}</option> --}}
@@ -86,7 +86,7 @@
                                     </div>
                                     <div class=" col-lg-3" style="display:inline-block">
                                         <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
-                                        id="state_dd" name="region_id" onchange="sort_elements()">
+                                        id="state_dd" name="region_id" >
                                             {{-- <option value="0">{{ translate('All regions') }}</option> --}}
 
 
@@ -94,7 +94,7 @@
                                     </div>
                                     <div class="col-lg-3" style="display:inline-block">
                                         <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
-                                        id="city_dd"  name="city_id" onchange="sort_elements()">
+                                        id="city_dd"  name="city_id" >
                                             {{-- <option value="0">{{ translate('All citys') }}</option> --}}
 
 
@@ -106,10 +106,10 @@
                                     <div class="form-inline justify-content-center">
 
                                         {{-- <input id="address" type="textbox" style="width:40%" value="tashken"> --}}
-                                        <input type="button" class="btn-outline-info p-2 " style="display: inline-block" value="Geocode" onclick="codeAddress()"> <br>
-                                        <label for="lat" class="p-2">latitude:</label>
+                                        {{-- <input type="button" class="btn-outline-info p-2 " style="display: inline-block" value="Geocode" onclick="codeAddress()"> <br> --}}
+                                        <label for="lat" class="p-2">{{translate('Latitude:')}}</label>
                                         <input type="text" id="lat" class="p-2" name="latitude"/>
-                                        <label for="lat" class="p-2">longitude:</label>
+                                        <label for="lat" class="p-2">{{translate('Longitude:')}}</label>
                                         <input type="text" id="lng" class="p-2" name="longitude"/>
 
                                     </div>
@@ -135,54 +135,61 @@
 
 @section('script')
 	<script type="text/javascript">
-
-
         $(document).ready(function () {
-                    $('#country_dd').on('change', function () {
-                        var idCountry = this.value;
-                        $("#state_dd").html('');
-                        $.ajax({
-                            url: "{{url('api/fetch-states')}}",
-                            type: "POST",
-                            data: {
-                                country_id: idCountry,
-                                _token: '{{csrf_token()}}'
-                            },
-                            dataType: 'json',
-                            success: function (result) {
-                                $('#state_dd').html('<option value="">All regions</option>');
-                                $.each(result.states, function (key, value) {
-                                    $("#state_dd").append('<option value="' + value
-                                        .id + '">' + value.name + '</option>');
-                                });
-                                $('#city_dd').html('<option value="">All citys</option>');
-                            }
+            $('#country_dd').on('change', function () {
+                var idCountry = this.value;
+                $("#state_dd").html('');
+                $.ajax({
+                    url: "{{url('api/fetch-states')}}",
+                    type: "POST",
+                    data: {
+                        country_id: idCountry,
+                        _token: '{{csrf_token()}}'
+                    },
+                    dataType: 'json',
+                    success: function (result) {
+                        $('#state_dd').html('<option value="">All regions</option>');
+                        $.each(result.states, function (key, value) {
+                            $("#state_dd").append('<option value="' + value
+                                .id + '">' + value.name + '</option>');
                         });
-                    });
-                    $('#state_dd').on('change', function () {
-                        var idState = this.value;
-                        $("#city_dd").html('');
-                        $.ajax({
-                            url: "{{url('api/fetch-cities')}}",
-                            type: "POST",
-                            data: {
-                                state_id: idState,
-                                _token: '{{csrf_token()}}'
-                            },
-                            dataType: 'json',
-                            success: function (res) {
-                                // alert(res.cities);
-                                $('#city_dd').html('<option value="">All citys</option>');
-                                $.each(res.cities, function (key, value) {
-                                var inform = $("#city_dd").append('<option value="' + value
-                                        .id + '">' + value.name + '</option>');
-                                });
-                            }
-                        });
-                    });
+                        $('#city_dd').html('<option value="">All citys</option>');
+                    }
                 });
-	</script>
-     <script>
+                var address=this.options[this.selectedIndex].text;
+                setAddressGeo(address, 5);
+            });
+            $('#state_dd').on('change', function () {
+                var idState = this.value;
+                $("#city_dd").html('');
+                $.ajax({
+                    url: "{{url('api/fetch-cities')}}",
+                    type: "POST",
+                    data: {
+                        state_id: idState,
+                        _token: '{{csrf_token()}}'
+                    },
+                    dataType: 'json',
+                    success: function (res) {
+                        // alert(res.cities);
+                        $('#city_dd').html('<option value="">All citys</option>');
+                        $.each(res.cities, function (key, value) {
+                        var inform = $("#city_dd").append('<option value="' + value
+                                .id + '">' + value.name + '</option>');
+                        });
+                    }
+                });
+                var address=this.options[this.selectedIndex].text;
+                setAddressGeo(address, 9);
+            });
+
+            $('#city_dd').on('change', function () {
+                var address=this.options[this.selectedIndex].text;
+                setAddressGeo(address, 11);
+            });
+
+        });
+
         var geocoder;
         var map;
         var mapOptions = {
@@ -194,95 +201,38 @@
         function initialize() {
           geocoder = new google.maps.Geocoder();
           map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
-          codeAddress();
+        //   codeAddress();
+          setAddressGeo('toshkent');
         }
 
-        // var city_name=document.getElementById('city_dd').value;
-        //                 if (city_name==="") {
-        //                     var error="kemadi";
-        //                     console.log(error);
-        //                 }
-        //                 else{
-        //                        console.log(city_name);
-        //                         e = document.getElementById("city_dd");
-        //                         var value=e.options[e.selectedIndex].value;// get selected option value
-        //                         var address=e.options[e.selectedIndex].text;
-        //                         console.log(address);
-        //                 }
 
-
-        function codeAddress() {
-            var city_name=document.getElementById('city_dd').value;
-                        if (city_name==="") {
-                            var error="kemadi";
-                            console.log(error);
-
-                            var address = "toshkent";
-                            geocoder.geocode( { 'address': address}, function(results, status) {
-                                if (status == google.maps.GeocoderStatus.OK) {
-                                map.setCenter(results[0].geometry.location);
-                                if(marker)
-                                    marker.setMap(null);
-                                marker = new google.maps.Marker({
-                                    map: map,
-                                    position: results[0].geometry.location,
-                                    draggable: true
-                                });
-                                google.maps.event.addListener(marker, "dragend", function() {
-                                    document.getElementById('lat').value = marker.getPosition().lat();
-                                    document.getElementById('lng').value = marker.getPosition().lng();
-                                });
-                                document.getElementById('lat').value = marker.getPosition().lat();
-                                document.getElementById('lng').value = marker.getPosition().lng();
-                                } else {
-                                alert('Geocode was not successful for the following reason: ' + status);
-                                }
-                            });
-                        }
-                        else{
-                            console.log(city_name);
-                                e = document.getElementById("city_dd");
-                                var value=e.options[e.selectedIndex].value;// get selected option value
-                                var address=e.options[e.selectedIndex].text;
-                                // console.log(text);
-
-                            // var address = document.getElementById('address').value;
-                            geocoder.geocode( { 'address': address}, function(results, status) {
-                                if (status == google.maps.GeocoderStatus.OK) {
-                                map.setCenter(results[0].geometry.location);
-                                if(marker)
-                                    marker.setMap(null);
-                                marker = new google.maps.Marker({
-                                    map: map,
-                                    position: results[0].geometry.location,
-                                    draggable: true
-                                });
-                                google.maps.event.addListener(marker, "dragend", function() {
-                                    document.getElementById('lat').value = marker.getPosition().lat();
-                                    document.getElementById('lng').value = marker.getPosition().lng();
-                                });
-                                document.getElementById('lat').value = marker.getPosition().lat();
-                                document.getElementById('lng').value = marker.getPosition().lng();
-                                } else {
-                                alert('Geocode was not successful for the following reason: ' + status);
-                                }
-                            });
-
-                        }
-
-
+        function setAddressGeo(address, my_zoom=9){
+            if(address==""){
+                address='toshkent';
+            }
+            map.setZoom(my_zoom);
+            geocoder.geocode( { 'address': address}, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    map.setCenter(results[0].geometry.location);
+                    if(marker)
+                        marker.setMap(null);
+                    marker = new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location,
+                        draggable: true
+                    });
+                    google.maps.event.addListener(marker, "dragend", function() {
+                        document.getElementById('lat').value = marker.getPosition().lat();
+                        document.getElementById('lng').value = marker.getPosition().lng();
+                    });
+                    document.getElementById('lat').value = marker.getPosition().lat();
+                    document.getElementById('lng').value = marker.getPosition().lng();
+                } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
         }
       </script>
-
-
-
-
-
-
-
-
-
-
 @endsection
 
 
