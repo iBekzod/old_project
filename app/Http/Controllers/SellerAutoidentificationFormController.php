@@ -49,7 +49,7 @@ class SellerAutoidentificationFormController extends Controller
                 $address_full=new Address;
             }
             // $address_full= new Address;
-            dd($address_full);
+            // dd($address_full);
             if (Seller::where('user_id', $user_id)->exists()) {
                 $seller = Seller::where('user_id', $user_id)->first();
             } else {
