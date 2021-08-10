@@ -946,6 +946,21 @@ if (!function_exists('convertCurrency')) {
         return round($price, $currency->precision ?? (-2));
     }
 }
+
+if (!function_exists('convertionRate')) {
+    function convertionRate($price, $price_currency_id)
+    {
+        $rate = 1;
+        if ($currency = Currency::where('id',$price_currency_id)->first()) {
+            $rate = floatval($price) / floatval($currency->exchange_rate);
+        }else{
+            $currency = Currency::where('status', true)->where('code', env('DEFAULT_CURRENCY', 'USD'))->first();
+            $rate = floatval($price) / floatval($currency->exchange_rate);
+        }
+        return $rate;
+    }
+}
+
 if (!function_exists('defaultCurrency')) {
     function defaultCurrency()
     {
@@ -1325,7 +1340,6 @@ if (!function_exists('getAttributeFormat')) {
             }else{
                 $inline_cost=$seller_address->city->inside_price;
             }
-
             $all_distance=0;
         }else{
             $distance_between_regions=DB::table('delivery')->where('seller_region_id', $seller_address->region->id)->where('client_region_id', $client_address->region->id)->first();

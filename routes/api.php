@@ -4,9 +4,22 @@
 
 
 
-// use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Route;
 
 // use Razorpay\Api\Api;
+Route::get('mytest', function () {
+    //single product
+    $products=getPublishedProducts()->limit(10)->get();
+    $collection=new App\Http\Resources\ProductCollection($products);
+    $data=$collection;
+
+    //products detail
+    // $product=getPublishedProducts()->first();
+    // $colection=new App\Http\Resources\ProductDetailCollection($product);
+    // $data=$colection;
+
+    return $data;
+});
 
 Route::prefix('v1/auth')->group(function () {
     Route::post('login', 'Api\AuthController@login');
