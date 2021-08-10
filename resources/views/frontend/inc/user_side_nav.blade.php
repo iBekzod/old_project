@@ -24,7 +24,7 @@
             @else
                 <h4 class="h5 fw-600">{{ Auth::user()->name }}
                     <span class="ml-2">
-                        @if(Auth::user()->seller->verification_status == 1)
+                        @if(isSeller() && isset(Auth::user()->seller->verification_status) && Auth::user()->seller->verification_status == 1)
                             <i class="las la-check-circle" style="color:green"></i>
                         @else
                             <i class="las la-times-circle" style="color:red"></i>
