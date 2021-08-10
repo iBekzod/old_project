@@ -141,7 +141,7 @@ class SellerAutoidentificationFormController extends Controller
             $address_full->longitude=$request->region_id;
             $address_full->latitude=$request->region_id;
 
-            // dd($address_full->all());
+            dd($address_full->all());
             // dd($shop);
             //   dd($seller->verification_info);
             $date = Carbon::parse($seller->created_at)->format('d-m-Y');
