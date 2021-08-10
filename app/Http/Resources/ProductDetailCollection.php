@@ -17,7 +17,7 @@ class ProductDetailCollection extends ResourceCollection
 {
     public function toArray($request)
     {
-        $product=Product::where('slug', $request->id)->first();
+        $product=Product::where('slug', $request->id)->orWhere('id', $request->id)->first();
         if(!($product->is_accepted && $product->published)){
             return [];
         }
@@ -27,6 +27,7 @@ class ProductDetailCollection extends ResourceCollection
         $seller_products=getPublishedProducts('product', ['where'=>[['user_id', $product->user_id],['element_id', $product->element_id]]], [], [])->get();
         try{
             $data = [
+                'weight'=>$element->weight,
                 'shipping_type' => $product->delivery_type,
                 'shipping_cost' => $this->calculateShippingCost($product, false),
                 'express_shipping_cost'=>$this->calculateShippingCost($product, true),

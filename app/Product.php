@@ -49,15 +49,10 @@ class Product extends Model
             ]
         ];
     }
-    // protected $fillable = [
-    //     'name', 'added_by', 'user_id', 'category_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
-    //     'purchase_price', 'unit', 'slug', 'colors', 'choice_options', 'variations', 'current_stock', 'on_moderation',
-    //     'is_accepted'
-    // ];
 
-//     public $appends = [
-//         'thumbnaile_image'
-//     ];
+    public $appends = [
+        'currency_rate'
+    ];
 
     // public function characteristicValues()
     // {
@@ -68,6 +63,11 @@ class Product extends Model
     // {
     //     return $this->hasOne(Category::class, 'id', 'category_id')->with('parentCategoryHierarchy');
     // }
+
+    public function getCurrencyRateAttribute()
+    {
+        return $this->price/$this->currency->exchange_rate;
+    }
 
     public function getTranslation($field = '', $lang = false){
         $lang = $lang == false ? app()->getLocale() : $lang;

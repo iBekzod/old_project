@@ -66,6 +66,18 @@
                         <input type="number" min="0" step="0.01" placeholder="{{ translate('Distance (km)') }}"
                             name="distance" class="form-control" required value="{{ $city->distance }}">
                     </div>
+                    <div class="form-group mb-3">
+                        <label for="name">{{ translate('Inside price (som)') }}</label>
+                        <input type="number" min="0" step="0.01"
+                            name="inside_price" class="form-control"  value="{{ $city->inside_price }}" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="name">{{ translate('Has Express') }}</label>
+                        <label class="mb-0 aiz-switch aiz-switch-success">
+                            <input type="checkbox" name="has_express" @if($city->has_express) checked @endif>
+                            <span></span>
+                        </label>
+                    </div>
                     <div class="form-group mb-3 text-right">
                         <button type="submit" class="btn btn-primary">{{ translate('Update') }}</button>
                     </div>

@@ -52,17 +52,13 @@ class CityController extends Controller
         $city = City::firstOrNew([
             'country_id'=>$request->country_id,
             'parent_id'=>$request->region_id,
-            'distance'=>$request->distance,
-            'name'=>$request->name,
-            'type'=>$request->type
+            'type'=>$request->type,
         ]);
-        // $city = new City;
-        // $city->country_id = $request->country_id;
-        // $city->parent_id = $request->region_id;
-        // $city->distance = $request->distance;
-        // $city->name = $request->name;
-        // $city->type = $request->type;
-        // $city->save();
+        $city->distance = $request->distance;
+        $city->name = $request->name;
+        $city->distance = $request->distance;
+        $city->inside_price = $request->inside_price;
+        $city->has_express = $request->has_express=='on';
         if($city->save()){
             foreach (Language::all() as $language){
                 // City Translations
@@ -74,7 +70,7 @@ class CityController extends Controller
 
         flash(translate('City has been inserted successfully'))->success();
 
-        return back();
+        return $this->index();
     }
 
     /**
@@ -112,6 +108,8 @@ class CityController extends Controller
         $city->distance = $request->distance;
         $city->name = $request->name;
         $city->type = $request->type;
+        $city->inside_price=$request->inside_price;
+        $city->has_express=$request->has_express=='on';
         $city->save();
 
         if(CityTranslation::where('city_id' , $city->id)->where('lang' ,default_language())->first()){
@@ -123,7 +121,17 @@ class CityController extends Controller
         }
 
         flash(translate('City has been updated successfully'))->success();
-        return back();
+        return $this->index();
+    }
+
+    public function updateExpress(Request $request)
+    {
+        $city = City::findOrFail($request->id);
+        $city->has_express = $request->status;
+        if ($city->save()) {
+            return 1;
+        }
+        return 0;
     }
 
     /**
@@ -143,6 +151,6 @@ class CityController extends Controller
         City::destroy($id);
 
         flash(translate('City has been deleted successfully'))->success();
-        return redirect()->route('cities.index');
+        return $this->index();
     }
 }

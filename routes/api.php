@@ -4,9 +4,22 @@
 
 
 
-// use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Route;
 
 // use Razorpay\Api\Api;
+Route::get('mytest', function () {
+    //single product
+    $products=getPublishedProducts()->limit(10)->get();
+    $collection=new App\Http\Resources\ProductCollection($products);
+    $data=$collection;
+
+    //products detail
+    // $product=getPublishedProducts()->first();
+    // $colection=new App\Http\Resources\ProductDetailCollection($product);
+    // $data=$colection;
+
+    return $data;
+});
 
 Route::prefix('v1/auth')->group(function () {
     Route::post('login', 'Api\AuthController@login');
@@ -125,10 +138,10 @@ Route::prefix('v1')->group(function () {
 //    Route::get('products/byBrand/{name}','Api\ProductController');
 
 
-    Route::get('carts/{id}', 'Api\CartController@index')->middleware('auth:api');
+    // Route::get('carts/{id}', 'Api\CartController@index')->middleware('auth:api');
     Route::post('carts/add', 'Api\CartController@add')->middleware('auth:api');
     Route::post('carts/change-quantity', 'Api\CartController@changeQuantity')->middleware('auth:api');
-    Route::apiResource('carts', 'Api\CartController')->only('destroy')->middleware('auth:api');
+    Route::apiResource('carts', 'Api\CartController')->except(['store', 'edit', 'update', 'show'])->middleware('auth:api');
 
     Route::get('reviews/product/{id}', 'Api\ReviewController@index')->name('api.reviews.index');
 
