@@ -262,8 +262,9 @@ if (!function_exists('filter_products')) {
 if (!function_exists('slugify')) {
     function slugify($string)
     {
-        // $string = preg_replace('/\s+/', '-', $string);
         $string = transliterator_transliterate("Any-Latin; NFD; [:Nonspacing Mark:] Remove; NFC; [:Punctuation:] Remove; Lower();", $string);
+        $string = preg_replace('/\s+/', '-', $string);
+        // $string = str_replace(' ', '_', $string);
         return $string;
     }
 }

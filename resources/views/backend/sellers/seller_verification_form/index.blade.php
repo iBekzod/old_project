@@ -21,7 +21,8 @@
 									        <label class="col-from-label">{{ ucfirst($element->type) }}</label>
 									    </div>
 									    <div class="col-lg-7">
-									        <input class="form-control" type="text" name="label[]" value="{{ $element->label }}" placeholder="{{ translate('Label') }}">
+									        <input class="form-control" type="text" name="label[]" value="{{ $element->name??$element->label }}" placeholder="{{ translate('Label') }}">
+									        {{-- <input class="form-control" type="text" name="label[]" value="{{ $element->label }}" placeholder="{{ translate('Label') }}"> --}}
 									    </div>
 									    <div class="col-lg-2"><span class="btn btn-icon btn-circle icon-lg" onclick="delete_choice_clearfix(this)"><i class="las la-times"></i></span></div>
 									</div>
@@ -32,7 +33,7 @@
 									        <label class="col-from-label">{{ ucfirst($element->type) }}</label>
 									    </div>
 									    <div class="col-lg-7">
-									        <input class="form-control" type="text" name="label[]" value="{{ $element->label }}" placeholder="{{ translate('Label') }}">
+									        <input class="form-control" type="text" name="label[]" value="{{ $element->name??$element->label }}" placeholder="{{ translate('Label') }}">
 									    </div>
 									    <div class="col-lg-2"><span class="btn btn-icon btn-circle icon-lg" onclick="delete_choice_clearfix(this)"><i class="las la-times"></i></span></div>
 									</div>
@@ -44,7 +45,7 @@
 									        <label class="col-from-label">{{ ucfirst(str_replace('_', ' ', $element->type)) }}</label>
 									    </div>
 									    <div class="col-lg-7">
-									        <input class="form-control" type="text" name="label[]" value="{{ $element->label }}" placeholder="{{ translate('Select Label') }}" style="margin-bottom:10px">
+									        <input class="form-control" type="text" name="label[]" value="{{ $element->name??$element->label }}" placeholder="{{ translate('Select Label') }}" style="margin-bottom:10px">
 									        <div class="customer_choice_options_types_wrap_child">
 												@if (is_array(json_decode($element->options)))
 													@foreach (json_decode($element->options) as $value)
