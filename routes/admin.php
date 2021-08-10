@@ -301,6 +301,7 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::post('/countries/status', 'CountryController@updateStatus')->name('countries.status');
 
 	Route::resource('cities', 'CityController');
+	Route::post('/cities/express', 'CityController@updateExpress')->name('cities.express');
 	Route::get('/cities/edit/{id}', 'CityController@edit')->name('cities.edit');
 	Route::get('/cities/destroy/{id}', 'CityController@destroy')->name('cities.destroy');
 

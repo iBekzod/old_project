@@ -29,9 +29,9 @@ class DeliveryTarifController extends Controller
     {
         $delivery = DeliveryTarif::firstOrNew([
             'seller_region_id'=>$request->seller_region_id,
-            'client_region_id'=>$request->client_region_id,
-            'distance'=>$request->distance
-            ]);
+            'client_region_id'=>$request->client_region_id
+        ]);
+        $delivery->distance = $request->distance;
         $delivery->save();
         flash(translate('Delivery Tarif has been inserted successfully'))->success();
         return redirect()->back();

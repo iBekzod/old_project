@@ -139,7 +139,7 @@
                                     <td>{{ translate($city->type) }}</td>
                                     <td>{{ $city->inside_price }}</td>
                                     <td><label class="mb-0 aiz-switch aiz-switch-success">
-                                        <input type="checkbox" name="has_express" @if($city->has_express) checked @endif>
+                                        <input type="checkbox" onchange="update_express(this)"  value="{{ $city->id }}" name="has_express" @if($city->has_express) checked @endif>
                                         <span></span>
                                     </label>
                                     </td>
@@ -182,6 +182,25 @@
             } else {
                 var status = 0;
             }
+        }
+
+        function update_express(el) {
+            if (el.checked) {
+                var status = 1;
+            } else {
+                var status = 0;
+            }
+            $.post('{{ route('cities.express') }}', {
+                _token: '{{ csrf_token() }}',
+                id: el.value,
+                status: status
+            }, function (data) {
+                if (data == 1) {
+                    AIZ.plugins.notify('success', '{{ translate('Express updated successfully') }}');
+                } else {
+                    AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
+                }
+            });
         }
 
     </script>

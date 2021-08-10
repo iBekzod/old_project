@@ -79,7 +79,7 @@
                                                         <div class="mb-3 form-group row">
                                                             <label for="name">{{ translate('Distance') }}</label>
                                                             <input type="number" min="0" step="1" placeholder="{{ translate('in km') }}"
-                                                                name="days" class="form-control" required
+                                                                name="distance" class="form-control" required
                                                                 value="{{ $delivery->distance }}">
                                                         </div>
                                                     </div>
@@ -144,7 +144,7 @@
                         <div class="mb-3 form-group row">
                             <label for="name">{{ translate('Distance') }}</label>
                             <input type="number" min="0" step="1" placeholder="{{ translate('in km') }}"
-                                name="days" class="form-control" required
+                                name="distance" class="form-control" required
                                 value="">
                         </div>
                     </div>
