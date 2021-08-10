@@ -1323,7 +1323,83 @@ if (!function_exists('getAttributeFormat')) {
     }
 }
 
- function calculateDeliveryCost($product, $address_id, $is_express=false){
+function calculateDeliveryCost($product, $address_id, $is_express=false){
+    $seller=$product->user;
+    $delivery_cost=0;
+    $days=10;
+    $express_hours=48;
+    $express_cost=0;
+    $weight_price=0;
+    $all_distance=0;
+    $delivery_metrics=null;
+    $is_outside=true;
+    if($seller->addresses->count()>0 && Address::where('id', $address_id)->exists()){
+        $seller_address=$seller->addresses->first();
+        $client_address=Address::where('id', $address_id)->first();
+
+        if($seller_address->city->id == $client_address->city->id){
+            //1 - holat = price
+            $inline_cost=$seller_address->city->inside_price;
+            $delivery_metrics=DB::table('delivery_tarif')->where('name', $seller_address->city->type)->first();
+            $is_outside=false;
+        }else{
+            if($seller_address->region->id==$client_address->region->id){
+               //2 - holat = km
+               $all_distance=$seller_address->city->distance+$client_address->city->distance;
+            }else{
+                $distance_between_regions=DB::table('delivery')->where('seller_region_id', $seller_address->region->id)->where('client_region_id', $client_address->region->id)->first();
+                if($distance_between_regions==null){
+                    $distance_between_regions=DB::table('delivery')->where('seller_region_id', $client_address->region->id)->where('client_region_id', $seller_address->region->id)->first();
+                }
+                // 3,4,5 - holatlar
+                if($distance_between_regions){
+                    $all_distance=$seller_address->city->distance + $distance_between_regions->distance + $client_address->city->distance;
+                }else{
+                    $all_distance=$seller_address->city->distance + 100 + $client_address->city->distance;
+                }
+            }
+            $delivery_metrics=DeliveryPrice::orderBy('distance', 'asc')
+                ->where('user_id', $seller_address->user_id)
+                ->where('distance', '>', $all_distance)
+                ->first()??DeliveryPrice::orderBy('distance', 'asc')
+                ->where('distance', '>', $all_distance)->first();
+
+        }
+    }
+    if($delivery_metrics && $is_outside){
+        $weight_price=$delivery_metrics->weight_price;
+        if($is_express){
+            $delivery_cost = $delivery_metrics->distance_price*$all_distance;
+            $express_cost = $delivery_cost*(100+((double)$delivery_metrics->express_percent))/100;
+        }else{
+            $delivery_cost = $delivery_metrics->distance_price*$all_distance;
+        }
+        $days=$delivery_metrics->days;
+        $express_hours=(double)$delivery_metrics->express_hours;
+    }else if($delivery_metrics && !$is_outside){
+        $weight_price=$delivery_metrics->weight_price;
+        if($is_express){
+            $delivery_cost = $inline_cost;
+            $express_cost = $delivery_cost*(100+((double)$delivery_metrics->express_percent))/100;
+        }else{
+            $delivery_cost = $inline_cost;
+        }
+        $days=$delivery_metrics->days;
+        $express_hours=(double)$delivery_metrics->express_hours;
+    }
+    $total_weight_cost=calculateWeightCost($product, $weight_price);
+    $total_cost=convertCurrency((double)($delivery_cost+$total_weight_cost), Currency::where('code', 'UZB'??defaultCurrency())->first()->id);
+    return [
+        'total_cost'=>$total_cost,
+        'days'=>$days,
+        'delivery_cost'=>(double)$delivery_cost,
+        'total_weight_cost'=>(double)$total_weight_cost,
+        'express_hours'=>$express_hours,
+        'express_cost'=>$express_cost,
+    ];
+}
+
+ function calculateDeliveryCostRough($product, $address_id, $is_express=false){
      //region -> Viloyat
     //city -> Shahar yoki tuman
     $seller=$product->user;
@@ -1435,9 +1511,11 @@ if (!function_exists('getAttributeFormat')) {
 function getAdmin(){
     return User::where('user_type', 'admin')->first();
 }
- function calculateWeightCost($product){
-     ($product->shipping_type='tinfis')?$user_id=getAdmin():$user_id=$product->user_id;
-    $weight_price=0;
+ function calculateWeightCost($product, $weight_price=0){
+    if($weight_price>0){
+        return $weight_price*((double)$product->element->weight);
+    }
+    ($product->shipping_type='tinfis')?$user_id=getAdmin():$user_id=$product->user_id;
     if($weight_setting=SellerSetting::where('type', 'kg_weight_price')->where('user_id', $user_id)->first()){
         $weight_price=convertCurrency((double)$weight_setting->value, (int)$weight_setting->relation_id);
     }else if($weight_setting=SellerSetting::where('type', 'kg_weight_price')->first()){
