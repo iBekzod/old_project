@@ -60,7 +60,7 @@
                                                         @csrf
                                                         <div class="mb-3 form-group row">
                                                             <label for="name">{{ translate('From') }}</label>
-                                                            <select class="form-control aiz-selectpicker" name="seller_region_id" id="seller_region_id" data-live-search="true" required>
+                                                            <select class="form-control " name="seller_region_id" id="seller_region_id" data-live-search="true" required>
                                                                 @foreach ($regions as $region)
                                                                     <option @if($region->id==$delivery->seller_region_id) selected @endif value="{{ $region->id }}">{{ $region->getTranslation('name') }}</option>
                                                                 @endforeach
@@ -68,7 +68,7 @@
                                                         </div>
                                                         <div class="mb-3 form-group row">
                                                             <label for="name">{{ translate('To') }}</label>
-                                                            <select class="form-control aiz-selectpicker" name="client_region_id" id="client_region_id"
+                                                            <select class="form-control " name="client_region_id" id="client_region_id"
                                                                     data-live-search="true" required>
                                                                 @foreach ($regions as $region)
                                                                     <option @if($region->id==$delivery->client_region_id) selected @endif value="{{ $region->id }}" >{{ $region->getTranslation('name') }}</option>
