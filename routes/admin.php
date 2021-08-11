@@ -319,6 +319,12 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 		'create'
 	]);
 
+
+    Route::get('deliveries', 'DeliveryController@index')->name('deliveries.index');
+    Route::post('deliveries/{id}/edit', 'DeliveryController@update')->name('deliveries.update');
+    Route::post('deliveries', 'DeliveryController@store')->name('deliveries.store');
+    Route::get('deliveries/destroy/{id}', 'DeliveryController@destroy')->name('deliveries.destroy');
+
     Route::get('delivery_prices', 'DeliveryPriceController@index')->name('delivery_prices.index');
     Route::post('delivery_prices/{id}/edit', 'DeliveryPriceController@update')->name('delivery_prices.update');
     Route::post('delivery_prices', 'DeliveryPriceController@store')->name('delivery_prices.store');

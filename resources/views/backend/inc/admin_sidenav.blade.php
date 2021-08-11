@@ -940,6 +940,12 @@
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
+                                <a href="{{route('deliveries.index')}}"
+                                class="aiz-side-nav-link {{ areActiveRoutes(['deliveries.index','deliveries.update','deliveries.store', 'deliveries.destroy'])}}">
+                                    <span class="aiz-side-nav-text">{{translate('Delivery distance')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
                                 <a href="{{route('delivery_prices.index')}}"
                                 class="aiz-side-nav-link {{ areActiveRoutes(['delivery_prices.index','delivery_prices.update','delivery_prices.store', 'delivery_prices.destroy'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Delivery prices')}}</span>
@@ -948,7 +954,7 @@
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('delivery_tarifs.index')}}"
                                 class="aiz-side-nav-link {{ areActiveRoutes(['delivery_tarifs.index','delivery_tarifs.update','delivery_tarifs.store', 'delivery_tarifs.destroy'])}}">
-                                    <span class="aiz-side-nav-text">{{translate('Distance between cities')}}</span>
+                                    <span class="aiz-side-nav-text">{{translate('Delivery tarifs')}}</span>
                                 </a>
                             </li>
                         </ul>

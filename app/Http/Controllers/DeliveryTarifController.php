@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\City;
 use App\DeliveryTarif;
 use Illuminate\Http\Request;
 
@@ -15,9 +14,8 @@ class DeliveryTarifController extends Controller
      */
     public function index()
     {
-        $delivery_tarifs = DeliveryTarif::orderBy('distance', 'asc')->paginate(15);
-        $regions=City::where('type', 'region')->get();
-        return view('backend.setup_configurations.delivery_tarifs.index', compact('delivery_tarifs', 'regions'));
+        $delivery_tarifs = DeliveryTarif::where('user_id', auth()->id())->orderBy('name', 'asc')->paginate(15);
+        return view('backend.setup_configurations.delivery_tarifs.index', compact('delivery_tarifs'));
     }
     /**
      * Store a newly created resource in storage.
@@ -27,14 +25,22 @@ class DeliveryTarifController extends Controller
      */
     public function store(Request $request)
     {
-        $delivery = DeliveryTarif::firstOrNew([
-            'seller_region_id'=>$request->seller_region_id,
-            'client_region_id'=>$request->client_region_id
-        ]);
-        $delivery->distance = $request->distance;
-        $delivery->save();
-        flash(translate('Delivery Tarif has been inserted successfully'))->success();
-        return redirect()->back();
+        try {
+            $delivery = DeliveryTarif::firstOrNew([
+                'user_id'=> auth()->id(),
+                'name'=> $request->name,
+                'distance_price'=>$request->distance_price
+            ]);
+            $delivery->days= $request->days;
+            $delivery->weight_price=$request->weight_price;
+            $delivery->express_percent=$request->express_percent;
+            $delivery->express_hours=$request->express_hours;
+            $delivery->save();
+            flash(translate('Delivery Price has been inserted successfully'))->success();
+        } catch (\Exception $e) {
+            flash($e->getMessage())->error();
+        }
+        return $this->index();
     }
 
     /**
@@ -47,11 +53,15 @@ class DeliveryTarifController extends Controller
     public function update(Request $request)
     {
         $delivery = DeliveryTarif::findOrFail($request->id);
-        $delivery->seller_region_id = $request->seller_region_id;
-        $delivery->client_region_id = $request->client_region_id;
-        $delivery->distance=$request->distance;
+        $delivery->user_id = auth()->id();
+        $delivery->name = $request->name;
+        $delivery->distance_price=$request->distance_price;
+        $delivery->days= $request->days;
+        $delivery->weight_price=$request->weight_price;
+        $delivery->express_percent=$request->express_percent;
+        $delivery->express_hours=$request->express_hours;
         $delivery->save();
-        flash(translate('Delivery Tarif has been updated successfully'))->success();
+        flash(translate('Delivery Price has been updated successfully'))->success();
         return $this->index();
     }
 
@@ -64,7 +74,7 @@ class DeliveryTarifController extends Controller
     public function destroy($id)
     {
         DeliveryTarif::destroy($id);
-        flash(translate('Delivery Tarif has been deleted successfully'))->success();
+        flash(translate('Delivery Price has been deleted successfully'))->success();
         return $this->index();
     }
 }

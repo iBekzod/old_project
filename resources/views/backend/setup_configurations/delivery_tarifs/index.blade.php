@@ -3,7 +3,7 @@
 @section('content')
     <div class="mt-2 mb-3 text-left aiz-titlebar">
         <div class="align-items-center d-flex justify-content-between">
-            <h1 class="h3">{{ translate('Delivery tarifs') }}</h1>
+            <h1 class="h3">{{ translate('Delivery Tarif') }}</h1>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
                     {{ translate('Add New Delivery Tarif') }}
                 </button>
@@ -17,9 +17,12 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>{{ translate('From') }}</th>
-                                <th>{{ translate('To') }}</th>
-                                <th>{{ translate('Distance (km)') }}</th>
+                                <th>{{ translate('Name') }}</th>
+                                <th>{{ translate('Cost per km (sums)') }}</th>
+                                <th>{{ translate('Duration (days)') }}</th>
+                                <th>{{ translate('Delivery Cost per kg')}}</th>
+                                <th>{{ translate('Express percent') }}</th>
+                                <th>{{ translate('Express Duration (hours)') }}</th>
                                 <th class="text-right">{{ translate('Options') }}</th>
                             </tr>
                         </thead>
@@ -27,20 +30,23 @@
                             @foreach ($delivery_tarifs as $key => $delivery)
                                 <tr>
                                     <td>{{ $key + 1 + ($delivery_tarifs->currentPage() - 1) * $delivery_tarifs->perPage() }}</td>
-                                    <td>{{ $delivery->from_region->getTranslation('name') }}</td>
-                                    <td>{{ $delivery->to_region->getTranslation('name') }}</td>
-                                    <td>{{ $delivery->distance }}</td>
+                                    <td>{{ $delivery->name }}</td>
+                                    <td>{{ $delivery->distance_price }}</td>
+                                    <td>{{ $delivery->days }}</td>
+                                    <td>{{ $delivery->weight_price }}</td>
+                                    <td>{{ $delivery->express_percent }}</td>
+                                    <td>{{ $delivery->express_hours }}</td>
                                     <td class="text-right">
                                         <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="#"
                                         title="{{ translate('Edit') }}" data-toggle="modal"
                                         data-target="#EditModal_{{ $delivery->id }}">
                                         <i class="las la-edit"></i>
                                     </a>
-                                    <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
+                                    {{-- <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
                                         data-href="{{ route('delivery_tarifs.destroy', $delivery->id) }}"
                                         title="{{ translate('Delete') }}">
                                         <i class="las la-trash"></i>
-                                    </a>
+                                    </a> --}}
                                     <form class="p-4" action="{{ route('delivery_tarifs.update', $delivery->id) }}"
                                         method="POST">
                                         <div class="overflow-hidden modal fade" id="EditModal_{{ $delivery->id }}"
@@ -50,7 +56,7 @@
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title">
-                                                            {{ translate('Edit Delivery tarif') }}</h5>
+                                                            {{ translate('Edit Delivery Tarif') }}</h5>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
@@ -59,29 +65,47 @@
                                                     <div class="modal-body">
                                                         @csrf
                                                         <div class="mb-3 form-group row">
-                                                            <label for="name">{{ translate('From') }}</label>
-                                                            <select class="form-control aiz-selectpicker" name="seller_region_id" id="seller_region_id" data-live-search="true" required>
-                                                                @foreach ($regions as $region)
-                                                                    <option @if($region->id==$delivery->seller_region_id) selected @endif value="{{ $region->id }}">{{ $region->getTranslation('name') }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                        <div class="mb-3 form-group row">
-                                                            <label for="name">{{ translate('To') }}</label>
-                                                            <select class="form-control aiz-selectpicker" name="client_region_id" id="client_region_id"
-                                                                    data-live-search="true" required>
-                                                                @foreach ($regions as $region)
-                                                                    <option @if($region->id==$delivery->client_region_id) selected @endif value="{{ $region->id }}" >{{ $region->getTranslation('name') }}</option>
-                                                                @endforeach
-                                                            </select>
+                                                            <label for="name">{{ translate('Name') }}</label>
+                                                            <input type="text" placeholder="{{ translate('name') }}"
+                                                                name="name" class="form-control" required
+                                                                value="{{ $delivery->name }}" disabled>
                                                         </div>
 
                                                         <div class="mb-3 form-group row">
-                                                            <label for="name">{{ translate('Distance') }}</label>
-                                                            <input type="number" min="0" step="1" placeholder="{{ translate('in km') }}"
-                                                                name="distance" class="form-control" required
-                                                                value="{{ $delivery->distance }}">
+                                                            <label for="name">{{ translate('Cost per km (sums)') }}</label>
+                                                            <input type="number" min="0" step="0.01" placeholder="{{ translate('in sums') }}"
+                                                                name="distance_price" class="form-control" required
+                                                                value="{{ $delivery->distance_price }}">
                                                         </div>
+
+                                                        <div class="mb-3 form-group row">
+                                                            <label for="name">{{ translate('Duration (days)') }}</label>
+                                                            <input type="number" min="0" step="1" placeholder="{{ translate('in days') }}"
+                                                                name="days" class="form-control" required
+                                                                value="{{ $delivery->days }}">
+                                                        </div>
+
+                                                        <div class="mb-3 form-group row">
+                                                            <label for="name">{{translate('Delivery Cost per kg')}}</label>
+                                                            <input type="number" min="0" step="0.01" placeholder="{{translate('in sums')}}"
+                                                                name="weight_price" class="form-control" required
+                                                                value="{{ $delivery->weight_price }}">
+                                                        </div>
+
+                                                        <div class="mb-3 form-group row">
+                                                            <label for="name">{{translate('Express percent')}}</label>
+                                                            <input type="number" min="0" step="1" max="100" placeholder="{{translate('in percent from 1 to 100')}}"
+                                                                name="express_percent" class="form-control" required
+                                                                value="{{ $delivery->express_percent }}">
+                                                        </div>
+
+                                                        <div class="mb-3 form-group row">
+                                                            <label for="name">{{ translate('Express Duration (hours)') }}</label>
+                                                            <input type="number" min="0" step="1" placeholder="{{ translate('in hours') }}"
+                                                                name="express_hours" class="form-control" required
+                                                                value="{{ $delivery->express_hours }}">
+                                                        </div>
+
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"
@@ -123,29 +147,38 @@
                     <div class="modal-body">
                         @csrf
                         <div class="mb-3 form-group row">
-                            <label for="name">{{ translate('From') }}</label>
-                            <select class="form-control aiz-selectpicker" name="seller_region_id" id="seller_region_id"
-                                    data-live-search="true" required>
-                                @foreach ($regions as $region)
-                                    <option value="{{ $region->id }}" >{{ $region->getTranslation('name') }}</option>
-                                @endforeach
-                            </select>
+                            <label for="name">{{ translate('Name') }}</label>
+                            <input type="text" placeholder="{{ translate('name') }}"
+                                name="name" class="form-control" required>
                         </div>
                         <div class="mb-3 form-group row">
-                            <label for="name">{{ translate('To') }}</label>
-                            <select class="form-control aiz-selectpicker" name="client_region_id" id="client_region_id"
-                                    data-live-search="true" required>
-                                @foreach ($regions as $region)
-                                    <option value="{{ $region->id }}">{{ $region->getTranslation('name') }}</option>
-                                @endforeach
-                            </select>
+                            <label for="name">{{ translate('Cost per km (sums)') }}</label>
+                            <input type="number" min="0" step="0.01" placeholder="{{ translate('in sums') }}"
+                                name="distance_price" class="form-control" required>
                         </div>
 
                         <div class="mb-3 form-group row">
-                            <label for="name">{{ translate('Distance') }}</label>
-                            <input type="number" min="0" step="1" placeholder="{{ translate('in km') }}"
-                                name="distance" class="form-control" required
-                                value="">
+                            <label for="name">{{ translate('Duration (days)') }}</label>
+                            <input type="number" min="0" step="1" placeholder="{{ translate('in days') }}"
+                                name="days" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3 form-group row">
+                            <label for="name">{{translate('Delivery Cost per kg')}}</label>
+                            <input type="number" min="0" step="0.01" placeholder="{{translate('in sums')}}"
+                                name="weight_price" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3 form-group row">
+                            <label for="name">{{translate('Express percent')}}</label>
+                            <input type="number" min="0" step="1" max="100" placeholder="{{translate('in percent from 1 to 100')}}"
+                                name="express_percent" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3 form-group row">
+                            <label for="name">{{ translate('Express Duration (hours)') }}</label>
+                            <input type="number" min="0" step="1" placeholder="{{ translate('in hours') }}"
+                                name="express_hours" class="form-control" required>
                         </div>
                     </div>
                     <div class="modal-footer">
