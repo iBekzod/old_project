@@ -153,19 +153,20 @@ public function generatorPDF() {
     $selection=array();
     if(Seller::where('user_id', $user_id)->exists()){
         $seller=Seller::where('user_id', $user_id)->first();
+        // dd($seller->verification_info);
 
-        foreach (($seller->verification_info) as  $element) {
-            $selection[$element['label']]=$element['value'];
-        }
     }
+    foreach (($seller->verification_info) as  $element) {
+        $selection[$element['label']]=$element['value'];
+
+    }
+    //  dd($selection);
+     $date=Carbon::parse($seller->created_at)->format('d-m-Y');
     // dd($seller->user_id);
     //  dd($selection);
     // $seller=Seller::findOrFail($user_id);
-    $date=Carbon::parse($seller->created_at)->format('d-m-Y');
+
             // dd($date);
-
-
-
             // ->with('selection', $selection)->with('seller', $seller)->with('date', $date)
 
 

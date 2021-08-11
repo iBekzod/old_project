@@ -35,6 +35,12 @@
     .danger{
         color: red;
     }
+    .selections{
+        display: block;
+        width: 100%;
+        margin: 15px;
+    }
+
 </style>
  </head>
  <body >
@@ -66,7 +72,7 @@
 
                                </div>
                                <div class="col-md-12">
-                                  <p> 1.1 Данный документ является официальным договором между ООО «BMG HI-TECH», далее - "Исполнитель" в лице руководителя Джаббарова И.Г.  <span class="danger pl-2">{{$selection['Форма_собственности']}}</span> " <span class="danger">{{$selection['Юридическое_название_вендора']}}</span>" , далее - "Заказчик" в лице руководителя <span class="danger">{{$selection['ФИО_директора']}}</span> заключили договор о предоставлении информационных услуг, далее по тексту - "Оферта" или «Договор», содержащий существенные условия, необходимые для предоставления информационных услуг, далее по тексту - "Услуги" с онлайн торговой платформой «TINFIS» на условиях, изложенных в настоящем документе. Договор вступает в силу с момента акцептования при регистрации на сайте https://tinfis.uz.</p>
+                                  <p> 1.1 Данный документ является официальным договором между ООО «BMG HI-TECH», далее - "Исполнитель" в лице руководителя Джаббарова И.Г.  <span class="danger pl-2">{{$selection['forma_sobstvennosti']?? ""}}</span> " <span class="danger">{{$selection['uridiceskoe_nazvanie_vendora'] ?? ""}}</span>" , далее - "Заказчик" в лице руководителя <span class="danger">{{$selection['fio_direktora']?? ""}}</span> заключили договор о предоставлении информационных услуг, далее по тексту - "Оферта" или «Договор», содержащий существенные условия, необходимые для предоставления информационных услуг, далее по тексту - "Услуги" с онлайн торговой платформой «TINFIS» на условиях, изложенных в настоящем документе. Договор вступает в силу с момента акцептования при регистрации на сайте https://tinfis.uz.</p>
                                   <p>1.2 Настоящий Договор, представляет собой договор присоединения, т.е. договор, условия которого определены Исполнителем в данной стандартной форме и могут быть приняты Заказчиком не иначе, как путем присоединения к предлагаемому Договора в целом, без права на внесение любых изменений и дополнений.</p>
                                </div>
                                <div class="col-md-12">
@@ -98,7 +104,7 @@
                                        Покупатель – любое физическое или юридическое лицо, посетитель сайт https://tinfis.uz, который намерен приобрести товар(ы), размещенные на торговой площадке «TINFIS», продавцом которых является один из Заказчиков, путем совершения действий, предусмотренных в настоящем Договоре, и материалах опубликованной на сайте https://tinfis.uz. <br>
                                        Счет Исполнителя - банковский счет Исполнителя в кредитной организации или других «платежных системах», на которые осуществляется оплата услуг.
                                        Регистрация продавца - совокупность действий Заказчика, а именно: заполнение регистрационной формы путем ввода персональных данных, и принятие положений Оферты, в результате чего, на сайте https://tinfis.uz для Заказчика создается учетная запись с уникальным логином и паролем.
-                                       Стороны - Исполнитель (ООО «BMG HI-TECH») и Заказчик  <span class="danger pl-2">{{$selection['Форма_собственности']}}</span> " <span class="danger">{{$selection['Юридическое_название_вендора']}}</span> ". <br>
+                                       Стороны - Исполнитель (ООО «BMG HI-TECH») и Заказчик  <span class="danger pl-2">{{$selection['forma_sobstvennosti'] ?? ""}}</span> " <span class="danger">{{$selection['uridiceskoe_nazvanie_vendora']?? ""}}</span> ". <br>
                                        Товары - товары, которые размещаются на торговой площадке https://tinfis.uz Заказчиком, с целью продажи Посетителям сайта.
                                        2.2 В Договоре могут быть использованы термины и определения, которые не получили определение в пункте 2. В этом случае толкование такого термина производится в соответствии с текстом. В случае отсутствия однозначного толкования термина в тексте Оферты, следует руководствоваться законодательством Республики Узбекистан и сложившейся бизнес-практикой ООО «BMG HI-TECH».
                                    </p>
@@ -306,75 +312,111 @@
                            <div class=" center">
                               <p><b>13. РЕКВИЗИТЫ СТОРОН</b></p>
                            </div>
-                           <div style="display: inline-block; padding:10px 15px 0">
+                           <div style="display: inline-block; padding-left: 30px;  width:45%">
                                <p><b>ИСПОЛНИТЕЛЬ</b></p>
                            </div>
-                           <div class="right" style="padding:0 15px 0">
-                            <p><b>ЗАКАЗЧИК</b></p>
+                           <div class="right" style="padding:0 15px 0; width:35%">
+                            <p style=""><b>ЗАКАЗЧИК</b></p>
                           </div>
                         </div>
+                                                                {{-- /*
+                                            array:16 [▼
+                                        "forma_sobstvennosti" => "Placeat itaque cum"
+                                        "uridiceskoe_nazvanie_vendora" => "Velit excepturi sint"
+                                        "nazvanie_magazina" => "Deserunt itaque omni"
+                                        "adres_registracii_vendora" => "Qui elit nihil quid"
+                                        "fiziceskij_adres_vendora" => "Voluptatem maiores d"
+                                        "inn" => "27"
+                                        "nazvanie_banka" => "Magni at est duis co"
+                                        "mfo_banka" => "71"
+                                        "rs" => "38"
+                                        "fio_direktora" => "Ipsam ducimus offic"
+                                        "tel_direktora" => "27"
+                                        "elektronnaa_pocta_direktora" => "pujy@mailinator.com"
+                                        "fio_menedzera_otvetstvennogo_za_sotrudnicestvo" => "Doloribus esse cupid"
+                                        "tel_menedzera" => "23"
+                                        "elektronnaa_pocta_menedzera" => "zuqyqybi@mailinator.com"
+                                        "poctovyj_indeks" => "41"
+                                        ] */ --}}
                         <div class="row">
                               <div class="col-md-12">
-                                  <div class="row">
-                                        <div class="width_left" style="display: inline-block">
+                                  <div class="selections">
+                                        <div style="display: inline-block; padding:10px 15px 0; width:45%">
                                             <p>Название: ООО «BMG HI-TECH</p>
                                         </div>
-                                        <div class="right"> <p>Название:  <span class="danger pl-2">{{$selection['Форма_собственности']}}</span> " <span class="danger">{{$selection['Юридическое_название_вендора']}}</span>"</p></div>
+                                        <div class="right" style="padding:0 15px 0; width:35%">
+                                            <p>Название:  <span class="danger pl-2">{{$selection['forma_sobstvennosti']?? ""}}</span> "<span class="danger">{{ $selection['uridiceskoe_nazvanie_vendora']?? null }}</span>"</p>
+                                        </div>
                                   </div>
-                                  <div class="row">
-                                        <div class="width_left" style="display:inline-block"><p>Адрес: 100029 г. Ташкент, Мирабадский р-он   ул. Афросиаб 12 б </p></div>
-                                        <div class="col-md-6"><p>Адрес:  <span class="danger pl-1">{{ $selection['Адрес_регистрации_вендора']?? null }}</span></p> </div>
+                                  <div class="selections">
+                                        <div style="display: inline-block; padding:10px 15px 0; width:45%">
+                                            <p>Адрес: 100029 г. Ташкент, Мирабадский р-он   ул. Афросиаб 12 б </p>
+                                        </div>
+                                        <div class="right" style="padding:0 15px 0; width:35%">
+                                            <p>Адрес:  <span class="danger pl-1">{{ $selection['adres_registracii_vendora']?? null }}</span></p>
+                                        </div>
                                   </div>
-                                   <div class="row">
-                                       <div class="col-md-6"><p>Банк: Алока банк </p> </div>
-                                       <div class="col-md-6"><p> Банк: <span class="danger pl-1">{{ $selection['Название_банка']?? null }}</span></p></div>
-                                  </div>
-                                   <div class="row">
-                                       <div class="col-md-6"><p>МФО: 00401</p> </div>
-                                       <div class="col-md-6"><p>МФО: <span class="danger pl-1">{{ $selection['МФО_банка']?? null }}</span></p> </div>
+                                  <div class="selections">
+                                        <div style="display: inline-block; padding:10px 15px 0; width:45%">
+                                            <p>Банк: Алока банк </p>
+                                        </div>
+                                        <div class="right" style="padding:0 15px 0; width:35%">
+                                            <p> Банк: <span class="danger pl-1">{{ $selection['nazvanie_magazina']?? null }}</span></p>
+                                        </div>
                                    </div>
-                                   <div class="row">
-                                       <div class="col-md-6"><p>р/с: 2020 8000 2009 7992 2001 </p></div>
-                                       <div class="col-md-6"><p>р/с:<span class="danger pl-1">{{ $selection['РС']?? null }}</span></p> </div>
-                                   </div>
-                                   <div class="row">
-                                       <div class="col-md-6"><p>ИНН: 306018564 </p> </div>
-                                       <div class="col-md-6"><p> ИНН:<span class="danger pl-1">{{ $selection['ИНН']?? null }}</span></p></div>
-                                   </div>
-                                   <div class="row">
-                                       <div class="col-md-6">
-                                           <p>Тел раб: 78 150 8 150</p>
-                                       </div>
-                                       <div class="col-md-6"> <p>Тел раб:<span class="danger pl-1">{{ $selection['Тел_директора']?? null }}</span></p>  </div>
-                                   </div>
-                                   <div class="row">
-                                       <div class="col-md-6">
-                                           <p>e-mail: bmgventure@gmail.com </p>
-                                       </div>
-                                       <div class="col-md-6"> <p>e-mail: <span class="danger pl-1">{{ $selection['Электронная_почта_директора']?? null }}</span> </p>  </div>
-                                   </div>
-                                   <div class="row">
-                                       <div class="col-md-6">
-                                           <p>Руководитель <br>
-                                               /Джаббаров И.Г./</p>
-                                       </div>
-                                       <div class="col-md-6">
-                                           <p>Руководитель <br>
-                                              <b> <span class="danger">{{ $selection['ФИО_директора']?? null }}</span></b>
-                                           </p>
-                                      </div>
-                                   </div>
+                                   <div class="selections">
+                                        <div style="display: inline-block; padding:10px 15px 0; width:45%">
+                                            <p>МФО: 00401</p>
+                                        </div>
+                                        <div class="right" style="padding:0 15px 0; width:35%">
+                                            <p>МФО: <span class="danger pl-1">{{ $selection['mfo_banka']?? null }}</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="selections">
+                                        <div style="display: inline-block; padding:10px 15px 0; width:45%">
+                                            <p>р/с: 2020 8000 2009 7992 2001 </p>
+                                        </div>
+                                        <div class="right" style="padding:0 15px 0; width:35%">
+                                            <p>р/с:<span class="danger pl-1">{{ $selection['rs']?? null }}</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="selections">
+                                        <div style="display: inline-block; padding:10px 15px 0; width:45%">
+                                            <p>ИНН: 306018564 </p>
+                                        </div>
+                                        <div class="right" style="padding:0 15px 0; width:35%">
+                                            <p> ИНН:<span class="danger pl-1">{{ $selection['inn']?? null }}</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="selections">
+                                        <div style="display: inline-block; padding:10px 15px 0; width:45%">
+                                            <p>Тел раб: 78 150 8 150</p>
+                                        </div>
+                                        <div class="right" style="padding:0 15px 0; width:35%">
+                                            <p>Тел раб:<span class="danger pl-1">{{ $selection['tel_direktora']?? null }}</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="selections">
+                                        <div style="display: inline-block; padding:10px 15px 0; width:45%">
+                                            <p>e-mail: bmgventure@gmail.com </p>
+                                        </div>
+                                        <div class="right" style="padding:0 15px 0; width:35%">
+                                            <p>e-mail: <span class="danger pl-1">{{ $selection['elektronnaa_pocta_menedzera']?? null }}</span> </p>
+                                        </div>
+                                    </div>
+                                    <div class="selections">
+                                        <div style="display: inline-block; padding:10px 15px 0; width:45%">
+                                            <p>Руководитель <br>
+                                                /Джаббаров И.Г./</p>
+                                        </div>
+                                        <div class="right" style="padding:0 15px 0; width:35%">
+                                            <p>Руководитель <br>
+                                                <b> <span class="danger">{{ $selection['fio_direktora']?? null }}</span></b>
+                                             </p>
+                                        </div>
+                                    </div>
                               </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class=" col-md-6  form-group text-right  pr-4 mt-3 ">
-                            <button type="submit" class="btn btn-primary py-2">{{translate('я принимаю')}}</button>
-                        </div>
-                        <div class=" col-md-6  form-group text-right  mt-3 ">
-                            <a href="/pdf/file" class="btn btn-primary py-2">{{translate('pdf')}}</a>
-                        </div>
-
                     </div>
                 </form>
             </div>
