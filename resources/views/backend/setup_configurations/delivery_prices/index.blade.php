@@ -3,7 +3,7 @@
 @section('content')
     <div class="mt-2 mb-3 text-left aiz-titlebar">
         <div class="align-items-center d-flex justify-content-between">
-            <h1 class="h3">{{ translate('Delivery Prices') }}</h1>    
+            <h1 class="h3">{{ translate('Delivery Prices') }}</h1>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
                     {{ translate('Add New Delivery Price') }}
                 </button>
@@ -43,11 +43,11 @@
                                         <i class="las la-edit"></i>
                                     </a>
                                     <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
-                                        data-href="{{ route('deliveries.destroy', $delivery->id) }}"
+                                        data-href="{{ route('delivery_prices.destroy', $delivery->id) }}"
                                         title="{{ translate('Delete') }}">
                                         <i class="las la-trash"></i>
                                     </a>
-                                    <form class="p-4" action="{{ route('deliveries.update', $delivery->id) }}"
+                                    <form class="p-4" action="{{ route('delivery_prices.update', $delivery->id) }}"
                                         method="POST">
                                         <div class="overflow-hidden modal fade" id="EditModal_{{ $delivery->id }}"
                                             tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -65,8 +65,8 @@
                                                     <div class="modal-body">
                                                         @csrf
                                                         <div class="mb-3 form-group row">
-                                                            <label for="name">{{ translate('Name') }}</label>
-                                                            <input type="text" placeholder="{{ translate('Name') }}"
+                                                            <label for="name">{{ translate('Distance (km)') }}</label>
+                                                            <input type="number" min="0" step="0.001"  placeholder="{{ translate('in km') }}"
                                                                 name="distance" class="form-control" required
                                                                 value="{{ $delivery->distance }}">
                                                         </div>
@@ -76,35 +76,35 @@
                                                                 name="distance_price" class="form-control" required
                                                                 value="{{ $delivery->distance_price }}">
                                                         </div>
-                                                    
+
                                                         <div class="mb-3 form-group row">
                                                             <label for="name">{{ translate('Duration (days)') }}</label>
                                                             <input type="number" min="0" step="1" placeholder="{{ translate('in days') }}"
                                                                 name="days" class="form-control" required
                                                                 value="{{ $delivery->days }}">
                                                         </div>
-                                                    
+
                                                         <div class="mb-3 form-group row">
                                                             <label for="name">{{translate('Delivery Cost per kg')}}</label>
                                                             <input type="number" min="0" step="0.01" placeholder="{{translate('in sums')}}"
                                                                 name="weight_price" class="form-control" required
                                                                 value="{{ $delivery->weight_price }}">
                                                         </div>
-                                                    
+
                                                         <div class="mb-3 form-group row">
                                                             <label for="name">{{translate('Express percent')}}</label>
                                                             <input type="number" min="0" step="1" max="100" placeholder="{{translate('in percent from 1 to 100')}}"
                                                                 name="express_percent" class="form-control" required
                                                                 value="{{ $delivery->express_percent }}">
                                                         </div>
-                                                           
+
                                                         <div class="mb-3 form-group row">
                                                             <label for="name">{{ translate('Express Duration (hours)') }}</label>
                                                             <input type="number" min="0" step="1" placeholder="{{ translate('in hours') }}"
                                                                 name="express_hours" class="form-control" required
                                                                 value="{{ $delivery->express_hours }}">
                                                         </div>
-                                                           
+
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"
@@ -132,7 +132,7 @@
     </div>
 
     <!-- Modal -->
-    <form action="{{ route('deliveries.store') }}" class="overflow-hidden " method="POST">
+    <form action="{{ route('delivery_prices.store') }}" class="overflow-hidden " method="POST">
         <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -146,8 +146,8 @@
                     <div class="modal-body">
                         @csrf
                         <div class="mb-3 form-group row">
-                            <label for="name">{{ translate('Name') }}</label>
-                            <input type="text" placeholder="{{ translate('Name') }}"
+                            <label for="name">{{ translate('Distance (km)') }}</label>
+                            <input type="number" min="0" step="0.001"   placeholder="{{ translate('in km') }}"
                                 name="distance" class="form-control" required>
                         </div>
                         <div class="mb-3 form-group row">
@@ -155,25 +155,25 @@
                             <input type="number" min="0" step="0.01" placeholder="{{ translate('in sums') }}"
                                 name="distance_price" class="form-control" required>
                         </div>
-                    
+
                         <div class="mb-3 form-group row">
                             <label for="name">{{ translate('Duration (days)') }}</label>
                             <input type="number" min="0" step="1" placeholder="{{ translate('in days') }}"
                                 name="days" class="form-control" required>
                         </div>
-                    
+
                         <div class="mb-3 form-group row">
                             <label for="name">{{translate('Delivery Cost per kg')}}</label>
                             <input type="number" min="0" step="0.01" placeholder="{{translate('in sums')}}"
                                 name="weight_price" class="form-control" required>
                         </div>
-                    
+
                         <div class="mb-3 form-group row">
                             <label for="name">{{translate('Express percent')}}</label>
                             <input type="number" min="0" step="1" max="100" placeholder="{{translate('in percent from 1 to 100')}}"
                                 name="express_percent" class="form-control" required>
                         </div>
-                           
+
                         <div class="mb-3 form-group row">
                             <label for="name">{{ translate('Express Duration (hours)') }}</label>
                             <input type="number" min="0" step="1" placeholder="{{ translate('in hours') }}"

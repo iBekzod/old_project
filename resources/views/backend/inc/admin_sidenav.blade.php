@@ -940,8 +940,8 @@
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
-                                <a href="{{route('deliveries.index')}}"
-                                class="aiz-side-nav-link {{ areActiveRoutes(['deliveries.index','deliveries.update','deliveries.store', 'deliveries.destroy'])}}">
+                                <a href="{{route('delivery_prices.index')}}"
+                                class="aiz-side-nav-link {{ areActiveRoutes(['delivery_prices.index','delivery_prices.update','delivery_prices.store', 'delivery_prices.destroy'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Delivery prices')}}</span>
                                 </a>
                             </li>

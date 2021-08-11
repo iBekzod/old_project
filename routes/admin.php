@@ -318,11 +318,11 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::resource('warehouse', 'WarehouseController')->except([
 		'create'
 	]);
-    Route::get('deliveries', 'DeliveryPriceController@index')->name('deliveries.index');
-    // Route::get('deliveries/{id}/edit', 'DeliveryPriceController@edit')->name('deliveries.edit');
-    Route::post('deliveries/{id}/edit', 'DeliveryPriceController@update')->name('deliveries.update');
-    Route::post('deliveries', 'DeliveryPriceController@store')->name('deliveries.store');
-    Route::get('deliveries/destroy/{id}', 'DeliveryPriceController@destroy')->name('deliveries.destroy');
+
+    Route::get('delivery_prices', 'DeliveryPriceController@index')->name('delivery_prices.index');
+    Route::post('delivery_prices/{id}/edit', 'DeliveryPriceController@update')->name('delivery_prices.update');
+    Route::post('delivery_prices', 'DeliveryPriceController@store')->name('delivery_prices.store');
+    Route::get('delivery_prices/destroy/{id}', 'DeliveryPriceController@destroy')->name('delivery_prices.destroy');
 
     Route::get('delivery_tarifs', 'DeliveryTarifController@index')->name('delivery_tarifs.index');
     Route::post('delivery_tarifs/{id}/edit', 'DeliveryTarifController@update')->name('delivery_tarifs.update');
