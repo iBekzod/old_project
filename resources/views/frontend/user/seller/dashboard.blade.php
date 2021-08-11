@@ -115,16 +115,16 @@
                       </div>
                       <div class="col-md-5">
                           <div class="bg-white mt-4 p-5 text-center">
-                              <div class="mb-3">
-                                  @if(Auth::user()->seller->verification_status == 0)
-                                      <img loading="lazy"  src="{{ static_asset('assets/img/non_verified.png') }}" alt="" width="130">
-                                  @else
-                                      <img loading="lazy"  src="{{ static_asset('assets/img/verified.png') }}" alt="" width="130">
-                                  @endif
-                              </div>
-                              @if(Auth::user()->seller->verification_status == 0)
-                                  <a href="{{ route('shop.verify') }}" class="btn btn-primary">{{ translate('Verify Now')}}</a>
-                              @endif
+                            @if(isset(Auth::user()->seller->verification_status) && Auth::user()->seller->verification_status == 1)
+                                <div class="mb-3">
+                                    <img loading="lazy"  src="{{ static_asset('assets/img/verified.png') }}" alt="" width="130">
+                                </div>
+                            @else
+                                <div class="mb-3">
+                                    <img loading="lazy"  src="{{ static_asset('assets/img/non_verified.png') }}" alt="" width="130">
+                                </div>
+                                <a href="{{ route('shop.verify') }}" class="btn btn-primary">{{ translate('Verify Now')}}</a>
+                            @endif
                           </div>
                       </div>
                   </div>
