@@ -1402,7 +1402,7 @@ function calculateDeliveryCost($product, $address_id, $is_express=false){
         $express_hours=(double)$delivery_metrics->express_hours;
     }
     $total_weight_cost=calculateWeightCost($product, $weight_price);
-    $currency=Currency::where('code', 'UZB'??defaultCurrency())->first();
+    // $currency=Currency::where('code', 'UZB'??defaultCurrency())->first();
     // $single_product_cost=homeBasePrice($product->id);//convertCurrency((double)($product->price), $product->currency_id);
     // $single_product_discounted_cost=homeDiscountedBasePrice($product->id);
     $total_delivery_cost=(double)($delivery_cost+$total_weight_cost);
@@ -1416,7 +1416,7 @@ function calculateDeliveryCost($product, $address_id, $is_express=false){
         'express_cost'=>$express_cost,
         'days'=>$days,
         'express_hours'=>$express_hours,
-        'currency'=>$currency
+        // 'currency'=>$currency
     ];
 }
 
@@ -1533,6 +1533,9 @@ function getAdmin(){
     return User::where('user_type', 'admin')->first();
 }
  function calculateWeightCost($product, $weight_price=0){
+    if(((double)$product->element->weight)<1){
+        return 0;
+    }
     if($weight_price>0){
         return $weight_price*((double)$product->element->weight);
     }
