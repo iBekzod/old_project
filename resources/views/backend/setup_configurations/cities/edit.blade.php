@@ -73,6 +73,7 @@
                     </div>
                     <div class="form-group mb-3">
                         <label for="name">{{ translate('Has Express') }}</label>
+                        <br>
                         <label class="mb-0 aiz-switch aiz-switch-success">
                             <input type="checkbox" name="has_express" @if($city->has_express) checked @endif>
                             <span></span>

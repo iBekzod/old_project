@@ -15,7 +15,7 @@ class DeliveryPriceController extends Controller
     public function index()
     {
         $deliveries = DeliveryPrice::where('user_id', auth()->id())->orderBy('distance', 'asc')->paginate(15);
-        return view('backend.setup_configurations.deliveries.index', compact('deliveries'));
+        return view('backend.setup_configurations.delivery_prices.index', compact('deliveries'));
     }
     /**
      * Store a newly created resource in storage.
@@ -25,18 +25,22 @@ class DeliveryPriceController extends Controller
      */
     public function store(Request $request)
     {
-        $delivery = DeliveryPrice::firstOrNew([
-            'user_id'=> auth()->id(),
-            'distance'=> $request->distance,
-            'distance_price'=>$request->distance_price,
-            'days'=> $request->days,
-            'weight_price'=>$request->weight_price,
-            'express_percent'=>$request->express_percent,
-            'express_hours'=>$request->express_hours,
+        try {
+            $delivery = DeliveryPrice::firstOrNew([
+                'user_id'=> auth()->id(),
+                'distance'=> $request->distance,
+                'distance_price'=>$request->distance_price
             ]);
-        $delivery->save();
-        flash(translate('Delivery Price has been inserted successfully'))->success();
-        return redirect()->back();
+            $delivery->days= $request->days;
+            $delivery->weight_price=$request->weight_price;
+            $delivery->express_percent=$request->express_percent;
+            $delivery->express_hours=$request->express_hours;
+            $delivery->save();
+            flash(translate('Delivery Price has been inserted successfully'))->success();
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+        return $this->index();
     }
 
     /**
