@@ -54,7 +54,7 @@ class DeliveryTarifController extends Controller
     {
         $delivery = DeliveryTarif::findOrFail($request->id);
         $delivery->user_id = auth()->id();
-        $delivery->name = $request->name;
+        // $delivery->name = $request->name;
         $delivery->distance_price=$request->distance_price;
         $delivery->days= $request->days;
         $delivery->weight_price=$request->weight_price;

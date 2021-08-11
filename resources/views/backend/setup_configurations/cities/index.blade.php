@@ -76,9 +76,10 @@
                                         name="inside_price" value="0" class="form-control" required>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <div class="form-group mb-3">
+                            <div class="col">
+                                <div class="form-group mb-3 ml-3">
                                     <label for="name">{{ translate('Has Express') }}</label>
+                                    <br>
                                     <label class="mb-0 aiz-switch aiz-switch-success">
                                         <input type="checkbox" name="has_express">
                                         <span></span>

@@ -1334,14 +1334,14 @@ function calculateDeliveryCost($product, $address_id, $is_express=false){
     $all_distance=0;
     $delivery_metrics=null;
     $is_outside=true;
+    $inline_cost=0;
     if($seller->addresses->count()>0 && Address::where('id', $address_id)->exists()){
         $seller_address=$seller->addresses->first();
         $client_address=Address::where('id', $address_id)->first();
-
         if($seller_address->city->id == $client_address->city->id){
             //1 - holat = price
-            $inline_cost=$seller_address->city->inside_price;
             $delivery_metrics=DB::table('delivery_tarif')->where('name', $seller_address->city->type)->first();
+            $inline_cost=$seller_address->city->inside_price;
             $is_outside=false;
         }else{
             if($seller_address->region->id==$client_address->region->id){
@@ -1353,6 +1353,13 @@ function calculateDeliveryCost($product, $address_id, $is_express=false){
                     $distance_between_regions=DB::table('delivery')->where('seller_region_id', $client_address->region->id)->where('client_region_id', $seller_address->region->id)->first();
                 }
                 // 3,4,5 - holatlar
+
+                // if($client_address->city->distance==0){
+                //     $inline_cost+=$client_address->city->inside_price;
+                // }
+                // if($seller_address->city->distance==0){
+                //     $inline_cost+=$seller_address->city->inside_price;
+                // }
                 if($distance_between_regions){
                     $all_distance=$seller_address->city->distance + $distance_between_regions->distance + $client_address->city->distance;
                 }else{
@@ -1360,6 +1367,9 @@ function calculateDeliveryCost($product, $address_id, $is_express=false){
                 }
             }
             $delivery_metrics=DeliveryPrice::orderBy('distance', 'asc')
+                ->where('user_id', $seller_address->user_id)
+                ->where('distance', '>', $all_distance)
+                ->first()??DeliveryPrice::orderBy('distance', 'asc')
                 ->where('user_id', $seller_address->user_id)
                 ->where('distance', '>', $all_distance)
                 ->first()??DeliveryPrice::orderBy('distance', 'asc')
@@ -1378,6 +1388,9 @@ function calculateDeliveryCost($product, $address_id, $is_express=false){
         $days=$delivery_metrics->days;
         $express_hours=(double)$delivery_metrics->express_hours;
     }else if($delivery_metrics && !$is_outside){
+        if($inline_cost==0){
+            $inline_cost = $delivery_metrics->distance_price;
+        }
         $weight_price=$delivery_metrics->weight_price;
         if($is_express){
             $delivery_cost = $inline_cost;
@@ -1389,14 +1402,21 @@ function calculateDeliveryCost($product, $address_id, $is_express=false){
         $express_hours=(double)$delivery_metrics->express_hours;
     }
     $total_weight_cost=calculateWeightCost($product, $weight_price);
-    $total_cost=convertCurrency((double)($delivery_cost+$total_weight_cost), Currency::where('code', 'UZB'??defaultCurrency())->first()->id);
+    $currency=Currency::where('code', 'UZB'??defaultCurrency())->first();
+    // $single_product_cost=homeBasePrice($product->id);//convertCurrency((double)($product->price), $product->currency_id);
+    // $single_product_discounted_cost=homeDiscountedBasePrice($product->id);
+    $total_delivery_cost=(double)($delivery_cost+$total_weight_cost);
+    $total_express_cost=(double)($express_cost+$total_weight_cost);
+    // $total_cost_free_delivery=(double)($total_weight_cost);
     return [
-        'total_cost'=>$total_cost,
-        'days'=>$days,
+        'total_delivery_cost'=>$total_delivery_cost,
+        'total_express_cost'=>$total_express_cost,
         'delivery_cost'=>(double)$delivery_cost,
         'total_weight_cost'=>(double)$total_weight_cost,
-        'express_hours'=>$express_hours,
         'express_cost'=>$express_cost,
+        'days'=>$days,
+        'express_hours'=>$express_hours,
+        'currency'=>$currency
     ];
 }
 

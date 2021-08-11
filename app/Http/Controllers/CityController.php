@@ -24,12 +24,18 @@ class CityController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $cities = City::orderBy('name', 'asc')->paginate(15);
+        $cities = City::orderBy('name', 'asc');
+        $sort_search=null;
+        if($request->has('search') && $request->search!=null){
+            $cities=$cities->where('name', 'like', '%'.$request->search.'%');
+            $sort_search=$request->search;
+        }
+        $cities=$cities->paginate(15);
         $all_cities = City::all();
         $countries = Country::where('status', 1)->get();
-        return view('backend.setup_configurations.cities.index', compact('cities', 'all_cities', 'countries'));
+        return view('backend.setup_configurations.cities.index', compact('cities', 'all_cities', 'countries', 'sort_search'));
     }
 
     /**

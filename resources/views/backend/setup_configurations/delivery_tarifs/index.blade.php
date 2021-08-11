@@ -18,7 +18,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>{{ translate('Name') }}</th>
-                                <th>{{ translate('Cost per km (sums)') }}</th>
+                                <th>{{ translate('Inside cost') }}</th>
                                 <th>{{ translate('Duration (days)') }}</th>
                                 <th>{{ translate('Delivery Cost per kg')}}</th>
                                 <th>{{ translate('Express percent') }}</th>
@@ -68,11 +68,11 @@
                                                             <label for="name">{{ translate('Name') }}</label>
                                                             <input type="text" placeholder="{{ translate('name') }}"
                                                                 name="name" class="form-control" required
-                                                                value="{{ $delivery->name }}" disabled>
+                                                                value="{{ $delivery->name }}" >
                                                         </div>
 
                                                         <div class="mb-3 form-group row">
-                                                            <label for="name">{{ translate('Cost per km (sums)') }}</label>
+                                                            <label for="name">{{ translate('Inside cost') }}</label>
                                                             <input type="number" min="0" step="0.01" placeholder="{{ translate('in sums') }}"
                                                                 name="distance_price" class="form-control" required
                                                                 value="{{ $delivery->distance_price }}">
@@ -152,7 +152,7 @@
                                 name="name" class="form-control" required>
                         </div>
                         <div class="mb-3 form-group row">
-                            <label for="name">{{ translate('Cost per km (sums)') }}</label>
+                            <label for="name">{{ translate('Inside cost') }}</label>
                             <input type="number" min="0" step="0.01" placeholder="{{ translate('in sums') }}"
                                 name="distance_price" class="form-control" required>
                         </div>
