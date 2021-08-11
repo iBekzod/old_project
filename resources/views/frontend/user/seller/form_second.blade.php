@@ -25,7 +25,7 @@
 
                                             <label class="col-lg-3 col-from-label mb-2"> {{translate($element->neme)}}</label>
                                             <div class="col-lg-8">
-                                                <select name="{{($element->name)}}" class="form-control py-2">
+                                                <select name="{{($element->label)}}" class="form-control py-2">
                                                     <option value="OАО">OАО</option>
                                                     <option value="ЗАО">ЗАО</option>
                                                     <option value="ООО">ООО</option>
@@ -43,7 +43,7 @@
                                             @else
                                                 <label class="col-lg-3 col-from-label mb-2"> {{translate($element->name)}}</label>
                                                 <div class="col-lg-8">
-                                                    <input class="form-control" type="text" name="{{($element->name)}}" required>
+                                                    <input class="form-control" type="text" name="{{($element->label)}}" required>
                                                 </div>
                                             @endif
                                         </div>
@@ -51,14 +51,14 @@
                                         <div class="form-group row" id="category">
                                             <label class="col-lg-3 col-from-label mb-2"> {{translate($element->name)}}</label>
                                             <div class="col-lg-8">
-                                            <input class="form-control" type="number" name="{{($element->name)}}" required>
+                                            <input class="form-control" type="number" name="{{($element->label)}}" required>
                                             </div>
                                         </div>
                                         @elseif($element->type=='email')
                                         <div class="form-group row" id="category">
                                             <label class="col-lg-3 col-from-label mb-2"> {{translate($element->name)}}</label>
                                             <div class="col-lg-8">
-                                            <input class="form-control" type="email" name="{{($element->name)}}" required>
+                                            <input class="form-control" type="email" name="{{($element->label)}}" required>
                                             </div>
                                         </div>
                                         @endif

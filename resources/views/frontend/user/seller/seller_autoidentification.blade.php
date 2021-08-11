@@ -67,7 +67,7 @@
                                    </div>
                                </div>
                                <div class="col-md-12">
-                                  <p> 1.1 Данный документ является официальным договором между ООО «BMG HI-TECH», далее - "Исполнитель" в лице руководителя Джаббарова И.Г.  <span class="text-danger pl-2">{{$array['Форма_собственности']}}</span><< <span class="text-danger">{{$array['Юридическое_название_вендора']}}</span>>> , далее - "Заказчик" в лице руководителя <span class="text-danger">{{$array['ФИО_директора']}}</span> заключили договор о предоставлении информационных услуг, далее по тексту - "Оферта" или «Договор», содержащий существенные условия, необходимые для предоставления информационных услуг, далее по тексту - "Услуги" с онлайн торговой платформой «TINFIS» на условиях, изложенных в настоящем документе. Договор вступает в силу с момента акцептования при регистрации на сайте https://tinfis.uz.</p>
+                                  <p> 1.1 Данный документ является официальным договором между ООО «BMG HI-TECH», далее - "Исполнитель" в лице руководителя Джаббарова И.Г.  <span class="text-danger pl-2">{{$array['forma_sobstvennosti']?? ""}}</span><< <span class="text-danger">{{$array['uridiceskoe_nazvanie_vendora']}}</span>>> , далее - "Заказчик" в лице руководителя <span class="text-danger">{{$array['fio_direktora']}}</span> заключили договор о предоставлении информационных услуг, далее по тексту - "Оферта" или «Договор», содержащий существенные условия, необходимые для предоставления информационных услуг, далее по тексту - "Услуги" с онлайн торговой платформой «TINFIS» на условиях, изложенных в настоящем документе. Договор вступает в силу с момента акцептования при регистрации на сайте https://tinfis.uz.</p>
                                   <p>1.2 Настоящий Договор, представляет собой договор присоединения, т.е. договор, условия которого определены Исполнителем в данной стандартной форме и могут быть приняты Заказчиком не иначе, как путем присоединения к предлагаемому Договора в целом, без права на внесение любых изменений и дополнений.</p>
                                </div>
                                <div class="col-md-12">
@@ -99,7 +99,7 @@
                                        Покупатель – любое физическое или юридическое лицо, посетитель сайт https://tinfis.uz, который намерен приобрести товар(ы), размещенные на торговой площадке «TINFIS», продавцом которых является один из Заказчиков, путем совершения действий, предусмотренных в настоящем Договоре, и материалах опубликованной на сайте https://tinfis.uz. <br>
                                        Счет Исполнителя - банковский счет Исполнителя в кредитной организации или других «платежных системах», на которые осуществляется оплата услуг.
                                        Регистрация продавца - совокупность действий Заказчика, а именно: заполнение регистрационной формы путем ввода персональных данных, и принятие положений Оферты, в результате чего, на сайте https://tinfis.uz для Заказчика создается учетная запись с уникальным логином и паролем.
-                                       Стороны - Исполнитель (ООО «BMG HI-TECH») и Заказчик  <span class="text-danger pl-2">{{$array['Форма_собственности']}}</span><< <span class="text-danger">{{$array['Юридическое_название_вендора']}}</span>>>. <br>
+                                       Стороны - Исполнитель (ООО «BMG HI-TECH») и Заказчик  <span class="text-danger pl-2">{{$array['forma_sobstvennosti']}}</span><< <span class="text-danger">{{$array['uridiceskoe_nazvanie_vendora']}}</span>>>. <br>
                                        Товары - товары, которые размещаются на торговой площадке https://tinfis.uz Заказчиком, с целью продажи Посетителям сайта.
                                        2.2 В Договоре могут быть использованы термины и определения, которые не получили определение в пункте 2. В этом случае толкование такого термина производится в соответствии с текстом. В случае отсутствия однозначного толкования термина в тексте Оферты, следует руководствоваться законодательством Республики Узбекистан и сложившейся бизнес-практикой ООО «BMG HI-TECH».
                                    </p>
@@ -320,39 +320,39 @@
                               <div class="col-md-12">
                                   <div class="row">
                                         <div class="col-md-6"><p>Название: ООО «BMG HI-TECH</p> </div>
-                                        <div class="col-md-6"><p>Название:  <span class="text-danger pl-2">{{$array['Форма_собственности']}}</span><< <span class="text-danger">{{$array['Юридическое_название_вендора']}}</span>>></p> </div>
+                                        <div class="col-md-6"><p>Название:  <span class="text-danger pl-2">{{$array['forma_sobstvennosti'] ?? ""}}</span><< <span class="text-danger">{{$array['uridiceskoe_nazvanie_vendora']}}</span>>></p> </div>
                                   </div>
                                   <div class="row">
                                         <div class="col-md-6"><p>Адрес: 100029 г. Ташкент, Мирабадский р-он   ул. Афросиаб 12 б </p></div>
-                                        <div class="col-md-6"><p>Адрес:  <span class="text-danger pl-1">{{ $array['Адрес_регистрации_вендора']?? null }}</span></p> </div>
+                                        <div class="col-md-6"><p>Адрес:  <span class="text-danger pl-1">{{ $array['adres_registracii_vendora']?? null }}</span></p> </div>
                                   </div>
                                    <div class="row">
                                        <div class="col-md-6"><p>Банк: Алока банк </p> </div>
-                                       <div class="col-md-6"><p> Банк: <span class="text-danger pl-1">{{ $array['Название_банка']?? null }}</span></p></div>
+                                       <div class="col-md-6"><p> Банк: <span class="text-danger pl-1">{{ $array['nazvanie_magazina']?? null }}</span></p></div>
                                   </div>
                                    <div class="row">
                                        <div class="col-md-6"><p>МФО: 00401</p> </div>
-                                       <div class="col-md-6"><p>МФО: <span class="text-danger pl-1">{{ $array['МФО_банка']?? null }}</span></p> </div>
+                                       <div class="col-md-6"><p>МФО: <span class="text-danger pl-1">{{ $array['mfo_banka']?? null }}</span></p> </div>
                                    </div>
                                    <div class="row">
                                        <div class="col-md-6"><p>р/с: 2020 8000 2009 7992 2001 </p></div>
-                                       <div class="col-md-6"><p>р/с:<span class="text-danger pl-1">{{ $array['РС']?? null }}</span></p> </div>
+                                       <div class="col-md-6"><p>р/с:<span class="text-danger pl-1">{{ $array['rs']?? null }}</span></p> </div>
                                    </div>
                                    <div class="row">
                                        <div class="col-md-6"><p>ИНН: 306018564 </p> </div>
-                                       <div class="col-md-6"><p> ИНН:<span class="text-danger pl-1">{{ $array['ИНН']?? null }}</span></p></div>
+                                       <div class="col-md-6"><p> ИНН:<span class="text-danger pl-1">{{ $array['inn']?? null }}</span></p></div>
                                    </div>
                                    <div class="row">
                                        <div class="col-md-6">
                                            <p>Тел раб: 78 150 8 150</p>
                                        </div>
-                                       <div class="col-md-6"> <p>Тел раб:<span class="text-danger pl-1">{{ $array['Тел_директора']?? null }}</span></p>  </div>
+                                       <div class="col-md-6"> <p>Тел раб:<span class="text-danger pl-1">{{ $array['tel_direktora']?? null }}</span></p>  </div>
                                    </div>
                                    <div class="row">
                                        <div class="col-md-6">
                                            <p>e-mail: bmgventure@gmail.com </p>
                                        </div>
-                                       <div class="col-md-6"> <p>e-mail: <span class="text-danger pl-1">{{ $array['Электронная_почта_директора']?? null }}</span> </p>  </div>
+                                       <div class="col-md-6"> <p>e-mail: <span class="text-danger pl-1">{{ $array['elektronnaa_pocta_direktora']?? null }}</span> </p>  </div>
                                    </div>
                                    <div class="row">
                                        <div class="col-md-6">
@@ -361,7 +361,7 @@
                                        </div>
                                        <div class="col-md-6">
                                            <p>Руководитель <br>
-                                              <b> <span class="text-danger">{{ $array['ФИО_директора']?? null }}</span></b>
+                                              <b> <span class="text-danger">{{ $array['fio_direktora']?? null }}</span></b>
                                            </p>
                                       </div>
                                    </div>

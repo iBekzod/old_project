@@ -27,7 +27,7 @@ class SellerAutoidentificationFormController extends Controller
                 }
             }
             //   dd($validation);
-            // $request->validate($validation);
+            $request->validate($validation);
             // dd($validation);
 
             $request->validate([
@@ -37,41 +37,9 @@ class SellerAutoidentificationFormController extends Controller
              'latitude'=>'required',
              'longitude'=>'required'
             ]);
-
-
             // dd($request->all());
 
-
-
-
-
-
-            // 'user_id', 'address', 'city_id', 'region_id', 'postal_code', 'phone', 'set_default', 'longitude', 'latitude'
-
-//             array:22 [▼
-//   "_token" => "AIPJfsXF4Rj6pD1ALvxVst1VYLsCtu5sbs1Eaurx"
-//   "Форма_собственности" => "ООО"
-//   "Юридическое_название_вендора" => "Porro officia ipsa"
-//   "Название_магазина" => "Cillum aliqua Omnis"
-//   "Адрес_регистрации_вендора" => "Minim illum tenetur"
-//   "Физический_адрес_вендора" => "Rem elit pariatur"
-//   "ИНН" => "52"
-//   "Название_банка" => "Velit suscipit culpa"
-//   "МФО_банка" => "78"
-//   "РС" => "42"
-//   "ФИО_директора" => "Corrupti et omnis n"
-//   "Тел_директора" => "26"
-//   "Электронная_почта_директора" => "zizepypy@mailinator.com"
-//   "ФИО_менеджера_ответственного_за_сотрудничество" => "Tenetur placeat nul"
-//   "Тел_менеджера" => "98"
-//   "Электронная_почта_менеджера" => "jona@mailinator.com"
-//   "Почтовый_индекс" => "92"
-//   "country_id" => "234"
-//   "region_id" => "47"
-//   "city_id" => "152"
-//   "latitude" => "40.8005366"
-//   "longitude" => "72.15938419999999"
-// ]
+            // dd($request->all());
 
                 //   dd($validation);
             $user_id = auth()->id();
@@ -84,8 +52,6 @@ class SellerAutoidentificationFormController extends Controller
             else{
                 $address_full=new Address;
             }
-            // $address_full= new Address;
-            // dd($address_full);
             if (Seller::where('user_id', $user_id)->exists()) {
                 $seller = Seller::where('user_id', $user_id)->first();
             } else {
@@ -115,38 +81,42 @@ class SellerAutoidentificationFormController extends Controller
                 array_push($data, $item);
                 $i++;
             }
+            // dd($array);
             // dd($data);
             $seller->user_id = $user_id;
             $seller->verification_info = json_encode($data);
-            //  dd($user_id);
+            //  dd($seller->verification_info);
             $shop->user_id =$user_id;
-            $shop->name = $request->name_of_shop;
-            $shop->address = $request->vendor_registration_address;
+            $shop->name = $request->nazvanie_magazina;
+            $shop->address = $request->adres_registracii_vendora;
             $shop->slug = SlugService::createSlug(Shop::class, 'slug', slugify($request->name_of_shop));
 
             $address_full->user_id=$user_id;
-            $address_full->address=$request->Physical_address_vendora;
+            $address_full->address=$request->fiziceskij_adres_vendora;
             // dd($address_full->address);
             $address_full->city_id=$request->city_id;
             // dd($address_full->city_id);
             $address_full->region_id=$request->region_id;
             // dd($address_full->region_id);
-
-            $address_full->postal_code=$request->postal_code;
+            $address_full->postal_code=$request->poctovyj_indeks;
             // dd($address_full->postal_code);
-            $address_full->phone=$request->Director_phone_number;
+            $address_full->phone=$request->tel_direktora;
             // dd($address_full->phone);
             $address_full->set_default=0;
             // dd($address_full->set_default);
-            $address_full->longitude=$request->region_id;
-            $address_full->latitude=$request->region_id;
-
-            dd($address_full->all());
+            $address_full->longitude=$request->longitude;
+                        // dd($address_full->longitude);
+            $address_full->latitude=$request->latitude;
+            //     dd($address_full->latitude);
+            // dd($address_full->all());
             // dd($shop);
             //   dd($seller->verification_info);
             $date = Carbon::parse($seller->created_at)->format('d-m-Y');
             // dd($array);
             // dd($date);
+            // if($seller->save()){
+            //     return 'chiqdi';
+            // }
             if ($user->save()) {
                 if ($seller->save()) {
                     if($shop->save()){
@@ -211,9 +181,5 @@ class SellerAutoidentificationFormController extends Controller
                 return back();
             }
         }
-
-
-
-
    }
 }
