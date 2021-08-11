@@ -30,7 +30,7 @@ class ProductDetailCollection extends ResourceCollection
                 'weight'=>$element->weight,
                 'shipping_type' => $product->delivery_type,
                 'shipping_cost' => $this->calculateShippingCost($product, false),
-                'express_shipping_cost'=>$this->calculateShippingCost($product, true),
+                // 'express_shipping_cost'=>$this->calculateShippingCost($product, true),
                 'id' => (integer) $product->id,
                 'name' => $variation->getTranslation('name'),
                 'added_by' => $product->added_by,
