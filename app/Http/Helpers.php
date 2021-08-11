@@ -1345,10 +1345,10 @@ function calculateDeliveryCost($product, $address_id, $delivery_type='tinfis'){
             if($delivery_type=='tinfis'){
                 $delivery_metrics=DeliveryTarif::where('name', $seller_address->city->type)->where('user_id', $admin->id)->first();
             }else{
-                $delivery_metrics=DeliveryTarif::table('delivery_tarif')->where('name', $seller_address->city->type)->where('user_id', $seller->id)->first();
+                $delivery_metrics=DeliveryTarif::where('name', $seller_address->city->type)->where('user_id', $seller->id)->first();
             }
             if($delivery_metrics){
-                $delivery_metrics=DeliveryTarif::table('delivery_tarif')->where('name', $seller_address->city->type)->first();
+                $delivery_metrics=DeliveryTarif::where('name', $seller_address->city->type)->first();
             }
 
             $inline_cost=$seller_address->city->inside_price;
@@ -1395,7 +1395,7 @@ function calculateDeliveryCost($product, $address_id, $delivery_type='tinfis'){
     }else if($delivery_metrics && !$is_outside){
         if($inline_cost==0){
             $inline_cost = $delivery_metrics->distance_price;
-        } 
+        }
         $weight_price=$delivery_metrics->weight_price;
         $delivery_cost = $inline_cost;
         $express_cost = $delivery_cost*(100+((double)$delivery_metrics->express_percent))/100;
