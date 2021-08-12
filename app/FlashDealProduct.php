@@ -21,12 +21,12 @@ class FlashDealProduct extends Model
             return [
                 'title' => $flash_deal->title,
                 'slug'=>$flash_deal->slug,
-                'start_date' => $flash_deal->end_date,
-                'end_date' => $flash_deal->end_date,
+                'start_date' => date('d-m-Y',$flash_deal->start_date),
+                'end_date' => date('d-m-Y',$flash_deal->end_date),
             ];
         }
         return [];
-        
+
         // new FlashDealCollection(FlashDeal::where('id', $this->flash_deal_id)->get());
     }
 }

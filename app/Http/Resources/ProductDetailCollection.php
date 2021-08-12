@@ -27,7 +27,9 @@ class ProductDetailCollection extends ResourceCollection
         $seller_products=getPublishedProducts('product', ['where'=>[['user_id', $product->user_id],['element_id', $product->element_id]]], [], [])->get();
         try{
             $data = [
+                'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??[],
                 'weight'=>$element->weight,
+                'refundable'=>$element->refundable,
                 'shipping_type' => $product->delivery_type,
                 'shipping_cost' => $this->calculateShippingCost($product, false),
                 // 'express_shipping_cost'=>$this->calculateShippingCost($product, true),
@@ -90,7 +92,7 @@ class ProductDetailCollection extends ResourceCollection
 
                 'characteristics' => $this->convertToCharacteristics(json_decode($element->characteristics, true)),
 
-                'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??[],
+
                 'category'=>[
                     'name' => $element->category->getTranslation('name'),
                     'banner' => api_asset($element->category->banner),
