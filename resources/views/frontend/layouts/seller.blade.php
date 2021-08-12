@@ -20,6 +20,13 @@
             <!-- google font -->
             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700">
 
+            {{-- google maps --}}
+
+            <link href="https://developers.google.com/maps/documentation/javascript/examples/default.css" rel="stylesheet">
+            <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPEW1j0_XsP39Xm8Mo8XMM939vW6qbR2Q&sensor=false">
+            </script>
+
             <!-- aiz core css -->
             <link rel="stylesheet" href="{{ static_asset('assets/css/vendors.css') }}">
             @if(\App\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()->rtl == 1)
@@ -56,7 +63,7 @@
             </script>
 
         </head>
-        <body class="">
+        <body onload="initialize()">
             @php
                 if(isset($lang) && $lang==null){
                     $lang=default_language();
