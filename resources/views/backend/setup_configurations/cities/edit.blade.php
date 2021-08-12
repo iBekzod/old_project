@@ -79,6 +79,15 @@
                             <span></span>
                         </label>
                     </div>
+
+                    <div class="form-group mb-3">
+                        <label for="name">{{ translate('Is selected') }}</label>
+                        <br>
+                        <label class="mb-0 aiz-switch aiz-switch-success">
+                            <input type="checkbox" name="is_selected" @if($city->is_selected) checked @endif>
+                            <span></span>
+                        </label>
+                    </div>
                     <div class="form-group mb-3 text-right">
                         <button type="submit" class="btn btn-primary">{{ translate('Update') }}</button>
                     </div>

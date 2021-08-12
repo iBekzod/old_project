@@ -87,6 +87,16 @@
                                 </div>
                             </div>
                             <div class="col">
+                                <div class="form-group mb-3 ml-3">
+                                    <label for="name">{{ translate('Is selected') }}</label>
+                                    <br>
+                                    <label class="mb-0 aiz-switch aiz-switch-success">
+                                        <input type="checkbox" name="is_selected">
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col">
                                 <div class="form-group mt-4 text-right">
                                     <button type="submit" class="btn btn-primary">{{ translate('Add') }}</button>
                                 </div>
@@ -139,10 +149,19 @@
                                     <td>{{ $city->distance }}</td>
                                     <td>{{ translate($city->type) }}</td>
                                     <td>{{ $city->inside_price }}</td>
-                                    <td><label class="mb-0 aiz-switch aiz-switch-success">
+                                    <td>
+                                        <label class="mb-0 aiz-switch aiz-switch-success">
                                         <input type="checkbox" onchange="update_express(this)"  value="{{ $city->id }}" name="has_express" @if($city->has_express) checked @endif>
                                         <span></span>
-                                    </label>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        {{-- @if($city->type=='district' || $city->type=='city') --}}
+                                            <label class="mb-0 aiz-switch aiz-switch-success">
+                                            <input type="checkbox" onchange="update_selected(this)"  value="{{ $city->id }}" name="is_selected" @if($city->is_selected) checked @endif>
+                                            <span></span>
+                                            </label>
+                                        {{-- @endif --}}
                                     </td>
                                     <td class="text-right">
                                         <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
@@ -204,5 +223,23 @@
             });
         }
 
+        function update_selected(el) {
+            if (el.checked) {
+                var status = 1;
+            } else {
+                var status = 0;
+            }
+            $.post('{{ route('cities.selected') }}', {
+                _token: '{{ csrf_token() }}',
+                id: el.value,
+                status: status
+            }, function (data) {
+                if (data == 1) {
+                    AIZ.plugins.notify('success', '{{ translate('Selection updated successfully') }}');
+                } else {
+                    AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
+                }
+            });
+        }
     </script>
 @endsection

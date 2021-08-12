@@ -65,6 +65,7 @@ class CityController extends Controller
         $city->distance = $request->distance;
         $city->inside_price = $request->inside_price;
         $city->has_express = $request->has_express=='on';
+        $city->is_selected = $request->is_selected=='on';
         if($city->save()){
             foreach (Language::all() as $language){
                 // City Translations
@@ -116,6 +117,7 @@ class CityController extends Controller
         $city->type = $request->type;
         $city->inside_price=$request->inside_price;
         $city->has_express=$request->has_express=='on';
+        $city->is_selected=$request->is_selected=='on';
         $city->save();
 
         if(CityTranslation::where('city_id' , $city->id)->where('lang' ,default_language())->first()){
@@ -135,6 +137,22 @@ class CityController extends Controller
         $city = City::findOrFail($request->id);
         $city->has_express = $request->status;
         if ($city->save()) {
+            if($city->type=='region'){
+                City::where('parent_id', $city->id)->update(['has_express' => true]);
+            }
+            return 1;
+        }
+        return 0;
+    }
+
+    public function updateSelected(Request $request)
+    {
+        $city = City::findOrFail($request->id);
+        $city->is_selected = $request->status;
+        if ($city->save()) {
+            if($city->type=='region'){
+                City::where('parent_id', $city->id)->update(['has_express' => true]);
+            }
             return 1;
         }
         return 0;
