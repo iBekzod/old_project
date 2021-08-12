@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Address;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use App\HelperClasses\Translations;
 use App\CharacteristicValues;
@@ -79,26 +80,29 @@ class HomeController extends Controller
             $user->password = Hash::make($request->password);
 
 
+
+
+
             // $countries=Country::where('id',234)->first();
             // $regions=City::where('type', 'region')->get();
-            // //   dd($regions);
+            // // dd($regions);
             // $cities=City::where('type', 'district')->orWhere('type', 'city')->get();
 
-           $countrys=Country::where('status',1)->get();
-        //    dd($countrys);
+            $countrys = Country::where('status', 1)->get();
+            // dd($countrys);
 
 
             // $user->save();
             if ($user->save()) {
                 auth()->login($user, true);
-                return view('frontend.user.seller.form_second',compact('countrys'));
+                return view('frontend.user.seller.form_second', compact('countrys'));
                 // return 'keldi';
 
             }
         } else if ($request->method() === 'GET') {
-            //    if(Auth::check()){
-            //        return redirect()->route('admin');
-            //    }
+            // if(Auth::check()){
+            // return redirect()->route('admin');
+            // }
 
             return view('frontend.user_registration');
         }
@@ -106,29 +110,26 @@ class HomeController extends Controller
     }
     public function fetchState(Request $request)
     {
-          if(City::where('country_id',$request->country_id)->exists()){
-               $regions=City::where('type','region')->where('country_id',$request->country_id);
-                $data['states'] = $regions->get(["name", "id"]);
-                return response()->json($data);
-          }
-          else{
-              return 'error';
-            }
-
+        if (City::where('country_id', $request->country_id)->exists()) {
+            $regions = City::where('type', 'region')->where('country_id', $request->country_id);
+            $data['states'] = $regions->get(["name", "id"]);
+            return response()->json($data);
+        } else {
+            return 'error';
+        }
     }
 
     public function fetchCity(Request $request)
     {
 
-         if($region=City::where('id',$request->state_id)->first()){
+        if ($region = City::where('id', $request->state_id)->first()) {
             // dd(City::where('parent_id',$request->state_id)->get());
-            $data['cities'] = City::where('parent_id',$request->state_id)->get(["name", "id"]);
+            $data['cities'] = City::where('parent_id', $request->state_id)->get(["name", "id"]);
             // dd($data);
-                return response()->json($data);
-          }
-          else{
-              return 'error';
-            }
+            return response()->json($data);
+        } else {
+            return 'error';
+        }
 
         // $data['cities'] = City::where("state_id",$request->state_id)->get(["name", "id"]);
         // return response()->json($data);
@@ -156,10 +157,10 @@ class HomeController extends Controller
 
             if ($user->registration_step == 'active_1') {
                 return redirect()->route('seller.autoidentification');
-                //  return 'keldi';
+                // return 'keldi';
             }
             if ($user->registration_step == 'active_2') {
-               return redirect()->route('seller.delivery');
+                return redirect()->route('seller.delivery');
                 // return 'keldi';
             }
             if ($user->registration_step == 'active_3') {
@@ -169,24 +170,24 @@ class HomeController extends Controller
 
 
             // if ($user->registration_step == 'active_3') {
-            //     return redirect()->route('seller.page');
+            // return redirect()->route('seller.page');
             // }
             // else{
-            //     return view('frontend.user.seller.dashboard');
+            // return view('frontend.user.seller.dashboard');
             // }
 
 
 
             // if($user=User::where('email', $request->email)->where('password', bcrypt($request->password))->first()){
-            //    auth()->login($user, true);
-            //    return view('frontend.user.seller.dashboard');
+            // auth()->login($user, true);
+            // return view('frontend.user.seller.dashboard');
             // }
             // else{
-            //     return 'error';
+            // return 'error';
             // }
         } else if ($request->method() === 'GET') {
             // if(Auth::check()){
-            //     return redirect()->route('home');
+            // return redirect()->route('home');
             // }
             // dd("sadfafguyasdgfd");
             return view('frontend.user_login');
@@ -198,7 +199,10 @@ class HomeController extends Controller
 
     public function cart_login(Request $request)
     {
-        $user = User::whereIn('user_type', ['customer', 'seller'])->where('email', $request->email)->orWhere('phone', $request->email)->first();
+        $user = User::whereIn('user_type', ['customer', 'seller'])->where('email', $request->email)->orWhere(
+            'phone',
+            $request->email
+        )->first();
         if ($user != null) {
             if (Hash::check($request->password, $user->password)) {
                 if ($request->has('remember')) {
@@ -247,7 +251,7 @@ class HomeController extends Controller
             return $this->admin_dashboard();
         }
         // elseif(Auth::user()->user_type == 'customer'){
-        //     return view('frontend.user.customer.dashboard');
+        // return view('frontend.user.customer.dashboard');
         // }
         else {
             return $this->index();
@@ -262,16 +266,23 @@ class HomeController extends Controller
             $addresses = Auth::user()->addresses;
             return view('frontend.user.customer.profile', compact('addresses'));
         } elseif (Auth::user()->user_type == 'seller') {
-            //  dd(Auth::user()->seller->verification_info);
-            //  $informations=Auth::user()->seller->verification_info;
+            // dd(Auth::user()->seller->verification_info);
+            // $informations=Auth::user()->seller->verification_info;
             // dd($informations->);
+            $user_id= auth()->id();
             $addresses = Auth::user()->addresses;
-            $information=Auth::user()->seller->verification_info;
+            $information = Auth::user()->seller->verification_info;
             // dd($information);
+            $key = array_search('text', array_column($information, 'type'));
+            //   dd($information[$key]['value']);
+            if(Address::where('user_id', $user_id)->exists()){
+                $address=Address::where('user_id', $user_id)->first();
+            }
+            dd($address);
             // dd($addresses['city_id']);
-            $countrys=Country::where('status',1)->get();
+            $countrys = Country::where('status', 1)->get();
 
-            return view('frontend.user.seller.profile', compact('addresses','countrys'));
+            return view('frontend.user.seller.profile', compact('addresses', 'countrys', 'information'));
         }
     }
 
@@ -355,7 +366,7 @@ class HomeController extends Controller
         if (auth()->user() != null) {
             return $this->dashboard();
         }
-          return redirect()->route('login');
+        return redirect()->route('login');
     }
 
     public function home()
@@ -411,7 +422,7 @@ class HomeController extends Controller
 
     public function product(Request $request, $slug)
     {
-        $detailedProduct  = Product::where('slug', $slug)->first();
+        $detailedProduct = Product::where('slug', $slug)->first();
 
         if ($detailedProduct != null && $detailedProduct->published) {
             //updateCartSetup();
@@ -431,7 +442,7 @@ class HomeController extends Controller
 
     public function element(Request $request, $slug)
     {
-        $detailedProduct  = Element::where('slug', $slug)->first();
+        $detailedProduct = Element::where('slug', $slug)->first();
 
         if ($detailedProduct != null && $detailedProduct->published) {
             //updateCartSetup();
@@ -451,7 +462,7 @@ class HomeController extends Controller
     public function shop($slug)
     {
         return redirect(default_website() . 'seller/' . $slug);
-        $shop  = Shop::where('slug', $slug)->first();
+        $shop = Shop::where('slug', $slug)->first();
 
         if ($shop != null) {
             $seller = Seller::where('user_id', $shop->user_id)->first();
@@ -466,7 +477,7 @@ class HomeController extends Controller
 
     public function filter_shop($slug, $type)
     {
-        $shop  = Shop::where('slug', $slug)->first();
+        $shop = Shop::where('slug', $slug)->first();
         if ($shop != null && $type != null) {
             return view('frontend.seller_shop', compact('shop', 'type'));
         }
@@ -609,18 +620,21 @@ class HomeController extends Controller
     public function show_product_upload_form(Request $request)
     {
         return redirect()->route('seller.elements.all');
-        if (\App\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated) {
-            //       if(Auth::user()->seller->remaining_uploads > 0){
+        if (
+            \App\Addon::where('unique_identifier', 'seller_subscription')->first() != null &&
+            \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated
+        ) {
+            // if(Auth::user()->seller->remaining_uploads > 0){
             $categories = Category::where('parent_id', null)
                 ->where('digital', 0)
                 ->with('childrenCategories')
                 ->get();
             return view('frontend.user.seller.product_upload', compact('categories'));
-            //       }
-            //       else {
-            //           flash(translate('Upload limit has been reached. Please upgrade your package.'))->warning();
-            //           return back();
-            //       }
+            // }
+            // else {
+            // flash(translate('Upload limit has been reached. Please upgrade your package.'))->warning();
+            // return back();
+            // }
         }
         $categories = Category::where('parent_id', null)
             ->where('digital', 0)
@@ -674,11 +688,13 @@ class HomeController extends Controller
             }
         }
 
-        $products = filter_products(Product::where('published', 1)->where('name', 'like', '%' . $request->search . '%'))->get()->take(3);
+        $products = filter_products(Product::where('published', 1)->where('name', 'like', '%' . $request->search .
+            '%'))->get()->take(3);
 
         $categories = Category::where('name', 'like', '%' . $request->search . '%')->get()->take(3);
 
-        $shops = Shop::whereIn('user_id', verified_sellers_id())->where('name', 'like', '%' . $request->search . '%')->get()->take(3);
+        $shops = Shop::whereIn('user_id', verified_sellers_id())->where('name', 'like', '%' . $request->search .
+            '%')->get()->take(3);
 
         if (sizeof($keywords) > 0 || sizeof($categories) > 0 || sizeof($products) > 0 || sizeof($shops) > 0) {
             return view('frontend.partials.search_content', compact('products', 'categories', 'keywords', 'shops'));
@@ -724,7 +740,10 @@ class HomeController extends Controller
         if ($brand_id != null) {
             $conditions = array_merge($conditions, ['brand_id' => $brand_id]);
         } elseif ($request->brand != null) {
-            $brand_id = (Brand::where('slug', $request->brand)->first() != null) ? Brand::where('slug', $request->brand)->first()->id : null;
+            $brand_id = (Brand::where('slug', $request->brand)->first() != null) ? Brand::where(
+                'slug',
+                $request->brand
+            )->first()->id : null;
             $conditions = array_merge($conditions, ['brand_id' => $brand_id]);
         }
 
@@ -744,8 +763,10 @@ class HomeController extends Controller
         if ($min_price != null && $max_price != null) {
             $products = $products->where('unit_price', '>=', $min_price)->where('unit_price', '<=', $max_price);
         }
-
-        if ($query != null) {
+        if (
+            $query
+            != null
+        ) {
             $searchController = new SearchController;
             $searchController->store($request);
             $products = $products->where('name', 'like', '%' . $query . '%')->orWhere('tags', 'like', '%' . $query . '%');
@@ -854,7 +875,20 @@ class HomeController extends Controller
 
         $products = filter_products($products)->paginate(12)->appends(request()->query());
 
-        return view('frontend.product_listing', compact('products', 'query', 'category_id', 'brand_id', 'sort_by', 'seller_id', 'min_price', 'max_price', 'attributes', 'selected_attributes', 'all_colors', 'selected_color'));
+        return view('frontend.product_listing', compact(
+            'products',
+            'query',
+            'category_id',
+            'brand_id',
+            'sort_by',
+            'seller_id',
+            'min_price',
+            'max_price',
+            'attributes',
+            'selected_attributes',
+            'all_colors',
+            'selected_color'
+        ));
     }
 
     public function home_settings(Request $request)
@@ -924,8 +958,17 @@ class HomeController extends Controller
         $flash_deals = \App\FlashDeal::where('status', 1)->get();
         $inFlashDeal = false;
         foreach ($flash_deals as $key => $flash_deal) {
-            if ($flash_deal != null && $flash_deal->status == 1 && strtotime(date('d-m-Y')) >= $flash_deal->start_date && strtotime(date('d-m-Y')) <= $flash_deal->end_date && \App\FlashDealProduct::where('flash_deal_id', $flash_deal->id)->where('product_id', $product->id)->first() != null) {
-                $flash_deal_product = \App\FlashDealProduct::where('flash_deal_id', $flash_deal->id)->where('product_id', $product->id)->first();
+            if (
+                $flash_deal != null && $flash_deal->status == 1 && strtotime(date('d-m-Y')) >= $flash_deal->start_date &&
+                strtotime(date('d-m-Y')) <= $flash_deal->end_date && \App\FlashDealProduct::where(
+                    'flash_deal_id',
+                    $flash_deal->id
+                )->where('product_id', $product->id)->first() != null
+            ) {
+                $flash_deal_product = \App\FlashDealProduct::where('flash_deal_id', $flash_deal->id)->where(
+                    'product_id',
+                    $product->id
+                )->first();
                 if ($flash_deal_product->discount_type == 'percent') {
                     $price -= ($price * $flash_deal_product->discount) / 100;
                 } elseif ($flash_deal_product->discount_type == 'amount') {
@@ -948,7 +991,8 @@ class HomeController extends Controller
         } elseif ($product->tax_type == 'amount') {
             $price += $product->tax;
         }
-        return array('price' => single_price($price * $request->quantity), 'quantity' => $quantity, 'digital' => $product->digital);
+        return array('price' => single_price($price * $request->quantity), 'quantity' => $quantity, 'digital' =>
+        $product->digital);
     }
 
     public function sellerpolicy()
@@ -996,21 +1040,27 @@ class HomeController extends Controller
 
     public function seller_digital_product_list(Request $request)
     {
-        $products = Product::where('user_id', Auth::user()->id)->where('digital', 1)->orderBy('created_at', 'desc')->paginate(10);
+        $products = Product::where('user_id', Auth::user()->id)->where('digital', 1)->orderBy(
+            'created_at',
+            'desc'
+        )->paginate(10);
         return view('frontend.user.seller.digitalproducts.products', compact('products'));
     }
     public function show_digital_product_upload_form(Request $request)
     {
-        if (\App\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated) {
-            //            if(Auth::user()->seller->remaining_digital_uploads > 0){
+        if (
+            \App\Addon::where('unique_identifier', 'seller_subscription')->first() != null &&
+            \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated
+        ) {
+            // if(Auth::user()->seller->remaining_digital_uploads > 0){
             $business_settings = BusinessSetting::where('type', 'digital_product_upload')->first();
             $categories = Category::where('digital', 1)->get();
             return view('frontend.user.seller.digitalproducts.product_upload', compact('categories'));
-            //            }
-            //            else {
-            //                flash(translate('Upload limit has been reached. Please upgrade your package.'))->warning();
-            //                return back();
-            //            }
+            // }
+            // else {
+            // flash(translate('Upload limit has been reached. Please upgrade your package.'))->warning();
+            // return back();
+            // }
         }
 
         $business_settings = BusinessSetting::where('type', 'digital_product_upload')->first();
@@ -1065,7 +1115,8 @@ class HomeController extends Controller
         $array['subject'] = 'Email Verification';
         $array['from'] = env('MAIL_USERNAME');
         $array['content'] = 'Verify your account';
-        $array['link'] = route('email_change.callback') . '?new_email_verificiation_code=' . $verification_code . '&email=' . $email;
+        $array['link'] = route('email_change.callback') . '?new_email_verificiation_code=' . $verification_code .
+            '&email=' . $email;
         $array['sender'] = Auth::user()->name;
         $array['details'] = "Email Second";
 
@@ -1090,7 +1141,7 @@ class HomeController extends Controller
     public function email_change_callback(Request $request)
     {
         if ($request->has('new_email_verificiation_code') && $request->has('email')) {
-            $verification_code_of_url_param =  $request->input('new_email_verificiation_code');
+            $verification_code_of_url_param = $request->input('new_email_verificiation_code');
             $user = User::where('new_email_verificiation_code', $verification_code_of_url_param)->first();
 
             if ($user != null) {
@@ -1112,7 +1163,9 @@ class HomeController extends Controller
 
     public function reset_password_with_code(Request $request)
     {
-        if (($user = User::where('email', $request->email)->where('verification_code', $request->code)->first()) != null) {
+        if (($user = User::where('email', $request->email)->where('verification_code', $request->code)->first()) !=
+            null
+        ) {
             if ($request->password == $request->password_confirmation) {
                 $user->password = Hash::make($request->password);
                 $user->email_verified_at = date('Y-m-d h:m:s');
@@ -1133,8 +1186,7 @@ class HomeController extends Controller
         } else {
             flash("Verification code mismatch")->error();
 
-           return back();
+            return back();
         }
-
-   }
+    }
 }
