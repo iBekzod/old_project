@@ -132,6 +132,29 @@
                             </form>
                         </div>
                     </div>
+                    {{-- Delivery day settings --}}
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0 h6">{{ translate('Days purchased product will be ready') }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <form action="{{ route('seller.seller_configuration.update') }}" method="POST" enctype="multipart/form-data">
+                                <input type="hidden" name="type" value="product_preparation_days">
+                                @csrf
+
+                                <div class="row mb-3">
+                                    <label class="col-md-2 col-form-label">{{ translate('In days') }} </label>
+                                    <div class="col-md-10">
+                                        <input class="form-control" type="text" name="product_preparation_days" value="{{ \App\SellerSetting::where('type', 'product_preparation_days')->where('user_id', auth()->id())->first()->value??\App\SellerSetting::where('type', 'product_preparation_days')->first()->value??0 }}">
+                                    </div>
+                                </div>
+
+                                <div class="form-group mb-0 text-right">
+                                    <button type="submit" class="btn btn-sm btn-primary">{{translate('Save')}}</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
 
                     {{-- Social Media Link --}}
                     <div class="card">

@@ -1337,7 +1337,9 @@ function calculateDeliveryCost($product, $address_id, $delivery_type='tarif'){
     $is_outside=true;
     $inline_cost=0;
     $admin=getAdmin();
+    $addditional_days=0;
     if($seller->addresses->count()>0 && Address::where('id', $address_id)->exists()){
+        $addditional_days=\App\SellerSetting::where('type', 'product_preparation_days')->where('user_id', $seller->id)->first()->value??0;
         $seller_address=$seller->addresses->first();
         $client_address=Address::where('id', $address_id)->first();
         if($seller_address->city->id == $client_address->city->id){
@@ -1385,30 +1387,41 @@ function calculateDeliveryCost($product, $address_id, $delivery_type='tarif'){
                 $delivery_metrics=DeliveryPrice::orderBy('distance', 'asc')->where('distance', '>', $all_distance)->first();
             }
         }
-    }
-    if($delivery_metrics && $is_outside){
-        $weight_price=$delivery_metrics->weight_price;
-        $delivery_cost = $delivery_metrics->distance_price*$all_distance;
-        $express_cost = $delivery_cost*(100+((double)$delivery_metrics->express_percent))/100;
-        $days=$delivery_metrics->days;
-        $express_hours=(double)$delivery_metrics->express_hours;
-    }else if($delivery_metrics && !$is_outside){
-        if($inline_cost==0){
-            $inline_cost = $delivery_metrics->distance_price;
+        if($delivery_metrics && $is_outside){
+            $weight_price=$delivery_metrics->weight_price;
+            $delivery_cost = $delivery_metrics->distance_price*$all_distance;
+            $express_cost = $delivery_cost*(100+((double)$delivery_metrics->express_percent))/100;
+            $days=$delivery_metrics->days;
+            $express_hours=(double)$delivery_metrics->express_hours;
+        }else if($delivery_metrics && !$is_outside){
+            if($inline_cost==0){
+                $inline_cost = $delivery_metrics->distance_price;
+            }
+            $weight_price=$delivery_metrics->weight_price;
+            $delivery_cost = $inline_cost;
+            $express_cost = $delivery_cost*(100+((double)$delivery_metrics->express_percent))/100;
+            $days=$delivery_metrics->days;
+            $express_hours=(double)$delivery_metrics->express_hours;
         }
-        $weight_price=$delivery_metrics->weight_price;
-        $delivery_cost = $inline_cost;
-        $express_cost = $delivery_cost*(100+((double)$delivery_metrics->express_percent))/100;
-        $days=$delivery_metrics->days;
-        $express_hours=(double)$delivery_metrics->express_hours;
+        $total_weight_cost=calculateWeightCost($product, $weight_price);
+        $total_delivery_cost=(double)($delivery_cost+$total_weight_cost);
+        $total_express_cost=(double)($express_cost+$total_weight_cost);
+        if(((int)($addditional_days))>0){
+            $days+=$addditional_days;
+            $total_express_cost=0;
+            $express_cost=0;
+            $express_hours=0;
+        }
+        if($delivery_type=='free'){
+            $total_delivery_cost=0;
+            $total_express_cost=0;
+            $total_weight_cost=0;
+            $delivery_cost=0;
+            $express_cost=0;
+            // $express_hours=0;
+        }
     }
-    $total_weight_cost=calculateWeightCost($product, $weight_price);
-    // $currency=Currency::where('code', 'UZB'??defaultCurrency())->first();
-    // $single_product_cost=homeBasePrice($product->id);//convertCurrency((double)($product->price), $product->currency_id);
-    // $single_product_discounted_cost=homeDiscountedBasePrice($product->id);
-    $total_delivery_cost=(double)($delivery_cost+$total_weight_cost);
-    $total_express_cost=(double)($express_cost+$total_weight_cost);
-    // $total_cost_free_delivery=(double)($total_weight_cost);
+
     return [
         'total_cost'=>$total_delivery_cost,
         'total_express_cost'=>$total_express_cost,
