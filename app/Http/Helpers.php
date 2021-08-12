@@ -1325,7 +1325,7 @@ if (!function_exists('getAttributeFormat')) {
     }
 }
 
-function calculateDeliveryCost($product, $address_id, $delivery_type='tinfis'){
+function calculateDeliveryCost($product, $address_id, $delivery_type='tarif'){
     $seller=$product->user;
     $delivery_cost=0;
     $days=10;
@@ -1342,7 +1342,7 @@ function calculateDeliveryCost($product, $address_id, $delivery_type='tinfis'){
         $client_address=Address::where('id', $address_id)->first();
         if($seller_address->city->id == $client_address->city->id){
             //1 - holat = price
-            if($delivery_type=='tinfis'){
+            if($delivery_type=='tarif'){
                 $delivery_metrics=DeliveryTarif::where('name', $seller_address->city->type)->where('user_id', $admin->id)->first();
             }else{
                 $delivery_metrics=DeliveryTarif::where('name', $seller_address->city->type)->where('user_id', $seller->id)->first();
@@ -1376,7 +1376,7 @@ function calculateDeliveryCost($product, $address_id, $delivery_type='tinfis'){
                 }
             }
 
-            if($delivery_type=='tinfis'){
+            if($delivery_type=='tarif'){
                 $delivery_metrics=DeliveryPrice::orderBy('distance', 'asc')->where('user_id', $admin->id)->where('distance', '>', $all_distance)->first();
             }else{
                 $delivery_metrics=DeliveryPrice::orderBy('distance', 'asc')->where('user_id', $seller->id)->where('distance', '>', $all_distance)->first();
@@ -1431,7 +1431,8 @@ function getAdmin(){
     if($weight_price>0){
         return $weight_price*((double)$product->element->weight);
     }
-    ($product->shipping_type='tinfis')?$user_id=getAdmin():$user_id=$product->user_id;
+    $user_id=getAdmin();
+    // ($product->shipping_type='tarif')?$user_id=getAdmin():$user_id=$product->user_id;
     if($weight_setting=SellerSetting::where('type', 'kg_weight_price')->where('user_id', $user_id)->first()){
         $weight_price=convertCurrency((double)$weight_setting->value, (int)$weight_setting->relation_id);
     }else if($weight_setting=SellerSetting::where('type', 'kg_weight_price')->first()){
