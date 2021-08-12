@@ -1339,6 +1339,9 @@ function calculateDeliveryCost($product, $address_id, $delivery_type='tarif'){
     $admin=getAdmin();
     $addditional_days=0;
     $has_express_delivery=true;
+    $total_delivery_cost=0;
+    $total_express_cost=0;
+    $total_weight_cost=0;
     if($seller->addresses->count()>0 && Address::where('id', $address_id)->exists()){
         $addditional_days=\App\SellerSetting::where('type', 'product_preparation_days')->where('user_id', $seller->id)->first()->value??0;
         $seller_address=$seller->addresses->first();
