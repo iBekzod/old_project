@@ -2,7 +2,7 @@
 
 @section('content')
 <section class="py-5">
-    <div class="container">
+    <div class="container" >
         <div class="d-flex align-items-start">
             @include('frontend.inc.user_side_nav')
             <div class="aiz-user-panel">
@@ -27,7 +27,6 @@
                                     <input type="text" class="form-control" placeholder="{{ translate('Your Name') }}" name="name" value="{{ Auth::user()->name }}">
                                 </div>
                             </div>
-
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">{{ translate('Your Phone') }}</label>
                                 <div class="col-md-10">
@@ -65,7 +64,7 @@
 
                     <!-- Address -->
                     {{-- @if(Auth::user()->has('addresses')) --}}
-                    <div class="card">
+                    {{-- <div class="card">
                         <div class="card-header">
                             <h5 class="mb-0 h6">{{ translate('Address')}}</h5>
                         </div>
@@ -84,7 +83,7 @@
                                             </div>
                                             <div>
                                                 <span class="w-50 fw-600">{{ translate('City') }}:</span>
-                                                <span class="ml-2">{{ $address->city }}</span>
+                                                <span class="ml-2">{{$address->city}}</span>
                                             </div>
                                             <div>
                                                 <span class="w-50 fw-600">{{ translate('Country') }}:</span>
@@ -121,7 +120,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     {{-- @endif --}}
                     <!-- Payment System -->
                     <div class="card">
@@ -172,7 +171,7 @@
                                     @foreach (Auth::user()->seller->verification_info as $element)
                                         @if($element['type']=='text')
                                         <div class="form-group row" >
-                                            <label class="col-lg-3 col-from-label mb-2"> {{translate($element['label'])}}</label>
+                                            <label class="col-lg-3 col-from-label mb-2"> {{translate($element['name'])}}</label>
                                             <div class="col-lg-9">
                                             <input class="form-control" type="text" value="{{$element['value']}}" name="{{($element['label'])}}" required>
                                             </div>

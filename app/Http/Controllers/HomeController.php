@@ -278,7 +278,12 @@ class HomeController extends Controller
             return view('frontend.user.customer.profile', compact('addresses'));
         } elseif (Auth::user()->user_type == 'seller') {
             //  dd(Auth::user()->seller->verification_info);
+            // dd('keldi');
             $addresses = Auth::user()->addresses;
+            $information=Auth::user()->seller->verification_info;
+            dd($information);
+            // dd($addresses['city_id']);
+
             return view('frontend.user.seller.profile', compact('addresses'));
         }
     }
