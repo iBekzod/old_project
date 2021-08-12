@@ -79,8 +79,8 @@
                                         <select class="form-control aiz-selectpicker" name="delivery_type">
                                             {{-- <option value="no">{{translate('Selected value')}}</option> --}}
                                             <option value="free" >{{ translate('Free') }}</option>
-                                            <option value="seller">{{ translate('Self') }}</option>
-                                            <option value="tinfis" selected>{{ translate('TINFIS Cargo') }}</option>
+                                            <option value="seller">{{ translate('Tarif') }}</option>
+                                            {{-- <option value="tinfis" selected>{{ translate('TINFIS Cargo') }}</option> --}}
                                         </select>
                                     </td>
 
@@ -194,8 +194,8 @@
                                                 <select class="form-control aiz-selectpicker delivery_type_change"
                                                     name="variation[{{ $index }}][delivery_type]">
                                                     <option value="free" >{{ translate('Free') }}</option>
-                                                    <option value="seller">{{ translate('Self') }}</option>
-                                                    <option value="tinfis" selected>{{ translate('TINFIS Cargo') }}</option>
+                                                    <option value="seller">{{ translate('Tarif') }}</option>
+                                                    {{-- <option value="tinfis" selected>{{ translate('TINFIS Cargo') }}</option> --}}
                                                 </select>
                                             </td>
                                             <td>
@@ -298,8 +298,8 @@
                                                 <select class="form-control aiz-selectpicker delivery_type_change"
                                                         name="variation[{{ $index }}][delivery_type]">
                                                         <option value="free" selected>{{translate('Free')}}</option>
-                                                        <option value="seller">{{translate('Self')}}</option>
-                                                        <option value="tinfis">{{translate('TINFIS Cargo')}}</option>
+                                                        <option value="seller">{{translate('Tarif')}}</option>
+                                                        {{-- <option value="tinfis">{{translate('TINFIS Cargo')}}</option> --}}
                                                 </select>
                                             </td>
                                             <td>

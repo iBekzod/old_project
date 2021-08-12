@@ -102,12 +102,12 @@
                             <span class="aiz-side-nav-text">{{ translate('Elements') }}</span>
                         </a>
                     </li>
-                    <li class="aiz-side-nav-item">
+                    {{-- <li class="aiz-side-nav-item">
                         <a href="{{route('seller.deliveries.index')}}"
                         class="aiz-side-nav-link {{ areActiveRoutes(['seller.deliveries.index','seller.deliveries.edit','seller.deliveries.update'])}}">
                             <span class="aiz-side-nav-text">{{translate('Deliveries')}}</span>
                         </a>
-                    </li>
+                    </li> --}}
                     {{-- <li class="aiz-side-nav-item">
                         <a href="{{route('product_bulk_upload.index')}}" class="aiz-side-nav-link {{ areActiveRoutes(['product_bulk_upload.index'])}}">
                             <i class="las la-upload aiz-side-nav-icon"></i>
