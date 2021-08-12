@@ -86,22 +86,7 @@ class HomeController extends Controller
 
            $countrys=Country::where('status',1)->get();
         //    dd($countrys);
-            // $country=Country::where('id', 234)->first();
-            // $country_id=$country->id;
-            // dd();
-            // dd($country->name);
 
-            // $region=$country->regions->first();
-            // dd($region->id);
-            // dd($region->children->pluck('name', 'id'));
-
-
-
-            // $categories = Category::where('level', 0)->get();
-            // $sub_categories = Category::where('parent_id', $category_id)->get();
-            // $sub_sub_categories = Category::where('parent_id', $sub_category_id)->get();
-
-            // TODO::hamma kereli dalniylay jonatilishi kere
 
             // $user->save();
             if ($user->save()) {
@@ -278,13 +263,15 @@ class HomeController extends Controller
             return view('frontend.user.customer.profile', compact('addresses'));
         } elseif (Auth::user()->user_type == 'seller') {
             //  dd(Auth::user()->seller->verification_info);
-            // dd('keldi');
+            //  $informations=Auth::user()->seller->verification_info;
+            // dd($informations->);
             $addresses = Auth::user()->addresses;
             $information=Auth::user()->seller->verification_info;
-            dd($information);
+            // dd($information);
             // dd($addresses['city_id']);
+            $countrys=Country::where('status',1)->get();
 
-            return view('frontend.user.seller.profile', compact('addresses'));
+            return view('frontend.user.seller.profile', compact('addresses','countrys'));
         }
     }
 
