@@ -151,7 +151,7 @@ class CityController extends Controller
         $city->is_selected = $request->status;
         if ($city->save()) {
             if($city->type=='region'){
-                City::where('parent_id', $city->id)->update(['has_express' => true]);
+                City::where('parent_id', $city->id)->update(['is_selected' => true]);
             }
             return 1;
         }
