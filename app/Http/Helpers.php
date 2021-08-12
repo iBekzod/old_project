@@ -1338,6 +1338,7 @@ function calculateDeliveryCost($product, $address_id, $delivery_type='tarif'){
     $inline_cost=0;
     $admin=getAdmin();
     $addditional_days=0;
+    $has_express_delivery=true;
     if($seller->addresses->count()>0 && Address::where('id', $address_id)->exists()){
         $addditional_days=\App\SellerSetting::where('type', 'product_preparation_days')->where('user_id', $seller->id)->first()->value??0;
         $seller_address=$seller->addresses->first();
@@ -1409,16 +1410,23 @@ function calculateDeliveryCost($product, $address_id, $delivery_type='tarif'){
         if(((int)($addditional_days))>0){
             $days+=$addditional_days;
             $total_express_cost=0;
-            $express_cost=0;
-            $express_hours=0;
+            $has_express_delivery=false;
         }
         if($delivery_type=='free'){
             $total_delivery_cost=0;
             $total_express_cost=0;
             $total_weight_cost=0;
             $delivery_cost=0;
+            $has_express_delivery=false;
+        }
+
+        if(!($seller_address->city->has_express && $client_address->city->has_express)){
+            $has_express_delivery=false;
+        }
+
+        if(!$has_express_delivery){
             $express_cost=0;
-            // $express_hours=0;
+            $express_hours=0;
         }
     }
 
@@ -1430,7 +1438,7 @@ function calculateDeliveryCost($product, $address_id, $delivery_type='tarif'){
         'days'=>$days,
         'express_cost'=>$express_cost,
         'express_hours'=>$express_hours,
-        // 'currency'=>$currency
+        'has_express_delivery'=>$has_express_delivery
     ];
 }
 
