@@ -25,15 +25,16 @@ class CartController extends Controller
         $price = $product->price+((double)$tax)+discountPrice($product->id);
         $address=getUserAddress();
         $quantity=0;
-        // $is_express=false;
-        // if($request->has('is_express')){
-        //     $is_express=$request->is_express;
-        // }
+        $is_express=false;
+        if($request->has('is_express')){
+            $is_express=$request->is_express;
+        }
         if($request->has('quantity')){
             $quantity=(double)$request->quantity;
         }else{
             $quantity=1;
         }
+        $shipping_cost=[];
         $shipping_cost = calculateDeliveryCost($product, $address->id, $product->delivery_type);
 
         Cart::updateOrCreate([
@@ -42,8 +43,8 @@ class CartController extends Controller
         ], [
             'price' => $price,
             'tax' => (double)$tax,
-            'shipping_cost' =>$shipping_cost,
-            'quantity' => 1
+            'shipping_cost' =>$shipping_cost['total_cost'],
+            'quantity' => $quantity
         ]);
 
         return response()->json([
