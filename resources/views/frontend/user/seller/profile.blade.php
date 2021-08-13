@@ -188,11 +188,10 @@
                                                                 <option value="Частное лицо">Частное лицо</option>
                                                             </select>
                                                         </div>
-
                                                         @else
                                                             <label class="col-lg-3 col-from-label mb-2"> {{translate($element->name)}}</label>
                                                             <div class="col-lg-8">
-                                                                <input class="form-control" type="text" name="{{($element->label)}}" required>
+                                                                <input class="form-control" type="text" value="{{$information[$key]['value']?? "kemadi"}}" name="{{($element->label)}}" required>
                                                             </div>
                                                         @endif
                                                     </div>
@@ -200,14 +199,14 @@
                                                     <div class="form-group row" id="category">
                                                         <label class="col-lg-3 col-from-label mb-2"> {{translate($element->name)}}</label>
                                                         <div class="col-lg-8">
-                                                        <input class="form-control" type="number" name="{{($element->label)}}" required>
+                                                        <input class="form-control" type="number" value="{{$information[$key]['value']?? "kemadi"}}" name="{{($element->label)}}" required>
                                                         </div>
                                                     </div>
                                                 @elseif($element->type=='email')
                                                     <div class="form-group row" id="category">
                                                         <label class="col-lg-3 col-from-label mb-2"> {{translate($element->name)}}</label>
                                                         <div class="col-lg-8">
-                                                        <input class="form-control" type="email" name="{{($element->label)}}" required>
+                                                        <input class="form-control" type="email" value="{{$information[$key]['value']?? "kemadi"}}" name="{{($element->label)}}" required>
                                                         </div>
                                                     </div>
                                                 @endif
