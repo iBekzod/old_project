@@ -156,12 +156,12 @@
                                         </label>
                                     </td>
                                     <td>
-                                        {{-- @if($city->type=='district' || $city->type=='city') --}}
+                                        @if($city->type=='district' || $city->type=='city')
                                             <label class="mb-0 aiz-switch aiz-switch-success">
                                             <input type="checkbox" onchange="update_selected(this)"  value="{{ $city->id }}" name="is_selected" @if($city->is_selected) checked @endif>
                                             <span></span>
                                             </label>
-                                        {{-- @endif --}}
+                                        @endif
                                     </td>
                                     <td class="text-right">
                                         <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
