@@ -43,7 +43,7 @@ class CartController extends Controller
             'price' => $price,
             'tax' => (double)$tax,
             'shipping_cost' =>$shipping_cost,
-            'quantity' => (double)$quantity
+            'quantity' => 1
         ]);
 
         return response()->json([
