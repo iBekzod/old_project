@@ -208,7 +208,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/regions/{country_id}', 'Api\CityController@countryRegions');
     Route::get('/cities/{region_id}', 'Api\CityController@regionCities');
     Route::get('/cities', 'Api\CityController@selectedCities');
-    Route::get('/search/cities', 'Api\CityController@search');
+    Route::post('/cities', 'Api\CityController@search');
     // Route::get('/region/{id}/cities', 'Api\CityController@cities');
     Route::get('/region/{country_id}/{region_id}/cities', 'Api\CityController@regions');
     Route::get('register/me', 'Api\ProductController@setLocationSetting');

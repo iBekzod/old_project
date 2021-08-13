@@ -24,9 +24,9 @@ class City extends Model
     public function parent()
     {
         if($this->parent_id==0){
-            return $this->belongsTo(Country::class);
+            return $this->belongsTo(Country::class, 'country_id');
         }
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(City::class, 'parent_id', 'id');
     }
 
     public function getTranslation($field = '', $lang = false){

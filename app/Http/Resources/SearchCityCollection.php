@@ -10,9 +10,13 @@ class SearchCityCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection->map(function($data) {
+                $parent_name="";
+                if($data->parent()->exists()){
+                    $parent_name=($data->parent->getTranslation('name'));
+                }
                 return [
                     'id' => $data->id,
-                    'name' => $data->getTranslation('name').', '.$data->parent->getTranslation('name'),
+                    'name' => $data->getTranslation('name').', '.$parent_name,
                     'country_id' => $data->country_id,
                     'type' => $data->type,
                     'parent_id' => $data->parent_id,
