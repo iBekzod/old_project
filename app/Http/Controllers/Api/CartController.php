@@ -41,7 +41,7 @@ class CartController extends Controller
             'product_id' => $request->id
         ], [
             'price' => $price,
-            'tax' => $tax,
+            'tax' => $price,
             'shipping_cost' =>$shipping_cost,
             'quantity' => $quantity??DB::raw('quantity + 1')
         ]);
