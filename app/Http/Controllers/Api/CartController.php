@@ -22,7 +22,7 @@ class CartController extends Controller
     {
         $product = Product::findOrFail($request->id);
         $tax=taxPrice($product->id);
-        $price = $product->price+$tax+discountPrice($product->id);
+        $price = $product->price+((double)$tax)+discountPrice($product->id);
         $address=getUserAddress();
         $quantity=0;
         // $is_express=false;
@@ -30,7 +30,7 @@ class CartController extends Controller
         //     $is_express=$request->is_express;
         // }
         if($request->has('quantity')){
-            $quantity=$request->quantity;
+            $quantity=(double)$request->quantity;
         }else{
             $quantity=1;
         }
@@ -41,9 +41,9 @@ class CartController extends Controller
             'product_id' => $request->id
         ], [
             'price' => $price,
-            'tax' => $price,
+            'tax' => (double)$tax,
             'shipping_cost' =>$shipping_cost,
-            'quantity' => $quantity??DB::raw('quantity + 1')
+            'quantity' => (double)$quantity
         ]);
 
         return response()->json([
