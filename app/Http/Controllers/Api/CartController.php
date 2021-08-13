@@ -25,17 +25,19 @@ class CartController extends Controller
         $price = $product->price+$tax+discountPrice($product->id);
         $address=getUserAddress();
         $quantity=0;
-        $is_express=false;
-        if($request->has('is_express')){
-            $is_express=$request->is_express;
-        }
+        // $is_express=false;
+        // if($request->has('is_express')){
+        //     $is_express=$request->is_express;
+        // }
         if($request->has('quantity')){
             $quantity=$request->quantity;
+        }else{
+            $quantity=1;
         }
-        $shipping_cost = calculateDeliveryCost($product, $address->id, $is_express);
+        $shipping_cost = calculateDeliveryCost($product, $address->id, $product->delivery_type);
 
         Cart::updateOrCreate([
-            'user_id' => $request->user_id,
+            'user_id' => auth()->id(),
             'product_id' => $request->id
         ], [
             'price' => $price,
