@@ -133,6 +133,7 @@
                                 <th>{{ translate('Type') }}</th>
                                 <th>{{ translate('Inside price') }}</th>
                                 <th>{{ translate('Has express') }}</th>
+                                <th>{{ translate('Is selected') }}</th>
                                 <th class="text-right">{{ translate('Options') }}</th>
                             </tr>
                         </thead>
