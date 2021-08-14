@@ -23,7 +23,7 @@
                                         <div class="form-group row" id="category">
                                             @if ($element->label=='Форма_собственности')
 
-                                            <label class="col-lg-3 col-from-label mb-2"> {{translate($element->neme)}}</label>
+                                            <label class="col-lg-3 col-from-label mb-2"> {{translate($element->name)}}</label>
                                             <div class="col-lg-8">
                                                 <select name="{{($element->label)}}" class="form-control py-2">
                                                     <option value="OАО">OАО</option>
