@@ -531,6 +531,9 @@ class ProductController extends Controller
                 break;
             case 'categoryAll':
                 $element_conditions['where'][] = ['category_id' , '<>', null];
+                if ($request->id!="list") {
+                    $product_conditions['whereIn'][] = ['id' => $this->getCategoryProducts($request->id)];
+                }
                 break;
             case 'categoryPopular':
                 $product_conditions['where'][] = ['todays_deal', 1];
