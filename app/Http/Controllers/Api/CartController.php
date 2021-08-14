@@ -25,17 +25,19 @@ class CartController extends Controller
         $price = $product->price+((double)$tax)+discountPrice($product->id);
         $address=getUserAddress();
         $quantity=0;
+        $shipping_cost=[];
+        $shipping_cost = calculateDeliveryCost($product, $address->id, $product->delivery_type);
+        $delivery_cost= $shipping_cost['total_cost'];
         $is_express=false;
-        if($request->has('is_express')){
-            $is_express=$request->is_express;
+        if($request->has('is_express') && $request->is_express==1){
+            $is_express=true;
+            $delivery_cost= $shipping_cost['total_express_cost'];
         }
         if($request->has('quantity')){
             $quantity=(double)$request->quantity;
         }else{
             $quantity=1;
         }
-        $shipping_cost=[];
-        $shipping_cost = calculateDeliveryCost($product, $address->id, $product->delivery_type);
 
         Cart::updateOrCreate([
             'user_id' => auth()->id(),
@@ -43,12 +45,13 @@ class CartController extends Controller
         ], [
             'price' => $price,
             'tax' => (double)$tax,
-            'shipping_cost' =>$shipping_cost['total_cost'],
+            'shipping_cost' =>$delivery_cost,
+            'variation'=>$is_express,
             'quantity' => $quantity
         ]);
 
         return response()->json([
-            'message' => 'Product added to cart successfully'
+            'message' => translate('Product added to cart successfully')
         ]);
     }
 
@@ -61,19 +64,21 @@ class CartController extends Controller
                     'quantity' => $request->quantity
                 ]);
 
-                return response()->json(['message' => 'Cart updated'], 200);
+                return response()->json(['message' => translate('Cart updated')], 200);
             }
             else {
-                return response()->json(['message' => 'Maximum available quantity reached'], 200);
+                return response()->json(['message' => translate('Maximum available quantity reached')], 200);
             }
         }
 
-        return response()->json(['message' => 'Something went wrong'], 200);
+        return response()->json(['message' => translate('Something went wrong')], 404);
     }
 
     public function destroy($id)
     {
-        Cart::destroy($id);
-        return response()->json(['message' => 'Product is successfully removed from your cart'], 200);
+        if(Cart::destroy($id))
+            return response()->json(['message' => translate('Product is successfully removed from your cart')], 200);
+        else
+            return response()->json(['message' => translate('Cart was not found')], 404);
     }
 }
