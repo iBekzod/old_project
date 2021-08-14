@@ -47,5 +47,10 @@ class CityController extends Controller
         }
         return [];
     }
+    
+    public function getCurrentLocation(){
+        $address=getUserAddress();
+        return new SearchCityCollection(City::where('id', $address->city_id)->get());
+    }
 
 }
