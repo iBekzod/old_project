@@ -156,9 +156,9 @@ Route::prefix('v1')->group(function () {
 
     Route::apiResource('sliders', 'Api\SliderController')->only('index');
 
-    Route::get('wishlists/{id}', 'Api\WishlistController@index')->middleware('auth:api');
+    // Route::get('wishlists/{id}', 'Api\WishlistController@index')->middleware('auth:api');
     Route::post('wishlists/check-product', 'Api\WishlistController@isProductInWishlist')->middleware('auth:api');
-    Route::apiResource('wishlists', 'Api\WishlistController')->except(['index', 'update', 'show'])->middleware('auth:api');
+    Route::apiResource('wishlists', 'Api\WishlistController')->except(['update', 'show'])->middleware('auth:api');
 
     Route::apiResource('settings', 'Api\SettingsController')->only('index');
 
