@@ -31,6 +31,7 @@ class SellerAutoidentificationFormController extends Controller
             // dd($validation);
 
             $request->validate([
+            'poctovyj_indeks'=>'required',
              'country_id'=>'required',
              'region_id' =>'required',
              'city_id' =>'required',
@@ -108,7 +109,7 @@ class SellerAutoidentificationFormController extends Controller
                         // dd($address_full->longitude);
             $address_full->latitude=$request->latitude;
             //     dd($address_full->latitude);
-            // dd($address_full->all());
+            dd($address_full);
             // dd($shop);
             //   dd($seller->verification_info);
             $date = Carbon::parse($seller->created_at)->format('d-m-Y');

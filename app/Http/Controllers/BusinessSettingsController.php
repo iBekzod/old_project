@@ -243,7 +243,7 @@ class BusinessSettingsController extends Controller
         $form = array();
         $select_types = ['select', 'multi_select', 'radio'];
         $j = 0;
-        for ($i=0; $i < count($request->type); $i++) {
+        for ($i=0; $i < count($request->type); $i++) { 
             $item['type'] = $request->type[$i];
             $item['label'] = str_replace('-', '_', slugify($request->label[$i]));
             $item['name'] = $request->label[$i];

@@ -278,11 +278,12 @@ class HomeController extends Controller
             if(Address::where('user_id', $user_id)->exists()){
                 $address=Address::where('user_id', $user_id)->first();
             }
-            dd($address);
+            // 
+            // dd($address);
             // dd($addresses['city_id']);
             $countrys = Country::where('status', 1)->get();
 
-            return view('frontend.user.seller.profile', compact('addresses', 'countrys', 'information'));
+            return view('frontend.user.seller.profile', compact('addresses', 'countrys', 'information','address'));
         }
     }
 
