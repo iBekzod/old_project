@@ -512,12 +512,25 @@ class ProductController extends Controller
         $product_conditions=[];
         $element_conditions=[];
         $is_random=true;
+        $product_type=null;
         // dd($request->all());
         //Filtering by brand slug
         switch ($type) {
             case 'brand':
                 if ($request->id!="list") {
                     $product_conditions['whereIn'][] = ['id' => $this->getBrandProducts($request->id)];
+                }
+                break;
+            case 'element':
+                $product_type='element';
+                if ($request->id!="list") {
+                    $product_conditions['whereIn'][] = ['id' => $this->getCategoryProducts($request->id)];
+                }
+                break;
+            case 'variation':
+                $product_type='variation';
+                if ($request->id!="list") {
+                    $product_conditions['whereIn'][] = ['id' => $this->getCategoryProducts($request->id)];
                 }
                 break;
             case 'flashdeals':
@@ -758,17 +771,19 @@ class ProductController extends Controller
 
         $min_price = (count($prices) > 0) ? min($prices) : 0;
         $max_price = (count($prices) > 0) ? max($prices) : 0;
-
-        if($request->has('product_type')){
-            $product_type=$request->product_type;
-            if($product_type=='variation'){
-                $products = groupByDistinctRelation( $products, 'variation_id', $is_random);
-            }else if($product_type=='element'){
-                $products = groupByDistinctRelation( $products, 'element_id', $is_random);
+        if($product_type==null){
+            if($request->has('product_type')){
+                $product_type=$request->product_type;
+                if($product_type=='variation'){
+                    $products = groupByDistinctRelation( $products, 'variation_id', $is_random);
+                }else if($product_type=='element'){
+                    $products = groupByDistinctRelation( $products, 'element_id', $is_random);
+                }
+            }else{
+                $product_type='product';
             }
-        }else{
-            $product_type='product';
         }
+
         $sub_sub_category_ids=[];
         foreach($tmp_products as $product){
             $sub_sub_category_ids[]=$product->element->category->id;
