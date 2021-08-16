@@ -34,7 +34,13 @@ class CityController extends Controller
         return Country::where('status', 1)->get();
     }
 
-    public function selectedCities(){
+    public function selectedCities(Request $request){
+        if($request->has('q') && $request->q!=null){
+            $search_text=$request->q;
+            return new SearchCityCollection(City::where('name', 'like', '%'.$search_text.'%')->where('type', '<>','region')->orWhereHas('parent', function ($relation) use ($search_text) {
+                $relation->where('name', 'like', '%'.$search_text.'%');
+            })->paginate(10));
+        }
         return new SearchCityCollection(City::where('is_selected', true)->where('type', '<>','region')->inRandomOrder()->paginate(10));
     }
 
@@ -47,7 +53,7 @@ class CityController extends Controller
         }
         return [];
     }
-    
+
     public function getCurrentLocation(){
         $address=getUserAddress();
         return new SearchCityCollection(City::where('id', $address->city_id)->get());
