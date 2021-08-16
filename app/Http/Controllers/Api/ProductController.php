@@ -489,7 +489,8 @@ class ProductController extends Controller
         return $result;
     }
     public function getCategoryProducts($id){
-        $category_ids=Category::where('id', $id)->orWhere('slug', $id)->where('level', '=', 2)->pluck('id');
+        $category=Category::where('id', $id)->orWhere('slug', $id)->first();
+        $category_ids=Category::descendantsAndSelf($category->id)->where('level', '=', 2)->pluck('id');
         $product_ids=[];
         if(count($category_ids)>0){
             $element_ids=Element::whereIn('category_id', $category_ids)->pluck('id')??[];
@@ -511,6 +512,7 @@ class ProductController extends Controller
         $product_conditions=[];
         $element_conditions=[];
         $is_random=true;
+        // dd($request->all());
         //Filtering by brand slug
         switch ($type) {
             case 'brand':
