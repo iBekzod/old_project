@@ -223,6 +223,19 @@ class SellerController extends Controller
 
         auth()->login($user, true);
 
+        if ($user->registration_step == 'active_1') {
+            return redirect()->route('seller.autoidentification');
+            // return 'keldi';
+        }
+        if ($user->registration_step == 'active_2') {
+            return redirect()->route('seller.delivery');
+            // return 'keldi';
+        }
+        if ($user->registration_step == 'active_3') {
+            $shop = Auth::user()->shop;
+            return view('frontend.user.seller.shop', compact('shop'));
+        }
+
         return redirect()->route('dashboard');
     }
 
