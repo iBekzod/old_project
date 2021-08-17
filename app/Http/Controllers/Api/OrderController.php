@@ -21,11 +21,11 @@ class OrderController extends Controller
 {
     public function userOrders(Request $request)
     {
-        $request->validate([
-            'user_id' => 'required|exists:users,id'
-        ]);
+        // $request->validate([
+        //     'user_id' => 'required|exists:users,id'
+        // ]);
 
-        $orders = Order::where('user_id', $request->user_id)->get();
+        $orders = Order::where('user_id', auth()->id())->get();
 
         return response()->json([
             'orders' => new OrderCollection($orders)

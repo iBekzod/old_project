@@ -73,8 +73,8 @@ Route::prefix('v1')->group(function () {
     Route::match(['get', 'post'], '/ajax_search', 'Api\SearchController@ajax_search');
     Route::match(['get', 'post'], '/search-by-category', 'Api\SearchController@searchByHashtags');
     Route::match(['get', 'post'], '/banners', 'App\Http\Controllers\Api\V2\HomePageController@banners');
-    Route::match(['get', 'post'], '/user/orders', 'Api\OrderController@userOrders'); //->middleware('auth:api');
-    Route::match(['get', 'post'], '/make/orders', 'Api\OrderController@processApiCheckout'); //->middleware('auth:api');
+    Route::match(['get', 'post'], '/user/orders', 'Api\OrderController@userOrders')->middleware('auth:api');
+    Route::match(['get', 'post'], '/make/orders', 'Api\OrderController@processApiCheckout')->middleware('auth:api');
 
     Route::apiResource('banners', 'Api\BannerController')->only('index');
 
