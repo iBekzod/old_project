@@ -17,6 +17,7 @@ class CartCollection extends ResourceCollection
                         'image' => api_asset($data->product->variation->thumbnail_img)
                     ],
                     'seller' => [
+                        'user_id'=>$data->product->user->id,
                         'name' => $data->product->user->name,
                         'email' => $data->product->user->email,
                         'avatar' => $data->product->user->avatar,
@@ -27,7 +28,7 @@ class CartCollection extends ResourceCollection
                     ],
                     'variation' => $data->variation,
                     'price' => (double) $data->price,
-                    'weight'=>$data->element->weight,
+                    'weight'=>$data->product->element->weight,
                     'earn_point'=>($data->product->earn_point!=0)?$data->product->earn_point:calculateProductClubPoint($data->product->id),
                     'tax' => (double) $data->tax,
                     'shipping_cost' => (double) $data->shipping_cost,
