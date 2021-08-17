@@ -266,7 +266,7 @@ class ProductController extends Controller
                     $product = new Product;
                     $product->element_id=$element->id;
                     $product->is_accepted=true;
-                    
+
                     if($user->user_type == 'seller' && $shop_name=$user->shop->name){
                         $product_name = $variation->name . " от " . $shop_name??$user->name;
                     }else{
@@ -564,6 +564,7 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($request->id);
         $product->todays_deal = $request->status;
+        $product->on_moderation = 0;
         if ($product->save()) {
             return 1;
         }
@@ -574,7 +575,7 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($request->id);
         $product->published = $request->status;
-        $product->on_moderation = 1;
+        $product->on_moderation = 0;
 
         if ($product->added_by == 'seller' && \App\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated) {
             $seller = $product->user->seller;
@@ -591,6 +592,7 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($request->id);
         $product->featured = $request->status;
+        $product->on_moderation = 0;
         if ($product->save()) {
             return 1;
         }
@@ -607,6 +609,7 @@ class ProductController extends Controller
             //            $products = Product::where('variation_id', $variation->id)->get();
             foreach ($products as $product) {
                 $product->todays_deal = $request->status;
+                $product->on_moderation = 0;
                 $product->save();
             }
             return 1;
@@ -625,7 +628,7 @@ class ProductController extends Controller
             //            $products = Product::where('variation_id', $variation->id)->get();
             foreach ($products as $product) {
                 $product->published = $request->status;
-                $product->on_moderation = 1;
+                $product->on_moderation = 0;
                 if ($product->added_by == 'seller' && \App\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated) {
                     $seller = $product->user->seller;
                     if ($seller->invalid_at != null && Carbon::now()->diffInDays(Carbon::parse($seller->invalid_at), false) <= 0) {
@@ -650,6 +653,7 @@ class ProductController extends Controller
             //            $products = Product::where('variation_id', $variation->id)->get();
             foreach ($products as $product) {
                 $product->featured = $request->status;
+                $product->on_moderation = 0;
                 $product->save();
             }
             return 1;
@@ -668,6 +672,7 @@ class ProductController extends Controller
             //            $products = Product::where('variation_id', $variation->id)->get();
             foreach ($products as $product) {
                 $product->seller_featured = $request->status;
+                $product->on_moderation = 0;
                 $product->save();
             }
             return 1;
@@ -679,6 +684,7 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($request->id);
         $product->seller_featured = $request->status;
+        $product->on_moderation = 0;
         if ($product->save()) {
             return 1;
         }
