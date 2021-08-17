@@ -51,7 +51,7 @@ class Product extends Model
     }
 
     public $appends = [
-        'currency_rate'
+        'currency_rate', 'address'
     ];
 
     // public function characteristicValues()
@@ -67,6 +67,11 @@ class Product extends Model
     public function getCurrencyRateAttribute()
     {
         return $this->price/$this->currency->exchange_rate;
+    }
+
+    public function getAddressAttribute()
+    {
+        return $this->user->addresses->first();
     }
 
     public function getTranslation($field = '', $lang = false){
