@@ -17,6 +17,7 @@ class CartCollection extends ResourceCollection
                         'image' => api_asset($data->product->variation->thumbnail_img)
                     ],
                     'seller' => [
+                        'user_id'=>$data->product->user->id,
                         'name' => $data->product->user->name,
                         'email' => $data->product->user->email,
                         'avatar' => $data->product->user->avatar,
