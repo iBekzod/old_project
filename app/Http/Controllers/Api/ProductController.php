@@ -30,6 +30,7 @@ use App\Http\Resources\CategoryCollection;
 use App\Http\Resources\ElementCollection;
 use App\Http\Resources\ParentCategoryCollection;
 use App\Http\Resources\ProductColorCollection;
+use App\Http\Resources\SearchCityCollection;
 use App\Http\Resources\VariationCollection;
 use App\IpAddress;
 use App\User;
@@ -854,11 +855,15 @@ class ProductController extends Controller
             $ip_address->data=$request->data;
         }
         $ip_address->save();
-        return response()->json(getUserAddress());
+        $address=getUserAddress();
+        return new SearchCityCollection(City::where('id', $address->city_id)->get());
+        // return response()->json(getUserAddress());
     }
 
     public function getLocationSetting(){
-        return response()->json(getUserAddress());
+        $address=getUserAddress();
+        return new SearchCityCollection(City::where('id', $address->city_id)->get());
+        // return response()->json(getUserAddress());
     }
 
 
