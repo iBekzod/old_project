@@ -854,13 +854,11 @@ class ProductController extends Controller
             $ip_address->data=$request->data;
         }
         $ip_address->save();
-        return response()->json($ip_address);
+        return response()->json(getUserAddress());
     }
 
-    public function getLocationSetting(Request $request){
-        $client_ip=getClientIp();
-        $ip_address=IpAddress::where('ip', $client_ip)->first();
-        return response()->json($ip_address);
+    public function getLocationSetting(){
+        return response()->json(getUserAddress());
     }
 
 

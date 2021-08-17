@@ -12,6 +12,10 @@ class Address extends Model
         'user_id', 'address', 'city_id', 'region_id', 'postal_code', 'phone', 'set_default', 'longitude', 'latitude'
     ];
 
+    protected $appends =['full_name'];
+    public function getFullNameAttribute(){
+        return $this->city->getTranslation('name').', '.$this->region->getTranslation('name');
+    }
     public function city()
     {
         return $this->belongsTo(City::class, 'city_id')->whereIn('type', ['district', 'city']);
