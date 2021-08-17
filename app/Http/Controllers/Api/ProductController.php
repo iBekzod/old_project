@@ -866,5 +866,23 @@ class ProductController extends Controller
         // return response()->json(getUserAddress());
     }
 
+    public function checkProductExists(Request $request){
+        //?ids[]=2&ids[]=5
+        // data [2 => 0, 5=>6]
+        $ids=[];
+        $ids=$request->ids;
+        $products=filterPublishedProducts(Product::whereIn('id', $ids))->get();
+        $data=[];
+        foreach($products as $product){
+            $data[]=[$product->id=>
+            ['quantity'=>$product->qty,
+             'address'=>$product->address
+            ]
+            ];
+        }
+        return response()->json([
+            'data'=>$data
+        ]);
+    }
 
 }
