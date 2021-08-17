@@ -256,7 +256,7 @@ class ProductController extends Controller
 
     public function brand($id)
     {
-        return new ProductCollection(getPublishedProducts('element', [], [], [ 'where' => [['brand_id', $id]]])->paginate(12));
+        return new ProductCollection(getPublishedProducts('element', [], [], ['where' => [['brand_id', $id]]])->paginate(12));
     }
 
     public function todaysDeal()
@@ -266,7 +266,7 @@ class ProductController extends Controller
 
     public function newProducts()
     {
-        return new ProductCollection(getPublishedProducts('element', ['orderBy' => [['created_at'=>'desc']]], [], [])->paginate(12));
+        return new ProductCollection(getPublishedProducts('element', ['orderBy' => [['created_at' => 'desc']]], [], [])->paginate(12));
     }
 
     public function flashDeal()
@@ -484,76 +484,78 @@ class ProductController extends Controller
             $result =  $this->searchPr($type, $request);
         } catch (\Exception $e) {
             return [
-                'message'=>$e->getMessage()
+                'message' => $e->getMessage()
             ];
         }
         return $result;
     }
-    public function getCategoryProducts($id){
-        $category=Category::where('id', $id)->orWhere('slug', $id)->first();
-        $category_ids=Category::descendantsAndSelf($category->id)->where('level', '=', 2)->pluck('id');
-        $product_ids=[];
-        if(count($category_ids)>0){
-            $element_ids=Element::whereIn('category_id', $category_ids)->pluck('id')??[];
-            $product_ids=Product::whereIn('element_id', $element_ids)->pluck('id');
+    public function getCategoryProducts($id)
+    {
+        $category = Category::where('id', $id)->orWhere('slug', $id)->first();
+        $category_ids = Category::descendantsAndSelf($category->id)->where('level', '=', 2)->pluck('id');
+        $product_ids = [];
+        if (count($category_ids) > 0) {
+            $element_ids = Element::whereIn('category_id', $category_ids)->pluck('id') ?? [];
+            $product_ids = Product::whereIn('element_id', $element_ids)->pluck('id');
         }
         return $product_ids;
     }
-    public function getBrandProducts($id){
-        $brand_ids=Brand::where('id', $id)->orWhere('slug', $id)->pluck('id');
-        $product_ids=[];
-        if(count($brand_ids)>0){
-            $element_ids=Element::whereIn('brand_id', $brand_ids)->pluck('id')??[];
-            $product_ids=Product::whereIn('element_id', $element_ids)->pluck('id');
+    public function getBrandProducts($id)
+    {
+        $brand_ids = Brand::where('id', $id)->orWhere('slug', $id)->pluck('id');
+        $product_ids = [];
+        if (count($brand_ids) > 0) {
+            $element_ids = Element::whereIn('brand_id', $brand_ids)->pluck('id') ?? [];
+            $product_ids = Product::whereIn('element_id', $element_ids)->pluck('id');
         }
         return $product_ids;
     }
     public function searchPr($type, $request)
     {
-        $product_conditions=[];
-        $element_conditions=[];
-        $is_random=true;
-        $product_type=null;
+        $product_conditions = [];
+        $element_conditions = [];
+        $is_random = true;
+        $product_type = null;
         // dd($request->all());
         //Filtering by brand slug
         switch ($type) {
             case 'brand':
-                if ($request->id!="list") {
+                if ($request->id != "list") {
                     $product_conditions['whereIn'][] = ['id' => $this->getBrandProducts($request->id)];
                 }
                 break;
             case 'element':
-                $product_type='element';
-                if ($request->id!="list") {
+                $product_type = 'element';
+                if ($request->id != "list") {
                     $product_conditions['whereIn'][] = ['id' => $this->getCategoryProducts($request->id)];
                 }
                 break;
             case 'variation':
-                $product_type='variation';
-                if ($request->id!="list") {
+                $product_type = 'variation';
+                if ($request->id != "list") {
                     $product_conditions['whereIn'][] = ['id' => $this->getCategoryProducts($request->id)];
                 }
                 break;
             case 'flashdeals':
-                if ($request->id!="list" && $flash_deal = FlashDeal::where('slug', $request->id)->firstOrFail()) {
+                if ($request->id != "list" && $flash_deal = FlashDeal::where('slug', $request->id)->firstOrFail()) {
                     $product_ids = FlashDealProduct::where('flash_deal_id', $flash_deal->id)->pluck('product_id');
                     $product_conditions['whereIn'][] = ['id' => $product_ids];
                 }
                 break;
             case 'category':
-                if ($request->id!="list") {
+                if ($request->id != "list") {
                     $product_conditions['whereIn'][] = ['id' => $this->getCategoryProducts($request->id)];
                 }
                 break;
             case 'categoryAll':
-                $element_conditions['where'][] = ['category_id' , '<>', null];
-                if ($request->id!="list") {
+                $element_conditions['where'][] = ['category_id', '<>', null];
+                if ($request->id != "list") {
                     $product_conditions['whereIn'][] = ['id' => $this->getCategoryProducts($request->id)];
                 }
                 break;
             case 'categoryPopular':
                 $product_conditions['where'][] = ['todays_deal', 1];
-                if ($request->id!="list") {
+                if ($request->id != "list") {
                     $product_conditions['whereIn'][] = ['id' => $this->getCategoryProducts($request->id)];
                 }
                 break;
@@ -564,23 +566,23 @@ class ProductController extends Controller
                 break;
             case 'new':
                 $product_conditions['orderBy'][] = ['created_at' => 'desc'];
-                if ($request->id!="list") {
+                if ($request->id != "list") {
                     $product_conditions['whereIn'][] = ['id' => $this->getCategoryProducts($request->id)];
                 }
-                $is_random=false;
+                $is_random = false;
                 break;
             case 'todays_deal':
                 $product_conditions['where'][] = ['todays_deal', 1];
                 break;
             case 'popular':
                 $product_conditions['where'][] = ['todays_deal', 1];
-                if ($request->id!="list") {
+                if ($request->id != "list") {
                     $product_conditions['whereIn'][] = ['id' => $this->getCategoryProducts($request->id)];
                 }
                 break;
             case 'recommendation':
                 $product_conditions['where'][] = ['featured', 1];
-                if ($request->id!="list") {
+                if ($request->id != "list") {
                     $product_conditions['whereIn'][] = ['id' => $this->getCategoryProducts($request->id)];
                 }
                 break;
@@ -598,13 +600,13 @@ class ProductController extends Controller
                 # code...
                 break;
         }
-        $products_count=getPublishedProducts('product', $product_conditions, [], $element_conditions)->count();
+        $products_count = getPublishedProducts('product', $product_conditions, [], $element_conditions)->count();
         $attribute_product_conditions = $product_conditions;
         $attribute_element_conditions = $element_conditions;
         //Order by sorting type
         $sort_by = $request->sort_by;
         if ($sort_by != null) {
-            $is_random=false;
+            $is_random = false;
             switch ($sort_by) {
                 case 'newest':
                     $product_conditions['orderBy'][] = ['created_at' => 'desc'];
@@ -633,7 +635,7 @@ class ProductController extends Controller
         }
         //Новинки
         if ($request->has('new') && $request->new) {
-            $is_random=false;
+            $is_random = false;
             $product_conditions['orderBy'][] = ['created_at' => 'desc'];
         }
         //Deal
@@ -666,7 +668,7 @@ class ProductController extends Controller
         }
 
         if ($request->has('q') && $query = $request->q) {
-            $is_random=false;
+            $is_random = false;
             // $searchController = new SearchController;
             // $searchController->store($request);
             $product_conditions['where'][] = ['name', 'like', '%' . $query . '%'];
@@ -723,40 +725,39 @@ class ProductController extends Controller
         $all_characteristics = array();
         $tmp_products = $attribute_products->get();
         foreach ($tmp_products as $product) {
-            if($product->variation)
-            $all_characteristics = array_unique(array_merge($all_characteristics, explode(',', $product->variation->characteristics)));
+            if ($product->variation)
+                $all_characteristics = array_unique(array_merge($all_characteristics, explode(',', $product->variation->characteristics)));
         }
         foreach ($all_characteristics as $characteristic) {
-            if($item = Characteristic::where('id',$characteristic)->first())
+            if ($item = Characteristic::where('id', $characteristic)->first())
                 $all_attributes[$item->attribute_id][] = $characteristic;
         }
         $all_attributes = getAttributeFormat($all_attributes);
 
         //Color Collection
         $all_colors = array();
-        $brands=[];
-        $brand_ids=[];
+        $brands = [];
+        $brand_ids = [];
         foreach ($tmp_products as $product) {
             if (($product->variation)  && $product->variation->color_id != null) {
                 $all_colors[] = $product->variation->color_id;
-
             }
             $brand_ids[] = $product->element->brand->id;
         }
         $all_colors = array_unique($all_colors);
 
-        if(count($brand_ids)>0){
-            $brands=Brand::whereIn('id', $brand_ids)->get();
+        if (count($brand_ids) > 0) {
+            $brands = Brand::whereIn('id', $brand_ids)->get();
         }
         $product_ids = [];
         foreach ($tmp_products as $product) {
             $unit_price = homeDiscountedBasePrice($product->id);
-            if ($request->has('min_price') && $selected_min_price = (double)$request->min_price) {
+            if ($request->has('min_price') && $selected_min_price = (float)$request->min_price) {
                 if ($unit_price < $selected_min_price) {
                     continue;
                 }
             }
-            if ($request->has('max_price') && $selected_max_price = (double)$request->max_price) {
+            if ($request->has('max_price') && $selected_max_price = (float)$request->max_price) {
                 if ($unit_price > $selected_max_price) {
                     continue;
                 }
@@ -766,48 +767,48 @@ class ProductController extends Controller
         $products = $products->whereIn('id', $product_ids);
 
         $prices = [];
-        foreach ($tmp_products as $product){
+        foreach ($tmp_products as $product) {
             $prices[] = homeDiscountedBasePrice($product->id);
         }
 
         $min_price = (count($prices) > 0) ? min($prices) : 0;
         $max_price = (count($prices) > 0) ? max($prices) : 0;
-        if($product_type==null){
-            if($request->has('product_type')){
-                $product_type=$request->product_type;
-                if($product_type=='variation'){
-                    $products = groupByDistinctRelation( $products, 'variation_id', $is_random);
-                }else if($product_type=='element'){
-                    $products = groupByDistinctRelation( $products, 'element_id', $is_random);
+        if ($product_type == null) {
+            if ($request->has('product_type')) {
+                $product_type = $request->product_type;
+                if ($product_type == 'variation') {
+                    $products = groupByDistinctRelation($products, 'variation_id', $is_random);
+                } else if ($product_type == 'element') {
+                    $products = groupByDistinctRelation($products, 'element_id', $is_random);
                 }
-            }else{
-                $product_type='product';
+            } else {
+                $product_type = 'product';
             }
         }
 
-        $sub_sub_category_ids=[];
-        foreach($tmp_products as $product){
-            $sub_sub_category_ids[]=$product->element->category->id;
+        $sub_sub_category_ids = [];
+        foreach ($tmp_products as $product) {
+            $sub_sub_category_ids[] = $product->element->category->id;
         }
         $sub_sub_category_ids = array_unique($sub_sub_category_ids);
-        $sub_sub_categories=Category::whereIn('id',$sub_sub_category_ids)->where('level',2)->get();
+        $sub_sub_categories = Category::whereIn('id', $sub_sub_category_ids)->where('level', 2)->get();
         // $all_categories = getProductCategories($attribute_products, 0)->get();
-        $products=$products->paginate(50);
+        $products = $products->paginate(50);
         return response()->json([
             // 'categories' => new CategoryCollection($all_categories),
             'categories' => new ParentCategoryCollection($sub_sub_categories),
             'products' => new ProductCollection($products),
-            'products_count'=>$products_count??count($products),
+            'products_count' => $products_count ?? count($products),
             'attributes' => $all_attributes,
             'colors' => new ProductColorCollection($all_colors),
 
-            'brands' => (count($brands)>0)?new BrandCollection($brands):[],
+            'brands' => (count($brands) > 0) ? new BrandCollection($brands) : [],
             'min_price' => $min_price ?? null,
             'max_price' => $max_price ?? null,
             'selected_min_price' => (isset($selected_min_price)) ? $selected_min_price : $min_price,
             'selected_max_price' => (isset($selected_max_price)) ? $selected_max_price : $max_price,
             'type' => $type ?? null,
-            'product_type'=>$product_type,
+            'product_type' => $product_type,
         ]);
     }
 
@@ -839,50 +840,54 @@ class ProductController extends Controller
     //     }
     //     return 0;
     // }
-    public function setLocationSetting(Request $request){
-        $client_ip=getClientIp();
-        $ip_address=IpAddress::firstOrNew(['ip' =>  $client_ip]);
-        if($request->has('region_id')){
-            $ip_address->region_id=$request->region_id;
+    public function setLocationSetting(Request $request)
+    {
+        $client_ip = getClientIp();
+        $ip_address = IpAddress::firstOrNew(['ip' =>  $client_ip]);
+        if ($request->has('region_id')) {
+            $ip_address->region_id = $request->region_id;
         }
-        if($request->has('language_id')){
-            $ip_address->language_id=$request->language_id;
+        if ($request->has('language_id')) {
+            $ip_address->language_id = $request->language_id;
         }
-        if($request->has('city_id')){
-            $ip_address->city_id=$request->city_id;
+        if ($request->has('city_id')) {
+            $ip_address->city_id = $request->city_id;
         }
-        if($request->has('data')){
-            $ip_address->data=$request->data;
+        if ($request->has('data')) {
+            $ip_address->data = $request->data;
         }
         $ip_address->save();
-        $address=getUserAddress();
+        $address = getUserAddress();
         return new SearchCityCollection(City::where('id', $address->city_id)->get());
         // return response()->json(getUserAddress());
     }
 
-    public function getLocationSetting(){
-        $address=getUserAddress();
+    public function getLocationSetting()
+    {
+        $address = getUserAddress();
         return new SearchCityCollection(City::where('id', $address->city_id)->get());
         // return response()->json(getUserAddress());
     }
 
-    public function checkProductExists(Request $request){
+    public function checkProductExists(Request $request)
+    {
         //?ids[]=2&ids[]=5
         // data [2 => 0, 5=>6]
-        $ids=[];
-        $ids=$request->ids;
-        $products=filterPublishedProducts(Product::whereIn('id', $ids))->get();
-        $data=[];
-        foreach($products as $product){
-            $data[]=[$product->id=>
-            ['quantity'=>$product->qty,
-             'address'=>$product->address
-            ]
+        $ids = [];
+        $ids = $request->ids;
+        $products = filterPublishedProducts(Product::whereIn('id', $ids))->get();
+        $data = [];
+        foreach ($products as $product) {
+            $data[] = [
+                $product->id =>
+                [
+                    'quantity' => $product->qty,
+                    'address' => $product->address
+                ]
             ];
         }
         return response()->json([
-            'data'=>$data
+            'data' => $data
         ]);
     }
-
 }

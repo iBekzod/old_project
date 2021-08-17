@@ -119,6 +119,7 @@ class SellerProductController extends Controller
                     $product->earn_point = 0;
                     $product->num_of_sale = 0;
                     $product->variation_id = $variation->id;
+                    $product->on_moderation = 1;
                     $product->save();
                     // if ($product->save()) {
                     //     $products = Product::where('variation_id', $variation->id);
@@ -237,9 +238,11 @@ class SellerProductController extends Controller
                     $product->tax_type = $variant["tax_type"];
                     $product->variation_id = $variation->id;
                     $product->element_id=$element->id;
+                    $product->on_moderation = 1;
                     $product->save();
                 }else if((int)$variant["quantity"]>0){
                     $product = new Product;
+                    $product->on_moderation = 1;
                     $product->element_id=$element->id;
                     $variation = Variation::where('id',(int)$variant["variation_id"])->first();
                     if($user->user_type == 'seller' && $shop_name=$user->shop->name){
@@ -334,7 +337,7 @@ class SellerProductController extends Controller
     {
         $product = Product::findOrFail($request->id);
         $product->published = $request->status;
-        $product->on_moderation = 1;
+        // $product->on_moderation = 1;
 
         if ($product->added_by == 'seller' && \App\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated) {
             $seller = $product->user->seller;
@@ -387,7 +390,7 @@ class SellerProductController extends Controller
             //            $products = Product::where('variation_id', $variation->id)->get();
             foreach ($products as $product) {
                 $product->published = $request->status;
-                $product->on_moderation = 1;
+                // $product->on_moderation = 1;
                 if ($product->added_by == 'seller' && \App\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated) {
                     $seller = $product->user->seller;
                     if ($seller->invalid_at != null && Carbon::now()->diffInDays(Carbon::parse($seller->invalid_at), false) <= 0) {

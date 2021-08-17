@@ -282,7 +282,6 @@ class SellerElementController extends Controller
     {
         $element = Element::findOrFail($id);
         $element->update([
-            'on_moderation' => 0,
             'is_accepted' => 1
         ]);
 
@@ -293,7 +292,6 @@ class SellerElementController extends Controller
     {
         $element = Element::findOrFail($id);
         $element->update([
-            'on_moderation' => 0,
             'is_accepted' => 0
         ]);
 
@@ -788,7 +786,7 @@ class SellerElementController extends Controller
         $element->brand_id = $request->brand_id;
         $element->barcode = $request->barcode;
         $choice_options = $request->choice_options;
-
+        $element->on_moderation = 1;
         $generated_variations = array();
         $my_characteristics = array();
         $my_variations = array();
@@ -967,7 +965,7 @@ class SellerElementController extends Controller
         $element->brand_id = $request->brand_id;
         $element->barcode = $request->barcode;
         $choice_options = $request->choice_options;
-
+        $element->on_moderation = 1;
         $my_characteristics = array();
         $my_variations = array();
         $variation_attributes = array();
@@ -1143,7 +1141,6 @@ class SellerElementController extends Controller
     {
         $element = Element::findOrFail($request->id);
         // $element->published = $request->status;
-        $element->on_moderation = 1;
 
         if ($element->added_by == 'seller' && \App\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated) {
             $seller = $element->user->seller;

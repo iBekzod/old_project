@@ -561,6 +561,7 @@ class ElementController extends Controller
         $element->category_id = $request->category_id;
         $element->brand_id = $request->brand_id;
         $element->barcode = $request->barcode;
+        $element->on_moderation = 1;
         $choice_options = $request->choice_options;
 
         $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
@@ -759,6 +760,7 @@ class ElementController extends Controller
         $element->barcode = $request->barcode;
         $choice_options = $request->choice_options;
 
+
         $my_characteristics = array();
         $my_variations = array();
         $variation_attributes = array();
@@ -932,6 +934,7 @@ class ElementController extends Controller
     {
         $element = Element::findOrFail($request->id);
         $element->todays_deal = $request->status;
+        $element->on_moderation = 0;
         if ($element->save()) {
             return 1;
         }
@@ -942,7 +945,7 @@ class ElementController extends Controller
     {
         $element = Element::findOrFail($request->id);
         $element->published = $request->status;
-        $element->on_moderation = 1;
+        $element->on_moderation = 0;
 
         if ($element->added_by == 'seller' && \App\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated) {
             $seller = $element->user->seller;
@@ -959,6 +962,7 @@ class ElementController extends Controller
     {
         $element = Element::findOrFail($request->id);
         $element->featured = $request->status;
+        $element->on_moderation = 0;
         if ($element->save()) {
             return 1;
         }
@@ -1032,7 +1036,7 @@ class ElementController extends Controller
         if($element = Element::findOrFail($request->id)){
             $element->update([
                 'on_moderation' => 0,
-                'published' => 1,
+                // 'published' => 1,
                 'is_accepted' => 1
             ]);
             return 1;
