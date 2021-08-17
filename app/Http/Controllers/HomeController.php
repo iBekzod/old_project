@@ -280,7 +280,8 @@ class HomeController extends Controller
             }
             // 
             // dd($address);
-            // dd($addresses['city_id']);
+
+
             $countrys = Country::where('status', 1)->get();
 
             return view('frontend.user.seller.profile', compact('addresses', 'countrys', 'information','address'));
