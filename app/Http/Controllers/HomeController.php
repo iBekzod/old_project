@@ -88,14 +88,14 @@ class HomeController extends Controller
             // // dd($regions);
             // $cities=City::where('type', 'district')->orWhere('type', 'city')->get();
 
-            $countrys = Country::where('status', 1)->get();
+            // $countrys = Country::where('status', 1)->get();
             // dd($countrys);
 
 
             // $user->save();
             if ($user->save()) {
                 auth()->login($user, true);
-                return view('frontend.user.seller.form_second', compact('countrys'));
+                return view('frontend.user.seller.form_second');
                 // return 'keldi';
 
             }
@@ -278,7 +278,7 @@ class HomeController extends Controller
             if(Address::where('user_id', $user_id)->exists()){
                 $address=Address::where('user_id', $user_id)->first();
             }
-            // 
+            //
             // dd($address);
 
 

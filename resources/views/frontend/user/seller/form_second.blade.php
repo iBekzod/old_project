@@ -76,8 +76,8 @@
                                             <option value="0">{{ translate('All countries') }}</option>
 
                                             {{-- <option value="{{$country->id}}">{{$country->name}}</option> --}}
-                                            @foreach ($countrys as $data)
-                                                    <option value="{{$data->id}}">
+                                            @foreach (App\Country::where('status', 1)->get() as $data)
+                                                    <option @if(App\Country::where('code', 'UZ')->first()->id==$data->id) selected @endif value="{{$data->id}}">
                                                         {{$data->name}}
 
                                                     </option>
@@ -136,6 +136,7 @@
 @section('script')
 	<script type="text/javascript">
         $(document).ready(function () {
+            $('#country_dd').trigger('change');
             $('#country_dd').on('change', function () {
                 var idCountry = this.value;
                 $("#state_dd").html('');

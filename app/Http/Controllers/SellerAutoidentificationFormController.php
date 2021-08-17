@@ -18,7 +18,7 @@ class SellerAutoidentificationFormController extends Controller
 {
     public function seller_autoidentification_form_save(Request $request)
     {
-          dd('keldi');
+        //   dd('keldi');
         if ($request->method() === 'POST') {
             $validation = array();
             foreach (json_decode(BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element) {
@@ -129,10 +129,14 @@ class SellerAutoidentificationFormController extends Controller
             }
         } else if ($request->method() === 'GET')
         {
+            // dd('keldi');
             $user_id = auth()->id();
+            // dd($user_id);
             $user = User::findOrFail($user_id);
             if (Seller::where('user_id', $user_id)->exists()) {
                 $seller = Seller::where('user_id', $user_id)->first();
+            }else{
+                $seller=new Seller();
             }
             return view('frontend.user.seller.form_second')->with('user_id', $user_id);
         } else {
