@@ -96,7 +96,7 @@ class SupportTicketController extends Controller
         $array['subject'] = 'Support ticket Code is:- '.$ticket->code;
         $array['from'] = env('MAIL_USERNAME');
         $array['content'] = 'Hi. A ticket has been created. Please check the ticket.';
-        $array['link'] = route('support_ticket.admin_show', encrypt($ticket->id));
+        $array['link'] = route('support_ticket.show', encrypt($ticket->id));
         $array['sender'] = $ticket->user->name;
         $array['details'] = $ticket->details;
 
@@ -181,7 +181,7 @@ class SupportTicketController extends Controller
         return view('frontend.user.support_ticket.show', compact('ticket','ticket_replies'));
     }
 
-    public function seller_admin_show($id)
+    public function seller_show($id)
     {
         $ticket = Ticket::findOrFail(decrypt($id));
         $ticket->viewed = 1;
