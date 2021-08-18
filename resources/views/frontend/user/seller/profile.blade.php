@@ -414,9 +414,9 @@
 
 @section('script')
     <script type="text/javascript">
-        function add_new_address(){
-            $('#new-address-modal').modal('show');
-        }
+        // function add_new_address(){
+        //     $('#new-address-modal').modal('show');
+        // }
 
         // $('.new-email-verification').on('click', function() {
         //     $(this).find('.loading').removeClass('d-none');
@@ -468,6 +468,7 @@
 
         // }
     </script>
+
     <script type="text/javascript">
         $(document).ready(function () {
             $('#country_dd').on('change', function () {

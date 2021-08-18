@@ -21,7 +21,7 @@
                                         @foreach (json_decode(\App\BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element)
                                         @if($element->type=='text')
                                         <div class="form-group row" id="category">
-                                            @if ($element->label=='Форма_собственности')
+                                            @if ($element->label=='forma_sobstvennosti')
 
                                             <label class="col-lg-3 col-from-label mb-2"> {{translate($element->name)}}</label>
                                             <div class="col-lg-8">
@@ -84,11 +84,11 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class=" col-lg-3" style="display:inline-block">
+                                    <div class="col-lg-3" style="display:inline-block">
                                         <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
                                         id="state_dd" name="region_id" >
                                             {{-- <option value="0">{{ translate('All regions') }}</option> --}}
-       
+
 
                                         </select>
                                     </div>
@@ -136,7 +136,6 @@
 @section('script')
 	<script type="text/javascript">
         $(document).ready(function () {
-            $('#country_dd').trigger('change');
             $('#country_dd').on('change', function () {
                 var idCountry = this.value;
                 $("#state_dd").html('');
