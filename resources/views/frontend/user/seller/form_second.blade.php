@@ -88,7 +88,7 @@
                                         <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
                                         id="state_dd" name="region_id" >
                                             {{-- <option value="0">{{ translate('All regions') }}</option> --}}
-
+       
 
                                         </select>
                                     </div>
