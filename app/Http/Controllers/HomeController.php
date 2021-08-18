@@ -55,6 +55,10 @@ class HomeController extends Controller
         return $this->admin_dashboard();
     }
 
+    public function email(){
+        return view('auth.passwords.email');
+    }
+
     // TODO::AUTHcontroller  Home controller;
     public function seller_registration(Request $request)
     {
