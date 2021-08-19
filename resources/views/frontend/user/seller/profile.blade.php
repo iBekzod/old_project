@@ -262,10 +262,10 @@
                                                {{-- <input id="address" type="textbox" style="width:40%" value="tashken"> --}}
                                                {{-- <input type="button" class="btn-outline-info p-2 " style="display: inline-block" value="Geocode" onclick="codeAddress()"> <br> --}}
                                                <label for="lat" class="p-2">{{translate('Latitude:')}}</label>
-                                               <input type="text" id="lat" class="p-2" name="latitude"/>
+                                               <input type="text" id="lat" class="p-2" value="{{$addresses->latitude ?? "" }}" name="latitude"/>
                                                <label for="lat" class="p-2">{{translate('Longitude:')}}</label>
-                                               <input type="text" id="lng" class="p-2" name="longitude"/>
-
+                                               <input type="text" id="lng" class="p-2" value="{{$addresses->longitude ?? "" }}" name="longitude"/>
+                                               {{-- @dd($addresses->latitude) --}}
                                            </div>
                                            <div id="map_canvas" class="my-2" style="width:95%; height:300px;"></div>
                                     </div>
@@ -471,6 +471,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+
             $('#country_dd').on('change', function () {
                 var idCountry = this.value;
                 $("#state_dd").html('');
@@ -523,6 +524,8 @@
                 var address=this.options[this.selectedIndex].text;
                 setAddressGeo(address, 11);
             });
+
+
             // setAddressGeo('{{$selected_city->name}}', 11);
         });
 
@@ -538,25 +541,41 @@
           geocoder = new google.maps.Geocoder();
           map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
         //   codeAddress();
-          setAddressGeo('{{$selected_city->name}}', 11);
+
+          setAddressGeo('{{$selected_city->name}}', 15, '{{$addresses->latitude??0}}', '{{$addresses->longitude??0}}');
         }
 
 
-        function setAddressGeo(address, my_zoom=9){
+        function setAddressGeo(address, my_zoom=9, lat_=0, lng_=0){
             if(address==""){
                 address='toshkent';
             }
             map.setZoom(my_zoom);
+            // a=getElementById('lat').value;
+            // b=getElementById('lng').value;
+            // console.log(lat);
+            // console.log(lng);
             geocoder.geocode( { 'address': address}, function(results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
-                    map.setCenter(results[0].geometry.location);
+                    position_=results[0].geometry.location;
+                    // alert(position_)
+                    if(lat_!=0 && lng_!=0){
+                        position_ = new google.maps.LatLng(lat_, lng_);
+                    }
+                    map.setCenter(position_);
                     if(marker)
-                        marker.setMap(null);
+                        marker.setMap();
                     marker = new google.maps.Marker({
                         map: map,
-                        position: results[0].geometry.location,
-                        draggable: true
+                        // position:{lat=40.1250439,lng=67.8808243},
+                        position: position_,
+                        draggable: true,
+
+
+
                     });
+                    // alert(results[0].geometry.location.lat());
+                    // alert(results[0].geometry.location.lng());
                     google.maps.event.addListener(marker, "dragend", function() {
                         document.getElementById('lat').value = marker.getPosition().lat();
                         document.getElementById('lng').value = marker.getPosition().lng();

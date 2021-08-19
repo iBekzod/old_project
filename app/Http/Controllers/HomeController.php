@@ -304,15 +304,15 @@ class HomeController extends Controller
 
             // $countrys = Country::where('status', 1)->get();
 
-            return view('frontend.user.seller.profile', compact('addresses', 'information',
-            'regions',
-            'selected_region',
-            'cities',
-            'selected_city'));
+            return view('frontend.user.seller.profile',
+             compact('addresses',
+                    'information',
+                    'regions',
+                    'selected_region',
+                    'cities',
+                    'selected_city'));
         }
     }
-
-
     public function customer_update_profile(Request $request)
     {
         if (env('DEMO_MODE') == 'On') {
