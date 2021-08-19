@@ -217,8 +217,11 @@ class SellerController extends Controller
 
     public function login($id)
     {
-        $seller = Seller::findOrFail(decrypt($id));
+        $seller = Seller::where('id', decrypt($id))->first();
 
+        if($seller==null){
+            return back();
+        }
         $user  = $seller->user;
 
         auth()->login($user, true);
@@ -232,7 +235,9 @@ class SellerController extends Controller
             // return 'keldi';
         }
         if ($user->registration_step == 'active_3') {
-            $shop = Auth::user()->shop;
+            $shop = $user->shop;
+            // dd($shop);
+            // return 'keldi';
             return view('frontend.user.seller.shop', compact('shop'));
         }
 

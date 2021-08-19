@@ -48,12 +48,12 @@
                                             @endif
                                         </div>
                                         @elseif($element->type=='number')
-                                        <div class="form-group row" id="category">
-                                            <label class="col-lg-3 col-from-label mb-2"> {{translate($element->name)}}</label>
-                                            <div class="col-lg-8">
-                                            <input class="form-control" type="number" name="{{($element->label)}}" required>
-                                            </div>
-                                        </div>
+                                                <div class="form-group row" id="category">
+                                                    <label class="col-lg-3 col-from-label mb-2"> {{translate($element->name)}}</label>
+                                                    <div class="col-lg-8">
+                                                    <input class="form-control" type="number" name="{{($element->label)}}" required>
+                                                    </div>
+                                                </div>
                                         @elseif($element->type=='email')
                                         <div class="form-group row" id="category">
                                             <label class="col-lg-3 col-from-label mb-2"> {{translate($element->name)}}</label>
