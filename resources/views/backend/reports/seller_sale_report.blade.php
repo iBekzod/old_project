@@ -29,7 +29,7 @@
                 <thead>
                     <tr>
                         <th>{{ translate('Seller Name') }}</th>
-                        <th>{{ translate('Shop Name') }}</th>
+                        {{-- <th>{{ translate('Shop Name') }}</th> --}}
                         <th>{{ translate('Number of Product Sale') }}</th>
                         <th>{{ translate('Order Amount') }}</th>
                     </tr>
@@ -39,7 +39,7 @@
                         @if($seller->user != null)
                             <tr>
                                 <td>{{ $seller->user->name }}</td>
-                                <td>{{ $seller->user->shop->name }}</td>
+                                {{-- <td>{{ $seller->user->shop->name }}</td> --}}
                                 <td>
                                     @php
                                         $num_of_sale = 0;
