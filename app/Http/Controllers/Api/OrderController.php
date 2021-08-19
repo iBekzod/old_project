@@ -54,7 +54,7 @@ class OrderController extends Controller
         foreach ($cartItems as $cartItem) {
             $product = $cartItem->product;
             // $product_ids = array();
-            $seller_products[$product->user_id][]=$cartItem->id;
+            $seller_products[$product->user_id][]=$product->id;
             // if (array_key_exists($product->user_id, $seller_products)) {
             //     $product_ids = $seller_products[$product->user_id];
             // }
@@ -63,8 +63,11 @@ class OrderController extends Controller
         }
 
         if (!empty($seller_products)) {
-            foreach ($seller_products as $key => $seller_product) {
-                $shipping += \App\Shop::where('user_id', $key)->first()->shipping_cost;
+            foreach ($seller_products as $key => $seller_product_ids) {
+                $product=Product::where('id', $seller_product_ids[0])->first();
+                $address= getUserAddress();
+                $shipping_cost = calculateDeliveryCost($product, $address->id, $product->delivery_type);
+                $shipping += $shipping_cost['total_cost'];
             }
         }
 
@@ -81,33 +84,17 @@ class OrderController extends Controller
         ]);
 
         foreach ($cartItems as $cartItem) {
-            $product = Product::findOrFail($cartItem->product_id);
-            // if ($product->variation) {
-            //     $cartItemVariation = $product->variation;
-            //     $product_stocks = $product->first();
-            //     $product_stocks->qty -= $cartItem->quantity;
-            //     $product_stocks->save();
-            // } else {
-                //TODO: add current_stock column to product
+            $product=$cartItem->product;
+
             $product->update([
                 'num_of_sale' => DB::raw('num_of_sale - ' . $cartItem->quantity)
             ]);
             // }
 
-            $order_detail_shipping_cost = 0;
 
-            // if (\App\BusinessSetting::where('type', 'shipping_type')->first()->value == 'flat_rate') {
-            //     $order_detail_shipping_cost = $shipping / count($cartItems);
-            // } elseif (\App\BusinessSetting::where('type', 'shipping_type')->first()->value == 'seller_wise_shipping') {
-            //     if ($product->added_by == 'admin') {
-            //         $order_detail_shipping_cost = \App\BusinessSetting::where('type', 'shipping_cost_admin')->first()->value / count($admin_products);
-            //     } else {
-            //         $order_detail_shipping_cost = \App\Shop::where('user_id', $product->user_id)->first()->shipping_cost / count($seller_products[$product->user_id]);
-            // }
-            // } else {
-            //     $order_detail_shipping_cost = $product->shipping_cost;
-            // }
-
+            $address= getUserAddress();
+            $shipping_cost = calculateDeliveryCost($product, $address->id, $product->delivery_type);
+            $order_detail_shipping_cost = (double) $shipping_cost['total_cost'];
             // save order details
             OrderDetail::create([
                 'order_id' => $order->id,
@@ -142,7 +129,7 @@ class OrderController extends Controller
             }
         }
         // clear user's cart
-        $user = User::findOrFail($user_id);
+        $user = User::where('id',$user_id)->first();
         $user->carts()->delete();
 
         return response()->json([
