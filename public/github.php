@@ -1,1 +1,1 @@
-<?php `git pull origin tinfis`;
+<?php `git pull`;
