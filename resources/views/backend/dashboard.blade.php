@@ -192,8 +192,8 @@
                 {
                     data: [
                         '{{ $published1Products->count() }}',
-                        '{{ count($published1Products->where("added_by", "seller")->all()) }}',
-                        '{{ count($published1Products->where("added_by", "admin")->all()) }}'
+                        '{{ \App\Product::where("added_by", "seller")->get()->count() }}',
+                        '{{ \App\Product::where("added_by", "admin")->get()->count() }}'
                     ],
                     backgroundColor: [
                         "#fd3995",
