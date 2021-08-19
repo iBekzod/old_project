@@ -354,7 +354,7 @@ class ProductDetailCollection extends ResourceCollection
         //     return 0;
         // }else {
         $address=getUserAddress();
-        return calculateDeliveryCost($product, $address->id, $is_express);
+        return calculateDeliveryCost($product, $address->id, $product->delivery_type);
             // return calculateShipping(['product_id'=>$product->id, 'type'=>'precise', 'address_id'=>$address->id]);
         // }
     }

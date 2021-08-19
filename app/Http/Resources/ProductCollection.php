@@ -78,6 +78,6 @@ class ProductCollection extends ResourceCollection
 
     protected function calculateShippingCost($product, $is_express=false){
         $address=getUserAddress();
-        return calculateDeliveryCost($product, $address->id, $is_express);
+        return calculateDeliveryCost($product, $address->id, $product->delivery_type);
     }
 }
