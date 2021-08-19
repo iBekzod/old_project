@@ -170,28 +170,28 @@
                                             @foreach (json_decode(\App\BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element)
                                                 @if($element->type=='text')
                                                     <div class="form-group row" id="category">
-                                                        @if ($element->label=='Форма_собственности')
+                                                        @if ($element->label=='forma_sobstvennosti')
 
-                                                        <label class="col-lg-3 col-from-label mb-2"> {{translate($element->neme)}}</label>
-                                                        <div class="col-lg-8">
-                                                            <select name="{{($element->label)}}" class="form-control py-2">
-                                                                <option value="OАО">OАО</option>
-                                                                <option value="ЗАО">ЗАО</option>
-                                                                <option value="ООО">ООО</option>
-                                                                <option value="Частное предприятие">Частное предприятие</option>
-                                                                <option value="Частный предприниматель">Частный предприниматель</option>
-                                                                <option value="СП">СП</option>
-                                                                <option value="ИП">ИП</option>
-                                                                <option value="ГУП">ГУП</option>
-                                                                <option value="Семейное предприятие">Семейное предприятие</option>
-                                                                <option value="Фермерское хозяйство">Фермерское хозяйство</option>
-                                                                <option value="Частное лицо">Частное лицо</option>
-                                                            </select>
-                                                        </div>
+                                                            <label class="col-lg-3 col-from-label mb-2"> {{translate($element->name)}}</label>
+                                                            <div class="col-lg-8">
+                                                                <select name="{{($element->label)}}" value="{{$information[$key]['value']?? ""}}" class="form-control py-2">
+                                                                    <option @if($information[$key]['value']=="OАО") selected @endif value="OАО">OАО</option>
+                                                                    <option @if($information[$key]['value']=="ЗАО") selected @endif  value="ЗАО">ЗАО</option>
+                                                                    <option @if($information[$key]['value']=="ООО") selected @endif  value="ООО">ООО</option>
+                                                                    <option @if($information[$key]['value']=="Частное предприятие") selected @endif  value="Частное предприятие">Частное предприятие</option>
+                                                                    <option @if($information[$key]['value']=="Частный предприниматель") selected @endif  value="Частный предприниматель">Частный предприниматель</option>
+                                                                    <option @if($information[$key]['value']=="СП") selected @endif  value="СП">СП</option>
+                                                                    <option @if($information[$key]['value']=="ИП") selected @endif  value="ИП">ИП</option>
+                                                                    <option @if($information[$key]['value']=="ГУП") selected @endif  value="ГУП">ГУП</option>
+                                                                    <option @if($information[$key]['value']=="Семейное предприятие") selected @endif  value="Семейное предприятие">Семейное предприятие</option>
+                                                                    <option @if($information[$key]['value']=="Фермерское хозяйство") selected @endif  value="Фермерское хозяйство">Фермерское хозяйство</option>
+                                                                    <option @if($information[$key]['value']=="Частное лицо") selected @endif  value="Частное лицо">Частное лицо</option>
+                                                                </select>
+                                                            </div>
                                                         @else
                                                             <label class="col-lg-3 col-from-label mb-2"> {{translate($element->name)}}</label>
                                                             <div class="col-lg-8">
-                                                                <input class="form-control" type="text" value="{{$information[$key]['value']?? "kemadi"}}" name="{{($element->label)}}" required>
+                                                                <input class="form-control" type="text" value="{{$information[$key]['value']?? ""}}" name="{{($element->label)}}" required>
                                                             </div>
                                                         @endif
                                                     </div>
