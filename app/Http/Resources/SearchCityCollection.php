@@ -21,6 +21,8 @@ class SearchCityCollection extends ResourceCollection
                     'type' => $data->type,
                     'parent_id' => $data->parent_id,
                     'distance' => $data->distance,
+                    // 'longitude'=>$data->longitude,
+                    // 'latitude'=>$data->latitude,
                 ];
             })
         ];
