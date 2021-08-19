@@ -7,19 +7,22 @@
 use Illuminate\Support\Facades\Route;
 
 // use Razorpay\Api\Api;
-Route::get('mytest', function () {
-    //single product
-    $products=getPublishedProducts()->limit(10)->get();
-    $collection=new App\Http\Resources\ProductCollection($products);
-    $data=$collection;
+// Route::get('mytest', function () {
+//     //single product
+//     $products=getPublishedProducts()->limit(10)->get();
+//     $collection=new App\Http\Resources\ProductCollection($products);
+//     $data=$collection;
 
-    //products detail
-    // $product=getPublishedProducts()->first();
-    // $colection=new App\Http\Resources\ProductDetailCollection($product);
-    // $data=$colection;
+//     //products detail
+//     // $product=getPublishedProducts()->first();
+//     // $colection=new App\Http\Resources\ProductDetailCollection($product);
+//     // $data=$colection;
 
-    return $data;
-});
+//     return $data;
+// });
+
+
+
 
 Route::prefix('v1/auth')->group(function () {
     Route::post('login', 'Api\AuthController@login');
@@ -216,7 +219,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/region/{country_id}/{region_id}/cities', 'Api\CityController@regions');
     Route::get('register/me', 'Api\ProductController@setLocationSetting');
     Route::get('get/me', 'Api\ProductController@getLocationSetting');
-
+    Route::post('/send-sms', 'SmsController@send');
 });
 
 Route::fallback(function() {

@@ -44,22 +44,22 @@ class OrderController extends Controller
             'coupon_code' => 'nullable',
         ]);
 
-        return "hi";
+        $user_id=auth()->id()??$request->user_id;
         $shippingAddress = json_decode($request->shipping_address);
 
-        $cartItems = Cart::where('user_id', $request->user_id)->get();
+        $cartItems = Cart::where('user_id', $user_id)->get();
 
         $shipping = 0;
         $seller_products = array();
-
         foreach ($cartItems as $cartItem) {
-            $product = \App\Product::find($cartItem->product_id);
-            $product_ids = array();
-            if (array_key_exists($product->user_id, $seller_products)) {
-                $product_ids = $seller_products[$product->user_id];
-            }
-            array_push($product_ids, $cartItem->product_id);
-            $seller_products[$product->user_id] = $product_ids;
+            $product = $cartItem->product;
+            // $product_ids = array();
+            $seller_products[$product->user_id][]=$cartItem->id;
+            // if (array_key_exists($product->user_id, $seller_products)) {
+            //     $product_ids = $seller_products[$product->user_id];
+            // }
+            // array_push($product_ids, $cartItem->product_id);
+            // $seller_products[$product->user_id] = $product_ids;
         }
 
         if (!empty($seller_products)) {
@@ -70,7 +70,7 @@ class OrderController extends Controller
 
         // create an order
         $order = Order::create([
-            'user_id' => $request->user_id,
+            'user_id' => $user_id,
             'shipping_address' => json_encode($shippingAddress),
             'payment_type' => $request->payment_type,
             'payment_status' => $request->payment_status,
@@ -127,22 +127,22 @@ class OrderController extends Controller
         // apply coupon usage
         if ($request->coupon_code != '') {
             CouponUsage::create([
-                'user_id' => $request->user_id,
+                'user_id' => $user_id,
                 'coupon_id' => Coupon::where('code', $request->coupon_code)->first()->id
             ]);
         }
         // calculate commission
-        // $commission_percentage = BusinessSetting::where('type', 'vendor_commission')->first()->value;
-        // foreach ($order->orderDetails as $orderDetail) {
-        //     if ($orderDetail->product->user->user_type == 'seller') {
-        //         $seller = $orderDetail->product->user->seller;
-        //         $price = $orderDetail->price + $orderDetail->tax + $orderDetail->shipping_cost;
-        //         $seller->admin_to_pay = ($request->payment_type == 'cash_on_delivery') ? $seller->admin_to_pay - ($price * $commission_percentage) / 100 : $seller->admin_to_pay + ($price * (100 - $commission_percentage)) / 100;
-        //         $seller->save();
-        //     }
-        // }
+        $commission_percentage = BusinessSetting::where('type', 'vendor_commission')->first()->value;
+        foreach ($order->orderDetails as $orderDetail) {
+            if ($orderDetail->product->user->user_type == 'seller') {
+                $seller = $orderDetail->product->user->seller;
+                $price = $orderDetail->price + $orderDetail->tax + $orderDetail->shipping_cost;
+                $seller->admin_to_pay = ($request->payment_type == 'cash_on_delivery') ? $seller->admin_to_pay - ($price * $commission_percentage) / 100 : $seller->admin_to_pay + ($price * (100 - $commission_percentage)) / 100;
+                $seller->save();
+            }
+        }
         // clear user's cart
-        $user = User::findOrFail($request->user_id);
+        $user = User::findOrFail($user_id);
         $user->carts()->delete();
 
         return response()->json([
