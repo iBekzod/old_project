@@ -55,6 +55,10 @@ class HomeController extends Controller
         return $this->admin_dashboard();
     }
 
+    public function email(){
+        return view('auth.passwords.email');
+    }
+
     // TODO::AUTHcontroller  Home controller;
     public function seller_registration(Request $request)
     {
@@ -270,21 +274,41 @@ class HomeController extends Controller
             // $informations=Auth::user()->seller->verification_info;
             // dd($informations->);
             $user_id= auth()->id();
-            $addresses = Auth::user()->addresses;
+            $addresses = Auth::user()->addresses->first();
+            // dd($addresses);
+            // $cities=collect();
+            // $regions=collect();
+            if($addresses!=null){
+                $regions=City::where('country_id', $addresses->country_id)->orWhere('type', 'region')->get();
+                $selected_region=$addresses->region;
+                $cities=$selected_region->children;
+                $selected_city=$addresses->city;
+                // $cities=City::where('id', $addresses->city_id)->orWhere('type', 'city')->first();
+                // dd($regions);
+                // $regions=City::where('id',$addresses->region_id)->orwhere('type', 'region')->first();
+                // dd($regions);
+            }
+
             $information = Auth::user()->seller->verification_info;
             // dd($information);
             $key = array_search('text', array_column($information, 'type'));
             //   dd($information[$key]['value']);
-            if(Address::where('user_id', $user_id)->exists()){
-                $address=Address::where('user_id', $user_id)->first();
-            }
-            //
+            // if(Address::where('user_id', $user_id)->exists()){
+            //     $address=Address::where('user_id', $user_id)->first();
+            // }
             // dd($address);
+            // $regions=City::where('type', 'region')->get();
+            // // dd($regions);
+            // $cities=City::where('type', 'district')->orWhere('type', 'city')->get();
 
 
-            $countrys = Country::where('status', 1)->get();
+            // $countrys = Country::where('status', 1)->get();
 
-            return view('frontend.user.seller.profile', compact('addresses', 'countrys', 'information','address'));
+            return view('frontend.user.seller.profile', compact('addresses', 'information',
+            'regions',
+            'selected_region',
+            'cities',
+            'selected_city'));
         }
     }
 

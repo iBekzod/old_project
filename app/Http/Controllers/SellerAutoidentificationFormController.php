@@ -152,19 +152,35 @@ class SellerAutoidentificationFormController extends Controller
                 if ($element->type) {
 
                    $validation[$element->label] = 'required';
-                    // dd('keldi');
 
                 }
             }
               $request->validate($validation);
-            //    dd( $request->validate($validation));
+            // dd($validation);
+            $request->validate([
+                'poctovyj_indeks'=>'required',
+                 'country_id'=>'required',
+                 'region_id' =>'required',
+                 'city_id' =>'required',
+                 'latitude'=>'required',
+                 'longitude'=>'required'
+                ]);
+
             $user_id = auth()->id();
             // dd($user_id);
+            if(Address::where('user_id', $user_id)->exists()){
+                $address_full=Address::where('user_id', $user_id)->first();
+            }else{
+                echo 'Your autoidentification form update has been updated successfully';
+                return back();
+            }
             if (Seller::where('user_id', $user_id)->exists()) {
                 $seller = Seller::where('user_id', $user_id)->first();
             }
-            // $seller=Seller::findOrFail($user_id);
-            //   dd($seller);
+           else{
+               echo 'your data is incomplete, try again';
+               return back();
+           }
             $data = array();
             $i = 0;
             foreach (json_decode(BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element) {
@@ -181,9 +197,23 @@ class SellerAutoidentificationFormController extends Controller
             }
             $seller->verification_info = json_encode($data);
             // dd($seller->verification_info[0]);
+
+            $address_full->user_id=$user_id;
+            $address_full->address=$request->fiziceskij_adres_vendora;
+            $address_full->city_id=$request->city_id;
+            $address_full->region_id=$request->region_id;
+            $address_full->postal_code=$request->poctovyj_indeks;
+            $address_full->phone=$request->tel_direktora;
+            $address_full->set_default=0;
+            $address_full->longitude=$request->longitude;
+            $address_full->latitude=$request->latitude;
+
             if ($seller->save()) {
-                flash(translate('Your autoidentification form update has been updated successfully!'))->success();
-                return back();
+                if ($address_full->save()) {
+                        flash(translate('Your autoidentification form update has been updated successfully!'))->success();
+                        return back();
+                }
+
             }
         }
    }

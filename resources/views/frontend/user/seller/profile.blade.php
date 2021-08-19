@@ -224,27 +224,33 @@
                                                 <option value="0">{{ translate('All countries') }}</option>
 
                                                 {{-- <option value="{{$country->id}}">{{$country->name}}</option> --}}
-                                                @foreach ($countrys as $data)
-                                                        <option value="{{$data->id}}">
-                                                            {{$data->name}}
-
-                                                        </option>
-                                                @endforeach
+                                                @foreach (App\Country::where('status', 1)->get() as $data)
+                                                    <option @if(App\Country::where('code', 'UZ')->first()->id==$data->id) selected @endif value="{{$data->id}}">
+                                                        {{$data->getTranslation('name')}}
+                                                    </option>
+                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class=" col-lg-3" style="display:inline-block">
                                             <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
                                             id="state_dd" name="region_id" >
-                                                {{-- <option value="0">{{ translate('All regions') }}</option> --}}
+                                            @foreach($regions as $data)
 
-
+                                                <option @if($selected_region->id==$data->id) selected @endif value="{{$data->id}}">
+                                                    {{$data->getTranslation('name')}}
+                                                </option>
+                                            @endforeach
                                             </select>
                                         </div>
                                         <div class="col-lg-3" style="display:inline-block">
                                             <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
                                             id="city_dd"  name="city_id" >
                                                 {{-- <option value="0">{{ translate('All citys') }}</option> --}}
-
+                                                @foreach ($cities as $data)
+                                                <option @if($selected_city->id==$data->id) selected @endif value="{{$data->id}}">
+                                                    {{$data->getTranslation('name')}}
+                                                </option>
+                                                @endforeach
 
                                             </select>
                                         </div>
@@ -362,9 +368,9 @@
                                 </div>
                                 <div class="col-md-10">
                                     <select class="mb-3 form-control aiz-selectpicker" data-live-search="true" name="city" required>
-                                        @foreach (\App\City::get() as $key => $city)
+                                        {{-- @foreach (\App\City::get() as $key => $city)
                                             <option value="{{ $city->name }}">{{ $city->getTranslation('name') }}</option>
-                                        @endforeach
+                                        @endforeach --}}
                                     </select>
                                 </div>
                             </div>
@@ -408,60 +414,61 @@
 
 @section('script')
     <script type="text/javascript">
-        function add_new_address(){
-            $('#new-address-modal').modal('show');
-        }
+        // function add_new_address(){
+        //     $('#new-address-modal').modal('show');
+        // }
 
-        $('.new-email-verification').on('click', function() {
-            $(this).find('.loading').removeClass('d-none');
-            $(this).find('.default').addClass('d-none');
-            var email = $("input[name=email]").val();
+        // $('.new-email-verification').on('click', function() {
+        //     $(this).find('.loading').removeClass('d-none');
+        //     $(this).find('.default').addClass('d-none');
+        //     var email = $("input[name=email]").val();
 
-            $.post('{{ route('user.new.verify') }}', {_token:'{{ csrf_token() }}', email: email}, function(data){
-                data = JSON.parse(data);
-                $('.default').removeClass('d-none');
-                $('.loading').addClass('d-none');
-                if(data.status == 2)
-                    AIZ.plugins.notify('warning', data.message);
-                else if(data.status == 1)
-                    AIZ.plugins.notify('success', data.message);
-                else
-                    AIZ.plugins.notify('danger', data.message);
-            });
-        });
+        //     $.post('{{ route('user.new.verify') }}', {_token:'{{ csrf_token() }}', email: email}, function(data){
+        //         data = JSON.parse(data);
+        //         $('.default').removeClass('d-none');
+        //         $('.loading').addClass('d-none');
+        //         if(data.status == 2)
+        //             AIZ.plugins.notify('warning', data.message);
+        //         else if(data.status == 1)
+        //             AIZ.plugins.notify('success', data.message);
+        //         else
+        //             AIZ.plugins.notify('danger', data.message);
+        //     });
+        // });
 
-        function initialize() {
+        // function initialize() {
 
-            var map_canvas = document.getElementById('map_canvas');
+        //     var map_canvas = document.getElementById('map_canvas');
 
-            // Initialise the map
-            var map_options = {
-                center: location,
-                zoom: 10,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            }
-            var map = new google.maps.Map(map_canvas, map_options)
+        //     // Initialise the map
+        //     var map_options = {
+        //         center: location,
+        //         zoom: 10,
+        //         mapTypeId: google.maps.MapTypeId.ROADMAP
+        //     }
+        //     var map = new google.maps.Map(map_canvas, map_options)
 
-            // Put all locations into array
-            var locations = [
-                @foreach($addresses as $location)
-                    [ {{ $location->latitude }}, {{ $location->longitude }} ]
-                @endforeach
+        //     // Put all locations into array
+        //     var locations = [
+        //         foreach($addresses as $location)
+        //             [  $location->latitude ,  $location->longitude  ]
+        //         endforeach
 
-            ];
+        //     ];
 
-            for (i = 0; i < locations.length; i++) {
-                var location = new google.maps.LatLng(locations[i][0], locations[i][1]);
-                var marker = new google.maps.Marker({
-                    position: location,
-                    map: map,
-                });
-            }
+        //     for (i = 0; i < locations.length; i++) {
+        //         var location = new google.maps.LatLng(locations[i][0], locations[i][1]);
+        //         var marker = new google.maps.Marker({
+        //             position: location,
+        //             map: map,
+        //         });
+        //     }
 
-            marker.setMap(map); // Probably not necessary since you set the map above
+        //     marker.setMap(map); // Probably not necessary since you set the map above
 
-        }
+        // }
     </script>
+
     <script type="text/javascript">
         $(document).ready(function () {
             $('#country_dd').on('change', function () {
@@ -487,6 +494,7 @@
                 var address=this.options[this.selectedIndex].text;
                 setAddressGeo(address, 5);
             });
+
             $('#state_dd').on('change', function () {
                 var idState = this.value;
                 $("#city_dd").html('');
@@ -515,7 +523,7 @@
                 var address=this.options[this.selectedIndex].text;
                 setAddressGeo(address, 11);
             });
-
+            // setAddressGeo('{{$selected_city->name}}', 11);
         });
 
         var geocoder;
@@ -530,7 +538,7 @@
           geocoder = new google.maps.Geocoder();
           map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
         //   codeAddress();
-          setAddressGeo('toshkent');
+          setAddressGeo('{{$selected_city->name}}', 11);
         }
 
 
@@ -559,6 +567,11 @@
                 alert('Geocode was not successful for the following reason: ' + status);
                 }
             });
+        }
+
+        function city_selected(){
+            var address=$('#city_dd').options[$('#city_dd').selectedIndex].text;
+            setAddressGeo(address, 11);
         }
     </script>
 
