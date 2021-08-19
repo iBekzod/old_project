@@ -79,7 +79,7 @@
                                         <select class="form-control aiz-selectpicker" name="delivery_type">
                                             {{-- <option value="no">{{translate('Selected value')}}</option> --}}
                                             <option value="free" >{{ translate('Free') }}</option>
-                                            <option value="seller">{{ translate('Tarif') }}</option>
+                                            <option value="tarif">{{ translate('Tarif') }}</option>
                                             {{-- <option value="tinfis" selected>{{ translate('TINFIS Cargo') }}</option> --}}
                                         </select>
                                     </td>
@@ -186,7 +186,7 @@
                                             <td>
                                                 <select class="form-control aiz-selectpicker discount_type_change"
                                                     name="variation[{{ $index }}][discount_type]">
-                                                    <option value="amount">{{ translate('Flat') }}</option>
+                                                    <option value="amount" >{{ translate('Flat') }}</option>
                                                     <option value="percent" selected>{{ translate('Percent') }}</option>
                                                 </select>
                                             </td>
@@ -194,7 +194,7 @@
                                                 <select class="form-control aiz-selectpicker delivery_type_change"
                                                     name="variation[{{ $index }}][delivery_type]">
                                                     <option value="free" >{{ translate('Free') }}</option>
-                                                    <option value="seller">{{ translate('Tarif') }}</option>
+                                                    <option value="tarif">{{ translate('Tarif') }}</option>
                                                     {{-- <option value="tinfis" selected>{{ translate('TINFIS Cargo') }}</option> --}}
                                                 </select>
                                             </td>
@@ -290,15 +290,15 @@
                                             <td>
                                                 <select class="form-control aiz-selectpicker discount_type_change"
                                                         name="variation[{{ $index }}][discount_type]">
-                                                    <option value="amount">{{translate('Flat')}}</option>
-                                                    <option value="percent" selected>{{translate('Percent')}}</option>
+                                                    <option value="amount" @if($combination->variant->discount_type=='amount') selected @endif  >{{translate('Flat')}}</option>
+                                                    <option value="percent" @if($combination->variant->discount_type=='percent') selected @endif >{{translate('Percent')}}</option>
                                                 </select>
                                             </td>
                                             <td>
                                                 <select class="form-control aiz-selectpicker delivery_type_change"
                                                         name="variation[{{ $index }}][delivery_type]">
-                                                        <option value="free" selected>{{translate('Free')}}</option>
-                                                        <option value="seller">{{translate('Tarif')}}</option>
+                                                        <option value="free"   @if($combination->variant->delivery_type=='free') selected @endif >{{translate('Free')}}</option>
+                                                        <option value="tarif"   @if($combination->variant->delivery_type=='tarif') selected @endif >{{translate('Tarif')}}</option>
                                                         {{-- <option value="tinfis">{{translate('TINFIS Cargo')}}</option> --}}
                                                 </select>
                                             </td>
@@ -310,8 +310,8 @@
                                             <td>
                                                 <select class="form-control aiz-selectpicker tax_type_change"
                                                         name="variation[{{ $index }}][tax_type]">
-                                                    <option value="amount">{{translate('Flat')}}</option>
-                                                    <option value="percent" selected>{{translate('Percent')}}</option>
+                                                    <option value="amount"  @if($combination->variant->tax_type=='amount') selected @endif>{{translate('Flat')}}</option>
+                                                    <option value="percent" @if($combination->variant->tax_type=='percent') selected @endif>{{translate('Percent')}}</option>
                                                 </select>
                                             </td>
                                             <td>

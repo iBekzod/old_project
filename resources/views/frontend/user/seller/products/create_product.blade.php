@@ -179,7 +179,7 @@
                                                 <select class="form-control aiz-selectpicker delivery_type_change"
                                                     name="variation[{{ $index }}][delivery_type]">
                                                     <option value="free" selected>{{ translate('Free') }}</option>
-                                                    <option value="seller">{{ translate('Tarif') }}</option>
+                                                    <option value="tarif">{{ translate('Tarif') }}</option>
                                                     {{-- <option value="tinfis">{{ translate('TINFIS Cargo') }}</option> --}}
                                                 </select>
                                             </td>
