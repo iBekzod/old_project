@@ -1442,7 +1442,7 @@ function calculateDeliveryCost($product, $address_id, $delivery_type='tarif'){
         'days'=>$days,
         'express_cost'=>$express_cost,
         'express_hours'=>$express_hours,
-        'has_express_delivery'=>$has_express_delivery
+        'has_express_delivery'=>true//$has_express_delivery
     ];
 }
 
