@@ -288,8 +288,8 @@
                                             <td>
                                                 <select class="form-control aiz-selectpicker discount_type_change"
                                                         name="variation[{{ $index }}][discount_type]">
-                                                    <option value="amount"  @if($seller_product->discount_type=='amount') selected @endif >{{translate('Flat')}}</option>
-                                                    <option value="percent"   @if($seller_product->discount_type=='percent') selected @endif >{{translate('Percent')}}</option>
+                                                    <option value="amount"  @if($combination->variant->discount_type=='amount') selected @endif >{{translate('Flat')}}</option>
+                                                    <option value="percent"   @if($combination->variant->discount_type=='percent') selected @endif >{{translate('Percent')}}</option>
                                                 </select>
                                             </td>
                                             <td>

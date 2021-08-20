@@ -113,6 +113,9 @@
                                         <div class="col-lg-8">
                                             <span class="text-muted">{{  ($product->variation)?$product->variation->getTranslation('name'):null}}</span>
                                         </div>
+                                        @if($product->on_moderation)
+                                            <span class="badge badge-pill badge-info">{{translate('new')}}</span>
+                                        @endif
                                     </div>
                                 </a>
                             </td>

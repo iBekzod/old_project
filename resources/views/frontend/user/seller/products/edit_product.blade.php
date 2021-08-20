@@ -370,14 +370,18 @@
         }
 
         function change_selection(value, class_name) {
-
             document.querySelectorAll("." + class_name).forEach(el => {
-                console.log(el)
-                // if(el.value === value){
-                //     el.selected = true
-                // } else {
-                //     el.seleted = false
-                // }
+                console.log(el);
+                if(el.text == value){
+                    if(!el.hasAttribute('selected')){
+                        el.setAttribute('selected', '');
+                    }
+                    // el.selected = true
+                } else {
+                    el.removeAttribute("selected");
+                    // el.selected = false;
+                }
+                // el.onchange();
             })
         }
 
