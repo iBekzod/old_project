@@ -260,8 +260,12 @@ class OrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function order_customer(){
+        return view('emails.my_invoice');
+    }
     public function store(Request $request)
     {
+
         $order = new Order;
         if(Auth::check()){
             $order->user_id = Auth::user()->id;
@@ -454,6 +458,7 @@ class OrderController extends Controller
     public function destroy($id)
     {
         $order = Order::findOrFail($id);
+        dd($order);
         if($order != null){
             foreach($order->orderDetails as $key => $orderDetail){
                 try {
@@ -462,12 +467,14 @@ class OrderController extends Controller
                         if($product_stock != null){
                             $product_stock->qty += $orderDetail->quantity;
                             $product_stock->save();
+                            dd($product_stock);
                         }
                     }
                     else {
                         $product = $orderDetail->product;
                         $product->current_stock += $orderDetail->quantity;
                         $product->save();
+                        dd($product);
                     }
                 } catch (\Exception $e) {
 
