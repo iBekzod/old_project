@@ -1352,7 +1352,7 @@ function calculateDeliveryCost($product, $address_id, $delivery_type='tarif'){
             }else{
                 $delivery_metrics=DeliveryTarif::where('name', $seller_address->city->type)->where('user_id', $seller->id)->first();
             }
-            if($delivery_metrics){
+            if($delivery_metrics==null){
                 $delivery_metrics=DeliveryTarif::where('name', $seller_address->city->type)->first();
             }
 
@@ -1414,12 +1414,13 @@ function calculateDeliveryCost($product, $address_id, $delivery_type='tarif'){
             $total_express_cost=0;
             $has_express_delivery=false;
         }
+
         if($delivery_type=='free'){
             $total_delivery_cost=0;
-            $total_express_cost=0;
-            $total_weight_cost=0;
+            // $total_express_cost=0;
+            // $total_weight_cost=0;
             $delivery_cost=0;
-            $has_express_delivery=false;
+            // $has_express_delivery=false;
         }
 
         if(!($seller_address->city->has_express && $client_address->city->has_express)){
