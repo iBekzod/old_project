@@ -1336,7 +1336,7 @@ function calculateDeliveryCost($product, $address_id, $delivery_type='tarif'){
     $is_outside=true;
     $inline_cost=0;
     $admin=getAdmin();
-    $addditional_days=0;
+    $additional_days=0;
     $has_express_delivery=true;
     $total_delivery_cost=0;
     $total_express_cost=0;
@@ -1410,7 +1410,7 @@ function calculateDeliveryCost($product, $address_id, $delivery_type='tarif'){
         $total_weight_cost=calculateWeightCost($product, $weight_price);
         $total_delivery_cost=(double)($delivery_cost+$total_weight_cost);
         $total_express_cost=(double)($express_cost+$total_weight_cost);
-        if(((int)($addditional_days))>0){
+        if(((int)($additional_days))>0){
             $days+=$addditional_days;
             $total_express_cost=0;
             $has_express_delivery=false;
@@ -1442,7 +1442,7 @@ function calculateDeliveryCost($product, $address_id, $delivery_type='tarif'){
         'days'=>$days,
         'express_cost'=>$express_cost,
         'express_hours'=>$express_hours,
-        'has_express_delivery'=>true//$has_express_delivery
+        'has_express_delivery'=>$has_express_delivery
     ];
 }
 
