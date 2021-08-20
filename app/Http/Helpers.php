@@ -1347,16 +1347,20 @@ function calculateDeliveryCost($product, $address_id, $delivery_type='tarif'){
         $client_address=Address::where('id', $address_id)->first();
         if($seller_address->city->id == $client_address->city->id){
             //1 - holat = price
-            if($delivery_type=='tarif'){
-                $delivery_metrics=DeliveryTarif::where('name', $seller_address->city->type)->where('user_id', $admin->id)->first();
-            }else{
-                $delivery_metrics=DeliveryTarif::where('name', $seller_address->city->type)->where('user_id', $seller->id)->first();
-            }
-            if($delivery_metrics==null){
-                $delivery_metrics=DeliveryTarif::where('name', $seller_address->city->type)->first();
-            }
+            // if($delivery_type=='tarif'){
+            //     $delivery_metrics=DeliveryTarif::where('name', $seller_address->city->type)->where('user_id', $admin->id)->first();
+            // }
+            // else{
+            //     $delivery_metrics=DeliveryTarif::where('name', $seller_address->city->type)->where('user_id', $seller->id)->first();
+            // }
+            // if($delivery_metrics==null){
+            $delivery_metrics=DeliveryTarif::where('name', $seller_address->city->type)->first();
+            // }
 
             $inline_cost=$seller_address->city->inside_price;
+            if($inline_cost==0){
+                $inline_cost = $delivery_metrics->distance_price;
+            }
             $is_outside=false;
         }else{
             if($seller_address->region->id==$client_address->region->id){
@@ -1390,16 +1394,13 @@ function calculateDeliveryCost($product, $address_id, $delivery_type='tarif'){
                 $delivery_metrics=DeliveryPrice::orderBy('distance', 'asc')->where('distance', '>', $all_distance)->first();
             }
         }
-        if($delivery_metrics && $is_outside){
+        if($delivery_metrics && $is_outside && $all_distance!=0){
             $weight_price=$delivery_metrics->weight_price;
             $delivery_cost = $delivery_metrics->distance_price*$all_distance;
             $express_cost = $delivery_cost*(100+((double)$delivery_metrics->express_percent))/100;
             $days=$delivery_metrics->days;
             $express_hours=(double)$delivery_metrics->express_hours;
         }else if($delivery_metrics && !$is_outside){
-            if($inline_cost==0){
-                $inline_cost = $delivery_metrics->distance_price;
-            }
             $weight_price=$delivery_metrics->weight_price;
             $delivery_cost = $inline_cost;
             $express_cost = $delivery_cost*(100+((double)$delivery_metrics->express_percent))/100;
