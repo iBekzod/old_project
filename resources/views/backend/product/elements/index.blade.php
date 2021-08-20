@@ -126,6 +126,9 @@
                                         <span class="text-muted">{{ $element->getTranslation('name') }}</span>
                                         {{-- <span class="text-muted">{{ $element->name }}</span> --}}
                                     </div>
+                                    @if($element->on_moderation)
+                                        <span class="badge badge-pill badge-info">{{translate('new')}}</span>
+                                    @endif
                                 </div>
                             </td>
                             {{-- <td>{!! strip_tags($element->getTranslation('description')) !!}</td> --}}
