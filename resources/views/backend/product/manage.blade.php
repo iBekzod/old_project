@@ -46,6 +46,9 @@
                             <a href="{{ url('single_product/'.$product->slug) }}" target="_blank">
                                 <div class="form-group row">
                                     <div class="col-lg-4">
+                                        @if($product->on_moderation)
+                                            <span class="badge badge-pill badge-info"> </span>
+                                        @endif
                                         <img src="{{ ($product->variation)?uploaded_asset($product->variation->thumbnail_img)??static_asset('assets/img/placeholder.jpg'):static_asset('assets/img/placeholder.jpg')}}" alt=""
                                                 class="w-50px">
                                     </div>

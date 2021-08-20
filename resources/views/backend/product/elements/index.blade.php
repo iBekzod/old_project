@@ -119,6 +119,9 @@
                             <td>
                                 <div class="form-group row">
                                     <div class="col-lg-4">
+                                        @if($element->on_moderation)
+                                            <span class="badge badge-pill badge-info"> </span>
+                                        @endif
                                         <img src="{{ uploaded_asset($element->thumbnail_img) ?? static_asset('assets/img/placeholder.jpg') }}"
                                             alt="Image" class="w-50px">
                                     </div>
@@ -126,9 +129,6 @@
                                         <span class="text-muted">{{ $element->getTranslation('name') }}</span>
                                         {{-- <span class="text-muted">{{ $element->name }}</span> --}}
                                     </div>
-                                    @if($element->on_moderation)
-                                        <span class="badge badge-pill badge-info">{{translate('new')}}</span>
-                                    @endif
                                 </div>
                             </td>
                             {{-- <td>{!! strip_tags($element->getTranslation('description')) !!}</td> --}}

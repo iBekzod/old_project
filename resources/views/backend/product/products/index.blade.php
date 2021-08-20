@@ -110,12 +110,17 @@
                                             <img src="{{ ($product->variation)?uploaded_asset($product->variation->thumbnail_img)??static_asset('assets/img/placeholder.jpg'):null}}" alt="Image"
                                                     class="w-50px">
                                         </div>
-                                        <div class="col-lg-8">
+                                        <div class="col-lg-6">
                                             <span class="text-muted">{{  ($product->variation)?$product->variation->getTranslation('name'):null}}</span>
+
                                         </div>
-                                        @if($product->on_moderation)
-                                            <span class="badge badge-pill badge-info">{{translate('new')}}</span>
-                                        @endif
+
+                                        <div class="col-lg-2">
+                                            @if($product->on_moderation)
+                                                <span class="badge badge-pill badge-info">{{translate('new')}}</span>
+                                            @endif
+                                        </div>
+
                                     </div>
                                 </a>
                             </td>
