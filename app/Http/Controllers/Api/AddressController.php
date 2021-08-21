@@ -15,15 +15,25 @@ class AddressController extends Controller
 
     public function createShippingAddress(Request $request)
     {
-        $address = new Address;
-        $address->user_id = $request->user_id;
-        $address->address = $request->address;
-        $address->region_id = $request->region_id;
-        $address->city_id = $request->city_id;
-        $address->postal_code = $request->postal_code;
-        $address->phone = $request->phone;
-        $address->longitude = $request->longitude;
-        $address->latitude = $request->latitude;
+        if($request->has('city_id')){
+            $address = Address::firstOrNew(['user_id' => $request->user_id, 'city_id' => $request->city_id]);
+        }else if($request->has('address')){
+            $address = Address::firstOrNew(['user_id' => $request->user_id, 'address' => $request->address]);
+        }else if($request->has('longitude')){
+            $address = Address::firstOrNew(['user_id' => $request->user_id, 'longitude' => $request->longitude]);
+        }else{
+            $address = new Address;
+        }
+
+
+
+        $address->address = $request->address??'';
+        $address->region_id = $request->region_id??0;
+        $address->city_id = $request->city_id??0;
+        $address->postal_code = $request->postal_code??0;
+        $address->phone = $request->phone??auth()->user()->phone;
+        $address->longitude = $request->longitude??0;
+        $address->latitude = $request->latitude??0;
         $address->save();
 
         return response()->json([
