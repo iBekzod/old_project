@@ -879,11 +879,9 @@ class ProductController extends Controller
         $data = [];
         foreach ($products as $product) {
             $data[] = [
-                $product->id =>
-                [
+                    'id'=>$product->id ,
                     'quantity' => $product->qty,
                     'address' => $product->address
-                ]
             ];
         }
         return response()->json([
