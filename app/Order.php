@@ -64,4 +64,24 @@ class Order extends Model
     {
         return $this->belongsTo(PickupPoint::class);
     }
+
+    // public function seller()
+    // {
+    //     return $this->hasOne(Shop::class, 'user_id', 'seller_id');
+    // }
+
+    // public function affiliate_log()
+    // {
+    //     return $this->hasMany(AffiliateLog::class);
+    // }
+
+    // public function club_point()
+    // {
+    //     return $this->hasMany(ClubPoint::class);
+    // }
+
+    public function delivery_boy()
+    {
+        return $this->belongsTo(User::class, 'assign_delivery_boy', 'id');
+    }
 }

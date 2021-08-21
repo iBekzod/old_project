@@ -423,3 +423,5 @@ Route::get('/{slug}', 'PageController@show_custom_page')->name('custom-pages.sho
 Route::get('map', 'Test\MapController@index');
 // Route::get('/return_back', 'HomeController@return_back')->name('return_back');
 Route::get('resolve-dependencies','ResolveDependenciesController@resolveDependencyManually');
+
+Route::post('/get-city', 'CityController@get_city')->name('get-city');

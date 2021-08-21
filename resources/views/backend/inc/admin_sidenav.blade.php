@@ -258,6 +258,45 @@
                     </ul>
                 </li>
 
+
+                <!-- Deliver Boy Addon-->
+                {{-- @if (\App\Addon::where('unique_identifier', 'delivery_boy')->first() != null && \App\Addon::where('unique_identifier', 'delivery_boy')->first()->activated) --}}
+                    @if(Auth::user()->user_type == 'admin' || in_array('1', json_decode(Auth::user()->staff->role->permissions)))
+                        <li class="aiz-side-nav-item">
+                            <a href="#" class="aiz-side-nav-link">
+                                <i class="las la-truck aiz-side-nav-icon"></i>
+                                <span class="aiz-side-nav-text">{{translate('Delivery Boy')}}</span>
+                                @if (env("DEMO_MODE") == "On")
+                                    <span class="badge badge-inline badge-danger">Addon</span>
+                                @endif
+                                <span class="aiz-side-nav-arrow"></span>
+                            </a>
+                            <ul class="aiz-side-nav-list level-2">
+                                <li class="aiz-side-nav-item">
+                                    <a href="{{route('delivery-boys.index')}}" class="aiz-side-nav-link {{ areActiveRoutes(['delivery-boys.index'])}}">
+                                        <span class="aiz-side-nav-text">{{translate('All Delivery Boy')}}</span>
+                                    </a>
+                                </li>
+                                <li class="aiz-side-nav-item">
+                                    <a href="{{route('delivery-boys.create')}}" class="aiz-side-nav-link {{ areActiveRoutes(['delivery-boys.create'])}}">
+                                        <span class="aiz-side-nav-text">{{translate('Add Delivery Boy')}}</span>
+                                    </a>
+                                </li>
+                                <li class="aiz-side-nav-item">
+                                    <a href="{{route('delivery-boy.cancel-request')}}" class="aiz-side-nav-link {{ areActiveRoutes(['delivery-boy.cancel-request'])}}">
+                                        <span class="aiz-side-nav-text">{{translate('Cancel Request')}}</span>
+                                    </a>
+                                </li>
+                                <li class="aiz-side-nav-item">
+                                    <a href="{{route('delivery-boy-configuration')}}" class="aiz-side-nav-link">
+                                        <span class="aiz-side-nav-text">{{translate('Configuration')}}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endif
+                {{-- @endif --}}
+
                 <!-- Refund addon -->
                 @if ($refund_request != null && $refund_request->activated)
                     @if(Auth::user()->user_type == 'admin' || in_array('7', json_decode(Auth::user()->staff->role->permissions)))
