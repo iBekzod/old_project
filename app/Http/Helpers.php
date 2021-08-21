@@ -1384,29 +1384,24 @@ function calculateDeliveryCost($product, $address_id, $delivery_type='tarif'){
                     $all_distance=$seller_address->city->distance + 100 + $client_address->city->distance;
                 }
             }
-
-            if($delivery_type=='tarif'){
+            // if($delivery_type=='tarif'){
                 $delivery_metrics=DeliveryPrice::orderBy('distance', 'asc')->where('user_id', $admin->id)->where('distance', '>', $all_distance)->first();
-            }else{
-                $delivery_metrics=DeliveryPrice::orderBy('distance', 'asc')->where('user_id', $seller->id)->where('distance', '>', $all_distance)->first();
-            }
+            // }else{
+            //     $delivery_metrics=DeliveryPrice::orderBy('distance', 'asc')->where('user_id', $seller->id)->where('distance', '>', $all_distance)->first();
+            // }
             if($delivery_metrics){
                 $delivery_metrics=DeliveryPrice::orderBy('distance', 'asc')->where('distance', '>', $all_distance)->first();
             }
         }
         if($delivery_metrics && $is_outside && $all_distance!=0){
-            $weight_price=$delivery_metrics->weight_price;
             $delivery_cost = $delivery_metrics->distance_price*$all_distance;
-            $express_cost = $delivery_cost*(100+((double)$delivery_metrics->express_percent))/100;
-            $days=$delivery_metrics->days;
-            $express_hours=(double)$delivery_metrics->express_hours;
         }else if($delivery_metrics && !$is_outside){
-            $weight_price=$delivery_metrics->weight_price;
             $delivery_cost = $inline_cost;
-            $express_cost = $delivery_cost*(100+((double)$delivery_metrics->express_percent))/100;
-            $days=$delivery_metrics->days;
-            $express_hours=(double)$delivery_metrics->express_hours;
         }
+        $weight_price=$delivery_metrics->weight_price;
+        $express_cost = $delivery_cost*(100+((double)$delivery_metrics->express_percent))/100;
+        $days=$delivery_metrics->days;
+        $express_hours=(double)$delivery_metrics->express_hours;
         $total_weight_cost=calculateWeightCost($product, $weight_price);
         $total_delivery_cost=(double)($delivery_cost+$total_weight_cost);
         $total_express_cost=(double)($express_cost+$total_weight_cost);
