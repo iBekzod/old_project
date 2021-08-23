@@ -968,11 +968,11 @@
                                     <span class="aiz-side-nav-text">{{translate('All Delivery Boy')}}</span>
                                 </a>
                             </li>
-                            <li class="aiz-side-nav-item">
+                            {{-- <li class="aiz-side-nav-item">
                                 <a href="{{route('delivery-boys.create')}}" class="aiz-side-nav-link {{ areActiveRoutes(['delivery-boys.create'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Add Delivery Boy')}}</span>
                                 </a>
-                            </li>
+                            </li> --}}
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('delivery-boy.cancel-request')}}" class="aiz-side-nav-link {{ areActiveRoutes(['delivery-boy.cancel-request'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Cancel Request')}}</span>
