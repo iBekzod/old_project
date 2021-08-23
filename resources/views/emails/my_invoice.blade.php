@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Invoys forma</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="index.css">
     <style>
         .wrap{
             padding-top: 1rem;
@@ -21,7 +22,7 @@
 <body>
 <div class="container-fluid">
     <div class="wrapper">
-        <img style="width: 15%" src="img/LogoTinfi.png" alt="">
+        <img style="width: 15%" src="{{ static_asset('assets/img/LogoTinfi.png') }}" alt="">
         <div class="row wrap">
             <div class="col-md-8">
                 <h6 class="text-black-50">Инвойс: №</h6>
