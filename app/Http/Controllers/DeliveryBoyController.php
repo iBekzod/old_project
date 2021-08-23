@@ -22,7 +22,7 @@ class DeliveryBoyController extends Controller
     {
         $sort_search = null;
         $delivery_boys = DeliveryBoy::orderBy('created_at', 'desc');
-        
+
         if ($request->has('search')){
             $sort_search = $request->search;
             $user_ids = User::where('user_type', 'delivery_boy')->where(function($user) use ($sort_search){
@@ -33,7 +33,7 @@ class DeliveryBoyController extends Controller
                 $delivery_boy->whereIn('user_id', $user_ids);
             });
         }
-        
+
         $delivery_boys = $delivery_boys->paginate(15);
         return view('delivery_boys.index', compact('delivery_boys', 'sort_search'));
     }
@@ -45,7 +45,7 @@ class DeliveryBoyController extends Controller
      */
     public function create()
     {
-        $countries = Country::all();
+        $countries = Country::all()->where('status', 1);
         return view('delivery_boys.create', compact('countries'));
     }
 
@@ -69,12 +69,12 @@ class DeliveryBoyController extends Controller
         $user->email_verified_at    = date("Y-m-d H:i:s");
         $user->password             = Hash::make($request->password);
         $user->save();
-        
+
         $delivery_boy = new DeliveryBoy;
-        
+
         $delivery_boy->user_id = $user->id;
         $delivery_boy->save();
-        
+
         flash(translate('Delivery Boy has been created successfully'))->success();
         return redirect()->route('delivery-boys.index');
     }
@@ -98,9 +98,9 @@ class DeliveryBoyController extends Controller
      */
     public function edit($id)
     {
-        $countries = Country::all();
+        $countries = Country::all()->where('status', 1);
         $delivery_boy = User::findOrFail($id);
-        
+
         return view('delivery_boys.edit', compact('countries', 'delivery_boy'));
     }
 
@@ -114,7 +114,7 @@ class DeliveryBoyController extends Controller
     public function update(Request $request, $id)
     {
         $delivery_boy = User::findOrFail($id);
-        
+
         $delivery_boy->name = $request->name;
         $delivery_boy->email = $request->email;
         $delivery_boy->phone = $request->phone;
@@ -125,13 +125,13 @@ class DeliveryBoyController extends Controller
         if(strlen($request->password) > 0){
             $delivery_boy->password = Hash::make($request->password);
         }
-        
-        
+
+
         if($delivery_boy->save()){
             flash(translate('Delivery Boy has been updated successfully'))->success();
             return redirect()->route('delivery-boys.index');
         }
-        
+
 
         flash(translate('Something went wrong'))->error();
         return back();
@@ -147,10 +147,10 @@ class DeliveryBoyController extends Controller
     {
         //
     }
-    
+
     public function ban($id) {
         $delivery_boy = User::findOrFail($id);
-        
+
         if($delivery_boy->banned == 1) {
             $delivery_boy->banned = 0;
             flash(translate('Delivery Boy UnBanned Successfully'))->success();
@@ -163,7 +163,7 @@ class DeliveryBoyController extends Controller
 
         return back();
     }
-    
+
     /**
      * Delivery boy payout.
      *
@@ -173,11 +173,11 @@ class DeliveryBoyController extends Controller
         $delivery_boy_info = DeliveryBoy::with('user')
                 ->where('user_id', $request->id)
                 ->first();
-        
+
         return view('delivery_boys.order_collection_form', compact('delivery_boy_info'));
     }
-    
-    
+
+
     /**
      * Update the specified resource in storage.
      *
@@ -187,18 +187,18 @@ class DeliveryBoyController extends Controller
      */
     public function collection_from_delivery_boy(Request $request) {
         $delivery_boy = DeliveryBoy::where('user_id', $request->delivery_boy_id)->first();
-        
+
         $delivery_boy->total_collection -= $request->payout_amount;
-        
+
         if($delivery_boy->save()){
             flash(translate('Payout to Delivery Boy Successfully'))->success();
         } else {
             flash(translate('Something went wrong'))->error();
         }
-        
+
         return redirect()->route('delivery-boys.index');
     }
-    
+
     public function cancel_request_list() {
         $order_query = Order::query();
         if(Auth::user()->user_type == 'delivery_boy') {
@@ -206,14 +206,14 @@ class DeliveryBoyController extends Controller
         }
         $order_query = $order_query->where('delivery_status', '!=', 'cancelled')->where('cancel_request', 1);
         $order_query = $order_query->paginate(10);
-        
+
         $cancel_requests = $order_query;
         if(Auth::user()->user_type == 'delivery_boy') {
             return view('delivery_boys.frontend.cancel_request_list', compact('cancel_requests'));
         }
         return view('delivery_boys.cancel_request_list', compact('cancel_requests'));
     }
-    
+
     /**
      * Configuration of delivery boy.
      *
@@ -224,7 +224,7 @@ class DeliveryBoyController extends Controller
     {
         return view('delivery_boys.delivery_boy_configure');
     }
-    
+
     /**
      * Show the list of assigned delivery by the admin.
      *
@@ -240,10 +240,10 @@ class DeliveryBoyController extends Controller
 //        $assigned_deliveries = DeliveryHistory::where('delivery_boy_id', Auth::user()->id)
 //                ->where('delivery_status', 'pending')
 //                ->paginate(10);
-        
+
         return view('delivery_boys.frontend.assigned_delivery', compact('assigned_deliveries'));
     }
-    
+
     /**
      * Show the list of pickup delivery by the delivery boy.
      *
@@ -259,10 +259,10 @@ class DeliveryBoyController extends Controller
 //        $pickup_deliveries = DeliveryHistory::where('delivery_boy_id', Auth::user()->id)
 //                ->where('delivery_status', 'picked_up')
 //                ->paginate(10);
-        
+
         return view('delivery_boys.frontend.pickup_delivery', compact('pickup_deliveries'));
     }
-    
+
     /**
      * Show the list of pickup delivery by the delivery boy.
      *
@@ -278,10 +278,10 @@ class DeliveryBoyController extends Controller
 //        $on_the_way_deliveries = DeliveryHistory::where('delivery_boy_id', Auth::user()->id)
 //                ->where('delivery_status', 'on_the_way')
 //                ->paginate(10);
-        
+
         return view('delivery_boys.frontend.on_the_way_delivery', compact('on_the_way_deliveries'));
     }
-    
+
     /**
      * Show the list of completed delivery by the delivery boy.
      *
@@ -296,10 +296,10 @@ class DeliveryBoyController extends Controller
         $completed_deliveries = DeliveryHistory::where('delivery_boy_id', Auth::user()->id)
                 ->where('delivery_status', 'delivered')
                 ->paginate(10);
-        
+
         return view('delivery_boys.frontend.completed_delivery', compact('completed_deliveries'));
     }
-    
+
     /**
      * Show the list of pending delivery by the delivery boy.
      *
@@ -313,10 +313,10 @@ class DeliveryBoyController extends Controller
                 ->where('delivery_status', '!=', 'cancelled')
                 ->where('cancel_request', '0')
                 ->paginate(10);
-        
+
         return view('delivery_boys.frontend.pending_delivery', compact('pending_deliveries'));
     }
-    
+
     /**
      * Show the list of cancelled delivery by the delivery boy.
      *
@@ -328,10 +328,10 @@ class DeliveryBoyController extends Controller
         $completed_deliveries = Order::where('assign_delivery_boy', Auth::user()->id)
                 ->where('delivery_status', 'cancelled')
                 ->paginate(10);
-        
+
         return view('delivery_boys.frontend.cancelled_delivery', compact('completed_deliveries'));
     }
-    
+
     /**
      * Show the list of total collection by the delivery boy.
      *
@@ -344,10 +344,10 @@ class DeliveryBoyController extends Controller
                 ->where('delivery_status', 'delivered')
                 ->where('payment_type', 'cash_on_delivery')
                 ->paginate(10);
-        
+
         return view('delivery_boys.frontend.total_collection_list', compact('today_collections'));
     }
-    
+
     /**
      * Show the list of total earning by the delivery boy.
      *
@@ -359,21 +359,21 @@ class DeliveryBoyController extends Controller
         $total_earnings = DeliveryHistory::where('delivery_boy_id', Auth::user()->id)
                 ->where('delivery_status', 'delivered')
                 ->paginate(10);
-        
+
         return view('delivery_boys.frontend.total_earning_list', compact('total_earnings'));
     }
-    
+
     public function cancel_request($order_id) {
         $order = Order::findOrFail($order_id);
         $order->cancel_request = '1';
         $order->cancel_request_at = date("Y-m-d H:i:s");
         $order->save();
-        
+
         return back();
     }
-    
+
     /**
-     * For only delivery boy while changing delivery status. 
+     * For only delivery boy while changing delivery status.
      * Call from order controller
      *
      * @param  int  $id
@@ -381,14 +381,14 @@ class DeliveryBoyController extends Controller
      */
     public function store_delivery_history($order) {
         $delivery_history = new DeliveryHistory;
-        
+
         $delivery_history->order_id         = $order->id;
         $delivery_history->delivery_boy_id  = Auth::user()->id;
         $delivery_history->delivery_status  = $order->delivery_status;
         $delivery_history->payment_type     = $order->payment_type;
         if($order->delivery_status == 'delivered') {
             $delivery_boy = DeliveryBoy::where('user_id', Auth::user()->id)->first();
-            
+
             if(get_setting('delivery_boy_payment_type') == 'commission') {
                 $delivery_history->earning      = get_setting('delivery_boy_commission');
                 $delivery_boy->total_earning   += get_setting('delivery_boy_commission');
@@ -396,22 +396,22 @@ class DeliveryBoyController extends Controller
             if($order->payment_type == 'cash_on_delivery') {
                 $delivery_history->collection    = $order->grand_total;
                 $delivery_boy->total_collection += $order->grand_total;
-                
+
                 $order->payment_status           = 'paid';
                 if($order->commission_calculated == 0) {
                     commission_calculation($order);
                     $order->commission_calculated = 1;
                 }
-                
+
             }
-            
+
             $delivery_boy->save();
-            
+
         }
         $order->delivery_history_date = date("Y-m-d H:i:s");
-        
+
         $order->save();
         $delivery_history->save();
-        
+
     }
 }
