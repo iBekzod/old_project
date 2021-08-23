@@ -263,6 +263,21 @@ class OrderController extends Controller
     public function order_customer(){
         return view('emails.my_invoice');
     }
+
+    public function order_information(){
+        // $user_id= Auth::user()->id;
+        $user_id= auth()->id();
+        // dd($user_id);
+        if(Order::where('user_id', $user_id)->exists()){
+            $order=Order::where('user_id', $user_id)->first();
+        }
+        else{
+            $order=new Order;
+        }
+        // dd($order);
+      dd($order->orderDetails);
+
+    }
     public function store(Request $request)
     {
 

@@ -315,6 +315,7 @@ Route::group(['middleware' => ['auth']], function(){
 
 
     Route::get('test/order','OrderController@order_customer');
+    Route::get('test/order/information','OrderController@order_information');
 	Route::resource('orders','OrderController');
 	Route::get('/orders/destroy/{id}', 'OrderController@destroy')->name('orders.destroy');
 	Route::post('/orders/details', 'OrderController@order_details')->name('orders.details');
