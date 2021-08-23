@@ -1079,7 +1079,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                 var uppy = Uppy.Core({
                     autoProceed: true,
                     restrictions: {
-                        maxFileSize: 2048,
+                        maxFileSize: 1048576,
                     },
                 });
                 uppy.use(Uppy.Dashboard, {

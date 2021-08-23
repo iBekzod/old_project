@@ -79,7 +79,7 @@ class ProductSyncronizer extends Command
         // $this->info('Successfully changed');
 
         //Clean Products
-        $products=Product::withTrashed()->get();
+        $products=Product::where('added_by', 'admin')->withTrashed()->get();
         foreach($products as $product){
             $product->reviews()->delete();
             $product->wishlists()->delete();

@@ -39,9 +39,9 @@ class CityController extends Controller
             $search_text=$request->q;
             return new SearchCityCollection(City::where('name', 'like', '%'.$search_text.'%')->where('type', '<>','region')->orWhereHas('parent', function ($relation) use ($search_text) {
                 $relation->where('name', 'like', '%'.$search_text.'%');
-            })->paginate(10));
+            })->paginate(15));
         }
-        return new SearchCityCollection(City::where('is_selected', true)->where('type', '<>','region')->inRandomOrder()->paginate(10));
+        return new SearchCityCollection(City::where('is_selected', true)->where('type', '<>','region')->orderBy('name', 'asc')->paginate(15));
     }
 
     public function search(Request $request){

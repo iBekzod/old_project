@@ -110,7 +110,8 @@ class ProductDetailCollection extends ResourceCollection
         } catch (\Exception $th) {
             // dd($th->getMessage());
             // return null;
-            return ($th->getTrace());
+            return abort(404, 'not found');
+            // return ($th->getTrace());
         }
         return $data;
     }

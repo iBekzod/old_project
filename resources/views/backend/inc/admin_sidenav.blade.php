@@ -963,6 +963,26 @@
                                     <span class="aiz-side-nav-text">{{translate('Delivery tarifs')}}</span>
                                 </a>
                             </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('delivery-boys.index')}}" class="aiz-side-nav-link {{ areActiveRoutes(['delivery-boys.index'])}}">
+                                    <span class="aiz-side-nav-text">{{translate('All Delivery Boy')}}</span>
+                                </a>
+                            </li>
+                            {{-- <li class="aiz-side-nav-item">
+                                <a href="{{route('delivery-boys.create')}}" class="aiz-side-nav-link {{ areActiveRoutes(['delivery-boys.create'])}}">
+                                    <span class="aiz-side-nav-text">{{translate('Add Delivery Boy')}}</span>
+                                </a>
+                            </li> --}}
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('delivery-boy.cancel-request')}}" class="aiz-side-nav-link {{ areActiveRoutes(['delivery-boy.cancel-request'])}}">
+                                    <span class="aiz-side-nav-text">{{translate('Cancel Request')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('delivery-boy-configuration')}}" class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Configuration')}}</span>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 @endif

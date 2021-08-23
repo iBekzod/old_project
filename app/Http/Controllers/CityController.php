@@ -177,4 +177,19 @@ class CityController extends Controller
         flash(translate('City has been deleted successfully'))->success();
         return $this->index();
     }
+
+    public function get_city(Request $request) {
+        $country_info = Country::where('status',1)->where('name', $request->country_name)->first();
+
+        $cities = City::where('country_id', $country_info->id)->get();
+        $html = '';
+
+        foreach ($cities as $row) {
+//            $val = $row->id . ' | ' . $row->name;
+            $html .= '<option value="' . $row->name . '">' . $row->getTranslation('name') . '</option>';
+        }
+
+
+        echo json_encode($html);
+    }
 }
