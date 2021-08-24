@@ -31,4 +31,6 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
     //Messaging
     Route::get('/sms', 'SmsController@index')->name('sms.index');
     Route::post('/sms-send', 'SmsController@send')->name('sms.send');
+
+    Route::resource('/sms-templates','SmsTemplateController');
 });

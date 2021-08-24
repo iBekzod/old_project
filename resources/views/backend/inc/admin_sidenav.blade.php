@@ -741,6 +741,11 @@
                                                     </a>
                                                 </li>
                                                 <li class="aiz-side-nav-item">
+                                                    <a href="{{route('sms-templates.index')}}" class="aiz-side-nav-link">
+                                                        <span class="aiz-side-nav-text">{{translate('SMS Templates')}}</span>
+                                                    </a>
+                                                </li>
+                                                <li class="aiz-side-nav-item">
                                                     <a href="{{route('otp_credentials.index')}}" class="aiz-side-nav-link">
                                                         <span class="aiz-side-nav-text">{{translate('Set OTP Credentials')}}</span>
                                                     </a>
@@ -749,6 +754,8 @@
                                         </li>
                                     @endif
                                 @endif
+
+
 
                 @if($afr_pg != null && $afr_pg->activated)
                     @if(Auth::user()->user_type == 'admin' || in_array('19', json_decode(Auth::user()->staff->role->permissions)))
