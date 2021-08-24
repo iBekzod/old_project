@@ -42,7 +42,7 @@ use App\Order;
 
 //highlights the selected navigation on admin panel
 if (!function_exists('sendSMS')) {
-    function sendSMS($to, $from, $text)
+    function sendSMS($to, $from, $text, $template_id)
     {
         if (OtpConfiguration::where('type', 'nexmo')->first()->value == 1) {
             try {
