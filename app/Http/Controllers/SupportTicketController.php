@@ -186,6 +186,7 @@ class SupportTicketController extends Controller
         $ticket = Ticket::findOrFail(decrypt($id));
         $ticket->viewed = 1;
         $ticket->save();
+        // dd($ticket);
         return view('backend.support.support_tickets_seller.show', compact('ticket'));
     }
 

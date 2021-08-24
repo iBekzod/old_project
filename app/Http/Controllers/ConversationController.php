@@ -45,8 +45,8 @@ class ConversationController extends Controller
             // $conversations = Conversation::orderBy('created_at', 'desc')->get();
             // return view('backend.support.conversations.index', compact('conversations'));
 
-            $conversation=Conversation::latest()->paginate(15);
-        //    dd($conversation);
+            $conversations=Conversation::latest()->paginate(15);
+        //    dd($conversations);
 
         // $string = "Here is use big string of your paragraph or description.";
 
@@ -60,7 +60,7 @@ class ConversationController extends Controller
         // dd($string);
 
             // dd( Auth::user()->seller);
-            return view('backend.support.conversations.index')->with('conversations',$conversation);
+            return view('backend.support.conversations.index', compact('conversations'));
         }
         else {
             flash(translate('Conversation is disabled at this moment'))->warning();
@@ -232,7 +232,7 @@ class ConversationController extends Controller
     //             return back();
     //     }
     // }
-    
+
      public function destroy($id)
     {
         $conversation = Conversation::findOrFail(decrypt($id));

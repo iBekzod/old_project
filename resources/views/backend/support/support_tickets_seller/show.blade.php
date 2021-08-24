@@ -126,5 +126,7 @@
                 $('#ticket-reply-form').submit();
             }
         }
+
     </script>
 @endsection
+

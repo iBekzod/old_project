@@ -15,7 +15,6 @@
             </div>
         </div>
     </form>
-
      <div class="card-body">
         <table class="aiz-table" cellspacing="0" width="100%">
             <thead>
