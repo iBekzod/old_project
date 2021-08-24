@@ -2,6 +2,10 @@
 
 use App\Address;
 use App\Attribute;
+use App\Http\Controllers\ClubPointController;
+use App\Http\Controllers\AffiliateController;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\OrderNotification;
 use App\Currency;
 use App\BusinessSetting;
 use App\Category;
@@ -32,6 +36,9 @@ use App\SellerSetting;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\FirebaseNotification;
+use App\Wallet;
+use App\Order;
 
 //highlights the selected navigation on admin panel
 if (!function_exists('sendSMS')) {
@@ -127,14 +134,25 @@ if (!function_exists('sendSMS')) {
             if (strpos($to, '+91') !== false) {
                 $to = substr($to, 3);
             }
-
+            if (env("ROUTE") == 'dlt_manual') {
             $fields = array(
                 "sender_id" => env("SENDER_ID"),
                 "message" => $text,
+                "template_id" => $template_id,
+                "entity_id" => env("ENTITY_ID"),
                 "language" => env("LANGUAGE"),
                 "route" => env("ROUTE"),
                 "numbers" => $to,
             );
+        } else {
+            $fields = array(
+            "sender_id" => env("SENDER_ID"),
+            "message" => $text,
+            "language" => env("LANGUAGE"),
+            "route" => env("ROUTE"),
+            "numbers" => $to,
+            );
+            }
 
             $auth_key = env('AUTH_KEY');
 
@@ -1508,4 +1526,310 @@ if (!function_exists('getClientIp')) {
 function calculateProductClubPoint($id){
     $product = Product::findOrFail($id);
     return ((int)(homeBasePrice($product->id)*0.01/1000));
+}
+
+
+// duplicates m$ excel's ceiling function
+if (!function_exists('ceiling')) {
+    function ceiling($number, $significance = 1)
+    {
+        return (is_numeric($number) && is_numeric($significance)) ? (ceil($number / $significance) * $significance) : false;
+    }
+}
+
+if (!function_exists('get_images')) {
+    function get_images($given_ids, $with_trashed = false)
+    {
+        $ids = (is_array($given_ids)
+            ? $given_ids
+            : is_null($given_ids)) ? [] : explode(",", $given_ids);
+
+        return $with_trashed
+            ? Upload::withTrashed()->whereIn('id', $ids)->get()
+            : Upload::whereIn('id', $ids)->get();
+    }
+}
+
+//for api
+if (!function_exists('get_images_path')) {
+    function get_images_path($given_ids, $with_trashed = false)
+    {
+        $paths = [];
+        $images = get_images($given_ids, $with_trashed);
+        if (!$images->isEmpty()) {
+            foreach ($images as $image) {
+                $paths[] = !is_null($image) ? $image->file_name : "";
+            }
+        }
+
+        return $paths;
+
+    }
+}
+
+//for api
+if (!function_exists('checkout_done')) {
+    function checkout_done($order_id, $payment)
+    {
+        $order = Order::findOrFail($order_id);
+        $order->payment_status = 'paid';
+        $order->payment_details = $payment;
+        $order->save();
+
+        if (\App\Addon::where('unique_identifier', 'affiliate_system')->first() != null && \App\Addon::where('unique_identifier', 'affiliate_system')->first()->activated) {
+            $affiliateController = new AffiliateController;
+            $affiliateController->processAffiliatePoints($order);
+        }
+
+        if (\App\Addon::where('unique_identifier', 'club_point')->first() != null && \App\Addon::where('unique_identifier', 'club_point')->first()->activated) {
+            if (Auth::check()) {
+                $clubpointController = new ClubPointController;
+                $clubpointController->processClubPoints($order);
+            }
+        }
+        $vendor_commission_activation = true;
+        if (\App\Addon::where('unique_identifier', 'seller_subscription')->first() != null
+            && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated
+            && !get_setting('vendor_commission_activation')) {
+            $vendor_commission_activation = false;
+        }
+
+        if ($vendor_commission_activation) {
+            if (BusinessSetting::where('type', 'category_wise_commission')->first()->value != 1) {
+                $commission_percentage = BusinessSetting::where('type', 'vendor_commission')->first()->value;
+                foreach ($order->orderDetails as $key => $orderDetail) {
+                    $orderDetail->payment_status = 'paid';
+                    $orderDetail->save();
+                    if ($orderDetail->product->user->user_type == 'seller') {
+                        $seller = $orderDetail->product->user->seller;
+                        $seller->admin_to_pay = $seller->admin_to_pay + ($orderDetail->price * (100 - $commission_percentage)) / 100 + $orderDetail->tax + $orderDetail->shipping_cost;
+                        $seller->save();
+                    }
+                }
+            } else {
+                foreach ($order->orderDetails as $key => $orderDetail) {
+                    $orderDetail->payment_status = 'paid';
+                    $orderDetail->save();
+                    if ($orderDetail->product->user->user_type == 'seller') {
+                        $commission_percentage = $orderDetail->product->category->commision_rate;
+                        $seller = $orderDetail->product->user->seller;
+                        $seller->admin_to_pay = $seller->admin_to_pay + ($orderDetail->price * (100 - $commission_percentage)) / 100 + $orderDetail->tax + $orderDetail->shipping_cost;
+                        $seller->save();
+                    }
+                }
+            }
+        } else {
+            foreach ($order->orderDetails as $key => $orderDetail) {
+                $orderDetail->payment_status = 'paid';
+                $orderDetail->save();
+                if ($orderDetail->product->user->user_type == 'seller') {
+                    $seller = $orderDetail->product->user->seller;
+                    $seller->admin_to_pay = $seller->admin_to_pay + $orderDetail->price + $orderDetail->tax + $orderDetail->shipping_cost;
+                    $seller->save();
+                }
+            }
+        }
+
+        $order->commission_calculated = 1;
+        $order->save();
+    }
+}
+
+//for api
+if (!function_exists('wallet_payment_done')) {
+    function wallet_payment_done($user_id, $amount, $payment_method, $payment_details)
+    {
+        $user = \App\User::find($user_id);
+        $user->balance = $user->balance + $amount;
+        $user->save();
+
+        $wallet = new Wallet;
+        $wallet->user_id = $user->id;
+        $wallet->amount = $amount;
+        $wallet->payment_method = $payment_method;
+        $wallet->payment_details = $payment_details;
+        $wallet->save();
+
+    }
+}
+
+if (!function_exists('purchase_payment_done')) {
+    function purchase_payment_done($user_id, $package_id)
+    {
+        $user = User::findOrFail($user_id);
+        $user->customer_package_id = $package_id;
+        $customer_package = CustomerPackage::findOrFail($package_id);
+        $user->remaining_uploads += $customer_package->product_upload;
+        $user->save();
+
+        return 'success';
+
+    }
+}
+
+//Commission Calculation
+if (!function_exists('commission_calculation')) {
+    function commission_calculation($order)
+    {
+        $vendor_commission_activation = true;
+        if (\App\Addon::where('unique_identifier', 'seller_subscription')->first() != null
+            && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated
+            && !get_setting('vendor_commission_activation')) {
+            $vendor_commission_activation = false;
+        }
+
+        if ($vendor_commission_activation) {
+            if ($order->payment_type == 'cash_on_delivery') {
+                foreach ($order->orderDetails as $key => $orderDetail) {
+                    $orderDetail->payment_status = 'paid';
+                    $orderDetail->save();
+                    $commission_percentage = 0;
+                    if (get_setting('category_wise_commission') != 1) {
+                        $commission_percentage = get_setting('vendor_commission');
+                    } else if ($orderDetail->product->user->user_type == 'seller') {
+                        $commission_percentage = $orderDetail->product->category->commision_rate;
+                    }
+                    if ($orderDetail->product->user->user_type == 'seller') {
+                        $seller = $orderDetail->product->user->seller;
+                        $admin_commission = ($orderDetail->price * $commission_percentage) / 100;
+
+                        if (get_setting('product_manage_by_admin') == 1) {
+                            $seller_earning = ($orderDetail->tax + $orderDetail->price) - $admin_commission;
+                            $seller->admin_to_pay += $seller_earning;
+                        } else {
+                            $seller_earning = ($orderDetail->tax + $orderDetail->shipping_cost + $orderDetail->price) - $admin_commission;
+                            $seller->admin_to_pay += $seller_earning;
+                        }
+
+                        $seller->save();
+
+                        $commission_history = new CommissionHistory;
+                        $commission_history->order_id = $order->id;
+                        $commission_history->order_detail_id = $orderDetail->id;
+                        $commission_history->seller_id = $orderDetail->seller_id;
+                        $commission_history->admin_commission = $admin_commission;
+                        $commission_history->seller_earning = $seller_earning;
+
+                        $commission_history->save();
+                    }
+                }
+            } elseif ($order->manual_payment) {
+                foreach ($order->orderDetails as $key => $orderDetail) {
+                    $orderDetail->payment_status = 'paid';
+                    $orderDetail->save();
+                    $commission_percentage = 0;
+                    if (get_setting('category_wise_commission') != 1) {
+                        $commission_percentage = BusinessSetting::where('type', 'vendor_commission')->first()->value;
+                    } else if ($orderDetail->product->user->user_type == 'seller') {
+                        $commission_percentage = $orderDetail->product->category->commision_rate;
+                    }
+                    if ($orderDetail->product->user->user_type == 'seller') {
+                        $seller = $orderDetail->product->user->seller;
+                        $admin_commission = ($orderDetail->price * $commission_percentage) / 100;
+
+                        if (get_setting('product_manage_by_admin') == 1) {
+                            $seller_earning = ($orderDetail->tax + $orderDetail->price) - $admin_commission;
+                            $seller->admin_to_pay += $seller_earning;
+                        } else {
+                            $seller_earning = ($orderDetail->tax + $orderDetail->shipping_cost + $orderDetail->price) - $admin_commission;
+                            $seller->admin_to_pay += $seller_earning;
+                        }
+
+                        $seller->save();
+
+                        $commission_history = new CommissionHistory;
+                        $commission_history->order_id = $order->id;
+                        $commission_history->order_detail_id = $orderDetail->id;
+                        $commission_history->seller_id = $orderDetail->seller_id;
+                        $commission_history->admin_commission = $admin_commission;
+                        $commission_history->seller_earning = $seller_earning;
+
+                        $commission_history->save();
+                    }
+                }
+            }
+        }
+
+        if (\App\Addon::where('unique_identifier', 'affiliate_system')->first() != null && \App\Addon::where('unique_identifier', 'affiliate_system')->first()->activated) {
+            $affiliateController = new AffiliateController;
+            $affiliateController->processAffiliatePoints($order);
+        }
+
+        if (\App\Addon::where('unique_identifier', 'club_point')->first() != null && \App\Addon::where('unique_identifier', 'club_point')->first()->activated) {
+            if ($order->user != null) {
+                $clubpointController = new ClubPointController;
+                $clubpointController->processClubPoints($order);
+            }
+        }
+    }
+}
+
+//Send Notification
+if (!function_exists('send_notification')) {
+    function send_notification($order, $order_status)
+    {
+        if ($order->seller_id == \App\User::where('user_type', 'admin')->first()->id) {
+            $users = User::findMany([$order->user->id, $order->seller_id]);
+        } else {
+            $users = User::findMany([$order->user->id, $order->seller_id, \App\User::where('user_type', 'admin')->first()->id]);
+        }
+
+        $order_notification = array();
+        $order_notification['order_id'] = $order->id;
+        $order_notification['order_code'] = $order->code;
+        $order_notification['user_id'] = $order->user_id;
+        $order_notification['seller_id'] = $order->seller_id;
+        $order_notification['status'] = $order_status;
+
+        Notification::send($users, new OrderNotification($order_notification));
+    }
+}
+
+if (!function_exists('send_firebase_notification')) {
+    function send_firebase_notification($req)
+    {
+        $url = 'https://fcm.googleapis.com/fcm/send';
+
+
+        $fields = array
+        (
+            'to' => $req->device_token,
+            'notification' => [
+                'body' => $req->text,
+                'title' => $req->title,
+                'sound' => 'default' /*Default sound*/
+            ],
+            'data' => [
+                'item_type' => $req->type,
+                'item_type_id' => $req->id,
+                'click_action' => 'FLUTTER_NOTIFICATION_CLICK'
+            ]
+        );
+
+        //$fields = json_encode($arrayToSend);
+        $headers = array(
+            'Authorization: key=' . env('FCM_SERVER_KEY'),
+            'Content-Type: application/json'
+        );
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        $firebase_notification = new FirebaseNotification;
+        $firebase_notification->title = $req->title;
+        $firebase_notification->text = $req->text;
+        $firebase_notification->item_type = $req->type;
+        $firebase_notification->item_type_id = $req->id;
+        $firebase_notification->receiver_id = $req->user_id;
+
+        $firebase_notification->save();
+    }
 }
