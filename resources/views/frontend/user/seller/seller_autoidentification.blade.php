@@ -328,7 +328,7 @@
                                   </div>
                                    <div class="row">
                                        <div class="col-md-6"><p>Банк: Алока банк </p> </div>
-                                       <div class="col-md-6"><p> Банк: <span class="text-danger pl-1">{{ $array['nazvanie_magazina']?? null }}</span></p></div>
+                                       <div class="col-md-6"><p> Банк: <span class="text-danger pl-1">{{ $array['nazvanie_banka']?? null }}</span></p></div>
                                   </div>
                                    <div class="row">
                                        <div class="col-md-6"><p>МФО: 00401</p> </div>
