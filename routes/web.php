@@ -361,6 +361,8 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get('/digitalproducts/destroy/{id}', 'DigitalProductController@destroy')->name('digitalproducts.destroy');
 	Route::get('/digitalproducts/download/{id}', 'DigitalProductController@download')->name('digitalproducts.download');
 
+    //Reports
+    Route::get('/commission-log', 'ReportController@commission_history')->name('commission-log.index');
 
 });
 

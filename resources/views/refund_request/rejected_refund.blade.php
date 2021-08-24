@@ -4,7 +4,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h5 class="mb-0 h6">{{translate('Approved Request')}}</h5>
+        <h5 class="mb-0 h6">{{translate('Rejected Request')}}</h5>
     </div>
     <div class="card-body">
         <table class="table aiz-table">
@@ -16,8 +16,8 @@
                     <th data-breakpoints="lg">{{translate('Product')}}</th>
                     <th data-breakpoints="lg">{{translate('Price')}}</th>
                     <th data-breakpoints="lg">{{translate('Seller Approval')}}</th>
-                    <th data-breakpoints="lg">{{translate('Admin Approval')}}</th>
-                    <th>{{translate('Refund Status')}}</th>
+                    <th>{{translate('Admin Approval')}}</th>
+                    <th data-breakpoints="lg">{{translate('Reject Reason')}}</th>
                 </tr>
             </thead>
             <tbody>
@@ -63,16 +63,14 @@
                             @endif
                         </td>
                         <td>
-                            @if ($refund->admin_approval == 1)
-                              <span class="badge badge-inline badge-success">{{translate('Approved')}}</span>
+                            @if($refund->admin_approval == 2)
+                                <span class="badge badge-inline badge-danger">{{translate('Rejected')}}</span>
                             @endif
                         </td>
-                        <td>
-                            @if ($refund->refund_status == 1)
-                              <span class="badge badge-inline badge-success">{{translate('Paid')}}</span>
-                            @else
-                              <span class="badge badge-inline badge-warning">{{translate('Non-Paid')}}</span>
-                            @endif
+                        <td class="text-right">
+                            <a href="javascript:void(0);" onclick="refund_reject_reason_show('{{ route('reject_reason_show', $refund->id )}}')" class="btn btn-soft-primary btn-icon btn-circle btn-sm" title="{{ translate('Reject Reason') }}">
+                                <i class="las la-eye"></i>
+                            </a>
                         </td>
                     </tr>
                 @endforeach
@@ -85,5 +83,33 @@
         </div>
     </div>
 </div>
+@endsection
 
+@section('modal')
+<div class="modal fade reject_reason_show_modal" id="modal-basic">
+	<div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title h6">{{translate('Refund Request Reject Reason')}}</h5>
+              <button type="button" class="close" data-dismiss="modal"></button>
+          </div>
+          <div class="modal-body reject_reason_show">
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-light" data-dismiss="modal">{{translate('Close')}}</button>
+          </div>
+      </div>
+	</div>
+</div>
+@endsection
+
+@section('script')
+<script type="text/javascript">
+  function refund_reject_reason_show(url){
+      $.get(url, function(data){
+          $('.reject_reason_show').html(data);
+          $('.reject_reason_show_modal').modal('show');
+      });
+  }
+</script>
 @endsection
