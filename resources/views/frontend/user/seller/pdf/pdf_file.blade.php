@@ -364,7 +364,7 @@
                                 <div class="clr"></div>
                                 <div class="selections">
                                         <p class="information">Банк: Алока банк </p>
-                                        <p class="information"> Банк: <span class="danger pl-1">{{ $selection['nazvanie_magazina']?? null }}</span></p>
+                                        <p class="information"> Банк: <span class="danger pl-1">{{ $selection['nazvanie_banka']?? null }}</span></p>
                                 </div>
                                 <div class="clr"></div>
                                 <div class="selections">
