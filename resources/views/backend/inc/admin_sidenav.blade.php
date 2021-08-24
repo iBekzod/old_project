@@ -265,19 +265,23 @@
                             <a href="#" class="aiz-side-nav-link">
                                 <i class="las la-backward aiz-side-nav-icon"></i>
                                 <span class="aiz-side-nav-text">{{ translate('Refunds') }}</span>
+
                                 <span class="aiz-side-nav-arrow"></span>
                             </a>
                             <ul class="aiz-side-nav-list level-2">
                                 <li class="aiz-side-nav-item">
-                                    <a href="{{route('refund_requests_all')}}"
-                                       class="aiz-side-nav-link {{ areActiveRoutes(['refund_requests_all', 'reason_show'])}}">
-
+                                    <a href="{{route('refund_requests_all')}}" class="aiz-side-nav-link {{ areActiveRoutes(['refund_requests_all', 'reason_show'])}}">
                                         <span class="aiz-side-nav-text">{{translate('Refund Requests')}}</span>
                                     </a>
                                 </li>
                                 <li class="aiz-side-nav-item">
                                     <a href="{{route('paid_refund')}}" class="aiz-side-nav-link">
-                                        <span class="aiz-side-nav-text">{{translate('Approved Refund')}}</span>
+                                        <span class="aiz-side-nav-text">{{translate('Approved Refunds')}}</span>
+                                    </a>
+                                </li>
+                                <li class="aiz-side-nav-item">
+                                    <a href="{{route('rejected_refund')}}" class="aiz-side-nav-link">
+                                        <span class="aiz-side-nav-text">{{translate('rejected Refunds')}}</span>
                                     </a>
                                 </li>
                                 <li class="aiz-side-nav-item">
@@ -414,6 +418,16 @@
                                 <a href="{{ route('user_search_report.index') }}"
                                    class="aiz-side-nav-link {{ areActiveRoutes(['user_search_report.index'])}}">
                                     <span class="aiz-side-nav-text">{{ translate('User Searches') }}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{ route('commission-log.index') }}" class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{ translate('Commission History') }}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{ route('wallet-history.index') }}" class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{ translate('Wallet Recharge History') }}</span>
                                 </a>
                             </li>
                         </ul>
