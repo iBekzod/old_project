@@ -10,12 +10,12 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th data-breakpoints="lg">{{translate('Date')}}</th>
+                    <th>{{translate('Date')}}</th>
                     <th>{{translate('Name')}}</th>
-                    <th data-breakpoints="lg">{{translate('Email')}}</th>
+                    <th>{{translate('Email')}}</th>
                     <th>{{translate('Amount')}}</th>
-                    <th data-breakpoints="lg">{{translate('Status')}}</th>
-                    <th data-breakpoints="lg">{{translate('options')}}</th>
+                    <th>{{translate('Status')}}</th>
+                    <th>{{translate('options')}}</th>
                 </tr>
                 </thead>
                 <tbody>
