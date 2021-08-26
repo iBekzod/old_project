@@ -127,6 +127,7 @@ class SupportTicketController extends Controller
 
     public function admin_store(Request $request)
     {
+        // return $request->all();
         $ticket_reply = new TicketReply;
 
         $ticket_reply->ticket_id = $request->ticket_id;
@@ -136,7 +137,7 @@ class SupportTicketController extends Controller
         $ticket_reply->ticket->client_viewed = 0;
         $ticket_reply->ticket->status = $request->status;
         $ticket_reply->ticket->save();
-        dd($ticket_reply);
+        // dd($ticket_reply);
 
         if($ticket_reply->save()){
             flash(translate('Reply has been sent successfully'))->success();

@@ -86,8 +86,28 @@ class ConversationController extends Controller
      */
     public function admin_store(Request $request)
     {
-        return $request->all();
-        return 'keldi';
+        // return $request->all();
+
+        // return $request->all();
+        $message = new Message();
+
+        $message->conversation_id = $request->conversation_id;
+        $message->user_id = Auth::user()->id;
+        // dd($message->user_id);
+        $message->message = $request->message;
+        // $message->conversation->user_id=0;
+
+        if($message->save()){
+            flash(translate('Reply has been sent successfully'))->success();
+            // $this->send_support_reply_email_to_user($ticket_reply->ticket, $ticket_reply);
+           // manabuni ishlatish kere
+            // dd($ticket_reply);
+            return back();
+        }
+        else{
+            flash(translate('Something went wrong'))->error();
+        }
+        // return 'keldi';
         // $user_type = Product::findOrFail($request->product_id)->user->user_type;
 
         // $conversation = new Conversation;
