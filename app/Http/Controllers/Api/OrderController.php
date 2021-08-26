@@ -141,16 +141,16 @@ class OrderController extends Controller
         try{
             $request->validate([
                 'shipping_address' => 'required',
-                'user_id' => 'required',
+                // 'user_id' => 'required',
                 'payment_type' => 'required',
                 'payment_status' => 'required',
                 'grand_total' => 'required',
                 'coupon_discount' => 'required',
-                'coupon_code' => 'nullable',
+                'coupon_code' => 'required',
             ]);
 
-            $user_id=auth()->id()??$request->user_id;
-            $shippingAddress = json_decode($request->shipping_address);
+            $user_id=auth()->id();//??$request->user_id;
+            $shippingAddress = $request->shipping_address;//json_decode($request->shipping_address);
 
             $cartItems = Cart::where('user_id', $user_id)->get();
 
@@ -179,7 +179,7 @@ class OrderController extends Controller
             // create an order
             $order = Order::create([
                 'user_id' => $user_id,
-                'shipping_address' => json_encode($shippingAddress),
+                'shipping_address' =>$shippingAddress,// json_encode($shippingAddress),
                 'payment_type' => $request->payment_type,
                 'payment_status' => $request->payment_status,
                 'grand_total' => $request->grand_total + $shipping,    //// 'grand_total' => $request->grand_total + $shipping,
@@ -217,12 +217,19 @@ class OrderController extends Controller
                 ]);
             }
             // apply coupon usage
-            if ($request->coupon_code != '') {
-                CouponUsage::create([
-                    'user_id' => $user_id,
-                    'coupon_id' => Coupon::where('code', $request->coupon_code)->first()->id
-                ]);
-            }
+            // if ($request->coupon_code != '') {
+            //     if(Coupon::where('code', $request->coupon_code)->first()){
+            //         CouponUsage::create([
+            //             'user_id' => $user_id,
+            //             'coupon_id' => Coupon::where('code', $request->coupon_code)->first()->id
+            //         ]);
+            //     }else{
+            //         return response()->json([
+            //             'success' => false,
+            //             'message' => "Invalid coupon code"
+            //         ]);
+            //     }
+            // }
             // calculate commission
             $commission_percentage = BusinessSetting::where('type', 'vendor_commission')->first()->value;
             foreach ($order->orderDetails as $orderDetail) {
@@ -239,6 +246,7 @@ class OrderController extends Controller
         }catch(Exception $e){
             return response()->json([
                 'success' => false,
+                // 'message' => $e->getTrace()
                 'message' => $e->getMessage()
             ]);
         }
