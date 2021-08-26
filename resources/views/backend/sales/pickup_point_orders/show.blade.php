@@ -16,8 +16,8 @@
             @endphp
 
             <!--Assign Delivery Boy-->
-            @if (\App\Addon::where('unique_identifier', 'delivery_boy')->first() != null &&
-                \App\Addon::where('unique_identifier', 'delivery_boy')->first()->activated)
+            {{-- @if (\App\Addon::where('unique_identifier', 'delivery_boy')->first() != null &&
+                \App\Addon::where('unique_identifier', 'delivery_boy')->first()->activated) --}}
                 <div class="col-md-3 ml-auto">
                     <label for="assign_deliver_boy">{{translate('Assign Deliver Boy')}}</label>
                     @if($delivery_status == 'pending' || $delivery_status == 'picked_up')
@@ -33,7 +33,7 @@
                         <input type="text" class="form-control" value="{{ optional($order->delivery_boy)->name }}" disabled>
                     @endif
                 </div>
-            @endif
+            {{-- @endif --}}
 
             <div class="col-md-3 ml-auto">
                 <label for=update_payment_status"">{{translate('Payment Status')}}</label>
@@ -240,8 +240,9 @@
 @section('script')
 <script type="text/javascript">
     $('#update_delivery_status').on('change', function(){
-        var order_id = {{ $order - > id }};
+        var order_id = {{ $order->id }};
         var status = $('#update_delivery_status').val();
+        // alert(order_id)
         $.post('{{ route('orders.update_delivery_status') }}', {_token:'{{ @csrf_token() }}', order_id:order_id, status:status}, function(data){
             AIZ.plugins.notify('success', '{{ translate('Delivery status has been updated') }}');
         });

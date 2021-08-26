@@ -736,7 +736,7 @@ class OrderController extends Controller
 
     public function assign_delivery_boy(Request $request)
     {
-        if (\App\Addon::where('unique_identifier', 'delivery_boy')->first() != null && \App\Addon::where('unique_identifier', 'delivery_boy')->first()->activated) {
+        // if (\App\Addon::where('unique_identifier', 'delivery_boy')->first() != null && \App\Addon::where('unique_identifier', 'delivery_boy')->first()->activated) {
 
             $order = Order::findOrFail($request->order_id);
             $order->assign_delivery_boy = $request->delivery_boy;
@@ -780,7 +780,7 @@ class OrderController extends Controller
 
                 }
             }
-        }
+        // }
 
         return 1;
     }

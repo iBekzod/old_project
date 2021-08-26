@@ -17,8 +17,8 @@
                 @endphp
 
                 <!--Assign Delivery Boy-->
-                @if (\App\Addon::where('unique_identifier', 'delivery_boy')->first() != null &&
-                    \App\Addon::where('unique_identifier', 'delivery_boy')->first()->activated)
+                {{-- @if (\App\Addon::where('unique_identifier', 'delivery_boy')->first() != null &&
+                    \App\Addon::where('unique_identifier', 'delivery_boy')->first()->activated) --}}
                     <div class="col-md-3 ml-auto">
                         <label for="assign_deliver_boy">{{translate('Assign Deliver Boy')}}</label>
                         @if($delivery_status == 'pending' || $delivery_status == 'picked_up')
@@ -34,7 +34,7 @@
                             <input type="text" class="form-control" value="{{ optional($order->delivery_boy)->name }}" disabled>
                         @endif
                     </div>
-                @endif
+                {{-- @endif --}}
                 <div class="col-md-3 ml-auto">
                     <label for=update_payment_status"">{{translate('Payment Status')}}</label>
                     <select class="form-control aiz-selectpicker"  data-minimum-results-for-search="Infinity" id="update_payment_status">
