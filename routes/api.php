@@ -146,6 +146,9 @@ Route::prefix('v1')->group(function () {
     Route::post('carts/add', 'Api\CartController@add')->middleware('auth:api');
     Route::post('carts/change-quantity', 'Api\CartController@changeQuantity')->middleware('auth:api');
     Route::apiResource('carts', 'Api\CartController')->except(['store', 'edit', 'update', 'show'])->middleware('auth:api');
+    Route::get('cart-summary/{user_id}/{owner_id}', 'Api\CartController@summary')->middleware('auth:api');
+    Route::post('carts/process', 'Api\CartController@process')->middleware('auth:api');
+    Route::post('carts/{user_id}', 'Api\CartController@getList')->middleware('auth:api');
 
     Route::get('reviews/product/{id}', 'Api\ReviewController@index')->name('api.reviews.index');
 
@@ -224,6 +227,8 @@ Route::prefix('v1')->group(function () {
 
 Route::prefix('v2/auth')->group(function () {
     Route::post('login', 'Api\V2\AuthController@login');
+    Route::post('signinByPhoneNumber', 'Api\AuthController@signinByPhoneNumber');
+    Route::post('registerPhoneNumber', 'Api\AuthController@registerPhoneNumber');
     Route::post('signup', 'Api\V2\AuthController@signup');
     Route::post('social-login', 'Api\V2\AuthController@socialLogin');
     Route::post('password/forget_request', 'Api\V2\PasswordResetController@forgetRequest');

@@ -2,18 +2,91 @@
 
 namespace App\Http\Controllers\Api\V2;
 
-use App\Http\Resources\V2\CartCollection;
-use App\Models\Cart;
-use App\Models\Color;
-use App\Models\FlashDeal;
-use App\Models\FlashDealProduct;
-use App\Models\Product;
+use App\Http\Resources\CartCollection;
+use App\Cart;
+use App\Color;
+use App\Coupon;
+use App\CouponUsage;
+use App\FlashDeal;
+use App\FlashDealProduct;
+use App\Product;
 use App\Shop;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
+    public function index()
+    {
+        return new CartCollection(Cart::where('user_id', auth()->id())->latest()->get());
+    }
+
+    public function addCustom(Request $request)
+    {
+        $product = Product::findOrFail($request->id);
+        $tax=taxPrice($product->id);
+        $price = $product->price+((double)$tax)+discountPrice($product->id);
+        $address=getUserAddress();
+        $quantity=0;
+        $shipping_cost=[];
+        $shipping_cost = calculateDeliveryCost($product, $address->id, $product->delivery_type);
+        $delivery_cost= $shipping_cost['total_cost'];
+        $is_express=false;
+        if($request->has('is_express') && $request->is_express==1){
+            $is_express=true;
+            $delivery_cost= $shipping_cost['total_express_cost'];
+        }
+        if($request->has('quantity')){
+            $quantity=(double)$request->quantity;
+        }else{
+            $quantity=1;
+        }
+
+        Cart::updateOrCreate([
+            'user_id' => auth()->id(),
+            'product_id' => $product->id
+        ], [
+            'price' => $price,
+            'tax' => (double)$tax,
+            'shipping_cost' =>$delivery_cost,
+            'variation'=>$is_express,
+            'quantity' => $quantity
+        ]);
+
+        return response()->json([
+            'message' => translate('Product added to cart successfully')
+        ]);
+    }
+
+    public function changeQuantity(Request $request)
+    {
+        $cart = Cart::find($request->id);
+        if ($cart != null) {
+            if ($cart->product->qty >= $request->quantity) {
+                $cart->update([
+                    'quantity' => $request->quantity
+                ]);
+
+                return response()->json(['message' => translate('Cart updated')], 200);
+            }
+            else {
+                return response()->json(['message' => translate('Maximum available quantity reached')], 200);
+            }
+        }
+
+        return response()->json(['message' => translate('Something went wrong')], 404);
+    }
+
+    public function destroy($id)
+    {
+        if(Cart::destroy($id))
+            return response()->json(['message' => translate('Product is successfully removed from your cart')], 200);
+        else
+            return response()->json(['message' => translate('Cart was not found')], 404);
+    }
+
+
     public function summary($user_id, $owner_id)
     {
         $items = Cart::where('user_id', $user_id)->where('owner_id', $owner_id)->get();
@@ -72,16 +145,16 @@ class CartController extends Controller
                         $shop_items_data_item["owner_id"] =intval($shop_items_raw_data_item["owner_id"]) ;
                         $shop_items_data_item["user_id"] =intval($shop_items_raw_data_item["user_id"]) ;
                         $shop_items_data_item["product_id"] =intval($shop_items_raw_data_item["product_id"]) ;
-                        $shop_items_data_item["product_name"] = $product->name;
-                        $shop_items_data_item["product_thumbnail_image"] = api_asset($product->thumbnail_img);
+                        $shop_items_data_item["product_name"] = $product->variation->name;
+                        $shop_items_data_item["product_thumbnail_image"] = api_asset($product->variation->thumbnail_img);
                         $shop_items_data_item["variation"] = $shop_items_raw_data_item["variation"];
                         $shop_items_data_item["price"] =(double) $shop_items_raw_data_item["price"];
                         $shop_items_data_item["currency_symbol"] = $currency_symbol;
                         $shop_items_data_item["tax"] =(double) $shop_items_raw_data_item["tax"];
                         $shop_items_data_item["shipping_cost"] =(double) $shop_items_raw_data_item["shipping_cost"];
                         $shop_items_data_item["quantity"] =intval($shop_items_raw_data_item["quantity"]) ;
-                        $shop_items_data_item["lower_limit"] = intval($product->min_qty) ;
-                        $shop_items_data_item["upper_limit"] = intval($product->stocks->where('variant', $shop_items_raw_data_item['variation'])->first()->qty) ;
+                        $shop_items_data_item["lower_limit"] = intval($product->qty) ;
+                        $shop_items_data_item["upper_limit"] =  intval($product->qty);
 
                         $shop_items_data[] = $shop_items_data_item;
 
@@ -111,101 +184,82 @@ class CartController extends Controller
 
     public function add(Request $request)
     {
-        $product = Product::findOrFail($request->id);
+        try{
+            $product = Product::where('id',$request->id)->first();
+            $tax = 0;
+            $tax= taxPrice($product->id);
+            $price = getSomPrice($product->id);
+            $user_id=auth()->id();
+            //discount calculation based on flash deal and regular discount
+            //calculation of taxes
+            $discount_applicable = false;
 
-        $variant = $request->variant;
-        $tax = 0;
-
-        if ($variant == '')
-            $price = $product->unit_price;
-        else {
-            $product_stock = $product->stocks->where('variant', $variant)->first();
-            $price = $product_stock->price;
-        }
-
-        //discount calculation based on flash deal and regular discount
-        //calculation of taxes
-        $discount_applicable = false;
-
-        if ($product->discount_start_date == null) {
-            $discount_applicable = true;
-        }
-        elseif (strtotime(date('d-m-Y H:i:s')) >= $product->discount_start_date &&
-            strtotime(date('d-m-Y H:i:s')) <= $product->discount_end_date) {
-            $discount_applicable = true;
-        }
-
-        if ($discount_applicable) {
-            if($product->discount_type == 'percent'){
-                $price -= ($price*$product->discount)/100;
+            if ($product->discount_start_date == null) {
+                $discount_applicable = true;
             }
-            elseif($product->discount_type == 'amount'){
-                $price -= $product->discount;
+            elseif (strtotime(date('d-m-Y H:i:s')) >= $product->discount_start_date &&
+                strtotime(date('d-m-Y H:i:s')) <= $product->discount_end_date) {
+                $discount_applicable = true;
             }
-        }
 
-        foreach ($product->taxes as $product_tax) {
-            if ($product_tax->tax_type == 'percent') {
-                $tax += ($price * $product_tax->tax) / 100;
-            } elseif ($product_tax->tax_type == 'amount') {
-                $tax += $product_tax->tax;
+            if ($discount_applicable) {
+                $price -= discountPrice($product->id);
             }
-        }
-
-        if ($product->min_qty > $request->quantity) {
-            return response()->json(['result' => false, 'message' => "Minimum {$product->min_qty} item(s) should be ordered"], 200);
-        }
-
-        $stock = $product->stocks->where('variant', $variant)->first()->qty;
-
-        $variant_string = $variant != null && $variant != "" ? "for ($variant)" : "";
-        if ($stock < $request->quantity) {
-            if ($stock == 0) {
-                return response()->json(['result' => false, 'message' => "Stock out"], 200);
-            } else {
-                return response()->json(['result' => false, 'message' => "Only {$stock} item(s) are available {$variant_string}"], 200);
+            $address_id=$request->address_id??getUserAddress()->id;
+            $delivery_cost=[];
+            $delivery_cost = calculateDeliveryCost($product, $address_id, $product->delivery_type);
+            $shipping_cost= $delivery_cost['total_cost']??0;
+            $is_express=false;
+            if($request->has('is_express') && $request->is_express==1){
+                $is_express=true;
+                $shipping_cost= $delivery_cost['total_express_cost'];
             }
-        }
-
-        Cart::updateOrCreate([
-            'user_id' => $request->user_id,
-            'owner_id' => $product->user_id,
-            'product_id' => $request->id,
-            'variation' => $variant
-        ], [
-            'price' => $price,
-            'tax' => $tax,
-            'shipping_cost' => 0,
-            'quantity' => DB::raw("quantity + $request->quantity")
-        ]);
-
-        if(\App\Utility\NagadUtility::create_balance_reference($request->cost_matrix) == false){
-            return response()->json(['result' => false, 'message' => 'Cost matrix error' ]);
-        }
-
-        return response()->json([
-            'result' => true,
-            'message' => 'Product added to cart successfully'
-        ]);
-    }
-
-    public function changeQuantity(Request $request)
-    {
-        $cart = Cart::find($request->id);
-        if ($cart != null) {
-
-            if ($cart->product->stocks->where('variant', $cart->variation)->first()->qty >= $request->quantity) {
-                $cart->update([
-                    'quantity' => $request->quantity
-                ]);
-
-                return response()->json(['result' => true, 'message' => 'Cart updated'], 200);
-            } else {
-                return response()->json(['result' => false, 'message' => 'Maximum available quantity reached'], 200);
+            $quantity=0;
+            if($request->has('quantity')){
+                $quantity=(double)$request->quantity;
+            }else{
+                $quantity=1;
             }
+            if ($product->qty < $quantity) {
+                return response()->json(['success' => false, 'message' => "Minimum {$product->qty} item(s) should be ordered"], 200);
+            }
+
+            $cart=Cart::updateOrCreate([
+                'user_id' => $user_id,
+                'owner_id' => $product->user_id,
+                'product_id' => $request->id,
+                'variation' => $is_express
+            ], [
+                'address_id'=>$address_id,
+                'price' => $price,
+                'tax' => $tax,
+                'shipping_cost' => $shipping_cost,
+                'shipping_type'=> $product->delivery_type,
+                'quantity' => DB::raw("quantity + $quantity"),
+                'discount' => $product->discount,
+            ]);
+
+            if($request->has('product_referral_code') && $request->product_referral_code!=null){
+                $cart->product_referral_code=$request->product_referral_code;
+            }
+
+            // if(\App\Utility\NagadUtility::create_balance_reference($request->cost_matrix) == false){
+            //     return response()->json(['result' => false, 'message' => 'Cost matrix error' ]);
+            // }
+
+            return response()->json([
+                'cart_id'=>$cart->id,
+                'success' => true,
+                'message' => 'Product added to cart successfully'
+            ]);
+        }catch(Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => $e->getTrace()
+                // 'message' => $e->getMessage()
+            ]);
         }
 
-        return response()->json(['result' => false, 'message' => 'Something went wrong'], 200);
     }
 
     public function process(Request $request)
@@ -219,24 +273,12 @@ class CartController extends Controller
                 $cart_item = Cart::where('id', $cart_id)->first();
                 $product = Product::where('id', $cart_item->product_id)->first();
 
-                if ($product->min_qty > $cart_quantities[$i]) {
-                    return response()->json(['result' => false, 'message' => "Minimum {$product->min_qty} item(s) should be ordered for {$product->name}"], 200);
-                }
-
-                $stock = $cart_item->product->stocks->where('variant', $cart_item->variation)->first()->qty;
-                $variant_string = $cart_item->variation != null && $cart_item->variation != "" ? " ($cart_item->variation)" : "";
-                if ($stock >= $cart_quantities[$i]) {
+                if ($product->qty > $cart_quantities[$i]) {
+                    return response()->json(['result' => false, 'message' => "Minimum {$product->qty} item(s) should be ordered for {$product->name}"], 200);
+                }else{
                     $cart_item->update([
                         'quantity' => $cart_quantities[$i]
                     ]);
-
-                } else {
-                    if ($stock == 0) {
-                        return response()->json(['result' => false, 'message' => "No item is available for {$product->name}{$variant_string},remove this from cart"], 200);
-                    } else {
-                        return response()->json(['result' => false, 'message' => "Only {$stock} item(s) are available for {$product->name}{$variant_string}"], 200);
-                    }
-
                 }
 
                 $i++;
@@ -251,9 +293,4 @@ class CartController extends Controller
 
     }
 
-    public function destroy($id)
-    {
-        Cart::destroy($id);
-        return response()->json(['result' => true, 'message' => 'Product is successfully removed from your cart'], 200);
-    }
 }

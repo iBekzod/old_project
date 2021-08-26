@@ -25,7 +25,7 @@ class DeliveryBoyController extends Controller
 
         if ($request->has('search')){
             $sort_search = $request->search;
-            $user_ids = User::where('user_type', 'delivery_boy')->where(function($user) use ($sort_search){
+            $user_ids = User::where('user_type', 'delivery_b')->where(function($user) use ($sort_search){
                 $user->where('name', 'like', '%'.$sort_search.'%')
                      ->orWhere('email', 'like', '%'.$sort_search.'%');
             })->pluck('id')->toArray();

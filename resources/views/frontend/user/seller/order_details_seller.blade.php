@@ -12,7 +12,7 @@
 @endphp
 
 <div class="modal-body gry-bg px-3 pt-0">
-    <div class="py-4">
+    {{-- <div class="py-4">
         <div class="row gutters-5 text-center aiz-steps">
             <div class="col @if($status == 'pending') active @else done @endif">
                 <div class="icon">
@@ -39,18 +39,20 @@
                 <div class="title fs-12">{{ translate('Delivered')}}</div>
             </div>
         </div>
-    </div>
-
+    </div> --}}
+    @if (get_setting('product_manage_by_admin') == 0)
     <div class="row mt-5">
-        <div class="offset-lg-2 col-lg-4 col-sm-6">
-            <div class="form-group">
-                <select class="form-control aiz-selectpicker form-control-sm"  data-minimum-results-for-search="Infinity" id="update_payment_status">
-                    <option value="unpaid" @if ($payment_status == 'unpaid') selected @endif>{{ translate('Unpaid')}}</option>
-                    <option value="paid" @if ($payment_status == 'paid') selected @endif>{{ translate('Paid')}}</option>
-                </select>
-                <label>{{ translate('Payment Status')}}</label>
+        @if($order->payment_type == 'cash_on_delivery')
+            <div class="offset-lg-2 col-lg-4 col-sm-6">
+                <div class="form-group">
+                    <select class="form-control aiz-selectpicker form-control-sm"  data-minimum-results-for-search="Infinity" id="update_payment_status">
+                        <option value="unpaid" @if ($payment_status == 'unpaid') selected @endif>{{ translate('Unpaid')}}</option>
+                        <option value="paid" @if ($payment_status == 'paid') selected @endif>{{ translate('Paid')}}</option>
+                    </select>
+                    <label>{{ translate('Payment Status')}}</label>
+                </div>
             </div>
-        </div>
+        @endif
         <div class="col-lg-4 col-sm-6">
             <div class="form-group">
                 <select class="form-control aiz-selectpicker form-control-sm"  data-minimum-results-for-search="Infinity" id="update_delivery_status">
@@ -63,6 +65,7 @@
             </div>
         </div>
     </div>
+    @endif
 
     <div class="card mt-4">
         <div class="card-header">
@@ -170,12 +173,16 @@
                                     <td>{{ $orderDetail->price }}</td>
                                     @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
                                         <td>
-                                            @if ($orderDetail->product != null && $orderDetail->product->refundable != 0 && $orderDetail->refund_request == null)
-                                                <button type="submit" class="btn btn-primary btn-sm" onclick="send_refund_request('{{ $orderDetail->id }}')">{{  translate('Send') }}</button>
-                                            @elseif ($orderDetail->refund_request != null && $orderDetail->refund_request->refund_status == 0)
+                                            @if ($orderDetail->refund_request != null && $orderDetail->refund_request->refund_status == 0)
                                                 <b class="text-info">{{  translate('Pending') }}</b>
+                                            @elseif ($orderDetail->refund_request != null && $orderDetail->refund_request->refund_status == 2)
+                                                <b class="text-success">{{  translate('Rejected') }}</b>
                                             @elseif ($orderDetail->refund_request != null && $orderDetail->refund_request->refund_status == 1)
-                                                <b class="text-success">{{  translate('Paid') }}</b>
+                                                <b class="text-success">{{  translate('Approved') }}</b>
+                                            @elseif ($orderDetail->product->refundable != 0)
+                                                <b>{{  translate('N/A') }}</b>
+                                            @else
+                                                <b>{{  translate('Non-refundable') }}</b>
                                             @endif
                                         </td>
                                     @endif
