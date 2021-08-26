@@ -36,7 +36,7 @@ class AuthController extends Controller
         }
         else {
             // TODO Check for maintenance
-//            $user->notify(new EmailVerificationNotification());
+        //            $user->notify(new EmailVerificationNotification());
         }
         $user->save();
 
@@ -57,7 +57,7 @@ class AuthController extends Controller
 
         $phone_verified = DB::table('phone_verifications')
             ->where('phone', '=', $request->phone)
-//            ->where('verification_code', '=', $request->verification_code)
+        //            ->where('verification_code', '=', $request->verification_code)
             ->orderBy('id', 'desc')
             ->first();
 
@@ -137,8 +137,8 @@ class AuthController extends Controller
 
 
         return response()->json([
-//            'verification_code' => $verification_code,
-//            'sms_response'=>$sms_response['message']
+        //            'verification_code' => $verification_code,
+        //            'sms_response'=>$sms_response['message']
         ], 200);
     }
 

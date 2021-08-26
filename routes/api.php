@@ -227,6 +227,8 @@ Route::prefix('v1')->group(function () {
 
 Route::prefix('v2/auth')->group(function () {
     Route::post('login', 'Api\V2\AuthController@login');
+    Route::post('signinByPhoneNumber', 'Api\AuthController@signinByPhoneNumber');
+    Route::post('registerPhoneNumber', 'Api\AuthController@registerPhoneNumber');
     Route::post('signup', 'Api\V2\AuthController@signup');
     Route::post('social-login', 'Api\V2\AuthController@socialLogin');
     Route::post('password/forget_request', 'Api\V2\PasswordResetController@forgetRequest');
