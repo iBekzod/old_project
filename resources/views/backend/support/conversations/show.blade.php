@@ -63,89 +63,82 @@
                     <button type="submit" class="btn btn-sm btn-dark" onclick="submit_reply('pending')">{{ translate('Submit as') }}</strong></button>
                 </div>
             </form>
+            <div class="pad-top">
+                <ul class="list-group list-group-flush">
+                    @foreach($conversation->messages as $conversation_messages)
+                        @if(auth()->id()==$conversation_messages->user_id)
+                            <li class="list-group-item" style="float: right;">
+                                <div class="media float-right">
+                                    <a class="media-left" href="#">
+                                        @if($conversation_messages->user->avatar_original != null)
+                                            <span class="avatar avatar-sm mr-3"><img src="{{ uploaded_asset($conversation_messages->user->avatar_original)??static_asset('assets/img/placeholder.jpg') }}"></span>
+                                        @else
+                                            <span class="avatar avatar-sm mr-3"><img src="{{ static_asset('assets/img/avatar-place.png') }}"></span>
+                                        @endif
+                                    </a>
 
-                {{-- @foreach ($conversation->messages as $conversation_messages)
-                <li>
-                    {{ $conversation_messages->user_id}}
-                </li>
+                                    <div class="media-body">
+                                        <div class="">
+                                            <span class="text-bold h6">{{ $conversation->sender->name }}</span>
+                                            <p class="text-muted text-sm fs-11">{{$conversation_messages->created_at}}</p>
+                                        </div>
+                                        <p>
+                                            {{$conversation_messages->message}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                        @else
+                            <li class="list-group-item">
+                                <div class="media">
+                                    <a class="media-left" href="#">
+                                        @if($conversation_messages->user->avatar_original != null)
+                                            <span class="avatar avatar-sm mr-3"><img src="{{ uploaded_asset($conversation_messages->user->avatar_original)??static_asset('assets/img/placeholder.jpg') }}"></span>
+                                        @else
+                                            <span class="avatar avatar-sm mr-3"><img src="{{ static_asset('assets/img/avatar-place.png') }}"></span>
+                                        @endif
+                                    </a>
 
-                @endforeach --}}
-
+                                    <div class="media-body">
+                                        <div class="">
+                                            <span class="text-bold h6">{{ $conversation->sender->name }}</span>
+                                            <p class="text-muted text-sm fs-11">{{$conversation_messages->created_at}}</p>
+                                        </div>
+                                        <p>
+                                            {{$conversation_messages->message}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                        @endif
+                    @endforeach
+                    <li class="list-group-item">
+                        <div class="media">
+                            <a class="media-left" href="#">
+                                @if($conversation_messages->user->avatar_original != null)
+                                    <span class="avatar avatar-sm m-3"><img src="{{ uploaded_asset($conversation_messages->user->avatar_original)??static_asset('assets/img/placeholder.jpg') }}"></span>
+                                @else
+                                    <span class="avatar avatar-sm m-3"><img src="{{ static_asset('assets/img/avatar-place.png') }}"></span>
+                                @endif
+                            </a>
+                            <div class="media-body">
+                                <div class="comment-header">
+                                    <span class="text-bold h6 text-muted">{{ $conversation->sender->name }}</span>
+                                    <p class="text-muted text-sm fs-11">{{ $conversation_messages->created_at }}</p>
+                                </div>
+                                <p>
+                                    {{$conversation_messages->message}}
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
 
         </div>
     </div>
 </div>
 
-<div class="pad-top">
-    <ul class="list-group list-group-flush">
-        @foreach($conversation->messages as $conversation_messages)
-            @if(auth()->id()==$conversation_messages->user_id)
-                <li class="list-group-item" style="float: right;">
-                    <div class="media float-right">
-                        <a class="media-left" href="#">
-                            @if($conversation_messages->user->avatar_original != null)
-                                <span class="avatar avatar-sm mr-3"><img src="{{ uploaded_asset($conversation_messages->user->avatar_original)??static_asset('assets/img/placeholder.jpg') }}"></span>
-                            @else
-                                <span class="avatar avatar-sm mr-3"><img src="{{ static_asset('assets/img/avatar-place.png') }}"></span>
-                            @endif
-                        </a>
 
-                        <div class="media-body">
-                            <div class="">
-                                <span class="text-bold h6">{{ $conversation->sender->name }}</span>
-                                <p class="text-muted text-sm fs-11">{{$conversation_messages->created_at}}</p>
-                            </div>
-                            <p>
-                                {{$conversation_messages->message}}
-                            </p>
-                        </div>
-                    </div>
-                </li>
-            @else
-                <li class="list-group-item">
-                    <div class="media">
-                        <a class="media-left" href="#">
-                            @if($conversation_messages->user->avatar_original != null)
-                                <span class="avatar avatar-sm mr-3"><img src="{{ uploaded_asset($conversation_messages->user->avatar_original)??static_asset('assets/img/placeholder.jpg') }}"></span>
-                            @else
-                                <span class="avatar avatar-sm mr-3"><img src="{{ static_asset('assets/img/avatar-place.png') }}"></span>
-                            @endif
-                        </a>
-
-                        <div class="media-body">
-                            <div class="">
-                                <span class="text-bold h6">{{ $conversation->sender->name }}</span>
-                                <p class="text-muted text-sm fs-11">{{$conversation_messages->created_at}}</p>
-                            </div>
-                            <p>
-                                {{$conversation_messages->message}}
-                            </p>
-                        </div>
-                    </div>
-                </li>
-            @endif
-        @endforeach
-        <li class="list-group-item">
-            <div class="media">
-                <a class="media-left" href="#">
-                    @if($conversation_messages->user->avatar_original != null)
-                        <span class="avatar avatar-sm m-3"><img src="{{ uploaded_asset($conversation_messages->user->avatar_original)??static_asset('assets/img/placeholder.jpg') }}"></span>
-                    @else
-                        <span class="avatar avatar-sm m-3"><img src="{{ static_asset('assets/img/avatar-place.png') }}"></span>
-                    @endif
-                </a>
-                <div class="media-body">
-                    <div class="comment-header">
-                        <span class="text-bold h6 text-muted">{{ $conversation->sender->name }}</span>
-                        <p class="text-muted text-sm fs-11">{{ $conversation_messages->created_at }}</p>
-                    </div>
-                    <p>
-                        {{$conversation_messages->message}}
-                    </p>
-                </div>
-            </div>
-        </li>
-    </ul>
-</div>
 
 @endsection
