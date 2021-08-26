@@ -8,26 +8,26 @@
             <h5 class="mb-0 h6">{{translate('Delivery Boy Information')}}</h5>
         </div>
 
-        <form action="{{ route('delivery-boys.update', $delivery_b->id) }}" method="POST">
+        <form action="{{ route('delivery-boys.update', $delivery_boy->id) }}" method="POST">
             @csrf
             <input name="_method" type="hidden" value="PATCH">
             <div class="card-body">
                 <div class="form-group row">
                     <label class="col-sm-2 col-from-label" for="name">{{translate('Name')}}</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="name" value="{{$delivery_b->name}}" placeholder="Name" required>
+                        <input type="text" class="form-control" name="name" value="{{$delivery_boy->name}}" placeholder="Name" required>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-2 col-from-label" for="email">{{translate('Email')}}</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="email" value="{{$delivery_b->email}}" placeholder="Email" required>
+                        <input type="text" class="form-control" name="email" value="{{$delivery_boy->email}}" placeholder="Email" required>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-2 col-from-label" for="phone">{{translate('Phone')}}</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="phone" value="{{$delivery_b->phone}}" placeholder="Phone" required>
+                        <input type="text" class="form-control" name="phone" value="{{$delivery_boy->phone}}" placeholder="Phone" required>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -44,7 +44,7 @@
                         <select class="form-control aiz-selectpicker" name="country" id="country" required>
                             <option value="">{{translate('Select Country')}}</option>
                             @foreach ($countries as $country)
-                                <option value="{{ $country->name }}" @if($delivery_b->country == $country->name) selected @endif>
+                                <option value="{{ $country->name }}" @if($delivery_boy->country == $country->name) selected @endif>
                                     {{ $country->name }}
                                 </option>
                             @endforeach
@@ -72,7 +72,7 @@
                                 <div class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse')}}</div>
                             </div>
                             <div class="form-control file-amount">{{ translate('Choose File') }}</div>
-                            <input type="hidden" name="avatar_original" value="{{ $delivery_b->avatar_original }}" class="selected-files">
+                            <input type="hidden" name="avatar_original" value="{{ $delivery_boy->avatar_original }}" class="selected-files">
                         </div>
                         <div class="file-preview box sm">
                         </div>
@@ -81,7 +81,7 @@
                 <div class="form-group row">
                     <label class="col-sm-2 col-from-label">{{translate('Address')}}</label>
                     <div class="col-sm-10">
-                        <textarea class="form-control" name="address">{{ $delivery_b->address }}</textarea>
+                        <textarea class="form-control" name="address">{{ $delivery_boy->address }}</textarea>
                     </div>
                 </div>
 
@@ -101,7 +101,7 @@
     (function($) {
     "use strict";
     $(document).ready(function () {
-        get_city('{{ $delivery_b->country }}');
+        get_city('{{ $delivery_boy->country }}');
     });
     $(document).on('change', '[name=country]', function() {
         var country = $(this).val();

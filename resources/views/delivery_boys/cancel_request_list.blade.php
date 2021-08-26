@@ -44,7 +44,7 @@
                         {{ $cancel_request->code }}
                     </td>
                     <td>
-                        {{ $cancel_request->delivery_b->name }}
+                        {{ $cancel_request->delivery_boy->name }}
                     </td>
                     <td>
                         {{$cancel_request->cancel_request_at}}
@@ -76,7 +76,7 @@
                 <button type="button" class="close" data-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p>{{translate('Do you really want to ban this delivery_b?')}}</p>
+                <p>{{translate('Do you really want to ban this delivery_boy?')}}</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-dismiss="modal">{{translate('Cancel')}}</button>
@@ -94,7 +94,7 @@
                 <button type="button" class="close" data-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p>{{translate('Do you really want to unban this delivery_b?')}}</p>
+                <p>{{translate('Do you really want to unban this delivery_boy?')}}</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-dismiss="modal">{{translate('Cancel')}}</button>

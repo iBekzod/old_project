@@ -30,7 +30,7 @@ class DeliveryBoyController extends Controller
         $order_query->where('assign_delivery_boy', $id);
 
 
-        $delivery_b = DeliveryBoy::where('user_id', $id)->first();
+        $delivery_boy = DeliveryBoy::where('user_id', $id)->first();
 
 
         //dummy
@@ -49,8 +49,8 @@ class DeliveryBoyController extends Controller
         return response()->json([
             'completed_delivery' => Order::where('assign_delivery_boy', $id)->where('delivery_status', 'delivered')->count(),
             'pending_delivery' => Order::where('assign_delivery_boy', $id)->where('delivery_status', '!=', 'delivered')->where('delivery_status', '!=', 'cancelled')->where('cancel_request', '0')->count(),
-            'total_collection' => format_price($delivery_b->total_collection),
-            'total_earning' => format_price($delivery_b->total_earning),
+            'total_collection' => format_price($delivery_boy->total_collection),
+            'total_earning' => format_price($delivery_boy->total_earning),
             'cancelled' => Order::where('assign_delivery_boy', $id)->where('delivery_status', 'cancelled')->count(),
             'on_the_way' => Order::where('assign_delivery_boy', $id)->where('delivery_status', 'on_the_way')->where('cancel_request', '0')->count(),
             'picked' => Order::where('assign_delivery_boy', $id)->where('delivery_status', 'picked_up')->where('cancel_request', '0')->count(),
@@ -341,15 +341,15 @@ class DeliveryBoyController extends Controller
                     }
                 }
             }
-            $delivery_b = DeliveryBoy::where('user_id', $request->delivery_boy_id)->first();
+            $delivery_boy = DeliveryBoy::where('user_id', $request->delivery_boy_id)->first();
 
             if (get_setting('delivery_boy_payment_type') == 'commission') {
                 $delivery_history->earning = get_setting('delivery_boy_commission');
-                $delivery_b->total_earning += get_setting('delivery_boy_commission');
+                $delivery_boy->total_earning += get_setting('delivery_boy_commission');
             }
             if ($order->payment_type == 'cash_on_delivery') {
                 $delivery_history->collection = $order->grand_total;
-                $delivery_b->total_collection += $order->grand_total;
+                $delivery_boy->total_collection += $order->grand_total;
 
                 $order->payment_status = 'paid';
                 if ($order->commission_calculated == 0) {
@@ -359,7 +359,7 @@ class DeliveryBoyController extends Controller
 
             }
 
-            $delivery_b->save();
+            $delivery_boy->save();
         }
         $order->delivery_history_date = date("Y-m-d H:i:s");
 
