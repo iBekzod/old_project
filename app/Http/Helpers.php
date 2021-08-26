@@ -751,7 +751,7 @@ if (!function_exists('taxPrice')) {
     function taxPrice($id)
     {
         // return 0;
-        $product = Product::findOrFail($id);
+        $product = Product::where('id',$id)->first();
         $price = $product->price;
         $tax=0;
         if ($product->tax_type == 'percent') {
@@ -767,7 +767,7 @@ if (!function_exists('discountPrice')) {
     function discountPrice($id)
     {
         // return 0;
-        $product = Product::findOrFail($id);
+        $product = Product::where('id',$id)->first();
         $price = $product->price;
         $discount=0;
         $flash_deals = FlashDeal::where('status', 1)->get();
@@ -991,6 +991,17 @@ if (!function_exists('defaultCurrency')) {
             return $currency->code;
         }
         return "USD";
+    }
+}
+
+if (!function_exists('getSomPrice')) {
+    function getSomPrice($id)
+    {
+        $product = Product::where('id',$id)->first();
+        if($currency=Currency::where('code', 'UZB')->first()){
+           return $product->price/$product->currency->exchange_rate*$currency->exchange_rate;
+        }
+        return $product->price/$product->currency->exchange_rate*defaultExchangeRate();
     }
 }
 
