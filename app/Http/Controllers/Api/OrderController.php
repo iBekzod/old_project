@@ -140,12 +140,12 @@ class OrderController extends Controller
     {
         try{
             $request->validate([
-                'shipping_address' => 'nullable',
-                'user_id' => 'nullable',
-                'payment_type' => 'nullable',
-                'payment_status' => 'nullable',
-                'grand_total' => 'nullable',
-                'coupon_discount' => 'nullable',
+                'shipping_address' => 'required',
+                'user_id' => 'required',
+                'payment_type' => 'required',
+                'payment_status' => 'required',
+                'grand_total' => 'required',
+                'coupon_discount' => 'required',
                 'coupon_code' => 'nullable',
             ]);
 
