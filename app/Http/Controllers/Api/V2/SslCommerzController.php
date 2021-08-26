@@ -28,13 +28,13 @@ class SslCommerzController extends Controller
     public function __construct()
     {
         # IF SANDBOX TRUE, THEN IT WILL CONNECT WITH SSLCOMMERZ SANDBOX (TEST) SYSTEM
-        if (BusinessSetting::where('type', 'sslcommerz_sandbox')->first()->value == 1) {
-            define("SSLCZ_IS_SANDBOX", true);
-        } else {
-            define("SSLCZ_IS_SANDBOX", false);
-        }
+        // if (BusinessSetting::where('type', 'sslcommerz_sandbox')->first()->value == 1) {
+        //     define("SSLCZ_IS_SANDBOX", true);
+        // } else {
+        //     define("SSLCZ_IS_SANDBOX", false);
+        // }
 
-        $this->setSSLCommerzMode((SSLCZ_IS_SANDBOX) ? 1 : 0);
+        // $this->setSSLCommerzMode((SSLCZ_IS_SANDBOX) ? 1 : 0);
         $this->store_id = env('SSLCZ_STORE_ID');
         $this->store_pass = env('SSLCZ_STORE_PASSWD');
 
