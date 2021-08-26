@@ -191,7 +191,7 @@ Route::prefix('v1')->group(function () {
     Route::post('post/report_description','Api\ReportDescriptionController@postReportDescription');
     Route::post('post/support_service','Api\SupportServiceController@postSupportService');
 
-    Route::post('order/store', 'Api\OrderController@store')->middleware('auth:api');
+    Route::post('order/store', 'Api\OrderController@processOrder')->middleware('auth:api');
 
     Route::get('wallet/balance/{id}', 'Api\WalletController@balance')->middleware('auth:api');
     Route::get('wallet/history/{id}', 'Api\WalletController@walletRechargeHistory')->middleware('auth:api');
