@@ -883,10 +883,18 @@ class ProductController extends Controller
         $products = filterPublishedProducts(Product::whereIn('id', $ids))->get();
         $data = [];
         foreach ($products as $product) {
+            $preparation_days=\App\SellerSetting::where('type', 'product_preparation_days')->where('user_id', $product->user_id)->first()->value??0;
             $data[] = [
                     'id'=>$product->id ,
+                    'slug'=>$product->slug ,
                     'quantity' => $product->qty,
-                    'address' => $product->address
+                    'address' => $product->address,
+                    'region'=>$product->address->region,
+                    'city'=>$product->address->city,
+                    'country'=>$product->address->city->country,
+                    'seller_name' => $product->user->name,
+                    'shop_slug' => $product->added_by == 'admin' ? '' : $product->user->shop->slug,
+                    'preparation_days'=>$preparation_days,
             ];
         }
         return response()->json([
