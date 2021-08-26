@@ -314,14 +314,21 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get('invoice/seller/{order_id}', 'InvoiceController@seller_invoice_download')->name('seller.invoice.download');
 
 
-    Route::get('test/order','OrderController@order_customer');
-    Route::get('test/order/information','OrderController@order_information');
-	Route::resource('orders','OrderController');
-	Route::get('/orders/destroy/{id}', 'OrderController@destroy')->name('orders.destroy');
-	Route::post('/orders/details', 'OrderController@order_details')->name('orders.details');
-	Route::post('/orders/update_delivery_status', 'OrderController@update_delivery_status')->name('orders.update_delivery_status');
-	Route::post('/orders/update_payment_status', 'OrderController@update_payment_status')->name('orders.update_payment_status');
+    // Route::get('test/order','OrderController@order_customer');
+    // Route::get('test/order/information','OrderController@order_information');
+	// Route::resource('orders','OrderController');
+	// Route::get('/orders/destroy/{id}', 'OrderController@destroy')->name('orders.destroy');
+	// Route::post('/orders/details', 'OrderController@order_details')->name('orders.details');
+	// Route::post('/orders/update_delivery_status', 'OrderController@update_delivery_status')->name('orders.update_delivery_status');
+	// Route::post('/orders/update_payment_status', 'OrderController@update_payment_status')->name('orders.update_payment_status');
 
+    Route::resource('orders', 'OrderController');
+    Route::get('/orders/destroy/{id}', 'OrderController@destroy')->name('orders.destroy');
+    Route::post('/orders/details', 'OrderController@order_details')->name('orders.details');
+    Route::post('/orders/update_delivery_status', 'OrderController@update_delivery_status')->name('orders.update_delivery_status');
+    Route::post('/orders/update_payment_status', 'OrderController@update_payment_status')->name('orders.update_payment_status');
+    Route::post('/orders/delivery-boy-assign', 'OrderController@assign_delivery_boy')->name('orders.delivery-boy-assign');
+    Route::get('invoice/{order_id}', 'InvoiceController@invoice_download')->name('invoice.download');
 	Route::resource('/reviews', 'ReviewController');
 
 	Route::resource('/withdraw_requests', 'SellerWithdrawRequestController');

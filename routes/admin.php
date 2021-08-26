@@ -179,22 +179,44 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	// Route::get('/sales', 'OrderController@sales')->name('sales.index');
 
 	// All Orders
-	Route::get('/all_orders', 'OrderController@all_orders')->name('all_orders.index');
-	Route::get('/all_orders/{id}/show', 'OrderController@all_orders_show')->name('all_orders.show');
+	// Route::get('/all_orders', 'OrderController@all_orders')->name('all_orders.index');
+	// Route::get('/all_orders/{id}/show', 'OrderController@all_orders_show')->name('all_orders.show');
 
-	// Inhouse Orders
-	Route::get('/inhouse-orders', 'OrderController@admin_orders')->name('inhouse_orders.index');
-	Route::get('/inhouse-orders/{id}/show', 'OrderController@show')->name('inhouse_orders.show');
+	// // Inhouse Orders
+	// Route::get('/inhouse-orders', 'OrderController@admin_orders')->name('inhouse_orders.index');
+	// Route::get('/inhouse-orders/{id}/show', 'OrderController@show')->name('inhouse_orders.show');
 
-	// Seller Orders
-	Route::get('/seller_orders', 'OrderController@seller_orders')->name('seller_orders.index');
-	Route::get('/seller_orders/{id}/show', 'OrderController@seller_orders_show')->name('seller_orders.show');
+	// // Seller Orders
+	// Route::get('/seller_orders', 'OrderController@seller_orders')->name('seller_orders.index');
+	// Route::get('/seller_orders/{id}/show', 'OrderController@seller_orders_show')->name('seller_orders.show');
 
-	// Pickup point orders
-	Route::get('orders_by_pickup_point','OrderController@pickup_point_order_index')->name('pick_up_point.order_index');
-	Route::get('/orders_by_pickup_point/{id}/show', 'OrderController@pickup_point_order_sales_show')->name('pick_up_point.order_show');
+	// // Pickup point orders
+	// Route::get('orders_by_pickup_point','OrderController@pickup_point_order_index')->name('pick_up_point.order_index');
+	// Route::get('/orders_by_pickup_point/{id}/show', 'OrderController@pickup_point_order_sales_show')->name('pick_up_point.order_show');
 
-	Route::get('/orders/destroy/{id}', 'OrderController@destroy')->name('orders.destroy');
+	// Route::get('/orders/destroy/{id}', 'OrderController@destroy')->name('orders.destroy');
+
+    Route::get('/all_orders', 'OrderController@all_orders')->name('all_orders.index');
+    Route::get('/all_orders/{id}/show', 'OrderController@all_orders_show')->name('all_orders.show');
+
+    // Inhouse Orders
+    Route::get('/inhouse-orders', 'OrderController@admin_orders')->name('inhouse_orders.index');
+    Route::get('/inhouse-orders/{id}/show', 'OrderController@show')->name('inhouse_orders.show');
+
+    // Seller Orders
+    Route::get('/seller_orders', 'OrderController@seller_orders')->name('seller_orders.index');
+    Route::get('/seller_orders/{id}/show', 'OrderController@seller_orders_show')->name('seller_orders.show');
+
+    Route::post('/bulk-order-status', 'OrderController@bulk_order_status')->name('bulk-order-status');
+
+
+    // Pickup point orders
+    Route::get('orders_by_pickup_point', 'OrderController@pickup_point_order_index')->name('pick_up_point.order_index');
+    Route::get('/orders_by_pickup_point/{id}/show', 'OrderController@pickup_point_order_sales_show')->name('pick_up_point.order_show');
+
+    Route::get('/orders/destroy/{id}', 'OrderController@destroy')->name('orders.destroy');
+    Route::post('/bulk-order-delete', 'OrderController@bulk_order_delete')->name('bulk-order-delete');
+    
 	Route::get('invoice/admin/{order_id}', 'InvoiceController@admin_invoice_download')->name('admin.invoice.download');
 
 	Route::post('/pay_to_seller', 'CommissionController@pay_to_seller')->name('commissions.pay_to_seller');
