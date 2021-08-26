@@ -1480,7 +1480,7 @@ function getAdmin(){
 }
 
 function getUserAddress(){
-    $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>getDefaultCity(), 'region_id'=>getDefaultRegion()]);
+    $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>getDefaultCity(), 'region_id'=>getDefaultRegion(), 'longitude'=>getDefaultLongitude(), 'latitude'=>getDefaultLatitude()]);
     if(Auth::check()){
         $user=User::where('id',auth()->id())->first();
         if(count($user->addresses)==1){
@@ -1488,12 +1488,12 @@ function getUserAddress(){
         }else if(count($user->addresses)>1){
             $address=$user->addresses->where('set_default', 1)->first();
         }else if($user_setting=SellerSetting::where('type', 'default_address')->where('user_id', auth()->id())->first()){
-            $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>$user_setting->value, 'region_id'=>$user_setting->relation_id]);
+            $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>$user_setting->value, 'region_id'=>$user_setting->relation_id, 'longitude'=>getDefaultLongitude(), 'latitude'=>getDefaultLatitude()]);
         }else if($user_setting=SellerSetting::where('type', 'default_address')->first()){
-            $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>$user_setting->value, 'region_id'=>$user_setting->relation_id]);
+            $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>$user_setting->value, 'region_id'=>$user_setting->relation_id, 'longitude'=>getDefaultLongitude(), 'latitude'=>getDefaultLatitude()]);
         }
     }else if($ip_address=IpAddress::where('ip', getClientIp())->first()){
-        $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>$ip_address->city_id??getDefaultCity(), 'region_id'=>$ip_address->region_id??getDefaultRegion()]);
+        $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>$ip_address->city_id??getDefaultCity(), 'region_id'=>$ip_address->region_id??getDefaultRegion(), 'longitude'=>getDefaultLongitude(), 'latitude'=>getDefaultLatitude()]);
     }
     $address->save();
     return $address;
@@ -1505,6 +1505,14 @@ function getDefaultCity(){
 
 function getDefaultRegion(){
     return 281;
+}
+
+function getDefaultLongitude(){
+    return 69.2400734;
+}
+
+function getDefaultLatitude(){
+    return 41.2994958;
 }
 
 if (!function_exists('getClientIp')) {

@@ -865,7 +865,12 @@ class ProductController extends Controller
     public function getLocationSetting()
     {
         $address = getUserAddress();
-        return new SearchCityCollection(City::where('id', $address->city_id)->get());
+        $cities=City::where('id', $address->city_id)->get();
+        foreach($cities as $city){
+            $city->address=json_encode($address);
+            $city->is_registered=($address->user_id!=0)?true:false;
+        }
+        return new SearchCityCollection($cities);
         // return response()->json(getUserAddress());
     }
 
