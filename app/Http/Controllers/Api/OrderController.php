@@ -143,7 +143,7 @@ class OrderController extends Controller
                 // 'shipping_address' => 'required',
                 'payment_type' => 'required',
                 'payment_status' => 'required',
-                'grand_total' => 'required',
+                // 'grand_total' => 'required',
                 'coupon_discount' => 'required',
                 'coupon_code' => 'required',
             ]);
@@ -196,13 +196,22 @@ class OrderController extends Controller
                 $sum += $item_sum;   //// 'grand_total' => $request->g
             }
 
+            $payment_type="cash_on_delivery";
+            if($request->has('payment_type')){
+                $payment_type=$request->payment_type;
+            }
+            $payment_status="unpaid";
+            if($request->has('payment_status')){
+                $payment_status=$request->payment_status;
+            }
+
             // create an order
             $order = Order::create([
                 'user_id' => $user_id,
                 // 'seller_id' =>$request->owner_id,
                 'shipping_address' =>json_encode($shippingAddress),
-                'payment_type' => $request->payment_type,
-                'payment_status' => $request->payment_status,
+                'payment_type' => $payment_type,
+                'payment_status' => $payment_status,
                 'grand_total' =>  $sum,//$request->grand_total + $shipping,    //// 'grand_total' => $request->grand_total + $shipping,
                 'coupon_discount' => $cartItems->sum('discount'),//$request->coupon_discount,
                 'code' => date('Ymd-his'),
@@ -220,7 +229,7 @@ class OrderController extends Controller
                     'tax' => $cartItem->tax * $cartItem->quantity,
                     'shipping_cost' => $cartItem->shipping_cost,
                     'quantity' => $cartItem->quantity,
-                    'payment_status' => 'unpaid'
+                    'payment_status' => $payment_status
                 ]);
                 $product->update([
                     'num_of_sale' => DB::raw('num_of_sale - ' . $cartItem->quantity)
