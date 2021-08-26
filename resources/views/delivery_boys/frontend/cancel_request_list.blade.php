@@ -26,7 +26,7 @@
                                 {{ $cancel_request->code }}
                             </td>
                             <td>
-                                {{ $cancel_request->delivery_boy->name }}
+                                {{ $cancel_request->delivery_b->name }}
                             </td>
                             <td>
                                 {{$cancel_request->cancel_request_at}}

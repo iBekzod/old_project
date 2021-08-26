@@ -16,21 +16,21 @@
             @endphp
 
             <!--Assign Delivery Boy-->
-            @if (\App\Addon::where('unique_identifier', 'delivery_boy')->first() != null &&
-                \App\Addon::where('unique_identifier', 'delivery_boy')->first()->activated)
+            @if (\App\Addon::where('unique_identifier', 'delivery_b')->first() != null &&
+                \App\Addon::where('unique_identifier', 'delivery_b')->first()->activated)
                 <div class="col-md-3 ml-auto">
                     <label for="assign_deliver_boy">{{translate('Assign Deliver Boy')}}</label>
                     @if($delivery_status == 'pending' || $delivery_status == 'picked_up')
                     <select class="form-control aiz-selectpicker" data-live-search="true" data-minimum-results-for-search="Infinity" id="assign_deliver_boy">
                         <option value="">{{translate('Select Delivery Boy')}}</option>
-                        @foreach($delivery_boys as $delivery_boy)
-                        <option value="{{ $delivery_boy->id }}" @if($order->assign_delivery_boy == $delivery_boy->id) selected @endif>
-                            {{ $delivery_boy->name }}
+                        @foreach($delivery_boys as $delivery_b)
+                        <option value="{{ $delivery_b->id }}" @if($order->assign_delivery_boy == $delivery_b->id) selected @endif>
+                            {{ $delivery_b->name }}
                         </option>
                         @endforeach
                     </select>
                     @else
-                        <input type="text" class="form-control" value="{{ optional($order->delivery_boy)->name }}" disabled>
+                        <input type="text" class="form-control" value="{{ optional($order->delivery_b)->name }}" disabled>
                     @endif
                 </div>
             @endif

@@ -43,15 +43,15 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($delivery_boys as $key => $delivery_boy)
-                @if ($delivery_boy->user != null)
+                @foreach($delivery_boys as $key => $delivery_b)
+                @if ($delivery_b->user != null)
                 <tr>
                     <td>{{ ($key+1) + ($delivery_boys->currentPage() - 1)*$delivery_boys->perPage() }}</td>
-                    <td>@if($delivery_boy->user->banned == 1) <i class="las la-ban text-danger" aria-hidden="true"></i> @endif {{$delivery_boy->user->name}}</td>
-                    <td>{{$delivery_boy->user->email}}</td>
-                    <td>{{$delivery_boy->user->phone}}</td>
+                    <td>@if($delivery_b->user->banned == 1) <i class="las la-ban text-danger" aria-hidden="true"></i> @endif {{$delivery_b->user->name}}</td>
+                    <td>{{$delivery_b->user->email}}</td>
+                    <td>{{$delivery_b->user->phone}}</td>
                     <td>
-                        {{ single_price($delivery_boy->total_collection) }}
+                        {{ single_price($delivery_b->total_collection) }}
                     </td>
                     <td>
                         <div class="dropdown">
@@ -60,31 +60,31 @@
                             </button>
                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-xs">
 
-                                <a href="{{route('delivery-boys.edit', $delivery_boy->user->id)}}" class="dropdown-item">
+                                <a href="{{route('delivery-boys.edit', $delivery_b->user->id)}}" class="dropdown-item">
                                   {{translate('Edit')}}
                                 </a>
-                                @if($delivery_boy->user->banned != 1)
-                                    <a href="#" onclick="confirm_ban('{{route('delivery-boy.ban', $delivery_boy->user->id)}}');" class="dropdown-item">
+                                @if($delivery_b->user->banned != 1)
+                                    <a href="#" onclick="confirm_ban('{{route('delivery-boy.ban', $delivery_b->user->id)}}');" class="dropdown-item">
                                         {{translate('Ban this delivery boy')}}
                                         <i class="fa fa-ban text-danger" aria-hidden="true"></i>
                                     </a>
                                 @else
-                                    <a href="#" onclick="confirm_unban('{{route('delivery-boy.ban', $delivery_boy->user->id)}}');" class="dropdown-item">
+                                    <a href="#" onclick="confirm_unban('{{route('delivery-boy.ban', $delivery_b->user->id)}}');" class="dropdown-item">
                                         {{translate('Unban this delivery boy')}}
                                         <i class="fa fa-check text-success" aria-hidden="true"></i>
                                     </a>
                                 @endif
-                                <a href="#" onclick="show_order_collection_modal('{{$delivery_boy->user->id}}');" class="dropdown-item">
+                                <a href="#" onclick="show_order_collection_modal('{{$delivery_b->user->id}}');" class="dropdown-item">
                                     {{translate('Go to Payment')}}
                                 </a>
 				{{--
-                                    <a href="#" class="dropdown-item confirm-delete" data-href="{{ route('delivery-boys.destroy', $delivery_boy->user->id) }}" class="">
+                                    <a href="#" class="dropdown-item confirm-delete" data-href="{{ route('delivery-boys.destroy', $delivery_b->user->id) }}" class="">
                                     {{translate('Delete')}}
                                 </a>--}}
                             </div>
                         </div>
 			{{--
-                        <a href="{{route('delivery_boys.login', encrypt($delivery_boy->user->id))}}" class="btn btn-soft-primary btn-icon btn-circle btn-sm" title="{{ translate('Log in as this delivery_boy') }}">
+                        <a href="{{route('delivery_boys.login', encrypt($delivery_b->user->id))}}" class="btn btn-soft-primary btn-icon btn-circle btn-sm" title="{{ translate('Log in as this delivery_b') }}">
                             <i class="las la-edit"></i>
                         </a>
                         --}}
@@ -118,7 +118,7 @@
                 <button type="button" class="close" data-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p>{{translate('Do you really want to ban this delivery_boy?')}}</p>
+                <p>{{translate('Do you really want to ban this delivery_b?')}}</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-dismiss="modal">{{translate('Cancel')}}</button>
@@ -136,7 +136,7 @@
                 <button type="button" class="close" data-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p>{{translate('Do you really want to unban this delivery_boy?')}}</p>
+                <p>{{translate('Do you really want to unban this delivery_b?')}}</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-dismiss="modal">{{translate('Cancel')}}</button>

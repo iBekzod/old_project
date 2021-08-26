@@ -46,7 +46,7 @@ class Order extends Model
         return $this->hasMany(ClubPoint::class);
     }
 
-    public function delivery_boy()
+    public function delivery_b()
     {
         return $this->belongsTo(User::class, 'assign_delivery_boy', 'id');
     }

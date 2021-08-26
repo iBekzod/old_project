@@ -644,10 +644,10 @@ class OrderController extends Controller
         }
 
 
-        if (\App\Addon::where('unique_identifier', 'delivery_boy')->first() != null &&
-            \App\Addon::where('unique_identifier', 'delivery_boy')->first()->activated) {
+        if (\App\Addon::where('unique_identifier', 'delivery_b')->first() != null &&
+            \App\Addon::where('unique_identifier', 'delivery_b')->first()->activated) {
 
-            if (Auth::user()->user_type == 'delivery_boy') {
+            if (Auth::user()->user_type == 'delivery_b') {
                 $deliveryBoyController = new DeliveryBoyController;
                 $deliveryBoyController->store_delivery_history($order);
             }
@@ -736,10 +736,10 @@ class OrderController extends Controller
 
     public function assign_delivery_boy(Request $request)
     {
-        if (\App\Addon::where('unique_identifier', 'delivery_boy')->first() != null && \App\Addon::where('unique_identifier', 'delivery_boy')->first()->activated) {
+        if (\App\Addon::where('unique_identifier', 'delivery_b')->first() != null && \App\Addon::where('unique_identifier', 'delivery_b')->first()->activated) {
 
             $order = Order::findOrFail($request->order_id);
-            $order->assign_delivery_boy = $request->delivery_boy;
+            $order->assign_delivery_boy = $request->delivery_b;
             $order->delivery_history_date = date("Y-m-d H:i:s");
             $order->save();
 
@@ -754,7 +754,7 @@ class OrderController extends Controller
                 $delivery_history->delivery_status = $order->delivery_status;
                 $delivery_history->payment_type = $order->payment_type;
             }
-            $delivery_history->delivery_boy_id = $request->delivery_boy;
+            $delivery_history->delivery_boy_id = $request->delivery_b;
 
             $delivery_history->save();
 
@@ -765,7 +765,7 @@ class OrderController extends Controller
                 $array['order'] = $order;
 
                 try {
-                    Mail::to($order->delivery_boy->email)->queue(new InvoiceEmailManager($array));
+                    Mail::to($order->delivery_b->email)->queue(new InvoiceEmailManager($array));
                 } catch (\Exception $e) {
 
                 }
@@ -775,7 +775,7 @@ class OrderController extends Controller
                 \App\Addon::where('unique_identifier', 'otp_system')->first()->activated &&
                 SmsTemplate::where('identifier', 'assign_delivery_boy')->first()->status == 1) {
                 try {
-                    SmsUtility::assign_delivery_boy($order->delivery_boy->phone, $order->code);
+                    SmsUtility::assign_delivery_boy($order->delivery_b->phone, $order->code);
                 } catch (\Exception $e) {
 
                 }

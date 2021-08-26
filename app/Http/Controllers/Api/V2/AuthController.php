@@ -207,10 +207,10 @@ class AuthController extends Controller
             'remember_me' => 'boolean'
         ]);*/
 
-        $delivery_boy_condition = $request->has('user_type') && $request->user_type == 'delivery_boy';
+        $delivery_boy_condition = $request->has('user_type') && $request->user_type == 'delivery_b';
 
         if ($delivery_boy_condition) {
-            $user = User::whereIn('user_type', ['delivery_boy'])->where('email', $request->email)->orWhere('phone', $request->email)->first();
+            $user = User::whereIn('user_type', ['delivery_b'])->where('email', $request->email)->orWhere('phone', $request->email)->first();
         } else {
             $user = User::whereIn('user_type', ['customer', 'seller'])->where('email', $request->email)->orWhere('phone', $request->email)->first();
         }
