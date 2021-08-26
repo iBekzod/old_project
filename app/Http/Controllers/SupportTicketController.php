@@ -128,6 +128,7 @@ class SupportTicketController extends Controller
     public function admin_store(Request $request)
     {
         $ticket_reply = new TicketReply;
+
         $ticket_reply->ticket_id = $request->ticket_id;
         $ticket_reply->user_id = Auth::user()->id;
         $ticket_reply->reply = $request->reply;
@@ -135,10 +136,12 @@ class SupportTicketController extends Controller
         $ticket_reply->ticket->client_viewed = 0;
         $ticket_reply->ticket->status = $request->status;
         $ticket_reply->ticket->save();
+        dd($ticket_reply);
 
         if($ticket_reply->save()){
             flash(translate('Reply has been sent successfully'))->success();
             $this->send_support_reply_email_to_user($ticket_reply->ticket, $ticket_reply);
+            // dd($ticket_reply);
             return back();
         }
         else{
@@ -186,6 +189,7 @@ class SupportTicketController extends Controller
         $ticket = Ticket::findOrFail(decrypt($id));
         $ticket->viewed = 1;
         $ticket->save();
+        dd($ticket);
         return view('backend.support.support_tickets_seller.show', compact('ticket'));
     }
 

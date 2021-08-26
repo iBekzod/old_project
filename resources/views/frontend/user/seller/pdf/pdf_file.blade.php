@@ -20,9 +20,21 @@
         width: 95% !important;
         margin: 0 auto;
     }
-    p{
-         font-size: 14px;
+    .clr{
+    clear: both;
     }
+    .information{
+        float: left;
+        margin: 0px;
+        width: 50%;
+        padding: 5px;
+
+    }
+
+ p{
+    font-size: 14px;
+    margin: 8px;
+ }
     .right{
         float: right !important;
     }
@@ -297,7 +309,7 @@
                                </div>
                                <div class="col-md-12">
                                    <div class="center">
-                                     <p > <b>12. КОНФИДЕНЦИАЛЬНОСТЬ И ПЕРСОНАЛЬНЫЕ ДАННЫЕ</b></p>
+                                     <p style="margin-top: 30px" > <b>12. КОНФИДЕНЦИАЛЬНОСТЬ И ПЕРСОНАЛЬНЫЕ ДАННЫЕ</b></p>
                                    </div>
                                </div>
                                <div class="col-md-12">
@@ -339,83 +351,55 @@
                                         "poctovyj_indeks" => "41"
                                         ] */ --}}
                         <div class="row">
-                              <div class="col-md-12">
-                                  <div class="selections">
-                                        <div style="display: inline-block; padding:10px 15px 0; width:45%">
-                                            <p>Название: ООО «BMG HI-TECH</p>
-                                        </div>
-                                        <div class="right" style="padding:0 15px 0; width:35%">
-                                            <p>Название:  <span class="danger pl-2">{{$selection['forma_sobstvennosti']?? ""}}</span> "<span class="danger">{{ $selection['uridiceskoe_nazvanie_vendora']?? null }}</span>"</p>
-                                        </div>
-                                  </div>
-                                  <div class="selections">
-                                        <div style="display: inline-block; padding:10px 15px 0; width:45%">
-                                            <p>Адрес: 100029 г. Ташкент, Мирабадский р-он   ул. Афросиаб 12 б </p>
-                                        </div>
-                                        <div class="right" style="padding:0 15px 0; width:35%">
-                                            <p>Адрес:  <span class="danger pl-1">{{ $selection['adres_registracii_vendora']?? null }}</span></p>
-                                        </div>
-                                  </div>
-                                  <div class="selections">
-                                        <div style="display: inline-block; padding:10px 15px 0; width:45%">
-                                            <p>Банк: Алока банк </p>
-                                        </div>
-                                        <div class="right" style="padding:0 15px 0; width:35%">
-                                            <p> Банк: <span class="danger pl-1">{{ $selection['nazvanie_magazina']?? null }}</span></p>
-                                        </div>
-                                   </div>
-                                   <div class="selections">
-                                        <div style="display: inline-block; padding:10px 15px 0; width:45%">
-                                            <p>МФО: 00401</p>
-                                        </div>
-                                        <div class="right" style="padding:0 15px 0; width:35%">
-                                            <p>МФО: <span class="danger pl-1">{{ $selection['mfo_banka']?? null }}</span></p>
-                                        </div>
-                                    </div>
-                                    <div class="selections">
-                                        <div style="display: inline-block; padding:10px 15px 0; width:45%">
-                                            <p>р/с: 2020 8000 2009 7992 2001 </p>
-                                        </div>
-                                        <div class="right" style="padding:0 15px 0; width:35%">
-                                            <p>р/с:<span class="danger pl-1">{{ $selection['rs']?? null }}</span></p>
-                                        </div>
-                                    </div>
-                                    <div class="selections">
-                                        <div style="display: inline-block; padding:10px 15px 0; width:45%">
-                                            <p>ИНН: 306018564 </p>
-                                        </div>
-                                        <div class="right" style="padding:0 15px 0; width:35%">
-                                            <p> ИНН:<span class="danger pl-1">{{ $selection['inn']?? null }}</span></p>
-                                        </div>
-                                    </div>
-                                    <div class="selections">
-                                        <div style="display: inline-block; padding:10px 15px 0; width:45%">
-                                            <p>Тел раб: 78 150 8 150</p>
-                                        </div>
-                                        <div class="right" style="padding:0 15px 0; width:35%">
-                                            <p>Тел раб:<span class="danger pl-1">{{ $selection['tel_direktora']?? null }}</span></p>
-                                        </div>
-                                    </div>
-                                    <div class="selections">
-                                        <div style="display: inline-block; padding:10px 15px 0; width:45%">
-                                            <p>e-mail: bmgventure@gmail.com </p>
-                                        </div>
-                                        <div class="right" style="padding:0 15px 0; width:35%">
-                                            <p>e-mail: <span class="danger pl-1">{{ $selection['elektronnaa_pocta_menedzera']?? null }}</span> </p>
-                                        </div>
-                                    </div>
-                                    <div class="selections">
-                                        <div style="display: inline-block; padding:10px 15px 0; width:45%">
-                                            <p>Руководитель <br>
-                                                /Джаббаров И.Г./</p>
-                                        </div>
-                                        <div class="right" style="padding:0 15px 0; width:35%">
-                                            <p>Руководитель <br>
-                                                <b> <span class="danger">{{ $selection['fio_direktora']?? null }}</span></b>
-                                             </p>
-                                        </div>
-                                    </div>
-                              </div>
+                            <div class="col-md-12">
+                                <div class="selections">
+                                        <p class="information">Название: ООО «BMG HI-TECH</p>
+                                        <p class="information">Название:  <span class="danger pl-2">{{$selection['forma_sobstvennosti']?? ""}}</span> "<span class="danger">{{ $selection['uridiceskoe_nazvanie_vendora']?? null }}</span>"</p>
+                                </div>
+                                <div class="clr"></div>
+                                <div class="selections">
+                                        <p class="information">Адрес: 100029 г. Ташкент, Мирабадский р-он   ул. Афросиаб 12 б </p>
+                                        <p class="information">Адрес:  <span class="danger pl-1">{{ $selection['adres_registracii_vendora']?? null }}</span></p>
+                                </div>
+                                <div class="clr"></div>
+                                <div class="selections">
+                                        <p class="information">Банк: Алока банк </p>
+                                        <p class="information"> Банк: <span class="danger pl-1">{{ $selection['nazvanie_banka']?? null }}</span></p>
+                                </div>
+                                <div class="clr"></div>
+                                <div class="selections">
+                                        <p class="information">МФО: 00401</p>
+                                        <p class="information">МФО: <span class="danger pl-1">{{ $selection['mfo_banka']?? null }}</span></p>
+                                </div>
+                                    <div class="clr"></div>
+                                <div class="selections">
+                                        <p class="information">р/с: 2020 8000 2009 7992 2001 </p>
+                                        <p class="information">р/с:<span class="danger pl-1">{{ $selection['rs']?? null }}</span></p>
+                                </div>
+                                    <div class="clr"></div>
+                                <div class="selections">
+                                        <p class="information">ИНН: 306018564 </p>
+                                        <p class="information"> ИНН:<span class="danger pl-1">{{ $selection['inn']?? null }}</span></p>
+                                </div>
+                                    <div class="clr"></div>
+                                <div class="selections">
+                                        <p class="information">Тел раб: 78 150 8 150</p>
+                                        <p class="information">Тел раб:<span class="danger pl-1">{{ $selection['tel_direktora']?? null }}</span></p>
+                                </div>
+                                    <div class="clr"></div>
+                                <div class="selections">
+                                        <p class="information">e-mail: bmgventure@gmail.com </p>
+                                        <p class="information">e-mail: <span class="danger pl-1">{{ $selection['elektronnaa_pocta_menedzera']?? null }}</span> </p>
+                                </div>
+                                    <div class="clr"></div>
+                                <div class="selections">
+                                        <p class="information">Руководитель <br>
+                                            /Джаббаров И.Г./</p>
+                                        <p class="information">Руководитель <br>
+                                            <b> <span class="danger">{{ $selection['fio_direktora']?? null }}</span></b>
+                                        </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </form>

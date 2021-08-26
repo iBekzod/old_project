@@ -45,8 +45,8 @@ class ConversationController extends Controller
             // $conversations = Conversation::orderBy('created_at', 'desc')->get();
             // return view('backend.support.conversations.index', compact('conversations'));
 
-            $conversation=Conversation::latest()->paginate(15);
-        //    dd($conversation);
+            $conversations=Conversation::latest()->paginate(15);
+        //    dd($conversations);
 
         // $string = "Here is use big string of your paragraph or description.";
 
@@ -60,7 +60,7 @@ class ConversationController extends Controller
         // dd($string);
 
             // dd( Auth::user()->seller);
-            return view('backend.support.conversations.index')->with('conversations',$conversation);
+            return view('backend.support.conversations.index', compact('conversations'));
         }
         else {
             flash(translate('Conversation is disabled at this moment'))->warning();
@@ -84,8 +84,34 @@ class ConversationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function admin_store(Request $request)
+    {
+        return $request->all();
+        return 'keldi';
+        // $user_type = Product::findOrFail($request->product_id)->user->user_type;
+
+        // $conversation = new Conversation;
+        // $conversation->sender_id = Auth::user()->id;
+        // $conversation->receiver_id = Product::findOrFail($request->product_id)->user->id;
+        // $conversation->title = $request->title;
+
+        // if($conversation->save()) {
+        //     $message = new Message;
+        //     $message->conversation_id = $conversation->id;
+        //     $message->user_id = Auth::user()->id;
+        //     $message->message = $request->message;
+
+        //     if ($message->save()) {
+        //         $this->send_message_to_seller($conversation, $message, $user_type);
+        //     }
+        // }
+
+        // flash(translate('Message has been send to seller'))->success();
+        // return back();
+    }
     public function store(Request $request)
     {
+
         $user_type = Product::findOrFail($request->product_id)->user->user_type;
 
         $conversation = new Conversation;
@@ -186,6 +212,8 @@ class ConversationController extends Controller
         elseif($conversation->receiver_id == Auth::user()->id) {
             $conversation->receiver_viewed = 1;
         }
+
+        // dd($conversation);
         if( $conversation->save()){
             return view('backend.support.conversations.show', compact('conversation'));
         }
@@ -232,7 +260,7 @@ class ConversationController extends Controller
     //             return back();
     //     }
     // }
-    
+
      public function destroy($id)
     {
         $conversation = Conversation::findOrFail(decrypt($id));

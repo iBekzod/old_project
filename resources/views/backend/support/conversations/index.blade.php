@@ -34,9 +34,19 @@
                         <td style="width: 10%">
                             @if(App\User::where('id',$conversation->sender_id)->exists())
                               {{ App\User::where('id',$conversation->sender_id)->first()->name}}
+                                @if ($conversation->receiver_viewed == 0)
+                                    <span class="badge badge-inline badge-info">{{ translate('New') }}</span>
+                                @endif
                             @endif
                         </td>
-                        <td style="width: 11%">@if(App\Product::where('id',$conversation->receiver_id)->exists()){{ App\Product::where('id',$conversation->receiver_id)->first()->user->name}}@endif</td>
+                        <td style="width: 11%">
+                            @if(App\Product::where('id',$conversation->receiver_id)->exists())
+                            {{ App\Product::where('id',$conversation->receiver_id)->first()->user->name}}
+                                @if ($conversation->sender_viewed == 0)
+                                <span class="badge badge-inline badge-info">{{ translate('New') }}</span>
+                                @endif
+                            @endif
+                        </td>
                         <td style="width: 20%">
                             @php
                             $string=$conversation->msg;
@@ -47,22 +57,18 @@
                               }else {
                                    echo $string;
                               }
-
-
                             @endphp
 
-                           </td>
-                        {{-- <td>
-                            @if ($conversation->sender != null)
-                                {{ $conversation->sender_id }}
+                            {{-- @if ($conversation->sender != null)
+                                {{ $conversation->sender->name }}
                                 @if ($conversation->receiver_viewed == 0)
                                     <span class="badge badge-inline badge-info">{{ translate('New') }}</span>
                                 @endif
                             @endif
-                        </td> --}}
-                        {{-- <td>
+                        </td>
+                        <td>
                             @if ($conversation->receiver != null)
-                                {{ $conversation->receiver_id }}
+                                {{ $conversation->receiver->name }}
                                 @if ($conversation->sender_viewed == 0)
                                     <span class="badge badge-inline badge-info">{{ translate('New') }}</span>
                                 @endif
