@@ -70,7 +70,7 @@ class OrderController extends Controller
         foreach ($cartItems as $cartItem) {
             $product = Product::find($cartItem->product_id);
 
-            $product_stocks = $product->stocks->where('variant', $cartItem->variation)->first();
+            $product_stocks = $product;
             $product_stocks->qty -= $cartItem->quantity;
             $product_stocks->save();
 

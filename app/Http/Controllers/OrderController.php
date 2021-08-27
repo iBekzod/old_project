@@ -341,7 +341,7 @@ class OrderController extends Controller
 
                 $product_variation = $cartItem['variation'];
 
-                $product_stock = $product->stocks->where('variant', $product_variation)->first();
+                $product_stock = $product;
                 if ($product->digital != 1 && $cartItem['quantity'] > $product_stock->qty) {
                     flash(translate('The requested quantity is not available for ') . $product->getTranslation('name'))->warning();
                     $order->delete();
@@ -502,7 +502,7 @@ class OrderController extends Controller
             foreach ($order->orderDetails as $key => $orderDetail) {
                 try {
 
-                    $product_stock = ProductStock::where('product_id', $orderDetail->product_id)->where('variant', $orderDetail->variation)->first();
+                    $product_stock = Product::where('id', $orderDetail->product_id)->first();
                     if ($product_stock != null) {
                         $product_stock->qty += $orderDetail->quantity;
                         $product_stock->save();
@@ -564,8 +564,7 @@ class OrderController extends Controller
                         $variant = '';
                     }
 
-                    $product_stock = ProductStock::where('product_id', $orderDetail->product_id)
-                        ->where('variant', $variant)
+                    $product_stock = Product::where('product_id', $orderDetail->product_id)
                         ->first();
 
                     if ($product_stock != null) {
@@ -586,8 +585,8 @@ class OrderController extends Controller
                         $variant = '';
                     }
 
-                    $product_stock = ProductStock::where('product_id', $orderDetail->product_id)
-                        ->where('variant', $variant)
+                    $product_stock = Product::where('product_id', $orderDetail->product_id)
+                        // ->where('variant', $variant)
                         ->first();
 
                     if ($product_stock != null) {

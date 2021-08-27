@@ -490,7 +490,7 @@ class OrderController extends Controller
             $product = Product::findOrFail($cartItem['id']);
             if ($cartItem['variation']) {
                 $cartItemVariation = $cartItem['variation'];
-                $product_stocks = $product->first();
+                $product_stocks = $product;
                 $product_stocks->qty -= $cartItem['quantity'];
                 $product_stocks->save();
             } else {

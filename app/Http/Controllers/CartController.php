@@ -40,9 +40,9 @@ class CartController extends Controller
         $str = '';
         $tax = 0;
 
-        if($product->digital != 1 && $request->quantity < $product->min_qty) {
+        if($product->digital != 1 && $request->quantity < $product->qty) {
             return array('status' => 0, 'view' => view('frontend.partials.minQtyNotSatisfied', [
-                'min_qty' => $product->min_qty
+                'min_qty' => $product->qty
             ])->render());
         }
 
@@ -67,8 +67,8 @@ class CartController extends Controller
 
         $data['variant'] = $str;
 
-        if($str != null && $product->variant_product){
-            $product_stock = $product->stocks->where('variant', $str)->first();
+        if($str != null ){//&& $product->variant_product){
+            $product_stock = $product;
             $price = $product_stock->price;
             $quantity = $product_stock->qty;
 
@@ -135,7 +135,7 @@ class CartController extends Controller
             foreach ($request->session()->get('cart') as $key => $cartItem){
                 if($cartItem['id'] == $request->id){
                     if($cartItem['variant'] == $str && $str != null){
-                        $product_stock = $product->stocks->where('variant', $str)->first();
+                        $product_stock = $product;
                         $quantity = $product_stock->qty;
 
                         if($quantity < $cartItem['quantity'] + $request['quantity']){
@@ -183,16 +183,16 @@ class CartController extends Controller
             if($key == $request->key){
                 $product = \App\Product::find($object['id']);
                 if($object['variant'] != null && $product->variant_product){
-                    $product_stock = $product->stocks->where('variant', $object['variant'])->first();
+                    $product_stock = $product;
                     $quantity = $product_stock->qty;
                     if($quantity >= $request->quantity){
-                        if($request->quantity >= $product->min_qty){
+                        if($request->quantity >= $product->qty){
                             $object['quantity'] = $request->quantity;
                         }
                     }
                 }
                 elseif ($product->current_stock >= $request->quantity) {
-                    if($request->quantity >= $product->min_qty){
+                    if($request->quantity >= $product->qty){
                         $object['quantity'] = $request->quantity;
                     }
                 }

@@ -97,7 +97,7 @@ class PosController extends Controller
         $data['variant'] = $request->variant;
 
         if($request->variant != null && $product->variant_product){
-            $product_stock = $product->stocks->where('variant', $request->variant)->first();
+            $product_stock = $product;
             $price = $product_stock->price;
             $quantity = $product_stock->qty;
 
@@ -309,7 +309,7 @@ class PosController extends Controller
                     $product_variation = $cartItem['variant'];
 
                     if($product_variation != null){
-                        $product_stock = $product->stocks->where('variant', $product_variation)->first();
+                        $product_stock = $product;
                         $product_stock->qty -= $cartItem['quantity'];
                         $product_stock->save();
                     }
