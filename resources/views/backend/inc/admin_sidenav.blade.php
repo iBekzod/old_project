@@ -500,7 +500,7 @@
                                 @endphp
                                 <li class="aiz-side-nav-item">
                                     <a href="{{ route('support_ticket_seller.admin_index') }}"
-                                       class="aiz-side-nav-link {{ areActiveRoutes(['support_ticket_seller.admin_index', 'support_ticket.admin_show'])}}">
+                                       class="aiz-side-nav-link {{ areActiveRoutes(['support_ticket_seller.admin_index', 'support_ticket_seller.admin_show'])}}">
                                         <span class="aiz-side-nav-text">{{translate('Ticket seller')}}</span>
                                         @if($support_ticket > 0)<span
                                         class="badge badge-info">{{ $support_ticket }}</span>
@@ -528,6 +528,8 @@
                                         <span class="aiz-side-nav-text">{{translate('Product Queries')}}</span>
                                         @if (count($conversation) > 0)
                                             <span class="badge badge-info">{{ count($conversation) }}</span>
+                                            <span class="badge badge-info">{{ count($conversation) }}</span>
+
                                         @endif
                                     </a>
                                 </li>
@@ -535,7 +537,7 @@
                             @if(Auth::user()->user_type == 'admin' || in_array('16', json_decode(Auth::user()->staff->role->permissions)))
                                 <li class="aiz-side-nav-item">
                                     <a href="{{ route('conversations.found_it_cheaper') }}"
-                                       class="aiz-side-nav-link {{ areActiveRoutes(['conversations.found_it_cheaper', 'conversations.admin_show'])}}">
+                                       class="aiz-side-nav-link {{ areActiveRoutes(['conversations.found_it_cheaper', 'found_it_cheapers.admin_show'])}}">
                                           <span class="aiz-side-nav-text">{{translate('Found it cheaper')}}</span>
                                         @if (count($conversation) > 0)
                                             <span class="badge badge-info">{{ count($conversation) }}</span>
@@ -557,7 +559,7 @@
                         @if(Auth::user()->user_type == 'admin' || in_array('16', json_decode(Auth::user()->staff->role->permissions)))
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('conversation.report_description') }}"
-                                   class="aiz-side-nav-link {{ areActiveRoutes(['conversation.report_description', 'conversations.admin_show'])}}">
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['conversation.report_description', 'report_description.admin_show'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Report description')}}</span>
                                     @if (count($conversation) > 0)
                                         <span class="badge badge-info">{{ count($conversation) }}</span>
@@ -568,7 +570,7 @@
                         @if(Auth::user()->user_type == 'admin' || in_array('16', json_decode(Auth::user()->staff->role->permissions)))
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('conversation.support_service') }}"
-                                   class="aiz-side-nav-link {{ areActiveRoutes(['conversation.support_service', 'conversations.admin_show'])}}">
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['conversation.support_service', 'support_service.admin_show'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Support service')}}</span>
                                     @if (count($conversation) > 0)
                                         <span class="badge badge-info">{{ count($conversation) }}</span>

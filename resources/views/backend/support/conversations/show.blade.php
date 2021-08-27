@@ -68,7 +68,6 @@
                                 </li>
                             @else
                                 <li class="list-group-item">
-                                  
                                     <div class="card " style="width: 75%;">
                                         <div class="card-header ">
                                             <div class="media float-rigth">

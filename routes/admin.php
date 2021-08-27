@@ -216,7 +216,7 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 
     Route::get('/orders/destroy/{id}', 'OrderController@destroy')->name('orders.destroy');
     Route::post('/bulk-order-delete', 'OrderController@bulk_order_delete')->name('bulk-order-delete');
-    
+
 	Route::get('invoice/admin/{order_id}', 'InvoiceController@admin_invoice_download')->name('admin.invoice.download');
 
 	Route::post('/pay_to_seller', 'CommissionController@pay_to_seller')->name('commissions.pay_to_seller');
@@ -246,9 +246,9 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::post('support_ticket/seller/reply','SupportTicketController@admin_store')->name('support_ticket.admin_store');
 
     //  Support_Ticket user
-    Route::get('support_ticket/user','SupportTicketController@user_admin_index')->name('support_ticket_user.admin_index');
+    // Route::get('support_ticket/user','SupportTicketController@user_admin_index')->name('support_ticket_user.admin_index');
 	// Route::get('support_ticket/user/{id}/show','SupportTicketController@admin_show')->name('support_ticket.admin_show');
-	Route::post('support_ticket/user/reply','SupportTicketController@admin_store')->name('support_ticket.admin_store');
+	// Route::post('support_ticket/user/reply','SupportTicketController@admin_store')->name('support_ticket.admin_store');
 
 	//Pickup_Points
 	Route::resource('pick_up_points','PickupPointController');
@@ -258,16 +258,22 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	//conversation of seller customer
 	Route::get('conversations','ConversationController@product_queries')->name('conversations.admin_index');
     Route::post('conversations/admin_store','ConversationController@admin_store')->name('conversation.admin_store');
+    Route::get('conversations/{id}/show','ConversationController@admin_show')->name('conversations.admin_show');
+        // Route::get('conversation/price_reduction','ConversationController@price_reduction')->name('conversation.price_reduction');
 
-    Route::get('conversation/found_it_cheaper','FoundItCheaperController@index')->name('conversations.found_it_cheaper');    // Route::get('conversation/price_reduction','ConversationController@price_reduction')->name('conversation.price_reduction');
-    Route::get('conversation/report_description','ReportDescriptionController@index')->name('conversation.report_description');
-    Route::get('conversation/support_service','SupportServiceController@index')->name('conversation.support_service');
-
-	Route::get('conversations/{id}/show','ConversationController@admin_show')->name('conversations.admin_show');
+    //found_it_cheaper of seller customer
+    Route::get('conversation/found_it_cheaper','FoundItCheaperController@index')->name('conversations.found_it_cheaper');
     Route::get('found_it_cheaper/{id}/show', 'FoundItCheaperController@show')->name('found_it_cheapers.admin_show');
+
+     //report_description of seller customer
+    Route::get('conversation/report_description','ReportDescriptionController@index')->name('conversation.report_description');
     Route::get('report_description/{id}/show','ReportDescriptionController@show')->name('report_description.admin_show');
+
+         //support_service of seller customer
+    Route::get('conversation/support_service','SupportServiceController@index')->name('conversation.support_service');
     Route::get('support_service/{id}/show','SupportServiceController@show')->name('support_service.admin_show');
 
+    
     Route::post('/sellers/profile_modal', 'SellerController@profile_modal')->name('sellers.profile_modal');
     Route::post('/sellers/approved', 'SellerController@updateApproved')->name('sellers.approved');
 

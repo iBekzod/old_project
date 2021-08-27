@@ -116,7 +116,7 @@
     </div>
 </div>
 
-@endsection
+@endsection 
 
 @section('script')
     <script type="text/javascript">
