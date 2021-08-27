@@ -93,14 +93,14 @@ class ConversationController extends Controller
 
         $message->conversation_id = $request->conversation_id;
         $message->user_id = Auth::user()->id;
-        // dd($message->user_id);
+        $message->conversation->sender_viewed=0;
         $message->message = $request->message;
-        // $message->conversation->user_id=0;
+        $message->conversation->save();
 
         if($message->save()){
             flash(translate('Reply has been sent successfully'))->success();
             // $this->send_support_reply_email_to_user($ticket_reply->ticket, $ticket_reply);
-           // manabuni ishlatish kere
+        //    manabuni ishlatish kere
             // dd($ticket_reply);
             return back();
         }
