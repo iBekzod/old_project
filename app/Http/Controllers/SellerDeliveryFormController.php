@@ -129,20 +129,7 @@ class SellerDeliveryFormController extends Controller
 
         }
     }
-    //  public function generatorPDF()
-    // {
-    // //   return 'came';
 
-    //   // retreive all records from db
-    //   $data =Seller::all();
-
-    //   // share data to view
-    //   view()->share('employee',$data);
-    //   $pdf = PDF::loadView('pdf_view', $data);
-
-    //   // download PDF file with download method
-    //   return $pdf->download('pdf_file.pdf');
-    // }
 
 
 public function generatorPDF() {
