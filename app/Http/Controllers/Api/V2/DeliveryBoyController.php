@@ -11,8 +11,11 @@ use App\Http\Resources\V2\DeliveryHistoryCollection;
 use Auth;
 use App\DeliveryBoy;
 use App\DeliveryHistory;
+use App\Http\Controllers\AffiliateController;
 use App\Order;
+use App\SmsTemplate;
 use App\User;
+use App\Utility\SmsUtility;
 
 class DeliveryBoyController extends Controller
 {
