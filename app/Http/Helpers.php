@@ -990,7 +990,7 @@ if (!function_exists('defaultCurrency')) {
         if ($currency = Currency::where('status', true)->where('code', env('DEFAULT_CURRENCY', 'USD'))->firstOrFail()) {
             return $currency->code;
         }
-        return "USD";
+        return "USB";
     }
 }
 

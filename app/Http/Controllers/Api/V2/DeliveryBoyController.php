@@ -369,15 +369,15 @@ class DeliveryBoyController extends Controller
         $order->save();
         $delivery_history->save();
 
-        if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null &&
-              \App\Addon::where('unique_identifier', 'otp_system')->first()->activated &&
-                SmsTemplate::where('identifier','delivery_status_change')->first()->status == 1){
+        // if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null &&
+        //       \App\Addon::where('unique_identifier', 'otp_system')->first()->activated &&
+        //         SmsTemplate::where('identifier','delivery_status_change')->first()->status == 1){
             try {
                 SmsUtility::delivery_status_change($order->user->phone, $order);
             } catch (\Exception $e) {
 
             }
-        }
+        // }
 
         return response()->json([
             'result' => true,
