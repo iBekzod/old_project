@@ -146,6 +146,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Address::class);
     }
 
+    public function affiliate_log()
+    {
+        return $this->hasMany(AffiliateLog::class);
+    }
+
     /**
      * Upload Image
      *
