@@ -144,8 +144,8 @@ class OrderController extends Controller
                 'payment_type' => 'required',
                 'payment_status' => 'required',
                 // 'grand_total' => 'required',
-                'coupon_discount' => 'required',
-                'coupon_code' => 'required',
+                'coupon_discount' => 'nullable',
+                'coupon_code' => 'nullable',
             ]);
             $user_id=auth()->id();//??$request->user_id;
             $user = User::where('id',$user_id)->first();
@@ -490,7 +490,7 @@ class OrderController extends Controller
             $product = Product::findOrFail($cartItem['id']);
             if ($cartItem['variation']) {
                 $cartItemVariation = $cartItem['variation'];
-                $product_stocks = $product->first();
+                $product_stocks = $product;
                 $product_stocks->qty -= $cartItem['quantity'];
                 $product_stocks->save();
             } else {
@@ -651,7 +651,7 @@ class OrderController extends Controller
             $product = Product::findOrFail($cartItem['id']);
             if ($cartItem['variation']) {
                 $cartItemVariation = $cartItem['variation'];
-                $product_stocks = $product->first();
+                $product_stocks = $product;
                 $product_stocks->qty -= $cartItem['quantity'];
                 $product_stocks->save();
             } else {

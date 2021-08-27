@@ -11,8 +11,11 @@ use App\Http\Resources\V2\DeliveryHistoryCollection;
 use Auth;
 use App\DeliveryBoy;
 use App\DeliveryHistory;
+use App\Http\Controllers\AffiliateController;
 use App\Order;
+use App\SmsTemplate;
 use App\User;
+use App\Utility\SmsUtility;
 
 class DeliveryBoyController extends Controller
 {
@@ -366,15 +369,15 @@ class DeliveryBoyController extends Controller
         $order->save();
         $delivery_history->save();
 
-        if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null &&
-              \App\Addon::where('unique_identifier', 'otp_system')->first()->activated &&
-                SmsTemplate::where('identifier','delivery_status_change')->first()->status == 1){
+        // if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null &&
+        //       \App\Addon::where('unique_identifier', 'otp_system')->first()->activated &&
+        //         SmsTemplate::where('identifier','delivery_status_change')->first()->status == 1){
             try {
                 SmsUtility::delivery_status_change($order->user->phone, $order);
             } catch (\Exception $e) {
 
             }
-        }
+        // }
 
         return response()->json([
             'result' => true,

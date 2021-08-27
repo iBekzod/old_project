@@ -341,7 +341,7 @@ class OrderController extends Controller
 
                 $product_variation = $cartItem['variation'];
 
-                $product_stock = $product->stocks->where('variant', $product_variation)->first();
+                $product_stock = $product;
                 if ($product->digital != 1 && $cartItem['quantity'] > $product_stock->qty) {
                     flash(translate('The requested quantity is not available for ') . $product->getTranslation('name'))->warning();
                     $order->delete();
@@ -502,7 +502,7 @@ class OrderController extends Controller
             foreach ($order->orderDetails as $key => $orderDetail) {
                 try {
 
-                    $product_stock = ProductStock::where('product_id', $orderDetail->product_id)->where('variant', $orderDetail->variation)->first();
+                    $product_stock = Product::where('id', $orderDetail->product_id)->first();
                     if ($product_stock != null) {
                         $product_stock->qty += $orderDetail->quantity;
                         $product_stock->save();
@@ -564,8 +564,7 @@ class OrderController extends Controller
                         $variant = '';
                     }
 
-                    $product_stock = ProductStock::where('product_id', $orderDetail->product_id)
-                        ->where('variant', $variant)
+                    $product_stock = Product::where('product_id', $orderDetail->product_id)
                         ->first();
 
                     if ($product_stock != null) {
@@ -586,8 +585,8 @@ class OrderController extends Controller
                         $variant = '';
                     }
 
-                    $product_stock = ProductStock::where('product_id', $orderDetail->product_id)
-                        ->where('variant', $variant)
+                    $product_stock = Product::where('product_id', $orderDetail->product_id)
+                        // ->where('variant', $variant)
                         ->first();
 
                     if ($product_stock != null) {
@@ -618,15 +617,15 @@ class OrderController extends Controller
                 }
             }
         }
-        if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null &&
-            \App\Addon::where('unique_identifier', 'otp_system')->first()->activated &&
-            SmsTemplate::where('identifier', 'delivery_status_change')->first()->status == 1) {
+        // if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null &&
+        //     \App\Addon::where('unique_identifier', 'otp_system')->first()->activated &&
+        //     SmsTemplate::where('identifier', 'delivery_status_change')->first()->status == 1) {
             try {
                 SmsUtility::delivery_status_change($order->user->phone, $order);
             } catch (\Exception $e) {
 
             }
-        }
+        // }
 
         //sends Notifications to user
         send_notification($order, $request->status);
@@ -722,15 +721,15 @@ class OrderController extends Controller
         }
 
 
-        if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null &&
-            \App\Addon::where('unique_identifier', 'otp_system')->first()->activated &&
-            SmsTemplate::where('identifier', 'payment_status_change')->first()->status == 1) {
+        // if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null &&
+        //     \App\Addon::where('unique_identifier', 'otp_system')->first()->activated &&
+        //     SmsTemplate::where('identifier', 'payment_status_change')->first()->status == 1) {
             try {
                 SmsUtility::payment_status_change($order->user->phone, $order);
             } catch (\Exception $e) {
 
             }
-        }
+        // }
         return 1;
     }
 
@@ -758,28 +757,28 @@ class OrderController extends Controller
 
             $delivery_history->save();
 
-            if (env('MAIL_USERNAME') != null && get_setting('delivery_boy_mail_notification') == '1') {
-                $array['view'] = 'emails.invoice';
-                $array['subject'] = translate('You are assigned to delivery an order. Order code') . ' - ' . $order->code;
-                $array['from'] = env('MAIL_FROM_ADDRESS');
-                $array['order'] = $order;
+            // if (env('MAIL_USERNAME') != null){// && get_setting('delivery_boy_mail_notification') == '1') {
+            //     $array['view'] = 'emails.invoice';
+            //     $array['subject'] = translate('You are assigned to delivery an order. Order code') . ' - ' . $order->code;
+            //     $array['from'] = env('MAIL_FROM_ADDRESS');
+            //     $array['order'] = $order;
 
-                try {
-                    Mail::to($order->delivery_boy->email)->queue(new InvoiceEmailManager($array));
-                } catch (\Exception $e) {
+            //     try {
+            //         Mail::to($order->delivery_boy->email)->queue(new InvoiceEmailManager($array));
+            //     } catch (\Exception $e) {
 
-                }
-            }
+            //     }
+            // }
 
-            if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null &&
-                \App\Addon::where('unique_identifier', 'otp_system')->first()->activated &&
-                SmsTemplate::where('identifier', 'assign_delivery_boy')->first()->status == 1) {
+            // if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null &&
+            //     \App\Addon::where('unique_identifier', 'otp_system')->first()->activated &&
+            //     SmsTemplate::where('identifier', 'assign_delivery_boy')->first()->status == 1) {
                 try {
                     SmsUtility::assign_delivery_boy($order->delivery_boy->phone, $order->code);
                 } catch (\Exception $e) {
 
                 }
-            }
+            // }
         // }
 
         return 1;

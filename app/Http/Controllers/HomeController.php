@@ -971,8 +971,8 @@ class HomeController extends Controller
 
 
 
-        if ($str != null && $product->variant_product) {
-            $product_stock = $product->stocks->where('variant', $str)->first();
+        if ($str != null){// && $product->variant_product) {
+            $product_stock = $product;
             $price = $product_stock->price;
             $quantity = $product_stock->qty;
         } else {

@@ -11,7 +11,8 @@
 		}
 		body{
 			font-size: 0.875rem;
-            font-family: '<?php echo  $font_family ?>';
+            font-family: '<?php echo  $font_family ?>' !important;;
+            /* font-family:DejaVu Sans !important; */
             font-weight: normal;
             direction: <?php echo  $direction ?>;
             text-align: <?php echo  $text_align ?>;

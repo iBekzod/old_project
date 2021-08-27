@@ -214,7 +214,7 @@ class ProductController extends Controller
         }
 
 
-        $product_stock = $product->stocks->where('variant', $str)->first();
+        $product_stock = $product;
         $price = $product_stock->price;
         $stockQuantity = $product_stock->qty;
 
