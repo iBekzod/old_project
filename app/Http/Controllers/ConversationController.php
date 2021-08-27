@@ -233,7 +233,6 @@ class ConversationController extends Controller
             $conversation->receiver_viewed = 1;
         }
 
-        // dd($conversation);
         if( $conversation->save()){
             return view('backend.support.conversations.show', compact('conversation'));
         }
