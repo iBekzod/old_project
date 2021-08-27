@@ -53,17 +53,17 @@ class CartController extends Controller
             $str = Color::where('code', $request['color'])->first()->name;
         }
 
-        if ($product->digital != 1) {
-            //Gets all the choice values of customer choice option and generate a string like Black-S-Cotton
-            foreach (json_decode(Product::find($request->id)->choice_options) as $key => $choice) {
-                if($str != null){
-                    $str .= '-'.str_replace(' ', '', $request['attribute_id_'.$choice->attribute_id]);
-                }
-                else{
-                    $str .= str_replace(' ', '', $request['attribute_id_'.$choice->attribute_id]);
-                }
-            }
-        }
+        // if ($product->digital != 1) {
+        //     //Gets all the choice values of customer choice option and generate a string like Black-S-Cotton
+        //     foreach (json_decode(Product::find($request->id)->choice_options) as $key => $choice) {
+        //         if($str != null){
+        //             $str .= '-'.str_replace(' ', '', $request['attribute_id_'.$choice->attribute_id]);
+        //         }
+        //         else{
+        //             $str .= str_replace(' ', '', $request['attribute_id_'.$choice->attribute_id]);
+        //         }
+        //     }
+        // }
 
         $data['variant'] = $str;
 
@@ -77,7 +77,7 @@ class CartController extends Controller
             }
         }
         else{
-            $price = $product->unit_price;
+            $price = $product->price;
         }
 
         //discount calculation based on flash deal and regular discount
@@ -124,9 +124,9 @@ class CartController extends Controller
             $data['quantity'] = 1;
         }
 
-        if(Cookie::has('referred_product_id') && Cookie::get('referred_product_id') == $product->id) {
-            $data['product_referral_code'] = Cookie::get('product_referral_code');
-        }
+        // if(Cookie::has('referred_product_id') && Cookie::get('referred_product_id') == $product->id) {
+        //     $data['product_referral_code'] = Cookie::get('product_referral_code');
+        // }
 
         if($request->session()->has('cart')){
             $foundInCart = false;
@@ -153,11 +153,11 @@ class CartController extends Controller
             if (!$foundInCart) {
                 $cart->push($data);
             }
-            $request->session()->put('cart', $cart);
+            // $request->session()->put('cart', $cart);
         }
         else{
             $cart = collect([$data]);
-            $request->session()->put('cart', $cart);
+            // $request->session()->put('cart', $cart);
         }
 
         return array('status' => 1, 'view' => view('frontend.partials.addedToCart', compact('product', 'data'))->render());

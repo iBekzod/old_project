@@ -61,18 +61,18 @@
             <div class="row gutters-5">
                 <div class="col text-center text-md-left">
                   <address>
-                      <strong class="text-main">{{ json_decode($order->shipping_address)->name }}</strong><br>
-                       {{ json_decode($order->shipping_address)->email }}<br>
-                       {{ json_decode($order->shipping_address)->phone }}<br>
-                       {{ json_decode($order->shipping_address)->address }}, {{ json_decode($order->shipping_address)->city }}, {{ json_decode($order->shipping_address)->postal_code }}<br>
-                       {{ json_decode($order->shipping_address)->country }}
+                      <strong class="text-main">{{ json_decode($order->shipping_address)->name??null }}</strong><br>
+                       {{ json_decode($order->shipping_address)->email??null }}<br>
+                       {{ json_decode($order->shipping_address)->phone??null }}<br>
+                       {{-- {{ json_decode($order->shipping_address)->address??null }}, {{ json_decode($order->shipping_address)->city??null }}, {{ json_decode($order->shipping_address)->postal_code??null }}<br> --}}
+                       {{-- {{ json_decode($order->shipping_address)->country??null }} --}}
                     </address>
-                      @if ($order->manual_payment && is_array(json_decode($order->manual_payment_data, true)))
+                      @if ($order->manual_payment && is_array(json_decode($order->manual_payment_data??null, true)))
                           <br>
                           <strong class="text-main">{{ translate('Payment Information') }}</strong><br>
-                          Name: {{ json_decode($order->manual_payment_data)->name }}, Amount: {{ single_price(json_decode($order->manual_payment_data)->amount) }}, TRX ID: {{ json_decode($order->manual_payment_data)->trx_id }}
+                          Name: {{ json_decode($order->manual_payment_data)->name??null }}, Amount: {{ single_price(json_decode($order->manual_payment_data)->amount??null) }}, TRX ID: {{ json_decode($order->manual_payment_data)->trx_id??null }}
                           <br>
-                          <a href="{{ uploaded_asset(json_decode($order->manual_payment_data)->photo) }}" target="_blank"><img src="{{ uploaded_asset(json_decode($order->manual_payment_data)->photo) }}" alt="" height="100"></a>
+                          <a href="{{ uploaded_asset(json_decode($order->manual_payment_data)->photo??null) }}" target="_blank"><img src="{{ uploaded_asset(json_decode($order->manual_payment_data)->photo??null) }}" alt="" height="100"></a>
                       @endif
                 </div>
                 <div class="col-md-4 ml-auto">

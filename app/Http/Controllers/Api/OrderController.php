@@ -237,25 +237,6 @@ class OrderController extends Controller
                 // $address= getUserAddress();
                 // $shipping_cost = calculateDeliveryCost($product, $address->id, $product->delivery_type);
                 // $order_detail_shipping_cost = (double) $shipping_cost['total_cost'];
-
-                // OrderDetail::create([
-                //     'order_id' => $order->id,
-                //     'seller_id' => $product->user_id,
-                //     'product_id' => $product->id,
-                //     'variation' => $cartItem->variation,
-                //     'price' => $cartItem->price * $cartItem->quantity,
-                //     'tax' => $cartItem->tax * $cartItem->quantity,
-                //     'shipping_cost' => $order_detail_shipping_cost,
-                //     'quantity' => $cartItem->quantity,
-                //     'payment_status' =>  $request->payment_status,
-                //     // 'delivery_status' => $delivery_status,
-                //     // 'shipping_type' => $shipping_type,
-                //     // 'pickup_point_id' => $pickup_point_id,
-                //     // 'product_referral_code' => $product_referral_code,
-                // ]);
-                // $product->update([
-                //     'num_of_sale' => DB::raw('num_of_sale + ' . $cartItem->quantity)
-                // ]);
             }
             // apply coupon usage
             if ($request->coupon_code != '') {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Address;
 use Illuminate\Http\Request;
 use App\Http\Controllers\OTPVerificationController;
 use App\Http\Controllers\ClubPointController;
@@ -15,6 +16,7 @@ use App\CouponUsage;
 use App\OtpConfiguration;
 use App\User;
 use App\BusinessSetting;
+use App\Cart;
 use App\Coupon;
 use Auth;
 use Session;
@@ -406,29 +408,29 @@ class OrderController extends Controller
 
             $order->save();
 
-            $array['view'] = 'emails.invoice';
-            $array['subject'] = translate('Your order has been placed') . ' - ' . $order->code;
-            $array['from'] = env('MAIL_FROM_ADDRESS');
-            $array['order'] = $order;
+            // $array['view'] = 'emails.invoice';
+            // $array['subject'] = translate('Your order has been placed') . ' - ' . $order->code;
+            // $array['from'] = env('MAIL_FROM_ADDRESS');
+            // $array['order'] = $order;
 
-            foreach ($seller_products as $key => $seller_product) {
-                try {
-                    Mail::to(\App\User::find($key)->email)->queue(new InvoiceEmailManager($array));
-                } catch (\Exception $e) {
+            // foreach ($seller_products as $key => $seller_product) {
+            //     try {
+            //         Mail::to(\App\User::find($key)->email)->queue(new InvoiceEmailManager($array));
+            //     } catch (\Exception $e) {
 
-                }
-            }
+            //     }
+            // }
 
-            if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null &&
-                \App\Addon::where('unique_identifier', 'otp_system')->first()->activated &&
-                SmsTemplate::where('identifier', 'order_placement')->first()->status == 1) {
+            // if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null &&
+            //     \App\Addon::where('unique_identifier', 'otp_system')->first()->activated &&
+                // SmsTemplate::where('identifier', 'order_placement')->first()->status == 1) {
                 try {
                     $otpController = new OTPVerificationController;
                     $otpController->send_order_code($order);
                 } catch (\Exception $e) {
 
                 }
-            }
+            // }
 
             //sends Notifications to user
             send_notification($order, 'placed');
