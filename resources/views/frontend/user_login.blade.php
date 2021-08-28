@@ -116,7 +116,7 @@
         }
         function autoFillCustomer(){
             $('#email').val('customer@example.com');
-            $('#password').val('123456');
+            $('#password').val('Tinfis12345');
         }
     </script>
 @endsection

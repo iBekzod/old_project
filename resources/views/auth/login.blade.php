@@ -41,6 +41,11 @@
                                         </label>
                                     </div>
                                 </div>
+                                <div class="col-sm-6">
+                                    <div class="text-right">
+                                        <a href="{{ route('user_login') }}" class="text-reset fs-14">{{translate('Login as seller or customer')}} ?</a>
+                                    </div>
+                                </div>
                                 @if(env('MAIL_USERNAME') != null && env('MAIL_PASSWORD') != null)
                                     <div class="col-sm-6">
                                         <div class="text-right">
@@ -79,7 +84,7 @@
 @section('script')
     <script type="text/javascript">
         function autoFill(){
-            $('#email').val('Tinfis@admin.uz');
+            $('#email').val('tinfis@admin.uz');
             $('#password').val('Tinfis12345');
         }
     </script>

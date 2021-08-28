@@ -47,11 +47,23 @@ class HomeController extends Controller
         redirect()->back();
     }
 
+    public function user_login()
+    {
+        if(Auth::check()){
+            return $this->dashboard();
+        }
+        return view('frontend.user_login');
+    }
+
     public function login()
     {
         if (Auth::check()) {
+            if(Auth::user()->user_type=='customer' ){
+                return $this->dashboard();
+            }
             return redirect()->route('admin');
         }
+        return $this->dashboard();
         return $this->admin_dashboard();
     }
 
@@ -254,12 +266,12 @@ class HomeController extends Controller
         } else if (Auth::user()->user_type == 'admin') {
             return $this->admin_dashboard();
         }
-        // elseif(Auth::user()->user_type == 'customer'){
-        // return view('frontend.user.customer.dashboard');
-        // }
+        else if(Auth::user()->user_type == 'customer'){
+         return view('frontend.user.customer.dashboard');
+        }
         else {
-            return $this->index();
-            // abort(404);
+            // return $this->index();
+            abort(404);
         }
     }
 
