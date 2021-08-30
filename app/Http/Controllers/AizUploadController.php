@@ -23,6 +23,10 @@ class AizUploadController extends Controller
             $all_uploads->where('file_original_name', 'like', '%'.$request->search.'%');
         }
 
+        if (auth()->user()->user_type == 'seller') {
+            $all_uploads->where('user_id', auth()->id());
+        }
+
         $sort_by = $request->sort;
         switch ($request->sort) {
             case 'newest':
@@ -44,7 +48,9 @@ class AizUploadController extends Controller
 
         $all_uploads = $all_uploads->paginate(60)->appends(request()->query());
 
-        return view('backend.uploaded_files.index', compact('all_uploads', 'search', 'sort_by') );
+        return (auth()->user()->user_type == 'seller')
+            ? view('frontend.user.seller.uploads.index', compact('all_uploads', 'search', 'sort_by'))
+            : view('backend.uploaded_files.index', compact('all_uploads', 'search', 'sort_by'));
     }
 
     public function create(){
