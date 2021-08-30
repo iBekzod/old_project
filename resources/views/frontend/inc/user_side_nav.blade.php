@@ -114,12 +114,18 @@
                             <span class="aiz-side-nav-text">{{ translate('Product Bulk Upload') }}</span>
                         </a>
                     </li> --}}
-                    {{-- <li class="aiz-side-nav-item">
+                    <li class="aiz-side-nav-item">
                         <a href="{{ route('seller.digitalproducts') }}" class="aiz-side-nav-link {{ areActiveRoutes(['seller.digitalproducts', 'seller.digitalproducts.upload', 'seller.digitalproducts.edit'])}}">
                             <i class="lab la-sketch aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{ translate('Digital Products') }}</span>
                         </a>
-                    </li> --}}
+                    </li>
+                    <li class="aiz-side-nav-item">
+                        <a href="{{ route('my_uploads.all') }}" class="aiz-side-nav-link {{ areActiveRoutes(['my_uploads.new'])}}">
+                            <i class="las la-folder-open aiz-side-nav-icon"></i>
+                            <span class="aiz-side-nav-text">{{ translate('Uploaded Files') }}</span>
+                        </a>
+                    </li>
                 @endif
 
                 {{-- @if(\App\BusinessSetting::where('type', 'classified_product')->first()->value == 1)

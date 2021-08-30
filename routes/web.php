@@ -281,6 +281,10 @@ Route::group(['prefix' =>'seller', 'middleware' => ['seller', 'verified', 'user'
 	Route::get('/digitalproducts/upload', 'HomeController@show_digital_product_upload_form')->name('seller.digitalproducts.upload');
 	Route::get('/digitalproducts/{id}/edit', 'HomeController@show_digital_product_edit_form')->name('seller.digitalproducts.edit');
 
+    Route::any('/uploads', 'AizUploadController@index')->name('my_uploads.all');
+    Route::any('/uploads/new', 'AizUploadController@create')->name('my_uploads.new');
+    Route::any('/uploads/file-info', 'AizUploadController@file_info')->name('my_uploads.info');
+    Route::get('/uploads/destroy/{id}', 'AizUploadController@destroy')->name('my_uploads.destroy');
 
     Route::resource('deliveries', 'SellerDeliveryController')->except([
 		'seller.create', 'seller.show', 'seller.destroy'
