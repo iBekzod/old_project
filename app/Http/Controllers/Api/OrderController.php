@@ -160,18 +160,18 @@ class OrderController extends Controller
             // $shippingAddress = json_decode($request->shipping_address);
             $address = Address::where('id', $cartItems->first()->address_id)->first();
             $shippingAddress = [];
-            if ($address != null) {
-                $shippingAddress['name']        = $user->name;
-                $shippingAddress['email']       = $user->email;
-                $shippingAddress['address']     = $address->address;
-                $shippingAddress['country']     = $address->region->name;
-                $shippingAddress['city']        = $address->city->name;
-                $shippingAddress['postal_code'] = $address->postal_code;
-                $shippingAddress['phone']       = $address->phone;
-                if($address->latitude || $address->longitude) {
-                    $shippingAddress['lat_lang'] = $address->latitude.','.$address->longitude;
-                }
+            // if ($address != null) {
+            $shippingAddress['name']        = $user->name;
+            $shippingAddress['email']       = $user->email;
+            $shippingAddress['address']     = $address->address;
+            $shippingAddress['country']     = $address->region->name;
+            $shippingAddress['city']        = $address->city->name;
+            $shippingAddress['postal_code'] = $address->postal_code;
+            $shippingAddress['phone']       = $address->phone;
+            if($address->latitude || $address->longitude) {
+                $shippingAddress['lat_lang'] = $address->latitude.','.$address->longitude;
             }
+            // }
 
             // $seller_products = array();
             // foreach ($cartItems as $cartItem) {

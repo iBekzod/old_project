@@ -7,6 +7,7 @@ use App\Cart;
 use App\Color;
 use App\Coupon;
 use App\CouponUsage;
+use App\Currency;
 use App\FlashDeal;
 use App\FlashDealProduct;
 use App\Product;
@@ -180,6 +181,7 @@ class CartController extends Controller
 
         return response()->json($shops);
     }
+
 
 
     public function add(Request $request)

@@ -32,18 +32,18 @@ class OrderController extends Controller
 
         $address = Address::where('id', $cartItems->first()->address_id)->first();
         $shippingAddress = [];
-        if ($address != null) {
-            $shippingAddress['name']        = $user->name;
-            $shippingAddress['email']       = $user->email;
-            $shippingAddress['address']     = $address->address;
-            $shippingAddress['country']     = $address->region->name;
-            $shippingAddress['city']        = $address->city->name;
-            $shippingAddress['postal_code'] = $address->postal_code;
-            $shippingAddress['phone']       = $address->phone;
-            if($address->latitude || $address->longitude) {
-                $shippingAddress['lat_lang'] = $address->latitude.','.$address->longitude;
-            }
+        // if ($address != null) {
+        $shippingAddress['name']        = $user->name;
+        $shippingAddress['email']       = $user->email;
+        $shippingAddress['address']     = $address->address;
+        $shippingAddress['country']     = $address->region->name;
+        $shippingAddress['city']        = $address->city->name;
+        $shippingAddress['postal_code'] = $address->postal_code;
+        $shippingAddress['phone']       = $address->phone;
+        if($address->latitude || $address->longitude) {
+            $shippingAddress['lat_lang'] = $address->latitude.','.$address->longitude;
         }
+        // }
 
         $sum = 0.00;
         foreach ($cartItems as $cartItem) {
@@ -57,7 +57,7 @@ class OrderController extends Controller
         // create an order
         $order = Order::create([
             'user_id' => $request->user_id,
-            'seller_id' =>$request->owner_id,
+            // 'seller_id' =>$request->owner_id,
             'shipping_address' => json_encode($shippingAddress),
             'payment_type' => $request->payment_type,
             'payment_status' => $set_paid ? 'paid' : 'unpaid',
