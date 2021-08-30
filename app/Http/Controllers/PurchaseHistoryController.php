@@ -28,7 +28,7 @@ class PurchaseHistoryController extends Controller
                         ->join('order_details', 'orders.id', '=', 'order_details.order_id')
                         ->join('products', 'order_details.product_id', '=', 'products.id')
                         ->where('orders.user_id', Auth::user()->id)
-                        ->where('products.digital', '1')
+                        // ->where('products.digital', '1')
                         ->where('order_details.payment_status', 'paid')
                         ->select('order_details.id')
                         ->paginate(1);
