@@ -63,12 +63,12 @@
                     </a>
                 </li>
 
-                {{-- <li class="aiz-side-nav-item">
+                <li class="aiz-side-nav-item">
                     <a href="{{ route('digital_purchase_history.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['digital_purchase_history.index'])}}">
                         <i class="las la-download aiz-side-nav-icon"></i>
                         <span class="aiz-side-nav-text">{{ translate('Downloads') }}</span>
                     </a>
-                </li> --}}
+                </li>
 
                 @php
                     $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
@@ -199,6 +199,13 @@
                         <a href="{{ route('payments.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['payments.index'])}}">
                             <i class="las la-history aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{ translate('Payment History') }}</span>
+                        </a>
+                    </li>
+
+                    <li class="aiz-side-nav-item">
+                        <a href="{{ route('commission-log.index') }}" class="aiz-side-nav-link">
+                            <i class="las la-file-alt aiz-side-nav-icon"></i>
+                            <span class="aiz-side-nav-text">{{ translate('Commission History') }}</span>
                         </a>
                     </li>
 
