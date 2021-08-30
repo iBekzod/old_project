@@ -187,8 +187,13 @@ class CartController extends Controller
         try{
             $product = Product::where('id',$request->id)->first();
             $tax = 0;
+            $default_currency_id=29;
+            if(Currency::where('code', 'UZB')->exists()){
+                $default_currency_id=Currency::where('code', 'UZB')->first()->id;
+            }
             $tax= taxPrice($product->id);
-            $price = getSomPrice($product->id);
+            $tax = convertToCurrency($tax, $product->currency_id, $default_currency_id);
+            $price = convertToCurrency($product->price, $product->currency_id, $default_currency_id);
             $user_id=auth()->id();
             //discount calculation based on flash deal and regular discount
             //calculation of taxes
@@ -202,8 +207,11 @@ class CartController extends Controller
                 $discount_applicable = true;
             }
 
+            $discount = convertToCurrency(discountPrice($product->id), $product->currency_id, $default_currency_id);
             if ($discount_applicable) {
-                $price -= discountPrice($product->id);
+                $price += $discount;
+            }else{
+                $discount=0;
             }
             $address_id=$request->address_id??getUserAddress()->id;
             $delivery_cost=[];
@@ -214,6 +222,7 @@ class CartController extends Controller
                 $is_express=true;
                 $shipping_cost= $delivery_cost['total_express_cost'];
             }
+            $shipping_cost = convertToCurrency($shipping_cost, $product->currency_id, $default_currency_id);
             $quantity=0;
             if($request->has('quantity')){
                 $quantity=(double)$request->quantity;
@@ -236,7 +245,7 @@ class CartController extends Controller
                 'shipping_cost' => $shipping_cost,
                 'shipping_type'=> $product->delivery_type,
                 'quantity' => DB::raw("quantity + $quantity"),
-                'discount' => $product->discount,
+                'discount' => $discount,
             ]);
 
             if($request->has('product_referral_code') && $request->product_referral_code!=null){

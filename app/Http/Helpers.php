@@ -1005,6 +1005,19 @@ if (!function_exists('getSomPrice')) {
     }
 }
 
+
+if (!function_exists('convertToCurrency')) {
+    function convertToCurrency($price, $from, $to)
+    {
+        if(Currency::where('id', $from)->exists() && Currency::where('id', $to)->exists()){
+            $currency_from=Currency::where('id', $from)->first();
+            $currency_to=Currency::where('id', $to)->first();
+           return $price/($currency_from->exchange_rate)*$currency_to->exchange_rate;
+        }
+        return $price;
+    }
+}
+
 if (!function_exists('defaultExchangeRate')) {
     function defaultExchangeRate()
     {
