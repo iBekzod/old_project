@@ -1078,10 +1078,15 @@ class HomeController extends Controller
 
     public function seller_digital_product_list(Request $request)
     {
+
         $products = Product::where('user_id', Auth::user()->id)->where('digital', 1)->orderBy(
             'created_at',
             'desc'
         )->paginate(10);
+        // $products = Product::where('user_id', Auth::user()->id)->orderBy(
+        //     'created_at',
+        //     'desc'
+        // )->paginate(10);
         return view('frontend.user.seller.digitalproducts.products', compact('products'));
     }
     public function show_digital_product_upload_form(Request $request)
