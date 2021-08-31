@@ -30,7 +30,7 @@
     <script type="text/javascript"
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPEW1j0_XsP39Xm8Mo8XMM939vW6qbR2Q&sensor=false">
     </script>
-   
+
     @php
         $code = '';
         if (Auth::check() && !isAdmin()) $code = 'var SB_AECOMMERCE_ACTIVE_USER = ' . Auth::user()->id . ';';

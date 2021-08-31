@@ -22,13 +22,26 @@ class ConversationController extends Controller
     public function index()
     {
         if (BusinessSetting::where('type', 'conversation_system')->first()->value == 1) {
-            $conversations = Conversation::where('sender_id', Auth::user()->id)->orWhere('receiver_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(5);
+
+            $conversations = Conversation::where('sender_id',Auth::user()->id)->orWhere('receiver_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(5);
+            // dd($conversations);
             return view('frontend.user.conversations.index', compact('conversations'));
         }
         else {
             flash(translate('Conversation is disabled at this moment'))->warning();
             return back();
         }
+
+        //     $seller_id=Auth::user()->id;
+        //     // dd($seller_id);
+        //     $conversations=Conversation::latest()->get();
+        //     dd($conversations->receiver_id);
+        //     return view('frontend.user.conversations.index', compact('conversations'));
+        // }
+        // else {
+        //     flash(translate('Conversation is disabled at this moment'))->warning();
+        //     return back();
+        // }
     }
 
     /**
@@ -226,10 +239,8 @@ class ConversationController extends Controller
     public function admin_show($id)
     {
         $conversation = Conversation::findOrFail(decrypt($id));
-        if ($conversation->sender_id == Auth::user()->id) {
+        if ( $conversation ) {
             $conversation->sender_viewed = 1;
-        }
-        elseif($conversation->receiver_id == Auth::user()->id) {
             $conversation->receiver_viewed = 1;
         }
 
