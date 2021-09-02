@@ -16,7 +16,8 @@ class OrderDetailCollection extends ResourceCollection
                     'price' => $data->price,
                     'product' => $data->product,
                     'user' => [                        
-                        'seller_id' => $data->product->user->id,
+                        'id' => $data->product->user->id,
+                        'phone' => $data->product->user->phone,
                         'name' => $data->product->user->name,
                         'email' => $data->product->user->email,
                         'avatar' => $data->product->user->avatar,

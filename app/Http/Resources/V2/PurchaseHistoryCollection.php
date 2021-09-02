@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V2;
 
+use App\Http\Resources\OrderDetailCollection;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
@@ -30,6 +31,7 @@ class PurchaseHistoryCollection extends ResourceCollection
                     'tax' => format_price($data->orderDetails->sum('tax')),
                     'date' => Carbon::createFromTimestamp($data->date)->format('d-m-Y'),
                     'cancel_request' => $data->cancel_request == 1,
+                    'ordered_products' => new OrderDetailCollection($data->orderDetails),
                     'links' => [
                         'details' => route('purchaseHistory.details', $data->id)
                     ]
