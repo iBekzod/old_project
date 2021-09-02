@@ -30,20 +30,22 @@ class OrderController extends Controller
 
         $user = User::find($request->user_id);
 
-        $address = Address::where('id', $cartItems->first()->address_id)->first();
+        $address = Address::where('id', $cartItems->first()->address_id)->first()??$user->addresses()->where('set_default', 1)->first()??$user->addresses()->first();
         $shippingAddress = [];
-        // if ($address != null) {
-        $shippingAddress['name']        = $user->name;
-        $shippingAddress['email']       = $user->email;
-        $shippingAddress['address']     = $address->address;
-        $shippingAddress['country']     = $address->region->name;
-        $shippingAddress['city']        = $address->city->name;
-        $shippingAddress['postal_code'] = $address->postal_code;
-        $shippingAddress['phone']       = $address->phone;
-        if($address->latitude || $address->longitude) {
-            $shippingAddress['lat_lang'] = $address->latitude.','.$address->longitude;
+        if ($address != null) {
+            $shippingAddress['name']        = $user->name;
+            $shippingAddress['email']       = $user->email;
+            $shippingAddress['address']     = $address->address;
+            $shippingAddress['country']     = $address->region->name;
+            $shippingAddress['city']        = $address->city->name;
+            $shippingAddress['postal_code'] = $address->postal_code;
+            $shippingAddress['phone']       = $address->phone;
+            $shippingAddress['latitude']    = $address->latitude;
+            $shippingAddress['longitude']   = $address->longitude;
+            // if($address->latitude || $address->longitude) {
+            //     $shippingAddress['lat_lang'] = $address->latitude.','.$address->longitude;
+            // }
         }
-        // }
 
         $sum = 0.00;
         foreach ($cartItems as $cartItem) {
