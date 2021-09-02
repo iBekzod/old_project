@@ -34,8 +34,8 @@ class OrderDetailCollection extends ResourceCollection
                         'city'=>$address->city->name,
                         'postal_code'=> $address->postal_code,
                         'phone'=>$address->phone,
-                        'longitude'=>$address->longitude,
-                        'latitude'=>$address->latitude
+                        'longitude'=>$address->longitude??getDefaultLongitude(),
+                        'latitude'=>$address->latitude??getDefaultLatitude()
                     ]
                 ];
             })
