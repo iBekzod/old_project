@@ -22,7 +22,7 @@ class ProductDetailCollection extends ResourceCollection
             return [];
         }
         $variation=Variation::withTrashed()->find($product->variation_id);
-        $products=getPublishedProducts('product', ['where'=>[['variation_id', $variation->id]]], [], []);
+        // $products=getPublishedProducts('product', ['where'=>[['variation_id', $variation->id]]], [], []);
         $element=Element::withTrashed()->find($variation->element_id);
         $seller_products=getPublishedProducts('product', ['where'=>[['user_id', $product->user_id],['element_id', $product->element_id]]], [], [])->get();
         try{
@@ -205,7 +205,7 @@ class ProductDetailCollection extends ResourceCollection
         if(count($products)>0){
             foreach($products as $product){
                 if($product->variation->characteristics)$characteristic_ids=array_unique(array_merge($characteristic_ids, explode(',', $product->variation->characteristics)));
-                if($product->color_id)$color_ids=array_unique(array_merge($color_ids, $product->color_id));
+                if($product->variation->color_id)$color_ids=array_unique(array_merge($color_ids, $product->variation->color_id));
             }
             $attributes=Characteristic::withTrashed()->whereIn('id', $characteristic_ids)->get()->groupBy('attribute_id');
             $collected_characteristics=[];

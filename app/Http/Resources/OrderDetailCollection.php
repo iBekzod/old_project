@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Color;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class OrderDetailCollection extends ResourceCollection
@@ -36,7 +37,23 @@ class OrderDetailCollection extends ResourceCollection
                         'phone'=>$address->phone,
                         'longitude'=>$address->longitude??getDefaultLongitude(),
                         'latitude'=>$address->latitude??getDefaultLatitude()
-                    ]
+                    ],    
+                    'brand' => [
+                        'name' => $product->element != null ? $product->element->brand->getTranslation('name'):null,
+                        'slug' => $product->element != null ? $product->element->brand->slug : null,
+                        'logo' => $product->element != null ? api_asset($product->element->brand->logo) : null,
+                        'links' => [
+                            'products' => route('api.products.brand', $product->element->brand->id)
+                        ]
+                    ],
+                    'color'=>($product->variation->color_id)?Color::withTrashed()->where('id', $product->variation->color_id)->first():null,
+                    'photos' => $this->convertPhotos(explode(',', $product->element->photos)),
+                    'thumbnail_image' => api_asset($product->variation->thumbnail_img),
+                    'earn_point'=>($product->earn_point!=0)?$product->earn_point:calculateProductClubPoint($product->id),
+                    'base_price' => (double) homeBasePrice($product->id),
+                    'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
+                    'currency_code'=>defaultCurrency(),
+                    'exchange_rate'=>defaultExchangeRate(),
                 ];
             })
         ];
@@ -49,5 +66,12 @@ class OrderDetailCollection extends ResourceCollection
             'success' => true,
             'status' => 200
         ];
+    }
+    protected function convertPhotos($data){
+        $result = array();
+        foreach ($data as $key => $item) {
+            array_push($result, api_asset($item));
+        }
+        return $result;
     }
 }
