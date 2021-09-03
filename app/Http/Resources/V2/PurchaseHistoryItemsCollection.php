@@ -54,7 +54,7 @@ class PurchaseHistoryItemsCollection extends ResourceCollection
                             'products' => route('api.products.brand', $product->element->brand->id)
                         ]
                     ],
-                    'color'=>($product->variation->color_id)?Color::withTrashed()->where('id', $product->variation->color_id)->first():null,
+                    'color'=>($product->variation->color_id)?Color::where('id', $product->variation->color_id)->first():null,
                     'photos' => $this->convertPhotos(explode(',', $product->element->photos)),
                     'thumbnail_image' => api_asset($product->variation->thumbnail_img),
                     'earn_point'=>($product->earn_point!=0)?$product->earn_point:calculateProductClubPoint($product->id),
