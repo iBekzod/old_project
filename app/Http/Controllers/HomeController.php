@@ -262,11 +262,14 @@ class HomeController extends Controller
     public function dashboard()
     {
         if (Auth::user()->user_type == 'seller') {
-            return view('frontend.user.seller.dashboard');
+            // return view('frontend.user.seller.dashboard');
+            return view('frontend.user.customer.dashboard');
         } else if (Auth::user()->user_type == 'admin') {
             return $this->admin_dashboard();
         }
         else if(Auth::user()->user_type == 'customer'){
+            // $address = Auth::user()->addresses->where('set_default', 1)->first();
+            // dd($address);
          return view('frontend.user.customer.dashboard');
         }
         else {

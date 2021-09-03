@@ -76,12 +76,29 @@
                               @if(Auth::user()->addresses != null)
                                   @php
                                       $address = Auth::user()->addresses->where('set_default', 1)->first();
+
+                                    //   $address = Auth::user()->addresses->where('set_default', 1)->first();
+                                    // // dd($address);
+
+                                    // // dd($region->name);
+                                    // $city=$address->city->where('id',$address->city_id)->first();
+                                    // dd($city->name);
                                   @endphp
                                   @if($address != null)
                                       <ul class="list-unstyled mb-0">
-    					                  <li class=" py-2"><span>{{ translate('Address') }} : {{ $address->address }}</span></li>
-                                          <li class=" py-2"><span>{{ translate('Country') }} : {{ $address->country }}</span></li>
-                                          <li class=" py-2"><span>{{ translate('City') }} : {{ $address->city }}</span></li>
+    					                  <li class=" py-2"><span>{{ translate('Address') }} : {{ $address->address ?? "empty field" }}</span></li>
+                                          <li class=" py-2"><span>{{ translate('Region') }} :
+                                          @php
+                                             $region=$address->region->where('id',$address->region_id)->first();
+                                          echo $region->name;
+                                          @endphp
+                                           </span></li>
+                                          <li class=" py-2"><span>{{ translate('City') }} :
+                                           @php
+                                                $city=$address->city->where('id',$address->city_id)->first();
+                                              echo $city->name;
+                                           @endphp
+                                            </span></li>
                                           <li class=" py-2"><span>{{ translate('Postal Code') }} : {{ $address->postal_code }}</span></li>
                                           <li class=" py-2"><span>{{ translate('Phone') }} : {{ $address->phone }}</span></li>
                                       </ul>
