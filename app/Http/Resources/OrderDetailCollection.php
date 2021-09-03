@@ -43,7 +43,7 @@ class OrderDetailCollection extends ResourceCollection
                         'slug' => $product->element != null ? $product->element->brand->slug : null,
                         'logo' => $product->element != null ? api_asset($product->element->brand->logo) : null,
                     ],
-                    'color'=>($product->variation->color_id)?Color::where('id', $product->variation->color_id)->first():null,
+                    'color'=>($product->variation && $product->variation->color_id)?Color::where('id', $product->variation->color_id)->first():null,
                     'photos' => $this->convertPhotos(explode(',', $product->element->photos)),
                     'thumbnail_image' => api_asset($product->variation->thumbnail_img),
                     'earn_point'=>($product->earn_point!=0)?$product->earn_point:calculateProductClubPoint($product->id),
