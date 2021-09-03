@@ -12,6 +12,8 @@ class PurchaseHistoryItemsCollection extends ResourceCollection
         return [
             'data' => $this->collection->map(function($data) {
                 $product=$data->product;
+                $element=$product->element;
+                $variation=$product->variation;
                 $address=$product->user->addresses->first();
                 return [
                     'product_id' => $data->product->id,
@@ -47,16 +49,13 @@ class PurchaseHistoryItemsCollection extends ResourceCollection
                         'latitude'=>$address->latitude??getDefaultLatitude()
                     ],    
                     'brand' => [
-                        'name' => $product->element != null ? $product->element->brand->getTranslation('name'):null,
-                        'slug' => $product->element != null ? $product->element->brand->slug : null,
-                        'logo' => $product->element != null ? api_asset($product->element->brand->logo) : null,
-                        'links' => [
-                            'products' => route('api.products.brand', $product->element->brand->id)
-                        ]
+                        'name' => $element != null ? $element->brand->getTranslation('name'):null,
+                        'slug' => $element != null ? $element->brand->slug : null,
+                        'logo' => $element != null ? api_asset($element->brand->logo) : null,
                     ],
-                    'color'=>($product->variation->color_id)?Color::where('id', $product->variation->color_id)->first():null,
-                    'photos' => $this->convertPhotos(explode(',', $product->element->photos)),
-                    'thumbnail_image' => api_asset($product->variation->thumbnail_img),
+                    'color'=>($variation && $variation->color_id)?Color::where('id', $variation->color_id)->first():null,
+                    'photos' => ($element && $element->photos)?$this->convertPhotos(explode(',', $element->photos)):[],
+                    'thumbnail_image' => ($variation && $variation->thumbnail_img)?api_asset($variation->thumbnail_img):[],
                     'earn_point'=>($product->earn_point!=0)?$product->earn_point:calculateProductClubPoint($product->id),
                     'base_price' => (double) homeBasePrice($product->id),
                     'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
