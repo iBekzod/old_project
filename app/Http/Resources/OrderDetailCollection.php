@@ -42,9 +42,6 @@ class OrderDetailCollection extends ResourceCollection
                         'name' => $product->element != null ? $product->element->brand->getTranslation('name'):null,
                         'slug' => $product->element != null ? $product->element->brand->slug : null,
                         'logo' => $product->element != null ? api_asset($product->element->brand->logo) : null,
-                        'links' => [
-                            'products' => route('api.products.brand', $product->element->brand->id)
-                        ]
                     ],
                     'color'=>($product->variation->color_id)?Color::where('id', $product->variation->color_id)->first():null,
                     'photos' => $this->convertPhotos(explode(',', $product->element->photos)),
