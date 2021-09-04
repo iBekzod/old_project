@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Conversation;
 use App\BusinessSetting;
+use App\FoundItCheaper;
 use App\Message;
 use Auth;
 use App\Product;
@@ -73,6 +74,8 @@ class ConversationController extends Controller
         // dd($string);
 
             // dd( Auth::user()->seller);
+            // $conversation = Conversation::where('receiver_id', Auth::user()->id)->where('receiver_viewed', '1')->get();
+
             return view('backend.support.conversations.index', compact('conversations'));
         }
         else {
@@ -241,7 +244,7 @@ class ConversationController extends Controller
         $conversation = Conversation::findOrFail(decrypt($id));
         if ( $conversation ) {
             $conversation->sender_viewed = 1;
-            $conversation->receiver_viewed = 1;
+            // $conversation->receiver_viewed = 1;
         }
 
         if( $conversation->save()){

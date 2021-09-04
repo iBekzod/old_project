@@ -104,7 +104,6 @@
                                                 <span class="ml-2">
                                                     @if ($address->city_id)
                                                         @php
-
                                                             $city = $address->city->where('id', $address->city_id)->first();
                                                             echo $city->name;
                                                         @endphp

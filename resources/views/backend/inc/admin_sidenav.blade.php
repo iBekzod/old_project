@@ -524,28 +524,32 @@
                             @endif
 
                             @php
-                                $conversation = \App\Conversation::where('receiver_id', Auth::user()->id)->where('receiver_viewed', '1')->get();
+                                // $conversation = \App\Conversation::where('receiver_id', Auth::user()->id)->where('receiver_viewed', '1')->get();
+                                $conversation = \App\Conversation::where('receiver_viewed', 0)->get();
+
                             @endphp
                             @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('16', json_decode(Auth::user()->staff->role->permissions))))
                                 <li class="aiz-side-nav-item">
                                     <a href="{{ route('conversations.admin_index') }}"
                                        class="aiz-side-nav-link {{ areActiveRoutes(['conversations.admin_index', 'conversations.admin_show'])}}">
                                         <span class="aiz-side-nav-text">{{translate('Product Queries')}}</span>
+
                                         @if (count($conversation) > 0)
                                             <span class="badge badge-info">{{ count($conversation) }}</span>
-                                            <span class="badge badge-info">{{ count($conversation) }}</span>
-
                                         @endif
                                     </a>
                                 </li>
                             @endif
+                          @php
+                                $found_it_cheaper=\App\FoundItCheaper::where('viewed',null)->get();
+                          @endphp
                             @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('16', json_decode(Auth::user()->staff->role->permissions))))
                                 <li class="aiz-side-nav-item">
                                     <a href="{{ route('conversations.found_it_cheaper') }}"
                                        class="aiz-side-nav-link {{ areActiveRoutes(['conversations.found_it_cheaper', 'found_it_cheapers.admin_show'])}}">
                                           <span class="aiz-side-nav-text">{{translate('Found it cheaper')}}</span>
-                                        @if (count($conversation) > 0)
-                                            <span class="badge badge-info">{{ count($conversation) }}</span>
+                                        @if (count($found_it_cheaper) > 0)
+                                            <span class="badge badge-info">{{ count($found_it_cheaper) }}</span>
                                         @endif
                                     </a>
                                 </li>
@@ -561,24 +565,30 @@
                                 </a>
                             </li>
                         @endif --}}
+                        @php
+                             $report_description=\App\ReportDescription::where('viewed',null)->get();
+                        @endphp
                         @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('16', json_decode(Auth::user()->staff->role->permissions))))
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('conversation.report_description') }}"
                                    class="aiz-side-nav-link {{ areActiveRoutes(['conversation.report_description', 'report_description.admin_show'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Report description')}}</span>
-                                    @if (count($conversation) > 0)
-                                        <span class="badge badge-info">{{ count($conversation) }}</span>
+                                    @if (count($report_description) > 0)
+                                        <span class="badge badge-info">{{ count($report_description) }}</span>
                                     @endif
                                 </a>
                             </li>
                         @endif
+                        @php
+                          $support_service=\App\SupportService::where('viewed',null)->get();
+                        @endphp
                         @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('16', json_decode(Auth::user()->staff->role->permissions))))
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('conversation.support_service') }}"
                                    class="aiz-side-nav-link {{ areActiveRoutes(['conversation.support_service', 'support_service.admin_show'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Support service')}}</span>
-                                    @if (count($conversation) > 0)
-                                        <span class="badge badge-info">{{ count($conversation) }}</span>
+                                    @if (count($support_service) > 0)
+                                        <span class="badge badge-info">{{ count($support_service) }}</span>
                                     @endif
                                 </a>
                             </li>
