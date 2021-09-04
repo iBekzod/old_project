@@ -43,6 +43,9 @@
                           @else
                             <p>anonymous user</p>
                           @endif
+                          @if ($report_description->viewed == null)
+                          <span class="badge badge-inline badge-info">{{ translate('New') }}</span>
+                          @endif
 
                         </td>
                         <td style="width:10%">{{$report_description->email}}</td>

@@ -37,7 +37,9 @@
                 {{-- @dd($conversations) --}}
                     @foreach ($found_it_cheapers as $key => $found_it_cheaper)
                     <tr>
-                        <td style="width:5%">{{$key+1}}</td>
+                        <td style="width:5%">{{$key+1}}
+
+                        </td>
                         {{-- <td style="width:15%">{{$found_it_cheaper->product_id}}</td> --}}
                         <td style="width:20%">
                            @if(App\Product::where('id',$found_it_cheaper->product_id)->exists())
@@ -49,7 +51,9 @@
                               }
                             @endphp
                            @endif
-
+                           @if ($found_it_cheaper->viewed == null)
+                           <span class="badge badge-inline badge-info">{{ translate('New') }}</span>
+                           @endif
                         </td>
                         <td style="width:10%">{{$found_it_cheaper->email}}</td>
                         <td style="width:10%">

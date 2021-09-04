@@ -63,7 +63,8 @@ class FoundItCheaperController extends Controller
         // dd($id);
         $found_it_cheaper=FoundItCheaper::findOrFail(decrypt($id));
         //  dd($found_it_cheaper);
-        if($found_it_cheaper){
+        $found_it_cheaper->viewed=1;
+        if($found_it_cheaper->save()){
                 return view('backend.support.found_it_cheapers.show', compact('found_it_cheaper'));
         }
     }

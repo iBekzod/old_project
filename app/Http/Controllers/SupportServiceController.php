@@ -63,7 +63,8 @@ class SupportServiceController extends Controller
         // dd($id);
         $support_service=SupportService::findOrFail(decrypt($id));
         //  dd($found_it_cheaper);
-        if($support_service){
+        $support_service->viewed=1;
+        if($support_service->save()){
                 return view('backend.support.support_service.show', compact('support_service'));
         }
     }

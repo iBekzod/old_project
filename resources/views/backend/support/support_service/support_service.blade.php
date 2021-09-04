@@ -33,6 +33,9 @@
                         @else
                             <p>anonymous user</p>
                         @endif --}}
+                        @if ($support_service->viewed == null)
+                        <span class="badge badge-inline badge-info">{{ translate('New') }}</span>
+                        @endif
 
                         </td>
                         <td style="width:10%">{{$support_service->phone}}</td>

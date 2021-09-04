@@ -244,7 +244,7 @@ class ConversationController extends Controller
         $conversation = Conversation::findOrFail(decrypt($id));
         if ( $conversation ) {
             $conversation->sender_viewed = 1;
-            // $conversation->receiver_viewed = 1;
+            $conversation->receiver_viewed = 1;
         }
 
         if( $conversation->save()){

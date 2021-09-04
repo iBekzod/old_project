@@ -65,7 +65,8 @@ class ReportDescriptionController extends Controller
         // dd($id);
         $report_description=ReportDescription::findOrFail(decrypt($id));
         //   dd($report_description);
-        if($report_description){
+        $report_description->viewed=1;
+        if($report_description->save()){
                 return view('backend.support.report_description.show', compact('report_description'));
         }
     }
