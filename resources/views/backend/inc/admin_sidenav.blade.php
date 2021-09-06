@@ -541,7 +541,7 @@
                                 </li>
                             @endif
                           @php
-                                $found_it_cheaper=\App\FoundItCheaper::where('viewed',null)->get();
+                                $found_it_cheaper=\App\FoundItCheaper::where('viewed',0)->get();
                           @endphp
                             @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('16', json_decode(Auth::user()->staff->role->permissions))))
                                 <li class="aiz-side-nav-item">
@@ -566,7 +566,7 @@
                             </li>
                         @endif --}}
                         @php
-                             $report_description=\App\ReportDescription::where('viewed',null)->get();
+                             $report_description=\App\ReportDescription::where('viewed',0)->get();
                         @endphp
                         @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('16', json_decode(Auth::user()->staff->role->permissions))))
                             <li class="aiz-side-nav-item">
@@ -580,7 +580,7 @@
                             </li>
                         @endif
                         @php
-                          $support_service=\App\SupportService::where('viewed',null)->get();
+                          $support_service=\App\SupportService::where('viewed',0)->get();
                         @endphp
                         @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('16', json_decode(Auth::user()->staff->role->permissions))))
                             <li class="aiz-side-nav-item">
