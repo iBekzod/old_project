@@ -205,7 +205,7 @@ class ProductDetailCollection extends ResourceCollection
         if(count($products)>0){
             foreach($products as $product){
                 if($product->variation->characteristics)$characteristic_ids=array_unique(array_merge($characteristic_ids, explode(',', $product->variation->characteristics)));
-                if($product->variation->color_id)$color_ids=array_unique(array_merge($color_ids, $product->variation->color_id));
+                if($product->variation->color_id)$color_ids=array_unique(array_merge($color_ids, [$product->variation->color_id]));
             }
             $attributes=Characteristic::withTrashed()->whereIn('id', $characteristic_ids)->get()->groupBy('attribute_id');
             $collected_characteristics=[];
