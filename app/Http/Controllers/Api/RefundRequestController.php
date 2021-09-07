@@ -20,7 +20,7 @@ class RefundRequestController extends Controller
      */
 
     //Store Customer Refund Request
-    public function postRefundRequest(Request $request)
+    public function request_store(Request $request)
     {
         $request->validate([
             'id' => 'required',
