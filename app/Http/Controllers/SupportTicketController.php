@@ -122,7 +122,7 @@ class SupportTicketController extends Controller
         try {
             Mail::to($ticket->user->email)->queue(new SupportMailManager($array));
         } catch (\Exception $e) {
-            //dd($e->getMessage());
+            // dd($e->getMessage());
         }
     }
 

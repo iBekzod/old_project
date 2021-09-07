@@ -187,6 +187,9 @@ Route::prefix('v1')->group(function () {
     Route::post('payments/pay/wallet', 'Api\WalletController@processPayment')->middleware('auth:api');
     Route::post('payments/pay/cod', 'Api\PaymentController@cashOnDelivery')->middleware('auth:api');
 
+    //  {{refund_requset}}
+    Route::post('post/refund_requset','RefundRequestController@postRefundRequest');
+
     //  {{communication}}
     Route::post('post/conversation','Api\ConversationController@postConversations');
     Route::post('post/subscriber','Api\SubscriberController@postSubscribers');
