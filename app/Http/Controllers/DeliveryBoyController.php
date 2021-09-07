@@ -365,7 +365,7 @@ class DeliveryBoyController extends Controller
 
     public function cancel_request($order_id) {
         $order = Order::findOrFail($order_id);
-        $order->cancel_request = '1';
+        $order->cancel_request = 1;
         $order->cancel_request_at = date("Y-m-d H:i:s");
         $order->save();
 

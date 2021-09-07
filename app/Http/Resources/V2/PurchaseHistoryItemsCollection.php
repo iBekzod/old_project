@@ -16,6 +16,7 @@ class PurchaseHistoryItemsCollection extends ResourceCollection
                 $variation=$product->variation;
                 $address=$product->user->addresses->first();
                 return [
+                    'id'=>$data->id,
                     'product_id' => $data->product->id,
                     'product_name' => $data->product->name,
                     'variation' => $data->variation,
@@ -28,7 +29,7 @@ class PurchaseHistoryItemsCollection extends ResourceCollection
                     'payment_status_string' => ucwords(str_replace('_', ' ', $data->payment_status)),
                     'delivery_status' => $data->delivery_status,
                     'delivery_status_string' => $data->delivery_status == 'pending'? "Order Placed" : ucwords(str_replace('_', ' ',  $data->delivery_status)),
-                    'user' => [                        
+                    'user' => [
                         'id' => $product->user->id,
                         'phone' => $product->user->phone,
                         'name' => $product->user->name,
@@ -47,7 +48,7 @@ class PurchaseHistoryItemsCollection extends ResourceCollection
                         'phone'=>$address->phone,
                         'longitude'=>$address->longitude??getDefaultLongitude(),
                         'latitude'=>$address->latitude??getDefaultLatitude()
-                    ],    
+                    ],
                     'brand' => [
                         'name' => $element != null ? $element->brand->getTranslation('name'):null,
                         'slug' => $element != null ? $element->brand->slug : null,
@@ -61,6 +62,8 @@ class PurchaseHistoryItemsCollection extends ResourceCollection
                     'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
                     'currency_code'=>defaultCurrency(),
                     'exchange_rate'=>defaultExchangeRate(),
+                    'refund_status'=>false,
+                    'refundable'=>$element->refundable,
                 ];
             })
         ];
