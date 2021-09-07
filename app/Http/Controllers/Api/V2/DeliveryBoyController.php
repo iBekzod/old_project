@@ -390,6 +390,7 @@ class DeliveryBoyController extends Controller
         $order =  Order::find($id);
 
         $order->cancel_request = 1;
+        $order->delivery_status = "cancelled";
         $order->cancel_request_at = date('Y-m-d H:i:s');
         $order->save();
 
