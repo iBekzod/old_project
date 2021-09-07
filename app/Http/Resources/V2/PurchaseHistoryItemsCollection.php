@@ -63,6 +63,7 @@ class PurchaseHistoryItemsCollection extends ResourceCollection
                     'currency_code'=>defaultCurrency(),
                     'exchange_rate'=>defaultExchangeRate(),
                     'refund_status'=>false,
+                    'refundable'=>$element->refundable,
                 ];
             })
         ];
