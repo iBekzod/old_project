@@ -24,6 +24,9 @@ class RefundRequestController extends Controller
     {
         $request->validate([
             'id' => 'required',
+
+
+            
             'reason' => 'required',
          ]);
         $order_detail = OrderDetail::where('id', $request->id)->first();
