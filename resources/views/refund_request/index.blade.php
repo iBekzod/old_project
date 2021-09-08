@@ -43,7 +43,7 @@
                               <a href="{{ route('product', $refund->orderDetail->product->slug) }}" target="_blank" class="media-block">
                                 <div class="row">
                                   <div class="col-auto">
-                                    <img src="{{ uploaded_asset($refund->orderDetail->product->thumbnail_img) }}" alt="Image" class="size-50px">
+                                    <img src="{{ uploaded_asset($refund->orderDetail->product->variation->thumbnail_img) }}" alt="Image" class="size-50px">
                                   </div>
                                   <div class="col">
                                     <div class="media-body text-truncate-2">{{ $refund->orderDetail->product->getTranslation('name') }}</div>

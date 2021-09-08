@@ -269,10 +269,20 @@
 
                                 <span class="aiz-side-nav-arrow"></span>
                             </a>
+
                             <ul class="aiz-side-nav-list level-2">
+                                @php
+                                    $refund_request=\App\RefundRequest::where('admin_seen',0)->get();
+                                    // $refund_request=\App\RefundRequest::where('refund_status',0)->get();
+                                @endphp
                                 <li class="aiz-side-nav-item">
                                     <a href="{{route('refund_requests_all')}}" class="aiz-side-nav-link {{ areActiveRoutes(['refund_requests_all', 'reason_show'])}}">
                                         <span class="aiz-side-nav-text">{{translate('Refund Requests')}}</span>
+
+                                        @if (count($refund_request) > 0)
+                                           <span class="badge badge-info">{{ count($refund_request) }}</span>
+                                        @endif
+
                                     </a>
                                 </li>
                                 <li class="aiz-side-nav-item">
