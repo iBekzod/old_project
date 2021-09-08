@@ -7,6 +7,7 @@ use App\BusinessSetting;
 use App\RefundRequest;
 use App\OrderDetail;
 use App\Seller;
+use App\Shop;
 use App\Wallet;
 use App\User;
 use Auth;
@@ -131,6 +132,7 @@ class RefundRequestController extends Controller
     public function admin_index()
     {
         $refunds = RefundRequest::where('refund_status', 0)->latest()->paginate(15);
+        // dd($refunds);
         return view('refund_request.index', compact('refunds'));
     }
 
@@ -260,6 +262,12 @@ class RefundRequestController extends Controller
     public function reason_view($id)
     {
         $refund = RefundRequest::findOrFail($id);
+        // dd($refund);
+        // if (Shop::where('user_id', $refund->seller_id)->exists()) {
+        //     $shop=Shop::where('user_id', $refund->seller_id)->first();
+        //     dd($shop);
+        // }
+
         if (Auth::user()->user_type == 'admin' || Auth::user()->user_type == 'staff') {
             if ($refund->orderDetail != null) {
                 $refund->admin_seen = 1;

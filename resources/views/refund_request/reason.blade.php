@@ -17,11 +17,79 @@
                         @endif
                     </li>
                     <li class="list-group-item">
+                        <b>{{ translate('Supplier Name') }} : </b>
+                        <b class="text-info">
+                            {{ $refund->supplier ?? "Hozircha kuryer yoq" }}
+                        </b>
+
+                    </li>
+                    <li class="list-group-item">
+                        <b>{{ translate('Customer Full Name') }}  :</b>
+                        <b class="text-info">
+                            @php
+                                if (App\User::where('id', $refund->user_id)->exists()) {
+                                    $user=App\User::where('id', $refund->user_id)->first();
+                                echo $user->full_name;
+                                }
+                                else {
+                                    echo "not found customer";
+                                }
+                           @endphp
+                    </b>
+                    </li>
+                    <li class="list-group-item">
+                        <b>{{ translate('Customer Full Address') }}  :</b>
+                        <b class="text-info">
+                                @php
+                                    if (App\User::where('id', $refund->user_id)->exists()) {
+                                        $user=App\User::where('id', $refund->user_id)->first();
+                                    echo $user->full_address;
+                                    }
+                                    else {
+                                        echo "not found customer";
+                                    }
+                               @endphp
+                        </b>
+                    </li>
+                    <li class="list-group-item mb-2">
+                        <b>{{ translate('Reason') }} :</b>
+                        {{ $refund->reason ?? "not found" }}
+                    </li>
+                    <li class="list-group-item">
                         <b>{{ translate('Seller Name') }}  :</b>
                         @if ($refund->seller != null)
                             {{ $refund->seller->name }}
                         @endif
                     </li>
+                    <li class="list-group-item">
+                        <b>{{ translate('Shop Name') }}  :</b>
+                        <b class="text-info">
+                                @php
+                                    if (App\Shop::where('user_id', $refund->seller_id)->exists()) {
+                                        $shop=App\Shop::where('user_id', $refund->seller_id)->first();
+                                    echo $shop->name;
+                                    }
+                                    else {
+                                        echo "not found shop";
+                                    }
+                               @endphp
+                        </b>
+                    </li>
+                    <li class="list-group-item">
+                        <b>{{ translate('Shop Address') }}  :</b>
+                        <b class="text-info">
+                                @php
+                                    if (App\Shop::where('user_id', $refund->seller_id)->exists()) {
+                                        $shop=App\Shop::where('user_id', $refund->seller_id)->first();
+                                    echo $shop->address;
+                                    }
+                                    else {
+                                        echo "not found shop";
+                                    }
+                               @endphp
+                        </b>
+                    </li>
+
                     <li class="list-group-item">
                         <div class="row">
                             <div class="col-md-2">
@@ -51,10 +119,7 @@
                             {{ single_price($refund->orderDetail->price) }}
                         @endif
                     </li>
-                    <li class="list-group-item mb-2">
-                        <b>{{ translate('Reason') }} :</b>
-                        {{ $refund->reason ?? "not found" }}
-                    </li>
+
                     <li class="list-group-item mb-2">
                         <b>{{ translate('Created_at') }} : </b>
                         {{ $refund->created_at ?? "not found" }}
