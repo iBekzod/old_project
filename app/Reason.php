@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 class Reason extends Model
 {
-    protected $fillable = [ 'name'];
+    protected $fillable = [ 'name', 'type', 'responsible'];
     public function getTranslation($field = '', $lang = false)
     {
         $lang = $lang == false ?  app()->getLocale() : $lang;

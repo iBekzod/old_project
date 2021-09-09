@@ -9,7 +9,7 @@ class Address extends Model
 {
 
     protected $fillable = [
-        'user_id', 'address', 'city_id', 'region_id', 'postal_code', 'phone', 'set_default', 'longitude', 'latitude'
+        'user_id', 'address', 'customer_note', 'city_id', 'region_id', 'postal_code', 'phone', 'set_default', 'longitude', 'latitude'
     ];
 
     // protected $appends =['full_name'];
