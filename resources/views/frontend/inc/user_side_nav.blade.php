@@ -226,7 +226,7 @@
 
                 @if (\App\BusinessSetting::where('type', 'conversation_system')->first()->value == 1)
                     @php
-                        $conversation = \App\Conversation::where('sender_id', Auth::user()->id)->where('sender_viewed', 0)->get();
+                        $conversation = \App\Conversation::where('receiver_viewed', 0)->get();
                     @endphp
                     <li class="aiz-side-nav-item">
                         <a href="{{ route('conversations.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['conversations.index', 'conversations.show'])}}">
@@ -238,6 +238,7 @@
                         </a>
                     </li>
                 @endif
+
 
 
                 @if (\App\BusinessSetting::where('type', 'wallet_system')->first()->value == 1)

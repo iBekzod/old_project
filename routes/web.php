@@ -344,6 +344,9 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::resource('conversations','ConversationController');
 	Route::get('/conversations/destroy/{id}', 'ConversationController@destroy')->name('conversations.destroy');
 	Route::post('conversations/refresh','ConversationController@refresh')->name('conversations.refresh');
+
+    Route::get('conversations/{id}/show','ConversationController@show')->name('conversations.show');
+
 	Route::resource('messages','MessageController');
 
     Route::get('/found_it_cheapers/destroy/{id}','FoundItCheaperController@destroy')->name('found_it_cheapers.destroy');

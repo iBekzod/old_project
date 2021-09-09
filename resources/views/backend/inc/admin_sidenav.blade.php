@@ -534,7 +534,9 @@
 
                             @php
                                 // $conversation = \App\Conversation::where('receiver_id', Auth::user()->id)->where('receiver_viewed', '1')->get();
-                                $conversation = \App\Conversation::where('receiver_viewed', 0)->get();
+                                $conversation = \App\Conversation::where('sender_viewed', 0)->get();
+                                // $conversation = \App\Conversation::where('receiver_viewed', 0)->get();
+
 
                             @endphp
                             @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('16', json_decode(Auth::user()->staff->role->permissions))))

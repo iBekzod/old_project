@@ -34,9 +34,6 @@
                         <td style="width: 10%">
                             @if(App\User::where('id',$conversation->sender_id)->exists())
                               {{ App\User::where('id',$conversation->sender_id)->first()->name}}
-                                @if ($conversation->receiver_viewed == 0)
-                                    <span class="badge badge-inline badge-info">{{ translate('New') }}</span>
-                                @endif
                             @else
                             {{ "user name not found" }}
                             @endif

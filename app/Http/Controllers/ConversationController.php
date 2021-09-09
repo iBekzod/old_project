@@ -27,8 +27,9 @@ class ConversationController extends Controller
             // dd($user_id);
             $conversations = Conversation::where('sender_id',$user_id)->orWhereHas('product', function ($product) use ($user_id){
                 $product->where('user_id', $user_id);
-            })->orderBy('created_at', 'desc')->get();
+            })->orderBy('created_at', 'desc')->paginate(10);
             // dd($conversations);
+
 
             return view('frontend.user.conversations.index', compact('conversations'));
         }
@@ -246,10 +247,8 @@ class ConversationController extends Controller
     public function admin_show($id)
     {
         $conversation = Conversation::findOrFail(decrypt($id));
-        if ( $conversation ) {
-            $conversation->sender_viewed = 1;
-            $conversation->receiver_viewed = 1;
-        }
+        $conversation->sender_viewed = 1;
+
         //  dd($conversation);
         if( $conversation->save()){
             return view('backend.support.conversations.show', compact('conversation'));
