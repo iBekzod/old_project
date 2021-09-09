@@ -17,9 +17,20 @@
                         @endif
                     </li>
                     <li class="list-group-item">
-                        <b>{{ translate('Supplier Name') }} : </b>
+                        <b>{{ translate('Delivery Boy Name') }} : </b>
                         <b class="text-info">
-                            {{ $refund->supplier ?? "Hozircha kuryer yoq" }}
+                            @php
+                                 if (App\Order::where('id', $refund->order_id)->exists()) {
+                                    $order=App\Order::where('id', $refund->order_id)->first();
+                                    // dd($order->assign_delivery_boy);
+                                    if (App\User::where('id',$order->assign_delivery_boy)->where('user_type','delivery_b')->exists()) {
+                                        $delivery_boy=App\User::where('id',$order->assign_delivery_boy)->where('user_type','delivery_b')->first();
+
+                                        echo $delivery_boy->name;
+                                    }
+                                }
+                            @endphp
+
                         </b>
 
                     </li>

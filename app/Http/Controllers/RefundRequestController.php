@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\BusinessSetting;
+use App\Order;
 use App\RefundRequest;
 use App\OrderDetail;
 use App\Seller;
@@ -262,11 +263,6 @@ class RefundRequestController extends Controller
     public function reason_view($id)
     {
         $refund = RefundRequest::findOrFail($id);
-        // dd($refund);
-        // if (Shop::where('user_id', $refund->seller_id)->exists()) {
-        //     $shop=Shop::where('user_id', $refund->seller_id)->first();
-        //     dd($shop);
-        // }
 
         if (Auth::user()->user_type == 'admin' || Auth::user()->user_type == 'staff') {
             if ($refund->orderDetail != null) {
