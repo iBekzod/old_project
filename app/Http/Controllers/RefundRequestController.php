@@ -146,7 +146,7 @@ class RefundRequestController extends Controller
     {
         $refunds = RefundRequest::where('refund_status', 1)->latest()->paginate(15);
 
-
+        // dd($refunds);
         return view('refund_request.paid_refund', compact('refunds'));
     }
 

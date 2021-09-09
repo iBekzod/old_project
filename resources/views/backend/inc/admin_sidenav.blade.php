@@ -272,7 +272,7 @@
 
                             <ul class="aiz-side-nav-list level-2">
                                 @php
-                                    $refund_request=\App\RefundRequest::where('admin_seen',0)->get();
+                                    $refund_request=\App\RefundRequest::where('admin_seen',0)->where('admin_approval',0)->get();
                                     // $refund_request=\App\RefundRequest::where('refund_status',0)->get();
                                 @endphp
                                 <li class="aiz-side-nav-item">
@@ -282,7 +282,6 @@
                                         @if (count($refund_request) > 0)
                                            <span class="badge badge-info">{{ count($refund_request) }}</span>
                                         @endif
-
                                     </a>
                                 </li>
                                 <li class="aiz-side-nav-item">
