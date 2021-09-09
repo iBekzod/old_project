@@ -145,6 +145,8 @@ class RefundRequestController extends Controller
     public function paid_index()
     {
         $refunds = RefundRequest::where('refund_status', 1)->latest()->paginate(15);
+
+
         return view('refund_request.paid_refund', compact('refunds'));
     }
 
