@@ -40,10 +40,10 @@
                             @if ($refund->orderDetail != null && $refund->orderDetail->product != null)
                               <a href="{{ route('product', $refund->orderDetail->product->slug) }}" target="_blank" class="media-block">
                                 <div class="form-group row">
-                                  <div class="col-md-5">
-                                    <img src="{{ uploaded_asset($refund->orderDetail->product->thumbnail_img)}}" alt="Image" class="w-50px">
+                                  <div class="col-md-2">
+                                    <img src="{{ uploaded_asset($refund->orderDetail->product->variation->thumbnail_img)}}" alt="Image" class="w-50px">
                                   </div>
-                                  <div class="col-md-7">
+                                  <div class="col-md-10">
                                     <div class="media-body">{{ $refund->orderDetail->product->getTranslation('name') }}</div>
                                   </div>
                                 </div>

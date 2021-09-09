@@ -43,10 +43,22 @@
                               <a href="{{ route('product', $refund->orderDetail->product->slug) }}" target="_blank" class="media-block">
                                 <div class="row">
                                   <div class="col-auto">
-                                    <img src="{{ uploaded_asset($refund->orderDetail->product->thumbnail_img) }}" alt="Image" class="size-50px">
+                                    <img src="{{ uploaded_asset($refund->orderDetail->product->variation->thumbnail_img) }}" alt="Image" class="size-50px">
                                   </div>
                                   <div class="col">
-                                    <div class="media-body text-truncate-2">{{ $refund->orderDetail->product->getTranslation('name') }}</div>
+                                    @php
+                                            $product_name=$refund->orderDetail->product->getTranslation('name');
+                                            if (strlen($product_name)>50){
+                                                $stringCut=substr($product_name, 0,50);
+                                                echo $stringCut." ...";
+                                            }
+                                    @endphp
+                                    <span class="pl-2">
+                                        @if ($refund->admin_seen===0)
+
+                                        <span class="badge badge-inline badge-info">{{ translate('New') }}</span>
+                                        @endif
+                                    </span>
                                   </div>
                                 </div>
                               </a>

@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\BusinessSetting;
+use App\Order;
 use App\RefundRequest;
 use App\OrderDetail;
 use App\Seller;
+use App\Shop;
 use App\Wallet;
 use App\User;
 use Auth;
@@ -131,6 +133,7 @@ class RefundRequestController extends Controller
     public function admin_index()
     {
         $refunds = RefundRequest::where('refund_status', 0)->latest()->paginate(15);
+        // dd($refunds);
         return view('refund_request.index', compact('refunds'));
     }
 
@@ -142,6 +145,8 @@ class RefundRequestController extends Controller
     public function paid_index()
     {
         $refunds = RefundRequest::where('refund_status', 1)->latest()->paginate(15);
+
+
         return view('refund_request.paid_refund', compact('refunds'));
     }
 
@@ -260,6 +265,7 @@ class RefundRequestController extends Controller
     public function reason_view($id)
     {
         $refund = RefundRequest::findOrFail($id);
+
         if (Auth::user()->user_type == 'admin' || Auth::user()->user_type == 'staff') {
             if ($refund->orderDetail != null) {
                 $refund->admin_seen = 1;
