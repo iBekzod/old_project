@@ -23,9 +23,13 @@ class ConversationController extends Controller
     public function index()
     {
         if (BusinessSetting::where('type', 'conversation_system')->first()->value == 1) {
-
-            $conversations = Conversation::where('sender_id',Auth::user()->id)->orWhere('receiver_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(5);
+            $user_id=Auth::user()->id;
+            // dd($user_id);
+            $conversations = Conversation::where('sender_id',$user_id)->orWhereHas('product', function ($product) use ($user_id){
+                $product->where('user_id', $user_id);
+            })->orderBy('created_at', 'desc')->get();
             // dd($conversations);
+
             return view('frontend.user.conversations.index', compact('conversations'));
         }
         else {
@@ -246,7 +250,7 @@ class ConversationController extends Controller
             $conversation->sender_viewed = 1;
             $conversation->receiver_viewed = 1;
         }
-
+        //  dd($conversation);
         if( $conversation->save()){
             return view('backend.support.conversations.show', compact('conversation'));
         }

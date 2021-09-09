@@ -24,17 +24,13 @@
                                           <div class="col-auto">
                                               <div class="media">
                                                   <span class="avatar avatar-sm flex-shrink-0">
-                                                    @if (Auth::user()->id == $conversation->sender_id)
-                                                    <img @if ($conversation->sender->avatar_original == null) src="{{ static_asset('assets/img/avatar-place.png') }}" @else src="{{ uploaded_asset($conversation->sender->avatar_original) }}" @endif class="rounded-circle" onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';">
-                                                    @endif
+                                                    {{-- <img @if ($conversation->sender->avatar_original == null) src="{{ static_asset('assets/img/avatar-place.png') }}" @else src="{{ uploaded_asset($conversation->sender->avatar_original) }}" @endif class="rounded-circle" onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';"> --}}
                                                 </span>
                                               </div>
                                           </div>
                                           <div class="col-auto col-lg-3">
                                               <p>
-                                                  @if (Auth::user()->id == $conversation->sender_id)
-                                                  <span class="fw-600">{{ $conversation->sender->name }}</span>
-                                                  @endif
+                                                  <span class="fw-600">{{ $conversation->sender->name ?? " sender name not found"}}</span>
                                                   <br>
                                                   <span class="opacity-50">
                                                       {{-- {{ date('h:i:m d-m-Y', strtotime($conversation->messages->last()->created_at)) }} --}}
@@ -48,9 +44,9 @@
                                                           <div class="col">
                                                               <h6 class="mt-0">
                                                                   <a href="{{ route('conversations.show', encrypt($conversation->id)) }}" class="text-dark fw-600">
-                                                                      {{ $conversation->title }}
+                                                                      {{ $conversation->message }}
                                                                   </a>
-                                                                  @if ((Auth::user()->id == $conversation->sender_id && $conversation->sender_viewed == 0) || (Auth::user()->id == $conversation->receiver_id && $conversation->receiver_viewed == 0))
+                                                                  @if ((  $conversation->sender_viewed == 0) || ( $conversation->receiver_viewed == 0))
                                                                       <span class="badge badge-inline badge-danger">{{ translate('New') }}</span>
                                                                   @endif
                                                               </h6>
