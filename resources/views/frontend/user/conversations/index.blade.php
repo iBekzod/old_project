@@ -13,7 +13,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="card">
                         <div class="card-body">
                             <ul class="list-group list-group-flush">
@@ -81,78 +80,3 @@
     </section>
 
 @endsection
-
-
-
-{{-- @extends('backend.layouts.app')
-
-@section('content')
-
-<div class="card">
-    <div class="card-header">
-        <h5 class="mb-0 h6">{{translate('Conversations')}}</h5>
-    </div>
-    <div class="card-body pr-0 mr-0">
-        <table class=" text-center pr-0 mr-0" cellspacing="0"  width="100%">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>{{translate('Sender')}}</th>
-                    <th>{{translate('Receiver')}}</th>
-                    <th>{{translate('Title')}}</th>
-                    <th>{{ translate('Date') }}</th>
-            </thead>
-            <tbody>
-                    @foreach ($conversations as $key => $conversation)
-                    <tr>
-                        <td style="width: 3%">{{$key+1}}</td>
-                        <td style="width: 10%">
-                            @if (App\User::where('id', $conversation->sender_id)->exists())
-                              {{ App\User::where('id',$conversation->sender_id)->first()->name}}
-                                @if ($conversation->receiver_viewed == 0)
-                                    <span class="badge badge-inline badge-info">{{ translate('New') }}</span>
-                                @endif
-                            @else
-                            {{ "user name not found" }}
-                            @endif
-                        </td>
-                        <td style="width: 11%">
-                            @if (App\Product::where('id', $conversation->receiver_id)->exists())
-                            {{ App\Product::where('id',$conversation->receiver_id)->first()->user->name}}
-                                @if ($conversation->sender_viewed == 0)
-                                <span class="badge badge-inline badge-info">{{ translate('New') }}</span>
-                                @endif
-                            @endif
-                        </td>
-                        <td style="width: 20%">
-                            @php
-                            $string=$conversation->msg;
-                                 if (strlen($string)>20) {
-                             $string = substr($string, 0,50);
-                             echo $string." ...";
-                              }else {
-                                   echo $string;
-                              }
-                            @endphp
-
-                        <td style="width: 15%">{{ $conversation->created_at }}</td>
-                        <td style="width: 8%">
-                            <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{route('conversations.admin_show', encrypt($conversation->id))}}" title="{{ translate('View') }}">
-                                <i class="las la-eye"></i>
-                            </a>
-                            <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete" data-href="{{route('conversations.destroy', encrypt($conversation->id))}}" title="{{ translate('Delete') }}">
-                                <i class="las la-trash"></i>
-                            </a>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-</div>
-
-@endsection
-
-@section('modal')
-    @include('modals.delete_modal')
-@endsection --}}

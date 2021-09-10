@@ -36,14 +36,15 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
+    //    dd($request->all());
         $payment_status = null;
         $delivery_status = null;
         $sort_search = null;
         $orders = DB::table('orders')
             ->orderBy('id', 'desc')
 //                    ->join('order_details', 'orders.id', '=', 'order_details.order_id')
-            ->where('seller_id', Auth::user()->id)
-            ->select('orders.id')
+            // ->where('seller_id', Auth::user()->id)
+            // ->select('orders.id')
             ->distinct();
 
         if ($request->payment_status != null) {
@@ -66,7 +67,9 @@ class OrderController extends Controller
             $order->viewed = 1;
             $order->save();
         }
-
+        // dd(Auth::user()->id);
+        // dd($orders);
+//    dd($order->orderDetails->where('seller_id', Auth::user()->id)->first()->payment_status == 'paid')
         return view('frontend.user.seller.orders', compact('orders', 'payment_status', 'delivery_status', 'sort_search'));
     }
 
@@ -539,6 +542,7 @@ class OrderController extends Controller
     {
         $order = Order::findOrFail($request->order_id);
         $order->save();
+        
         return view('frontend.user.seller.order_details_seller', compact('order'));
     }
 

@@ -12,7 +12,7 @@
 @endphp
 
 <div class="modal-body gry-bg px-3 pt-0">
-    {{-- <div class="py-4">
+    <div class="py-4">
         <div class="row gutters-5 text-center aiz-steps">
             <div class="col @if($status == 'pending') active @else done @endif">
                 <div class="icon">
@@ -39,7 +39,7 @@
                 <div class="title fs-12">{{ translate('Delivered')}}</div>
             </div>
         </div>
-    </div> --}}
+    </div>
     @if (get_setting('product_manage_by_admin') == 0)
     <div class="row mt-5">
         @if($order->payment_type == 'cash_on_delivery')
