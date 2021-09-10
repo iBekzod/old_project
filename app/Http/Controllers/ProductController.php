@@ -296,6 +296,11 @@ class ProductController extends Controller
                     } else {
                         $product->featured = false;
                     }
+                    if (array_key_exists('refundable', $variant)) {
+                        ($variant["refundable"] == "on") ? $product->refundable = true : $product->refundable = false;
+                    } else {
+                        $product->refundable = false;
+                    }
                     $product->delivery_type = $variant["delivery_type"];
                     $product->sku = $variant["sku"];
                     $product->qty = (int)$variant["quantity"];
@@ -439,6 +444,11 @@ class ProductController extends Controller
                     } else {
                         $product->featured = false;
                     }
+                    if (array_key_exists('refundable', $variant)) {
+                        ($variant["refundable"] == "on") ? $product->refundable = true : $product->refundable = false;
+                    } else {
+                        $product->refundable = false;
+                    }
                     $product->delivery_type = $variant["delivery_type"];
                     $product->sku = $variant["sku"];
                     $product->qty = (int)$variant["quantity"];
@@ -479,6 +489,11 @@ class ProductController extends Controller
                         ($variant["featured"] == "on") ? $product->featured = true : $product->featured = false;
                     } else {
                         $product->featured = false;
+                    }
+                    if (array_key_exists('refundable', $variant)) {
+                        ($variant["refundable"] == "on") ? $product->refundable = true : $product->refundable = false;
+                    } else {
+                        $product->refundable = false;
                     }
                     $product->delivery_type = $variant["delivery_type"];
                     $product->sku = $variant["sku"];
@@ -598,6 +613,16 @@ class ProductController extends Controller
         }
         return 0;
     }
+    public function updateRefundable(Request $request)
+    {
+        $product = Product::findOrFail($request->id);
+        $product->refundable = $request->status;
+        $product->on_moderation = 0;
+        if ($product->save()) {
+            return 1;
+        }
+        return 0;
+    }
 
     public function updateTodaysDeals(Request $request)
     {
@@ -653,6 +678,24 @@ class ProductController extends Controller
             //            $products = Product::where('variation_id', $variation->id)->get();
             foreach ($products as $product) {
                 $product->featured = $request->status;
+                $product->on_moderation = 0;
+                $product->save();
+            }
+            return 1;
+        } catch (\Exception $e) {
+            return 0;
+        }
+    }
+    public function updateRefundables(Request $request)
+    {
+        try {
+            $variation = Variation::findOrFail($request->id);
+            $products = $variation->products;
+            //            $product = Product::findOrFail($request->id);
+            //            $variation = Variation::findOrFail('id', $product->variation_id);
+            //            $products = Product::where('variation_id', $variation->id)->get();
+            foreach ($products as $product) {
+                $product->refundable = $request->status;
                 $product->on_moderation = 0;
                 $product->save();
             }

@@ -105,6 +105,7 @@
                         {{-- <th>{{translate('Rating')}}</th> --}}
                         <th>{{translate('Published')}}</th>
                         <th>{{translate('Featured')}}</th>
+                        <th>{{translate('Refundable')}}</th>
                         {{-- <th width="60%">{{ translate('Description') }}</th> --}}
                         <th>{{ translate('Added By') }}</th>
                         {{-- <th>{{ translate('Is cloned') }}</th> --}}
@@ -151,6 +152,13 @@
                                 <label class="mb-0 aiz-switch aiz-switch-success">
                                     <input onchange="update_featured(this)" value="{{ $element->id }}"
                                            type="checkbox" <?php if ($element->featured == 1) echo "checked";?> >
+                                    <span class="slider round"></span>
+                                </label>
+                            </td>
+                            <td>
+                                <label class="mb-0 aiz-switch aiz-switch-success">
+                                    <input onchange="update_refundable(this)" value="{{ $element->id }}"
+                                           type="checkbox" <?php if ($element->refundable == 1) echo "checked";?> >
                                     <span class="slider round"></span>
                                 </label>
                             </td>
@@ -245,6 +253,24 @@
             }, function (data) {
                 if (data == 1) {
                     AIZ.plugins.notify('success', '{{ translate('Featured elements updated successfully') }}');
+                } else {
+                    AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
+                }
+            });
+        }
+        function update_refundable(el) {
+            if (el.checked) {
+                var status = 1;
+            } else {
+                var status = 0;
+            }
+            $.post('{{ route('elements.refundable') }}', {
+                _token: '{{ csrf_token() }}',
+                id: el.value,
+                status: status
+            }, function (data) {
+                if (data == 1) {
+                    AIZ.plugins.notify('success', '{{ translate('Refundable elements updated successfully') }}');
                 } else {
                     AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
                 }

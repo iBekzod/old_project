@@ -234,19 +234,21 @@ class CheckoutController extends Controller
             $data['name'] = Auth::user()->name;
             $data['email'] = Auth::user()->email;
             $data['address'] = $address->address;
-            $data['country'] = $address->country;
-            $data['city'] = $address->city;
+            $data['country'] = $address->country->name;
+            $data['city'] = $address->city->name;
             $data['postal_code'] = $address->postal_code;
             $data['phone'] = $address->phone;
+            $data['customer_note'] = $address->customer_note;
             $data['checkout_type'] = $request->checkout_type;
         } else {
             $data['name'] = $request->name;
             $data['email'] = $request->email;
             $data['address'] = $request->address;
-            $data['country'] = $request->country;
-            $data['city'] = $request->city;
+            $data['country'] = $request->country->name;
+            $data['city'] = $request->city->name;
             $data['postal_code'] = $request->postal_code;
             $data['phone'] = $request->phone;
+            $data['customer_note'] = $request->customer_note;
             $data['checkout_type'] = $request->checkout_type;
         }
 

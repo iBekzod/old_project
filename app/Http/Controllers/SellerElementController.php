@@ -1162,6 +1162,15 @@ class SellerElementController extends Controller
         }
         return 0;
     }
+    public function updateRefundable(Request $request)
+    {
+        $element = Element::findOrFail($request->id);
+        $element->refundable = $request->status;
+        if ($element->save()) {
+            return 1;
+        }
+        return 0;
+    }
 
 
 

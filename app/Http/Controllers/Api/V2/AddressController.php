@@ -23,6 +23,9 @@ class AddressController extends Controller
         $address = new Address;
         $address->user_id = $request->user_id;
         $address->address = $request->address;
+        if($request->has('customer_note') ){
+            $address->customer_note = $request->customer_note;
+        }
         $address->country = $request->country;
         $address->city = $request->city;
         $address->postal_code = $request->postal_code;
@@ -43,6 +46,10 @@ class AddressController extends Controller
         $address->city = $request->city;
         $address->postal_code = $request->postal_code;
         $address->phone = $request->phone;
+
+        if($request->has('customer_note') ){
+            $address->customer_note = $request->customer_note;
+        }
         $address->save();
 
         return response()->json([
