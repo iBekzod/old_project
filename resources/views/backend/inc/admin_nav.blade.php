@@ -9,7 +9,7 @@
             @php
                 $logo = get_setting('header_logo');
             @endphp
-            {{-- <a class="ml-0 mr-3 d-block py-10px" href="{{ route('homePage') }}">
+            <a class="ml-0 mr-3 d-block py-10px" href="{{ route('user.login') }}">
                 @php
                     $header_logo = get_setting('header_logo');
                 @endphp
@@ -18,7 +18,7 @@
                 @else
                     <img src="{{ static_asset('assets/img/logo.png') }}" alt="{{ env('APP_NAME') }}" class="mw-100 h-15px h-md-30px" height="20">
                 @endif
-            </a> --}}
+            </a>
             <a href="{{ route('admin.dashboard') }}" class="d-block">
                 @if($logo != null)
                     <img src="{{ uploaded_asset($logo)??static_asset('assets/img/placeholder.jpg') }}" class="brand-icon" alt="{{ get_setting('website_name') }}">
@@ -26,7 +26,7 @@
                     <img src="{{ static_asset('assets/img/logo.png') }}" class="brand-icon" alt="{{ get_setting('website_name') }}">
                 @endif
             </a>
-            <a href="{{ route('homePage') }}" class="d-block">
+            {{-- <a href="{{ route('homePage') }}" class="d-block">
                 @php
                     $header_logo = get_setting('header_logo');
                 @endphp
@@ -35,7 +35,7 @@
                 @else
                     <img src="{{ static_asset('assets/img/logo.png') }}" class="brand-icon" alt="{{ get_setting('website_name') }}">
                 @endif
-            </a>
+            </a> --}}
         </div>
     </div>
     <div class="d-flex justify-content-between align-items-stretch flex-grow-xl-1">
@@ -43,6 +43,16 @@
             <div class="d-none d-md-flex justify-content-around align-items-center align-items-stretch">
                 <div class="aiz-topbar-item">
                     <div class="d-flex align-items-center">
+                        <a class="ml-0 mr-3 d-block py-10px" href="{{ route('user.login') }}">
+                            @php
+                                $header_logo = get_setting('header_logo');
+                            @endphp
+                            @if($header_logo != null)
+                                <img src="{{ uploaded_asset($header_logo) }}" alt="{{ env('APP_NAME') }}" class="mw-100 h-15px h-md-30px" height="20">
+                            @else
+                                <img src="{{ static_asset('assets/img/logo.png') }}" alt="{{ env('APP_NAME') }}" class="mw-100 h-15px h-md-30px" height="20">
+                            @endif
+                        </a>
                         <a class="btn btn-icon btn-circle btn-light" href="{{ default_website() }}" target="_blank" title="{{ translate('Browse Website') }}">
                             <i class="las la-globe"></i>
                         </a>
