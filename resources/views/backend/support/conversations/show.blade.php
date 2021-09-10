@@ -11,7 +11,7 @@
                     <div class="mt-2">
                         <b>product name: </b><span> {{ $conversation->product->name }} </span>
                         <br>
-                        <b>message:</b> {{ json_decode($conversation->msg)->content }}
+                        <b>message:</b> {{ json_decode($conversation->msg) }}
                     </div>
                 </div>
             </div>
@@ -104,9 +104,6 @@
             </div>
         </div>
     </div>
-
-
-
 @endsection
 
 @section('script')

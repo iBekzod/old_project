@@ -175,8 +175,7 @@
                     </li>
 
                     @php
-                        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
-                        $club_point_addon = \App\Addon::where('unique_identifier', 'club_point')->first();
+                        $conversation = \App\Conversation::where('receiver_viewed', 0)->get();
                     @endphp
                     @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
                         <li class="aiz-side-nav-item">
@@ -257,6 +256,15 @@
                             </li>
                         @endif
                     @endif --}}
+
+                @if (\App\BusinessSetting::where('type', 'wallet_system')->first()->value == 1)
+                    <li class="aiz-side-nav-item">
+                        <a href="{{ route('wallet.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['wallet.index'])}}">
+                            <i class="las la-dollar-sign aiz-side-nav-icon"></i>
+                            <span class="aiz-side-nav-text">{{translate('My Wallet')}}</span>
+                        </a>
+                    </li>
+                @endif
 
                         @php
                             $orders = DB::table('orders')

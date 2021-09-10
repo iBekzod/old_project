@@ -34,9 +34,8 @@
                         <td style="width: 10%">
                             @if(App\User::where('id',$conversation->sender_id)->exists())
                               {{ App\User::where('id',$conversation->sender_id)->first()->name}}
-                                @if ($conversation->receiver_viewed == 0)
-                                    <span class="badge badge-inline badge-info">{{ translate('New') }}</span>
-                                @endif
+                            @else
+                            {{ "user name not found" }}
                             @endif
                         </td>
                         <td style="width: 11%">
@@ -52,7 +51,7 @@
                             $string=$conversation->msg;
                             // dd($string);
                                  if (strlen($string)>20) {
-                             $string = substr($string, 0,20);
+                             $string = substr($string, 0,50);
                              echo $string." ...";
                               }else {
                                    echo $string;
