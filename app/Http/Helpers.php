@@ -231,7 +231,7 @@ if (!function_exists('defaultLanguage')) {
 if (!function_exists('default_website')) {
     function default_website()
     {
-        return "http://tinfis.vercel.app/";
+        return "https://tinfis-zeta.vercel.app/";
     }
 }
 
