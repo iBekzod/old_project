@@ -177,6 +177,10 @@
                     @php
                         $conversation = \App\Conversation::where('receiver_viewed', 0)->get();
                     @endphp
+                    @php
+                        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
+                        $club_point_addon = \App\Addon::where('unique_identifier', 'club_point')->first();
+                    @endphp
                     @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
                         <li class="aiz-side-nav-item">
                             <a href="{{ route('customer_refund_request') }}"
