@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app')
+@extends('frontend.layouts.seller')
 
 @section('content')
     <section class="py-5">
@@ -68,7 +68,7 @@
                         </div>
                     @endif
                     <br>
-                    
+
                     <div class="card">
                         <form class="" id="sort_blogs" action="" method="GET">
                             <div class="card-header">
@@ -91,7 +91,7 @@
                                 </div>
                             </div>
                         </form>
-                        
+
                         <div class="card-body">
                             <div class="row gutters-10">
                                 <div class="col-md-3 mx-auto mb-3">
@@ -101,7 +101,7 @@
                                                 <span class="la-3x text-white">
                                                     @if($affliate_stats->count_click)
                                                         {{ $affliate_stats->count_click }}
-                                                    @else 
+                                                    @else
                                                         0
                                                     @endif
                                                 </span>
@@ -117,7 +117,7 @@
                                                 <span class="la-3x text-white">
                                                     @if($affliate_stats->count_item)
                                                         {{ $affliate_stats->count_item }}
-                                                    @else 
+                                                    @else
                                                         0
                                                     @endif
                                                 </span>
@@ -133,7 +133,7 @@
                                                 <span class="la-3x text-white">
                                                     @if($affliate_stats->count_delivered)
                                                         {{ $affliate_stats->count_delivered }}
-                                                    @else 
+                                                    @else
                                                         0
                                                     @endif
                                                 </span>
@@ -149,7 +149,7 @@
                                                 <span class="la-3x text-white">
                                                     @if($affliate_stats->count_cancel)
                                                         {{ $affliate_stats->count_cancel }}
-                                                    @else 
+                                                    @else
                                                         0
                                                     @endif
                                                 </span>
@@ -161,7 +161,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="card">
                         <div class="card-header">
                             <h5 class="mb-0 h6">{{translate('Affiliate Earning History')}}</h5>

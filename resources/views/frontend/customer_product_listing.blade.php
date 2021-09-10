@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app')
+@extends('frontend.layouts.seller')
 
 @if (isset($category_id))
     @php

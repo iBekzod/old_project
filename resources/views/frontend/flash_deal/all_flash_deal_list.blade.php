@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app')
+@extends('frontend.layouts.seller')
 
 @section('content')
 
@@ -28,7 +28,7 @@
 
 <section class="mb-4">
     <div class="container">
-        <div class="row row-cols-1 row-cols-lg-2 gutters-10">                           
+        <div class="row row-cols-1 row-cols-lg-2 gutters-10">
             @foreach($all_flash_deals as $single)
             <div class="col">
                 <div class="bg-white rounded shadow-sm mb-3">

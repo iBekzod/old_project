@@ -139,6 +139,7 @@
                         </a>
                     </li>
                 @else
+                    @if(isSeller())
                     <li class="aiz-side-nav-item">
                         <a href="{{ route('seller.marketing') }}"
                             class="aiz-side-nav-link {{ areActiveRoutes(['seller.marketing', 'seller.marketing.create']) }}">
@@ -146,7 +147,7 @@
                             <span class="aiz-side-nav-text">{{ translate('Marketing') }}</span>
                         </a>
                     </li>
-
+                    @endif
                     @php
                         $delivery_viewed = App\Order::where('user_id', Auth::user()->id)
                             ->where('delivery_viewed', 0)
@@ -191,12 +192,12 @@
                         </li>
                     @endif
 
-                    {{-- <li class="aiz-side-nav-item">
+                    <li class="aiz-side-nav-item">
                         <a href="{{ route('wishlists.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['wishlists.index'])}}">
                             <i class="la la-heart-o aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{ translate('Wishlist') }}</span>
                         </a>
-                    </li> --}}
+                    </li>
                     @if (Auth::user()->user_type == 'seller')
                         <li class="aiz-side-nav-item">
                             <a href="{{ route('seller.products') }}"

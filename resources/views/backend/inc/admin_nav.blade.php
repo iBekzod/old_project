@@ -9,9 +9,29 @@
             @php
                 $logo = get_setting('header_logo');
             @endphp
+            {{-- <a class="ml-0 mr-3 d-block py-10px" href="{{ route('homePage') }}">
+                @php
+                    $header_logo = get_setting('header_logo');
+                @endphp
+                @if($header_logo != null)
+                    <img src="{{ uploaded_asset($header_logo) }}" alt="{{ env('APP_NAME') }}" class="mw-100 h-15px h-md-30px" height="20">
+                @else
+                    <img src="{{ static_asset('assets/img/logo.png') }}" alt="{{ env('APP_NAME') }}" class="mw-100 h-15px h-md-30px" height="20">
+                @endif
+            </a> --}}
             <a href="{{ route('admin.dashboard') }}" class="d-block">
                 @if($logo != null)
                     <img src="{{ uploaded_asset($logo)??static_asset('assets/img/placeholder.jpg') }}" class="brand-icon" alt="{{ get_setting('website_name') }}">
+                @else
+                    <img src="{{ static_asset('assets/img/logo.png') }}" class="brand-icon" alt="{{ get_setting('website_name') }}">
+                @endif
+            </a>
+            <a href="{{ route('homePage') }}" class="d-block">
+                @php
+                    $header_logo = get_setting('header_logo');
+                @endphp
+                @if($header_logo != null)
+                    <img src="{{ uploaded_asset($header_logo)??static_asset('assets/img/placeholder.jpg') }}" class="brand-icon" alt="{{ get_setting('website_name') }}">
                 @else
                     <img src="{{ static_asset('assets/img/logo.png') }}" class="brand-icon" alt="{{ get_setting('website_name') }}">
                 @endif
@@ -129,34 +149,82 @@
                     </ul>
                 </div>
             </div>
-
+            {{-- currency --}}
+            {{-- @if(get_setting('show_currency_switcher') == 'on')
+                <li class="list-inline-item dropdown" id="currency-change">
+                    @php
+                        if(Session::has('currency_code')){
+                            $currency_code = Session::get('currency_code');
+                        }
+                        else{
+                            $currency_code = \App\Currency::findOrFail(\App\BusinessSetting::where('type', 'system_default_currency')->first()->value)->code;
+                        }
+                    @endphp
+                    <a href="javascript:void(0)" class="py-2 dropdown-toggle text-reset opacity-60" data-toggle="dropdown" data-display="static">
+                         {{ (\App\Currency::where('code', $currency_code)->first()->symbol) }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
+                        @foreach (\App\Currency::where('status', 1)->get() as $key => $currency)
+                            <li>
+                                <a class="dropdown-item @if($currency_code == $currency->code) active @endif" href="javascript:void(0)" data-currency="{{ $currency->code }}">{{ $currency->name }} </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </li>
+            @endif --}}
             <div class="aiz-topbar-item ml-2">
                 <div class="align-items-stretch d-flex dropdown">
                     <a class="dropdown-toggle no-arrow text-dark" data-toggle="dropdown" href="javascript:void(0);" role="button" aria-haspopup="false" aria-expanded="false">
                         <span class="d-flex align-items-center">
                             <span class="avatar avatar-sm mr-md-2">
                                 <img
-                                    src="{{ uploaded_asset(Auth::user()->avatar_original) }}"
+                                    src="{{ uploaded_asset(Auth::user()->avatar_original??null) }}"
                                     onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';"
                                 >
                             </span>
                             <span class="d-none d-md-block">
-                                <span class="d-block fw-500">{{Auth::user()->name}}</span>
-                                <span class="d-block small opacity-60">{{Auth::user()->user_type}}</span>
+                                <span class="d-block fw-500">{{Auth::user()->name??null}}</span>
+                                <span class="d-block small opacity-60">{{Auth::user()->phone??null}}</span>
                             </span>
                         </span>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-md">
-                        <a href="{{ route('profile.index') }}" class="dropdown-item">
-                            <i class="las la-user-circle"></i>
-                            <span>{{translate('Profile')}}</span>
-                        </a>
+                    @auth
+                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-md">
+                            @if(isAdmin())
+                                <a href="{{ route('admin.dashboard')}}" class="dropdown-item">
+                                    <i class="las la-sign-out-alt"></i>
+                                    <span>{{translate('My Panel')}}</span>
+                                </a>
+                            @else
+                                <a href="{{ route('dashboard')}}" class="dropdown-item">
+                                    <i class="las la-sign-out-alt"></i>
+                                    <span>{{translate('My Panel')}}</span>
+                                </a>
+                            @endif
+                            <a href="{{ route('profile.index') }}" class="dropdown-item">
+                                <i class="las la-user-circle"></i>
+                                <span>{{translate('Profile')}}</span>
+                            </a>
 
-                        <a href="{{ route('logout')}}" class="dropdown-item">
-                            <i class="las la-sign-out-alt"></i>
-                            <span>{{translate('Logout')}}</span>
-                        </a>
-                    </div>
+                            <a href="{{ route('logout')}}" class="dropdown-item">
+                                <i class="las la-sign-out-alt"></i>
+                                <span>{{translate('Logout')}}</span>
+                            </a>
+                        </div>
+
+                    @else
+                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-md">
+                            <a href="{{ route('user.login')}}" class="dropdown-item">
+                                <i class="las la-sign-out-alt"></i>
+                                <span>{{translate('Login')}}</span>
+                            </a>
+                            <a href="{{ route('user.registration')}}" class="dropdown-item">
+                                <i class="las la-sign-out-alt"></i>
+                                <span>{{translate('Registration')}}</span>
+                            </a>
+                        </div>
+                    @endauth
+
                 </div>
             </div><!-- .aiz-topbar-item -->
         </div>
