@@ -213,6 +213,7 @@ class ConversationController extends Controller
         elseif($conversation->receiver_id == Auth::user()->id) {
             $conversation->receiver_viewed = 1;
         }
+        // dd($conversation);
         $conversation->save();
         return view('frontend.user.conversations.show', compact('conversation'));
     }
