@@ -24,8 +24,7 @@
                                                 <div class="col-auto">
                                                     <div class="media">
                                                         <span class="avatar avatar-sm flex-shrink-0">
-                                                            {{-- <img @if ($conversation->sender->avatar_original == null) src="{{ static_asset('assets/img/avatar-place.png') }}" @else src="{{ uploaded_asset($conversation->sender->avatar_original) }}" @endif class="rounded-circle" onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';"> --}}
-
+                                                            <img @if ($conversation->sender->avatar_original == null) src="{{ static_asset('assets/img/avatar-place.png') }}" @else src="{{ uploaded_asset($conversation->sender->avatar_original) }}" @endif class="rounded-circle" onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';">
                                                         </span>
                                                     </div>
                                                 </div>
@@ -66,22 +65,6 @@
                                                         </a>
                                                     </p>
                                                 </div>
-
-
-                                                {{-- <div class="col-12 col-lg">
-                                                    <h6 class="mt-0">
-                                                        <a href="{{ route('conversations.show', encrypt($conversation->id)) }}"
-                                                            class="text-dark fw-600">
-
-                                                        </a>
-                                                        @if ($conversation->receiver_viewed = 0)
-                                                            <span
-                                                                class="badge badge-inline badge-danger">{{ translate('New') }}</span>
-                                                        @endif
-                                                    </h6>
-                                                </div> --}}
-
-
                                             </div>
                                         </li>
                                     @endif
@@ -89,9 +72,9 @@
                             </ul>
                         </div>
                     </div>
-                    {{-- <div class="aiz-pagination">
+                    <div class="aiz-pagination">
                       	{{ $conversations->links() }}
-                	</div> --}}
+                	</div>
                 </div>
             </div>
         </div>
