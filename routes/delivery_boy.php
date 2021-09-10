@@ -10,7 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+use Illuminate\Support\Facades\Route;
 
 //Admin
 Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function(){
@@ -21,10 +21,10 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
     Route::post('/delivery-boy/order-collection', 'DeliveryBoyController@order_collection_form')->name('delivery-boy.order-collection');
     Route::post('/collection-from-delivery-boy', 'DeliveryBoyController@collection_from_delivery_boy')->name('collection-from-delivery-boy');
     Route::get('/delivery-boy/cancel-request', 'DeliveryBoyController@cancel_request_list')->name('delivery-boy.cancel-request');
-    
+
 });
 
-Route::group(['middleware' => ['user', 'verified', 'unbanned']], function() {
+Route::group(['prefix' =>'deliver','middleware' => ['user', 'verified', 'unbanned']], function() {
     Route::get('/assigned-deliveries', 'DeliveryBoyController@assigned_delivery')->name('assigned-deliveries');
     Route::get('/pickup-deliveries', 'DeliveryBoyController@pickup_delivery')->name('pickup-deliveries');
     Route::get('/on-the-way-deliveries', 'DeliveryBoyController@on_the_way_deliveries')->name('on-the-way-deliveries');

@@ -14,13 +14,24 @@
                             </div>
                             <div class="px-4 py-3 py-lg-4">
                                 <div class="">
-                                    <form class="form-default" role="form" action="{{ route('seller.login') }}" method="POST">
+                                    <form class="form-default" role="form" action="{{ route('user.login') }}" method="POST">
                                         @csrf
+                                        @method('POST')
                                         <div class="form-group">
                                             @if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null && \App\Addon::where('unique_identifier', 'otp_system')->first()->activated)
                                                 <input type="text" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" placeholder="{{ translate('Email Or Phone')}}" name="email" id="email">
+                                                @if ($errors->has('email'))
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $errors->first('email') }}</strong>
+                                                    </span>
+                                                @endif
                                             @else
                                                 <input type="email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" placeholder="{{  translate('Email') }}" name="email">
+                                                @if ($errors->has('email'))
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $errors->first('email') }}</strong>
+                                                    </span>
+                                                @endif
                                             @endif
                                             @if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null && \App\Addon::where('unique_identifier', 'otp_system')->first()->activated)
                                                 <span class="opacity-60">{{  translate('Use country code before number') }}</span>
@@ -29,6 +40,11 @@
 
                                         <div class="form-group">
                                             <input type="password" class="form-control {{ $errors->has('password') ? ' is-invalid' : '' }}" placeholder="{{ translate('Password')}}" name="password" id="password">
+                                            @if ($errors->has('password'))
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $errors->first('password') }}</strong>
+                                                </span>
+                                            @endif
                                         </div>
 
                                         <div class="row mb-2">
@@ -97,6 +113,18 @@
                                             <td>{{ translate('Customer Account')}}</td>
                                             <td><button class="btn btn-info" onclick="autoFillCustomer()">{{ translate('Copy credentials') }}</button></td>
                                         </tr>
+                                        <tr>
+                                            <td>{{ translate('Delivery Boy Account')}}</td>
+                                            <td>
+                                                <button class="btn btn-info btn-sm" onclick="autoFillDeliveryBoy()">{{ translate('Copy credentials') }}</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ translate('Admin Account')}}</td>
+                                            <td>
+                                                <button class="btn btn-info btn-sm" onclick="autoFill()">{{ translate('Copy credentials') }}</button>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -111,11 +139,19 @@
 @section('script')
     <script type="text/javascript">
         function autoFillSeller(){
-            $('#email').val('seller@example.com');
-            $('#password').val('123456');
+            $('#email').val('dj.temur@gmail.com');
+            $('#password').val('Tinfis12345');
         }
         function autoFillCustomer(){
             $('#email').val('customer@example.com');
+            $('#password').val('Tinfis12345');
+        }
+        function autoFillDeliveryBoy(){
+            $('#email').val('muhammadsaid220722@gmail.com');
+            $('#password').val('Tinfis12345');
+        }
+        function autoFill(){
+            $('#email').val('tinfis@admin.uz');
             $('#password').val('Tinfis12345');
         }
     </script>

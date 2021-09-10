@@ -1252,12 +1252,27 @@ if (!function_exists('isUnique')) {
 }
 
 if (!function_exists('get_setting')) {
-    function get_setting($key, $default = null)
+    // function get_setting($key, $default = null, $locale='ru')
+    // {
+    //     if ($setting = BusinessSetting::where('type', $key)->first()) {
+    //         return $setting->value;
+    //     }
+    //     return $setting ?? $default;
+    // }
+
+    function get_setting($key, $default = null, $lang = false)
     {
-        if ($setting = BusinessSetting::where('type', $key)->first()) {
-            return $setting->value;
+        $settings = Cache::remember('business_settings', 86400, function () {
+            return BusinessSetting::all();
+        });
+
+        if ($lang == false) {
+            $setting = $settings->where('type', $key)->first();
+        } else {
+            $setting = $settings->where('type', $key)->where('lang', $lang)->first();
+            $setting = !$setting ? $settings->where('type', $key)->first() : $setting;
         }
-        return $setting ?? $default;
+        return $setting == null ? $default : $setting->value;
     }
 }
 
@@ -1290,6 +1305,15 @@ if (!function_exists('isCustomer')) {
     function isCustomer()
     {
         if (Auth::check() && Auth::user()->user_type == 'customer') {
+            return true;
+        }
+        return false;
+    }
+}
+if (!function_exists('isDriver')) {
+    function isDriver()
+    {
+        if (Auth::check() && Auth::user()->user_type == 'delivery_b') {
             return true;
         }
         return false;

@@ -11,7 +11,7 @@ use Laravel\Passport\HasApiTokens;
 use App\Cart;
 use App\Notifications\EmailVerificationNotification;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable// implements MustVerifyEmail
 {
     public const PROFILE_IMAGE_URL = 'uploads/profile/';
     use Notifiable, HasApiTokens;

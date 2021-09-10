@@ -202,7 +202,7 @@ Route::prefix('v1')->group(function () {
     Route::post('post/conversation','Api\ConversationController@postConversations');
     Route::post('post/subscriber','Api\SubscriberController@postSubscribers');
     Route::post('post/found_it_cheaper','Api\FoundItCheaperController@postFoundItCheaper');
-    Route::post('post/report_description','Api\ReportDescriptionController@postReportDescription');
+    // Route::post('post/report_description','Api\ReportDescriptionController@postReportDescription');
     Route::post('post/support_service','Api\SupportServiceController@postSupportService');
 
     Route::post('order/store', 'Api\OrderController@processOrder')->middleware('auth:api');

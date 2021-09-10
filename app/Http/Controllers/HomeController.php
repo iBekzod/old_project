@@ -47,24 +47,40 @@ class HomeController extends Controller
         redirect()->back();
     }
 
-    public function user_login()
+    // public function user_login()
+    // {
+    //     $this->login();
+    // }
+
+    public function login(Request $request)
     {
-        if(Auth::check()){
+
+        if (Auth::check()) {
             return $this->dashboard();
+        }else{
+
+            if ($request->method() == 'POST') {
+                $request->validate([
+                    'email' => 'required|string|email',
+                    'password' => 'required|string',
+                    'remember_me' => 'boolean'
+                ]);
+                if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+                    return $this->dashboard();
+                }else if (Auth::attempt(['phone' => $request->email, 'password' => $request->password])) {
+                    return $this->dashboard();
+                }
+                // $user = User::where('password', Hash::make($request->password))->where('email', $request->email)->first();
+                // dd();
+                // if($user = User::where('email', $request->email)->orWhere('phone', $request->email)->first())
+                // {
+                //     auth()->login($user, true);
+                //     return $this->dashboard();
+                // }
+
+            }
         }
         return view('frontend.user_login');
-    }
-
-    public function login()
-    {
-        if (Auth::check()) {
-            if(Auth::user()->user_type=='customer' ){
-                return $this->dashboard();
-            }
-            return redirect()->route('admin');
-        }
-        return $this->dashboard();
-        return $this->admin_dashboard();
     }
 
     public function email(){
@@ -74,7 +90,6 @@ class HomeController extends Controller
     // TODO::AUTHcontroller  Home controller;
     public function seller_registration(Request $request)
     {
-
         if ($request->method() === 'POST') {
 
             $request->validate([
@@ -167,7 +182,6 @@ class HomeController extends Controller
             if (!Auth::attempt($credentials)) {
                 return back();
             }
-
             $user = $request->user();
             auth()->login($user, true);
 
@@ -261,65 +275,60 @@ class HomeController extends Controller
      */
     public function dashboard()
     {
-        if (Auth::user()->user_type == 'seller') {
+        // dd(isSeller());
+        if ( isSeller()) {
             // return view('frontend.user.seller.dashboard');
+
+            $this->check_seller();
             return view('frontend.user.customer.dashboard');
-        } else if (Auth::user()->user_type == 'admin') {
-            return $this->admin_dashboard();
+        } else if (isAdmin()) {
+            return view('backend.dashboard');
         }
-        else if(Auth::user()->user_type == 'customer'){
-            // $address = Auth::user()->addresses->where('set_default', 1)->first();
-            // dd($address);
-         return view('frontend.user.customer.dashboard');
+        else if(isCustomer()){
+            return view('frontend.user.customer.dashboard');
+        }
+        else if(isDriver()){
+            return view('delivery_boys.frontend.dashboard');
         }
         else {
-            // return $this->index();
-            abort(404);
+            return $this->index();
         }
     }
 
+    function check_seller(){
+            $user=Auth::user();
+            if ($user->registration_step == 'active_1') {
+                return redirect()->route('seller.autoidentification');
+                // return 'keldi';
+            }
+            if ($user->registration_step == 'active_2') {
+                return redirect()->route('seller.delivery');
+                // return 'keldi';
+            }
+            if ($user->registration_step == 'active_3') {
+                $shop = Auth::user()->shop;
+                return view('frontend.user.seller.shop', compact('shop'));
+            }
+    }
     public function profile(Request $request)
     {
-        // dd($request->all());
-        if (Auth::user()->user_type == 'customer') {
+        if (isCustomer()) {
             $addresses = Auth::user()->addresses;
-            // dd($addresses);
             return view('frontend.user.customer.profile', compact('addresses'));
-        } elseif (Auth::user()->user_type == 'seller') {
-            // dd(Auth::user()->seller->verification_info);
-            // $informations=Auth::user()->seller->verification_info;
-            // dd($informations->);
+        }else if(isDriver()){
+            return view('delivery_boys.frontend.profile');
+        }else if (isSeller()) {
+            $this->check_seller();
             $user_id= auth()->id();
             $addresses = Auth::user()->addresses->first();
-            // dd($addresses);
-            // $cities=collect();
-            // $regions=collect();
             if($addresses!=null){
                 $regions=City::where('country_id', $addresses->country_id)->orWhere('type', 'region')->get();
                 $selected_region=$addresses->region;
                 $cities=$selected_region->children;
                 $selected_city=$addresses->city;
-                // $cities=City::where('id', $addresses->city_id)->orWhere('type', 'city')->first();
-                // dd($regions);
-                // $regions=City::where('id',$addresses->region_id)->orwhere('type', 'region')->first();
-                // dd($regions);
             }
-
             $information = Auth::user()->seller->verification_info;
-            // dd($information);
             $key = array_search('text', array_column($information, 'type'));
-            //   dd($information[$key]['value']);
-            // if(Address::where('user_id', $user_id)->exists()){
-            //     $address=Address::where('user_id', $user_id)->first();
-            // }
-            // dd($address);
-            // $regions=City::where('type', 'region')->get();
-            // // dd($regions);
-            // $cities=City::where('type', 'district')->orWhere('type', 'city')->get();
-
-
-            // $countrys = Country::where('status', 1)->get();
-
             return view('frontend.user.seller.profile',
              compact('addresses',
                     'information',
@@ -327,7 +336,10 @@ class HomeController extends Controller
                     'selected_region',
                     'cities',
                     'selected_city'));
+        }else if (isAdmin()){
+            return view('backend.admin_profile.index');
         }
+        return $this->dashboard();
     }
     public function customer_update_profile(Request $request)
     {
@@ -404,11 +416,10 @@ class HomeController extends Controller
     public function index()
     {
         // return redirect('https://marketpro.vercel.app/');
-        // return view('frontend.index');
-        if (auth()->user() != null) {
-            return $this->dashboard();
-        }
-        return redirect()->route('login');
+        // if (auth()->user() != null) {
+            return view('frontend.user_login');
+        // }
+        // return redirect()->route('user.login');
     }
 
     public function home()

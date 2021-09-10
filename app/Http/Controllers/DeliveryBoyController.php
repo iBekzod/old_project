@@ -58,7 +58,7 @@ class DeliveryBoyController extends Controller
     public function store(Request $request)
     {
         $user                       = new User;
-        $user->user_type            = 'delivery_boy';
+        $user->user_type            = 'delivery_b';
         $user->name                 = $request->name;
         $user->email                = $request->email;
         $user->phone                = $request->phone;
@@ -201,14 +201,14 @@ class DeliveryBoyController extends Controller
 
     public function cancel_request_list() {
         $order_query = Order::query();
-        if(Auth::user()->user_type == 'delivery_boy') {
+        if(isDriver()) {
             $order_query = $order_query->where('assign_delivery_boy', Auth::user()->id);
         }
         $order_query = $order_query->where('delivery_status', '!=', 'cancelled')->where('cancel_request', 1);
         $order_query = $order_query->paginate(10);
 
         $cancel_requests = $order_query;
-        if(Auth::user()->user_type == 'delivery_boy') {
+        if(isDriver()) {
             return view('delivery_boys.frontend.cancel_request_list', compact('cancel_requests'));
         }
         return view('delivery_boys.cancel_request_list', compact('cancel_requests'));
