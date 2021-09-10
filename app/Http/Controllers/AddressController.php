@@ -52,6 +52,9 @@ class AddressController extends Controller
             $address->longitude = $request->longitude;
             $address->latitude = $request->latitude;
         }
+        if($request->has('customer_note') ){
+            $address->customer_note = $request->customer_note;
+        }
         $address->save();
 
         return back();

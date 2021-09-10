@@ -17,7 +17,7 @@
                 <div class="mb-3">
                     <select class="form-control aiz-selectpicker" data-live-search="true" data-placeholder="{{ translate('Select your country')}}" name="country" id="edit_country" required>
                         @foreach (\App\Country::where('status', 1)->get() as $key => $country)
-                        <option value="{{ $country->name }}" @if($address_data->country == $country->name) selected @endif>
+                        <option value="{{ $country->name }}" @if($address_data->country->name == $country->name) selected @endif>
                             {{ $country->name }}
                         </option>
                         @endforeach
@@ -36,7 +36,7 @@
                 </select>
             </div>
         </div>
-        
+
         @if (get_setting('google_map') == 1)
             <div class="row">
                 <input id="edit_searchInput" class="controls" type="text" placeholder="Enter a location">
@@ -67,7 +67,7 @@
                 </div>
             </div>
         @endif
-        
+
         <div class="row">
             <div class="col-md-2">
                 <label>{{ translate('Postal code')}}</label>

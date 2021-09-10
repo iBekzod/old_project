@@ -15,11 +15,11 @@
                     </div>
                     <div>
                         <span class="alpha-6">{{ translate('City') }}:</span>
-                        <span class="strong-600 ml-2">{{ $address->city }}</span>
+                        <span class="strong-600 ml-2">{{ $address->city->name }}</span>
                     </div>
                     <div>
                         <span class="alpha-6">{{ translate('Country') }}:</span>
-                        <span class="strong-600 ml-2">{{ $address->country }}</span>
+                        <span class="strong-600 ml-2">{{ $address->country->name }}</span>
                     </div>
                     <div>
                         <span class="alpha-6">{{ translate('Phone') }}:</span>

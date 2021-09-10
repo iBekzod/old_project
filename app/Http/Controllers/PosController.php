@@ -271,8 +271,8 @@ class PosController extends Controller
                 if($request->shipping_address != null){
                     $address_data   = Address::findOrFail($request->shipping_address);
                     $address        = $address_data->address;
-                    $country        = $address_data->country;
-                    $city           = $address_data->city;
+                    $country        = $address_data->country->name;
+                    $city           = $address_data->city->name;
                     $postal_code    = $address_data->postal_code;
                     $phone          = $address_data->phone;
                 }
