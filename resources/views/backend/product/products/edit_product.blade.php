@@ -125,6 +125,15 @@
                                             <span></span>
                                         </label>
                                     </td>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{ translate('Refundable') }}</label>
+                                        <label class="mb-0 aiz-switch aiz-switch-success">
+                                            <input type="checkbox"
+                                                   onchange="change_switch(this.checked, 'refundable_change')"
+                                                   name="refundable"  @if($element->refundable) checked @endif>
+                                            <span></span>
+                                        </label>
+                                    </td>
                                     {{-- <td>
                                         {{translate('Delete')}}
                                     </td> --}}
@@ -235,6 +244,13 @@
                                                     <span></span>
                                                 </label>
                                             </td>
+                                            <td>
+                                                <label class="mb-0 aiz-switch aiz-switch-success ">
+                                                    <input type="checkbox" name="variation[{{ $index }}][refundable]"
+                                                        class="refundable_change" @if ($element->refundable) checked @endif>
+                                                    <span></span>
+                                                </label>
+                                            </td>
                                             {{-- <td>
 
                                                 {{translate('Is new!')}}
@@ -334,6 +350,13 @@
                                                     <span></span>
                                                 </label>
                                             </td>
+                                            <td>
+                                                <label class="mb-0 aiz-switch aiz-switch-success ">
+                                                    <input type="checkbox" name="variation[{{ $index }}][refundable]"
+                                                        class="refundable_change" @if($combination->variant->refundable) checked @endif>
+                                                    <span></span>
+                                                </label>
+                                            </td>
                                             {{-- <td>
                                                 <a href="{{ route('products.destroy', $combination->variant->id) }}"
                                                     class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
@@ -422,6 +445,10 @@
                                     </td>
                                     <td class="text-center">
                                         <label for="" class="control-label">{{ translate('Published') }}</label>
+
+                                    </td>
+                                    <td class="text-center">
+                                        <label for="" class="control-label">{{ translate('Refundable') }}</label>
 
                                     </td>
                                     {{-- <td>
@@ -524,6 +551,13 @@
                                             <label class="mb-0 aiz-switch aiz-switch-success ">
                                                 <input type="checkbox" name="variation[{{ $index }}][published]"
                                                     class="published_change" @if($seller_product->published) checked @endif>
+                                                <span></span>
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <label class="mb-0 aiz-switch aiz-switch-success ">
+                                                <input type="checkbox" name="variation[{{ $index }}][refundable]"
+                                                    class="refundable_change" @if($seller_product->refundable) checked @endif>
                                                 <span></span>
                                             </label>
                                         </td>

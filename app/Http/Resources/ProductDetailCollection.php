@@ -29,7 +29,7 @@ class ProductDetailCollection extends ResourceCollection
             $data = [
                 'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??[],
                 'weight'=>$element->weight,
-                'refundable'=>$element->refundable,
+                'refundable'=>$product->refundable,
                 'shipping_type' => $product->delivery_type,
                 'shipping_cost' => $this->calculateShippingCost($product, false),
                 // 'express_shipping_cost'=>$this->calculateShippingCost($product, true),

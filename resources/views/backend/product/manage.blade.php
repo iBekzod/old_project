@@ -32,6 +32,7 @@
                     <th>{{translate('Todays deal')}}</th>
                     <th>{{translate('Published')}}</th>
                     <th>{{translate('Featured')}}</th>
+                    <th>{{translate('Refundable')}}</th>
                     <th class="text-right">{{translate('Accepted')}}</th>
                 </tr>
                 </thead>
@@ -82,6 +83,13 @@
                             <label class="aiz-switch aiz-switch-success mb-0">
                                 <input onchange="update_featured(this)" value="{{ $product->id }}"
                                        type="checkbox" <?php if ($product->featured == 1) echo "checked";?> >
+                                <span class="slider round"></span>
+                            </label>
+                        </td>
+                        <td>
+                            <label class="aiz-switch aiz-switch-success mb-0">
+                                <input onchange="update_refundable(this)" value="{{ $product->id }}"
+                                       type="checkbox" <?php if ($product->refundable == 1) echo "checked";?> >
                                 <span class="slider round"></span>
                             </label>
                         </td>
@@ -196,6 +204,24 @@
             }, function (data) {
                 if (data == 1) {
                     AIZ.plugins.notify('success', '{{ translate('Featured products updated successfully') }}');
+                } else {
+                    AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
+                }
+            });
+        }
+        function update_refundable(el) {
+            if (el.checked) {
+                var status = 1;
+            } else {
+                var status = 0;
+            }
+            $.post('{{ route('products.refundable') }}', {
+                _token: '{{ csrf_token() }}',
+                id: el.value,
+                status: status
+            }, function (data) {
+                if (data == 1) {
+                    AIZ.plugins.notify('success', '{{ translate('Refundable products updated successfully') }}');
                 } else {
                     AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
                 }

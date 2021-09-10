@@ -49,7 +49,9 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
     Route::post('/products/todays_deal', 'ProductController@updateTodaysDeal')->name('products.todays_deal');
     Route::post('/products/todays_deals', 'ProductController@updateTodaysDeals')->name('products.todays_deals');
     Route::post('/products/featured', 'ProductController@updateFeatured')->name('products.featured');
+    Route::post('/products/refundable', 'ProductController@updateRefundable')->name('products.refundable');
     Route::post('/products/featureds', 'ProductController@updateFeatureds')->name('products.featureds');
+    Route::post('/products/refundables', 'ProductController@updateRefundables')->name('products.refundables');
     Route::post('/products/get_products_by_subcategory', 'ProductController@get_products_by_subcategory')->name('products.get_products_by_subcategory');
 
 	Route::post('/elements/update/{id}','ElementController@update')->name('elements.update');
@@ -67,6 +69,7 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::get('/elements/seller/{id}/edit','ElementController@seller_element_edit')->name('elements.seller.edit');
 	Route::post('/elements/todays_deal', 'ElementController@updateTodaysDeal')->name('elements.todays_deal');
 	Route::post('/elements/featured', 'ElementController@updateFeatured')->name('elements.featured');
+	Route::post('/elements/refundable', 'ElementController@updateRefundable')->name('elements.refundable');
     Route::get('/elements/make_selected_attribute_options', 'ElementController@make_selected_attribute_options')->name('elements.make_selected_attribute_options');
     Route::get('/elements/make_attribute_options', 'ElementController@make_attribute_options')->name('elements.make_attribute_options');
     Route::get('/elements/make_color_options', 'ElementController@make_color_options')->name('elements.make_color_options');

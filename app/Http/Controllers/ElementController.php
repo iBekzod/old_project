@@ -566,11 +566,12 @@ class ElementController extends Controller
 
         $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
         if ($refund_request_addon != null && $refund_request_addon->activated == 1) {
-            if ($request->refundable != null) {
-                $element->refundable = 1;
-            } else {
-                $element->refundable = 0;
-            }
+            ($request->refundable == "on") ? $element->refundable = true : $element->refundable = false;
+            // if ($request->refundable != null) {
+            //     $element->refundable = 1;
+            // } else {
+            //     $element->refundable = 0;
+            // }
         }
         $generated_variations = array();
         $my_characteristics = array();
@@ -962,6 +963,16 @@ class ElementController extends Controller
     {
         $element = Element::findOrFail($request->id);
         $element->featured = $request->status;
+        $element->on_moderation = 0;
+        if ($element->save()) {
+            return 1;
+        }
+        return 0;
+    }
+    public function updateRefundable(Request $request)
+    {
+        $element = Element::findOrFail($request->id);
+        $element->refundable = $request->status;
         $element->on_moderation = 0;
         if ($element->save()) {
             return 1;

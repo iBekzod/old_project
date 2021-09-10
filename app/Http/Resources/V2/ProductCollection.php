@@ -18,6 +18,7 @@ class ProductCollection extends ResourceCollection
                     'base_price' => (double) homeBasePrice($data),
                     'base_discounted_price' => (double) homeDiscountedBasePrice($data),
                     'todays_deal' => (integer) $data->todays_deal,
+                    'refundable' => (integer) $data->refundable,
                     'featured' =>(integer) $data->featured,
                     'unit' => $data->unit,
                     'discount' => (double) $data->discount,
