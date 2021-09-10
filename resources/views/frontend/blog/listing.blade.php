@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app')
+@extends('frontend.layouts.seller')
 
 @section('content')
 
@@ -59,7 +59,7 @@
                     </div>
                 </div>
             @endforeach
-            
+
         </div>
         <div class="aiz-pagination aiz-pagination-center mt-4">
             {{ $blogs->links() }}

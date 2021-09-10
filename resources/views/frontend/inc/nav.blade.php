@@ -116,7 +116,7 @@
                     </li>
                     @endif
 
-                    {{-- @if(get_setting('show_currency_switcher') == 'on')
+                    @if(get_setting('show_currency_switcher') == 'on')
                     <li class="list-inline-item dropdown" id="currency-change">
                         @php
                             if(Session::has('currency_code')){
@@ -137,7 +137,7 @@
                             @endforeach
                         </ul>
                     </li>
-                    @endif --}}
+                    @endif
                 </ul>
             </div>
         </div>
