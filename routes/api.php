@@ -100,6 +100,7 @@ Route::prefix('v1')->group(function () {
 //    Route::get('sub-categories2/{id}', 'Api\SubCategoryController@index2')->name('subCategories.index');
 
     Route::apiResource('colors', 'Api\ColorController')->only('index');
+    Route::apiResource('reasons', 'Api\ReasonController')->only('index');
 
     Route::apiResource('currencies', 'Api\CurrencyController')->only('index');
 
