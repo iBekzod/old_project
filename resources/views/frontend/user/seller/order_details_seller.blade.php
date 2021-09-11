@@ -117,7 +117,7 @@
     <div class="row">
         <div class="col-lg-12">
                 <div class="card pb-0">
-                    <table class="table table-bordered m-0">
+                    <table class="table table-bordered m-0 text-center">
                         {{-- style="border-collapse: collapse; border:1px solid black" --}}
                         <thead>
                             <tr>
@@ -164,19 +164,40 @@
                                             @if ($orderDetail->pickup_point != null)
                                                 {{ $orderDetail->pickup_point->getTranslation('name') }} ({{  translate('Pickip Point') }})
                                             @endif
+                                        @elseif ($orderDetail->shipping_type == 'tinfis')
+                                         {{  translate('Tinfis') }}
+                                         @elseif ($orderDetail->shipping_type == 'free')
+                                         {{  translate('Free') }}
                                         @endif
                                     </td>
-                                    <td>QTY</td>
-                                    <td>{{ $orderDetail->price }}</td>
-                                    <td>Total</td>
+                                    <td>
+                                        <b>
+                                            @if ($orderDetail->product!=null)
+                                              {{ $orderDetail->product->qty }}
+                                            @endif
+                                         </b>
+
+                                    </td>
+                                    <td>
+                                      @php
+                                          $price=($orderDetail->price)/$orderDetail->product->qty;
+                                          echo $price;
+                                      @endphp
+                                    </td>
+                                    {{-- @if ($orderDetail->product!=null &&  )
+
+                                    @endif --}}
+                                    <td>
+                                        @if ($orderDetail->price!=null)
+                                          {{ $orderDetail->price }}
+                                        @endif
+                                    </td>
                                     {{-- @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
                                         <td>
-                                            @if ($orderDetail->refund_request != null && $orderDetail->refund_request->refund_status == 0)
-                                                <b class="text-info">{{  translate('Pending') }}</b>
-                                            @elseif ($orderDetail->refund_request != null && $orderDetail->refund_request->refund_status == 2)
-                                                <b class="text-success">{{  translate('Rejected') }}</b>
-                                            @elseif ($orderDetail->refund_request != null && $orderDetail->refund_request->refund_status == 1)
-                                                <b class="text-success">{{  translate('Approved') }}</b>
+                                            @if ($order
+
+
+                                            translate('Approved') }}</b>
                                             @elseif ($orderDetail->product->refundable != 0)
                                                 <b>{{  translate('N/A') }}</b>
                                             @else
