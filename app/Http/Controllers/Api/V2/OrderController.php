@@ -42,6 +42,8 @@ class OrderController extends Controller
             $shippingAddress['phone']       = $address->phone;
             $shippingAddress['latitude']    = $address->latitude;
             $shippingAddress['longitude']   = $address->longitude;
+            $shippingAddress['customer_note']   = $address->customer_note;
+
             // if($address->latitude || $address->longitude) {
             //     $shippingAddress['lat_lang'] = $address->latitude.','.$address->longitude;
             // }

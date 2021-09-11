@@ -22,17 +22,20 @@ class AddressController extends Controller
     {
         $address = new Address;
         $address->user_id = $request->user_id;
-        $address->address = $request->address;
+        $address->address = $request->address??'';
+        $address->region_id = $request->region_id??0;
+        $address->city_id = $request->city_id??0;
+        $address->postal_code = $request->postal_code??0;
+        $address->phone = $request->phone??auth()->user()->phone;
+        $address->longitude = $request->longitude??0;
+        $address->latitude = $request->latitude??0;
         if($request->has('customer_note') ){
             $address->customer_note = $request->customer_note;
         }
-        $address->country = $request->country;
-        $address->city = $request->city;
-        $address->postal_code = $request->postal_code;
-        $address->phone = $request->phone;
         $address->save();
 
         return response()->json([
+            'data'=>$address,
             'result' => true,
             'message' => 'Shipping information has been added successfully'
         ]);
@@ -40,21 +43,45 @@ class AddressController extends Controller
 
     public function updateShippingAddress(Request $request)
     {
-        $address = Address::find($request->id);
-        $address->address = $request->address;
-        $address->country = $request->country;
-        $address->city = $request->city;
-        $address->postal_code = $request->postal_code;
-        $address->phone = $request->phone;
-
-        if($request->has('customer_note') ){
-            $address->customer_note = $request->customer_note;
+        if($address=Address::where('id', $request->id)->first()){
+            if($request->has('address') ){
+                $address->address = $request->address;
+            }
+            if($request->has('user_id') ){
+                $address->user_id = $request->user_id;
+            }
+            if($request->has('region_id') ){
+                $address->region_id = $request->region_id;
+            }
+            if($request->has('city_id') ){
+                $address->city_id = $request->city_id;
+            }
+            if($request->has('postal_code') ){
+                $address->postal_code = $request->postal_code;
+            }
+            if($request->has('phone') ){
+                $address->phone = $request->phone;
+            }
+            if($request->has('longitude') ){
+                $address->longitude = $request->longitude;
+            }
+            if($request->has('latitude') ){
+                $address->latitude = $request->latitude;
+            }
+            if($request->has('customer_note') ){
+                $address->customer_note = $request->customer_note;
+            }
+            $address->save();
+            return response()->json([
+                'data'=>$address,
+                'result' => true,
+                'message' => 'Shipping information has been updated successfully'
+            ]);
         }
-        $address->save();
-
         return response()->json([
-            'result' => true,
-            'message' => 'Shipping information has been updated successfully'
+            'data'=>[],
+            'result' => false,
+            'message' => 'Shipping information not found'
         ]);
     }
 
@@ -66,6 +93,7 @@ class AddressController extends Controller
         $address->save();
 
         return response()->json([
+            'data'=>$address,
             'result' => true,
             'message' => 'Shipping location in map updated successfully'
         ]);
@@ -77,6 +105,7 @@ class AddressController extends Controller
         $address = Address::find($id);
         $address->delete();
         return response()->json([
+            'data'=>$address,
             'result' => true,
             'message' => 'Shipping information has been deleted'
         ]);
@@ -90,6 +119,7 @@ class AddressController extends Controller
         $address->set_default = 1;
         $address->save();
         return response()->json([
+            'data'=>$address,
             'result' => true,
             'message' => 'Default shipping information has been updated'
         ]);

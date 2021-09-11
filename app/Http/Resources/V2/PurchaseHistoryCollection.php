@@ -31,8 +31,6 @@ class PurchaseHistoryCollection extends ResourceCollection
                     'tax' => format_price($data->orderDetails->sum('tax')),
                     'date' => Carbon::createFromTimestamp($data->date)->format('d-m-Y'),
                     'cancel_request' => $data->cancel_request == 1,
-                    // 'ordered_products' => new OrderDetailCollection($data->orderDetails),
-                    'customers_note'=>'',
                     'links' => [
                         'details' => route('purchaseHistory.details', $data->id)
                     ]
