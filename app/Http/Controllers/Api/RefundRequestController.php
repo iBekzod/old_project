@@ -24,8 +24,8 @@ class RefundRequestController extends Controller
     {
         $request->validate([
             'id' => 'required',
-            // 'status'=>'required',
             'reason' => 'required',
+            'reason_id' => 'required',
          ]);
         $order_detail = OrderDetail::where('id', $request->id)->first();
         $refund = new RefundRequest;
@@ -35,6 +35,7 @@ class RefundRequestController extends Controller
         $refund->seller_id = $order_detail->seller_id;
         $refund->seller_approval = 0;
         $refund->reason = $request->reason;
+        $refund->reason_id=$request->reason_id;
         $refund->admin_approval = 0;
         $refund->admin_seen = 0;
         $refund->refund_amount = $order_detail->price + $order_detail->tax;
