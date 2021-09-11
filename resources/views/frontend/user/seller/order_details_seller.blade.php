@@ -152,10 +152,32 @@
                                     @endif
 
                                     <td>
-                                        <span>option</span>
+                                        <b>Size:</b><span>
+                                            @php
+                                                $variation=App\Variation::where('user_id',$orderDetail->seller_id)->first();
+                                                echo $variation->color->getTranslation('name');
+                                            @endphp
+                                        </span><br>
+                                        <b>Color:</b><span>
+                                            @php
+                                                $variation=App\Variation::where('user_id',$orderDetail->seller_id)->first();
+                                                echo $variation->color->getTranslation('name');
+                                            @endphp
+                                        </span><br>
+                                        <b>Brend:</b><span>
+                                            @php
+                                            $variation=App\Variation::where('user_id',$orderDetail->seller_id)->first();
+                                            echo $variation->color->getTranslation('name');
+                                        @endphp
+                                        </span><br>
                                     </td>
                                     <td>
-                                        <span>shop</span>
+                                        <b>
+                                            @php
+                                                $shop=App\Shop::where('user_id',$orderDetail->seller_id)->first();
+                                                echo $shop->name;
+                                            @endphp
+                                        </b>
                                     </td>
                                     <td>
                                         @if ($orderDetail->shipping_type != null && $orderDetail->shipping_type == 'home_delivery')
