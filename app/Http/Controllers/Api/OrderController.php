@@ -170,6 +170,7 @@ class OrderController extends Controller
                 $shippingAddress['phone']       = $address->phone;
                 $shippingAddress['latitude']       = $address->latitude;
                 $shippingAddress['longitude']       = $address->longitude;
+                $shippingAddress['customer_note']   = $address->customer_note;
             // if($address->latitude || $address->longitude) {
             //     $shippingAddress['lat_lang'] = $address->latitude.','.$address->longitude;
             // }
@@ -194,7 +195,7 @@ class OrderController extends Controller
             foreach ($cartItems as $cartItem) {
                 $item_sum = 0;
                 $item_sum += ($cartItem->price + $cartItem->tax) * $cartItem->quantity;
-                $item_sum += $cartItem->shipping_cost - $cartItem->discount;
+                $item_sum += $cartItem->shipping_cost + $cartItem->discount;
                 $sum += $item_sum;   //// 'grand_total' => $request->g
             }
 
