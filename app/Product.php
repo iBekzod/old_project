@@ -108,7 +108,7 @@ class Product extends Model
 
      public function brand()
      {
-         return $this->element()->brand;
+         return $this->element->brand;
      }
 
      public function reviews()

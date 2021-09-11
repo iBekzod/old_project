@@ -75,7 +75,7 @@ Route::post('api/fetch-cities','HomeController@fetchCity');
 // Route::get('/users/login', 'HomeController@login')->name('user.login');
 // Route::get('/users/registration', 'HomeController@registration')->name('user.registration');
 
-// Route::post('/users/login/cart', 'HomeController@cart_login')->name('cart.login.submit');
+Route::post('/users/login/cart', 'HomeController@cart_login')->name('cart.login.submit');
 
 //Route::post('/users/login', 'HomeController@user_login')->name('user.login.submit');
 Route::get('get/email', 'HomeController@email');

@@ -53,6 +53,10 @@ class Variation extends Model
          return $this->hasMany(VariationTranslation::class);
      }
 
+     public function color()
+     {
+         return $this->hasOne(Color::class, 'id', 'color_id');
+     }
      public function element()
      {
          return $this->hasOne(Element::class, 'id', 'element_id');
