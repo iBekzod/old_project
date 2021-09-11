@@ -61,22 +61,25 @@ class HomeController extends Controller
 
             if ($request->method() == 'POST') {
                 $request->validate([
-                    'email' => 'required|string|email',
+                    'email' => 'required|string',
                     'password' => 'required|string',
-                    'remember_me' => 'boolean'
+                    'remember' => 'boolean'
                 ]);
                 if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
                     return $this->dashboard();
                 }else if (Auth::attempt(['phone' => $request->email, 'password' => $request->password])) {
                     return $this->dashboard();
                 }
-                // $user = User::where('password', Hash::make($request->password))->where('email', $request->email)->first();
-                // dd();
-                // if($user = User::where('email', $request->email)->orWhere('phone', $request->email)->first())
-                // {
-                //     auth()->login($user, true);
-                //     return $this->dashboard();
-                // }
+                $user = User::where('email', $request->email)->orWhere('phone', $request->email)->first();
+                if ($user != null && Hash::check($request->password, $user->password)) {
+                    if ($request->has('remember')) {
+                        auth()->login($user, true);
+                    } else {
+                        auth()->login($user, false);
+                    }
+                    return $this->dashboard();
+                }
+                flash(translate('Invalid email or password!'))->warning();
 
             }
         }
@@ -297,17 +300,21 @@ class HomeController extends Controller
 
     function check_seller(){
             $user=Auth::user();
+            // if(!Auth::user()->seller->verification_info){
+
+            // }
             if ($user->registration_step == 'active_1') {
                 return redirect()->route('seller.autoidentification');
                 // return 'keldi';
             }
-            if ($user->registration_step == 'active_2') {
+            else if ($user->registration_step == 'active_2') {
                 return redirect()->route('seller.delivery');
                 // return 'keldi';
-            }
-            if ($user->registration_step == 'active_3') {
+            }else if ($user->registration_step == 'active_3') {
                 $shop = Auth::user()->shop;
                 return view('frontend.user.seller.shop', compact('shop'));
+            }else{
+                return view('frontend.user_login');
             }
     }
     public function profile(Request $request)
