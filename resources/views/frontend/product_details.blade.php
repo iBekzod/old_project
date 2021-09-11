@@ -129,9 +129,9 @@
                                     </div>
                                 @endif
 
-                                @if ($detailedProduct->brand != null)
+                                @if ($detailedProduct->element->brand != null)
                                     <div class="col-auto">
-                                        <img src="{{ uploaded_asset($detailedProduct->brand->logo) }}" alt="{{ $detailedProduct->brand->getTranslation('name') }}" height="30">
+                                        <img src="{{ uploaded_asset($detailedProduct->element->brand->logo) }}" alt="{{ $detailedProduct->element->brand->getTranslation('name') }}" height="30">
                                     </div>
                                 @endif
                             </div>
@@ -245,14 +245,13 @@
                                     @endforeach
                                 @endif
 
-                                @if (count(json_decode($detailedProduct->colors)) > 0)
+                                @if ($color=$detailedProduct->variation->color->code)
                                     <div class="row no-gutters">
                                         <div class="col-sm-2">
                                             <div class="opacity-50 my-2">{{ translate('Color')}}:</div>
                                         </div>
                                         <div class="col-sm-10">
                                             <div class="aiz-radio-inline">
-                                                @foreach (json_decode($detailedProduct->colors) as $key => $color)
                                                 <label class="aiz-megabox pl-0 mr-2" data-toggle="tooltip" data-title="{{ \App\Color::where('code', $color)->first()->name }}">
                                                     <input
                                                         type="radio"
@@ -264,7 +263,6 @@
                                                         <span class="size-30px d-inline-block rounded" style="background: {{ $color }};"></span>
                                                     </span>
                                                 </label>
-                                                @endforeach
                                             </div>
                                         </div>
                                     </div>
@@ -681,7 +679,7 @@
 
                         </div>
                     </div>
-                    <div class="bg-white rounded shadow-sm">
+                    {{-- <div class="bg-white rounded shadow-sm">
                         <div class="border-bottom p-3">
                             <h3 class="fs-16 fw-600 mb-0">
                                 <span class="mr-4">{{ translate('Related products')}}</span>
@@ -728,7 +726,7 @@
                                 @endforeach
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

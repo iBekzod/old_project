@@ -542,7 +542,10 @@ class OrderController extends Controller
     {
         $order = Order::findOrFail($request->order_id);
         $order->save();
-        
+        // dd($order);
+        // $user=User::where('id',$order->user_id);
+        // dd($user);
+
         return view('frontend.user.seller.order_details_seller', compact('order'));
     }
 
