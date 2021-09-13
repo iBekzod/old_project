@@ -109,10 +109,10 @@
 				<thead>
 	                <tr class="gry-color" style="background: #eceff4;">
 	                    <th width="35%" class="text-left">{{ translate('Product Name') }}</th>
+                        <th width="10%" class="text-left">{{ translate('Shop') }}</th>
 						<th width="15%" class="text-left">{{ translate('Delivery Type') }}</th>
 	                    <th width="10%" class="text-left">{{ translate('Qty') }}</th>
 	                    <th width="15%" class="text-left">{{ translate('Unit Price') }}</th>
-	                    <th width="10%" class="text-left">{{ translate('Tax') }}</th>
 	                    <th width="15%" class="text-right">{{ translate('Total') }}</th>
 	                </tr>
 				</thead>
@@ -121,18 +121,27 @@
 		                @if ($orderDetail->product != null)
 							<tr class="">
 								<td>{{ $orderDetail->product->name }} @if($orderDetail->variation != null) ({{ $orderDetail->variation }}) @endif</td>
-								<td>
-									@if ($orderDetail->shipping_type != null && $orderDetail->shipping_type == 'home_delivery')
-										{{ translate('Home Delivery') }}
-									@elseif ($orderDetail->shipping_type == 'pickup_point')
-										@if ($orderDetail->pickup_point != null)
-											{{ $orderDetail->pickup_point->getTranslation('name') }} ({{ translate('Pickip Point') }})
-										@endif
-									@endif
+								<td class="currency">
+                                 @php
+                                    $shop=App\Shop::where('user_id',$orderDetail->seller_id)->first();
+                                    echo $shop->name;
+                                @endphp
+                                </td>
+                                <td>
+                                    @if ($orderDetail->shipping_type != null && $orderDetail->shipping_type == 'home_delivery')
+                                    {{  translate('Home Delivery') }}
+                                @elseif ($orderDetail->shipping_type == 'pickup_point')
+                                    @if ($orderDetail->pickup_point != null)
+                                        {{ $orderDetail->pickup_point->getTranslation('name') }} ({{  translate('Pickip Point') }})
+                                    @endif
+                                @elseif ($orderDetail->shipping_type == 'tinfis')
+                                 {{  translate('Home Delivery') }}
+                                 @elseif ($orderDetail->shipping_type == 'free')
+                                 {{  translate('Free') }}
+                                @endif
 								</td>
 								<td class="">{{ $orderDetail->quantity }}</td>
 								<td class="currency">{{ single_price($orderDetail->price/$orderDetail->quantity) }}</td>
-								<td class="currency">{{ single_price($orderDetail->tax/$orderDetail->quantity) }}</td>
 			                    <td class="text-right currency">{{ single_price($orderDetail->price+$orderDetail->tax) }}</td>
 							</tr>
 		                @endif

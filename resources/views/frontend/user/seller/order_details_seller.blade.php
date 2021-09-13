@@ -95,7 +95,6 @@
                 <b>{{ translate('Order date')}}:</b><br>
                 <b>{{ translate('Order status')}}:</b><br>
                 <b>{{ translate('Total order amount')}}:</b><br>
-                <b>{{ translate('Contact')}}:</b><br>
                 <b>{{ translate('Payment method')}}:</b><br>
            </p>
 
@@ -105,7 +104,7 @@
                 <span>{{ date('d-m-Y H:i A', $order->date) }}</span><br>
                 <span class="badge badge-inline badge-success">{{ translate($status)}}</span><br>
                 <span>{{ single_price($order->grand_total) }}</span><br>
-                <span>{{ json_decode($order->shipping_address)->phone }}</span><br>
+                {{-- <span>{{ json_decode($order->shipping_address)->phone }}</span><br> --}}
                 <span>{{ ucfirst(str_replace('_', ' ', $order->payment_type)) }}</span><br>
 
             </p>
@@ -203,7 +202,7 @@
                                                 {{ $orderDetail->pickup_point->getTranslation('name') }} ({{  translate('Pickip Point') }})
                                             @endif
                                         @elseif ($orderDetail->shipping_type == 'tinfis')
-                                         {{  translate('Tinfis') }}
+                                         {{  translate('Home Delivery') }}
                                          @elseif ($orderDetail->shipping_type == 'free')
                                          {{  translate('Free') }}
                                         @endif
