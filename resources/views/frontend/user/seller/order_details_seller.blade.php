@@ -85,7 +85,7 @@
              <span>{{ $order->code }}</span><br>
              <span>{{ json_decode($order->shipping_address)->name }}</span><br>
              <span>{{ $order->user->email }}</span><br>
-             <span>{{ json_decode($order->shipping_address)->address }}, {{ json_decode($order->shipping_address)->city }}, {{ json_decode($order->shipping_address)->postal_code }}, {{ json_decode($order->shipping_address)->country }}{{ json_decode($order->shipping_address)->address }}, {{ json_decode($order->shipping_address)->city }}, {{ json_decode($order->shipping_address)->postal_code }}, {{ json_decode($order->shipping_address)->country }}</span><br>
+             <span>{{ json_decode($order->shipping_address)->address }}, {{ json_decode($order->shipping_address)->city }}, {{ json_decode($order->shipping_address)->postal_code }}, {{ json_decode($order->shipping_address)->country }}</span><br>
          </p>
         </div>
         <div class="col-md-3">
@@ -137,39 +137,55 @@
                                 <tr>
                                     <td>{{ $key+1 }}</td>
                                     @if ($orderDetail->product != null)
-                                    <td>
-                                        {{-- {{ $orderDetail->product }} --}}
-                                        <img src="{{ uploaded_asset($orderDetail->product->variation->thumbnail_img) }}" alt="Image" class="size-25px">
+                                        <td>
+                                            {{-- {{ $orderDetail->product }} --}}
+                                            <img src="{{ uploaded_asset($orderDetail->product->variation->thumbnail_img) }}" alt="Image" class="size-25px">
 
-                                    </td>
-                                    <td style="size: 5px">
-                                        {{-- <a href="{{ route('product', $orderDetail->product->slug) }}" target="_blank">{{ $orderDetail->product->getTranslation('name') }}</a> --}}
-                                        {{ $orderDetail->product->getTranslation('name') }}
-                                        @else
-                                            <strong>{{  translate('Product Unavailable') }}</strong>
-                                    </td>
+                                        </td>
+                                        <td style="size: 5px">
+                                            {{-- <a href="{{ route('product', $orderDetail->product->slug) }}" target="_blank">{{ $orderDetail->product->getTranslation('name') }}</a> --}}
+                                            {{ $orderDetail->product->getTranslation('name') }}
+                                            @else
+                                                <strong>{{  translate('Product Unavailable') }}</strong>
+                                        </td>
 
                                     @endif
 
                                     <td>
-                                        <b>Size:</b><span>
-                                            @php
-                                                $variation=App\Variation::where('user_id',$orderDetail->seller_id)->first();
-                                                echo $variation->color->getTranslation('name');
-                                            @endphp
-                                        </span><br>
-                                        <b>Color:</b><span>
-                                            @php
-                                                $variation=App\Variation::where('user_id',$orderDetail->seller_id)->first();
-                                                echo $variation->color->getTranslation('name');
-                                            @endphp
-                                        </span><br>
-                                        <b>Brend:</b><span>
-                                            @php
-                                            $variation=App\Variation::where('user_id',$orderDetail->seller_id)->first();
-                                            echo $variation->color->getTranslation('name');
+                                        @if (App\Variation::where('user_id',$orderDetail->seller_id)->exists())
+                                        @php
+                                        $variation=App\Variation::where('user_id',$orderDetail->seller_id)->first();
+                                        $color=App\Color::where('id',$variation->color_id)->first();
+                                        $element=App\Element::where('id',$orderDetail->product->element_id)->first();
+                                        $brand=App\Brand::where('id',$element->brand_id)->first();
+
                                         @endphp
+                                         <b>Brand:</b><span>
+                                            {{ $brand->name }}
+                                       </span> <br>
+                                         <b> {{ translate('Color') }}:</b><span>
+                                            {{ $color->getTranslation('name') }}
                                         </span><br>
+                                           @if (App\Characteristic::where('id',$variation->characteristics)->exists())
+                                                @php
+                                                $characteristics=App\Characteristic::where('id',$variation->characteristics)->first();
+                                                $attribute=App\Attribute::where('id',$characteristics->attribute_id)->first();
+
+                                                @endphp
+
+                                                <b>Size:</b><span>
+                                                    {{ $characteristics->name ?? "" }}
+                                                    {{ $attribute->name }}
+                                                </span><br>
+
+
+
+                                           @endif
+
+                                        @endif
+
+
+
                                     </td>
                                     <td>
                                         <b>
