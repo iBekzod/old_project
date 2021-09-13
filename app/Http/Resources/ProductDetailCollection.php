@@ -209,13 +209,15 @@ class ProductDetailCollection extends ResourceCollection
             }
             $attributes=Characteristic::withTrashed()->whereIn('id', $characteristic_ids)->get()->groupBy('attribute_id');
             $collected_characteristics=[];
-            // dd($characteristic_ids);
+
             if ($attributes) {
                 foreach($attributes as $attribute_id=>$models){
-                    if( is_array($models) && count($models)>0){
+
+                    // dd(is_array($models));
+                    if( count($models)>0){
                         $characteristics=$models;
                         $attribute=Attribute::withTrashed()->where('id',$attribute_id)->first();
-                        if(!(isset($attribute))){
+                        if($attribute==null){
                             continue;
                         }
                         $items=array();
@@ -226,7 +228,7 @@ class ProductDetailCollection extends ResourceCollection
                                 'name'=>$characteristic->getTranslation('name')
                             ];
                         }
-                        // dd($items);
+                        // dd($attribute);
                         if( is_array($items) && count($items)>0){
                             $collected_characteristics[]=[
                                 'id'=>$attribute->id,
@@ -238,7 +240,7 @@ class ProductDetailCollection extends ResourceCollection
                 }
             }
         }
-
+        // dd($collected_characteristics);
         return $collected_characteristics;
     }
     // protected function convertToChoiceOptions($attributes, $product){
