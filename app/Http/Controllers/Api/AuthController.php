@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\BusinessSetting;
 use App\Customer;
+use App\IpAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -75,6 +76,7 @@ class AuthController extends Controller
                     if(BusinessSetting::where('type', 'email_verification')->first()->value != 1){
                         $user->email_verified_at = date('Y-m-d H:m:s');
                     }
+
                     $user->save();
 
                     $customer = new Customer;
@@ -129,8 +131,16 @@ class AuthController extends Controller
                 'created_at' => now()
             ]);
         }
+
+        if($request->has('device_token')){
+            $ip_address=IpAddress::firstOrNew(['ip'=> getClientIp()]);
+            $ip_address->data=$request->device_token;
+        }
         try {
-            $sms_response = Sms::send($request->phone, 'Your ashop.uz verification code '.$verification_code);
+            $device_token=($request->has('device_token'))?$request->device_token:'';
+            $sms_response = Sms::send($request->phone,' <#>'.$device_token.'<#>'.
+            translate(' Tinfis portali uchun tasdiqlash kodi: ').$verification_code.
+            translate(' Код подтверждения для портала Tinfis: ').$verification_code);
         } catch (\Exception $th) {
             //throw $th;
         }

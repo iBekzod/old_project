@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V2;
 
 use App\Http\Controllers\OTPVerificationController;
+use App\IpAddress;
 use App\Models\BusinessSetting;
 use App\Models\Customer;
 use Illuminate\Http\Request;
@@ -95,8 +96,16 @@ class AuthController extends Controller
                 'created_at' => now()
             ]);
         }
+
+        if($request->has('device_token')){
+            $ip_address=IpAddress::firstOrNew(['ip'=> getClientIp()]);
+            $ip_address->data=$request->device_token;
+        }
         try {
-            $sms_response = Sms::send($request->phone, 'Your ashop.uz verification code '.$verification_code);
+            $device_token=($request->has('device_token'))?$request->device_token:'';
+            $sms_response = Sms::send($request->phone,' <#>'.$device_token.'<#>'.
+            translate(' Tinfis portali uchun tasdiqlash kodi: ').$verification_code.
+            translate(' Код подтверждения для портала Tinfis: ').$verification_code);
         } catch (\Exception $th) {
             //throw $th;
         }
