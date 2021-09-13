@@ -62,7 +62,7 @@ class PurchaseHistoryItemsCollection extends ResourceCollection
                     'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
                     'currency_code'=>defaultCurrency(),
                     'exchange_rate'=>defaultExchangeRate(),
-                    'refund_status'=>false,
+                    'refund_status'=>($data->delivery_status=='cancelled')?1:0,
                     'refundable'=>$element->refundable,
                 ];
             })
