@@ -716,18 +716,18 @@ class OrderController extends Controller
 
         //sends Notifications to user
         send_notification($order, $request->status);
-        if (get_setting('google_firebase') == 1 && $order->user->device_token != null) {
-            $request->device_token = $order->user->device_token;
-            $request->title = "Order updated !";
-            $status = str_replace("_", "", $order->payment_status);
-            $request->text = " Your order {$order->code} has been {$status}";
+        // if (get_setting('google_firebase') == 1 && $order->user->device_token != null) {
+        //     $request->device_token = $order->user->device_token;
+        //     $request->title = "Order updated !";
+        //     $status = str_replace("_", "", $order->payment_status);
+        //     $request->text = " Your order {$order->code} has been {$status}";
 
-            $request->type = "order";
-            $request->id = $order->id;
-            $request->user_id = $order->user->id;
+        //     $request->type = "order";
+        //     $request->id = $order->id;
+        //     $request->user_id = $order->user->id;
 
-            send_firebase_notification($request);
-        }
+        //     send_firebase_notification($request);
+        // }
 
 
         // if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null &&
@@ -782,7 +782,7 @@ class OrderController extends Controller
             // if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null &&
             //     \App\Addon::where('unique_identifier', 'otp_system')->first()->activated &&
             //     SmsTemplate::where('identifier', 'assign_delivery_boy')->first()->status == 1) {
-                
+
                 try {
                     SmsUtility::assign_delivery_boy($order->delivery_boy->phone, $order->code);
                 } catch (\Exception $e) {

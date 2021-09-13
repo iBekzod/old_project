@@ -40,7 +40,7 @@ class RefundRequestController extends Controller
         $refund->admin_approval = 0;
         $refund->admin_seen = 0;
         $refund->refund_amount = $order_detail->price + $order_detail->tax;
-        $refund->refund_status =0;
+        $refund->refund_status = 0;
         // $refund->refund_status = $request->status;
         if ($refund->save()) {
             return response()->json([
