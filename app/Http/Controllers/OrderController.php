@@ -782,6 +782,7 @@ class OrderController extends Controller
             // if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null &&
             //     \App\Addon::where('unique_identifier', 'otp_system')->first()->activated &&
             //     SmsTemplate::where('identifier', 'assign_delivery_boy')->first()->status == 1) {
+                
                 try {
                     SmsUtility::assign_delivery_boy($order->delivery_boy->phone, $order->code);
                 } catch (\Exception $e) {

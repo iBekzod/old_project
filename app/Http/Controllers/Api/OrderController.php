@@ -475,7 +475,7 @@ class OrderController extends Controller
             'payment_type' => $payment_type,
             'payment_status' => $payment_status,
             'grand_total' => $grand_price + $shipping,    //// 'grand_total' => $request->grand_total + $shipping,
-            'coupon_discount' => $request->coupon_discount,
+            'coupon_discount' => $request->coupon_discount??0,
             'code' => date('Ymd-his'),
             'date' => strtotime('now')
         ]);
