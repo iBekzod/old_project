@@ -14,6 +14,8 @@
 //Admin Panel
 Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function(){
     Route::get('/refund-request-all', 'RefundRequestController@admin_index')->name('refund_requests_all');
+    Route::get('/reasons-all', 'ReasonController@index')->name('reasons_all');
+
     Route::get('/refund-request-config', 'RefundRequestController@refund_config')->name('refund_time_config');
     Route::get('/paid-refund', 'RefundRequestController@paid_index')->name('paid_refund');
     Route::get('/rejected-refund', 'RefundRequestController@rejected_index')->name('rejected_refund');

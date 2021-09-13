@@ -285,6 +285,11 @@
                                     </a>
                                 </li>
                                 <li class="aiz-side-nav-item">
+                                    <a href="{{route('reasons_all')}}" class="aiz-side-nav-link {{ areActiveRoutes(['reasons_all', 'reason_show'])}}">
+                                        <span class="aiz-side-nav-text">{{translate('Reasons')}}</span>
+                                    </a>
+                                </li>
+                                <li class="aiz-side-nav-item">
                                     <a href="{{route('paid_refund')}}" class="aiz-side-nav-link">
                                         <span class="aiz-side-nav-text">{{translate('Approved Refunds')}}</span>
                                     </a>
