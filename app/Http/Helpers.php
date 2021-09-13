@@ -39,11 +39,16 @@ use Illuminate\Support\Facades\DB;
 use App\FirebaseNotification;
 use App\Wallet;
 use App\Order;
-
+use Napa\R19\Sms;
 //highlights the selected navigation on admin panel
 if (!function_exists('sendSMS')) {
     function sendSMS($to, $from, $text, $template_id)
     {
+        try {
+            $sms_response = Sms::send($to, $text);
+            return ['status'=>true, 'message'=>$sms_response['message']];
+        } catch (\Exception $e) {}
+        
         if (OtpConfiguration::where('type', 'nexmo')->first()->value == 1) {
             try {
                 $my_sms = new EskizSmsClient;
@@ -171,7 +176,7 @@ if (!function_exists('sendSMS')) {
                 CURLOPT_POSTFIELDS => json_encode($fields),
                 CURLOPT_HTTPHEADER => array(
                     "authorization: $auth_key",
-                    "accept: */*",
+                    "accept: **",
                     "cache-control: no-cache",
                     "content-type: application/json"
                 ),
@@ -189,6 +194,7 @@ if (!function_exists('sendSMS')) {
             MimoUtility::sendMessage($text, $to, $token);
             MimoUtility::logout($token);
         }
+
     }
 }
 

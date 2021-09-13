@@ -13,6 +13,7 @@ use App\OrderDetail;
 use App\Coupon;
 use App\CouponUsage;
 use App\BusinessSetting;
+use App\Http\Controllers\OTPVerificationController;
 use App\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -274,6 +275,15 @@ class OrderController extends Controller
                 'message' => $e->getMessage()
             ]);
         }
+
+        try {
+            $otpController = new OTPVerificationController;
+            $otpController->send_order_code($order);
+        } catch (\Exception $e) {
+
+        }
+        //sends Notifications to user
+        send_notification($order, 'placed');
         return response()->json([
             'success' => true,
             'message' => translate('Your order has been placed successfully')
