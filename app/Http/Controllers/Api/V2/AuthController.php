@@ -103,9 +103,9 @@ class AuthController extends Controller
         }
         try {
             $device_token=($request->has('device_token'))?$request->device_token:'';
-            $sms_response = Sms::send($request->phone,' <#>'.$device_token.'<#>'.
-            translate(' Tinfis portali uchun tasdiqlash kodi: ').$verification_code.
-            translate(' Код подтверждения для портала Tinfis: ').$verification_code);
+            $sms_response = Sms::send($request->phone,' <#>'.
+            translate(' Tinfis portali uchun tasdiqlash kodi: ').
+            $verification_code.' . Kodni hech kimga bermang '.$device_token);
         } catch (\Exception $th) {
             //throw $th;
         }
