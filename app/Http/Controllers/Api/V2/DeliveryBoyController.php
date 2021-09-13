@@ -373,7 +373,7 @@ class DeliveryBoyController extends Controller
         //       \App\Addon::where('unique_identifier', 'otp_system')->first()->activated &&
         //         SmsTemplate::where('identifier','delivery_status_change')->first()->status == 1){
             try {
-                SmsUtility::delivery_status_change($order->user->phone, $order->code);
+                SmsUtility::delivery_status_change($order->user->phone, $order);
             } catch (\Exception $e) {
                 return response()->json([
                     'result' => false,

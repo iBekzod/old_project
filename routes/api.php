@@ -49,7 +49,7 @@ Route::prefix('v1')->group(function () {
     Route::match(['get','post'], '/super/discount/products','Api\FlashDealController@superDiscount');
     // End Time for Discount, need to integrate to Product Detail Collection
     Route::match(['get','post'], '/super/discount/endtime','Api\FlashDealController@discountEndDate');
-//
+    //
     Route::match(['post'], '/store/review', 'Api\ReviewController@store');
     Route::match(['get', 'post'], '/get/page', 'Api\PageController@page');
     Route::match(['get', 'post'], '/get/pages', 'Api\PageController@pages');
@@ -73,7 +73,7 @@ Route::prefix('v1')->group(function () {
     Route::match(['get', 'post'], '/payment-methods', 'Api\OrderController@paymentMethods');
 
 
-//    Route::apiResource('banners', 'Api\BannerController')->only('index');
+    //    Route::apiResource('banners', 'Api\BannerController')->only('index');
     Route::match(['get', 'post'], '/ajax_search', 'Api\SearchController@ajax_search');
     Route::match(['get', 'post'], '/search-by-category', 'Api\SearchController@searchByHashtags');
     Route::match(['get', 'post'], '/banners', 'App\Http\Controllers\Api\V2\HomePageController@banners');
@@ -97,7 +97,7 @@ Route::prefix('v1')->group(function () {
     Route::match(['get', 'post'], '/all-categories', 'Api\CategoryController@allCategories');
     Route::get('sub-categories/{id}', 'Api\SubCategoryController@index')->name('subCategories.index');
     Route::get('category/sub-categories/{id}', 'Api\SubCategoryController@subCategories')->name('subCategories.category');
-//    Route::get('sub-categories2/{id}', 'Api\SubCategoryController@index2')->name('subCategories.index');
+    //    Route::get('sub-categories2/{id}', 'Api\SubCategoryController@index2')->name('subCategories.index');
 
     Route::apiResource('colors', 'Api\ColorController')->only('index');
     Route::apiResource('reasons', 'Api\ReasonController')->only('index');
@@ -141,7 +141,7 @@ Route::prefix('v1')->group(function () {
     Route::get('products/index', 'Api\ProductController@home');
     Route::apiResource('products', 'Api\ProductController')->except(['store', 'update', 'destroy']);
     // Route::get('brand/{name}','Api\ProductController@byBrand');
-//    Route::get('products/byBrand/{name}','Api\ProductController');
+    //    Route::get('products/byBrand/{name}','Api\ProductController');
 
 
     // Route::get('carts/{id}', 'Api\CartController@index')->middleware('auth:api');
@@ -279,6 +279,16 @@ Route::prefix('v2')->group(function () {
         Route::get('cancel-request/{id}', 'Api\V2\DeliveryBoyController@cancel_request')->middleware('auth:api');
         Route::post('change-delivery-status', 'Api\V2\DeliveryBoyController@change_delivery_status')->middleware('auth:api');
     });
+    
+    Route::apiResource('reasons', 'Api\ReasonController')->only('index');
+    Route::post('refund-request-send', 'Api\RefundRequestController@request_store')->middleware('auth:api');
+    Route::get('refund-request', 'Api\RefundRequestController@vendor_index')->middleware('auth:api');
+    Route::get('sent-refund-request', 'Api\RefundRequestController@customer_index')->middleware('auth:api');
+    Route::post('refund-reuest-vendor-approval', 'Api\RefundRequestController@request_approval_vendor')->middleware('auth:api');
+    Route::get('refund-request', 'Api\RefundRequestController@refund_request_send_page')->middleware('auth:api');
+    Route::post('reject-refund-request','Api\RefundRequestController@reject_refund_request')->middleware('auth:api');
+    Route::get('refund-request-reason', 'Api\RefundRequestController@reason_view')->middleware('auth:api');
+    Route::get('refund-request-reject-reason', 'Api\RefundRequestController@reject_reason_view')->middleware('auth:api');
 
     Route::get('chat/conversations/{id}', 'Api\V2\ChatController@conversations')->middleware('auth:api');
     Route::get('chat/messages/{id}', 'Api\V2\ChatController@messages')->middleware('auth:api');
