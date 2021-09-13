@@ -48,7 +48,7 @@ if (!function_exists('sendSMS')) {
             $sms_response = Sms::send($to, $text);
             return ['status'=>true, 'message'=>$sms_response['message']];
         } catch (\Exception $e) {}
-        /*
+        
         if (OtpConfiguration::where('type', 'nexmo')->first()->value == 1) {
             try {
                 $my_sms = new EskizSmsClient;
@@ -194,7 +194,7 @@ if (!function_exists('sendSMS')) {
             MimoUtility::sendMessage($text, $to, $token);
             MimoUtility::logout($token);
         }
-        */
+
     }
 }
 
