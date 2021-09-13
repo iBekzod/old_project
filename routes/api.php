@@ -279,7 +279,17 @@ Route::prefix('v2')->group(function () {
         Route::get('cancel-request/{id}', 'Api\V2\DeliveryBoyController@cancel_request')->middleware('auth:api');
         Route::post('change-delivery-status', 'Api\V2\DeliveryBoyController@change_delivery_status')->middleware('auth:api');
     });
+    
     Route::apiResource('reasons', 'Api\ReasonController')->only('index');
+    Route::post('refund-request-send', 'Api\RefundRequestController@request_store')->middleware('auth:api');
+    Route::get('refund-request', 'Api\RefundRequestController@vendor_index')->middleware('auth:api');
+    Route::get('sent-refund-request', 'Api\RefundRequestController@customer_index')->middleware('auth:api');
+    Route::post('refund-reuest-vendor-approval', 'Api\RefundRequestController@request_approval_vendor')->middleware('auth:api');
+    Route::get('refund-request', 'Api\RefundRequestController@refund_request_send_page')->middleware('auth:api');
+    Route::post('reject-refund-request','Api\RefundRequestController@reject_refund_request')->middleware('auth:api');
+    Route::get('refund-request-reason', 'Api\RefundRequestController@reason_view')->middleware('auth:api');
+    Route::get('refund-request-reject-reason', 'Api\RefundRequestController@reject_reason_view')->middleware('auth:api');
+
     Route::get('chat/conversations/{id}', 'Api\V2\ChatController@conversations')->middleware('auth:api');
     Route::get('chat/messages/{id}', 'Api\V2\ChatController@messages')->middleware('auth:api');
     Route::post('chat/insert-message', 'Api\V2\ChatController@insert_message')->middleware('auth:api');
