@@ -106,10 +106,10 @@ class Product extends Model
          return $this->hasMany(OrderDetail::class);
      }
 
-     public function brand()
-     {
-         return $this->element->brand;
-     }
+    //  public function brand()
+    //  {
+    //      return $this->element->brand;
+    //  }
 
      public function reviews()
      {
