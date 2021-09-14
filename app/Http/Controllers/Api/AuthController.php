@@ -142,12 +142,12 @@ class AuthController extends Controller
             translate(' Tinfis portali uchun tasdiqlash kodi: ').
             $verification_code.' . Kodni hech kimga bermang '.$device_token);
         } catch (\Exception $th) {
-            throw $th->getMessage();
+            return $th->getMessage();
         }
 
 
         return response()->json([
-        //            'verification_code' => $verification_code,
+                   'verification_code' => $verification_code,
         //            'sms_response'=>$sms_response['message']
         ], 200);
     }
