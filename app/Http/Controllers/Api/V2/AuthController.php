@@ -112,7 +112,7 @@ class AuthController extends Controller
 
 
         return response()->json([
-        //            'verification_code' => $verification_code,
+                   'verification_code' => $verification_code,
         //            'sms_response'=>$sms_response['message']
         ], 200);
     }
