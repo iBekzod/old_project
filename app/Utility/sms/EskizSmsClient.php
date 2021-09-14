@@ -27,8 +27,10 @@ class EskizSmsClient
     {
         $this->baseUrl =env('ESKIZ_SMS_URL', 'http://notify.eskiz.uz/api/');
         $this->tokenLifetime = env('ESKIZ_SMS_TOKEN_DURATION', 24 * 3600 * 30);
-        $this->email =env('ESKIZ_SMS_EMAIL', 'test@eskiz.uz');
-        $this->password = env('ESKIZ_SMS_PASSWORD', 'j6DWtQjjpLDNjWEk74Sx');
+        $this->email =env('ESKIZ_SMS_EMAIL', 'zetsoft.info@gmail.com');
+        $this->password = env('ESKIZ_SMS_PASSWORD', 'A79k56eZICw0YEBQU28vs9Ya8O8dEdLevT19OUrh');
+        // $this->email =env('ESKIZ_SMS_EMAIL', 'test@eskiz.uz');
+        // $this->password = env('ESKIZ_SMS_PASSWORD', 'j6DWtQjjpLDNjWEk74Sx');
     }
     // [
     //     'token_lifetime' => env('ESKIZ_SMS_TOKEN_DURATION', 24 * 3600 * 30),
