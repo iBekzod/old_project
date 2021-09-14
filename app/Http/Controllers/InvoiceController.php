@@ -26,6 +26,7 @@ class InvoiceController extends Controller
     //downloads seller invoice
     public function seller_invoice_download($id)
     {
+        // return "came";
         $order = Order::findOrFail($id);
         $pdf = PDF::setOptions([
                         'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true,
@@ -112,6 +113,6 @@ class InvoiceController extends Controller
             'not_text_align',
         ));
 
-        return $pdf->download('order-'.$order->code.'.pdf');
+        return $pdf->stream('order-'.$order->code.'.pdf');
     }
 }
