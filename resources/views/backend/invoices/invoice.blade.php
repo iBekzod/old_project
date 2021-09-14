@@ -96,8 +96,8 @@
 				@php
 					$shipping_address = json_decode($order->shipping_address??null);
 				@endphp
-				<tr><td class="strong small gry-color">{{ translate('Bill to') }}:</td></tr>
-				<tr><td class="strong">{{ $shipping_address->name??null }}</td></tr>
+				<tr><td class="strong small gry-color">{{ translate('Bill to') }}: <span style="color: black">{{ $shipping_address->name??null }}</span></td></tr>
+				
 				{{-- <tr><td class="gry-color small">{{ $shipping_address->address??null }}, {{ $shipping_address->city??null }}, {{ $shipping_address->country??null }}</td></tr> --}}
 				<tr><td class="gry-color small">{{ translate('Email') }}: {{ $shipping_address->email??null }}</td></tr>
 				<tr><td class="gry-color small">{{ translate('Phone') }}: {{ $shipping_address->phone??null }}</td></tr>
@@ -122,7 +122,8 @@
 							<tr class="">
 								<td>{{ $orderDetail->product->name }} @if($orderDetail->variation != null) ({{ $orderDetail->variation }}) @endif</td>
 								<td class="currency">
-                                 @php
+
+                                @php
                                     $shop=App\Shop::where('user_id',$orderDetail->seller_id)->first();
                                     echo $shop->name;
                                 @endphp
@@ -178,7 +179,7 @@
 							            <td class="currency">{{ single_price($order->orderDetails->sum('tax')) }}</td>
 							        </tr>
 				                    <tr class="border-bottom">
-							            <th class="gry-color text-left">{{ translate('Coupon Discount') }}</th>
+							            <th class="gry-color text-left">{{ translate('Coupon') }}</th>
 							            <td class="currency">{{ single_price($order->coupon_discount) }}</td>
 							        </tr>
 							        <tr>
