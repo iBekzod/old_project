@@ -132,17 +132,17 @@ class AuthController extends Controller
             ]);
         }
 
-        if($request->has('device_token')){
-            $ip_address=IpAddress::firstOrNew(['ip'=> getClientIp()]);
-            $ip_address->data=$request->device_token;
-        }
+        // if($request->has('device_token')){
+        //     $ip_address=IpAddress::firstOrNew(['ip'=> getClientIp()]);
+        //     $ip_address->data=$request->device_token;
+        // }
         try {
             $device_token=($request->has('device_token'))?$request->device_token:'';
             $sms_response = Sms::send($request->phone,' <#>'.
             translate(' Tinfis portali uchun tasdiqlash kodi: ').
             $verification_code.' . Kodni hech kimga bermang '.$device_token);
         } catch (\Exception $th) {
-            //throw $th;
+            throw $th->getMessage();
         }
 
 
