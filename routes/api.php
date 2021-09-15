@@ -78,7 +78,7 @@ Route::prefix('v1')->group(function () {
     Route::match(['get', 'post'], '/search-by-category', 'Api\SearchController@searchByHashtags');
     Route::match(['get', 'post'], '/banners', 'App\Http\Controllers\Api\V2\HomePageController@banners');
     Route::match(['get', 'post'], '/user/orders', 'Api\OrderController@userOrders')->middleware('auth:api');
-    Route::match(['get', 'post'], '/make/orders', 'Api\OrderController@processApiCheckout')->middleware('auth:api');
+    Route::match(['get', 'post'], '/make/orders', 'Api\OrderController@store')->middleware('auth:api');
 
     Route::apiResource('banners', 'Api\BannerController')->only('index');
 
@@ -244,6 +244,8 @@ Route::prefix('v1')->group(function () {
     Route::get('register/me', 'Api\ProductController@setLocationSetting');
     Route::get('get/me', 'Api\ProductController@getLocationSetting');
     Route::post('/send-sms', 'SmsController@send');
+    Route::post('/change-language', 'Api\LanguageController@changeLanguage');
+    Route::get('/languages', 'Api\LanguageController@index');
 });
 
 Route::prefix('v2/auth')->group(function () {
