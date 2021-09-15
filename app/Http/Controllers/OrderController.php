@@ -36,14 +36,15 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
+        // dd(Auth::user()->id);
     //    dd($request->all());
         $payment_status = null;
         $delivery_status = null;
         $sort_search = null;
         $orders = DB::table('orders')
             ->orderBy('id', 'desc')
-//                    ->join('order_details', 'orders.id', '=', 'order_details.order_id')
-            // ->where('seller_id', Auth::user()->id)
+                //    ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+            ->where('seller_id', Auth::user()->id)
             // ->select('orders.id')
             ->distinct();
 
