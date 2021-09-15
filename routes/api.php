@@ -278,7 +278,7 @@ Route::prefix('v2')->group(function () {
         Route::get('earning-summary/{id}', 'Api\V2\DeliveryBoyController@earning_summary')->middleware('auth:api');
         Route::get('collection/{id}', 'Api\V2\DeliveryBoyController@collection')->middleware('auth:api');
         Route::get('earning/{id}', 'Api\V2\DeliveryBoyController@earning')->middleware('auth:api');
-        Route::get('cancel-request', 'Api\V2\DeliveryBoyController@cancel_request')->middleware('auth:api');
+        Route::post('cancel-request', 'Api\V2\DeliveryBoyController@cancel_request')->middleware('auth:api');
         Route::post('change-delivery-status', 'Api\V2\DeliveryBoyController@change_delivery_status')->middleware('auth:api');
     });
 
@@ -460,6 +460,8 @@ Route::prefix('v2')->group(function () {
 
     Route::get('flash-deals', 'Api\V2\FlashDealController@index');
     Route::get('flash-deal-products/{id}', 'Api\V2\FlashDealController@products');
+    Route::post('/change-language', 'Api\LanguageController@changeLanguage');
+    Route::get('/languages', 'Api\LanguageController@index');
 });
 
 Route::fallback(function() {
