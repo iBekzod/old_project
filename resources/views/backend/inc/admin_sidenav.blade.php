@@ -892,7 +892,13 @@
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
-                                <a href="{{route('translations.show_translation', ['base_table'=>'countries', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'country_translations', 'relation_id'=>'country_id', 'language_selected'=>'ru'])}}"
+                                <a href="{{route('translations.show_translation', ['base_table'=>'
+
+
+
+
+
+                                ', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'country_translations', 'relation_id'=>'country_id', 'language_selected'=>'ru'])}}"
                                    class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{translate('Countries')}}</span>
                                 </a>
@@ -962,6 +968,12 @@
                                 <a href="{{route('translations.show_translation', ['base_table'=>'variations', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'variation_translations', 'relation_id'=>'variation_id', 'language_selected'=>'ru'])}}"
                                    class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{translate('Variations')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'reasons', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'reason_translations', 'relation_id'=>'reason_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Reasons')}}</span>
                                 </a>
                             </li>
                             {{-- <li class="aiz-side-nav-item">

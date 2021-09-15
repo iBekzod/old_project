@@ -97,7 +97,7 @@
 					$shipping_address = json_decode($order->shipping_address??null);
 				@endphp
 				<tr><td class="strong small gry-color">{{ translate('Bill to') }}: <span style="color: black">{{ $shipping_address->name??null }}</span></td></tr>
-				
+
 				{{-- <tr><td class="gry-color small">{{ $shipping_address->address??null }}, {{ $shipping_address->city??null }}, {{ $shipping_address->country??null }}</td></tr> --}}
 				<tr><td class="gry-color small">{{ translate('Email') }}: {{ $shipping_address->email??null }}</td></tr>
 				<tr><td class="gry-color small">{{ translate('Phone') }}: {{ $shipping_address->phone??null }}</td></tr>
@@ -119,7 +119,7 @@
 				<tbody class="strong">
 	                @foreach ($order->orderDetails as $key => $orderDetail)
 		                @if ($orderDetail->product != null)
-							<tr class="">
+							<tr>
 								<td>{{ $orderDetail->product->name }} @if($orderDetail->variation != null) ({{ $orderDetail->variation }}) @endif</td>
 								<td class="currency">
 
@@ -174,9 +174,13 @@
 							            <th class="gry-color text-left">{{ translate('Shipping Cost') }}</th>
 							            <td class="currency">{{ single_price($order->orderDetails->sum('shipping_cost')) }}</td>
 							        </tr>
-							        <tr class="border-bottom">
+							        {{-- <tr class="border-bottom">
 							            <th class="gry-color text-left">{{ translate('Total Tax') }}</th>
 							            <td class="currency">{{ single_price($order->orderDetails->sum('tax')) }}</td>
+							        </tr> --}}
+                                    <tr class="border-bottom">
+							            <th class="gry-color text-left">{{ translate('Discount') }}</th>
+							            <td class="currency">{{ translate('Discount')}}</td>
 							        </tr>
 				                    <tr class="border-bottom">
 							            <th class="gry-color text-left">{{ translate('Coupon') }}</th>
