@@ -13,6 +13,7 @@ use App\DeliveryBoy;
 use App\DeliveryHistory;
 use App\Http\Controllers\AffiliateController;
 use App\Order;
+use App\RefundRequest;
 use App\SmsTemplate;
 use App\User;
 use App\Utility\SmsUtility;
@@ -388,10 +389,29 @@ class DeliveryBoyController extends Controller
         ]);
     }
 
-    public function cancel_request($id)
+    public function cancel_request(Request $request)
     {
-        $order =  Order::find($id);
-
+        $request->validate([
+            'id' => 'required',
+            'reason_id' => 'required',
+            'reason' => 'required',
+         ]);
+        $order =  Order::find($request->id);
+        foreach($order->orderDetails as $order_detail){
+            $refund = new RefundRequest;
+            $refund->user_id = Auth::user()->id;
+            $refund->order_id = $order_detail->order_id;
+            $refund->order_detail_id = $order_detail->id;
+            $refund->seller_id = $order_detail->seller_id;
+            $refund->seller_approval = 0;
+            $refund->reason = $request->reason;
+            $refund->reason_id=$request->reason_id;
+            $refund->admin_approval = 0;
+            $refund->admin_seen = 0;
+            $refund->refund_amount = $order_detail->price + $order_detail->tax;
+            $refund->refund_status = 0;
+            $refund->save();
+        }
         $order->cancel_request = 1;
         $order->delivery_status = "cancelled";
         $order->cancel_request_at = date('Y-m-d H:i:s');

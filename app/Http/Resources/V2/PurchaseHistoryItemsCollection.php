@@ -3,6 +3,7 @@
 namespace App\Http\Resources\V2;
 
 use App\Color;
+use App\RefundRequest;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class PurchaseHistoryItemsCollection extends ResourceCollection
@@ -62,8 +63,9 @@ class PurchaseHistoryItemsCollection extends ResourceCollection
                     'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
                     'currency_code'=>defaultCurrency(),
                     'exchange_rate'=>defaultExchangeRate(),
+                    'on_refund'=>RefundRequest::where('order_detail_id', $data->id)->exists(),
                     'refund_status'=>($data->delivery_status=='cancelled')?1:0,
-                    'refundable'=>$element->refundable,
+                    'refundable'=>$product->refundable,
                 ];
             })
         ];
