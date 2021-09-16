@@ -17,6 +17,7 @@ class LanguageController extends Controller
         if($language = Language::where('code', $request->locale)->first()){
             $ip_address=IpAddress::firstOrNew(['ip'=> getClientIp()]);
             $ip_address->language_id=$language->id;
+            $ip_address->save();
             return response()->json([
                 'success' => true,
                 'message' => translate('Language changed to ') .' '. $language->name
@@ -24,7 +25,7 @@ class LanguageController extends Controller
         }
         return response()->json([
             'success' => false,
-            'message' => 'Not found'
+            'message' => translate('Not found')
         ]);
     }
 
