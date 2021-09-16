@@ -8,7 +8,8 @@ use App\FrontendTranslation;
 use App\Category;
 use Illuminate\Http\Request;
 use App\Language;
-use App\Characteristic;
+use App\Http\Controllers\Controller;
+
 class FrontendController extends Controller
 {
     public function getFrontendTranslation(Request $request)
