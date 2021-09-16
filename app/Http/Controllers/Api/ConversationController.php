@@ -16,6 +16,7 @@ class ConversationController extends Controller
 {
     public function getConversations(Request $request)
     {
+        /**  TODO::conversation and ticked */
         $request->validate([
             'user_id' => 'required',
         ]);
