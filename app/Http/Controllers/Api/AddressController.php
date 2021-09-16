@@ -9,6 +9,7 @@ use App\Http\Resources\V2\CitiesCollection;
 use App\Http\Resources\V2\CountriesCollection;
 use App\Models\Country;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class AddressController extends Controller
 {

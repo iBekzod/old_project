@@ -7,6 +7,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Image;
+use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {

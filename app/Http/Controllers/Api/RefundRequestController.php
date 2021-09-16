@@ -7,9 +7,11 @@ use App\BusinessSetting;
 use App\Http\Resources\RefundRequestCollection;
 use App\RefundRequest;
 use App\OrderDetail;
+use App\Reason;
 use App\Seller;
 use App\Wallet;
 use App\User;
+use App\Http\Controllers\Controller;
 use Auth;
 
 class RefundRequestController extends Controller
@@ -27,36 +29,54 @@ class RefundRequestController extends Controller
             'id' => 'required',
             'reason_id' => 'required',
             'reason' => 'required',
-
          ]);
         $order_detail = OrderDetail::where('id', $request->id)->first();
-        $refund = new RefundRequest;
-        $refund->user_id = Auth::user()->id;
-        $refund->order_id = $order_detail->order_id;
-        $refund->order_detail_id = $order_detail->id;
-        $refund->seller_id = $order_detail->seller_id;
-        $refund->seller_approval = 0;
-        $refund->reason = $request->reason;
-        $refund->reason_id=$request->reason_id;
-        $refund->admin_approval = 0;
-        $refund->admin_seen = 0;
-        $refund->refund_amount = $order_detail->price + $order_detail->tax;
-        $refund->refund_status = 0;
-        // $refund->refund_status = $request->status;
-        if ($refund->save()) {
-            return response()->json([
-                'data'=>$refund,
-                'status'=>true,
-                'message' =>translate("Refund Request has been sent successfully")
-           ]);
+        if(!RefundRequest::where('user_id', $order_detail->order->user_id)->where('order_detail_id',$order_detail->id)->where('order_id',$order_detail->order_id)->exists()){
+            if($order_detail->product->refundable && $order_detail->payment_status=='paid'){
+                $refund = new RefundRequest;
+                $refund->user_id = $order_detail->order->user_id;
+                $refund->order_id = $order_detail->order_id;
+                $refund->order_detail_id = $order_detail->id;
+                $refund->seller_id = $order_detail->seller_id;
+                $refund->seller_approval = 0;
+                $refund->reason = $request->reason;
+                $refund->reason_id=$request->reason_id;
+                $refund->admin_approval = 0;
+                $refund->admin_seen = 0;
+                $refund->refund_amount = 0;// $order_detail->price + $order_detail->tax;
+                $refund->refund_status = 0;
+                if($reason=Reason::where('id', $request->reason_id)->first()){
+                    switch ($reason->responsible) {
+                        case 'seller':
+                            $refund->refund_amount = $order_detail->price + $order_detail->tax;
+                            break;
+                        case 'delivery_boy':
+                            $refund->refund_amount = $order_detail->price + $order_detail->tax;
+                            break;
+                        case 'customer':
+                            $refund->refund_amount = $order_detail->price + $order_detail->tax;
+                            break;
+
+                        default:
+                            $refund->refund_amount = $order_detail->price + $order_detail->tax;
+                            break;
+                    }
+                }
+                if ($refund->save()) {
+                    return response()->json([
+                        'data'=>$refund,
+                        'status'=>true,
+                        'message' =>translate("Refund Request has been sent successfully")
+                   ]);
+                }
+
+            }
         }
-        else {
-            return response()->json([
-                'data'=>[],
-                'status'=>false,
-                'message' =>translate("Something went wrong")
-           ]);
-        }
+        return response()->json([
+            'data'=>[],
+            'status'=>false,
+            'message' =>translate("Rejected refund request")
+        ]);
     }
 
     /**

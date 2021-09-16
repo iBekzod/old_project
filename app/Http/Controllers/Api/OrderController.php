@@ -18,6 +18,8 @@ use App\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Stripe\PaymentMethod;
+use App\Http\Controllers\Controller;
+
 
 class OrderController extends Controller
 {

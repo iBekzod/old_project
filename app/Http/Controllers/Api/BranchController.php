@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-
+use App\Http\Controllers\Controller;
 use App\Branch as AppBranch;
 use App\Http\Resources\BranchCollection;
 use App\Branch;
