@@ -856,6 +856,12 @@
                         </a>
                         <ul class="aiz-side-nav-list level-2">
                             <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'frontends', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'frontend_translations', 'relation_id'=>'frontend_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Frontend')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
                                 <a href="{{route('translations.show_translation', ['base_table'=>'attributes', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'attribute_translations', 'relation_id'=>'attribute_id', 'language_selected'=>'ru'])}}"
                                    class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{translate('Attributes')}}</span>
