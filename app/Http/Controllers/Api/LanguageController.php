@@ -12,7 +12,7 @@ class LanguageController extends Controller
 {
     public function changeLanguage(Request $request)
     {
-        App::setLocale($request->locale);
+        // App::setLocale($request->locale);
         // $request->session()->put('locale', $request->locale);
         if($language = Language::where('code', $request->locale)->first()){
             $ip_address=IpAddress::firstOrNew(['ip'=> getClientIp()]);
