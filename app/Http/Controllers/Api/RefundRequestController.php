@@ -10,6 +10,7 @@ use App\Reason;
 use App\Seller;
 use App\Wallet;
 use App\User;
+use App\Http\Controllers\Controller;
 use Auth;
 
 class RefundRequestController extends Controller

@@ -7,6 +7,8 @@ use App\City;
 use App\Country;
 use App\Http\Resources\SearchCityCollection;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
 
 class CityController extends Controller
 {

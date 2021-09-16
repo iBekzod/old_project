@@ -39,6 +39,8 @@ use Illuminate\Http\Request;
 use App\Utility\CategoryUtility;
 use App\Variation;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+
 
 // use Illuminate\Http\Resources\Json\ResourceCollection;
 // use phpDocumentor\Reflection\Types\Integer;

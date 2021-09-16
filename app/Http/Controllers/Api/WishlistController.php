@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Resources\WishlistCollection;
 use App\Wishlist;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class WishlistController extends Controller
 {

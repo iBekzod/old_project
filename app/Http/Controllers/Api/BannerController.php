@@ -6,6 +6,8 @@ use App\Banner;
 use App\Http\Resources\BannerCollection;
 use App\Http\Resources\BannerSliderCollection;
 use App\Http\Resources\SliderCollection;
+use App\Http\Controllers\Controller;
+
 
 class BannerController extends Controller
 {

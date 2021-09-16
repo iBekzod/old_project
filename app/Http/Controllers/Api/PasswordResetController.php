@@ -7,6 +7,8 @@ use App\User;
 use App\PasswordReset;
 use App\Notifications\PasswordResetRequest;
 use Illuminate\Support\Str;
+use App\Http\Controllers\Controller;
+
 
 class PasswordResetController extends Controller
 {

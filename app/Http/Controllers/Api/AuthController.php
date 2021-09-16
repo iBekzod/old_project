@@ -16,6 +16,8 @@ use App\Seller;
 use App\Shop;
 use Illuminate\Support\Facades\Hash;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
+use App\Http\Controllers\Controller;
+
 
 class AuthController extends Controller
 {

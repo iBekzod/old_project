@@ -7,6 +7,7 @@ use App\Http\Resources\ReviewCollection;
 use App\Review;
 use App\Product;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class ReviewController extends Controller
 {

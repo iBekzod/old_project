@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\BrandCollection;
 use App\Brand;
+use App\Http\Controllers\Controller;
+
 
 class BrandController extends Controller
 {

@@ -11,6 +11,7 @@ use App\Product;
 use App\Shop;
 use App\Seller;
 use Exception;
+use App\Http\Controllers\Controller;
 
 class ShopController extends Controller
 {
