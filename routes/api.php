@@ -248,6 +248,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/send-sms', 'SmsController@send');
     Route::post('/change-language', 'Api\LanguageController@changeLanguage');
     Route::get('/languages', 'Api\LanguageController@index');
+    Route::get('/tranlate-type', 'Api\FrontendController@getMobile');
 });
 
 Route::prefix('v2/auth')->group(function () {
@@ -465,6 +466,7 @@ Route::prefix('v2')->group(function () {
     Route::get('flash-deal-products/{id}', 'Api\V2\FlashDealController@products');
     Route::post('/change-language', 'Api\LanguageController@changeLanguage');
     Route::get('/languages', 'Api\LanguageController@index');
+    Route::get('/tranlate-type', 'Api\FrontendController@getMobile');
 });
 
 Route::fallback(function() {
