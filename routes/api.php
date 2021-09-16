@@ -198,8 +198,9 @@ Route::prefix('v1')->group(function () {
     Route::post('payments/pay/cod', 'Api\PaymentController@cashOnDelivery')->middleware('auth:api');
 
     //  {{refund_requset}}
+    Route::apiResource('reasons', 'Api\ReasonController')->only('index');
     Route::post('refund-request-send', 'Api\RefundRequestController@request_store')->middleware('auth:api');
-    Route::get('refund-request', 'Api\RefundRequestController@vendor_index')->middleware('auth:api');
+    Route::get('refund-request', 'Api\RefundRequestController@index')->middleware('auth:api');
     Route::get('sent-refund-request', 'Api\RefundRequestController@customer_index')->middleware('auth:api');
     Route::post('refund-reuest-vendor-approval', 'Api\RefundRequestController@request_approval_vendor')->middleware('auth:api');
     Route::get('refund-request', 'Api\RefundRequestController@refund_request_send_page')->middleware('auth:api');
@@ -207,9 +208,17 @@ Route::prefix('v1')->group(function () {
     Route::get('refund-request-reason', 'Api\RefundRequestController@reason_view')->middleware('auth:api');
     Route::get('refund-request-reject-reason', 'Api\RefundRequestController@reject_reason_view')->middleware('auth:api');
 
+    //  {{SupportTicket}}
+	Route::post('post/support-ticket','Api\SupportTicketController@post_store')->middleware('auth:api');
+    Route::get('get/support-ticket', 'Api\SupportTicketController')->middleware('auth:api');
+
+	// Route::post('support_ticket/reply','SupportTicketController@seller_store')->name('support_ticket.seller_store');
+
 
     //  {{communication}}
+
     Route::post('post/conversation','Api\ConversationController@postConversations');
+    Route::get('get/conversation','Api\ConversationController@getConversations')
     Route::post('post/subscriber','Api\SubscriberController@postSubscribers');
     Route::post('post/found_it_cheaper','Api\FoundItCheaperController@postFoundItCheaper');
     // Route::post('post/report_description','Api\ReportDescriptionController@postReportDescription');

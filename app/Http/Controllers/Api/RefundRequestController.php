@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\BusinessSetting;
+use App\Http\Resources\RefundRequestCollection;
 use App\RefundRequest;
 use App\OrderDetail;
 use App\Seller;
@@ -63,14 +64,10 @@ class RefundRequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function vendor_index()
+    public function index()
     {
         $refunds = RefundRequest::where('seller_id', Auth::user()->id)->latest()->paginate(10);
-        return response()->json([
-            'data'=>$refunds,
-            'status'=>true,
-            'message' =>translate("Refund Request has been sent successfully")
-        ]);
+        return new RefundRequestCollection($refunds);
     }
 
     /**
