@@ -13,6 +13,7 @@ use App\DeliveryBoy;
 use App\DeliveryHistory;
 use App\Http\Controllers\AffiliateController;
 use App\Order;
+use App\Reason;
 use App\RefundRequest;
 use App\SmsTemplate;
 use App\User;
@@ -397,29 +398,63 @@ class DeliveryBoyController extends Controller
             'reason' => 'required',
          ]);
         $order =  Order::find($request->id);
+        $is_cancellable=true;
         foreach($order->orderDetails as $order_detail){
-            $refund = new RefundRequest;
-            $refund->user_id = Auth::user()->id;
-            $refund->order_id = $order_detail->order_id;
-            $refund->order_detail_id = $order_detail->id;
-            $refund->seller_id = $order_detail->seller_id;
-            $refund->seller_approval = 0;
-            $refund->reason = $request->reason;
-            $refund->reason_id=$request->reason_id;
-            $refund->admin_approval = 0;
-            $refund->admin_seen = 0;
-            $refund->refund_amount = $order_detail->price + $order_detail->tax;
-            $refund->refund_status = 0;
-            $refund->save();
+            if($order_detail->product->refundable==0){
+                $is_cancellable=false;
+            }
         }
-        $order->cancel_request = 1;
-        $order->delivery_status = "cancelled";
-        $order->cancel_request_at = date('Y-m-d H:i:s');
-        $order->save();
+        if($is_cancellable){
+            foreach($order->orderDetails as $order_detail){
+                if(!RefundRequest::where('user_id', $order->user_id)->where('order_detail_id',$order_detail->id)->where('order_id',$order_detail->order_id)->exists()){
+                    if($order_detail->product->refundable && $order_detail->payment_status=='paid'){
+                        $refund = new RefundRequest;
+                        $refund->user_id = $order->user_id;
+                        $refund->order_id = $order_detail->order_id;
+                        $refund->order_detail_id = $order_detail->id;
+                        $refund->seller_id = $order_detail->seller_id;
+                        $refund->seller_approval = 0;
+                        $refund->reason = $request->reason;
+                        $refund->reason_id=$request->reason_id;
+                        $refund->admin_approval = 0;
+                        $refund->admin_seen = 0;
+                        $refund->refund_amount = 0;// $order_detail->price + $order_detail->tax;
+                        $refund->refund_status = 0;
+                        if($reason=Reason::where('id', $request->reason_id)->first()){
+                            switch ($reason->responsible) {
+                                case 'seller':
+                                    $refund->refund_amount = $order_detail->price + $order_detail->tax;
+                                    break;
+                                case 'delivery_boy':
+                                    $refund->refund_amount = $order_detail->price + $order_detail->tax;
+                                    break;
+                                case 'customer':
+                                    $refund->refund_amount = $order_detail->price + $order_detail->tax;
+                                    break;
 
+                                default:
+                                    $refund->refund_amount = $order_detail->price + $order_detail->tax;
+                                    break;
+                            }
+                        }
+                        $refund->save();
+
+                    }
+                }
+            }
+            $order->cancel_request = 1;
+            $order->delivery_status = "cancelled";
+            $order->cancel_request_at = date('Y-m-d H:i:s');
+            $order->save();
+
+            return response()->json([
+                'result' => true,
+                'message' => translate('Requested for cancellation')
+            ]);
+        }
         return response()->json([
-            'result' => true,
-            'message' => 'Requested for cancellation'
+            'result' => false,
+            'message' => translate('Rejected for cancellation')
         ]);
     }
 }
