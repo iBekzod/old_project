@@ -3,14 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
-use Session;
-use File;
 use App\Language;
-use App\Translation;
-use App\ProductTranslation as productTranslation;
-use App\CategoryTranslation as categoryTranslation;
-use DB;
-use View;
 use App;
 use App\Http\Resources\LanguageCollection;
 

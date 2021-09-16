@@ -14,7 +14,11 @@ class FrontendController extends Controller
     public function getFrontendTranslation(Request $request)
     {
         if($frontend=Frontend::where('name', $request->name)->first()){
-            return $frontend->getTranslation('name');
+            // return $frontend->getTranslation('name');
+            return response()->json([
+                'success' => true,
+                'name' => $frontend->getTranslation('name')
+            ]);
         }else{
             $frontend = Frontend::firstOrNew(['name' => $request->name]);
             $frontend->type=$request->type??'web';
@@ -25,7 +29,11 @@ class FrontendController extends Controller
                 $frontend_translation->name = $frontend->name;
                 $frontend_translation->save();
             }
-            return $frontend->getTranslation('name');
+            // return $frontend->getTranslation('name');
+            return response()->json([
+                'success' => false,
+                'name' => $frontend->getTranslation('name')
+            ]);
         }
     }
 
