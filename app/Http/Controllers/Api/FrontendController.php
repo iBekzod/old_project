@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Attribute;
 use App\Frontend;
@@ -11,7 +11,7 @@ use App\Language;
 use App\Characteristic;
 class FrontendController extends Controller
 {
-    public function getFrontend(Request $request)
+    public function getFrontendTranslation(Request $request)
     {
         if($frontend=Frontend::where('name', $request->name)->first()){
             return $frontend->getTranslation('name');
@@ -25,7 +25,7 @@ class FrontendController extends Controller
                 $frontend_translation->name = $frontend->name;
                 $frontend_translation->save();
             }
-            $frontend->getTranslation('name');
+            return $frontend->getTranslation('name');
         }
     }
 

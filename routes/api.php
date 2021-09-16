@@ -41,6 +41,8 @@ Route::prefix('v1/auth')->group(function () {
 });
 
 Route::prefix('v1')->group(function () {
+    Route::match(['get', 'post'], '/translate', 'Api\FrontendController@getFrontendTranslation');
+
     Route::get('/verification/form', 'Api\VerificationController@form');
     Route::match(['get', 'post'], '/nested/categories', 'Api\CategoryController@all');
     Route::get('/get/all/products', 'Api\ProductController@getAllProducts');
@@ -267,6 +269,7 @@ Route::prefix('v2/auth')->group(function () {
 
 Route::prefix('v2')->group(function () {
 
+    Route::match(['get', 'post'], '/translate', 'Api\FrontendController@getFrontendTranslation');
     Route::prefix('delivery-boy')->group(function () {
         Route::get('dashboard-summary/{id}', 'Api\V2\DeliveryBoyController@dashboard_summary')->middleware('auth:api');
         Route::get('deliveries/completed/{id}', 'Api\V2\DeliveryBoyController@completed_delivery')->middleware('auth:api');
