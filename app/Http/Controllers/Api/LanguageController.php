@@ -15,7 +15,7 @@ class LanguageController extends Controller
         App::setLocale($request->locale);
         // $request->session()->put('locale', $request->locale);
         if($language = Language::where('code', $request->locale)->first()){
-            $ip_address=IpAddress::firstOrNew(['ip', getClientIp()]);
+            $ip_address=IpAddress::firstOrNew(['ip'=> getClientIp()]);
             $ip_address->language_id=$language->id;
             return response()->json([
                 'success' => true,
