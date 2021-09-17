@@ -9,8 +9,8 @@ use App\Http\Controllers\Controller;
 
 class PurchaseHistoryController extends Controller
 {
-    public function index($id)
+    public function index()
     {
-        return new PurchaseHistoryCollection(Order::where('user_id', $id)->latest()->get());
+        return new PurchaseHistoryCollection(Order::where('user_id', auth()->id())->latest()->get());
     }
 }
