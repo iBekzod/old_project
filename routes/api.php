@@ -205,7 +205,7 @@ Route::prefix('v1')->group(function () {
     Route::get('refund-request', 'Api\RefundRequestController@index')->middleware('auth:api');
     Route::get('sent-refund-request', 'Api\RefundRequestController@customer_index')->middleware('auth:api');
     Route::post('refund-reuest-vendor-approval', 'Api\RefundRequestController@request_approval_vendor')->middleware('auth:api');
-    Route::get('refund-request', 'Api\RefundRequestController@refund_request_send_page')->middleware('auth:api');
+    // Route::get('refund-request', 'Api\RefundRequestController@refund_request_send_page')->middleware('auth:api');
     Route::post('reject-refund-request','Api\RefundRequestController@reject_refund_request')->middleware('auth:api');
     Route::get('refund-request-reason', 'Api\RefundRequestController@reason_view')->middleware('auth:api');
     Route::get('refund-request-reject-reason', 'Api\RefundRequestController@reject_reason_view')->middleware('auth:api');
