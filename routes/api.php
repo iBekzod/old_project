@@ -212,7 +212,7 @@ Route::prefix('v1')->group(function () {
 
     //  {{SupportTicket}}
 	Route::post('post/support-ticket','Api\SupportTicketController@post_store')->middleware('auth:api');
-    Route::get('get/support-ticket', 'Api\SupportTicketController')->middleware('auth:api');
+    Route::get('get/support-ticket', 'Api\SupportTicketController@index')->middleware('auth:api');
 
 	// Route::post('support_ticket/reply','SupportTicketController@seller_store')->name('support_ticket.seller_store');
 
@@ -220,7 +220,7 @@ Route::prefix('v1')->group(function () {
     //  {{communication}}
 
     Route::post('post/conversation','Api\ConversationController@postConversations');
-    Route::get('get/conversation','Api\ConversationController@getConversations')
+    Route::get('get/conversation','Api\ConversationController@getConversations');
     Route::post('post/subscriber','Api\SubscriberController@postSubscribers');
     Route::post('post/found_it_cheaper','Api\FoundItCheaperController@postFoundItCheaper');
     // Route::post('post/report_description','Api\ReportDescriptionController@postReportDescription');
