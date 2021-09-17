@@ -116,7 +116,7 @@ Route::prefix('v1')->group(function () {
     //  Route::get('test/branch','Api\BranchController@index');
     // Route::get('test/variation','Api\VariationController@index');
 
-    Route::get('purchase-history/{id}', 'Api\PurchaseHistoryController@index')->middleware('auth:api');
+    Route::get('purchase-history', 'Api\PurchaseHistoryController@index')->middleware('auth:api');
     Route::get('purchase-history-details/{id}', 'Api\PurchaseHistoryDetailController@index')->name('purchaseHistory.details')->middleware('auth:api');
     Route::get('products/detail/{id}', 'Api\ProductController@show');
 
