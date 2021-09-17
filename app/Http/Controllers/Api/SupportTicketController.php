@@ -53,7 +53,6 @@ class SupportTicketController extends Controller
 
     public function index()
     {
-        // return "came";
         $tickets = Ticket::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->get();
         return response()->json([
             'data'=>$tickets,

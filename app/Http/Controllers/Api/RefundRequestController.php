@@ -86,8 +86,8 @@ class RefundRequestController extends Controller
      */
     public function index()
     {
-        $refunds = RefundRequest::where('seller_id', Auth::user()->id)->latest()->paginate(10);
-        return new RefundRequestCollection($refunds);
+        $refunds = RefundRequest::where('user_id', Auth::user()->id)->latest()->paginate(10);
+        return new RefundRequestCollection($refunds->with("reason"));
     }
 
     /**
