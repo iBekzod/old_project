@@ -22,6 +22,7 @@ class PurchaseHistoryCollection extends ResourceCollection
                     'shipping_address' => json_decode($data->shipping_address),
                     'payment_type' => str_replace('_', ' ', $data->payment_type),
                     'payment_status' => $data->payment_status,
+                    'delivery_status' => $data->delivery_status,
                     'grand_total' => (double) $data->grand_total,
                     'coupon_discount' => (double) $data->coupon_discount,
                     'shipping_cost' => (double) $data->orderDetails->sum('shipping_cost'),
