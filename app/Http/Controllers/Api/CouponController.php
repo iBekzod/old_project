@@ -7,10 +7,15 @@ use App\Coupon;
 use App\CouponUsage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use App\Http\Resources\CouponUsageCollection;
 
 class CouponController extends Controller
 {
+    public function index(){
+        $coupon_usages = CouponUsage::where('user_id', auth()->id())->orderBy('created_at','desc')->get();
+        return new CouponUsageCollection($coupon_usages);
+    }
+
     public function apply(Request $request)
     {
         $coupon = Coupon::where('code', $request->code)->first();
