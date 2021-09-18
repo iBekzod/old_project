@@ -187,22 +187,14 @@ class RefundRequestController extends Controller
      */
     public function paid_index()
     {
-        $refunds = RefundRequest::where('refund_status', 1)->latest()->paginate(15);
-        return response()->json([
-            'data'=>$refunds,
-            'status'=>true,
-            'message' =>''
-       ]);
+        $refunds = RefundRequest::where('refund_status', 1)->where('user_id', Auth::user()->id)->latest()->paginate(10);
+        return new RefundRequestCollection($refunds);
     }
 
     public function rejected_index()
     {
-        $refunds = RefundRequest::where('refund_status', 2)->latest()->paginate(15);
-        return response()->json([
-            'data'=>$refunds,
-            'status'=>true,
-            'message' =>''
-       ]);
+        $refunds = RefundRequest::where('refund_status', 2)->where('user_id', Auth::user()->id)->latest()->paginate(10);
+        return new RefundRequestCollection($refunds);
     }
 
     /**

@@ -40,11 +40,11 @@ class FrontendController extends Controller
 
     public function getWeb(Request $request)
     {
-        return Frontend::where('type', 'web')->get();
+        return Frontend::where('type', $request->type)->get();
     }
 
     public function getMobile(Request $request)
     {
-        return Frontend::where('type', 'mobile')->get();
+        return Frontend::where('type', $request->type)->get();
     }
 }

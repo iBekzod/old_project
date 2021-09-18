@@ -196,7 +196,7 @@ Route::prefix('v1')->group(function () {
 
     Route::post('coupon/apply', 'Api\CouponController@apply')->middleware('auth:api');
     Route::get('coupon/usage', 'Api\CouponController@index')->middleware('auth:api');
-    
+
     Route::post('payments/pay/stripe', 'Api\StripeController@processPayment')->middleware('auth:api');
     Route::post('payments/pay/paypal', 'Api\PaypalController@processPayment')->middleware('auth:api');
     Route::post('payments/pay/wallet', 'Api\WalletController@processPayment')->middleware('auth:api');
@@ -212,8 +212,9 @@ Route::prefix('v1')->group(function () {
     Route::post('reject-refund-request','Api\RefundRequestController@reject_refund_request')->middleware('auth:api');
     Route::get('refund-request-reason', 'Api\RefundRequestController@reason_view')->middleware('auth:api');
     Route::get('refund-request-reject-reason', 'Api\RefundRequestController@reject_reason_view')->middleware('auth:api');
+    // Route::get('paid-refund', 'Api\RefundRequestController@paid_index')->middleware('auth:api');
     Route::get('paid-refund', 'Api\RefundRequestController@paid_index')->middleware('auth:api');
-
+    Route::get('rejected-refund', 'Api\RefundRequestController@rejected_index')->middleware('auth:api');
     //  {{SupportTicket}}
 	Route::post('post/support-ticket','Api\SupportTicketController@post_store')->middleware('auth:api');
     Route::get('get/support-ticket', 'Api\SupportTicketController@index')->middleware('auth:api');
