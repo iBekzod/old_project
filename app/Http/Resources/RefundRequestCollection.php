@@ -22,7 +22,7 @@ class RefundRequestCollection extends ResourceCollection
                         'name'=>$data->orderDetail->product->name,
                         'ranking'=>$data->orderDetail->product->rating,
                         'list_of_review'=>new ReviewCollection(Review::where('product_id', $data->orderDetail->product->id)->where('user_id', $data->user_id)->get()) ,
-                        'is_wishlist'=>Wishlist::where('product_id',$data->orderDetail->product->id)->where('user_id', $data->user_id)->get()->exists(),
+                        'is_wishlist'=> Wishlist::where('product_id',$data->orderDetail->product->id)->where('user_id', $data->user_id)->exists(),
                         'product_id'=>$data->orderDetail->product->id,
                     ],
                     'user_id' => $data->user_id,
