@@ -11,6 +11,7 @@ class TicketCollection extends ResourceCollection
         return [
             'data' => $this->collection->map(function($data) {
                 return [
+                    'code'=>$data->code,
                     'ticket_replies'=>$data->ticketreplies,
                     'subject' => $data->subject,
                     'details' => $data->details,

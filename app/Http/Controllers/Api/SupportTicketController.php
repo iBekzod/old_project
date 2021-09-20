@@ -20,18 +20,15 @@ class SupportTicketController extends Controller
      */
     public function post_store(Request $request)
     {
-        $ticket = new Ticket;
         if($request->has('code') && $request->code!=null){
             $code = $request->code;
         }else{
             $code = max(100000, (Ticket::latest()->first() != null ? Ticket::latest()->first()->code + 1 : 0)).date('s');
         }
-        $ticket->code = $code;
-        $ticket->user_id = auth()->id();
+        $ticket = Ticket::firstOrNew(['code'=>$code, 'user_id'=>auth()->id()]);
         $ticket->subject = $request->subject;
         $ticket->details = $request->details;
         $ticket->files = $request->attachments;
-
         if($ticket->save()){
             $this->send_support_mail_to_admin($ticket);
             return response()->json([
@@ -47,41 +44,17 @@ class SupportTicketController extends Controller
                 'message' => translate('Something went wrong')
            ]);
         }
-        // // dd($request->all());
-        // $request->validate([
-        //     'code'=>'required',
-        //     'subject' => 'required',
-        //     'details' => 'required',
-        //     'file' => 'sometimes',
-        //     'status'=> 'required'
-        //  ]);
-        //  $data=[
-        //     'code'=>$request->code,
-        //     'user_id'=>auth()->id(),
-        //     'subject'=>$request->subject,
-        //     'details'=>$request->details,
-        //     'files'=>$request->file,
-        //     'status'=>$request->status
-        //  ];
-        // //  dd($data);
-        //  $support_ticket=Ticket::firstOrNew($data);
-
-        //   if($support_ticket->save()){
-        //     return response()->json([
-        //         'message' => translate('Message has been send to seller')
-        //    ]);
-        //   }
-        //   else{
-        //     return response()->json([
-        //         'message' => translate('error')
-        //    ]);
-        //   }
-
     }
 
     public function index()
     {
         $tickets = Ticket::where('user_id', auth()->id())->orderBy('created_at', 'desc')->paginate(15);
+        return new TicketCollection($tickets);
+    }
+
+    public function show($code)
+    {
+        $tickets = Ticket::where('user_id', auth()->id())->where('code', $code)->orderBy('created_at', 'desc')->get();
         return new TicketCollection($tickets);
     }
 
@@ -103,20 +76,4 @@ class SupportTicketController extends Controller
         }
     }
 
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $ticket = Ticket::findOrFail(decrypt($id));
-        // $ticket->client_viewed = 1;
-        // $ticket->save();
-        $ticket_replies = $ticket->ticketreplies;
-        return view('frontend.user.support_ticket.show', compact('ticket','ticket_replies'));
-    }
 }
