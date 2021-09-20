@@ -16,9 +16,9 @@ class RefundRequestCollection extends ResourceCollection
                     'id'=>$data->id,
                     'product'=>[
                         'list_of_images'=>$this->convertPhotos(explode(',', $data->orderDetail->product->element->photos)),
-                        'price'=>$data->refund_amount,
-                        'discount'=>$data->order->coupon_discount,
-                        'discount_price'=>$data->order->coupon_discount,
+                        'price'=>(double)$data->refund_amount,
+                        'discount'=>(double)($data->order->coupon_discount/$data->refund_amount),
+                        'discount_price'=>(double)$data->order->coupon_discount,
                         'name'=>$data->orderDetail->product->name,
                         'ranking'=>$data->orderDetail->product->rating,
                         'list_of_review'=>new ReviewCollection(Review::where('product_id', $data->orderDetail->product->id)->where('user_id', $data->user_id)->get()) ,
