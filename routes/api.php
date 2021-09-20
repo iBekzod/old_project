@@ -42,7 +42,6 @@ Route::prefix('v1/auth')->group(function () {
 
 Route::prefix('v1')->group(function () {
     Route::match(['get', 'post'], '/translate', 'Api\FrontendController@getFrontendTranslation');
-
     Route::get('/verification/form', 'Api\VerificationController@form');
     Route::match(['get', 'post'], '/nested/categories', 'Api\CategoryController@all');
     Route::get('/get/all/products', 'Api\ProductController@getAllProducts');
@@ -154,6 +153,7 @@ Route::prefix('v1')->group(function () {
     Route::post('carts/process', 'Api\CartController@process')->middleware('auth:api');
     Route::post('carts/{user_id}', 'Api\CartController@getList')->middleware('auth:api');
 
+    Route::get('reviews/user', 'Api\ReviewController@userReview')->middleware('auth:api');
     Route::get('reviews/product/{id}', 'Api\ReviewController@index')->name('api.reviews.index');
     Route::post('reviews/submit', 'Api\ReviewController@submit')->name('api.reviews.submit');
 
@@ -382,6 +382,7 @@ Route::prefix('v2')->group(function () {
     Route::get('payment-types', 'Api\V2\PaymentTypesController@getList');
 
     Route::get('reviews/product/{id}', 'Api\V2\ReviewController@index')->name('api.reviews.index');
+    Route::get('reviews/user', 'Api\ReviewController@userReview')->middleware('auth:api');
     Route::post('reviews/submit', 'Api\V2\ReviewController@submit')->name('api.reviews.submit');
 
     Route::get('shop/user/{id}', 'Api\V2\ShopController@shopOfUser')->middleware('auth:api');

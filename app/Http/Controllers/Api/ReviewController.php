@@ -14,7 +14,12 @@ class ReviewController extends Controller
 {
     public function index($id)
     {
-        return new ReviewCollection(Review::where('product_id', $id)->latest()->get());
+        return new ReviewCollection(Review::where('product_id', $id)->orderBy('updated_at', 'desc')->paginate(10));
+    }
+
+    public function userReview()
+    {
+        return new ReviewCollection(Review::where('user_id', auth()->id())->orderBy('updated_at', 'desc')->paginate(20));
     }
 
     public function store(Request $request)
