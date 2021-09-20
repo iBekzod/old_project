@@ -229,8 +229,9 @@ Route::prefix('v1')->group(function () {
 
     //  {{communication}}
     Route::post('post/conversation','Api\ConversationController@postConversations');
-    Route::get('get/conversation','Api\ConversationController@getConversations');
-    Route::get('get/conversation/show','Api\ConversationController@show');
+    Route::get('get/conversation','Api\ConversationController@getConversations')->middleware('auth:api');;
+    Route::get('get/conversation/show','Api\ConversationController@show')->middleware('auth:api');;
+
     Route::post('post/subscriber','Api\SubscriberController@postSubscribers');
     Route::post('post/found_it_cheaper','Api\FoundItCheaperController@postFoundItCheaper');
     // Route::post('post/report_description','Api\ReportDescriptionController@postReportDescription');
@@ -249,8 +250,8 @@ Route::prefix('v1')->group(function () {
     //     return response()->json($data);
     // });
 
-    Route::get('conversation_messages','Api\ConversationController@getConversations');//->middleware('auth:api');
-    Route::post('send_conversation_message','Api\ConversationController@store');//->middleware('auth:api');
+    // Route::get('conversation_messages','Api\ConversationController@getConversations');//->middleware('auth:api');
+    // Route::post('send_conversation_message','Api\ConversationController@store');//->middleware('auth:api');
 
 
     Route::get('/countries', 'Api\CityController@countries');

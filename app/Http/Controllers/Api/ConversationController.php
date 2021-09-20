@@ -17,9 +17,9 @@ class ConversationController extends Controller
     public function getConversations(Request $request)
     {
         /**  TODO::conversation and ticked */
-        // $request->validate([
-        //     'user_id' => 'required',
-        // ]);
+        $request->validate([
+            'user_id' => 'required',
+        ]);
         $conversation = Conversation::where('sender_id', auth()->id())->orWhere('receiver_id', $request->user_id)->orderBy('created_at', 'desc')->paginate(15);
 
         return [
