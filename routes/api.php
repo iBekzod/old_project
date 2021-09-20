@@ -222,6 +222,9 @@ Route::prefix('v1')->group(function () {
 
 	// Route::post('support_ticket/reply','SupportTicketController@seller_store')->name('support_ticket.seller_store');
 
+    // club point
+    Route::get('earning-points', 'Api\ClubPointController@userpoint_index')->middleware('auth:api');
+    Route::post('convert-point-into-wallet', 'Api\ClubPointController@convert_point_into_wallet')->middleware('auth:api');
 
     //  {{communication}}
 
