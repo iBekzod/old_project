@@ -17,7 +17,7 @@ class RefundRequestCollection extends ResourceCollection
                     'product'=>[
                         'list_of_images'=>$this->convertPhotos(explode(',', $data->orderDetail->product->element->photos)),
                         'price'=>(double)$data->refund_amount,
-                        'discount'=>(double)($data->order->coupon_discount/$data->refund_amount),
+                        'discount'=>(int)((double)($data->order->coupon_discount/$data->refund_amount)*100),
                         'discount_price'=>(double)$data->order->coupon_discount,
                         'name'=>$data->orderDetail->product->name,
                         'ranking'=>$data->orderDetail->product->rating,
