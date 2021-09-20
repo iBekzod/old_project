@@ -47,14 +47,20 @@
                             <a href="{{ url('single_product/'.$product->slug) }}" target="_blank">
                                 <div class="form-group row">
                                     <div class="col-lg-4">
-                                        @if($product->on_moderation)
+                                        {{-- @if($product->on_moderation)
                                             <span class="badge badge-pill badge-info"> </span>
-                                        @endif
+                                        @endif --}}
+
                                         <img src="{{ ($product->variation)?uploaded_asset($product->variation->thumbnail_img)??static_asset('assets/img/placeholder.jpg'):static_asset('assets/img/placeholder.jpg')}}" alt=""
                                                 class="w-50px">
                                     </div>
                                     <div class="col-lg-8">
                                         <span class="text-muted">{{  $product->getTranslation('name')??null}}</span>
+                                        <div class="col-lg-2">
+                                            @if($product->on_moderation)
+                                                <span class="badge badge-pill badge-info">{{translate('new')}}</span>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </a>

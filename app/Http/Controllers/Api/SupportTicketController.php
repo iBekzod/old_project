@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\TicketCollection;
 use Illuminate\Http\Request;
 use App\Ticket;
 use App\User;
@@ -19,113 +20,69 @@ class SupportTicketController extends Controller
      */
     public function post_store(Request $request)
     {
-        // dd($request->all());
-        $request->validate([
-            'code'=>'required',
-            'subject' => 'required',
-            'details' => 'required',
-            'file' => 'sometimes',
-            'status'=> 'required'
-         ]);
-         $data=[
-            'code'=>$request->code,
-            'user_id'=>auth()->id(),
-            'subject'=>$request->subject,
-            'details'=>$request->details,
-            'files'=>$request->file,
-            'status'=>$request->status
-         ];
-        //  dd($data);
-         $support_ticket=Ticket::firstOrNew($data);
-
-          if($support_ticket->save()){
-            return response()->json([
-                'message' => translate('Message has been send to seller')
-           ]);
-          }
-          else{
-            return response()->json([
-                'message' => translate('error')
-           ]);
-          }
-
-    }
-
-    public function index()
-    {
-        $tickets = Ticket::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->get();
-        return response()->json([
-            'data'=>$tickets,
-            'status'=>true,
-            'message' =>translate("Ticket has been sent successfully")
-        ]);
-    }
-
-    public function seller_admin_index(Request $request)
-    {
-    //    dd($request->all());
-
-        $sort_search =null;
-        $tickets = Ticket::orderBy('created_at', 'desc');
-        // dd($tickets);
-        if ($request->has('search')){
-            $sort_search = $request->search;
-            $tickets = $tickets->where('code', 'like', '%'.$sort_search.'%');
-
-        }
-        $tickets = $tickets->paginate(15);
-        return view('backend.support.support_tickets_seller.index', compact('tickets', 'sort_search'));
-    }
-
-
-    public function user_admin_index(Request $request)
-    {
-    //    dd($request->all());
-        $sort_search =null;
-        $tickets = Ticket::orderBy('created_at', 'desc');
-        // dd($tickets);
-        if ($request->has('search')){
-            $sort_search = $request->search;
-            $tickets = $tickets->where('code', 'like', '%'.$sort_search.'%');
-
-        }
-        $tickets = $tickets->paginate(15);
-        return view('backend.support.support_tickets_user.index', compact('tickets', 'sort_search'));
-    }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //dd();
         $ticket = new Ticket;
-        $ticket->code = max(100000, (Ticket::latest()->first() != null ? Ticket::latest()->first()->code + 1 : 0)).date('s');
-        $ticket->user_id = Auth::user()->id;
+        if($request->has('code') && $request->code!=null){
+            $code = $request->code;
+        }else{
+            $code = max(100000, (Ticket::latest()->first() != null ? Ticket::latest()->first()->code + 1 : 0)).date('s');
+        }
+        $ticket->code = $code;
+        $ticket->user_id = auth()->id();
         $ticket->subject = $request->subject;
         $ticket->details = $request->details;
         $ticket->files = $request->attachments;
 
         if($ticket->save()){
             $this->send_support_mail_to_admin($ticket);
-            flash(translate('Ticket has been sent successfully'))->success();
-            return redirect()->route('support_ticket.index');
+            return response()->json([
+                'code'=>$code,
+                'status'=>true,
+                'message' => translate('Ticket has been sent successfully')
+           ]);
         }
         else{
-            flash(translate('Something went wrong'))->error();
+            return response()->json([
+                'code'=>$code,
+                'status'=>false,
+                'message' => translate('Something went wrong')
+           ]);
         }
+        // // dd($request->all());
+        // $request->validate([
+        //     'code'=>'required',
+        //     'subject' => 'required',
+        //     'details' => 'required',
+        //     'file' => 'sometimes',
+        //     'status'=> 'required'
+        //  ]);
+        //  $data=[
+        //     'code'=>$request->code,
+        //     'user_id'=>auth()->id(),
+        //     'subject'=>$request->subject,
+        //     'details'=>$request->details,
+        //     'files'=>$request->file,
+        //     'status'=>$request->status
+        //  ];
+        // //  dd($data);
+        //  $support_ticket=Ticket::firstOrNew($data);
+
+        //   if($support_ticket->save()){
+        //     return response()->json([
+        //         'message' => translate('Message has been send to seller')
+        //    ]);
+        //   }
+        //   else{
+        //     return response()->json([
+        //         'message' => translate('error')
+        //    ]);
+        //   }
+
+    }
+
+    public function index()
+    {
+        $tickets = Ticket::where('user_id', auth()->id())->orderBy('created_at', 'desc')->paginate(15);
+        return new TicketCollection($tickets);
     }
 
     public function send_support_mail_to_admin($ticket){
@@ -146,66 +103,7 @@ class SupportTicketController extends Controller
         }
     }
 
-    public function send_support_reply_email_to_user($ticket, $tkt_reply){
-        $array['view'] = 'emails.support';
-        $array['subject'] = 'Support ticket Code is:- '.$ticket->code;
-        $array['from'] = env('MAIL_USERNAME');
-        $array['content'] = 'Hi. A ticket has been created. Please check the ticket.';
-        $array['link'] = route('support_ticket.show', encrypt($ticket->id));
-        $array['sender'] = $tkt_reply->user->name;
-        $array['details'] = $tkt_reply->reply;
 
-        try {
-            Mail::to($ticket->user->email)->queue(new SupportMailManager($array));
-        } catch (\Exception $e) {
-            // dd($e->getMessage());
-        }
-    }
-
-    public function admin_store(Request $request)
-    {
-        // return $request->all();
-        $ticket_reply = new TicketReply;
-
-        $ticket_reply->ticket_id = $request->ticket_id;
-        $ticket_reply->user_id = Auth::user()->id;
-        $ticket_reply->reply = $request->reply;
-        $ticket_reply->files = $request->attachments;
-        $ticket_reply->ticket->client_viewed = 0;
-        $ticket_reply->ticket->status = $request->status;
-        $ticket_reply->ticket->save();
-        // dd($ticket_reply);
-
-        if($ticket_reply->save()){
-            flash(translate('Reply has been sent successfully'))->success();
-            $this->send_support_reply_email_to_user($ticket_reply->ticket, $ticket_reply);
-            // dd($ticket_reply);
-            return back();
-        }
-        else{
-            flash(translate('Something went wrong'))->error();
-        }
-    }
-
-    public function seller_store(Request $request)
-    {
-        $ticket_reply = new TicketReply;
-        $ticket_reply->ticket_id = $request->ticket_id;
-        $ticket_reply->user_id = $request->user_id;
-        $ticket_reply->reply = $request->reply;
-        $ticket_reply->files = $request->attachments;
-        $ticket_reply->ticket->viewed = 0;
-        $ticket_reply->ticket->status = 'pending';
-        $ticket_reply->ticket->save();
-        if($ticket_reply->save()){
-
-            flash(translate('Reply has been sent successfully'))->success();
-            return back();
-        }
-        else{
-            flash(translate('Something went wrong'))->error();
-        }
-    }
 
     /**
      * Display the specified resource.
@@ -216,52 +114,9 @@ class SupportTicketController extends Controller
     public function show($id)
     {
         $ticket = Ticket::findOrFail(decrypt($id));
-        $ticket->client_viewed = 1;
-        $ticket->save();
+        // $ticket->client_viewed = 1;
+        // $ticket->save();
         $ticket_replies = $ticket->ticketreplies;
         return view('frontend.user.support_ticket.show', compact('ticket','ticket_replies'));
-    }
-
-    public function seller_show($id)
-    {
-        $ticket = Ticket::findOrFail(decrypt($id));
-        $ticket->viewed = 1;
-        $ticket->save();
-        // dd($ticket);
-        return view('backend.support.support_tickets_seller.show', compact('ticket'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }
