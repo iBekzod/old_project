@@ -9,4 +9,9 @@ class ClubPoint extends Model
     public function user(){
     	return $this->belongsTo(user::class);
     }
+
+    public function clubPointDetails()
+    {
+        return $this->hasMany(ClubPointDetail::class);
+    }
 }

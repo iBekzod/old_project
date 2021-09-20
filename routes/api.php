@@ -225,9 +225,9 @@ Route::prefix('v1')->group(function () {
     // club point
     Route::get('earning-points', 'Api\ClubPointController@userpoint_index')->middleware('auth:api');
     Route::post('convert-point-into-wallet', 'Api\ClubPointController@convert_point_into_wallet')->middleware('auth:api');
+    Route::get('club-point-details/{club_point_id}', 'Api\ClubPointController@club_point_detail')->middleware('auth:api');
 
     //  {{communication}}
-
     Route::post('post/conversation','Api\ConversationController@postConversations');
     Route::get('get/conversation','Api\ConversationController@getConversations');
     Route::post('post/subscriber','Api\SubscriberController@postSubscribers');
