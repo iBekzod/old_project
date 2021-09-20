@@ -11,7 +11,7 @@
                     <div class="mt-2">
                         <b>product name: </b><span> {{ $conversation->product->name }} </span>
                         <br>
-                        <b>message:</b> {{ json_decode($conversation->msg) }}
+                        <b>message:</b> {{$conversation->msg }}
                     </div>
                 </div>
             </div>
