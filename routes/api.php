@@ -148,16 +148,17 @@ Route::prefix('v1')->group(function () {
     // Route::get('carts/{id}', 'Api\CartController@index')->middleware('auth:api');
     Route::post('carts/add', 'Api\CartController@add')->middleware('auth:api');
     Route::post('carts/change-quantity', 'Api\CartController@changeQuantity')->middleware('auth:api');
-    Route::apiResource('carts', 'Api\CartController')->except(['store', 'edit', 'update', 'show'])->middleware('auth:api');
+    // Route::apiResource('carts', 'Api\CartController')->except(['store', 'edit', 'update', 'show'])->middleware('auth:api');
     Route::get('cart-summary/{user_id}/{owner_id}', 'Api\CartController@summary')->middleware('auth:api');
     Route::post('carts/process', 'Api\CartController@process')->middleware('auth:api');
     Route::post('carts/{user_id}', 'Api\CartController@getList')->middleware('auth:api');
 
+    Route::apiResource('carts', 'Api\V2\CartController')->only('destroy')->middleware('auth:api');
 
     // {{ product-reviews }}
     Route::get('reviews/user', 'Api\ReviewController@userReview')->middleware('auth:api');
     Route::get('reviews/product/{id}', 'Api\ReviewController@index')->name('api.reviews.index');
-    Route::post('reviews/submit', 'Api\ReviewController@submit')->name('api.reviews.submit');
+    Route::post('reviews/submit', 'Api\ReviewController@submit')->middleware('auth:api');
 
 
     Route::get('shop/user/{id}', 'Api\ShopController@shopOfUser')->middleware('auth:api');
@@ -392,7 +393,7 @@ Route::prefix('v2')->group(function () {
 
     Route::get('reviews/product/{id}', 'Api\V2\ReviewController@index')->name('api.reviews.index');
     Route::get('reviews/user', 'Api\ReviewController@userReview')->middleware('auth:api');
-    Route::post('reviews/submit', 'Api\V2\ReviewController@submit')->name('api.reviews.submit');
+    Route::post('reviews/submit', 'Api\V2\ReviewController@submit')->middleware('auth:api');
 
     Route::get('shop/user/{id}', 'Api\V2\ShopController@shopOfUser')->middleware('auth:api');
     Route::get('shops/details/{id}', 'Api\V2\ShopController@info')->name('shops.info');
