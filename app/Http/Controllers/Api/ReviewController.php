@@ -51,28 +51,44 @@ class ReviewController extends Controller
 
     public function submit(Request $request)
     {
+        $request->validate([
+            'product_id' => 'required',
+            'user_id' => 'required',
+            'comment' => 'required',
+            'rating' => 'required'
+        ]);
         $product = Product::find($request->product_id);
-        $user = User::find($request->user_id);
-        $reviewable = false;
-        if(Auth::check()){
-            $reviewable = true;
-        }
+        // $user = User::find($request->user_id);
 
+        /*
+         @foreach ($detailedProduct->orderDetails as $key => $orderDetail)
+                                            @if($orderDetail->order != null && $orderDetail->order->user_id == Auth::user()->id && $orderDetail->delivery_status == 'delivered' && \App\Review::where('user_id', Auth::user()->id)->where('product_id', $detailedProduct->id)->first() == null)
+                                                @php
+                                                    $commentable = true;
+                                                @endphp
+                                            @endif
+                                        @endforeach
+        */
+
+        // $reviewable = false;
+        // if(Auth::check()){
+        //     $reviewable = true;
+        // }
         // foreach ($product->orderDetails as $key => $orderDetail) {
         //     if($orderDetail->order != null && $orderDetail->order->user_id == $request->user_id && $orderDetail->delivery_status == 'delivered' && \App\Review::where('user_id', $request->user_id)->where('product_id', $product->id)->first() == null){
         //         $reviewable = true;
         //     }
         // }
 
-        if(!$reviewable){
-            return response()->json([
-                'result' => false,
-                'message' => 'You cannot review this product'
-            ]);
-        }
+        // if(!$reviewable){
+        //     return response()->json([
+        //         'result' => false,
+        //         'message' => 'You cannot review this product'
+        //     ]);
+        // }
 
         $review = new \App\Review;
-        $review->product_id = $request->product_id;
+        $review->product_id = $product->product_id;
         $review->user_id = $request->user_id;
         $review->rating = $request->rating;
         $review->comment = $request->comment;
