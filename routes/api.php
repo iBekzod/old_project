@@ -65,21 +65,23 @@ Route::prefix('v1')->group(function () {
     Route::match(['get', 'post'], '/sellers/{id}/top-selling', 'Api\SellerController@topSelling');
     Route::match(['get', 'post'], '/sellers/{id}/featured-products', 'Api\SellerController@featuredProducts');
     Route::match(['get', 'post'], '/sellers/{id}/all-products', 'Api\SellerController@allProducts');
-   // Route::get('get/seller', 'Api\SellerController@sellers');
+    // Route::get('get/seller', 'Api\SellerController@sellers');
 
+    // orders
     Route::match(['get', 'post'], '/user/addresses', 'Api\OrderController@getUserAddress');
     Route::match(['get', 'post'], '/store/user/addresses', 'Api\OrderController@storeUserAddress')->middleware('auth:api');
     Route::match(['get', 'post'], '/delete/user/addresses', 'Api\OrderController@deleteUserAddress')->middleware('auth:api');
     Route::match(['get', 'post'], '/pick-up-points', 'Api\OrderController@getPickUpPoints');
     Route::match(['get', 'post'], '/payment-methods', 'Api\OrderController@paymentMethods');
+    Route::match(['get', 'post'], '/user/orders', 'Api\OrderController@userOrders')->middleware('auth:api');
+    Route::match(['get', 'post'], '/make/orders', 'Api\OrderController@store')->middleware('auth:api');
 
 
     //    Route::apiResource('banners', 'Api\BannerController')->only('index');
     Route::match(['get', 'post'], '/ajax_search', 'Api\SearchController@ajax_search');
     Route::match(['get', 'post'], '/search-by-category', 'Api\SearchController@searchByHashtags');
     Route::match(['get', 'post'], '/banners', 'App\Http\Controllers\Api\V2\HomePageController@banners');
-    Route::match(['get', 'post'], '/user/orders', 'Api\OrderController@userOrders')->middleware('auth:api');
-    Route::match(['get', 'post'], '/make/orders', 'Api\OrderController@store')->middleware('auth:api');
+
 
     Route::apiResource('banners', 'Api\BannerController')->only('index');
 
@@ -148,12 +150,11 @@ Route::prefix('v1')->group(function () {
     // Route::get('carts/{id}', 'Api\CartController@index')->middleware('auth:api');
     Route::post('carts/add', 'Api\CartController@add')->middleware('auth:api');
     Route::post('carts/change-quantity', 'Api\CartController@changeQuantity')->middleware('auth:api');
-    // Route::apiResource('carts', 'Api\CartController')->except(['store', 'edit', 'update', 'show'])->middleware('auth:api');
+    Route::apiResource('carts', 'Api\CartController')->except(['store', 'edit', 'update', 'show'])->middleware('auth:api');
     Route::get('cart-summary/{user_id}/{owner_id}', 'Api\CartController@summary')->middleware('auth:api');
     Route::post('carts/process', 'Api\CartController@process')->middleware('auth:api');
     Route::post('carts/{user_id}', 'Api\CartController@getList')->middleware('auth:api');
 
-    Route::apiResource('carts', 'Api\V2\CartController')->only('destroy')->middleware('auth:api');
 
     // {{ product-reviews }}
     Route::get('reviews/user', 'Api\ReviewController@userReview')->middleware('auth:api');
