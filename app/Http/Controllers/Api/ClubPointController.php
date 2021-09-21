@@ -29,7 +29,7 @@ class ClubPointController extends Controller
     public function convert_point_into_wallet(Request $request)
     {
         $club_point_convert_rate = BusinessSetting::where('type', 'club_point_convert_rate')->first()->value;
-        $club_point = ClubPoint::findOrFail($request->el);
+        $club_point = ClubPoint::findOrFail($request->id);
         $wallet = new Wallet;
         $wallet->user_id = Auth::user()->id;
         $wallet->amount = floatval($club_point->points / $club_point_convert_rate);
@@ -41,10 +41,18 @@ class ClubPointController extends Controller
         $user->save();
         $club_point->convert_status = 1;
         if ($club_point->save()) {
-            return 1;
+            return response()->json([
+                'data'=>$wallet,
+                'status'=>true,
+                'message' =>translate("Refund Request has been sent successfully")
+           ]);
         }
         else {
-            return 0;
+            return response()->json([
+                'data'=>[],
+                'status'=>false,
+                'message' =>translate("Rejected request")
+            ]);
         }
     }
 }

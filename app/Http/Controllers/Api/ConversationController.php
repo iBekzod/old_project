@@ -17,12 +17,13 @@ class ConversationController extends Controller
     public function getConversations()
     {
         $conversation = Conversation::where('sender_id', auth()->id())->orWhere('receiver_id',  auth()->id())->orderBy('created_at', 'desc')->paginate(15);
+        // dd($conversation);
         return new ConversationCollection($conversation);
     }
     public function postConversations(Request $request)
     {
 
-        // dd($request->all());
+
 
         $request->validate([
             'user_id'=>'required',
@@ -30,15 +31,15 @@ class ConversationController extends Controller
             'product_id' => 'required',
             'msg' => 'required'
          ]);
-          $support_ticket = new Conversation;
+        //  dd($request->all());
+          $conversation = new Conversation;
 
-          $support_ticket->sender_id =$request->user_id;
-
-          $support_ticket->receiver_id = $request->product_id;
-          $support_ticket->type = $request->type??'conversation';
-          $support_ticket->msg = json_encode($request->msg);
-
-          if($support_ticket->save()){
+          $conversation->sender_id =$request->user_id;
+          $conversation->receiver_id = $request->product_id;
+          $conversation->type = $request->type??'conversation';
+          $conversation->msg =$request->msg;
+        //    dd($conversation);
+          if($conversation->save()){
             return response()->json([
                 'message' => translate('Message has been send to seller')
            ]);
