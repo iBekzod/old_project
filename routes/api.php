@@ -153,6 +153,8 @@ Route::prefix('v1')->group(function () {
     Route::post('carts/process', 'Api\CartController@process')->middleware('auth:api');
     Route::post('carts/{user_id}', 'Api\CartController@getList')->middleware('auth:api');
 
+
+    // {{ product-reviews }}
     Route::get('reviews/user', 'Api\ReviewController@userReview')->middleware('auth:api');
     Route::get('reviews/product/{id}', 'Api\ReviewController@index')->name('api.reviews.index');
     Route::post('reviews/submit', 'Api\ReviewController@submit')->name('api.reviews.submit');
@@ -194,6 +196,7 @@ Route::prefix('v1')->group(function () {
     Route::get('user/shipping/delete/{id}', 'Api\V2\AddressController@deleteShippingAddress')->middleware('auth:api');
     // Route::get('user/shipping/cost/{product_id}/{region_id}', 'Api\ProductController@calculateShipping')->middleware('auth:api');
 
+    // {{ Coupon }}
     Route::post('coupon/apply', 'Api\CouponController@apply')->middleware('auth:api');
     Route::get('coupon/usage', 'Api\CouponController@index')->middleware('auth:api');
 
@@ -222,8 +225,8 @@ Route::prefix('v1')->group(function () {
 
 	// Route::post('support_ticket/reply','SupportTicketController@seller_store')->name('support_ticket.seller_store');
 
-    // club point
-    Route::get('earning-points', 'Api\ClubPointController@userpoint_index')->middleware('auth:api');
+    // club point {ball}
+    Route::get('earning-points', 'Api\ClubPointCfontroller@userpoint_index')->middleware('auth:api');
     Route::post('convert-point-into-wallet', 'Api\ClubPointController@convert_point_into_wallet')->middleware('auth:api');
     Route::get('club-point-details/{club_point_id}', 'Api\ClubPointController@club_point_detail')->middleware('auth:api');
 
