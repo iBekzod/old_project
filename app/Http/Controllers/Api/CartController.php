@@ -188,13 +188,19 @@ class CartController extends Controller
     public function add(Request $request)
     {
         try{
+            if(!filterPublishedProducts(Product::where('id', $request->id))->exists()){
+                return response()->json([
+                    'success' => false,
+                    'message' => translate('No such product left in store!')
+                ]);
+            }
             $product = Product::where('id', $request->id)->first();
             $tax = 0;
             $default_currency_id=29;
             if(Currency::where('code', 'UZB')->exists()){
                 $default_currency_id=Currency::where('code', 'UZB')->first()->id;
             }
-            $tax= taxPrice($product->id);
+            $tax = taxPrice($product->id);
             $tax = convertToCurrency($tax, $product->currency_id, $default_currency_id);
             $price = convertToCurrency($product->price, $product->currency_id, $default_currency_id);
             $user_id=auth()->id();
@@ -235,19 +241,6 @@ class CartController extends Controller
             if ($product->qty < $quantity) {
                 return response()->json(['success' => false, 'message' => "Minimum {$product->qty} item(s) should be ordered"], 200);
             }
-            $data=[
-                'user_id' => $user_id,
-                'owner_id' => $product->user_id,
-                'product_id' => $request->id,
-                'variation' => $is_express,
-                'address_id'=>$address_id,
-                'price' => $price,
-                'tax' => $tax,
-                'shipping_cost' => $shipping_cost,
-                'shipping_type'=> $product->delivery_type,
-                'quantity' => DB::raw("quantity + $quantity"),
-                'discount' => $discount,
-            ];
             $cart=Cart::updateOrCreate([
                 'user_id' => $user_id,
                 'owner_id' => $product->user_id,
@@ -290,14 +283,14 @@ class CartController extends Controller
     {
         $cart_ids = explode(",", $request->cart_ids);
         $cart_quantities = explode(",", $request->cart_quantities);
-
+        // $address_id=$request->address_id??getUserAddress()->id;
         if (!empty($cart_ids)) {
             $i = 0;
             foreach ($cart_ids as $cart_id) {
                 $cart_item = Cart::where('id', $cart_id)->first();
                 $product = Product::where('id', $cart_item->product_id)->first();
 
-                if ($product->qty > $cart_quantities[$i]) {
+                if ($product->qty < $cart_quantities[$i]) {
                     return response()->json(['result' => false, 'message' => "Minimum {$product->qty} item(s) should be ordered for {$product->name}"], 200);
                 }else{
                     $cart_item->update([
