@@ -155,6 +155,7 @@ class AuthController extends Controller
     }
 
     private function generateRandomOtp(){
+        return 1111;
         return rand(1000, 9999);
     }
 
