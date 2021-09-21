@@ -31,12 +31,14 @@ class ReviewController extends Controller
         */
 
         $reviewable = false;
-
-        foreach ($product->orderDetails as $key => $orderDetail) {
-            if($orderDetail->order != null && $orderDetail->order->user_id == $request->user_id && $orderDetail->delivery_status == 'delivered' && \App\Review::where('user_id', $request->user_id)->where('product_id', $product->id)->first() == null){
-                $reviewable = true;
-            }
+        if(Auth::check()){
+            $reviewable = true;
         }
+        // foreach ($product->orderDetails as $key => $orderDetail) {
+        //     if($orderDetail->order != null && $orderDetail->order->user_id == $request->user_id && $orderDetail->delivery_status == 'delivered' && \App\Review::where('user_id', $request->user_id)->where('product_id', $product->id)->first() == null){
+        //         $reviewable = true;
+        //     }
+        // }
 
         if(!$reviewable){
             return response()->json([
