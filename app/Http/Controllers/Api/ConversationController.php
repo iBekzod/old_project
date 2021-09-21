@@ -53,9 +53,9 @@ class ConversationController extends Controller
 
     }
 
-    public function show()
+    public function show($id)
     {
-        $conversation = Conversation::where('sender_id', auth()->id())->orWhere('receiver_id',auth()->id())->orderBy('created_at', 'desc')->get();
+        $conversation = Conversation::where('sender_id', $id)->orWhere('receiver_id',auth()->id())->orderBy('created_at', 'desc')->get();
         return new ConversationCollection($conversation);
 
     }
