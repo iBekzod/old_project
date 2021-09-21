@@ -9,6 +9,7 @@ use App\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
+use Auth;
 
 class ReviewController extends Controller
 {
