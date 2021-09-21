@@ -25,6 +25,7 @@
                 <tr>
                     <th>#</th>
                     <th width="20%">{{translate('Name')}}</th>
+                    <th>{{translate('Status')}}</th>
                     <th>{{translate('Added By')}}</th>
                     <th>{{translate('Num of Sale')}}</th>
                     <th>{{translate('Total Stock')}}</th>
@@ -56,15 +57,14 @@
                                     </div>
                                     <div class="col-lg-8">
                                         <span class="text-muted">{{  $product->getTranslation('name')??null}}</span>
-                                        <div class="col-lg-2">
-                                            @if($product->on_moderation)
-                                                <span class="badge badge-pill badge-info">{{translate('new')}}</span>
-                                            @endif
-                                        </div>
+
                                     </div>
                                 </div>
                             </a>
                         </td>
+                        <td>@if($product->on_moderation)
+                            <span class="badge badge-inline badge-info">{{ translate('New') }}</span>
+                            @endif</td>
                         <td>{{ $product->user->name }}</td>
                         <td>{{ $product->num_of_sale }} {{translate('times')}}</td>
                         <td>
