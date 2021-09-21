@@ -188,7 +188,7 @@ class CartController extends Controller
     public function add(Request $request)
     {
         try{
-            $product = Product::where('id',$request->id)->first();
+            $product = Product::where('id', $request->id)->first();
             $tax = 0;
             $default_currency_id=29;
             if(Currency::where('code', 'UZB')->exists()){
@@ -225,7 +225,7 @@ class CartController extends Controller
                 $is_express=true;
                 $shipping_cost= $delivery_cost['total_express_cost'];
             }
-            $shipping_cost = convertToCurrency($shipping_cost, $product->currency_id, $default_currency_id);
+            // $shipping_cost = convertToCurrency($shipping_cost, $product->currency_id, $default_currency_id);
             $quantity=0;
             if($request->has('quantity')){
                 $quantity=(double)$request->quantity;
@@ -235,7 +235,19 @@ class CartController extends Controller
             if ($product->qty < $quantity) {
                 return response()->json(['success' => false, 'message' => "Minimum {$product->qty} item(s) should be ordered"], 200);
             }
-
+            $data=[
+                'user_id' => $user_id,
+                'owner_id' => $product->user_id,
+                'product_id' => $request->id,
+                'variation' => $is_express,
+                'address_id'=>$address_id,
+                'price' => $price,
+                'tax' => $tax,
+                'shipping_cost' => $shipping_cost,
+                'shipping_type'=> $product->delivery_type,
+                'quantity' => DB::raw("quantity + $quantity"),
+                'discount' => $discount,
+            ];
             $cart=Cart::updateOrCreate([
                 'user_id' => $user_id,
                 'owner_id' => $product->user_id,

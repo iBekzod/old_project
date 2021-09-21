@@ -148,11 +148,12 @@ Route::prefix('v1')->group(function () {
     // Route::get('carts/{id}', 'Api\CartController@index')->middleware('auth:api');
     Route::post('carts/add', 'Api\CartController@add')->middleware('auth:api');
     Route::post('carts/change-quantity', 'Api\CartController@changeQuantity')->middleware('auth:api');
-    Route::apiResource('carts', 'Api\CartController')->except(['store', 'edit', 'update', 'show'])->middleware('auth:api');
+    // Route::apiResource('carts', 'Api\CartController')->except(['store', 'edit', 'update', 'show'])->middleware('auth:api');
     Route::get('cart-summary/{user_id}/{owner_id}', 'Api\CartController@summary')->middleware('auth:api');
     Route::post('carts/process', 'Api\CartController@process')->middleware('auth:api');
     Route::post('carts/{user_id}', 'Api\CartController@getList')->middleware('auth:api');
 
+    Route::apiResource('carts', 'Api\V2\CartController')->only('destroy')->middleware('auth:api');
 
     // {{ product-reviews }}
     Route::get('reviews/user', 'Api\ReviewController@userReview')->middleware('auth:api');
