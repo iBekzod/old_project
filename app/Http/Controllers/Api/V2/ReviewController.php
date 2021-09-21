@@ -49,7 +49,7 @@ class ReviewController extends Controller
         // }
 
         $review = new \App\Review;
-        $review->product_id = $product->product_id;
+        $review->product_id = $product->id;
         $review->user_id = $request->user_id;
         $review->rating = $request->rating;
         $review->comment = $request->comment;
