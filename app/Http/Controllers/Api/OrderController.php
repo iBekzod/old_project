@@ -128,12 +128,7 @@ class OrderController extends Controller
 
     public function userOrders(Request $request)
     {
-        // $request->validate([
-        //     'user_id' => 'required|exists:users,id'
-        // ]);
-
         $orders = Order::where('user_id', auth()->id())->get();
-
         return response()->json([
             'orders' => new OrderCollection($orders)
         ], 200);
@@ -143,7 +138,7 @@ class OrderController extends Controller
     {
         try{
             $request->validate([
-                // 'shipping_address' => 'required',
+                'address_id' => 'required',
                 'payment_type' => 'required',
                 'payment_status' => 'required',
                 // 'grand_total' => 'required',
@@ -161,7 +156,7 @@ class OrderController extends Controller
                 ]);
             }
             $shippingAddress = json_decode($request->shipping_address);
-            $address = Address::where('id', $cartItems->first()->address_id)->first()??$user->addresses()->where('set_default', 1)->first()??$user->addresses()->first();
+            $address = Address::where('id', $request->address_id??$cartItems->first()->address_id)->first()??$user->addresses()->where('set_default', 1)->first()??$user->addresses()->first();
             $shippingAddress = [];
             if ($shippingAddress == null) {
                 $shippingAddress['name']        = $user->name;
