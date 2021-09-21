@@ -14,30 +14,10 @@ use Auth;
 
 class ConversationController extends Controller
 {
-    public function getConversations(Request $request)
+    public function getConversations()
     {
-        /**  TODO::conversation and ticked */
-        $request->validate([
-            'user_id' => 'required',
-        ]);
-        $conversation = Conversation::where('sender_id', auth()->id())->orWhere('receiver_id', $request->user_id)->orderBy('created_at', 'desc')->paginate(15);
-
-        return [
-            'data' => $conversation->map(function($data) {
-                return [
-                    'id' => (integer) $data->id,
-                    'sender_id' => $data->sender_id,
-                    'receiver_id' => $data->receiver_id,
-                    'title' => $data->title,
-                    'type' => $data->type,
-                    'sender_viewed' => $data->sender_viewed,
-                    'receiver_viewed' => $data->receiver_viewed,
-                    'created_at' => $data->created_at,
-                    'updated_at' => $data->updated_at,
-                    'messages'=> $data->messages
-                ];
-            })
-        ];
+        $conversation = Conversation::where('sender_id', auth()->id())->orWhere('receiver_id',  auth()->id())->orderBy('created_at', 'desc')->paginate(15);
+        return new ConversationCollection($conversation);
     }
     public function postConversations(Request $request)
     {
@@ -72,30 +52,11 @@ class ConversationController extends Controller
 
     }
 
-    public function show(Request $request)
+    public function show()
     {
-        /**  TODO::conversation and ticked */
-        // $request->validate([
-        //     'user_id' => 'required',
-        // ]);
-        $conversation = Conversation::where('sender_id', auth()->id())->orWhere('receiver_id', $request->user_id)->orderBy('created_at', 'desc')->get();
+        $conversation = Conversation::where('sender_id', auth()->id())->orWhere('receiver_id',auth()->id())->orderBy('created_at', 'desc')->get();
+        return new ConversationCollection($conversation);
 
-        return [
-            'data' => $conversation->map(function($data) {
-                return [
-                    'id' => (integer) $data->id,
-                    'sender_id' => $data->sender_id,
-                    'receiver_id' => $data->receiver_id,
-                    'title' => $data->title,
-                    'type' => $data->type,
-                    'sender_viewed' => $data->sender_viewed,
-                    'receiver_viewed' => $data->receiver_viewed,
-                    'created_at' => $data->created_at,
-                    'updated_at' => $data->updated_at,
-                    'messages'=> $data->messages
-                ];
-            })
-        ];
     }
 }
 
