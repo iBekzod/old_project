@@ -157,7 +157,7 @@ Route::prefix('v1')->group(function () {
     // {{ product-reviews }}
     Route::get('reviews/user', 'Api\ReviewController@userReview')->middleware('auth:api');
     Route::get('reviews/product/{id}', 'Api\ReviewController@index')->name('api.reviews.index');
-    Route::post('reviews/submit', 'Api\ReviewController@submit')->name('api.reviews.submit');
+    Route::post('reviews/submit', 'Api\ReviewController@submit')->middleware('auth:api');
 
 
     Route::get('shop/user/{id}', 'Api\ShopController@shopOfUser')->middleware('auth:api');
@@ -392,7 +392,7 @@ Route::prefix('v2')->group(function () {
 
     Route::get('reviews/product/{id}', 'Api\V2\ReviewController@index')->name('api.reviews.index');
     Route::get('reviews/user', 'Api\ReviewController@userReview')->middleware('auth:api');
-    Route::post('reviews/submit', 'Api\V2\ReviewController@submit')->name('api.reviews.submit');
+    Route::post('reviews/submit', 'Api\V2\ReviewController@submit')->middleware('auth:api');
 
     Route::get('shop/user/{id}', 'Api\V2\ShopController@shopOfUser')->middleware('auth:api');
     Route::get('shops/details/{id}', 'Api\V2\ShopController@info')->name('shops.info');
