@@ -52,10 +52,11 @@ class ConversationController extends Controller
 
 
     }
+      // { og'abek conversation show bu id ga qarab ajratib beraman}
 
     public function show($id)
     {
-        $conversation = Conversation::where('sender_id', $id)->orWhere('receiver_id',auth()->id())->orderBy('created_at', 'desc')->get();
+        $conversation = Conversation::where('id', $id)->get();
         return new ConversationCollection($conversation);
 
     }
