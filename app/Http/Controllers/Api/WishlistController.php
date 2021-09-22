@@ -13,9 +13,9 @@ class WishlistController extends Controller
 {
     public function index()
     {
-        $wishlist_product_ids=Wishlist::where('user_id', auth()->id())->pluck('product_id');
-        return new ProductCollection(Product::whereIn('id', $wishlist_product_ids)->get());
-        // return new WishlistCollection(Wishlist::where('user_id', auth()->id())->with('product')->latest()->get());
+        // $wishlist_product_ids=Wishlist::where('user_id', auth()->id())->pluck('product_id');
+        // return new ProductCollection(Product::whereIn('id', $wishlist_product_ids)->get());
+        return new WishlistCollection(Wishlist::where('user_id', auth()->id())->with('product')->latest()->get());
     }
 
     public function store(Request $request)
