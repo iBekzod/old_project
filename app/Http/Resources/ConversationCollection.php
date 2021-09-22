@@ -20,8 +20,8 @@ class ConversationCollection extends ResourceCollection
                     'created_at' => $data->created_at,
                     'updated_at' => $data->updated_at,
                     'messages'=> $data->messages,
-                    'product_name'=>$data->product->name,
-                    'product_slug'=>$data->product->slug,
+                    'product_name'=>($data->product)?$data->product->name:'',
+                    'product_slug'=>($data->product)?$data->product->slug:'',
                 ];
             })
         ];
