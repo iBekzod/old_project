@@ -58,6 +58,42 @@ class SupportTicketController extends Controller
         return new TicketCollection($tickets);
     }
 
+    public function post_store_code(Request $request)
+    {
+        $request->validate([
+            'code' => 'required',
+            'details' => 'required',
+            'files' => 'required',
+        ]);
+        if($request->has('code') && $request->code!=null){
+            $code = $request->code;
+        }
+        $ticket = Ticket::firstOrNew(['code'=>$code, 'user_id'=>auth()->id()]);
+        $ticket_replies = TicketReply::where('ticket_id',$ticket->id)->first();
+
+        // $ticket_replies->reply = $request->details;
+        // $ticket_replies->user_id=auth()->id();
+        // $ticket->files = $request->attachments;
+        if($ticket_replies->save()){
+            // $this->send_support_mail_to_admin($ticket);
+            return response()->json([
+                'code'=>$code,
+                'status'=>true,
+                'message' => translate('Ticket has been sent successfully')
+           ]);
+        }
+        else{
+            return response()->json([
+                'code'=>$code,
+                'status'=>false,
+                'message' => translate('Something went wrong')
+           ]);
+        }
+    }
+
+
+
+
     public function send_support_mail_to_admin($ticket){
         $array['view'] = 'emails.support';
         $array['subject'] = 'Support ticket Code is:- '.$ticket->code;

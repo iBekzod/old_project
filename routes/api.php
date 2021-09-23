@@ -225,7 +225,9 @@ Route::prefix('v1')->group(function () {
     //  {{SupportTicket}}
 	Route::post('post/support-ticket','Api\SupportTicketController@post_store')->middleware('auth:api');
     Route::get('get/support-ticket', 'Api\SupportTicketController@index')->middleware('auth:api');
+
     Route::get('show/support-ticket/{code}', 'Api\SupportTicketController@show')->middleware('auth:api');
+    Route::post('post/support-ticket/{code}','Api\SupportTicketController@post_store_code')->middleware('auth:api');
 
 	// Route::post('support_ticket/reply','SupportTicketController@seller_store')->name('support_ticket.seller_store');
 
