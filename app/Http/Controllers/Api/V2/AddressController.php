@@ -113,7 +113,7 @@ class AddressController extends Controller
 
     public function makeShippingAddressDefault(Request $request)
     {
-        Address::where('user_id', $request->user_id)->update(['set_default' => 0]); //make all user addressed non default first
+        Address::where('user_id', auth()->id())->update(['set_default' => 0]); //make all user addressed non default first
 
         $address = Address::find($request->id);
         $address->set_default = 1;
@@ -128,7 +128,7 @@ class AddressController extends Controller
     public function updateAddressInCart(Request $request)
     {
         try {
-            Cart::where('user_id', $request->user_id)->update(['address_id' => $request->address_id]);
+            Cart::where('user_id', auth()->id())->update(['address_id' => $request->address_id]);
 
         } catch (\Exception $e) {
             return response()->json([

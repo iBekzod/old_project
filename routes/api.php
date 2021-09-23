@@ -196,6 +196,8 @@ Route::prefix('v1')->group(function () {
     Route::post('user/shipping/update-location', 'Api\V2\AddressController@updateShippingAddressLocation')->middleware('auth:api');
     Route::post('user/shipping/make_default', 'Api\V2\AddressController@makeShippingAddressDefault')->middleware('auth:api');
     Route::get('user/shipping/delete/{id}', 'Api\V2\AddressController@deleteShippingAddress')->middleware('auth:api');
+    Route::post('update-address-in-cart', 'Api\V2\AddressController@updateAddressInCart')->middleware('auth:api');
+
     // Route::get('user/shipping/cost/{product_id}/{region_id}', 'Api\ProductController@calculateShipping')->middleware('auth:api');
 
     // {{ Coupon }}

@@ -48,7 +48,7 @@ if (!function_exists('sendSMS')) {
             $sms_response = Sms::send($to, $text);
             return ['status'=>true, 'message'=>$sms_response['message']];
         } catch (\Exception $e) {}
-        
+
         if (OtpConfiguration::where('type', 'nexmo')->first()->value == 1) {
             try {
                 $my_sms = new EskizSmsClient;
@@ -1539,8 +1539,11 @@ function getUserAddress(){
         $user=User::where('id',auth()->id())->first();
         if(count($user->addresses)==1){
             $address=$user->addresses->first();
+            return $address;
         }else if(count($user->addresses)>1){
-            $address=$user->addresses->where('set_default', 1)->first();
+            //where('set_default', 1)->orWhere('set_default', 0)->
+            $address=$user->addresses->first();
+            return $address;
         }else if($user_setting=SellerSetting::where('type', 'default_address')->where('user_id', auth()->id())->first()){
             $address=Address::firstOrNew(['user_id' => 0, 'address' => null, 'city_id'=>$user_setting->value, 'region_id'=>$user_setting->relation_id, 'longitude'=>getDefaultLongitude(), 'latitude'=>getDefaultLatitude()]);
         }else if($user_setting=SellerSetting::where('type', 'default_address')->first()){
