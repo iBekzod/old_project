@@ -23,23 +23,37 @@ class WishlistCollection extends ResourceCollection
                 if($data->product) {
                     return [
                         'id' => (integer) $data->id,
-                            'product_id' => $product->id,
-                            'name' => $product->getTranslation('name'),
-                            'slug' => $product->slug,
-                            'thumbnail_image' => api_asset($variation->thumbnail_img),
-                            'base_price' => (double) homeBasePrice($product->id),
-                            'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
-                            'currency_code'=>defaultCurrency(),
-                            'exchange_rate'=>defaultExchangeRate(),
-                            'unit' => $element->unit,
-                            'rating' => (double) $product->rating,
-                            'links' => [
-                                'details' => route('products.show', $product->id),
-                                'reviews' => route('api.reviews.index', $product->id),
-                                'related' => route('products.related', $product->id),
-                                'top_from_seller' => route('products.topFromSeller', $product->id)
-                            ]
-                        ];
+                        'weight'=>$element->weight,
+                        'discount' => (integer) $product->discount,
+                        'discount_type' => $product->discount_type,
+                        'user' => [
+                            'name' => $product->user->name,
+                            'email' => $product->user->email,
+                            'avatar' => $product->user->avatar,
+                            'avatar_original' => api_asset($product->user->avatar_original),
+                            'shop_name' => $product->added_by == 'admin' ? '' : $product->user->shop->name,
+                            'shop_logo' => $product->added_by == 'admin' ? '' : api_asset($product->user->shop->logo),
+                            'shop_link' => $product->added_by == 'admin' ? '' : route('shops.info', $product->user->shop->id)
+                        ],
+                        'shipping_type' => $product->delivery_type,
+                        'shipping_cost' => $this->calculateShippingCost($product),
+                        'product_id' => $product->id,
+                        'name' => $product->getTranslation('name'),
+                        'slug' => $product->slug,
+                        'thumbnail_image' => api_asset($variation->thumbnail_img),
+                        'base_price' => (double) homeBasePrice($product->id),
+                        'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
+                        'currency_code'=>defaultCurrency(),
+                        'exchange_rate'=>defaultExchangeRate(),
+                        'unit' => $element->unit,
+                        'rating' => (double) $product->rating,
+                        'links' => [
+                            'details' => route('products.show', $product->id),
+                            'reviews' => route('api.reviews.index', $product->id),
+                            'related' => route('products.related', $product->id),
+                            'top_from_seller' => route('products.topFromSeller', $product->id)
+                        ]
+                    ];
                 }
                 return null;
             })
@@ -53,5 +67,10 @@ class WishlistCollection extends ResourceCollection
             'success' => true,
             'status' => 200
         ];
+    }
+
+    protected function calculateShippingCost($product, $is_express=false){
+        $address=getUserAddress();
+        return calculateDeliveryCost($product, $address->id, $product->delivery_type);
     }
 }

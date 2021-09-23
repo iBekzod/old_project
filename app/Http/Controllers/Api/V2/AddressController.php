@@ -113,7 +113,7 @@ class AddressController extends Controller
 
     public function makeShippingAddressDefault(Request $request)
     {
-        Address::where('user_id', $request->user_id)->update(['set_default' => 0]); //make all user addressed non default first
+        Address::where('user_id', auth()->id())->update(['set_default' => 0]); //make all user addressed non default first
 
         $address = Address::find($request->id);
         $address->set_default = 1;
