@@ -128,7 +128,7 @@ class AddressController extends Controller
     public function updateAddressInCart(Request $request)
     {
         try {
-            Cart::where('user_id', $request->user_id)->update(['address_id' => $request->address_id]);
+            Cart::where('user_id', auth()->id())->update(['address_id' => $request->address_id]);
 
         } catch (\Exception $e) {
             return response()->json([

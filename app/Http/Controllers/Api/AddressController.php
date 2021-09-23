@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\AddressCollection;
 use App\Address;
+use App\Cart;
 use App\City;
 use App\Http\Resources\V2\CitiesCollection;
 use App\Http\Resources\V2\CountriesCollection;
@@ -132,7 +133,7 @@ class AddressController extends Controller
     public function updateAddressInCart(Request $request)
     {
         try {
-            Cart::where('user_id', $request->user_id)->update(['address_id' => $request->address_id]);
+            Cart::where('user_id', auth()->id())->update(['address_id' => $request->address_id]);
 
         } catch (\Exception $e) {
             return response()->json([
