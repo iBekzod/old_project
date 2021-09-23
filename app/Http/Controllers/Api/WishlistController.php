@@ -6,11 +6,15 @@ use App\Http\Resources\WishlistCollection;
 use App\Wishlist;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductCollection;
+use App\Product;
 
 class WishlistController extends Controller
 {
     public function index()
     {
+        // $wishlist_product_ids=Wishlist::where('user_id', auth()->id())->pluck('product_id');
+        // return new ProductCollection(Product::whereIn('id', $wishlist_product_ids)->get());
         return new WishlistCollection(Wishlist::where('user_id', auth()->id())->with('product')->latest()->get());
     }
 
