@@ -22,9 +22,6 @@ class ConversationController extends Controller
     }
     public function postConversations(Request $request)
     {
-
-
-
         $request->validate([
             'user_id'=>'required',
             'type'=>'required',
@@ -58,6 +55,29 @@ class ConversationController extends Controller
     {
         $conversation = Conversation::where('id', $id)->get();
         return new ConversationCollection($conversation);
+
+    }
+
+    public function message(Request $request)
+    {
+        $request->validate([
+            'conversation_id'=>'required',
+            'message' => 'required',
+         ]);
+        $conversation=Conversation::where(['sender_id'=>auth()->id(),'id'=>$request->conversation_id])->first();
+        $messages= Message::firstOrNew(['conversation_id'=>$conversation->id, 'user_id'=>auth()->id(), 'message'=>$request->message]);
+
+          if($messages->save()){
+            return response()->json([
+                'message' => translate('Message has been send to seller')
+           ]);
+          }
+          else{
+            return response()->json([
+                'message' => translate('error')
+           ]);
+          }
+
 
     }
 }
