@@ -118,6 +118,8 @@ Route::prefix('v1')->group(function () {
     // Route::get('test/variation','Api\VariationController@index');
 
     Route::get('purchase-history', 'Api\PurchaseHistoryController@index')->middleware('auth:api');
+    Route::get('purchase-history-bought', 'Api\PurchaseHistoryController@boughtProducts')->middleware('auth:api');
+    Route::get('purchase-history-refunded', 'Api\PurchaseHistoryController@refundedProducts')->middleware('auth:api');
     Route::get('purchase-history-details/{id}', 'Api\PurchaseHistoryDetailController@index')->name('purchaseHistory.details')->middleware('auth:api');
     Route::get('products/detail/{id}', 'Api\ProductController@show');
 

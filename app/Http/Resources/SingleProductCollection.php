@@ -9,6 +9,7 @@ use App\OrderDetail;
 use App\Review;
 use App\Wishlist;
 use App\Attribute;
+use App\Color;
 use App\Element;
 use App\Variation;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -51,6 +52,12 @@ class SingleProductCollection extends ResourceCollection
             'earn_point'=>($product->earn_point!=0)?$product->earn_point:calculateProductClubPoint($product->id),
             'user_related'=> $user_related,
             'choice_options' => $this->convertToChoiceOptions($variation->characteristics),
+            'color'=>($variation && $variation->color_id)?Color::where('id', $variation->color_id)->first():null,
+            'brand' => [
+                'name' => $element != null ? $element->brand->getTranslation('name'):null,
+                'slug' => $element != null ? $element->brand->slug : null,
+                'logo' => $element != null ? api_asset($element->brand->logo) : null,
+            ],
         ];
     }
 
