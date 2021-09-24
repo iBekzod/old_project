@@ -37,7 +37,7 @@ class Characteristic extends Model
 
     public function attribute()
     {
-        return $this->hasOne(Attribute::class);
+        return $this->belongsTo(Attribute::class);
     }
 
     public function delete()

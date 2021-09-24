@@ -9,6 +9,8 @@ use App\OrderDetail;
 use App\Review;
 use App\Wishlist;
 use App\Attribute;
+use App\Element;
+use App\Variation;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,36 +18,39 @@ class SingleProductCollection extends ResourceCollection
 {
     public function toArray($request)
     {
+        // dd($this);
+        $product=$this->first();
+        $variation=Variation::withTrashed()->find($product->variation_id);
+        $element=Element::withTrashed()->find($product->element_id);
         $user_related=[];
         if(Auth::check()){
             $user_id=auth()->id();
-            $belongs_to_user=[['user_id', $this->$user_id], ['product_id', $this->id]];
             $user_related=[
-                'review_count'=>(integer)Review::where($belongs_to_user)->count(),
-                'cart_count'=>Cart::where($belongs_to_user)->count(),
-                'is_wishlist'=> Wishlist::where($belongs_to_user)->exists(),
+                'review_count'=>(integer)Review::where('user_id', $user_id)->where('product_id', $product->id)->count(),
+                'cart_count'=>Cart::where('user_id', $user_id)->where('product_id', $product->id)->count(),
+                'is_wishlist'=> Wishlist::where('user_id', $user_id)->where('product_id', $product->id)->exists(),
             ];
         }
         return [
-            'id' => (integer) $this->id,
-            'name' => $this->name,
-            'slug' => $this->slug,
-            'photos' => $this->convertPhotos(explode(',', $this->element->photos)),
-            'thumbnail_image' => api_asset($this->variation->thumbnail_img),
-            // 'currency_code'=>defaultCurrency(),
-            // 'exchange_rate'=>defaultExchangeRate(),
-            // 'base_price' => (double) homeBasePrice($this->id),
-            // 'base_discounted_price' => (double) homeDiscountedBasePrice($this->id),
-            // 'discount' => (integer) $this->discount,
-            // 'discount_type' => $this->discount_type,
-            'todays_deal' => (integer) $this->todays_deal,
-            'featured' =>(integer) $this->featured,
-            'rating' => (double) $this->rating,
-            'qty' => (integer) $this->qty,
-            'review_count'=>(integer)Review::where('product_id', $this->id)->count(),
-            'earn_point'=>($this->earn_point!=0)?$this->earn_point:calculateProductClubPoint($this->id),
+            'id' =>  $product->id,
+            'name' => $product->name,
+            'slug' => $product->slug,
+            'photos' => $this->convertPhotos(explode(',', $element->photos)),
+            'thumbnail_image' => api_asset($variation->thumbnail_img),
+            'currency_code'=>defaultCurrency(),
+            'exchange_rate'=>defaultExchangeRate(),
+            'base_price' => (double) homeBasePrice($product->id),
+            'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
+            'discount' => (integer) $product->discount,
+            'discount_type' => $product->discount_type,
+            'todays_deal' => (integer) $product->todays_deal,
+            'featured' =>(integer) $product->featured,
+            'rating' => (double) $product->rating,
+            'qty' => (integer) $product->qty,
+            'review_count'=>(integer)Review::where('product_id', $product->id)->count(),
+            'earn_point'=>($product->earn_point!=0)?$product->earn_point:calculateProductClubPoint($product->id),
             'user_related'=> $user_related,
-            'choice_options' => $this->convertToChoiceOptions($this->variation->characteristics),
+            'choice_options' => $this->convertToChoiceOptions($variation->characteristics),
         ];
     }
 
@@ -66,9 +71,18 @@ class SingleProductCollection extends ResourceCollection
                 'characteristic_id'=>$characteristic->id,
                 'characteristic'=>$characteristic->getTranslation('name'),
                 'attribute_id'=>$characteristic->attribute_id,
-                'attribute'=>$characteristic->attribute->getTranslation('name'),
+                'attribute'=>$characteristic->attribute->name,
             ];
         }
         return $data;
+    }
+
+    
+    protected function convertPhotos($data){
+        $result = array();
+        foreach ($data as $key => $item) {
+            array_push($result, api_asset($item));
+        }
+        return $result;
     }
 }

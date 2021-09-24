@@ -9,10 +9,10 @@ class CustomOrderDetailCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->product->collection->map(function($data) {
+            'data' => $this->collection->map(function($data) {
                 return [
                     'id' => (integer) $data->id,
-                    'product'=>new SingleProductCollection($data->product),
+                    'product'=>new SingleProductCollection($data->product->first()),
                     'currency_code'=>defaultCurrency(),
                     'exchange_rate'=>defaultExchangeRate(),
                     'base_price' => (double) homeBasePrice($data->product->id),
