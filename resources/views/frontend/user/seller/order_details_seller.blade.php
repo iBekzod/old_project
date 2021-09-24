@@ -15,6 +15,7 @@
 
 <div class="modal-body gry-bg px-3 pt-0">
     <div class="pt-1">
+        
         <div class="row gutters-5 text-center aiz-steps">
             <div class="col @if($status == 'pending') active @else done @endif">
                 <div class="icon mb-0">

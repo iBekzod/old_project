@@ -44,10 +44,8 @@ class OrderController extends Controller
         $orders = DB::table('orders')
             ->orderBy('id', 'desc')
                 //    ->join('order_details', 'orders.id', '=', 'order_details.order_id')
-            ->where('seller_id', Auth::user()->id)
-            // ->select('orders.id')
-            ->distinct();
-
+            ->where('seller_id', auth()->id());
+        // dd(auth()->id());
         if ($request->payment_status != null) {
             $orders = $orders->where('payment_status', $request->payment_status);
             $payment_status = $request->payment_status;
@@ -62,7 +60,7 @@ class OrderController extends Controller
         }
 
         $orders = $orders->paginate(15);
-
+        // dd($orders);
         foreach ($orders as $key => $value) {
             $order = \App\Order::find($value->id);
             $order->viewed = 1;
@@ -104,6 +102,7 @@ class OrderController extends Controller
         $delivery_boys = User:://where('city', $order_shipping_address->city??'tashkent')
             where('user_type', 'delivery_b')
             ->get();
+            // return "came";
 
         return view('backend.sales.all_orders.show', compact('order', 'delivery_boys'));
     }
