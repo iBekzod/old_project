@@ -155,108 +155,193 @@
             </div>
         </div>
         <hr class="new-section-sm bord-no">
-        <div class="row">
-            <div class="col-lg-12 table-responsive">
-                <table class="table table-bordered aiz-table invoice-summary">
-                    <thead>
-                        <tr class="bg-trans-dark">
-                            <th data-breakpoints="lg" class="min-col">#</th>
-                            <th width="10%">{{translate('Photo')}}</th>
-                            <th class="text-uppercase">{{translate('Description')}}</th>
-                            <th data-breakpoints="lg" class="text-uppercase">{{translate('Delivery Type')}}</th>
-                            <th data-breakpoints="lg" class="min-col text-center text-uppercase">{{translate('Qty')}}</th>
-                            <th data-breakpoints="lg" class="min-col text-center text-uppercase">{{translate('Price')}}</th>
-                            <th data-breakpoints="lg" class="min-col text-right text-uppercase">{{translate('Total')}}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($order->orderDetails as $key => $orderDetail)
-                        <tr>
-                            <td>{{ $key+1 }}</td>
-                            <td>
-                                @if ($orderDetail->product != null)
-                                <a href="{{ route('product', $orderDetail->product->slug) }}" target="_blank"><img height="50" src="{{ uploaded_asset($orderDetail->product->thumbnail_img) }}"></a>
-                                @else
-                                <strong>{{ translate('N/A') }}</strong>
-                                @endif
-                            </td>
-                            <td>
-                                @if ($orderDetail->product != null)
-                                <strong><a href="{{ route('product', $orderDetail->product->slug) }}" target="_blank" class="text-muted">{{ $orderDetail->product->getTranslation('name') }}</a></strong>
-                                <small>{{ $orderDetail->variation }}</small>
-                                @else
-                                <strong>{{ translate('Product Unavailable') }}</strong>
-                                @endif
-                            </td>
-                            <td>
-                                @if ($orderDetail->shipping_type != null && $orderDetail->shipping_type == 'home_delivery')
-                                {{ translate('Home Delivery') }}
-                                @elseif ($orderDetail->shipping_type == 'pickup_point')
 
-                                @if ($orderDetail->pickup_point != null)
-                                {{ $orderDetail->pickup_point->getTranslation('name') }} ({{ translate('Pickup Point') }})
-                                @else
-                                {{ translate('Pickup Point') }}
-                                @endif
-                                @endif
+        <div class="row">
+            <div class="col-lg-12">
+                    <div class="card pb-0">
+                        <table class="table table-bordered m-0 text-center">
+                            {{-- style="border-collapse: collapse; border:1px solid black" --}}
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>{{ translate('Poto')}}</th>
+                                    <th width="30%">{{ translate('Product')}}</th>
+                                    <th>{{ translate('Option')}}</th>
+                                    <th>{{ translate('Shop')}}</th>
+                                    <th>{{ translate('Delivery Type')}}</th>
+                                    <th>{{ translate('QTY')}}</th>
+                                    <th>{{ translate('Price')}}</th>
+                                    <th>{{ translate('Total')}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($order->orderDetails as $key => $orderDetail)
+                                    <tr>
+                                        <td>{{ $key+1 }}</td>
+                                        @if ($orderDetail->product != null)
+                                            <td>
+                                                {{-- {{ $orderDetail->product }} --}}
+                                                <img src="{{ uploaded_asset($orderDetail->product->variation->thumbnail_img) }}" alt="Image" class="size-25px">
+
+                                            </td>
+                                            <td style="size: 5px">
+                                                {{-- <a href="{{ route('product', $orderDetail->product->slug) }}" target="_blank">{{ $orderDetail->product->getTranslation('name') }}</a> --}}
+                                                {{ $orderDetail->product->getTranslation('name') }}
+                                                @else
+                                                    <strong>{{  translate('Product Unavailable') }}</strong>
+                                            </td>
+
+                                        @endif
+
+                                        <td>
+                                            @if (App\Variation::where('user_id',$orderDetail->seller_id)->exists())
+                                            @php
+                                            $variation=App\Variation::where('user_id',$orderDetail->seller_id)->first();
+                                            $color=App\Color::where('id',$variation->color_id)->first();
+                                            $element=App\Element::where('id',$orderDetail->product->element_id)->first();
+                                            $brand=App\Brand::where('id',$element->brand_id)->first();
+
+                                            @endphp
+                                             <b>Brand:</b><span>
+                                                {{ $brand->name }}
+                                           </span> <br>
+                                             <b> {{ translate('Color') }}:</b><span>
+                                                {{ $color->getTranslation('name') }}
+                                            </span><br>
+                                               @if (App\Characteristic::where('id',$variation->characteristics)->exists())
+                                                    @php
+                                                    $characteristics=App\Characteristic::where('id',$variation->characteristics)->first();
+                                                    $attribute=App\Attribute::where('id',$characteristics->attribute_id)->first();
+
+                                                    @endphp
+
+                                                    <b>Size:</b><span>
+                                                        {{ $characteristics->name ?? "" }}
+                                                        {{ $attribute->name }}
+                                                    </span><br>
+
+
+
+                                               @endif
+
+                                            @endif
+
+
+
+                                        </td>
+                                        <td>
+                                            <b>
+                                                @php
+                                                    $shop=App\Shop::where('user_id',$orderDetail->seller_id)->first();
+                                                    echo $shop->name;
+                                                @endphp
+                                            </b>
+                                        </td>
+                                        <td>
+                                            @if ($orderDetail->shipping_type != null && $orderDetail->shipping_type == 'home_delivery')
+                                                {{  translate('Home Delivery') }}
+                                            @elseif ($orderDetail->shipping_type == 'pickup_point')
+                                                @if ($orderDetail->pickup_point != null)
+                                                    {{ $orderDetail->pickup_point->getTranslation('name') }} ({{  translate('Pickip Point') }})
+                                                @endif
+                                            @elseif ($orderDetail->shipping_type == 'tinfis')
+                                             {{  translate('Home Delivery') }}
+                                             @elseif ($orderDetail->shipping_type == 'free')
+                                             {{  translate('Free') }}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <b>
+                                                @if ($orderDetail->product!=null)
+                                                  {{ $orderDetail->product->qty }}
+                                                @endif
+                                             </b>
+
+                                        </td>
+                                        <td>
+                                          @php
+                                              $price=($orderDetail->price)/$orderDetail->product->qty;
+                                              echo $price;
+                                          @endphp
+                                        </td>
+                                        {{-- @if ($orderDetail->product!=null &&  )
+
+                                        @endif --}}
+                                        <td>
+                                            @if ($orderDetail->price!=null)
+                                              {{ $orderDetail->price }}
+                                            @endif
+                                        </td>
+                                        {{-- @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
+                                            <td>
+                                                @if ($order
+
+
+                                                translate('Approved') }}</b>
+                                                @elseif ($orderDetail->product->refundable != 0)
+                                                    <b>{{  translate('N/A') }}</b>
+                                                @else
+                                                    <b>{{  translate('Non-refundable') }}</b>
+                                                @endif
+                                            </td>
+                                        @endif --}}
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix float-right">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <strong class="text-muted">{{translate('Sub Total')}} :</strong>
                             </td>
-                            <td class="text-center">{{ $orderDetail->quantity }}</td>
-                            <td class="text-center">{{ single_price($orderDetail->price/$orderDetail->quantity) }}</td>
-                            <td class="text-center">{{ single_price($orderDetail->price) }}</td>
+                            <td>
+                                {{ single_price($order->orderDetails->sum('price')) }}
+                            </td>
                         </tr>
-                        @endforeach
+                        <tr>
+                            <td>
+                                <strong class="text-muted">{{translate('Tax')}} :</strong>
+                            </td>
+                            <td>
+                                {{ single_price($order->orderDetails->sum('tax')) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong class="text-muted">{{translate('Shipping')}} :</strong>
+                            </td>
+                            <td>
+                                {{ single_price($order->orderDetails->sum('shipping_cost')) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong class="text-muted">{{translate('Coupon')}} :</strong>
+                            </td>
+                            <td>
+                                {{ single_price($order->coupon_discount) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong class="text-muted">{{translate('TOTAL')}} :</strong>
+                            </td>
+                            <td class="text-muted h5">
+                                {{ single_price($order->grand_total) }}
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
+                <div class="text-right no-print">
+                    <a href="{{ route('invoice.download', $order->id) }}" type="button" class="btn btn-icon btn-light"><i class="las la-print"></i></a>
+                </div>
             </div>
-        </div>
-        <div class="clearfix float-right">
-            <table class="table">
-                <tbody>
-                    <tr>
-                        <td>
-                            <strong class="text-muted">{{translate('Sub Total')}} :</strong>
-                        </td>
-                        <td>
-                            {{ single_price($order->orderDetails->sum('price')) }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong class="text-muted">{{translate('Tax')}} :</strong>
-                        </td>
-                        <td>
-                            {{ single_price($order->orderDetails->sum('tax')) }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong class="text-muted">{{translate('Shipping')}} :</strong>
-                        </td>
-                        <td>
-                            {{ single_price($order->orderDetails->sum('shipping_cost')) }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong class="text-muted">{{translate('Coupon')}} :</strong>
-                        </td>
-                        <td>
-                            {{ single_price($order->coupon_discount) }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong class="text-muted">{{translate('TOTAL')}} :</strong>
-                        </td>
-                        <td class="text-muted h5">
-                            {{ single_price($order->grand_total) }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="text-right no-print">
-                <a href="{{ route('invoice.download', $order->id) }}" type="button" class="btn btn-icon btn-light"><i class="las la-print"></i></a>
-            </div>
+
         </div>
 
     </div>
