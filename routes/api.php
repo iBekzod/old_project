@@ -238,8 +238,11 @@ Route::prefix('v1')->group(function () {
 
     //  {{communication}}
     Route::post('post/conversation','Api\ConversationController@postConversations')->middleware('auth:api');
-    Route::get('get/conversation','Api\ConversationController@getConversations')->middleware('auth:api');;
-    Route::get('get/conversation/{id}','Api\ConversationController@show')->middleware('auth:api');;
+    Route::get('get/conversation','Api\ConversationController@getConversations')->middleware('auth:api');
+
+    Route::get('get/conversation/{id}','Api\ConversationController@show')->middleware('auth:api');
+    Route::post('post/conversation/message','Api\ConversationController@message')->middleware('auth:api');
+
 
     Route::post('post/subscriber','Api\SubscriberController@postSubscribers');
     Route::post('post/found_it_cheaper','Api\FoundItCheaperController@postFoundItCheaper');
