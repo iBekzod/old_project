@@ -13,8 +13,6 @@ class CustomOrderDetailCollection extends ResourceCollection
                 return [
                     'id' => (integer) $data->id,
                     'product'=>new SingleProductCollection($data->product),
-
-
                     'currency_code'=>defaultCurrency(),
                     'exchange_rate'=>defaultExchangeRate(),
                     'base_price' => (double) homeBasePrice($this->id),
