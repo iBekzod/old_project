@@ -80,7 +80,7 @@ Route::prefix('v1')->group(function () {
     //    Route::apiResource('banners', 'Api\BannerController')->only('index');
     Route::match(['get', 'post'], '/ajax_search', 'Api\SearchController@ajax_search');
     Route::match(['get', 'post'], '/search-by-category', 'Api\SearchController@searchByHashtags');
-    Route::match(['get', 'post'], '/banners', 'App\Http\Controllers\Api\V2\HomePageController@banners');
+    Route::match(['get', 'post'], '/banners', 'Api\V2\HomePageController@banners');
 
 
     Route::apiResource('banners', 'Api\BannerController')->only('index');
@@ -183,7 +183,7 @@ Route::prefix('v1')->group(function () {
     Route::get('policies/support', 'Api\PolicyController@supportPolicy')->name('policies.support');
     Route::get('policies/return', 'Api\PolicyController@returnPolicy')->name('policies.return');
 
-    Route::match(['get', 'post'], 'user/info/update', 'Api\UserController@updateUser');
+    Route::post('user/info/update', 'Api\UserController@updateUser')->middleware('auth:api');
     Route::get('user/info/{id}', 'Api\UserController@info')->middleware('auth:api');
     // Route::get('user/shipping/address/{id}', 'Api\AddressController@addresses')->middleware('auth:api');
     // Route::post('user/shipping/create', 'Api\AddressController@createShippingAddress')->middleware('auth:api');
@@ -227,7 +227,7 @@ Route::prefix('v1')->group(function () {
     Route::get('get/support-ticket', 'Api\SupportTicketController@index')->middleware('auth:api');
 
     Route::get('show/support-ticket/{code}', 'Api\SupportTicketController@show')->middleware('auth:api');
-    Route::post('post/support-ticket/{code}','Api\SupportTicketController@post_store_code')->middleware('auth:api');
+    Route::get('post/support-ticket-message','Api\SupportTicketController@post_store_code')->middleware('auth:api');
 
 	// Route::post('support_ticket/reply','SupportTicketController@seller_store')->name('support_ticket.seller_store');
 
@@ -237,14 +237,14 @@ Route::prefix('v1')->group(function () {
     Route::get('club-point-details/{club_point_id}', 'Api\ClubPointController@club_point_detail')->middleware('auth:api');
 
     //  {{communication}}
-    Route::post('post/conversation','Api\ConversationController@postConversations');
+    Route::post('post/conversation','Api\ConversationController@postConversations')->middleware('auth:api');
     Route::get('get/conversation','Api\ConversationController@getConversations')->middleware('auth:api');;
     Route::get('get/conversation/{id}','Api\ConversationController@show')->middleware('auth:api');;
 
     Route::post('post/subscriber','Api\SubscriberController@postSubscribers');
     Route::post('post/found_it_cheaper','Api\FoundItCheaperController@postFoundItCheaper');
     // Route::post('post/report_description','Api\ReportDescriptionController@postReportDescription');
-    Route::post('post/support_service','Api\SupportServiceController@postSupportService');
+    Route::post('post/support_service','Api\SupportServiceController@postSupportService')->middleware('auth:api');
 
     Route::post('order/store', 'Api\OrderController@processOrder')->middleware('auth:api');
 

@@ -60,21 +60,19 @@ class SupportTicketController extends Controller
 
     public function post_store_code(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'code' => 'required',
             'details' => 'required',
-            'files' => 'required',
+            'files' => 'nullable',
         ]);
         if($request->has('code') && $request->code!=null){
             $code = $request->code;
         }
-        $ticket = Ticket::firstOrNew(['code'=>$code, 'user_id'=>auth()->id()]);
-        $ticket_replies = TicketReply::where('ticket_id',$ticket->id)->first();
-
-        // $ticket_replies->reply = $request->details;
-        // $ticket_replies->user_id=auth()->id();
-        // $ticket->files = $request->attachments;
-        if($ticket_replies->save()){
+        $ticket = Ticket::where(['code'=>$code, 'user_id'=>auth()->id()])->first();
+        $ticket_reply = TicketReply::firstOrNew(['ticket_id'=>$ticket->id, 'user_id'=>auth()->id(), 'reply'=>$request->details]);
+        $ticket->files = $request->files;
+        if($ticket_reply->save()){
             // $this->send_support_mail_to_admin($ticket);
             return response()->json([
                 'code'=>$code,

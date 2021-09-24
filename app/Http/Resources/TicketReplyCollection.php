@@ -4,21 +4,21 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class TicketCollection extends ResourceCollection
+class TicketReplyCollection extends ResourceCollection
 {
     public function toArray($request)
     {
         return [
             'data' => $this->collection->map(function($data) {
                 return [
-                    'code'=>$data->code,
-                    'ticket_replies'=>new TicketReplyCollection($data->ticketreplies),
-                    'subject' => $data->subject,
-                    'details' => $data->details,
+                    'id'=>$data->id,
+                    'ticket_id'=> $data->ticket_id,
+                    'user' => [
+                        'type'=>$data->user->user_type,
+                        'name'=>$data->user->full_name??$data->user->name
+                    ],
+                    'reply' => $data->reply,
                     'files' => $data->files,
-                    'status' => $data->status,
-                    'viewed' => $data->viewed,
-                    'client_viewed' => $data->client_viewed,
                     'created_at'=>$data->created_at,
                 ];
             })
