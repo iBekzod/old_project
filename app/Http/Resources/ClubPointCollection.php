@@ -12,9 +12,9 @@ class ClubPointCollection extends ResourceCollection
             'data' => $this->collection->map(function($data) {
                 return [
                     'id'=>$data->id,
-                    'points' => $data->points,
-                    'convert_status' => $data->convert_status,
-                    'created_at' => $data->created_at,
+                    'points' => $data->points, // ball soma
+                    'convert_status' => $data->convert_status, 
+                    'created_at' => $data->created_at, // data
                     'club_point_details'=>$data->clubPointDetails
                 ];
             })
