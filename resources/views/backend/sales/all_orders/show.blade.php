@@ -7,17 +7,58 @@
         <h1 class="h2 fs-16 mb-0">{{ translate('Order Details') }}</h1>
     </div>
     <div class="card-body">
+
+        @php
+        $delivery_status = $order->delivery_status;
+        $payment_status = $order->payment_status;
+        @endphp
+       @php
+       $status = $order->delivery_status;
+       $payment_status = $order->payment_status;
+       $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
+       @endphp
+
+
+        <div class="row gutters-5 text-center aiz-steps">
+            <div class="col @if($status == 'pending') active @else done @endif">
+                <div class="icon mb-0">
+                    <i class="las la-file-invoice"></i>
+                </div>
+                <div class="title fs-12">{{ translate('Order placed')}}</div>
+            </div>
+            <div class="col @if($status == 'confirmed') active @elseif($status == 'on_delivery' || $status == 'delivered') done @endif">
+                <div class="icon  mb-0">
+                    <i class="las la-newspaper"></i>
+                </div>
+              <div class="title fs-12">{{ translate('Confirmed')}}</div>
+            </div>
+            <div class="col @if($status == 'on_delivery') active @elseif($status == 'delivered') done @endif">
+                <div class="icon mb-0">
+                    <i class="las la-truck"></i>
+                </div>
+                <div class="title fs-12">{{ translate('On delivery')}}</div>
+            </div>
+            <div class="col @if($status == 'delivered') done @endif">
+                <div class="icon mb-0">
+                    <i class="las la-clipboard-check"></i>
+                </div>
+                <div class="title fs-12">{{ translate('Delivered')}}</div>
+            </div>
+        </div>
         <div class="row gutters-5">
             <div class="col text-center text-md-left">
             </div>
-            @php
-            $delivery_status = $order->delivery_status;
-            $payment_status = $order->payment_status;
-            @endphp
 
+        {{-- @php
+        $status = $order->orderDetails->where('seller_id', Auth::user()->id)->first()->delivery_status;
+        $payment_status = $order->orderDetails->where('seller_id', Auth::user()->id)->first()->payment_status;
+        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
+        @endphp --}}
             <!--Assign Delivery Boy-->
-            {{-- @if (\App\Addon::where('unique_identifier', 'delivery_boy')->first() != null &&
-                \App\Addon::where('unique_identifier', 'delivery_boy')->first()->activated) --}}
+
+            @if (\App\Addon::where('unique_identifier', 'delivery_boy')->first() != null &&
+                \App\Addon::where('unique_identifier', 'delivery_boy')->first()->activated)
+
                 <div class="col-md-3 ml-auto">
                     <label for="assign_deliver_boy">{{translate('Assign Deliver Boy')}}</label>
                     @if($delivery_status == 'pending' || $delivery_status == 'picked_up')
@@ -33,7 +74,7 @@
                         <input type="text" class="form-control" value="{{ optional($order->delivery_boy)->name }}" disabled>
                     @endif
                 </div>
-            {{-- @endif --}}
+            @endif
 
             <div class="col-md-3 ml-auto">
                 <label for=update_payment_status"">{{translate('Payment Status')}}</label>

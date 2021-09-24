@@ -15,7 +15,6 @@
                       <option value="unpaid" @isset($payment_status) @if($payment_status == 'unpaid') selected @endif @endisset>{{ translate('Un-Paid')}}</option>
                   </select>
               </div>
-
               <div class="col-md-3 ml-auto">
                 <select class="form-control aiz-selectpicker" data-placeholder="{{ translate('Filter by Payment Status')}}" name="delivery_status" onchange="sort_orders()">
                     <option value="">{{ translate('Filter by Deliver Status')}}</option>
@@ -76,7 +75,7 @@
                                     </td>
                                     <td>
                                         @php
-                                            $status = $order->orderDetails->first()->delivery_status;
+                                            $status = $order->orderDetails->where('seller_id', Auth::user()->id)->first()->delivery_status??'';
                                         @endphp
                                         {{ translate(ucfirst(str_replace('_', ' ', $status))) }}
                                     </td>
