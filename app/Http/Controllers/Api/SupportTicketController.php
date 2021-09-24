@@ -58,14 +58,15 @@ class SupportTicketController extends Controller
         return new TicketCollection($tickets);
     }
 
-    public function post_store_code(Request $request)
+    public function send_ticket_reply(Request $request)
     {
         // dd($request->all());
         $request->validate([
             'code' => 'required',
             'details' => 'required',
-            'files' => 'nullable',
+            'files' => 'file|nullable',
         ]);
+        $code = '';
         if($request->has('code') && $request->code!=null){
             $code = $request->code;
         }
