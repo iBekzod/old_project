@@ -64,7 +64,7 @@ class ConversationController extends Controller
             'conversation_id'=>'required',
             'message' => 'required',
          ]);
-        $conversation=Conversation::where(['sender_id'=>auth()->id(),'id'=>$request->conversation_id])->first();
+        $conversation=Conversation::where(['id'=>$request->conversation_id])->first();
         $messages= Message::firstOrNew(['conversation_id'=>$conversation->id, 'user_id'=>auth()->id(), 'message'=>$request->message]);
 
           if($messages->save()){
