@@ -23,7 +23,7 @@ class SupportTicketController extends Controller
         // if($request->has('code') && $request->code!=null){
         //     $code = $request->code;
         // }else{
-            $code = max(100000, (Ticket::latest()->first() != null ? Ticket::latest()->first()->code + 1 : 0)).date('s');
+        $code = max(100000, (Ticket::latest()->first() != null ? Ticket::latest()->first()->code + 1 : 0)).date('s');
         // }
         $ticket = new Ticket;
         $ticket->code=$code;
@@ -32,7 +32,7 @@ class SupportTicketController extends Controller
         $ticket->details = $request->details;
         $ticket->files = $request->attachments;
         if($ticket->save()){
-            $this->send_support_mail_to_admin($ticket);
+            // $this->send_support_mail_to_admin($ticket);
             return response()->json([
                 'code'=>$code,
                 'status'=>true,
