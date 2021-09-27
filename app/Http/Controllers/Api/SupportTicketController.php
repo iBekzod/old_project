@@ -20,11 +20,11 @@ class SupportTicketController extends Controller
      */
     public function post_store(Request $request)
     {
-        if($request->has('code') && $request->code!=null){
-            $code = $request->code;
-        }else{
+        // if($request->has('code') && $request->code!=null){
+        //     $code = $request->code;
+        // }else{
             $code = max(100000, (Ticket::latest()->first() != null ? Ticket::latest()->first()->code + 1 : 0)).date('s');
-        }
+        // }
         $ticket = Ticket::firstOrNew(['code'=>$code, 'user_id'=>auth()->id()]);
         $ticket->subject = $request->subject;
         $ticket->details = $request->details;
@@ -60,7 +60,6 @@ class SupportTicketController extends Controller
 
     public function send_ticket_reply(Request $request)
     {
-        // dd($request->all());
         $request->validate([
             'code' => 'required',
             'details' => 'required',
@@ -71,10 +70,13 @@ class SupportTicketController extends Controller
             $code = $request->code;
         }
         $ticket = Ticket::where(['code'=>$code, 'user_id'=>auth()->id()])->first();
-        $ticket_reply = TicketReply::firstOrNew(['ticket_id'=>$ticket->id, 'user_id'=>auth()->id(), 'reply'=>$request->details]);
+        $ticket_reply = new TicketReply;
+        $ticket->ticket_id=$ticket->id;
+        $ticket->user_id=auth()->id();
+        $ticket->reply=$request->details;
         $ticket->files = $request->files;
         if($ticket_reply->save()){
-            // $this->send_support_mail_to_admin($ticket);
+            $this->send_support_mail_to_admin($ticket);
             return response()->json([
                 'code'=>$code,
                 'status'=>true,
