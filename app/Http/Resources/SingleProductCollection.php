@@ -19,7 +19,6 @@ class SingleProductCollection extends ResourceCollection
 {
     public function toArray($request)
     {
-        // dd($this);
         $product=$this->first();
         $variation=Variation::withTrashed()->find($product->variation_id);
         $element=Element::withTrashed()->find($product->element_id);
@@ -27,37 +26,37 @@ class SingleProductCollection extends ResourceCollection
         if(Auth::check()){
             $user_id=auth()->id();
             $user_related=[
-                'review_count'=>(integer)Review::where('user_id', $user_id)->where('product_id', $product->id)->count(),
-                'cart_count'=>Cart::where('user_id', $user_id)->where('product_id', $product->id)->count(),
+                // 'review_count'=>(integer)Review::where('user_id', $user_id)->where('product_id', $product->id)->count(),
+                // 'cart_count'=>Cart::where('user_id', $user_id)->where('product_id', $product->id)->count(),
                 'is_wishlist'=> Wishlist::where('user_id', $user_id)->where('product_id', $product->id)->exists(),
             ];
         }
         return [
             'id' =>  $product->id,
-            'name' => $product->name,
-            'slug' => $product->slug,
-            'photos' => $this->convertPhotos(explode(',', $element->photos)),
+            'name' => $product->name, // KERE
+            'slug' => $product->slug,  // KERE
+            'photos' => $this->convertPhotos(explode(',', $element->photos)),  // KERE
             'thumbnail_image' => api_asset($variation->thumbnail_img),
-            'currency_code'=>defaultCurrency(),
-            'exchange_rate'=>defaultExchangeRate(),
-            'base_price' => (double) homeBasePrice($product->id),
-            'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
-            'discount' => (integer) $product->discount,
-            'discount_type' => $product->discount_type,
-            'todays_deal' => (integer) $product->todays_deal,
-            'featured' =>(integer) $product->featured,
-            'rating' => (double) $product->rating,
-            'qty' => (integer) $product->qty,
-            'review_count'=>(integer)Review::where('product_id', $product->id)->count(),
-            'earn_point'=>($product->earn_point!=0)?$product->earn_point:calculateProductClubPoint($product->id),
+            // 'currency_code'=>defaultCurrency(),
+            // 'exchange_rate'=>defaultExchangeRate(),
+            // 'base_price' => (double) homeBasePrice($product->id),
+            // 'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
+            // 'discount' => (integer) $product->discount,
+            // 'discount_type' => $product->discount_type,
+            // 'todays_deal' => (integer) $product->todays_deal,  // ILYOS AKA BILADI
+            // 'featured' =>(integer) $product->featured,  // ILYOS AKA BILADI
+            'rating' => (double) $product->rating, // YULDUZCHA
+            // 'qty' => (integer) $product->qty,
+            'review_count'=>(integer)Review::where('product_id', $product->id)->count(), // OTZIF
+            // 'earn_point'=>($product->earn_point!=0)?$product->earn_point:calculateProductClubPoint($product->id),
             'user_related'=> $user_related,
-            'choice_options' => $this->convertToChoiceOptions($variation->characteristics),
-            'color'=>($variation && $variation->color_id)?Color::where('id', $variation->color_id)->first():null,
-            'brand' => [
-                'name' => $element != null ? $element->brand->getTranslation('name'):null,
-                'slug' => $element != null ? $element->brand->slug : null,
-                'logo' => $element != null ? api_asset($element->brand->logo) : null,
-            ],
+            // 'choice_options' => $this->convertToChoiceOptions($variation->characteristics),
+            // 'color'=>($variation && $variation->color_id)?new ColorCollection(Color::where('id', $variation->color_id)->get()):null,
+            // 'brand' => [
+            //     'name' => $element != null ? $element->brand->getTranslation('name'):null,
+            //     'slug' => $element != null ? $element->brand->slug : null,
+            //     'logo' => $element != null ? api_asset($element->brand->logo) : null,
+            // ],
         ];
     }
 
@@ -84,7 +83,7 @@ class SingleProductCollection extends ResourceCollection
         return $data;
     }
 
-    
+
     protected function convertPhotos($data){
         $result = array();
         foreach ($data as $key => $item) {
