@@ -378,7 +378,7 @@ Route::prefix('v2')->group(function () {
     Route::get('products/todays-deal', 'Api\V2\ProductController@todaysDeal');
     Route::get('products/featured', 'Api\V2\ProductController@featured');
     Route::get('products/best-seller', 'Api\V2\ProductController@bestSeller');
-    Route::get('products/related/{id}', 'Api\V2\ProductController@related')->name('products.related');
+    Route::get('products/related/{id}', 'Api\ProductController@related')->name('products.related');
 
     Route::get('products/featured-from-seller/{id}', 'Api\V2\ProductController@newFromSeller')->name('products.featuredromSeller');
     Route::get('products/search', 'Api\V2\ProductController@search');
