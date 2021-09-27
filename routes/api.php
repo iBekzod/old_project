@@ -156,7 +156,7 @@ Route::prefix('v1')->group(function () {
     Route::get('cart-summary/{user_id}/{owner_id}', 'Api\CartController@summary')->middleware('auth:api');
     Route::post('carts/process', 'Api\CartController@process')->middleware('auth:api');
     Route::post('carts/{user_id}', 'Api\CartController@getList')->middleware('auth:api');
-
+    Route::post('carts/process-shipping-cost', 'Api\CartController@calculate_current_cart_shipping_cost')->middleware('auth:api');
 
     // {{ product-reviews }}
     Route::get('reviews/user', 'Api\ReviewController@userReview')->middleware('auth:api');
@@ -388,6 +388,7 @@ Route::prefix('v2')->group(function () {
 
     Route::get('cart-summary/{user_id}/{owner_id}', 'Api\V2\CartController@summary')->middleware('auth:api');
     Route::post('carts/process', 'Api\V2\CartController@process')->middleware('auth:api');
+
     Route::post('carts/add', 'Api\V2\CartController@add')->middleware('auth:api');
     Route::post('carts/change-quantity', 'Api\V2\CartController@changeQuantity')->middleware('auth:api');
     Route::apiResource('carts', 'Api\V2\CartController')->only('destroy')->middleware('auth:api');

@@ -14,17 +14,7 @@ class RefundRequestCollection extends ResourceCollection
             'data' => $this->collection->map(function($data) {
                 return [
                     'id'=>$data->id,
-                    'product'=>[
-                        'list_of_images'=>$this->convertPhotos(explode(',', $data->orderDetail->product->element->photos)),
-                        'price'=>(double)$data->refund_amount,
-                        'discount'=>(int)((double)($data->order->coupon_discount/$data->refund_amount)*100),
-                        'discount_price'=>(double)$data->order->coupon_discount,
-                        'name'=>$data->orderDetail->product->name,
-                        'ranking'=>$data->orderDetail->product->rating,
-                        'list_of_review'=>new ReviewCollection(Review::where('product_id', $data->orderDetail->product->id)->where('user_id', $data->user_id)->get()) ,
-                        'is_wishlist'=> Wishlist::where('product_id',$data->orderDetail->product->id)->where('user_id', $data->user_id)->exists(),
-                        'product_id'=>$data->orderDetail->product->id,
-                    ],
+                    'product'=>new SingleProductCollection($data->orderDetail->product),
                     'user_id' => $data->user_id,
                     'order' => $data->order,
                     'order_detail' => $data->orderDetail,
