@@ -13,11 +13,12 @@ class ClubPointCollection extends ResourceCollection
                 return [
                     'id'=>$data->id,
                     'points' => $data->points, // ball soma
-                    'convert_status' => $data->convert_status, 
+                    'convert_status' => $data->convert_status,
                     'created_at' => $data->created_at, // data
                     'club_point_details'=>$data->clubPointDetails
                 ];
-            })
+            }),
+            'total'=>$this->collection->sum('points')
         ];
     }
 
