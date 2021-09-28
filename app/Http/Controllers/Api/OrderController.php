@@ -327,7 +327,7 @@ class OrderController extends Controller
         $addresses = $user->addresses;
 
         return response()->json([
-            'addresses' => $addresses
+            'address' => $addresses
         ], 200);
     }
 

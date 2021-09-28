@@ -18,7 +18,7 @@
        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
        @endphp
 
-
+ 
         <div class="row gutters-5 text-center aiz-steps">
             <div class="col @if($status == 'pending') active @else done @endif">
                 <div class="icon mb-0">
