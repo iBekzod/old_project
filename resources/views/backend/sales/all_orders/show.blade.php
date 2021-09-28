@@ -178,20 +178,19 @@
                                 @foreach ($order->orderDetails as $key => $orderDetail)
                                     <tr>
                                         <td>{{ $key+1 }}</td>
-                                        @if ($orderDetail->product != null)
-                                            <td>
+                                        {{-- @if ($orderDetail->product != null) --}}
+                                            {{-- <td> --}}
                                                 {{-- {{ $orderDetail->product }} --}}
-                                                <img src="{{ uploaded_asset($orderDetail->product->variation->thumbnail_img) }}" alt="Image" class="size-25px">
-
-                                            </td>
+                                                {{-- <img src="{{ uploaded_asset($orderDetail->product->variation->thumbnail_img ?? static_asset('assets/img/placeholder.jpg')) }}" alt="Image" class="size-25px"> --}}
+                                                <td><img src="{{ uploaded_asset($orderDetail->product->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}" alt="{{translate('Product Image')}}" class="h-25px"></td>
+                                            {{-- </td> --}}
                                             <td style="size: 5px">
                                                 {{-- <a href="{{ route('product', $orderDetail->product->slug) }}" target="_blank">{{ $orderDetail->product->getTranslation('name') }}</a> --}}
-                                                {{ $orderDetail->product->getTranslation('name') }}
-                                                @else
-                                                    <strong>{{  translate('Product Unavailable') }}</strong>
+                                                {{ $orderDetail->product->getTranslation('name') ?? translate('Product Unavailable')}}
+                                                {{-- @else --}}
                                             </td>
 
-                                        @endif
+                                        {{-- @endif --}}
 
                                         <td>
                                             @if (App\Variation::where('user_id',$orderDetail->seller_id)->exists())

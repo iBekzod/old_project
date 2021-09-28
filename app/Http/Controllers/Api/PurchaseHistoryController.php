@@ -19,13 +19,13 @@ class PurchaseHistoryController extends Controller
     public function boughtProducts(){
         $order_ids=Order::where('user_id', auth()->id())->pluck('id');
         $order_details=OrderDetail::whereIn('order_id', $order_ids)
-        ->where('delivery_status', 'delivered')
+        // ->where('delivery_status', 'delivered')
         ->where('payment_status', 'paid')->get();
         return new CustomOrderDetailCollection($order_details);
     }
 
     public function refundedProducts(){
-        $order_detail_ids=RefundRequest::where('user_id', auth()->id())->pluck('order_detail_id');
+        $order_detail_ids=RefundRequest::where('user_id', auth()->id())->where('refund_status', 1)->pluck('order_detail_id');
         $order_details=OrderDetail::whereIn('id', $order_detail_ids)->get();
         return new CustomOrderDetailCollection($order_details);
     }
