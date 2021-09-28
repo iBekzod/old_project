@@ -31,7 +31,7 @@ class RefundRequestController extends Controller
             'reason' => 'required',
          ]);
         $order_detail = OrderDetail::where('id', $request->id)->first();
-        if(!RefundRequest::where('user_id', auth()->id())->where('order_detail_id',$order_detail->id)->where('order_id',$order_detail->order_id)->exists()){
+        if($order_detail && !RefundRequest::where('user_id', auth()->id())->where('order_detail_id', $order_detail->id)->where('order_id',$order_detail->order_id)->exists()){
             if($order_detail->product->refundable && $order_detail->payment_status=='paid'){
                 $refund = new RefundRequest;
                 $refund->user_id = auth()->id();
