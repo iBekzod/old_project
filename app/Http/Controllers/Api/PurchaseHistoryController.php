@@ -12,16 +12,14 @@ use App\RefundRequest;
 class PurchaseHistoryController extends Controller
 {
     public function index()
-    {        
+    {
         return new PurchaseHistoryCollection(Order::where('user_id', auth()->id())->latest()->get());
     }
 
     public function boughtProducts(){
-        $order_details=OrderDetail::
-        whereHas('order', function ($relation) {
-            $relation->where('user_id', auth()->id());
-        })->
-        where('delivery_status', 'delivered')
+        $order_ids=Order::where('user_id', auth()->id())->pluck('id');
+        $order_details=OrderDetail::whereIn('order_id', $order_ids)
+        ->where('delivery_status', 'delivered')
         ->where('payment_status', 'paid')->get();
         return new CustomOrderDetailCollection($order_details);
     }
