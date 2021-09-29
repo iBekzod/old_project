@@ -11,17 +11,17 @@ class RefundRequestCollection extends ResourceCollection
         return [
             'data' => $this->collection->map(function($data) {
                 return [
-                    // 'id'=>$data->id,
-                    // 'product'=>new SingleProductCollection($data->orderDetail->product),
-                    // 'user_id' => $data->user_id,
-                    // // 'order' => $data->order,
-                    // // 'order_detail' => $data->orderDetail,
-                    // 'seller_id' => $data->seller_id,
-                    // 'admin_approval' => $data->admin_approval,
-                    // 'seller_approval' => $data->seller_approval,
-                    // 'refund_amount' => $data->refund_amount,
-                    // 'reason' => $data->reason,
-                    // 'reason_id' => $data->my_reason->getTranslation('name'),
+                    'id'=>$data->id,
+                    'product'=>new SingleProductCollection($data->orderDetail->product),
+                    'user_id' => $data->user_id,
+                    // 'order' => $data->order,
+                    // 'order_detail' => $data->orderDetail,
+                    'seller_id' => $data->seller_id,
+                    'admin_approval' => $data->admin_approval,
+                    'seller_approval' => $data->seller_approval,
+                    'refund_amount' => $data->refund_amount,
+                    'reason' => $data->reason,
+                    'reason_id' => $data->my_reason->getTranslation('name'),
                     'created_at'=>$data->created_at,
                 ];
             })
