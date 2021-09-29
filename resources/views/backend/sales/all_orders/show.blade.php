@@ -18,7 +18,7 @@
        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
        @endphp
 
- 
+
         <div class="row gutters-5 text-center aiz-steps">
             <div class="col @if($status == 'pending') active @else done @endif">
                 <div class="icon mb-0">
@@ -182,7 +182,7 @@
                                             {{-- <td> --}}
                                                 {{-- {{ $orderDetail->product }} --}}
                                                 {{-- <img src="{{ uploaded_asset($orderDetail->product->variation->thumbnail_img ?? static_asset('assets/img/placeholder.jpg')) }}" alt="Image" class="size-25px"> --}}
-                                                <td><img src="{{ uploaded_asset($orderDetail->product->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}" alt="{{translate('Product Image')}}" class="h-25px"></td>
+                                                <td><img src="{{ uploaded_asset($orderDetail->product->variation-> thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}" alt="{{translate('Product Image')}}" class="h-25px"></td>
                                             {{-- </td> --}}
                                             <td style="size: 5px">
                                                 {{-- <a href="{{ route('product', $orderDetail->product->slug) }}" target="_blank">{{ $orderDetail->product->getTranslation('name') }}</a> --}}
@@ -236,10 +236,7 @@
                                                 @endphp
                                             </b>
                                         </td>
-                                        <td>
-                                           @php
-                                               echo $orderDetail->shipping_type;
-                                           @endphp
+                                        <td
                                             @if ($orderDetail->shipping_type != null && $orderDetail->shipping_type == 'home_delivery')
                                                 {{  translate('Home Delivery') }}
                                             @elseif ($orderDetail->shipping_type == 'pickup_point')

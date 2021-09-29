@@ -103,7 +103,7 @@ class OrderController extends Controller
             where('user_type', 'delivery_b')
             ->get();
             // return "came";
-
+    //  dd($order->shipping_address);
 
         return view('backend.sales.all_orders.show', compact('order', 'delivery_boys'));
     }
