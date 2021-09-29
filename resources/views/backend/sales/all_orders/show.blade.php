@@ -18,7 +18,7 @@
        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
        @endphp
 
- 
+
         <div class="row gutters-5 text-center aiz-steps">
             <div class="col @if($status == 'pending') active @else done @endif">
                 <div class="icon mb-0">
@@ -238,6 +238,9 @@
                                             </b>
                                         </td>
                                         <td>
+                                           @php
+                                               echo $orderDetail->shipping_type;
+                                           @endphp
                                             @if ($orderDetail->shipping_type != null && $orderDetail->shipping_type == 'home_delivery')
                                                 {{  translate('Home Delivery') }}
                                             @elseif ($orderDetail->shipping_type == 'pickup_point')
