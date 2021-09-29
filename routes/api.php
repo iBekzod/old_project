@@ -118,6 +118,8 @@ Route::prefix('v1')->group(function () {
     // Route::get('test/variation','Api\VariationController@index');
 
     Route::get('purchase-history', 'Api\PurchaseHistoryController@index')->middleware('auth:api');
+    Route::get('purchase-history-bought', 'Api\PurchaseHistoryController@boughtProducts')->middleware('auth:api');
+    Route::get('purchase-history-refunded', 'Api\PurchaseHistoryController@refundedProducts')->middleware('auth:api');
     Route::get('purchase-history-details/{id}', 'Api\PurchaseHistoryDetailController@index')->name('purchaseHistory.details')->middleware('auth:api');
     Route::get('products/detail/{id}', 'Api\ProductController@show');
 
@@ -154,7 +156,7 @@ Route::prefix('v1')->group(function () {
     Route::get('cart-summary/{user_id}/{owner_id}', 'Api\CartController@summary')->middleware('auth:api');
     Route::post('carts/process', 'Api\CartController@process')->middleware('auth:api');
     Route::post('carts/{user_id}', 'Api\CartController@getList')->middleware('auth:api');
-
+    Route::post('carts/process-shipping-cost', 'Api\CartController@calculate_current_cart_shipping_cost')->middleware('auth:api');
 
     // {{ product-reviews }}
     Route::get('reviews/user', 'Api\ReviewController@userReview')->middleware('auth:api');
@@ -238,8 +240,11 @@ Route::prefix('v1')->group(function () {
 
     //  {{communication}}
     Route::post('post/conversation','Api\ConversationController@postConversations')->middleware('auth:api');
-    Route::get('get/conversation','Api\ConversationController@getConversations')->middleware('auth:api');;
-    Route::get('get/conversation/{id}','Api\ConversationController@show')->middleware('auth:api');;
+    Route::get('get/conversation','Api\ConversationController@getConversations')->middleware('auth:api');
+
+    Route::get('get/conversation/{id}','Api\ConversationController@show')->middleware('auth:api');
+    Route::post('post/conversation/message','Api\ConversationController@message')->middleware('auth:api');
+
 
     Route::post('post/subscriber','Api\SubscriberController@postSubscribers');
     Route::post('post/found_it_cheaper','Api\FoundItCheaperController@postFoundItCheaper');
@@ -373,7 +378,7 @@ Route::prefix('v2')->group(function () {
     Route::get('products/todays-deal', 'Api\V2\ProductController@todaysDeal');
     Route::get('products/featured', 'Api\V2\ProductController@featured');
     Route::get('products/best-seller', 'Api\V2\ProductController@bestSeller');
-    Route::get('products/related/{id}', 'Api\V2\ProductController@related')->name('products.related');
+    Route::get('products/related/{id}', 'Api\ProductController@related')->name('products.related');
 
     Route::get('products/featured-from-seller/{id}', 'Api\V2\ProductController@newFromSeller')->name('products.featuredromSeller');
     Route::get('products/search', 'Api\V2\ProductController@search');
@@ -383,6 +388,7 @@ Route::prefix('v2')->group(function () {
 
     Route::get('cart-summary/{user_id}/{owner_id}', 'Api\V2\CartController@summary')->middleware('auth:api');
     Route::post('carts/process', 'Api\V2\CartController@process')->middleware('auth:api');
+
     Route::post('carts/add', 'Api\V2\CartController@add')->middleware('auth:api');
     Route::post('carts/change-quantity', 'Api\V2\CartController@changeQuantity')->middleware('auth:api');
     Route::apiResource('carts', 'Api\V2\CartController')->only('destroy')->middleware('auth:api');

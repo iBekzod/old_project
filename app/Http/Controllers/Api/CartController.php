@@ -310,4 +310,39 @@ class CartController extends Controller
 
     }
 
+
+    public function calculate_current_cart_shipping_cost(Request $request){
+        $cart_ids = explode(",", $request->cart_ids);
+        $cart_quantities = explode(",", $request->cart_quantities);
+        $address_id=$request->address_id??getUserAddress()->id;
+
+        $product_ids=Cart::whereIn('id', $cart_ids)->pluck('product_id');
+        $seller_products=Product::whereIn('id', $product_ids)->get()->groupBy('user_id');
+        dd('$seller_products');
+        // if (!empty($cart_ids)) {
+        //     $i = 0;
+        //     foreach ($cart_ids as $cart_id) {
+        //         $cart_item = Cart::where('id', $cart_id)->first();
+        //         $product = Product::where('id', $cart_item->product_id)->first();
+        //         $address_ids=[];
+        //         // if ($product->qty < $cart_quantities[$i]) {
+        //         //     return response()->json(['result' => false, 'message' => "Minimum {$product->qty} item(s) should be ordered for {$product->name}"], 200);
+        //         // }else{
+        //         //     $cart_item->update([
+        //         //         'quantity' => $cart_quantities[$i]
+        //         //     ]);
+        //         // }
+
+        //         $i++;
+        //     }
+
+        //     return response()->json(['result' => true, 'message' => 'Cart updated'], 200);
+
+        // } else {
+        //     return response()->json(['result' => false, 'message' => 'Cart is empty'], 200);
+        // }
+
+        return response()->json(['result' => true, 'message' => 'Cart updated'], 200);
+    }
+
 }

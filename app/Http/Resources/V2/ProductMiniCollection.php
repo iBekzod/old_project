@@ -14,7 +14,7 @@ class ProductMiniCollection extends ResourceCollection
                     'id' => $data->id,
                     'name' => $data->name,
                     'thumbnail_image' => api_asset($data->thumbnail_img),
-                    'base_price' => format_price(homeBasePrice($data)) ,
+                    'base_price' => format_price(homeBasePrice($data->id)) ,
                     'rating' => (double) $data->rating,
                     'sales' => (integer) $data->num_of_sale,
                     'links' => [

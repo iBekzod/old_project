@@ -36,7 +36,7 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        // dd(Auth::user()->id);
+        // dd(auth()->id());
     //    dd($request->all());
         $payment_status = null;
         $delivery_status = null;
@@ -103,6 +103,7 @@ class OrderController extends Controller
             where('user_type', 'delivery_b')
             ->get();
             // return "came";
+
 
         return view('backend.sales.all_orders.show', compact('order', 'delivery_boys'));
     }

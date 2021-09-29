@@ -69,8 +69,9 @@ class ProductController extends Controller
     {
         $category_ids = CategoryUtility::children_ids($id);
         $category_ids[] = $id;
-
-        return new ProductMiniCollection(Product::whereIn('category_id', $category_ids)->latest()->paginate(10));
+        $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+        return new ProductMiniCollection(getPublishedProducts('element', [], [], $element_conditions)->latest()->paginate(10));
+        // return new ProductMiniCollection(Product::whereIn('category_id', $category_ids)->latest()->paginate(10));
     }
 
     public function brand($id, Request $request)
@@ -106,7 +107,9 @@ class ProductController extends Controller
     public function related($id)
     {
         $product = Product::find($id);
-        return new ProductMiniCollection(Product::where('category_id', $product->category_id)->where('id', '!=', $id)->limit(10)->get());
+        $element_conditions['where'][] = ['category_id' => $product->category_id];
+        return new ProductMiniCollection(getPublishedProducts('element', [], [], $element_conditions)->where('id', '!=', $id)->limit(10)->get());
+        // return new ProductMiniCollection(Product::where('category_id', $product->category_id)->where('id', '!=', $id)->limit(10)->get());
     }
 
     public function topFromSeller($id)

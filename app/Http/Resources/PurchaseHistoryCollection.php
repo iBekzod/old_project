@@ -21,6 +21,7 @@ class PurchaseHistoryCollection extends ResourceCollection
                         'avatar' => $data->user->avatar,
                         'avatar_original' => api_asset($data->user->avatar_original)
                     ],
+                    'order_details'=>new CustomOrderDetailCollection($data->orderDetails),
                     // 'product'=>[
                     //     'list_of_images'=>($data->orderDetail)?$this->convertPhotos(explode(',', $data->orderDetail->product->element->photos)):'',
                     //     'price'=>(double)$data->orderDetail->price,
