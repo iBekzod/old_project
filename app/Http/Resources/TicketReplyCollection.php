@@ -19,7 +19,7 @@ class TicketReplyCollection extends ResourceCollection
                     ],
                     'reply' => $data->reply,
                     'files' => $data->files,
-                    'created_at'=>$data->created_at,
+                    'created_at'=>formatDate($data->created_at),
                 ];
             })
         ];
