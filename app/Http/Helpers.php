@@ -237,7 +237,7 @@ if (!function_exists('defaultLanguage')) {
 if (!function_exists('default_website')) {
     function default_website()
     {
-        return "https://tinfis-zeta.vercel.app/";
+        return "https://nextjs-marketpro-kohl.vercel.app/";
     }
 }
 
