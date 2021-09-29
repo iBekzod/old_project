@@ -39,6 +39,7 @@ use Illuminate\Support\Facades\DB;
 use App\FirebaseNotification;
 use App\Wallet;
 use App\Order;
+use Carbon\Carbon;
 use Napa\R19\Sms;
 //highlights the selected navigation on admin panel
 if (!function_exists('sendSMS')) {
@@ -766,6 +767,25 @@ if (!function_exists('taxPrice')) {
             $tax = $product->tax;
         }
         return $tax;
+    }
+}
+
+if (!function_exists('formatDate')) {
+    function formatDate($date)
+    {
+        if ($date) {
+            $date = Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('d.m.Y');
+        }
+        return $date;
+    }
+}
+if (!function_exists('formatHourDate')) {
+    function formatHourDate($date)
+    {
+        if ($date) {
+            $date = Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('d.m.Y H:i');
+        }
+        return $date;
     }
 }
 
