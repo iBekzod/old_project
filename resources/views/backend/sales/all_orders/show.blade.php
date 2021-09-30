@@ -56,8 +56,8 @@
         @endphp --}}
             <!--Assign Delivery Boy-->
 
-            @if (\App\Addon::where('unique_identifier', 'delivery_boy')->first() != null &&
-                \App\Addon::where('unique_identifier', 'delivery_boy')->first()->activated)
+            {{-- @if (\App\Addon::where('unique_identifier', 'delivery_boy')->first() != null &&
+                \App\Addon::where('unique_identifier', 'delivery_boy')->first()->activated) --}}
 
                 <div class="col-md-3 ml-auto">
                     <label for="assign_deliver_boy">{{translate('Assign Deliver Boy')}}</label>
@@ -74,7 +74,7 @@
                         <input type="text" class="form-control" value="{{ optional($order->delivery_boy)->name }}" disabled>
                     @endif
                 </div>
-            @endif
+            {{-- @endif --}}
 
             <div class="col-md-3 ml-auto">
                 <label for=update_payment_status"">{{translate('Payment Status')}}</label>
