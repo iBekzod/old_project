@@ -12,16 +12,17 @@ use App\Attribute;
 use App\Color;
 use App\Element;
 use App\Variation;
-use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
+// use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Auth;
 
-class SingleProductCollection extends ResourceCollection
+class SingleProductCollection extends JsonResource
 {
     public function toArray($request)
     {
-        $product=$this->first();
+        $product=$this;
         $variation=Variation::withTrashed()->find($product->variation_id);
-        $element=Element::withTrashed()->find($product->element_id);
+        // $element=Element::withTrashed()->find($product->element_id);
         $user_related=[];
         if(Auth::check()){
             $user_id=auth()->id();
@@ -35,7 +36,7 @@ class SingleProductCollection extends ResourceCollection
             'id' =>  $product->id,
             'name' => $product->name, // KERE
             'slug' => $product->slug,  // KERE
-            'photos' => $this->convertPhotos(explode(',', $element->photos)),  // KERE
+            'photos' => $this->convertPhotos(explode(',', $variation->photos)),  // KERE
             'thumbnail_image' => api_asset($variation->thumbnail_img),
             // 'currency_code'=>defaultCurrency(),
             // 'exchange_rate'=>defaultExchangeRate(),

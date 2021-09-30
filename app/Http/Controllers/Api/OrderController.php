@@ -169,25 +169,7 @@ class OrderController extends Controller
                 $shippingAddress['latitude']       = $address->latitude;
                 $shippingAddress['longitude']       = $address->longitude;
                 $shippingAddress['customer_note']   = $address->customer_note;
-            // if($address->latitude || $address->longitude) {
-            //     $shippingAddress['lat_lang'] = $address->latitude.','.$address->longitude;
-            // }
             }
-
-            // $seller_products = array();
-            // foreach ($cartItems as $cartItem) {
-            //     $product = $cartItem->product;
-            //     $seller_products[$product->user_id][]=$product->id;
-            // }
-
-            // if (!empty($seller_products)) {
-            //     foreach ($seller_products as $key => $seller_product_ids) {
-            //         $product=Product::where('id', $seller_product_ids[0])->first();
-            //         $address= getUserAddress();
-            //         $shipping_cost = calculateDeliveryCost($product, $address->id, $product->delivery_type);
-            //         $shipping += $shipping_cost['total_cost'];
-            //     }
-            // }
 
             $sum = 0.00;
             foreach ($cartItems as $cartItem) {
