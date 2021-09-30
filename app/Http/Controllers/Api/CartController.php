@@ -206,7 +206,7 @@ class CartController extends Controller
             $user_id=auth()->id();
             //discount calculation based on flash deal and regular discount
             //calculation of taxes
-            $discount_applicable = false;
+            $discount_applicable = true;
 
             if ($product->discount_start_date == null) {
                 $discount_applicable = true;
