@@ -10,6 +10,7 @@ use App\DeliveryBoy;
 use App\DeliveryHistory;
 use App\Order;
 use App\User;
+use Illuminate\Support\Facades\Validator;
 
 class DeliveryBoyController extends Controller
 {
@@ -57,6 +58,21 @@ class DeliveryBoyController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:255',
+            'email' => 'required|string|email|unique:users',
+            'password' => 'required|string|min:6'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('delivery-boys.create')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+        // Retrieve the validated input...
+        $validated = $validator->validated();
+
         $user                       = new User;
         $user->user_type            = 'delivery_b';
         $user->name                 = $request->name;
@@ -114,6 +130,20 @@ class DeliveryBoyController extends Controller
     public function update(Request $request, $id)
     {
         $delivery_boy = User::findOrFail($id);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:255',
+            'email' => 'required|string|email|unique:users',
+            'password' => 'required|string|min:6'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('delivery-boys.edit')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+        // Retrieve the validated input...
+        $validated = $validator->validated();
 
         $delivery_boy->name = $request->name;
         $delivery_boy->email = $request->email;

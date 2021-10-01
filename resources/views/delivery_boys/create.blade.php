@@ -18,6 +18,11 @@
                     <div class="col-sm-10">
                         <input type="text" class="form-control" name="name" value="" placeholder="Name" required>
                     </div>
+                    @if ($errors->has('name'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('name') }}</strong>
+                        </span>
+                    @endif
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-2 col-from-label" for="email">
@@ -26,6 +31,12 @@
                     <div class="col-sm-10">
                         <input type="text" class="form-control" name="email" value="" placeholder="Email" required>
                     </div>
+
+                    @if ($errors->has('email'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('email') }}</strong>
+                        </span>
+                    @endif
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-2 col-from-label" for="phone">
@@ -42,6 +53,11 @@
                     <div class="col-sm-10">
                         <input type="password" class="form-control" name="password" placeholder="Password" required>
                     </div>
+                    @if ($errors->has('password'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('password') }}</strong>
+                        </span>
+                    @endif
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-2 col-from-label" for="type">
