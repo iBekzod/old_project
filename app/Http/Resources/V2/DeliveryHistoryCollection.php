@@ -21,7 +21,7 @@ class DeliveryHistoryCollection extends ResourceCollection
                     'earning' => format_price($data->earning) ,
                     'collection' => format_price($data->collection),
                     'payment_type' => $data->payment_type,
-                    'date' => Carbon::createFromTimestamp($data->created_at)->format('d-m-Y'),
+                    'date' => formatDate($data->created_at),
                 ];
             })
         ];
