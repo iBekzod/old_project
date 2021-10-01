@@ -21,7 +21,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Stripe\PaymentMethod;
 use App\Http\Controllers\Controller;
-
+use App\Http\Resources\CustomOrderCollection;
 
 class OrderController extends Controller
 {
@@ -135,6 +135,15 @@ class OrderController extends Controller
             'orders' => new OrderCollection($orders)
         ], 200);
     }
+
+
+
+    public function customUserOrders(Request $request)
+    {
+        $orders = Order::where('user_id', auth()->id())->get();
+        return new CustomOrderCollection($orders);
+    }
+
     public function change_current_address($request){
         if($client_address = Address::where('id', $request->address_id)->first()){
             $carts = Cart::where('user_id', auth()->id())->get()->groupBy('address_id');
