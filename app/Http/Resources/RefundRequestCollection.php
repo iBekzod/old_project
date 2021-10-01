@@ -22,7 +22,7 @@ class RefundRequestCollection extends ResourceCollection
                     'refund_amount' => $data->refund_amount,
                     'reason' => $data->reason,
                     'reason_id' => $data->my_reason->getTranslation('name'),
-                    'created_at'=>$data->created_at,
+                    'created_at'=>formatDate($data->created_at),
                 ];
             })
         ];
