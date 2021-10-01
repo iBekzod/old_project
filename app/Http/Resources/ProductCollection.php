@@ -6,7 +6,9 @@ use App\Element;
 use App\FlashDealProduct;
 use App\Product;
 use App\Variation;
+use App\Wishlist;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Auth;
 
 class ProductCollection extends ResourceCollection
 {
@@ -22,6 +24,11 @@ class ProductCollection extends ResourceCollection
                     $products=Product::where('variation_id', $product->variation_id)->get();
                 } catch (\Exception $th) {
                     return null;//($th->getMessage());
+                }
+                $wishlist=false;
+                if(Auth::check()){
+                    $user_id=auth()->id();
+                    $wishlist= Wishlist::where('user_id', $user_id)->where('product_id', $product->id)->exists();
                 }
                 return [
                     'id'=>$product->id,
@@ -48,6 +55,7 @@ class ProductCollection extends ResourceCollection
                     'variant' => $product,
                     'variations' => $products,
                     'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??[],
+                    'is_wishlist'=>$wishlist,
                     'links' => [
                         'details' => route('products.show', $product->id),
                         'reviews' => route('api.reviews.index', $product->id),
