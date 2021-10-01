@@ -84,13 +84,15 @@
                 </select>
             </div>
             <div class="col-md-3 ml-auto">
-                <label for=update_delivery_status"">{{translate('Delivery Status')}}</label>
+                <label for=update_delivery_status"">{{translate('all_orders')}}</label>
                 @if($delivery_status != 'delivered' && $delivery_status != 'cancelled')
                     <select class="form-control aiz-selectpicker"  data-minimum-results-for-search="Infinity" id="update_delivery_status">
                         <option value="pending" @if ($delivery_status == 'pending') selected @endif>{{translate('Pending')}}</option>
                         <option value="confirmed" @if ($delivery_status == 'confirmed') selected @endif>{{translate('Confirmed')}}</option>
-                        <option value="picked_up" @if ($delivery_status == 'picked_up') selected @endif>{{translate('Picked Up')}}</option>
-                        <option value="on_the_way" @if ($delivery_status == 'on_the_way') selected @endif>{{translate('On The Way')}}</option>
+                        <option value="on_delivery" @if ($delivery_status == 'on_delivery') selected @endif>{{ translate('On delivery')}}</option>
+
+                        {{-- <option value="picked_up" @if ($delivery_status == 'picked_up') selected @endif>{{translate('Picked Up')}}</option> --}}
+                        {{-- <option value="on_the_way" @if ($delivery_status == 'on_the_way') selected @endif>{{translate('On The Way')}}</option> --}}
                         <option value="delivered" @if ($delivery_status == 'delivered') selected @endif>{{translate('Delivered')}}</option>
                         <option value="cancelled" @if ($delivery_status == 'cancelled') selected @endif>{{translate('Cancel')}}</option>
                     </select>
