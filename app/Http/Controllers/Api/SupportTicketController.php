@@ -30,7 +30,7 @@ class SupportTicketController extends Controller
         $ticket->user_id=auth()->id();
         $ticket->subject = $request->subject;
         $ticket->details = $request->details;
-        $ticket->files = $request->attachments;
+        $ticket->files = $request->files;
         if($ticket->save()){
             // $this->send_support_mail_to_admin($ticket);
             return response()->json([
