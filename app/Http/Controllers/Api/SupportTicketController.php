@@ -82,7 +82,7 @@ class SupportTicketController extends Controller
         if($request->has('code') && $request->code!=null){
             $code = $request->code;
         }
-        $ticket = Ticket::where(['code'=>$code, 'user_id'=>auth()->id()])->first();
+        $ticket = Ticket::where('code',$code)->first();
         $ticket_reply = new TicketReply;
         $ticket_reply->ticket_id=$ticket->id;
         $ticket_reply->user_id=auth()->id();
