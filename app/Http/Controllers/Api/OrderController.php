@@ -373,7 +373,7 @@ class OrderController extends Controller
                     'seller_id' => $product->user_id,
                     'product_id' => $product->id,
                     'variation' => $cartItem->variation,
-                    'price' => $cartItem->price * $cartItem->quantity,
+                    'price' => ($cartItem->price + $cartItem->tax + $cartItem->discount) * $cartItem->quantity + $cartItem->shipping_cost,
                     'tax' => $cartItem->tax * $cartItem->quantity,
                     'shipping_cost' => $cartItem->shipping_cost,
                     'shipping_type' => $cartItem->shipping_type,

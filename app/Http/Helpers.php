@@ -500,22 +500,23 @@ if (!function_exists('verified_sellers_id')) {
 if (!function_exists('convert_price')) {
     function convert_price($price)
     {
-        $business_settings = BusinessSetting::where('type', 'system_default_currency')->first();
-        if ($business_settings != null) {
-            $currency = Currency::find($business_settings->value);
-            $price = floatval($price) / floatval($currency->exchange_rate);
-        }
+        return convertPrice($price);
+        // $business_settings = BusinessSetting::where('type', 'system_default_currency')->first();
+        // if ($business_settings != null) {
+        //     $currency = Currency::find($business_settings->value);
+        //     $price = floatval($price) / floatval($currency->exchange_rate);
+        // }
 
-        $code = \App\Currency::findOrFail(\App\BusinessSetting::where('type', 'system_default_currency')->first()->value)->code;
-        if (Session::has('currency_code')) {
-            $currency = Currency::where('code', Session::get('currency_code', $code))->first();
-        } else {
-            $currency = Currency::where('code', $code)->first();
-        }
+        // $code = \App\Currency::findOrFail(\App\BusinessSetting::where('type', 'system_default_currency')->first()->value)->code;
+        // if (Session::has('currency_code')) {
+        //     $currency = Currency::where('code', Session::get('currency_code', $code))->first();
+        // } else {
+        //     $currency = Currency::where('code', $code)->first();
+        // }
 
-        $price = floatval($price) * floatval($currency->exchange_rate);
+        // $price = floatval($price) * floatval($currency->exchange_rate);
 
-        return $price;
+        // return $price;
     }
 }
 
