@@ -20,7 +20,7 @@
 
 
         <div class="row gutters-5 text-center aiz-steps">
-            <div class="col @if($status == 'pending') active @else done @endif">
+            <div class="col @if($status == 'pending') active @elseif($status == 'cancelled') @else done @endif">
                 <div class="icon mb-0">
                     <i class="las la-file-invoice"></i>
                 </div>
@@ -45,35 +45,36 @@
                 <div class="title fs-12">{{ translate('Delivered')}}</div>
             </div>
         </div>
+        <hr class="new-section-sm bord-no">
         <div class="row gutters-5">
             <div class="col text-center text-md-left">
             </div>
 
-        {{-- @php
-        $status = $order->orderDetails->where('seller_id', Auth::user()->id)->first()->delivery_status;
-        $payment_status = $order->orderDetails->where('seller_id', Auth::user()->id)->first()->payment_status;
-        $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
-        @endphp --}}
+            {{-- @php
+            $status = $order->orderDetails->where('seller_id', Auth::user()->id)->first()->delivery_status;
+            $payment_status = $order->orderDetails->where('seller_id', Auth::user()->id)->first()->payment_status;
+            $refund_request_addon = \App\Addon::where('unique_identifier', 'refund_request')->first();
+            @endphp --}}
             <!--Assign Delivery Boy-->
 
             {{-- @if (\App\Addon::where('unique_identifier', 'delivery_boy')->first() != null &&
                 \App\Addon::where('unique_identifier', 'delivery_boy')->first()->activated) --}}
 
-                <div class="col-md-3 ml-auto">
-                    <label for="assign_deliver_boy">{{translate('Assign Deliver Boy')}}</label>
-                    @if($delivery_status == 'pending' || $delivery_status == 'picked_up')
-                    <select class="form-control aiz-selectpicker" data-live-search="true" data-minimum-results-for-search="Infinity" id="assign_deliver_boy">
-                        <option value="">{{translate('Select Delivery Boy')}}</option>
-                        @foreach($delivery_boys as $delivery_boy)
-                        <option value="{{ $delivery_boy->id }}" @if($order->assign_delivery_boy == $delivery_boy->id) selected @endif>
-                            {{ $delivery_boy->name }}
-                        </option>
-                        @endforeach
-                    </select>
-                    @else
-                        <input type="text" class="form-control" value="{{ optional($order->delivery_boy)->name }}" disabled>
-                    @endif
-                </div>
+            <div class="col-md-3 ml-auto">
+                <label for="assign_deliver_boy">{{translate('Assign Deliver Boy')}}</label>
+                @if($delivery_status == 'confirmed' )
+                <select class="form-control aiz-selectpicker" data-live-search="true" data-minimum-results-for-search="Infinity" id="assign_deliver_boy">
+                    <option value="">{{translate('Select Delivery Boy')}}</option>
+                    @foreach($delivery_boys as $delivery_boy)
+                    <option value="{{ $delivery_boy->id }}" @if($order->assign_delivery_boy == $delivery_boy->id) selected @endif>
+                        {{ $delivery_boy->name }}
+                    </option>
+                    @endforeach
+                </select>
+                @else
+                    <input type="text" class="form-control" value="{{ optional($order->delivery_boy)->name }}" disabled>
+                @endif
+            </div>
             {{-- @endif --}}
 
             <div class="col-md-3 ml-auto">
@@ -84,7 +85,7 @@
                 </select>
             </div>
             <div class="col-md-3 ml-auto">
-                <label for=update_delivery_status"">{{translate('all_orders')}}</label>
+                <label for=update_delivery_status"">{{translate('Order status')}}</label>
                 @if($delivery_status != 'delivered' && $delivery_status != 'cancelled')
                     <select class="form-control aiz-selectpicker"  data-minimum-results-for-search="Infinity" id="update_delivery_status">
                         <option value="pending" @if ($delivery_status == 'pending') selected @endif>{{translate('Pending')}}</option>
@@ -101,61 +102,52 @@
                 @endif
             </div>
         </div>
-        {{-- @dd(json_decode($order->shipping_address)) --}}
+        <hr class="new-section-sm bord-no">
         <div class="row gutters-5">
-            <div class="col text-center text-md-left">
-                <address>
-                    <strong class="text-main">{{ json_decode($order->shipping_address)->name??null }}</strong><br>
-                    {{ json_decode($order->shipping_address)->email??null }}<br>
-                    {{ json_decode($order->shipping_address)->phone??null }}<br>
-                    {{-- {{ json_decode($order->shipping_address)->address??null }}, {{ json_decode($order->shipping_address)->city??null }}, {{ json_decode($order->shipping_address)->postal_code??null }}<br> --}}
-                    {{-- {{ json_decode($order->shipping_address)->country??null }} --}}
-                </address>
-                @if ($order->manual_payment && is_array(json_decode($order->manual_payment_data, true)))
-                <br>
-                <strong class="text-main">{{ translate('Payment Information') }}</strong><br>
-                {{ translate('Name') }}: {{ json_decode($order->manual_payment_data)->name??null }}, {{ translate('Amount') }}: {{ single_price(json_decode($order->manual_payment_data)->amount??null) }}, {{ translate('TRX ID') }}: {{ json_decode($order->manual_payment_data)->trx_id??null }}
-                <br>
-                <a href="{{ uploaded_asset(json_decode($order->manual_payment_data)->photo??null) }}" target="_blank"><img src="{{ uploaded_asset(json_decode($order->manual_payment_data)->photo??null) }}" alt="" height="100"></a>
-                @endif
+            <div class="col-md-2">
+            <p>
+                    <b class="text-main text-bold">{{ translate('Order Code')}}:</b><br>
+                    <b>{{ translate('Customer')}}:</b><br>
+                    <b>{{ translate('Email')}}:</b><br>
+                    <b>{{ translate('Shipping address')}}:</b><br>
+            </p>
             </div>
-            <div class="col-md-4 ml-auto">
-                <table>
-                    <tbody>
-                        <tr>
-                            <td class="text-main text-bold">{{translate('Order #')}}</td>
-                            <td class="text-right text-info text-bold">	{{ $order->code }}</td>
-                        </tr>
-                        <tr>
-                            <td class="text-main text-bold">{{translate('Order Status')}}</td>
-                            <td class="text-right">
-                                @if($delivery_status == 'delivered')
-                                <span class="badge badge-inline badge-success">{{ translate(ucfirst(str_replace('_', ' ', $delivery_status))) }}</span>
-                                @else
-                                <span class="badge badge-inline badge-info">{{ translate(ucfirst(str_replace('_', ' ', $delivery_status))) }}</span>
-                                @endif
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-main text-bold">{{translate('Order Date')}}	</td>
-                            <td class="text-right">{{ date('d-m-Y h:i A', $order->date) }}</td>
-                        </tr>
-                        <tr>
-                            <td class="text-main text-bold">
-                                {{translate('Total amount')}}
-                            </td>
-                            <td class="text-right">
-                                {{ single_price($order->grand_total) }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-main text-bold">{{translate('Payment method')}}</td>
-                            <td class="text-right">{{ ucfirst(str_replace('_', ' ', $order->payment_type)) }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="col-md-3">
+            <p>
+                <span class="text-right text-info text-bold">{{ $order->code }}</span><br>
+                <span>{{ json_decode($order->shipping_address)->name }}</span><br>
+                <span>{{ $order->user->email }}</span><br>
+                <span>{{ json_decode($order->shipping_address)->address }}, {{ json_decode($order->shipping_address)->city }}, {{ json_decode($order->shipping_address)->postal_code }}, {{ json_decode($order->shipping_address)->country }}</span><br>
+            </p>
+            </div>
+            <div class="col-md-3">
+            </div>
+            <div class="col-md-2">
+                <p>
+                    <b>{{ translate('Order date')}}:</b><br>
+                    <b>{{ translate('Order status')}}:</b><br>
+                    <b>{{ translate('Total order amount')}}:</b><br>
+                    <b>{{ translate('Payment method')}}:</b><br>
+            </p>
+
+            </div>
+            <div class="col-md-2">
+                <p>
+
+                    <span>{{ date('d-m-Y H:i A', $order->date) }}</span><br>
+                    @if($delivery_status == 'delivered')
+                    <span class="badge badge-inline badge-success">{{ translate(ucfirst(str_replace('_', ' ', $delivery_status))) }}</span>
+                    @else
+                    <span class="badge badge-inline badge-info">{{ translate(ucfirst(str_replace('_', ' ', $delivery_status))) }}</span>
+                    @endif<br>
+                    <span>{{ single_price($order->grand_total) }}</span><br>
+                    {{-- <span>{{ json_decode($order->shipping_address)->phone }}</span><br> --}}
+                    <span>{{ ucfirst(str_replace('_', ' ', $order->payment_type)) }}</span><br>
+
+                </p>
             </div>
         </div>
+
         <hr class="new-section-sm bord-no">
 
         <div class="row">

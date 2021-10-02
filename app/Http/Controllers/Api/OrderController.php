@@ -155,7 +155,7 @@ class OrderController extends Controller
                     $delivery_cost = calculateDeliveryCost($product, $client_address->id, $product->delivery_type);
                     $shipping_cost= $delivery_cost['total_cost']??0;
                     $is_express=false;
-                    if($request->has('is_express') && $request->is_express==1){
+                    if($request->is_express!=null && $request->is_express==1){
                         $is_express=true;
                         $shipping_cost= $delivery_cost['total_express_cost']??0;
                     }
@@ -239,6 +239,7 @@ class OrderController extends Controller
                 // 'grand_total' => 'required',
                 'coupon_discount' => 'nullable',
                 'coupon_code' => 'nullable',
+                'is_express' => 'nullable',
             ]);
             $user_id=auth()->id();//??$request->user_id;
             $user = User::where('id',$user_id)->first();
@@ -266,15 +267,14 @@ class OrderController extends Controller
                 $shippingAddress['customer_note']   = $address->customer_note;
                 $shippingAddress['address_id']   = $address->id;
             }
-
-            $sum = 0.00;
-            foreach ($cartItems as $cartItem) {
-                $item_sum = 0;
-                $item_sum += ($cartItem->price + $cartItem->tax) * $cartItem->quantity;
-                $item_sum += $cartItem->shipping_cost + $cartItem->discount;
-                $sum += $item_sum;   //// 'grand_total' => $request->g
+            $is_express=false;
+            if($request->has('is_express') && $request->is_express==1){
+                $is_express=true;
             }
-
+            // $request->address_id=$address->id;
+            // $request->is_express=$is_express;
+            // $this->change_current_address($request);
+            $cartItems = Cart::where('user_id', $user_id)->get();
             $payment_type="cash_on_delivery";
             if($request->has('payment_type')){
                 $payment_type=$request->payment_type;
@@ -283,7 +283,7 @@ class OrderController extends Controller
             if($request->has('payment_status')){
                 $payment_status=$request->payment_status;
             }
-
+            $sum=$cartItems->sum('price');
             // apply coupon usage
             $coupon_discount=0;
             if ($request->coupon_code != '') {
@@ -292,15 +292,15 @@ class OrderController extends Controller
                         if (CouponUsage::where('user_id', $user_id)->where('coupon_id', $coupon->id)->first() == null) {
                             $coupon_details = json_decode($coupon->details);
                             if ($coupon->type == 'cart_base') {
-                                $subtotal = 0;
-                                $tax = 0;
-                                $shipping = 0;
-                                foreach ($cartItems as $key => $cartItem) {
-                                    $subtotal += $cartItem->price * $cartItem->quantity;
-                                    $tax += $cartItem->tax * $cartItem->quantity ;
-                                    $shipping += $cartItem->shipping;
-                                }
-                                $sum = $subtotal + $tax + $shipping;
+                                // $subtotal = $cartItems->sum('price');
+                                // $tax = $cartItems->sum('tax');
+                                // $shipping = $cartItems->sum('shipping_cost');
+                                // foreach ($cartItems as $key => $cartItem) {
+                                //     $subtotal += $cartItem->price * $cartItem->quantity;
+                                //     $tax += $cartItem->tax * $cartItem->quantity ;
+                                //     $shipping += $cartItem->shipping;
+                                // }
+                                // $sum = $subtotal;// + $shipping;
 
                                 if ($sum >= $coupon_details->min_buy) {
                                     if ($coupon->discount_type == 'percent') {
@@ -363,7 +363,7 @@ class OrderController extends Controller
                 'grand_total' =>  $sum,//$request->grand_total + $shipping,    //// 'grand_total' => $request->grand_total + $shipping,
                 'coupon_discount' => $coupon_discount,//$cartItems->sum('discount'),//$request->coupon_discount,
                 'code' => date('Ymd-his'),
-                'date' => strtotime('now')
+                'date' => strtotime(date('d-m-Y h:i A'))
             ]);
 
             foreach ($cartItems as $cartItem) {
@@ -373,32 +373,29 @@ class OrderController extends Controller
                     'seller_id' => $product->user_id,
                     'product_id' => $product->id,
                     'variation' => $cartItem->variation,
-                    'price' => ($cartItem->price + $cartItem->tax + $cartItem->discount) * $cartItem->quantity + $cartItem->shipping_cost,
-                    'tax' => $cartItem->tax * $cartItem->quantity,
+                    'price' => $cartItem->price,
+                    'tax' => $cartItem->tax,
                     'shipping_cost' => $cartItem->shipping_cost,
                     'shipping_type' => $cartItem->shipping_type,
                     'quantity' => $cartItem->quantity,
                     'payment_status' => $payment_status
                 ]);
                 $product->update([
-                    'num_of_sale' => DB::raw('num_of_sale - ' . $cartItem->quantity)
+                    'num_of_sale' => DB::raw('num_of_sale + ' . $cartItem->quantity),
+                    'qty' => DB::raw('qty - ' . $cartItem->quantity)
                 ]);
                 // $address= getUserAddress();
                 // $shipping_cost = calculateDeliveryCost($product, $address->id, $product->delivery_type);
                 // $order_detail_shipping_cost = (double) $shipping_cost['total_cost'];
             }
 
-            // $this->change_current_address([
-            //     'address_id'=>$address->id,
-            //     'is_express'=>0
 
-            // ]);
             // calculate commission
             $commission_percentage = BusinessSetting::where('type', 'vendor_commission')->first()->value;
             foreach ($order->orderDetails as $orderDetail) {
                 if ($orderDetail->product->user->user_type == 'seller') {
                     $seller = $orderDetail->product->user->seller;
-                    $price = $orderDetail->price + $orderDetail->tax + $orderDetail->shipping_cost;
+                    $price = $orderDetail->price;
                     $seller->admin_to_pay = ($request->payment_type == 'cash_on_delivery') ? $seller->admin_to_pay - ($price * $commission_percentage) / 100 : $seller->admin_to_pay + ($price * (100 - $commission_percentage)) / 100;
                     $seller->save();
                 }
@@ -407,8 +404,6 @@ class OrderController extends Controller
             if (\App\Addon::where('unique_identifier', 'club_point')->first() != null && \App\Addon::where('unique_identifier', 'club_point')->first()->activated) {
                 $this->processClubPoints($order);
             }
-
-
             // clear user's cart
             $user->carts()->delete();
         }catch(Exception $e){
