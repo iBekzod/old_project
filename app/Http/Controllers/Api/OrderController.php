@@ -388,6 +388,11 @@ class OrderController extends Controller
                 // $order_detail_shipping_cost = (double) $shipping_cost['total_cost'];
             }
 
+            // $this->change_current_address([
+            //     'address_id'=>$address->id,
+            //     'is_express'=>0
+
+            // ]);
             // calculate commission
             $commission_percentage = BusinessSetting::where('type', 'vendor_commission')->first()->value;
             foreach ($order->orderDetails as $orderDetail) {
@@ -402,6 +407,7 @@ class OrderController extends Controller
             if (\App\Addon::where('unique_identifier', 'club_point')->first() != null && \App\Addon::where('unique_identifier', 'club_point')->first()->activated) {
                 $this->processClubPoints($order);
             }
+
 
             // clear user's cart
             $user->carts()->delete();
