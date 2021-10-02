@@ -133,6 +133,7 @@ class RefundRequestController extends Controller
     public function admin_index()
     {
         $refunds = RefundRequest::where('refund_status', 0)->latest()->paginate(15);
+        // $refunds = RefundRequest::where('refund_status', 0)->first();
         // dd($refunds);
         return view('refund_request.index', compact('refunds'));
     }
@@ -262,10 +263,12 @@ class RefundRequestController extends Controller
      * @return \Illuminate\Http\Response
      */
     //Shows the refund reason
-    public function reason_view($id)
+    public function admin_reason_view($id)
     {
+        //   return "keldi";
+        //   dd($id);
         $refund = RefundRequest::findOrFail($id);
-
+        //  dd($refund);
         if (Auth::user()->user_type == 'admin' || Auth::user()->user_type == 'staff') {
             if ($refund->orderDetail != null) {
                 $refund->admin_seen = 1;

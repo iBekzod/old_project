@@ -36,6 +36,6 @@ Route::group(['middleware' => ['user', 'verified']], function(){
 Route::group(['middleware' => ['auth']], function(){
     Route::Post('/reject-refund-request','RefundRequestController@reject_refund_request')->name('reject_refund_request');
 
-    Route::get('refund-request-reason/{id}', 'RefundRequestController@reason_view')->name('reason_show');
+    Route::get('refund-request-reason/{id}', 'RefundRequestController@admin_reason_view')->name('reason_show');
     Route::get('refund-request-reject-reason/{id}', 'RefundRequestController@reject_reason_view')->name('reject_reason_show');
 });
