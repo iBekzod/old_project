@@ -20,9 +20,12 @@ class SupportTicketController extends Controller
      */
     public function post_store(Request $request)
     {
-        // if($request->has('code') && $request->code!=null){
-        //     $code = $request->code;
-        // }else{
+        $request->validate([
+            'subject' => 'required|string',
+            'details' => 'required|string',
+            'attachments' => 'nullable'
+        ]);
+
         $code = max(100000, (Ticket::latest()->first() != null ? Ticket::latest()->first()->code + 1 : 0)).date('s');
         // }
         $ticket = new Ticket;
@@ -30,7 +33,15 @@ class SupportTicketController extends Controller
         $ticket->user_id=auth()->id();
         $ticket->subject = $request->subject;
         $ticket->details = $request->details;
-        $ticket->files = $request->attachments;
+        $ticket->files = $request->attachments ;
+        // dd($ticket);
+
+        // 'code',
+        // 'user_id',
+        // 'subject',
+        // 'details',
+        // 'files',
+        // 'status',
         if($ticket->save()){
             // $this->send_support_mail_to_admin($ticket);
             return response()->json([
