@@ -47,23 +47,25 @@
             @if($order->payment_type == 'cash_on_delivery')
                 <div class="offset-lg-2 col-lg-4 col-sm-6">
                     <div class="form-group">
+                        <label>{{ translate('Payment Status')}}</label>
                         <select class="form-control aiz-selectpicker form-control-sm"  data-minimum-results-for-search="Infinity" id="update_payment_status">
                             <option value="unpaid" @if ($payment_status == 'unpaid') selected @endif>{{ translate('Unpaid')}}</option>
                             <option value="paid" @if ($payment_status == 'paid') selected @endif>{{ translate('Paid')}}</option>
                         </select>
-                        <label>{{ translate('Payment Status')}}</label>
+
                     </div>
                 </div>
             @endif
             <div class="col-lg-4 col-sm-6">
                 <div class="form-group">
+                    <label>{{ translate('Delivery Status')}}</label>
                     <select class="form-control aiz-selectpicker form-control-sm"  data-minimum-results-for-search="Infinity" id="update_delivery_status">
                         <option value="pending" @if ($status == 'pending') selected @endif>{{ translate('Pending')}}</option>
                         <option value="confirmed" @if ($status == 'confirmed') selected @endif>{{ translate('Confirmed')}}</option>
-                        <option value="on_delivery" @if ($status == 'on_delivery') selected @endif>{{ translate('On delivery')}}</option>
-                        <option value="delivered" @if ($status == 'delivered') selected @endif>{{ translate('Delivered')}}</option>
+                        {{-- <option value="on_delivery" @if ($status == 'on_delivery') selected @endif>{{ translate('On delivery')}}</option> --}}
+                        {{-- <option value="delivered" @if ($status == 'delivered') selected @endif>{{ translate('Delivered')}}</option> --}}
                     </select>
-                    <label>{{ translate('Delivery Status')}}</label>
+
                 </div>
             </div>
         </div>
@@ -133,116 +135,107 @@
                         </thead>
                         <tbody>
                             @foreach ($order->orderDetails->where('seller_id', Auth::user()->id) as $key => $orderDetail)
-                                <tr>
-                                    <td>{{ $key+1 }}</td>
-                                    @if ($orderDetail->product != null)
-                                        <td>
-                                            {{-- {{ $orderDetail->product }} --}}
-                                            <img src="{{ uploaded_asset($orderDetail->product->variation->thumbnail_img) }}" alt="Image" class="size-25px">
+                            <tr>
+                                <td>{{ $key+1 }}</td>
+                                {{-- @if ($orderDetail->product != null) --}}
+                                    {{-- <td> --}}
+                                        {{-- {{ $orderDetail->product }} --}}
+                                        {{-- <img src="{{ uploaded_asset($orderDetail->product->variation->thumbnail_img ?? static_asset('assets/img/placeholder.jpg')) }}" alt="Image" class="size-25px"> --}}
+                                <td><img src="{{ uploaded_asset($orderDetail->product->variation-> thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}" alt="{{translate('Product Image')}}" class="h-35px"></td>
+                                    {{-- </td> --}}
+                                <td  width="20%">
+                                    {{-- <a href="{{ route('product', $orderDetail->product->slug) }}" target="_blank">{{ $orderDetail->product->getTranslation('name') }}</a> --}}
+                                    {{ $orderDetail->product->getTranslation('name') ?? translate('Product Unavailable')}}
+                                    {{-- @else --}}
+                                </td>
 
-                                        </td>
-                                        <td style="size: 5px">
-                                            {{-- <a href="{{ route('product', $orderDetail->product->slug) }}" target="_blank">{{ $orderDetail->product->getTranslation('name') }}</a> --}}
-                                            {{ $orderDetail->product->getTranslation('name') }}
-                                            @else
-                                                <strong>{{  translate('Product Unavailable') }}</strong>
-                                        </td>
+                                {{-- @endif --}}
 
-                                    @endif
+                                <td width="20%">
+                                    @if (App\Variation::where('user_id',$orderDetail->seller_id)->exists())
+                                    @php
+                                    $variation=App\Variation::where('user_id',$orderDetail->seller_id)->first();
+                                    $color=App\Color::where('id',$variation->color_id)->first();
+                                    $element=App\Element::where('id',$orderDetail->product->element_id)->first();
+                                    $brand=App\Brand::where('id',$element->brand_id)->first();
 
-                                    <td>
-                                        @if (App\Variation::where('user_id',$orderDetail->seller_id)->exists())
-                                        @php
-                                        $variation=App\Variation::where('user_id',$orderDetail->seller_id)->first();
-                                        $color=App\Color::where('id',$variation->color_id)->first();
-                                        $element=App\Element::where('id',$orderDetail->product->element_id)->first();
-                                        $brand=App\Brand::where('id',$element->brand_id)->first();
-
-                                        @endphp
-                                         <b>Brand:</b><span>
-                                            {{ $brand->name }}
-                                       </span> <br>
-                                         <b> {{ translate('Color') }}:</b><span>
-                                            {{ $color->getTranslation('name') }}
-                                        </span><br>
-                                           @if (App\Characteristic::where('id',$variation->characteristics)->exists())
-                                                @php
-                                                $characteristics=App\Characteristic::where('id',$variation->characteristics)->first();
-                                                $attribute=App\Attribute::where('id',$characteristics->attribute_id)->first();
-
-                                                @endphp
-
-                                                <b>Size:</b><span>
-                                                    {{ $characteristics->name ?? "" }}
-                                                    {{ $attribute->name }}
-                                                </span><br>
-
-
-
-                                           @endif
-
-                                        @endif
-
-
-
-                                    </td>
-                                    <td>
-                                        <b>
+                                    @endphp
+                                     <b>{{ translate('Brand') }}:</b><span>
+                                        {{ $brand->getTranslation('name') }}
+                                   </span> <br>
+                                     <b> {{ translate('Color') }}:</b><span>
+                                        {{ $color->getTranslation('name') }}
+                                    </span><br>
+                                       @if (count(explode(',', $variation->characteristics))>0)
                                             @php
-                                                $shop=App\Shop::where('user_id',$orderDetail->seller_id)->first();
-                                                echo $shop->name;
+                                                $characteristics=App\Characteristic::whereIn('id', explode(',', $variation->characteristics))->get();
                                             @endphp
-                                        </b>
-                                    </td>
+                                            @foreach($characteristics as  $characteristic)
+                                                @php
+                                                    $attribute=App\Attribute::where('id',$characteristic->attribute_id)->first();
+                                                @endphp
+                                                <b>{{ $attribute->getTranslation('name') }}:</b><span>
+                                                    {{ $characteristic->getTranslation('name') ?? "" }}
+                                                </span><br>
+                                            @endforeach
+
+                                       @endif
+                                    @endif
+                                </td>
+                                <td>
+                                    <b>
+                                        @php
+                                            $shop=App\Shop::where('user_id',$orderDetail->seller_id)->first();
+                                            echo $shop->name;
+                                        @endphp
+                                    </b>
+                                </td>
+                                <td>
+                                    @if ($orderDetail->shipping_type == 'home_delivery')
+                                        {{  translate('Home Delivery') }}
+                                    @elseif ($orderDetail->shipping_type == 'pickup_point')
+                                        @if ($orderDetail->pickup_point != null)
+                                            {{ $orderDetail->pickup_point->getTranslation('name') }} ({{  translate('Pickip Point') }})
+                                        @endif
+                                    @elseif ($orderDetail->shipping_type == 'tarif')
+                                     {{  translate('Home Delivery') }}
+                                    @elseif ($orderDetail->shipping_type == 'free')
+                                     {{  translate('Free') }}
+                                    @else
+                                     {{  translate('Not selected') }}
+                                    @endif
+                                </td>
+                                <td>
+                                    <b>
+                                          {{ $orderDetail->quantity }}
+                                     </b>
+
+                                </td>
+                                <td>
+                                  @php
+                                      $price=($orderDetail->price)/$orderDetail->quantity;
+                                      echo single_price($price);
+                                  @endphp
+                                </td>
+                                <td>
+                                    @if ($orderDetail->price!=null)
+                                      {{ single_price($orderDetail->price) }}
+                                    @endif
+                                </td>
+                                {{-- @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
                                     <td>
-                                        @if ($orderDetail->shipping_type != null && $orderDetail->shipping_type == 'home_delivery')
-                                            {{  translate('Home Delivery') }}
-                                        @elseif ($orderDetail->shipping_type == 'pickup_point')
-                                            @if ($orderDetail->pickup_point != null)
-                                                {{ $orderDetail->pickup_point->getTranslation('name') }} ({{  translate('Pickip Point') }})
-                                            @endif
-                                        @elseif ($orderDetail->shipping_type == 'tinfis')
-                                         {{  translate('Home Delivery') }}
-                                         @elseif ($orderDetail->shipping_type == 'free')
-                                         {{  translate('Free') }}
+                                        @if ($order
+
+
+                                        translate('Approved') }}</b>
+                                        @elseif ($orderDetail->product->refundable != 0)
+                                            <b>{{  translate('N/A') }}</b>
+                                        @else
+                                            <b>{{  translate('Non-refundable') }}</b>
                                         @endif
                                     </td>
-                                    <td>
-                                        <b>
-                                            @if ($orderDetail->product!=null)
-                                              {{ $orderDetail->product->qty }}
-                                            @endif
-                                         </b>
-
-                                    </td>
-                                    <td>
-                                      @php
-                                          $price=($orderDetail->price)/$orderDetail->product->qty;
-                                          echo $price;
-                                      @endphp
-                                    </td>
-                                    {{-- @if ($orderDetail->product!=null &&  )
-
-                                    @endif --}}
-                                    <td>
-                                        @if ($orderDetail->price!=null)
-                                          {{ $orderDetail->price }}
-                                        @endif
-                                    </td>
-                                    {{-- @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
-                                        <td>
-                                            @if ($order
-
-
-                                            translate('Approved') }}</b>
-                                            @elseif ($orderDetail->product->refundable != 0)
-                                                <b>{{  translate('N/A') }}</b>
-                                            @else
-                                                <b>{{  translate('Non-refundable') }}</b>
-                                            @endif
-                                        </td>
-                                    @endif --}}
-                                </tr>
+                                @endif --}}
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>
