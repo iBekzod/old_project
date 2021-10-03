@@ -54,10 +54,13 @@ class RefundRequestController extends Controller
     public function vendor_index()
     {
         $refunds = RefundRequest::where('seller_id', Auth::user()->id)->latest()->paginate(10);
+        // dd($refunds);
         if (Auth::user()->user_type == 'admin' || Auth::user()->user_type == 'staff') {
+
             return view('refund_request.frontend.recieved_refund_request.index', compact('refunds'));
         }
         else {
+            // dd("keldi");
             return view('refund_request.frontend.recieved_refund_request.index', compact('refunds'));
         }
     }
@@ -277,6 +280,7 @@ class RefundRequestController extends Controller
             }
         }
         else {
+            // dd($refund);
             return view('refund_request.frontend.refund_request.reason', compact('refund'));
         }
     }
