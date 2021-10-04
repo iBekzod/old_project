@@ -76,8 +76,11 @@
                                             </td>
                                             <td>
                                               @if($refund->refund_status == 0 && $refund->seller_approval == 0)
-                                                <a class="btn btn-soft-danger btn-icon btn-circle btn-sm" onclick="reject_refund_request({{$refund->id}})" title="{{ translate('Reject Refund Request') }}">
+                                                <a class="btn btn-soft-danger btn-icon btn-circle btn-sm " onclick="reject_refund_request({{$refund->id}})" title="{{ translate('Reject Refund Request') }}">
                                                     <i class="las la-trash"></i>
+                                                </a>
+                                                <a href="{{ route('reason_show', $refund->id) }}" class="btn btn-soft-primary btn-icon btn-circle btn-sm" title="{{ translate('View Reason') }}">
+                                                    <i class="las la-eye"></i>
                                                 </a>
                                               @elseif($refund->seller_approval == 2 || $refund->refund_status == 2)
                                                 <a href="javascript:void(0);" onclick="refund_reject_reason_show('{{ route('reject_reason_show', $refund->id )}}')" class="btn btn-soft-primary btn-icon btn-circle btn-sm" title="{{ translate('Reject Reason') }}">

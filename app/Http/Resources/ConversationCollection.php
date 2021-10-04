@@ -17,7 +17,7 @@ class ConversationCollection extends ResourceCollection
                     'title' => $data->msg,
                     'sender_viewed' => $data->sender_viewed,
                     'receiver_viewed' => $data->receiver_viewed,
-                    'created_at' => $data->created_at,
+                    'created_at' => formatDate($data->created_at),
                     'updated_at' => $data->updated_at,
                     'messages'=> $data->messages,
                     'product_name'=>($data->product)?$data->product->name:'',

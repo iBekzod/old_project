@@ -28,7 +28,7 @@
                         <td>{{ ($key+1) + ($refunds->currentPage() - 1)*$refunds->perPage() }}</td>
                         <td>
                             @if($refund->order != null)
-                                {{ $refund->order->code }}
+                                {{ $refund->order->code ?? "ORDER CODE NOT FOUND" }}
                             @else
                                 {{ translate('Order deleted') }}
                             @endif
@@ -64,7 +64,7 @@
                               </a>
                             @endif
 
-                         
+
 
                         </td>
                         <td>
@@ -96,7 +96,7 @@
                             <a class="btn btn-soft-success btn-icon btn-circle btn-sm" onclick="refund_request_money('{{ $refund->id }}')" title="{{ translate('Refund Now') }}">
                                 <i class="las la-backward"></i>
                             </a>
-                            <a class="btn btn-soft-danger btn-icon btn-circle btn-sm" onclick="reject_refund_request('{{ route('reject_reason_show', $refund->id )}}', '{{$refund->id}}', '{{ $refund->order->code }}')"  title="{{ translate('Reject Refund Request') }}">
+                            <a class="btn btn-soft-danger btn-icon btn-circle btn-sm" onclick="reject_refund_request('{{ route('reject_reason_show', $refund->id )}}', '{{$refund->id}}', '{{ $refund->order->code ?? " ORDER KODE NOT FOUNT" }}')"  title="{{ translate('Reject Refund Request') }}">
                                 <i class="las la-trash"></i>
                             </a>
                             <a href="{{ route('reason_show', $refund->id) }}" class="btn btn-soft-primary btn-icon btn-circle btn-sm" title="{{ translate('View Reason') }}">

@@ -41,6 +41,7 @@ Route::prefix('v1/auth')->group(function () {
 });
 
 Route::prefix('v1')->group(function () {
+    Route::post('change-cart-address', 'Api\OrderController@apply_carts_address')->middleware('auth:api');
     Route::match(['get', 'post'], '/translate', 'Api\FrontendController@getFrontendTranslation');
     Route::get('/verification/form', 'Api\VerificationController@form');
     Route::match(['get', 'post'], '/nested/categories', 'Api\CategoryController@all');
@@ -74,6 +75,7 @@ Route::prefix('v1')->group(function () {
     Route::match(['get', 'post'], '/pick-up-points', 'Api\OrderController@getPickUpPoints');
     Route::match(['get', 'post'], '/payment-methods', 'Api\OrderController@paymentMethods');
     Route::match(['get', 'post'], '/user/orders', 'Api\OrderController@userOrders')->middleware('auth:api');
+    Route::match(['get', 'post'], 'custom/user/orders', 'Api\OrderController@customUserOrders')->middleware('auth:api');
     Route::match(['get', 'post'], '/make/orders', 'Api\OrderController@store')->middleware('auth:api');
 
 

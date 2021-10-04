@@ -15,13 +15,13 @@ class DeliveryHistoryCollection extends ResourceCollection
                     'id' => $data->id,
                     'delivery_boy_id' => $data->delivery_boy_id,
                     'order_id' => $data->order_id,
-                    'shipping_cost' => $data->order->orderDetails->sum('shipping_cost'),
+                    'shipping_cost' => ($data->order)?$data->order->orderDetails->sum('shipping_cost'):0,
                     'order_code' => $data->order->code,
                     'delivery_status' => $data->delivery_status,
                     'earning' => format_price($data->earning) ,
                     'collection' => format_price($data->collection),
                     'payment_type' => $data->payment_type,
-                    'date' => Carbon::createFromTimestamp($data->created_at)->format('d-m-Y'),
+                    'date' => formatDate($data->created_at),
                 ];
             })
         ];

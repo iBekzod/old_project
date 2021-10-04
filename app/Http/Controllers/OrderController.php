@@ -41,11 +41,14 @@ class OrderController extends Controller
         $payment_status = null;
         $delivery_status = null;
         $sort_search = null;
-        $orders = DB::table('orders')
-            ->orderBy('id', 'desc')
+        $user_id=auth()->id();
+        $orders = Order::orderBy('id', 'desc')
+            ->whereHas('orderDetails', function ($product) use ($user_id){
+                $product->where('seller_id', $user_id);
+            });
                 //    ->join('order_details', 'orders.id', '=', 'order_details.order_id')
-            ->where('seller_id', auth()->id());
-        // dd(auth()->id());
+            // ->where('seller_id', auth()->id());
+        // dd();
         if ($request->payment_status != null) {
             $orders = $orders->where('payment_status', $request->payment_status);
             $payment_status = $request->payment_status;
@@ -103,7 +106,7 @@ class OrderController extends Controller
             where('user_type', 'delivery_b')
             ->get();
             // return "came";
-
+    //  dd($order_shipping_address);
 
         return view('backend.sales.all_orders.show', compact('order', 'delivery_boys'));
     }

@@ -12,7 +12,8 @@ use App\FlashDealProduct;
 use App\Product;
 use App\User;
 use App\Variation;
-
+use App\Wishlist;
+use Auth;
 class ProductDetailCollection extends ResourceCollection
 {
     public function toArray($request)
@@ -20,6 +21,11 @@ class ProductDetailCollection extends ResourceCollection
         $product=Product::where('slug', $request->id)->orWhere('id', $request->id)->first();
         if(!($product->is_accepted && $product->published)){
             return [];
+        }
+        $wishlist=false;
+        if(Auth::check()){
+            $user_id=auth()->id();
+            $wishlist= Wishlist::where('user_id', $user_id)->where('product_id', $product->id)->exists();
         }
         $variation=Variation::withTrashed()->find($product->variation_id);
         // $products=getPublishedProducts('product', ['where'=>[['variation_id', $variation->id]]], [], []);
@@ -106,6 +112,7 @@ class ProductDetailCollection extends ResourceCollection
                     'reviews' => route('api.reviews.index', $product->id),
                     'related' => route('products.related', $product->id)
                 ],
+                'is_wishlist'=>$wishlist,
             ];
         } catch (\Exception $th) {
             // dd($th->getMessage());

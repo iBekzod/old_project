@@ -19,7 +19,7 @@ class CouponUsageCollection extends ResourceCollection
                         'start_date'=>date("Y-m-d H:i:s", $data->coupon->start_date),
                         'end_date'=>date("Y-m-d H:i:s", $data->coupon->end_date)
                     ],
-                    'created_at'=>$data->created_at
+                    'created_at'=>formatDate($data->created_at)
                 ];
             })
         ];

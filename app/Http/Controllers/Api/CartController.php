@@ -67,7 +67,19 @@ class CartController extends Controller
         $cart = Cart::find($request->id);
         if ($cart != null) {
             if ($cart->product->qty >= $request->quantity) {
+                $single_price=$cart->price;
+                $single_tax=$cart->tax;
+                $single_discount=$cart->discount;
+                if($cart->quantity!=0){
+                    $single_price=$cart->price/$cart->quantity;
+                    $single_tax=$cart->tax/$cart->quantity;
+                    $single_discount=$cart->discount/$cart->quantity;
+                }
+                $total_price=($single_price + $single_tax +  $single_discount)*$request->quantity;
                 $cart->update([
+                    'discount' => $single_discount*$request->quantity,
+                    'tax' => $single_tax*$request->quantity,
+                    'price'=>$total_price,
                     'quantity' => $request->quantity
                 ]);
 
@@ -200,38 +212,6 @@ class CartController extends Controller
             if(Currency::where('code', 'UZB')->exists()){
                 $default_currency_id=Currency::where('code', 'UZB')->first()->id;
             }
-            $tax = taxPrice($product->id);
-            $tax = convertToCurrency($tax, $product->currency_id, $default_currency_id);
-            $price = convertToCurrency($product->price, $product->currency_id, $default_currency_id);
-            $user_id=auth()->id();
-            //discount calculation based on flash deal and regular discount
-            //calculation of taxes
-            $discount_applicable = false;
-
-            if ($product->discount_start_date == null) {
-                $discount_applicable = true;
-            }
-            elseif (strtotime(date('d-m-Y H:i:s')) >= $product->discount_start_date &&
-                strtotime(date('d-m-Y H:i:s')) <= $product->discount_end_date) {
-                $discount_applicable = true;
-            }
-
-            $discount = convertToCurrency(discountPrice($product->id), $product->currency_id, $default_currency_id);
-            if ($discount_applicable) {
-                $price += $discount;
-            }else{
-                $discount=0;
-            }
-            $address_id=$request->address_id??getUserAddress()->id;
-            $delivery_cost=[];
-            $delivery_cost = calculateDeliveryCost($product, $address_id, $product->delivery_type);
-            $shipping_cost= $delivery_cost['total_cost']??0;
-            $is_express=false;
-            if($request->has('is_express') && $request->is_express==1){
-                $is_express=true;
-                $shipping_cost= $delivery_cost['total_express_cost'];
-            }
-            // $shipping_cost = convertToCurrency($shipping_cost, $product->currency_id, $default_currency_id);
             $quantity=0;
             if($request->has('quantity')){
                 $quantity=(double)$request->quantity;
@@ -241,19 +221,51 @@ class CartController extends Controller
             if ($product->qty < $quantity) {
                 return response()->json(['success' => false, 'message' => "Minimum {$product->qty} item(s) should be ordered"], 200);
             }
+            $tax = taxPrice($product->id);
+            $tax = convertToCurrency($tax, $product->currency_id, $default_currency_id);
+            $price = convertToCurrency($product->price, $product->currency_id, $default_currency_id);
+            $discount = convertToCurrency(discountPrice($product->id), $product->currency_id, $default_currency_id);
+            $total_price =($price + $tax + $discount)*$quantity;
+            $user_id=auth()->id();
+            //discount calculation based on flash deal and regular discount
+            //calculation of taxes
+            // $discount_applicable = false;
+
+            // if ($product->discount_start_date == null) {
+            //     $discount_applicable = true;
+            // }
+            // elseif (strtotime(date('d-m-Y H:i:s')) >= $product->discount_start_date &&
+            //     strtotime(date('d-m-Y H:i:s')) <= $product->discount_end_date) {
+            //     $discount_applicable = true;
+            // }
+
+            // if ($discount_applicable) {
+            //     $price += $discount;
+            // }else{
+            //     $discount=0;
+            // }
+            $address_id=$request->address_id??getUserAddress()->id;
+            $delivery_cost=[];
+            $delivery_cost = calculateDeliveryCost($product, $address_id, $product->delivery_type);
+            $shipping_cost= $delivery_cost['total_cost']??0;
+            $is_express=false;
+            if($request->has('is_express') && $request->is_express==1){
+                $is_express=true;
+                $shipping_cost= $delivery_cost['total_express_cost'];
+            }
             $cart=Cart::updateOrCreate([
                 'user_id' => $user_id,
                 'owner_id' => $product->user_id,
                 'product_id' => $request->id,
-                'variation' => $is_express
             ], [
+                'variation' => $is_express,
                 'address_id'=>$address_id,
-                'price' => $price,
-                'tax' => $tax,
+                'price' => $total_price,
+                'tax' => $tax*$quantity,
                 'shipping_cost' => $shipping_cost,
                 'shipping_type'=> $product->delivery_type,
-                'quantity' => DB::raw("quantity + $quantity"),
-                'discount' => $discount,
+                'quantity' => $quantity,
+                'discount' => $discount*$quantity,
             ]);
 
             if($request->has('product_referral_code') && $request->product_referral_code!=null){
@@ -272,8 +284,8 @@ class CartController extends Controller
         }catch(Exception $e){
             return response()->json([
                 'success' => false,
-                'message' => $e->getTrace()
-                // 'message' => $e->getMessage()
+                // 'message' => $e->getTrace()
+                'message' => $e->getMessage()
             ]);
         }
 

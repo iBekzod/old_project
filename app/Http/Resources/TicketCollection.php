@@ -19,7 +19,7 @@ class TicketCollection extends ResourceCollection
                     'status' => $data->status,
                     'viewed' => $data->viewed,
                     'client_viewed' => $data->client_viewed,
-                    'created_at'=>$data->created_at,
+                    'created_at'=>formatDate($data->created_at),
                 ];
             })
         ];

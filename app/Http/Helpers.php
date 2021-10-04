@@ -39,6 +39,7 @@ use Illuminate\Support\Facades\DB;
 use App\FirebaseNotification;
 use App\Wallet;
 use App\Order;
+use Carbon\Carbon;
 use Napa\R19\Sms;
 //highlights the selected navigation on admin panel
 if (!function_exists('sendSMS')) {
@@ -499,22 +500,23 @@ if (!function_exists('verified_sellers_id')) {
 if (!function_exists('convert_price')) {
     function convert_price($price)
     {
-        $business_settings = BusinessSetting::where('type', 'system_default_currency')->first();
-        if ($business_settings != null) {
-            $currency = Currency::find($business_settings->value);
-            $price = floatval($price) / floatval($currency->exchange_rate);
-        }
+        return convertPrice($price);
+        // $business_settings = BusinessSetting::where('type', 'system_default_currency')->first();
+        // if ($business_settings != null) {
+        //     $currency = Currency::find($business_settings->value);
+        //     $price = floatval($price) / floatval($currency->exchange_rate);
+        // }
 
-        $code = \App\Currency::findOrFail(\App\BusinessSetting::where('type', 'system_default_currency')->first()->value)->code;
-        if (Session::has('currency_code')) {
-            $currency = Currency::where('code', Session::get('currency_code', $code))->first();
-        } else {
-            $currency = Currency::where('code', $code)->first();
-        }
+        // $code = \App\Currency::findOrFail(\App\BusinessSetting::where('type', 'system_default_currency')->first()->value)->code;
+        // if (Session::has('currency_code')) {
+        //     $currency = Currency::where('code', Session::get('currency_code', $code))->first();
+        // } else {
+        //     $currency = Currency::where('code', $code)->first();
+        // }
 
-        $price = floatval($price) * floatval($currency->exchange_rate);
+        // $price = floatval($price) * floatval($currency->exchange_rate);
 
-        return $price;
+        // return $price;
     }
 }
 
@@ -766,6 +768,25 @@ if (!function_exists('taxPrice')) {
             $tax = $product->tax;
         }
         return $tax;
+    }
+}
+
+if (!function_exists('formatDate')) {
+    function formatDate($date)
+    {
+        if ($date) {
+            $date = Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('d.m.Y');
+        }
+        return $date;
+    }
+}
+if (!function_exists('formatHourDate')) {
+    function formatHourDate($date)
+    {
+        if ($date) {
+            $date = Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('d.m.Y H:i');
+        }
+        return $date;
     }
 }
 
@@ -1396,7 +1417,7 @@ if (!function_exists('getAttributeFormat')) {
     }
 }
 
-function calculateDeliveryCost($product, $address_id, $delivery_type='tarif'){
+function calculateDeliveryCost($product, $address_id, $delivery_type='tarif', $total_weight=0){
     $seller=$product->user;
     $delivery_cost=0;
     $days=10;
@@ -1474,7 +1495,7 @@ function calculateDeliveryCost($product, $address_id, $delivery_type='tarif'){
         $express_cost = $delivery_cost*(100+((double)$delivery_metrics->express_percent))/100;
         $days=$delivery_metrics->days;
         $express_hours=(double)$delivery_metrics->express_hours;
-        $total_weight_cost=calculateWeightCost($product, $weight_price);
+        $total_weight_cost=calculateWeightCost($product, $weight_price, $total_weight);
         $total_delivery_cost=(double)($delivery_cost+$total_weight_cost);
         $total_express_cost=(double)($express_cost+$total_weight_cost);
         if(((int)($additional_days))>0){
@@ -1516,11 +1537,14 @@ function calculateDeliveryCost($product, $address_id, $delivery_type='tarif'){
 function getAdmin(){
     return User::where('user_type', 'admin')->first();
 }
- function calculateWeightCost($product, $weight_price=0){
-    if(((double)$product->element->weight)<1){
+ function calculateWeightCost($product, $weight_price=0, $total_weight=0){
+    if(((double)$product->element->weight)<1 || ($total_weight<1 && $total_weight!=0)){
         return 0;
     }
     if($weight_price>0){
+        if($total_weight!=0){
+            return $weight_price*$total_weight;
+        }
         return $weight_price*((double)$product->element->weight);
     }
     $user_id=getAdmin();

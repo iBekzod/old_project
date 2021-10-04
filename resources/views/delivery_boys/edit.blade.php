@@ -17,12 +17,23 @@
                     <div class="col-sm-10">
                         <input type="text" class="form-control" name="name" value="{{$delivery_boy->name}}" placeholder="Name" required>
                     </div>
+                    @if ($errors->has('name'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('name') }}</strong>
+                        </span>
+                    @endif
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-2 col-from-label" for="email">{{translate('Email')}}</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" name="email" value="{{$delivery_boy->email}}" placeholder="Email" required>
                     </div>
+
+                    @if ($errors->has('email'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('email') }}</strong>
+                        </span>
+                    @endif
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-2 col-from-label" for="phone">{{translate('Phone')}}</label>
@@ -35,6 +46,11 @@
                     <div class="col-sm-10">
                         <input type="password" class="form-control" name="password" placeholder="Password">
                     </div>
+                    @if ($errors->has('password'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('password') }}</strong>
+                        </span>
+                    @endif
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-2 col-from-label" for="country">
