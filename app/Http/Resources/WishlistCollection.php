@@ -5,7 +5,9 @@ namespace App\Http\Resources;
 use App\Element;
 use App\Product;
 use App\Variation;
+use App\Wishlist;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use App;
 
 class WishlistCollection extends ResourceCollection
 {
@@ -19,6 +21,11 @@ class WishlistCollection extends ResourceCollection
                     $element=Element::findOrFail($variation->element_id);
                 } catch (\Exception $th) {
                     return null;//($th->getMessage());
+                }
+                $wishlist=false;
+                if(Auth::check()){
+                    $user_id=auth()->id();
+                    $wishlist= Wishlist::where('user_id', $user_id)->where('product_id', $product->id)->exists();
                 }
                 if($data->product) {
                     return [
@@ -47,6 +54,7 @@ class WishlistCollection extends ResourceCollection
                         'exchange_rate'=>defaultExchangeRate(),
                         'unit' => $element->unit,
                         'rating' => (double) $product->rating,
+                        'is_wishlist'=>$wishlist,
                         'links' => [
                             'details' => route('products.show', $product->id),
                             'reviews' => route('api.reviews.index', $product->id),
