@@ -7,7 +7,7 @@ use App\Product;
 use App\Variation;
 use App\Wishlist;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use App;
+use Illuminate\Support\Facades\Auth;
 
 class WishlistCollection extends ResourceCollection
 {
