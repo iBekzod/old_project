@@ -253,20 +253,37 @@ class CartController extends Controller
                 $is_express=true;
                 $shipping_cost= $delivery_cost['total_express_cost'];
             }
-            $cart=Cart::updateOrCreate([
-                'user_id' => $user_id,
-                'owner_id' => $product->user_id,
-                'product_id' => $request->id,
-            ], [
-                'variation' => $is_express,
-                'address_id'=>$address_id,
-                'price' => $total_price,
-                'tax' => $tax*$quantity,
-                'shipping_cost' => $shipping_cost,
-                'shipping_type'=> $product->delivery_type,
-                'quantity' => $quantity,
-                'discount' => $discount*$quantity,
-            ]);
+            if($old_cart=Cart::where('user_id' , $user_id)->where('product_id' , $request->id)->first()){
+                $cart=Cart::updateOrCreate([
+                    'user_id' => $user_id,
+                    'product_id' => $request->id,
+                ], [
+                    'owner_id' => $product->user_id,
+                    'variation' => $is_express,
+                    'address_id'=>$address_id,
+                    'price' => $total_price/$quantity*($quantity+$old_cart->quantity),
+                    'tax' => $tax*($quantity+$old_cart->quantity),
+                    'shipping_cost' => $shipping_cost,
+                    'shipping_type'=> $product->delivery_type,
+                    'quantity' => ($quantity+$old_cart->quantity),
+                    'discount' => $discount*($quantity+$old_cart->quantity),
+                ]);
+            }else{
+                $cart=Cart::updateOrCreate([
+                    'user_id' => $user_id,
+                    'product_id' => $request->id,
+                ], [
+                    'owner_id' => $product->user_id,
+                    'variation' => $is_express,
+                    'address_id'=>$address_id,
+                    'price' => $total_price,
+                    'tax' => $tax*$quantity,
+                    'shipping_cost' => $shipping_cost,
+                    'shipping_type'=> $product->delivery_type,
+                    'quantity' => $quantity,
+                    'discount' => $discount*$quantity,
+                ]);
+            }
 
             if($request->has('product_referral_code') && $request->product_referral_code!=null){
                 $cart->product_referral_code=$request->product_referral_code;
