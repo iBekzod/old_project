@@ -168,7 +168,7 @@ class CartController extends Controller
                         $shop_items_data_item["tax"] =(double) $shop_items_raw_data_item["tax"];
                         $shop_items_data_item["shipping_cost"] =(double) $shop_items_raw_data_item["shipping_cost"];
                         $shop_items_data_item["quantity"] =intval($shop_items_raw_data_item["quantity"]) ;
-                        $shop_items_data_item["lower_limit"] = intval($product->qty) ;
+                        $shop_items_data_item["lower_limit"] = 0 ;
                         $shop_items_data_item["upper_limit"] =  intval($product->qty);
 
                         $shop_items_data[] = $shop_items_data_item;
@@ -218,8 +218,8 @@ class CartController extends Controller
             }else{
                 $quantity=1;
             }
-            if ($product->qty < $quantity) {
-                return response()->json(['success' => false, 'message' => "Minimum {$product->qty} item(s) should be ordered"], 200);
+            if (($product->qty>0 && $product->qty < $quantity) || ($product->qty<0)) {
+                return response()->json(['success' => false, 'message' => "Minimum {$product->qty} item(s) should be ordered"], 404);
             }
             $tax = taxPrice($product->id);
             $tax = convertToCurrency($tax, $product->currency_id, $default_currency_id);
@@ -320,7 +320,7 @@ class CartController extends Controller
                 $product = Product::where('id', $cart_item->product_id)->first();
 
                 if ($product->qty < $cart_quantities[$i]) {
-                    return response()->json(['result' => false, 'message' => "Minimum {$product->qty} item(s) should be ordered for {$product->name}"], 200);
+                    return response()->json(['result' => false, 'message' => "Minimum {$product->qty} item(s) should be ordered for {$product->name}"], 404);
                 }else{
                     $cart_item->update([
                         'quantity' => $cart_quantities[$i]

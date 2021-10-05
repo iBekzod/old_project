@@ -18,6 +18,7 @@ use App\User;
 use App\BusinessSetting;
 use App\Cart;
 use App\Coupon;
+use App\DeliveryHistory;
 use Auth;
 use Session;
 use DB;
@@ -102,7 +103,16 @@ class OrderController extends Controller
     {
         $order = Order::findOrFail(decrypt($id));
         $order_shipping_address = json_decode($order->shipping_address);
-        $delivery_boys = User:://where('city', $order_shipping_address->city??'tashkent')
+        // $delivery_boy_ids=DeliveryHistory::groupBy('order_id')->get();
+        // dd($delivery_boy_ids);
+        // $delivery_boy_ids->map(function ($order){
+        //     dd($order);
+        // });
+
+        // return response()->json($delivery_boy_ids);
+        $delivery_boys = User::
+
+        //where('city', $order_shipping_address->city??'tashkent')
             where('user_type', 'delivery_b')
             ->get();
             // return "came";

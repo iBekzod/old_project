@@ -154,7 +154,7 @@ class CartController extends Controller
                         $shop_items_data_item["tax"] =(double) $shop_items_raw_data_item["tax"];
                         $shop_items_data_item["shipping_cost"] =(double) $shop_items_raw_data_item["shipping_cost"];
                         $shop_items_data_item["quantity"] =intval($shop_items_raw_data_item["quantity"]) ;
-                        $shop_items_data_item["lower_limit"] = intval($product->qty) ;
+                        $shop_items_data_item["lower_limit"] = 0 ;
                         $shop_items_data_item["upper_limit"] =  intval($product->qty);
 
                         $shop_items_data[] = $shop_items_data_item;
