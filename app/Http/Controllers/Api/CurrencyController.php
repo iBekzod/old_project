@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\CurrencyCollection;
-use App\Models\Currency;
+use App\Currency;
+use App\Http\Controllers\Controller;
+
 
 class CurrencyController extends Controller
 {

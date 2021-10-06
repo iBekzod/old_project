@@ -14,6 +14,8 @@ use ImageOptimizer;
 use Illuminate\Support\Str;
 use App\Utility\CategoryUtility;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
+use App\Language;
+use Twilio\Rest\Api\V2010\Account\Usage\Record\TodayOptions;
 
 class CustomerProductController extends Controller
 {
@@ -104,11 +106,15 @@ class CustomerProductController extends Controller
             $user->remaining_uploads -= 1;
             $user->save();
 
-            $customer_product_translation               = CustomerProductTranslation::firstOrNew(['lang' => env('DEFAULT_LANGUAGE'), 'customer_product_id' => $customer_product->id]);
-            $customer_product_translation->name         = $request->name;
-            $customer_product_translation->unit         = $request->unit;
-            $customer_product_translation->description  = $request->description;
-            $customer_product_translation->save();
+            foreach (Language::all() as $language){
+                // CustomerProduct Translations
+                $customer_product_translation = CustomerProductTranslation::firstOrNew(['lang' => $language->code, 'customer_product_id' => $customer_product->id]);
+                $customer_product_translation->name = $customer_product->name;
+                $customer_product_translation->unit  = $customer_product->unit;
+                $customer_product_translation->description  = $customer_product->description;
+                $customer_product_translation->save();
+            }
+
 
             flash(translate('Product has been inserted successfully'))->success();
             return redirect()->route('customer_products.index');
@@ -117,6 +123,7 @@ class CustomerProductController extends Controller
             flash(translate('Something went wrong'))->error();
             return back();
         }
+
     }
 
     /**
@@ -157,7 +164,7 @@ class CustomerProductController extends Controller
     public function update(Request $request, $id)
     {
         $customer_product                       = CustomerProduct::find($id);
-        if($request->lang == env("DEFAULT_LANGUAGE")){
+        if($request->lang == default_language()){
             $customer_product->name             = $request->name;
             $customer_product->unit             = $request->unit;
             $customer_product->description      = $request->description;
@@ -188,12 +195,16 @@ class CustomerProductController extends Controller
         $customer_product->pdf                  = $request->pdf;
         $customer_product->slug                 = SlugService::createSlug(CustomerProduct::class, 'slug', slugify($request->slug));
         if($customer_product->save()){
-
-            $customer_product_translation               = CustomerProductTranslation::firstOrNew(['lang' => $request->lang, 'customer_product_id' => $customer_product->id]);
-            $customer_product_translation->name         = $request->name;
-            $customer_product_translation->unit         = $request->unit;
-            $customer_product_translation->description  = $request->description;
-            $customer_product_translation->save();
+            
+            if(CustomerProductTranslation::where('customer_product_id' , $customer_product->id)->where('lang' ,default_language())->first()){
+                foreach (Language::all() as $language){
+                    $customer_product_translation = CustomerProductTranslation::firstOrNew(['lang' => $language->code, 'customer_product_id' => $customer_product->id]);
+                    $customer_product_translation->name = $request->name;
+                    $customer_product_translation->unit = $request->unit;
+                    $customer_product_translation->description = $request->description;
+                    $customer_product_translation->save();
+                }
+            }
 
             flash(translate('Product has been inserted successfully'))->success();
             return back();
@@ -202,6 +213,7 @@ class CustomerProductController extends Controller
             flash(translate('Something went wrong'))->error();
             return back();
         }
+
     }
 
     /**

@@ -7,40 +7,55 @@
 
 <div class="card">
     <form class="" action="" method="GET">
-      <div class="card-header row gutters-5">
-        <div class="col text-center text-md-left">
-          <h5 class="mb-md-0 h6">{{ translate('Seller Orders') }}</h5>
-        </div>
-        <div class="col-lg-2">
-            <div class="form-group mb-0">
-                <input type="text" class="aiz-date-range form-control" value="{{ $date }}" name="date" placeholder="{{ translate('Filter by date') }}" data-format="DD-MM-Y" data-separator=" to " data-advanced-range="true" autocomplete="off">
+        <div class="card-header row gutters-5">
+            <div class="col text-center text-md-left">
+                <h5 class="mb-md-0 h6">{{ translate('Seller Orders') }}</h5>
+            </div>
+            <div class="col-lg-2">
+                <div class="form-group mb-0">
+                    <input type="text" class="aiz-date-range form-control" value="{{ $date }}" name="date" placeholder="{{ translate('Filter by date') }}" data-format="DD-MM-Y" data-separator=" to " data-advanced-range="true" autocomplete="off">
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="form-group mb-0">
+                    <select class="form-control form-control-sm aiz-selectpicker mb-2 mb-md-0" id="seller_id" name="seller_id">
+                        <option value="">{{ translate('All Sellers') }}</option>
+                        @foreach (App\Seller::all() as $key => $seller)
+                            @if ($seller->user != null && $seller->user->shop != null)
+                                <option value="{{ $seller->user->id }}" @if ($seller->user->id == $seller_id) selected @endif>
+                                    {{ $seller->user->shop->name }} ({{ $seller->user->name }})
+                                </option>
+                            @endif
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group mb-0">
+                    <input type="text" class="form-control" id="search" name="search"@isset($sort_search) value="{{ $sort_search }}" @endisset placeholder="{{ translate('Type Order code & hit Enter') }}">
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="form-group mb-0">
+                    <button type="submit" class="btn btn-primary">{{ translate('Filter') }}</button>
+                </div>
             </div>
         </div>
-        <div class="col-lg-2">
-          <div class="form-group mb-0">
-            <input type="text" class="form-control" id="search" name="search"@isset($sort_search) value="{{ $sort_search }}" @endisset placeholder="{{ translate('Type Order code & hit Enter') }}">
-          </div>
-        </div>
-        <div class="col-auto">
-          <div class="form-group mb-0">
-            <button type="submit" class="btn btn-primary">{{ translate('Filter') }}</button>
-          </div>
-        </div>
-      </div>
-  </form>
+    </form>
 
     <div class="card-body">
         <table class="table aiz-table mb-0">
             <thead>
                 <tr>
-                    <th>#</th>
+                    <th data-breakpoints="lg">#</th>
                     <th width="20%">{{translate('Order Code')}}</th>
-                    <th>{{translate('Num. of Products')}}</th>
-                    <th>{{translate('Customer')}}</th>
-                    <th>{{translate('Amount')}}</th>
-                    <th>{{translate('Delivery Status')}}</th>
-                    <th>{{translate('Payment Method')}}</th>
-                    <th>{{translate('Payment Status')}}</th>
+                    <th data-breakpoints="lg">{{translate('Num. of Products')}}</th>
+                    <th data-breakpoints="lg">{{translate('Customer')}}</th>
+                    <th>{{translate('Seller')}}</th>
+                    <th data-breakpoints="lg">{{translate('Amount')}}</th>
+                    <th data-breakpoints="lg">{{translate('Delivery Status')}}</th>
+                    <th data-breakpoints="lg">{{translate('Payment Method')}}</th>
+                    <th data-breakpoints="lg">{{translate('Payment Status')}}</th>
                     @if ($refund_request_addon != null && $refund_request_addon->activated == 1)
                         <th>{{translate('Refund')}}</th>
                     @endif
@@ -71,11 +86,16 @@
                                 @endif
                             </td>
                             <td>
+                                @if($order->seller)
+                                    {{ $order->seller->name }}
+                                @endif
+                            </td>
+                            <td>
                                 {{ single_price($order->grand_total) }}
                             </td>
                             <td>
                                 @php
-                                    $status = $order->orderDetails->first()->delivery_status;
+                                    $status = $order->delivery_status;
                                 @endphp
                                 {{ translate(ucfirst(str_replace('_', ' ', $status))) }}
                             </td>
@@ -83,7 +103,7 @@
                                 {{ translate(ucfirst(str_replace('_', ' ', $order->payment_type))) }}
                             </td>
                             <td>
-                                @if ($order->orderDetails->where('seller_id', '!=',  $admin_user_id)->first()->payment_status == 'paid')
+                                @if ($order->payment_status == 'paid')
                                   <span class="badge badge-inline badge-success">{{translate('Paid')}}</span>
                                 @else
                                   <span class="badge badge-inline badge-danger">{{translate('Unpaid')}}</span>
@@ -103,7 +123,7 @@
                                 <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{route('seller_orders.show', encrypt($order->id))}}" title="{{ translate('View') }}">
                                     <i class="las la-eye"></i>
                                 </a>
-                                <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{ route('customer.invoice.download', $order->id) }}" title="{{ translate('Download Invoice') }}">
+                                <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{ route('invoice.download', $order->id) }}" title="{{ translate('Download Invoice') }}">
                                     <i class="las la-download"></i>
                                 </a>
                                 <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete" data-href="{{route('orders.destroy', $order->id)}}" title="{{ translate('Delete') }}">

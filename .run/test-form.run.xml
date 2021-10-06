@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="test-form" type="PhpLocalRunConfigurationType" factoryName="PHP Console" folderName="test" path="$PROJECT_DIR$/artisan" scriptParameters="run:query">
+    <method v="2" />
+  </configuration>
+</component>

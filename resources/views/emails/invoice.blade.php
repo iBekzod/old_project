@@ -86,11 +86,11 @@
 				</tr>
 				<tr>
 					<td class="gry-color small">{{  translate('Email') }}: {{ get_setting('contact_email') }}</td>
-					<td class="text-right small"><span class="gry-color small">{{  translate('Order ID') }}:</span> <span class="strong">{{ $order->code }}</span></td>
+					<td class="text-right small"><span class="gry-color small">{{  translate('Order ID') }}:</span> <span class="strong">{{ $order->code ?? "kemadi" }}</span></td>
 				</tr>
 				<tr>
 					<td class="gry-color small">{{  translate('Phone') }}: {{ get_setting('contact_phone') }}</td>
-					<td class="text-right small"><span class="gry-color small">{{  translate('Order Date') }}:</span> <span class=" strong">{{ date('d-m-Y', $order->date) }}</span></td>
+					{{-- <td class="text-right small"><span class="gry-color small">{{  translate('Order Date') }}:</span> <span class=" strong">{{ date('d-m-Y', $order->date) }}</span></td> --}}
 				</tr>
 			</table>
 
@@ -98,14 +98,14 @@
 
 		<div style="padding: 1.5rem;padding-bottom: 0">
             <table>
-				@php
+				{{-- @php
 					$shipping_address = json_decode($order->shipping_address);
-				@endphp
+				@endphp --}}
 				<tr><td class="strong small gry-color">{{ translate('Bill to') }}:</td></tr>
-				<tr><td class="strong">{{ $shipping_address->name }}</td></tr>
-				<tr><td class="gry-color small">{{ $shipping_address->address }}, {{ $shipping_address->city }}, {{ $shipping_address->country }}</td></tr>
-				<tr><td class="gry-color small">{{ translate('Email') }}: {{ $shipping_address->email }}</td></tr>
-				<tr><td class="gry-color small">{{ translate('Phone') }}: {{ $shipping_address->phone }}</td></tr>
+				<tr><td class="strong">{{ $shipping_address->name ?? "kemadi" }}</td></tr>
+				<tr><td class="gry-color small">{{ $shipping_address->address ?? "kemadi" }}, {{ $shipping_address->city ?? "kemadi" }}, {{ $shipping_address->country ?? "kemadi" }}</td></tr>
+				<tr><td class="gry-color small">{{ translate('Email') }}: {{ $shipping_address->email ?? "kemadi" }}</td></tr>
+				<tr><td class="gry-color small">{{ translate('Phone') }}: {{ $shipping_address->phone ?? "kemadi" }}</td></tr>
 			</table>
 		</div>
 
@@ -122,7 +122,7 @@
 	                </tr>
 				</thead>
 				<tbody class="strong">
-	                @foreach ($order->orderDetails as $key => $orderDetail)
+	                {{-- @foreach ($order->orderDetails as $key => $orderDetail)
 		                @if ($orderDetail->product != null)
 							<tr class="">
 								<td>{{ $orderDetail->product->getTranslation('name') }} @if($orderDetail->variation != null) ({{ $orderDetail->variation }}) @endif</td>
@@ -138,36 +138,58 @@
 								<td class="gry-color">{{ $orderDetail->quantity }}</td>
 								<td class="gry-color currency">{{ single_price($orderDetail->price/$orderDetail->quantity) }}</td>
 								<td class="gry-color currency">{{ single_price($orderDetail->tax/$orderDetail->quantity) }}</td>
-			                    <td class="text-right currency">{{ single_price($orderDetail->price+$orderDetail->tax) }}</td>
+			                    <td class="text-right currency">{{ single_price($orderDetail->price+$orderDetail->tax) }}</td> ?? "kemadi"
 							</tr>
 		                @endif
-					@endforeach
+					@endforeach --}}
 	            </tbody>
 			</table>
 		</div>
 
 	    <div style="padding:0 1.5rem;">
 	        <table style="width: 40%;margin-left:auto;" class="text-right sm-padding small strong">
-		        <tbody>
+		        {{-- <tbody>
 			        <tr>
 			            <th class="gry-color text-left">{{ translate('Sub Total') }}</th>
-			            <td class="currency">{{ single_price($order->orderDetails->sum('price')) }}</td>
+			            <td class="currency">{{ single_price($order->orderDetails->sum('price') ?? "kemadi") }}</td>
 			        </tr>
 			        <tr>
 			            <th class="gry-color text-left">{{ translate('Shipping Cost') }}</th>
-			            <td class="currency">{{ single_price($order->orderDetails->sum('shipping_cost')) }}</td>
+			            <td class="currency">{{ single_price($order->orderDetails->sum('shipping_cost') ?? "kemadi") }}</td>
 			        </tr>
 			        <tr class="border-bottom">
 			            <th class="gry-color text-left">{{ translate('Total Tax') }}</th>
-			            <td class="currency">{{ single_price($order->orderDetails->sum('tax')) }}</td>
+			            <td class="currency">{{ single_price($order->orderDetails->sum('tax') ?? "kemadi") }}</td>
 			        </tr>
                     <tr class="border-bottom">
 			            <th class="gry-color text-left">{{ translate('Coupon') }}</th>
-			            <td class="currency">{{ single_price($order->coupon_discount) }}</td>
+			            <td class="currency">{{ single_price($order->coupon_discount ?? "kemadi") }}</td>
 			        </tr>
 			        <tr>
 			            <th class="text-left strong">{{ translate('Grand Total') }}</th>
-			            <td class="currency">{{ single_price($order->grand_total) }}</td>
+			            <td class="currency">{{ single_price($order->grand_total ?? "kemadi") }}</td>
+			        </tr>
+		        </tbody> --}}
+                 <tbody>
+			        <tr>
+			            <th class="gry-color text-left">{{ translate('Sub Total') }}</th>
+			            <td class="currency">KEMADI</td>
+			        </tr>
+			        <tr>
+			            <th class="gry-color text-left">{{ translate('Shipping Cost') }}</th>
+			            <td class="currency">KEMADI</td>
+			        </tr>
+			        <tr class="border-bottom">
+			            <th class="gry-color text-left">{{ translate('Total Tax') }}</th>
+			            <td class="currency">KEMADI</td>
+			        </tr>
+                    <tr class="border-bottom">
+			            <th class="gry-color text-left">{{ translate('Coupon') }}</th>
+			            <td class="currency">KEMADI</td>
+			        </tr>
+			        <tr>
+			            <th class="text-left strong">{{ translate('Grand Total') }}</th>
+			            <td class="currency">KEMADI</td>
 			        </tr>
 		        </tbody>
 		    </table>

@@ -20,7 +20,7 @@
                             <span class="fs-12 d-block">{{ translate('Total') }}</span>
                             {{ translate('Customer') }}
                         </div>
-                        <div class="h3 fw-700 mb-3">{{ DB::table('customers')->count() }}</div>
+                        <div class="h3 fw-700 mb-3">{{ \App\User::where('user_type', 'customer')->count() }}</div>
                     </div>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
                         <path fill="rgba(255,255,255,0.3)" fill-opacity="1" d="M0,128L34.3,112C68.6,96,137,64,206,96C274.3,128,343,224,411,250.7C480,277,549,235,617,213.3C685.7,192,754,192,823,181.3C891.4,171,960,149,1029,117.3C1097.1,85,1166,43,1234,58.7C1302.9,75,1371,149,1406,186.7L1440,224L1440,320L1405.7,320C1371.4,320,1303,320,1234,320C1165.7,320,1097,320,1029,320C960,320,891,320,823,320C754.3,320,686,320,617,320C548.6,320,480,320,411,320C342.9,320,274,320,206,320C137.1,320,69,320,34,320L0,320Z"></path>
@@ -34,7 +34,7 @@
                             <span class="fs-12 d-block">{{ translate('Total') }}</span>
                             {{ translate('Order') }}
                         </div>
-                        <div class="h3 fw-700 mb-3">{{ DB::table('orders')->count() }}</div>
+                        <div class="h3 fw-700 mb-3">{{ \App\Order::count() }}</div>
                     </div>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
                         <path fill="rgba(255,255,255,0.3)" fill-opacity="1" d="M0,128L34.3,112C68.6,96,137,64,206,96C274.3,128,343,224,411,250.7C480,277,549,235,617,213.3C685.7,192,754,192,823,181.3C891.4,171,960,149,1029,117.3C1097.1,85,1166,43,1234,58.7C1302.9,75,1371,149,1406,186.7L1440,224L1440,320L1405.7,320C1371.4,320,1303,320,1234,320C1165.7,320,1097,320,1029,320C960,320,891,320,823,320C754.3,320,686,320,617,320C548.6,320,480,320,411,320C342.9,320,274,320,206,320C137.1,320,69,320,34,320L0,320Z"></path>
@@ -48,7 +48,7 @@
                             <span class="fs-12 d-block">{{ translate('Total') }}</span>
                             {{ translate('Product category') }}
                         </div>
-                        <div class="h3 fw-700 mb-3">{{ DB::table('categories')->count() }}</div>
+                        <div class="h3 fw-700 mb-3">{{ \App\Category::count() }}</div>
                     </div>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
                         <path fill="rgba(255,255,255,0.3)" fill-opacity="1" d="M0,128L34.3,112C68.6,96,137,64,206,96C274.3,128,343,224,411,250.7C480,277,549,235,617,213.3C685.7,192,754,192,823,181.3C891.4,171,960,149,1029,117.3C1097.1,85,1166,43,1234,58.7C1302.9,75,1371,149,1406,186.7L1440,224L1440,320L1405.7,320C1371.4,320,1303,320,1234,320C1165.7,320,1097,320,1029,320C960,320,891,320,823,320C754.3,320,686,320,617,320C548.6,320,480,320,411,320C342.9,320,274,320,206,320C137.1,320,69,320,34,320L0,320Z"></path>
@@ -62,7 +62,7 @@
                             <span class="fs-12 d-block">{{ translate('Total') }}</span>
                             {{ translate('Product brand') }}
                         </div>
-                        <div class="h3 fw-700 mb-3">{{ DB::table('brands')->count() }}</div>
+                        <div class="h3 fw-700 mb-3">{{ \App\Brand::count() }}</div>
                     </div>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
                         <path fill="rgba(255,255,255,0.3)" fill-opacity="1" d="M0,128L34.3,112C68.6,96,137,64,206,96C274.3,128,343,224,411,250.7C480,277,549,235,617,213.3C685.7,192,754,192,823,181.3C891.4,171,960,149,1029,117.3C1097.1,85,1166,43,1234,58.7C1302.9,75,1371,149,1406,186.7L1440,224L1440,320L1405.7,320C1371.4,320,1303,320,1234,320C1165.7,320,1097,320,1029,320C960,320,891,320,823,320C754.3,320,686,320,617,320C548.6,320,480,320,411,320C342.9,320,274,320,206,320C137.1,320,69,320,34,320L0,320Z"></path>
@@ -131,32 +131,34 @@
     </div>
     <div class="card-body">
         <div class="aiz-carousel gutters-10 half-outside-arrow" data-items="6" data-xl-items="5" data-lg-items="4" data-md-items="3" data-sm-items="2" data-arrows='true'>
-            @foreach (filter_products(\App\Product::where('published', 1)->with('product_translations')->orderBy('num_of_sale', 'desc'))->limit(12)->get() as $key => $product)
+            @foreach (getPublishedProducts('product', [['orderBy'=>['num_of_sale' => 'desc']]])->groupBy('element_id')->limit(12)->get() as $key => $product)
                 <div class="carousel-box">
                     <div class="aiz-card-box border border-light rounded shadow-sm hov-shadow-md mb-2 has-transition bg-white">
                         <div class="position-relative">
-                            <a href="{{ route('product', $product->slug) }}" class="d-block">
+                            <a href="{{ url('single_product/'.$product->slug) }}" target="_blank">
                                 <img
                                     class="img-fit lazyload mx-auto h-210px"
                                     src="{{ static_asset('assets/img/placeholder.jpg') }}"
-                                    data-src="{{ uploaded_asset($product->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}"
-                                    alt="{{  $product->getTranslation('name')  }}"
+                                    data-src="{{ uploaded_asset($product->variation->thumbnail_img)??static_asset('assets/img/placeholder.jpg') }}"
+                                    alt="{{  $product->variation->name  }}"
                                     onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
                                 >
                             </a>
                         </div>
                         <div class="p-md-3 p-2 text-left">
                             <div class="fs-15">
-                                @if(home_base_price($product->id) != home_discounted_base_price($product->id))
-                                    <del class="fw-600 opacity-50 mr-1">{{ home_base_price($product->id) }}</del>
+                                @if(homeBasePrice($product->id) != homeDiscountedBasePrice($product->id))
+                                    <del class="fw-600 opacity-50 mr-1">{{ homeBasePrice($product->id) }} {{defaultCurrency()}}</del>
                                 @endif
-                                <span class="fw-700 text-primary">{{ home_discounted_base_price($product->id) }}</span>
+                                <span class="fw-700 text-primary">{{ homeDiscountedBasePrice($product->id) }} {{defaultCurrency()}}</span>
                             </div>
                             <div class="rating rating-sm mt-1">
                                 {{ renderStarRating($product->rating) }}
                             </div>
                             <h3 class="fw-600 fs-13 text-truncate-2 lh-1-4 mb-0">
-                                <a href="{{ route('product', $product->slug) }}" class="d-block text-reset">{{ $product->getTranslation('name') }}</a>
+{{--                                <a href="{{ route('product', $product->slug) }}" class="d-block text-reset">--}}
+                                    {{ $product->name }}
+{{--                                </a>--}}
                             </h3>
                         </div>
                     </div>
@@ -170,25 +172,28 @@
 @endsection
 @section('script')
 @php
-    $lvl0Categories = \App\Category::where('level', 0)->get();
-    $published1Products = \App\Product::where('published', 1)->get();
+    // \App\Category::where('level', 0)->get();
+    $published1Products = getPublishedProducts('product');
+    $lvl0Categories = getProductCategories($published1Products,0)->get();
+    $published1Products = $published1Products->get();
     $allSellers = \App\Seller::all();
 @endphp
+{{-- @dd($lvl0Categories) --}}
 <script type="text/javascript">
     AIZ.plugins.chart('#pie-1',{
         type: 'doughnut',
         data: {
             labels: [
-                '{{translate('Total published products')}}',
-                '{{translate('Total sellers products')}}',
-                '{{translate('Total admin products')}}'
+                '{{translate("Total published products")}}',
+                '{{translate("Total sellers products")}}',
+                '{{translate("Total admin products")}}'
             ],
             datasets: [
                 {
                     data: [
-                        {{ $published1Products->count() }},
-                        {{ count($published1Products->where('added_by', 'seller')->all()) }},
-                        {{ count($published1Products->where('added_by', 'admin')->all()) }}
+                        '{{ $published1Products->count() }}',
+                        '{{ \App\Product::where("added_by", "seller")->get()->count() }}',
+                        '{{ \App\Product::where("added_by", "admin")->get()->count() }}'
                     ],
                     backgroundColor: [
                         "#fd3995",
@@ -225,16 +230,16 @@
         type: 'doughnut',
         data: {
             labels: [
-                '{{translate('Total sellers')}}',
-                '{{translate('Total approved sellers')}}',
-                '{{translate('Total pending sellers')}}'
+                '{{translate("Total sellers")}}',
+                '{{translate("Total approved sellers")}}',
+                '{{translate("Total pending sellers")}}'
             ],
             datasets: [
                 {
                     data: [
-                        {{ $allSellers->count() }},
-                        {{ count($allSellers->where('verification_status', 1)->all()) }},
-                        {{ count($allSellers->where('verification_status', 0)) }}
+                        '{{ $allSellers->count() }}',
+                        '{{ count($allSellers->where("verification_status", 1)->all()) }}',
+                        '{{ count($allSellers->where("verification_status", 0)) }}'
                     ],
                     backgroundColor: [
                         "#fd3995",
@@ -269,33 +274,38 @@
     var sfs = {
             labels: [
                 @foreach ($lvl0Categories as $key => $category)
-                '{{ $category->getTranslation('name') }}',
+                    '{{ $category->getTranslation("name") }}',
                 @endforeach
             ],
             datasets: [
                 @foreach ($lvl0Categories as $key => $category)
-                {{ \App\Product::where('category_id', $category->id)->sum('num_of_sale') }},
+                    '{{ $published1Products->sum("num_of_sale") }}',
                 @endforeach
             ]
     }
+    console.log(sfs);
     AIZ.plugins.chart('#graph-1',{
         type: 'bar',
         data: {
             labels: [
                 @foreach ($lvl0Categories as $key => $category)
-                '{{ $category->getTranslation('name') }}',
+                '{{ $category->getTranslation("name") }}',
                 @endforeach
             ],
             datasets: [{
-                label: '{{ translate('Number of sale') }}',
+                label: '{{ translate("Number of sale") }}',
                 data: [
-{{--                    @foreach ($lvl0Categories as $key => $category)--}}
-{{--                        @php--}}
-{{--                            $category_ids = \App\Utility\CategoryUtility::children_ids($category->id);--}}
-{{--                            $category_ids[] = $category->id;--}}
-{{--                        @endphp--}}
-{{--                    {{ \App\Product::whereIn('category_id', $category_ids)->sum('num_of_sale') }},--}}
-{{--                    @endforeach--}}
+                    @foreach ($lvl0Categories as $key => $category)
+                        @php
+                            $category_ids = \App\Utility\CategoryUtility::children_ids($category->id);
+                            $category_ids[] = $category->id;
+                            $num_of_sale=\App\Product::whereHas('element', function ($relation) use ($category_ids) {
+                                $relation->whereIn('category_id', $category_ids);
+                            })->sum('num_of_sale');
+                        @endphp
+                            '{{$num_of_sale}}'
+                            ,
+                    @endforeach
                 ],
                 backgroundColor: [
                     @foreach ($lvl0Categories as $key => $category)
@@ -351,33 +361,24 @@
         type: 'bar',
         data: {
             labels: [
-{{--                @foreach ($lvl0Categories as $key => $category)--}}
-{{--                '{{ $category->getTranslation('name') }}',--}}
-{{--                @endforeach--}}
+                @foreach ($lvl0Categories as $key => $category)
+                    '{{ $category->getTranslation("name")}} ',
+                @endforeach
             ],
             datasets: [{
-                label: '{{ translate('Number of Stock') }}',
+                label: '{{ translate("Number of Stock") }}',
                 data: [
-{{--                    @foreach ($lvl0Categories as $key => $category)--}}
-{{--                        @php--}}
-{{--                            $category_ids = \App\Utility\CategoryUtility::children_ids($category->id);--}}
-{{--                            $category_ids[] = $category->id;--}}
-
-{{--                            $products = \App\Product::whereIn('category_id', $category_ids)->get();--}}
-{{--                            $qty = 0;--}}
-{{--                            foreach ($products as $key => $product) {--}}
-{{--                                if ($product->variant_product) {--}}
-{{--                                    foreach ($product->stocks as $key => $stock) {--}}
-{{--                                        $qty += $stock->qty;--}}
-{{--                                    }--}}
-{{--                                }--}}
-{{--                                else {--}}
-{{--                                    $qty = $product->current_stock;--}}
-{{--                                }--}}
-{{--                            }--}}
-{{--                        @endphp--}}
-{{--                        {{ $qty }},--}}
-{{--                    @endforeach--}}
+                    @foreach ($lvl0Categories as $key => $category)
+                        @php
+                            $category_ids = \App\Utility\CategoryUtility::children_ids($category->id);
+                            $category_ids[] = $category->id;
+                            $num_of_stock=\App\Product::whereHas("element", function ($relation) use ($category_ids) {
+                                $relation->whereIn("category_id", $category_ids);
+                            })->sum("qty");
+                        @endphp
+                            '{{$num_of_stock}}'
+                        ,
+                    @endforeach
                 ],
                 backgroundColor: [
                     @foreach ($lvl0Categories as $key => $category)

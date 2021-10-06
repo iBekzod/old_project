@@ -1,19 +1,18 @@
 @extends('backend.layouts.app')
 
 @section('content')
-
     <div class="aiz-titlebar text-left mt-2 mb-3">
         <div class="row align-items-center">
             <div class="col-md-6">
                 <h1 class="h3">{{translate('All products')}}</h1>
             </div>
-            @if($type != 'Seller')
+            {{-- @if($type != 'Seller')
                 <div class="col-md-6 text-md-right">
                     <a href="{{ route('products.create') }}" class="btn btn-circle btn-info">
                         <span>{{translate('Add New Product')}}</span>
                     </a>
                 </div>
-            @endif
+            @endif --}}
         </div>
     </div>
     <br>
@@ -64,10 +63,9 @@
                                 @isset($col_name , $query) @if($col_name == 'num_of_sale' && $query == 'desc') selected @endif @endisset>{{translate('Num of Sale (High > Low)')}}</option>
                         <option value="num_of_sale,asc"
                                 @isset($col_name , $query) @if($col_name == 'num_of_sale' && $query == 'asc') selected @endif @endisset>{{translate('Num of Sale (Low > High)')}}</option>
-                        <option value="unit_price,desc"
-                                @isset($col_name , $query) @if($col_name == 'unit_price' && $query == 'desc') selected @endif @endisset>{{translate('Base Price (High > Low)')}}</option>
-                        <option value="unit_price,asc"
-                                @isset($col_name , $query) @if($col_name == 'unit_price' && $query == 'asc') selected @endif @endisset>{{translate('Base Price (Low > High)')}}</option>
+                       {{--   <option value="price,desc"
+{{--                                @isset($col_name , $query) @if($col_name == 'price' && $query == 'desc') selected @endif @endisset>{{translate('Base Price (High > Low)')}}</option>                        <option value="price,asc"
+{{--                                @isset($col_name , $query) @if($col_name == 'price' && $query == 'asc') selected @endif @endisset>{{translate('Base Price (Low > High)')}}</option> --}}
                     </select>
                 </div>
                 <div class="col-md-2">
@@ -91,97 +89,81 @@
                         <th>{{translate('Num of Sale')}}</th>
                         <th>{{translate('Total Stock')}}</th>
                         <th>{{translate('Base Price')}}</th>
-                        <th>{{translate('Todays Deal')}}</th>
+                       {{-- <th>{{translate('Currency')}}</th> --}}
                         <th>{{translate('Rating')}}</th>
+                        {{-- <th>{{translate('Todays Deal')}}</th>
+
                         <th>{{translate('Published')}}</th>
-                        <th>{{translate('Featured')}}</th>
+                        <th>{{translate('Featured')}}</th> --}}
                         <th class="text-right">{{translate('Options')}}</th>
                     </tr>
                     </thead>
                     <tbody>
+{{--                    @dd($products)--}}
                     @foreach($products as $key => $product)
                         <tr>
                             <td>{{ ($key+1) + ($products->currentPage() - 1)*$products->perPage() }}</td>
                             <td>
-                                <a href="{{ route('product', $product->slug) }}" target="_blank">
+                                <a href="{{ url('single_product/'.$product->slug) }}" target="_blank">
                                     <div class="form-group row">
                                         <div class="col-lg-4">
-                                            <img src="{{ uploaded_asset($product->thumbnail_img)??static_asset('assets/img/placeholder.jpg')}}" alt="Image"
-                                                 class="w-50px">
+                                            <img src="{{ ($product->variation)?uploaded_asset($product->variation->thumbnail_img)??static_asset('assets/img/placeholder.jpg'):null}}" alt="Image"
+                                                    class="w-50px">
                                         </div>
-                                        <div class="col-lg-8">
-                                            <span class="text-muted">{{ $product->getTranslation('name') }}</span>
+                                        <div class="col-lg-6">
+                                            <span class="text-muted">{{  ($product->variation)?$product->variation->getTranslation('name'):null}}</span>
+
                                         </div>
+
+                                        <div class="col-lg-2">
+                                            @if($product->on_moderation)
+                                                <span class="badge badge-pill badge-info">{{translate('new')}}</span>
+                                            @endif
+                                        </div>
+
                                     </div>
                                 </a>
                             </td>
                             @if($type == 'Seller' || $type == 'All')
-                                <td>{{ $product->user->name }}</td>
+                                <td>{{ ($product)?$product->user->name??null:null }}</td>
                             @endif
-                            <td>{{ $product->num_of_sale }} {{translate('times')}}</td>
+                            <td>{{ $product->num_of_sale??0 }} {{translate('times')}}</td>
                             <td>
-                                @php
-                                    $qty = 0;
-                                    if($product->variant_product){
-                                        foreach ($product->stocks as $key => $stock) {
-                                            $qty += $stock->qty;
-                                        }
-                                    }
-                                    else{
-                                        $qty = $product->current_stock;
-                                    }
-                                    echo $qty;
-                                @endphp
+                                {{($product)?$product->qty??0:null}}
                             </td>
-                            <td>{{ number_format($product->unit_price,2) }}</td>
-                            <td>
+                            <td>{{ ($product)?number_format(homeBasePrice($product->id), 2):null }}</td>
+                            {{-- <td>{{ $product->currency->code }}</td> --}}
+                            <td>{{ $product->rating??0 }}</td>
+                            {{-- <td>
                                 <label class="aiz-switch aiz-switch-success mb-0">
                                     <input onchange="update_todays_deal(this)" value="{{ $product->id }}"
-                                           type="checkbox" <?php if ($product->todays_deal == 1) echo "checked";?> >
+                                           type="checkbox" @if(($product)?$product->todays_deal:null == 1) checked @endif >
                                     <span class="slider round"></span>
                                 </label>
                             </td>
-                            <td>{{ $product->rating }}</td>
+
                             <td>
                                 <label class="aiz-switch aiz-switch-success mb-0">
                                     <input onchange="update_published(this)" value="{{ $product->id }}"
-                                           type="checkbox" <?php if ($product->published == 1) echo "checked";?> >
+                                           type="checkbox" @if(($product)?$product->published:null == 1) checked @endif >
                                     <span class="slider round"></span>
                                 </label>
                             </td>
                             <td>
                                 <label class="aiz-switch aiz-switch-success mb-0">
                                     <input onchange="update_featured(this)" value="{{ $product->id }}"
-                                           type="checkbox" <?php if ($product->featured == 1) echo "checked";?> >
+                                           type="checkbox" @if(($product)?$product->featured:null == 1) checked @endif>
                                     <span class="slider round"></span>
                                 </label>
-                            </td>
+                            </td> --}}
                             <td class="text-right">
-                                <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
-                                   href="{{route('products.characteristics', ['id'=>$product->id, 'type'=>$type]  )}}"
-                                   title="{{ translate('Product Attributes') }}">
-                                    <i class="las la-list"></i>
-                                </a>
-                                @if ($type == 'Seller')
-                                    <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                       href="{{route('products.seller.edit', ['id'=>$product->id, 'lang'=>env('DEFAULT_LANGUAGE')] )}}"
-                                       title="{{ translate('Edit') }}">
-                                        <i class="las la-edit"></i>
-                                    </a>
-                                @else
-                                    <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                       href="{{route('products.admin.edit', ['id'=>$product->id, 'lang'=>env('DEFAULT_LANGUAGE')] )}}"
-                                       title="{{ translate('Edit') }}">
-                                        <i class="las la-edit"></i>
-                                    </a>
-                                @endif
-                                <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
-                                   href="{{route('products.duplicate', ['id'=>$product->id, 'type'=>$type]  )}}"
-                                   title="{{ translate('Duplicate') }}">
-                                    <i class="las la-copy"></i>
+                                <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
+                                    href="{{route('element.products.edit', ['id'=>$product->element->id] )}}"
+                                    title="{{ translate('Edit') }}">
+                                    <i class="las la-edit"></i>
                                 </a>
                                 <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
-                                   data-href="{{route('products.destroy', $product->id)}}"
+                                   data-href="{{route('products.destroy', ['id'=>$product->id])}}"
                                    title="{{ translate('Delete') }}">
                                     <i class="las la-trash"></i>
                                 </a>
@@ -269,6 +251,11 @@
 
         function sort_products(el) {
             $('#sort_products').submit();
+        }
+        let newValue = '';
+        function onChange(e) {
+            newValue = e.target.value;
+            document.querySelector("#change").value = newValue;
         }
 
     </script>

@@ -11,7 +11,7 @@ class SearchProductCollection extends ResourceCollection
         return [
             'data' => $this->collection->map(function($data) {
                 return [
-                    'name' => $data->name,
+                    'name' => $data->getTranslation('name'),
                     'thumbnail_image' => api_asset($data->thumbnail_img),
                     'base_price' => (double) homeBasePrice($data->id),
                     'base_discounted_price' => (double) homeDiscountedBasePrice($data->id),
@@ -30,6 +30,7 @@ class SearchProductCollection extends ResourceCollection
     public function with($request)
     {
         return [
+            'lang'=> app()->getLocale(),
             'success' => true,
             'status' => 200
         ];

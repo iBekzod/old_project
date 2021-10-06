@@ -11,7 +11,7 @@ class BannerCollection extends ResourceCollection
         return [
             'data' => $this->collection->map(function($data) {
                 return [
-                    'photo' => $data ? api_asset($data) : 'public/images/default-image.jpg',
+                    'photo' => api_asset($data)??static_asset('assets/img/placeholder.jpg'),
                     'url' => route('home'),
                     'position' => 1
                 ];
@@ -22,6 +22,7 @@ class BannerCollection extends ResourceCollection
     public function with($request)
     {
         return [
+            'lang'=> app()->getLocale(),
             'success' => true,
             'status' => 200
         ];

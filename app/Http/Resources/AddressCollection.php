@@ -14,11 +14,13 @@ class AddressCollection extends ResourceCollection
                     'id'      => $data->id,
                     'user_id' => $data->user_id,
                     'address' => $data->address,
-                    'country' => $data->country,
-                    'city' => $data->city,
+                    'region_id' => $data->region_id,
+                    'city_id' => $data->city_id,
                     'postal_code' => $data->postal_code,
                     'phone' => $data->phone,
-                    'set_default' => $data->set_default
+                    'set_default' => $data->set_default,
+                    'longitude' => $data->longitude,
+                    'latitude' => $data->latitude
                 ];
             })
         ];
@@ -27,6 +29,7 @@ class AddressCollection extends ResourceCollection
     public function with($request)
     {
         return [
+            'lang'=> app()->getLocale(),
             'success' => true,
             'status' => 200
         ];

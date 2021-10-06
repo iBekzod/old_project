@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app')
+@extends('frontend.layouts.seller')
 
 @section('content')
     <section class="py-5">
@@ -69,7 +69,151 @@
                     @endif
                     <br>
 
-                    <div class="row">
+                    <div class="card">
+                        <form class="" id="sort_blogs" action="" method="GET">
+                            <div class="card-header">
+                                <div class="col text-center text-md-left">
+                                    <h5 class="mb-0 h6">{{translate('Affiliate Stats')}}</h5>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group mb-0">
+                                        <select class="form-control aiz-selectpicker" name="type" data-live-search="true">
+                                            <option value="">Choose</option>
+                                            <option value="Today" @if($type == 'Today') selected @endif>Today</option>
+                                            <option value="7" @if($type == '7') selected @endif>Last 7 Days</option>
+                                            <option value="30" @if($type == '30') selected @endif>Last 30 Days</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-primary" type="submit">{{ translate('Filter') }}</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="card-body">
+                            <div class="row gutters-10">
+                                <div class="col-md-3 mx-auto mb-3">
+                                    <a href="#">
+                                        <div class="p-3 rounded mb-3 c-pointer text-center bg-white shadow-sm hov-shadow-lg has-transition">
+                                            <span class="size-60px rounded-circle mx-auto bg-secondary d-flex align-items-center justify-content-center mb-3">
+                                                <span class="la-3x text-white">
+                                                    @if($affliate_stats->count_click)
+                                                        {{ $affliate_stats->count_click }}
+                                                    @else
+                                                        0
+                                                    @endif
+                                                </span>
+                                            </span>
+                                            <div class="fs-18 text-primary">{{ translate('No of click') }}</div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mx-auto mb-3" >
+                                    <a href="#">
+                                        <div class="p-3 rounded mb-3 c-pointer text-center bg-white shadow-sm hov-shadow-lg has-transition">
+                                            <span class="size-60px rounded-circle mx-auto bg-secondary d-flex align-items-center justify-content-center mb-3">
+                                                <span class="la-3x text-white">
+                                                    @if($affliate_stats->count_item)
+                                                        {{ $affliate_stats->count_item }}
+                                                    @else
+                                                        0
+                                                    @endif
+                                                </span>
+                                            </span>
+                                            <div class="fs-18 text-primary">{{ translate('No of item') }}</div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mx-auto mb-3" >
+                                    <a href="#">
+                                        <div class="p-3 rounded mb-3 c-pointer text-center bg-white shadow-sm hov-shadow-lg has-transition">
+                                            <span class="size-60px rounded-circle mx-auto bg-secondary d-flex align-items-center justify-content-center mb-3">
+                                                <span class="la-3x text-white">
+                                                    @if($affliate_stats->count_delivered)
+                                                        {{ $affliate_stats->count_delivered }}
+                                                    @else
+                                                        0
+                                                    @endif
+                                                </span>
+                                            </span>
+                                            <div class="fs-18 text-primary">{{ translate('No of deliverd') }}</div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mx-auto mb-3" >
+                                    <a href="#">
+                                        <div class="p-3 rounded mb-3 c-pointer text-center bg-white shadow-sm hov-shadow-lg has-transition">
+                                            <span class="size-60px rounded-circle mx-auto bg-secondary d-flex align-items-center justify-content-center mb-3">
+                                                <span class="la-3x text-white">
+                                                    @if($affliate_stats->count_cancel)
+                                                        {{ $affliate_stats->count_cancel }}
+                                                    @else
+                                                        0
+                                                    @endif
+                                                </span>
+                                            </span>
+                                            <div class="fs-18 text-primary">{{ translate('No of cancel') }}</div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0 h6">{{translate('Affiliate Earning History')}}</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table aiz-table mb-0">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>{{ translate('Referral User')}}</th>
+                                    <th>{{ translate('Amount')}}</th>
+                                    <th>{{ translate('Order Id')}}</th>
+                                    <th>{{ translate('Referral Type') }}</th>
+                                    <th>{{ translate('Product') }}</th>
+                                    <th>{{ translate('Date') }}</th>
+                                </thead>
+                                <tbody>
+                                @foreach($affiliate_logs as $key => $affiliate_log)
+                                    <tr>
+                                        <td>{{ ($key+1) + ($affiliate_logs->currentPage() - 1)*$affiliate_logs->perPage() }}</td>
+                                        <td>
+                                            @if($affiliate_log->user_id !== null)
+                                                {{ $affiliate_log->user->name }}
+                                            @else
+                                                {{ translate('Guest').' ('. $affiliate_log->guest_id.')' }}
+                                            @endif
+                                        </td>
+                                        <td>{{ single_price($affiliate_log->amount) }}</td>
+                                        <td>
+                                            @if($affiliate_log->order_id != null)
+                                                {{ $affiliate_log->order->code }}
+                                            @else
+                                                {{ $affiliate_log->order_detail->order->code }}
+                                            @endif
+                                        </td>
+                                        <td> {{ ucwords(str_replace('_',' ', $affiliate_log->affiliate_type)) }}</td>
+                                        <td>
+                                            @if($affiliate_log->order_detail_id != null)
+                                                {{ $affiliate_log->order_detail->product->name }}
+                                            @endif
+                                        </td>
+                                        <td>{{ $affiliate_log->created_at->format('d, F Y') }} </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                            <div class="aiz-pagination">
+                                {{ $affiliate_logs->links() }}
+                            </div>
+                        </div>
+                    </div>
+                    {{-- <div class="row">
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-header">
@@ -143,7 +287,7 @@
                                   </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

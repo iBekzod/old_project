@@ -8,12 +8,17 @@ use App\Http\Resources\CategoryCollection;
 use App\Http\Resources\CategorySubCategoryCollection;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\SearchProductCollection;
-use App\Models\Attribute;
-use App\Models\Category;
-use App\Category as MainCategory;
-use App\Models\Product;
+use App\Attribute;
+use App\Category;
+use App\Characteristic;
+use App\FlashDeal;
+use App\FlashDealProduct;
+use App\Http\Resources\ProductColorCollection;
+use App\Product;
 use App\Seller;
+use App\Shop;
 use App\Utility\CategoryUtility;
+use App\Variation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -21,7 +26,7 @@ class SubCategoryController extends Controller
 {
     public function index(Request $request, $id)
     {
-        $category = Category::where('slug', $id)
+        $category = Category::where('slug', $id)->orWhere('id', $id)
             ->with(['products', 'childrenCategories', 'parentCategoryHierarchy'])
             ->firstOrFail();
 
@@ -30,8 +35,8 @@ class SubCategoryController extends Controller
         $category_collection->additional['category'] = Category::where('id', $id)->orWhere('slug', $id)->with('parent')->first();
         $category_collection->additional['category']['tag'] = $this->getTags($category->childrenCategories);
         $category_collection->additional['category']['brands'] = $this->getBrands($category->childrenCategories);
-        $category_collection->additional['category']['min_price'] = filter_products(\App\Product::query())->get()->min('unit_price');
-        $category_collection->additional['category']['max_price'] = filter_products(\App\Product::query())->get()->max('unit_price');
+        $category_collection->additional['category']['min_price'] = getPublishedProducts('product')->get()->min('price');
+        $category_collection->additional['category']['max_price'] = getPublishedProducts('product')->get()->max('price');
         $category_collection->additional['category']->banner = api_asset($category_collection->additional['category']->banner);
         $category_collection->additional['category']['breadcrumbs'] = $category->parentCategoryHierarchy;
 
@@ -61,7 +66,8 @@ class SubCategoryController extends Controller
 
     public function subCategories($id)
     {
-        $category = MainCategory::where('slug',  $id )
+
+        $category = Category::where('slug',  $id )
             ->with('products')
             ->firstOrFail();
 
@@ -107,8 +113,7 @@ class SubCategoryController extends Controller
         }
 
         $brands = [];
-
-        foreach ($array as $item) {
+          foreach ($array as $item) {
             if(!in_array($item->brand, $brands))
             {
                 $data = $item->brand;
@@ -122,171 +127,294 @@ class SubCategoryController extends Controller
     public function searchByAttrs($request, $id)
     {
         $category = \App\Category::where('id', $id)->orWhere('slug', $id)->first();
-
         if ($category != null) {
-            return $this->search($request, $category->id);
+            $request->id = $category->slug;
+            $productController=new ProductController();
+            return $productController->searchPr('category', $request);
         }
-
         abort(404);
     }
 
-    public function search($request, $category_id = null, $brand_id = null)
+    public function searchPr($type, $request)
     {
-        $query = $request->q;
+        $product_conditions=[];
+        $element_conditions=[];
+        //Filtering by brand slug
+        switch ($type) {
+            case 'brand':
+                if ($brand = Brand::where('slug', $request->id)->firstOrFail()) {
+                    $element_conditions['where'][] = ['brand_id', $brand->id];
+                }
+                break;
+            case 'flashdeals':
+                if ($flash_deal = FlashDeal::where('slug', $request->id)->firstOrFail()) {
+                    $product_ids = FlashDealProduct::where('flash_deal_id', $flash_deal->id)->pluck('product_id');
+                    $product_conditions['whereIn'][] = ['id' => $product_ids];
+                }
+                break;
+            case 'category':
+                if ($categoryA = Category::where('slug', $request->id)->firstOrFail()) {
+                    $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
+                    $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                }
+                break;
+            case 'categoryAll':
+                $category_ids = Category::where('level', '=', 2)->pluck('id');
+                $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                break;
+            case 'categoryPopular':
+                $category_ids = Category::where('featured', 1)->where('level', '=', 2)->pluck('id');
+                $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                break;
+            case 'seller':
+                if ($seller = Shop::select('user_id')->where('slug', $request->id)->firstOrFail()) {
+                    $product_conditions['where'][] = ['user_id', $seller->user_id];
+                }
+                break;
+            case 'new':
+                $product_conditions['orderBy'][] = ['created_at' => 'desc'];
+                if ($request->id!="list" && $categoryA = Category::where('slug', $request->id)->firstOrFail()) {
+                    $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
+                    $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                }
+                break;
+            case 'todays_deal':
+                $product_conditions['where'][] = ['todays_deal', 1];
+                break;
+            case 'popular':
+                $product_conditions['where'][] = ['todays_deal', 1];
+                if ($request->id!="list" && $categoryA = Category::where('slug', $request->id)->firstOrFail()) {
+                    $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
+                    $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                }
+                break;
+            case 'recommendation':
+                $product_conditions['where'][] = ['featured', 1];
+                if ($request->id!="list" && $categoryA = Category::where('slug', $request->id)->firstOrFail()) {
+                    $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
+                    $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+                }
+                break;
+            case 'stock':
+                $product_conditions['where'][] = ['discount', '>', 0];
+                break;
+            case 'freeDelevery':
+                $product_conditions['where'][] = ['delivery_type', 'free'];
+                break;
+            case 'installment':
+                $product_conditions['where'][] = ['delivery_type', 'free'];
+                break;
+
+            default:
+                # code...
+                break;
+        }
+        $products_count=getPublishedProducts('product', $product_conditions, [], $element_conditions)->count();
+        $attribute_product_conditions = $product_conditions;
+        $attribute_element_conditions = $element_conditions;
+        //Order by sorting type
         $sort_by = $request->sort_by;
-        $min_price = $request->min_price;
-        $max_price = $request->max_price;
-        $seller_id = $request->seller_id;
-
-        $conditions = ['published' => 1];
-
-        if($brand_id != null){
-            $conditions = array_merge($conditions, ['brand_id' => $brand_id]);
-        }elseif ($request->brand != null) {
-            $brand_id = (Brand::where('slug', $request->brand)->first() != null) ? Brand::where('slug', $request->brand)->first()->id : null;
-            $conditions = array_merge($conditions, ['brand_id' => $brand_id]);
-        }
-
-        if($seller_id != null){
-            $conditions = array_merge($conditions, ['user_id' => Seller::findOrFail($seller_id)->user->id]);
-        }
-
-        $products = \App\Product::where($conditions);
-
-        if($category_id != null){
-            $category_ids = CategoryUtility::children_ids($category_id);
-            $category_ids[] = $category_id;
-
-            $products = $products->whereIn('category_id', $category_ids);
-        }
-
-        if($min_price != null && $max_price != null){
-            $products = $products->where('unit_price', '>=', $min_price)->where('unit_price', '<=', $max_price);
-        }
-
-        if($query != null){
-            $searchController = new SearchController;
-            $searchController->store($request);
-            $products = $products->where('name', 'like', '%'.$query.'%')->orWhere('tags', 'like', '%'.$query.'%');
-        }
-
-        if($sort_by != null){
+        if ($sort_by != null) {
             switch ($sort_by) {
                 case 'newest':
-                    $products->orderBy('created_at', 'desc');
+                    $product_conditions['orderBy'][] = ['created_at' => 'desc'];
                     break;
                 case 'oldest':
-                    $products->orderBy('created_at', 'asc');
+                    $product_conditions['orderBy'][] = ['created_at' => 'asc'];
                     break;
                 case 'price-asc':
-                    $products->orderBy('unit_price', 'asc');
+                    $product_conditions['orderBy'][] = ['price' => 'asc'];
                     break;
                 case 'price-desc':
-                    $products->orderBy('unit_price', 'desc');
+                    $product_conditions['orderBy'][] = ['price' => 'desc'];
                     break;
                 default:
                     // code...
                     break;
             }
         }
+        //Category
+        if ($request->has('category') && $request->category) {
+            if ($categoryA = Category::where('slug', $request->category)->firstOrFail()) {
+                $category_ids = Category::descendantsAndSelf($categoryA->id)->where('level', '=', 2)->pluck('id');
+                $element_conditions['whereIn'][] = ['category_id' => $category_ids];
+            }
+        }
+        //Новинки
+        if ($request->has('new') && $request->new) {
+            $product_conditions['orderBy'][] = ['created_at' => 'desc'];
+        }
+        //Deal
+        if ($request->has('todaysDeal') && $request->new) {
+            $product_conditions['where'][] = ['todays_deal', 1];
+        }
+        //Популярные
+        if ($request->has('popular') && $request->popular) {
+            $product_conditions['where'][] = ['todays_deal', 1];
+        }
+        //Рекомендуемые
+        if ($request->has('recommendation') && $request->recommendation) {
+            $product_conditions['where'][] = ['featured', 1];
+        }
+        //Акции
+        if ($request->has('stock') && $request->stock) {
+            $product_conditions['where'][] = ['discount', '>', 0];
+        }
+        //Бесплатная доставка
+        if ($request->has('freeDelevery') && $request->freeDelevery) {
+            $product_conditions['where'][] = ['delivery_type', 'free'];
+        }
+        //Доступно в рассрочку
+        if ($request->has('installment') && $request->installment) {
+            $product_conditions['where'][] = ['delivery_type', 'free'];
+        }
 
+        if ($request->has('brand') && $request->brand) {
+            if ($brand = Brand::where('slug', $request->brand)->firstOrFail()) {
+                $element_conditions['where'][] = ['brand_id', $brand->id];
+            }
+        }
 
-        $non_paginate_products = filter_products($products)->get();
-
-        //Attribute Filter
-
-        $attributes = array();
-        foreach ($non_paginate_products as $key => $product) {
-            if($product->attributes != null && is_array(json_decode($product->attributes))){
-                foreach (json_decode($product->attributes) as $key => $value) {
-                    $flag = false;
-                    $pos = 0;
-                    foreach ($attributes as $key => $attribute) {
-                        if($attribute['id'] == $value){
-                            $flag = true;
-                            $pos = $key;
-                            break;
-                        }
-                    }
-                    if(!$flag){
-                        $item['id'] = $value;
-                        $item['values'] = array();
-                        foreach (json_decode($product->choice_options) as $key => $choice_option) {
-                            if($choice_option->attribute_id == $value){
-                                $item['values'] = $choice_option->values;
-                                break;
-                            }
-                        }
-                        array_push($attributes, $item);
-                    }
-                    else {
-                        foreach (json_decode($product->choice_options) as $key => $choice_option) {
-                            if($choice_option->attribute_id == $value){
-                                foreach ($choice_option->values as $key => $value) {
-                                    if(!in_array($value, $attributes[$pos]['values'])){
-                                        array_push($attributes[$pos]['values'], $value);
-                                    }
+        if ($request->has('q') && $query = $request->q) {
+            // $searchController = new SearchController;
+            // $searchController->store($request);
+            $product_conditions['where'][] = ['name', 'like', '%' . $query . '%'];
+            // $element_conditions['where'][] = ['tags', 'like', '%' . $query . '%'];
+        }
+        //Filtering Attributes
+        $variations = Variation::where('deleted_at', '=', null);
+        $color_id_list = array();
+        $has_color = false;
+        if ($request->has('color') && count($request->color) > 0) {
+            $color_id_list = $request->color;
+            $has_color = true;
+        }
+        $characteristic_id_list = array();
+        $has_characteristic = false;
+        $filtered_variation_id_list = array();
+        if ($request->has('attribute') && count($request->attribute) > 0) {
+            $characteristic_id_list = $request->attribute;
+            $has_characteristic = true;
+        }
+        foreach ($variations->get() as $variation) {
+            $is_valid = false;
+            if ($has_characteristic) {
+                if (is_array(explode(',', $variation->characteristics))) {
+                    foreach (explode(',', $variation->characteristics) as $characteristic_id) {
+                        if (in_array($characteristic_id, $characteristic_id_list)) {
+                            if ($has_color) {
+                                if (in_array($variation->color_id, $color_id_list)) {
+                                    $is_valid = true;
                                 }
+                            } else {
+                                $is_valid = true;
                             }
                         }
                     }
                 }
-            }
-        }
-
-        $selected_attributes = array();
-        foreach ($attributes as $key => $attribute) {
-            $attr = Attribute::find($attribute['id']);
-            if ($attr != null)
-            {
-                $attributes[$key]['attr'] = $attr;
-            }else{
-                unset($attributes[$key]);
-            }
-        }
-
-        foreach ($attributes as $key => $attribute) {
-            if ($request->has('attribute_'.$attribute['id'])) {
-                foreach ($request['attribute_'.$attribute['id']] as $key => $value) {
-                    $str = '"'.$value.'"';
-                    $products = $products->where('choice_options', 'like', '%'.$str.'%');
+            } else if ($has_color) {
+                if (in_array($variation->color_id, $color_id_list)) {
+                    $is_valid = true;
                 }
-
-                $item['id'] = $attribute['id'];
-                $item['values'] = $request['attribute_'.$attribute['id']];
-                $item['attr'] = $attr;
-                array_push($selected_attributes, $item);
+            }
+            if ($is_valid) {
+                $filtered_variation_id_list[] = $variation->id;
             }
         }
+        if (count($filtered_variation_id_list) > 0) {
+            $filtered_variation_id_list = array_unique($filtered_variation_id_list);
+            $product_conditions['whereIn'][] = ['variation_id' => $filtered_variation_id_list];
+        }
+        $products = getPublishedProducts('product', $product_conditions, [], $element_conditions);
+        $attribute_products = getPublishedProducts('product', $attribute_product_conditions, [], $attribute_element_conditions);
+        //Attribute collection
+        $all_attributes = array();
+        $all_characteristics = array();
+        $tmp_products = $attribute_products->get();
+        foreach ($tmp_products as $product) {
+            if($product->variation)
+            $all_characteristics = array_unique(array_merge($all_characteristics, explode(',', $product->variation->characteristics)));
+        }
+        foreach ($all_characteristics as $characteristic) {
+            if($item = Characteristic::withTrashed()->where('id',$characteristic)->first())
+                $all_attributes[$item->attribute_id][] = $characteristic;
+        }
+        $all_attributes = getAttributeFormat($all_attributes);
 
-
-        //Color Filter
+        //Color Collection
         $all_colors = array();
+        $brands=[];
+        $brand_ids=[];
+        foreach ($tmp_products as $product) {
+            if (($product->variation)  && $product->variation->color_id != null) {
+                $all_colors[] = $product->variation->color_id;
 
-        foreach ($non_paginate_products as $key => $product) {
-            if ($product->colors != null) {
-                foreach (json_decode($product->colors) as $key => $color) {
-                    if(!in_array($color, $all_colors)){
-                        array_push($all_colors, $color);
-                    }
+            }
+            $brand_ids[] = $product->element->brand->id;
+        }
+        $all_colors = array_unique($all_colors);
+
+        if(count($brand_ids)>0){
+            $brands=Brand::whereIn('id', $brand_ids)->get();
+        }
+        $product_ids = [];
+        foreach ($tmp_products as $product) {
+            $unit_price = homeDiscountedBasePrice($product->id);
+            if ($request->has('min_price') && $selected_min_price = (double)$request->min_price) {
+                if ($unit_price < $selected_min_price) {
+                    continue;
                 }
             }
+            if ($request->has('max_price') && $selected_max_price = (double)$request->max_price) {
+                if ($unit_price > $selected_max_price) {
+                    continue;
+                }
+            }
+            $product_ids[] = $product->id;
+        }
+        $products = $products->whereIn('id', $product_ids);
+
+        $prices = [];
+        foreach ($tmp_products as $product) {
+            $prices[] = homeDiscountedBasePrice($product->id);
         }
 
-        $selected_color = null;
+        $min_price = (count($prices) > 0) ? min($prices) : 0;
+        $max_price = (count($prices) > 0) ? max($prices) : 0;
 
-        if($request->has('color')){
-            $str = '"'.$request->color.'"';
-            $products = $products->where('colors', 'like', '%'.$str.'%');
-            $selected_color = $request->color;
+        if($request->has('product_type')){
+            $product_type=$request->product_type;
+            if($product_type=='variation'){
+                $products = groupByDistinctRelation( $products, 'variation_id');
+            }else if($product_type=='element'){
+                $products = groupByDistinctRelation( $products, 'element_id');
+            }
+        }else{
+            $product_type='product';
         }
-
-
-        $products = filter_products($products)->paginate(12)->appends(request()->query());
-
+        $sub_sub_category_ids=[];
+        foreach($tmp_products as $product){
+            $sub_sub_category_ids[]=$product->element->category->id;
+        }
+        $sub_sub_category_ids = array_unique($sub_sub_category_ids);
+        $sub_sub_categories=Category::whereIn('id',$sub_sub_category_ids)->where('level',2)->get();
+        // $all_categories = getProductCategories($attribute_products, 0)->get();
+        $products=$products->paginate(50);
         return response()->json([
+            // 'categories' => new CategoryCollection($all_categories),
+            'categories' => new ParentCategoryCollection($sub_sub_categories),
             'products' => new ProductCollection($products),
-            'attributes' => $attributes
-        ], 200);
+            'products_count'=>$products_count??count($products),
+            'attributes' => $all_attributes,
+            'colors' => new ProductColorCollection($all_colors),
+
+            'brands' => (count($brands)>0)?new BrandCollection($brands):[],
+            'min_price' => $min_price ?? null,
+            'max_price' => $max_price ?? null,
+            'selected_min_price' => (isset($selected_min_price)) ? $selected_min_price : $min_price,
+            'selected_max_price' => (isset($selected_max_price)) ? $selected_max_price : $max_price,
+            'type' => $type ?? null,
+            'product_type'=>$product_type,
+        ]);
     }
 }

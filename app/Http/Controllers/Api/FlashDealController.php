@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\FlashDealProductCollection;
 use App\Http\Resources\ProductCollection;
-use App\Models\FlashDeal;
+use App\FlashDeal;
+use App\FlashDealProduct;
 use Illuminate\Http\Request;
 
 use \Cviebrock\EloquentSluggable\Services\SlugService;
@@ -14,22 +15,14 @@ class FlashDealController extends Controller
 {
     public function superDiscount()
     {
-        $discountProducts = \App\Models\FlashDealProduct::latest()->take(12)->with('product')->get();
+        $discountProducts = FlashDealProduct::latest()->take(12)->with('product')->get();
 
         $featProds = $discountProducts->filter(function ($item) {
             if($item->product) {
                 return $item;
             }
         });
-
-        $arr = [];
-        foreach ($featProds as $item) {
-            $arr[] = $item;
-        }
-
-        $products = new FlashDealProductCollection($arr);
-
-        return response()->json($products);
+        return response()->json(new FlashDealProductCollection($featProds));
     }
 
     public function featuredProduct()
@@ -39,21 +32,15 @@ class FlashDealController extends Controller
                 $query->latest()->limit(12);
             }
         ])->first();
-
+        if($featuredProduct==null){
+            return null;
+        }
         $featProds = $featuredProduct->flashDealProducts->filter(function ($item) {
             if($item->product) {
                 return $item;
             }
         });
-
-        $arr = [];
-        foreach ($featProds as $item) {
-            $arr[] = $item;
-        }
-
-        $products = new FlashDealProductCollection($arr);
-
-        return response()->json($products);
+        return response()->json(new FlashDealProductCollection($featProds));
 
     }
 

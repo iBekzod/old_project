@@ -8,7 +8,7 @@ use App\FlashDealTranslation;
 use App\FlashDealProduct;
 use Illuminate\Support\Str;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
-
+use App\Language;
 class FlashDealController extends Controller
 {
     /**
@@ -74,9 +74,13 @@ class FlashDealController extends Controller
                     $flash_deal_product->save();
                 }
 
-                $flash_deal_translation = FlashDealTranslation::firstOrNew(['lang' => default_language(), 'flash_deal_id' => $flash_deal->id]);
-                $flash_deal_translation->title = $request->title;
-                $flash_deal_translation->save();
+                foreach (Language::all() as $language){
+                    //  FlashDeal Translations
+                    $flash_deal_translation =  FlashDealTranslation::firstOrNew(['lang' => $language->code, 'flash_deal_id' => $flash_deal->id]);
+                    $flash_deal_translation->name = $flash_deal->name;
+                    $flash_deal_translation->title = $flash_deal->title;
+                    $flash_deal_translation->save();
+                }
 
                 flash(translate('Flash Deal has been inserted successfully'))->success();
                 return redirect()->route('flash_deals.index');
@@ -134,7 +138,7 @@ class FlashDealController extends Controller
 
         $flash_deal->background_color = $request->background_color;
 
-        if($request->lang == env("DEFAULT_LANGUAGE")){
+        if($request->lang == default_language()){
           $flash_deal->title = $request->title;
 //          if (($flash_deal->slug == null) || ($flash_deal->title != $request->title)) {
 //              $flash_deal->slug = SlugService::createSlug(FlashDeal::class, 'slug', slugify($request->title));
@@ -155,10 +159,14 @@ class FlashDealController extends Controller
                 $flash_deal_product->save();
             }
 
-            $sub_category_translation = FlashDealTranslation::firstOrNew(['lang' => $request->lang, 'flash_deal_id' => $flash_deal->id]);
-            $sub_category_translation->title = $request->title;
-            $sub_category_translation->save();
-
+            if(FlashDealTranslation::where('flash_deal_id' , $flash_deal->id)->where('lang' , default_language())->first()){
+                foreach (Language::all() as $language){
+                    $flash_deal_translation = FlashDealTranslation::firstOrNew(['lang' => $language->code, 'flash_deal_id' => $flash_deal->id]);
+                    // $flash_deal_translation->name = $request->name;
+                    $flash_deal_translation->title = $request->title;
+                    $flash_deal_translation->save();
+                }
+            }
             flash(translate('Flash Deal has been updated successfully'))->success();
             return back();
         }

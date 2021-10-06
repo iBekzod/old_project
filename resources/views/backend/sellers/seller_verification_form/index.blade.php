@@ -21,7 +21,19 @@
 									        <label class="col-from-label">{{ ucfirst($element->type) }}</label>
 									    </div>
 									    <div class="col-lg-7">
-									        <input class="form-control" type="text" name="label[]" value="{{ $element->label }}" placeholder="{{ translate('Label') }}">
+									        <input class="form-control" type="text" name="label[]" value="{{ $element->name??$element->label }}" placeholder="{{ translate('Label') }}">
+									        {{-- <input class="form-control" type="text" name="label[]" value="{{ $element->label }}" placeholder="{{ translate('Label') }}"> --}}
+									    </div>
+									    <div class="col-lg-2"><span class="btn btn-icon btn-circle icon-lg" onclick="delete_choice_clearfix(this)"><i class="las la-times"></i></span></div>
+									</div>
+                                @elseif ($element->type == 'number' || $element->type == 'email')
+									<div class="form-group row" style="background:rgba(0,0,0,0.1);padding:10px 0;">
+									    <input type="hidden" name="type[]" value="{{ $element->type }}">
+									    <div class="col-lg-3">
+									        <label class="col-from-label">{{ ucfirst($element->type) }}</label>
+									    </div>
+									    <div class="col-lg-7">
+									        <input class="form-control" type="text" name="label[]" value="{{ $element->name??$element->label }}" placeholder="{{ translate('Label') }}">
 									    </div>
 									    <div class="col-lg-2"><span class="btn btn-icon btn-circle icon-lg" onclick="delete_choice_clearfix(this)"><i class="las la-times"></i></span></div>
 									</div>
@@ -33,7 +45,7 @@
 									        <label class="col-from-label">{{ ucfirst(str_replace('_', ' ', $element->type)) }}</label>
 									    </div>
 									    <div class="col-lg-7">
-									        <input class="form-control" type="text" name="label[]" value="{{ $element->label }}" placeholder="{{ translate('Select Label') }}" style="margin-bottom:10px">
+									        <input class="form-control" type="text" name="label[]" value="{{ $element->name??$element->label }}" placeholder="{{ translate('Select Label') }}" style="margin-bottom:10px">
 									        <div class="customer_choice_options_types_wrap_child">
 												@if (is_array(json_decode($element->options)))
 													@foreach (json_decode($element->options) as $value)
@@ -56,16 +68,18 @@
 						<div class="col-lg-4">
 
 							<ul class="list-group">
-								<li class="list-group-item btn" style="text-align: left;" onclick="appenddToForm('text')">{{translate('Text Input')}}</li>
-								<li class="list-group-item btn" style="text-align: left;" onclick="appenddToForm('select')">{{translate('Select')}}</li>
-								<li class="list-group-item btn" style="text-align: left;" onclick="appenddToForm('multi-select')">{{translate('Multiple Select')}}</li>
-								<li class="list-group-item btn" style="text-align: left;" onclick="appenddToForm('radio')">{{translate('Radio')}}</li>
-								<li class="list-group-item btn" style="text-align: left;" onclick="appenddToForm('file')">{{translate('File')}}</li>
+                               <li class="list-group-item btn btn-outline-info btn-lg text-md-left" onclick="appenddToForm('text')">{{translate('Text Input')}}</li>
+                               <li class="list-group-item btn btn-outline-info btn-lg text-md-left" onclick="appenddToForm('number')">{{translate('Number Input')}}</li>
+                               <li class="list-group-item btn btn-outline-info btn-lg text-md-left" onclick="appenddToForm('email')">{{translate('Email Input')}}</li>
+                               <li class="list-group-item btn btn-outline-info btn-lg text-md-left" onclick="appenddToForm('select')">{{translate('Select')}}</li>
+							   <li class="list-group-item btn btn-outline-info btn-lg text-md-left" onclick="appenddToForm('multi-select')">{{translate('Multiple Select')}}</li>
+							   <li class="list-group-item btn btn-outline-info btn-lg text-md-left" onclick="appenddToForm('radio')">{{translate('Radio')}}</li>
+							   <li class="list-group-item btn btn-outline-info btn-lg text-md-left" onclick="appenddToForm('file')">{{translate('File')}}</li>
 							</ul>
 
 						</div>
 					</div>
-					<div class="form-group mb-0 text-right">
+					<div class="form-group mt-md-5 text-right">
 						<button type="submit" class="btn btn-primary">{{translate('Save')}}</button>
 					</div>
 				</form>
@@ -180,6 +194,36 @@
 								+'</div>'
 								+'<div class="col-lg-7">'
 									+'<input class="form-control" type="text" name="label[]" placeholder="{{ translate('Label') }}">'
+								+'</div>'
+								+'<div class="col-lg-2">'
+									+'<span class="btn btn-icon btn-circle icon-lg" onclick="delete_choice_clearfix(this)"><i class="las la-times"></i></span>'
+								+'</div>'
+							+'</div>';
+				$('#form').append(str);
+			}
+			else if(type == 'number'){
+				var str = '<div class="form-group row" style="background:rgba(0,0,0,0.1);padding:10px 0;">'
+								+'<input type="hidden" name="type[]" value="number">'
+								+'<div class="col-lg-3">'
+									+'<label class="col-from-label">Number</label>'
+								+'</div>'
+								+'<div class="col-lg-7">'
+									+'<input class="form-control" type="text" name="label[]" placeholder="{{ translate('Number') }}">'
+								+'</div>'
+								+'<div class="col-lg-2">'
+									+'<span class="btn btn-icon btn-circle icon-lg" onclick="delete_choice_clearfix(this)"><i class="las la-times"></i></span>'
+								+'</div>'
+							+'</div>';
+				$('#form').append(str);
+			}
+            else if(type == 'email'){
+				var str = '<div class="form-group row" style="background:rgba(0,0,0,0.1);padding:10px 0;">'
+								+'<input type="hidden" name="type[]" value="email">'
+								+'<div class="col-lg-3">'
+									+'<label class="col-from-label">Email</label>'
+								+'</div>'
+								+'<div class="col-lg-7">'
+									+'<input class="form-control" type="text" name="label[]" placeholder="{{ translate('Email') }}">'
 								+'</div>'
 								+'<div class="col-lg-2">'
 									+'<span class="btn btn-icon btn-circle icon-lg" onclick="delete_choice_clearfix(this)"><i class="las la-times"></i></span>'

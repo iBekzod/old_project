@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Role;
 use App\RoleTranslation;
-
+use App\Language;
 class RoleController extends Controller
 {
     /**
@@ -43,9 +43,12 @@ class RoleController extends Controller
             $role->permissions = json_encode($request->permissions);
             $role->save();
 
-            $role_translation = RoleTranslation::firstOrNew(['lang' => env('DEFAULT_LANGUAGE'), 'role_id' => $role->id]);
-            $role_translation->name = $request->name;
-            $role_translation->save();
+            foreach (Language::all() as $language){
+                // Role Translations
+                $role_translations = RoleTranslation::firstOrNew(['lang' => $language->code, 'role_id' => $role->id]);
+                $role_translations->name = $role->name;
+                $role_translations->save();
+            }
 
             flash(translate('Role has been inserted successfully'))->success();
             return redirect()->route('roles.index');
@@ -91,15 +94,19 @@ class RoleController extends Controller
         $role = Role::findOrFail($id);
 
         if($request->has('permissions')){
-            if($request->lang == env("DEFAULT_LANGUAGE")){
+            if($request->lang == default_language()){
                 $role->name = $request->name;
             }
             $role->permissions = json_encode($request->permissions);
             $role->save();
 
-            $role_translation = RoleTranslation::firstOrNew(['lang' => $request->lang, 'role_id' => $role->id]);
-            $role_translation->name = $request->name;
-            $role_translation->save();
+            if(RoleTranslation::where('role_id' , $role->id)->where('lang' , default_language())->first()){
+                foreach (Language::all() as $language){
+                    $role_translation = RoleTranslation::firstOrNew(['lang' => $language->code, 'role_id' => $role->id]);
+                    $role_translation->name = $request->name;
+                    $role_translation->save();
+                }
+            }
 
             flash(translate('Role has been updated successfully'))->success();
             return redirect()->route('roles.index');

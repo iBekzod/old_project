@@ -837,7 +837,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                         $this.val(selected);
                     }
                     $this.selectpicker({
-                        size: 5,                    
+                        size: 5,
                         virtualScroll: false
                     });
                 }
@@ -1078,6 +1078,9 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
             if ($("#aiz-upload-files").length > 0) {
                 var uppy = Uppy.Core({
                     autoProceed: true,
+                    restrictions: {
+                        maxFileSize: 1048576,
+                    },
                 });
                 uppy.use(Uppy.Dashboard, {
                     target: "#aiz-upload-files",
@@ -1280,7 +1283,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                             max: parseInt(c.getAttribute("data-range-value-max")),
                         },
                     }),
-                    
+
                     c.noUiSlider.on("update", function (a, b) {
                         f[b].textContent = a[b];
                     }),
@@ -1620,7 +1623,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                 var type = $(this).attr("data-type");
                 var input = $("input[name='" + fieldName + "']");
                 var currentVal = parseInt(input.val());
-                
+
 
                 if (!isNaN(currentVal)) {
                     if (type == "minus") {

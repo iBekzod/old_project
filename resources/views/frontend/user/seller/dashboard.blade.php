@@ -13,7 +13,6 @@
                         </div>
                     </div>
                   </div>
-
                   <div class="row gutters-10">
                     <div class="col-md-3">
                         <div class="bg-grad-3 text-white rounded-lg mb-4 overflow-hidden">
@@ -116,16 +115,16 @@
                       </div>
                       <div class="col-md-5">
                           <div class="bg-white mt-4 p-5 text-center">
-                              <div class="mb-3">
-                                  @if(Auth::user()->seller->verification_status == 0)
-                                      <img loading="lazy"  src="{{ static_asset('assets/img/non_verified.png') }}" alt="" width="130">
-                                  @else
-                                      <img loading="lazy"  src="{{ static_asset('assets/img/verified.png') }}" alt="" width="130">
-                                  @endif
-                              </div>
-                              @if(Auth::user()->seller->verification_status == 0)
-                                  <a href="{{ route('shop.verify') }}" class="btn btn-primary">{{ translate('Verify Now')}}</a>
-                              @endif
+                            @if(isset(Auth::user()->seller->verification_status) && Auth::user()->seller->verification_status == 1)
+                                <div class="mb-3">
+                                    <img loading="lazy"  src="{{ static_asset('assets/img/verified.png') }}" alt="" width="130">
+                                </div>
+                            @else
+                                <div class="mb-3">
+                                    <img loading="lazy"  src="{{ static_asset('assets/img/non_verified.png') }}" alt="" width="130">
+                                </div>
+                                <a href="{{ route('shop.verify') }}" class="btn btn-primary">{{ translate('Verify Now')}}</a>
+                            @endif
                           </div>
                       </div>
                   </div>
@@ -145,25 +144,30 @@
                                       </tr>
                                   </thead>
                                   <tbody>
-                                    @foreach (\App\Category::all() as $key => $category)
-                                        @if(count($category->products->where('user_id', Auth::user()->id))>0)
+                                      @php
+                                          $products=\App\Product::where('user_id', Auth::user()->id)->with('element')->get();
+                                          $category_list=[];
+                                          foreach($products as $product){
+                                            $category_list[$product->element->category_id][]=$product->element_id;
+                                          }
+                                      @endphp
+                                    @foreach ($category_list as $category_id=>$element_ids)
                                           <tr>
-                                              <td>{{ $category->getTranslation('name') }}</td>
-                                              <td>{{ count($category->products->where('user_id', Auth::user()->id)) }}</td>
+                                              <td>{{ \App\Category::where('id', $category_id)->first()->getTranslation('name') }}</td>
+                                              <td>{{ count($element_ids) }}</td>
                                           </tr>
-                                      @endif
                                   @endforeach
                                 </table>
                                 <br>
                                 <div class="text-center">
-                                    <a href="{{ route('seller.products.upload')}}" class="btn btn-primary d-inline-block">{{ translate('Add New Product')}}</a>
-                                    <a href="{{ route('seller.products.clone')}}" class="btn btn-primary d-inline-block">{{ translate('Clone Product')}}</a>
+                                    <a href="{{ route('seller.elements.create')}}" class="btn btn-primary d-inline-block">{{ translate('Add New Element')}}</a>
+                                    {{-- <a href="{{ route('seller.elements.clone')}}" class="btn btn-primary d-inline-block">{{ translate('Clone Element')}}</a> --}}
                                 </div>
                               </div>
                           </div>
                       </div>
                       <div class="col-md-4">
-                          @if (\App\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated)
+                          {{-- @if (\App\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Addon::where('unique_identifier', 'seller_subscription')->first()->activated)
 
                               <div class="card">
                                   <div class="card-header">
@@ -187,17 +191,22 @@
                                       </div>
                                   </div>
                               </div>
-                          @endif
+                          @endif --}}
                           <div class="bg-white mt-4 p-4 text-center">
                               <div class="h5 fw-600">{{ translate('Shop')}}</div>
                               <p>{{ translate('Manage & organize your shop')}}</p>
                               <a href="{{ route('shops.index') }}" class="btn btn-soft-primary">{{ translate('Go to setting')}}</a>
                           </div>
                           <div class="bg-white mt-4 p-4 text-center">
+                            <div class="h5 fw-600">{{ translate('PDF')}}</div>
+                            <p>{{ translate('PDF version of the contract')}}</p>
+                            <a href="/pdf/file" class="btn btn-soft-primary">{{ translate('Go to PDF')}}</a>
+                        </div>
+                          {{-- <div class="bg-white mt-4 p-4 text-center">
                               <div class="h5 fw-600">{{ translate('Payment')}}</div>
                               <p>{{ translate('Configure your payment method')}}</p>
                               <a href="{{ route('profile') }}" class="btn btn-soft-primary">{{ translate('Configure Now')}}</a>
-                          </div>
+                          </div> --}}
                       </div>
                   </div>
 

@@ -2,49 +2,67 @@
 
 namespace App\Http\Resources;
 
-use App\ProductStock;
-use App\ProductTranslation;
+use App\Element;
+use App\FlashDealProduct;
+use App\Product;
+use App\Variation;
+use App\Wishlist;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Auth;
 
 class ProductCollection extends ResourceCollection
 {
     public function toArray($request)
     {
+        // dd($request);
         return [
             'data' => $this->collection->map(function($data) {
-                $lang = ProductTranslation::where('product_id', $data->id)->where('lang', app()->getLocale())->first();
-
-                $arr =  [
-                    'id'=>$data->id,
-                    'slug'=>$data->slug,
-                    'owner_id' => $data->user_id,
-                    'name' => $data->name,
-                    'photos' => explode(',', $data->photos),
-                    'thumbnail_image' => api_asset($data->thumbnail_img),
-                    'base_price' => (double) homeBasePrice($data->id),
-                    'base_discounted_price' => (double) homeDiscountedBasePrice($data->id),
-                    'todays_deal' => (integer) $data->todays_deal,
-                    'featured' =>(integer) $data->featured,
-                    'unit' => $data->unit,
-                    'discount' => (integer) $data->discount,
-                    'discount_type' => $data->discount_type,
-                    'rating' => (double) $data->rating,
-                    'sales' => (integer) $data->num_of_sale,
-                    'variant' => ProductStock::where('product_id', $data->id)->first(),
-                    'variations' => ProductStock::where('product_id', $data->id)->get(),
+                try {
+                    $product=Product::find($data->id);
+                    $variation=Variation::find($product->variation_id);
+                    $element=Element::find($variation->element_id);
+                    $products=Product::where('variation_id', $product->variation_id)->get();
+                } catch (\Exception $th) {
+                    return null;//($th->getMessage());
+                }
+                $wishlist=false;
+                if(Auth::check()){
+                    $user_id=auth()->id();
+                    $wishlist= Wishlist::where('user_id', $user_id)->where('product_id', $product->id)->exists();
+                }
+                return [
+                    'id'=>$product->id,
+                    'slug'=>$product->slug,
+                    'owner_id' => $product->user_id,
+                    'name' => $variation->name,
+                    'photos' => $this->convertPhotos(explode(',', $element->photos)),
+                    'thumbnail_image' => api_asset($variation->thumbnail_img),
+                    'earn_point'=>($product->earn_point!=0)?$product->earn_point:calculateProductClubPoint($product->id),
+                    'base_price' => (double) homeBasePrice($product->id),
+                    'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
+                    'shipping_type' => $product->delivery_type,
+                    'shipping_cost' => $this->calculateShippingCost($product),
+                    'currency_code'=>defaultCurrency(),
+                    'exchange_rate'=>defaultExchangeRate(),
+                    'todays_deal' => (integer) $product->todays_deal,
+                    'featured' =>(integer) $product->featured,
+                    'unit' => $element->unit,
+                    'discount' => (integer) $product->discount,
+                    'discount_type' => $product->discount_type,
+                    'rating' => (double) $product->rating,
+                    'sales' => (integer) $variation->num_of_sale,
+                    'qty' => (integer) $variation->qty,
+                    'variant' => $product,
+                    'variations' => $products,
+                    'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??[],
+                    'is_wishlist'=>$wishlist,
                     'links' => [
-                        'details' => route('products.show', $data->id),
-                        'reviews' => route('api.reviews.index', $data->id),
-                        'related' => route('products.related', $data->id),
-                        'top_from_seller' => route('products.topFromSeller', $data->id)
+                        'details' => route('products.show', $product->id),
+                        'reviews' => route('api.reviews.index', $product->id),
+                        'related' => route('products.related', $product->id),
+                        'top_from_seller' => route('products.topFromSeller', $product->id)
                     ]
                 ];
-
-                if ($lang) {
-                    $arr['name'] = $lang->name;
-                }
-
-                return $arr;
             })
         ];
     }
@@ -52,8 +70,22 @@ class ProductCollection extends ResourceCollection
     public function with($request)
     {
         return [
+            'lang'=> app()->getLocale(),
             'success' => true,
             'status' => 200
         ];
+    }
+
+    protected function convertPhotos($variation){
+        $result = array();
+        foreach ($variation as $key => $item) {
+            array_push($result, api_asset($item));
+        }
+        return $result;
+    }
+
+    protected function calculateShippingCost($product, $is_express=false){
+        $address=getUserAddress();
+        return calculateDeliveryCost($product, $address->id, $product->delivery_type);
     }
 }

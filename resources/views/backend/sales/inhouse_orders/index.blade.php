@@ -92,7 +92,7 @@
                             </td>
                             <td>
                                 @php
-                                    $status = $order->orderDetails->first()->delivery_status;
+                                    $status = $order->delivery_status;
                                 @endphp
                                 {{ translate(ucfirst(str_replace('_', ' ', $status))) }}
                             </td>
@@ -100,7 +100,7 @@
                                 {{ translate(ucfirst(str_replace('_', ' ', $order->payment_type))) }}
                             </td>
                             <td>
-                                @if ($order->orderDetails->where('seller_id',  $admin_user_id)->first()->payment_status == 'paid')
+                                @if ($order->payment_status == 'paid')
                                   <span class="badge badge-inline badge-success">{{translate('Paid')}}</span>
                                 @else
                                   <span class="badge badge-inline badge-danger">{{translate('Unpaid')}}</span>
@@ -120,7 +120,7 @@
                                 <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{route('inhouse_orders.show', encrypt($order->id))}}" title="{{ translate('View') }}">
                                     <i class="las la-eye"></i>
                                 </a>
-                                <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{ route('customer.invoice.download', $order->id) }}" title="{{ translate('Download Invoice') }}">
+                                <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{ route('invoice.download', $order->id) }}" title="{{ translate('Download Invoice') }}">
                                     <i class="las la-download"></i>
                                 </a>
                                 <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete" data-href="{{route('orders.destroy', $order->id)}}" title="{{ translate('Delete') }}">

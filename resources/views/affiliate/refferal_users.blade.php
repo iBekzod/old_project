@@ -11,9 +11,9 @@
                 <tr>
                     <th>#</th>
                     <th>{{ translate('Name')}}</th>
-                    <th>{{ translate('Phone')}}</th>
-                    <th>{{ translate('Email Address')}}</th>
-                    <th>{{ translate('Reffered By')}}</th>
+                    <th data-breakpoints="lg">{{ translate('Phone')}}</th>
+                    <th data-breakpoints="lg">{{ translate('Email Address')}}</th>
+                    <th data-breakpoints="lg">{{ translate('Reffered By')}}</th>
                 </tr>
                 </thead>
                 <tbody>

@@ -23,6 +23,7 @@ class SellerController extends Controller
         $sort_search = null;
         $approved = null;
         $sellers = Seller::orderBy('created_at', 'desc');
+
         if ($request->has('search')){
             $sort_search = $request->search;
             $user_ids = User::where('user_type', 'seller')->where(function($user) use ($sort_search){
@@ -35,8 +36,10 @@ class SellerController extends Controller
         if ($request->approved_status != null) {
             $approved = $request->approved_status;
             $sellers = $sellers->where('verification_status', $approved);
+            // dd($approved);
         }
         $sellers = $sellers->paginate(15);
+        // dd($sellers[0]->verification_info[0]);
         return view('backend.sellers.index', compact('sellers', 'sort_search', 'approved'));
     }
 
@@ -214,11 +217,29 @@ class SellerController extends Controller
 
     public function login($id)
     {
-        $seller = Seller::findOrFail(decrypt($id));
+        $seller = Seller::where('id', decrypt($id))->first();
 
+        if($seller==null){
+            return back();
+        }
         $user  = $seller->user;
 
         auth()->login($user, true);
+
+        if ($user->registration_step == 'active_1') {
+            return redirect()->route('seller.autoidentification');
+            // return 'keldi';
+        }
+        if ($user->registration_step == 'active_2') {
+            return redirect()->route('seller.delivery');
+            // return 'keldi';
+        }
+        if ($user->registration_step == 'active_3') {
+            $shop = $user->shop;
+            // dd($shop);
+            // return 'keldi';
+            return view('frontend.user.seller.shop', compact('shop'));
+        }
 
         return redirect()->route('dashboard');
     }

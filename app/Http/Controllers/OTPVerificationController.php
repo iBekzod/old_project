@@ -8,6 +8,7 @@ use App\User;
 use Auth;
 use Nexmo;
 use App\OtpConfiguration;
+use App\Utility\SmsUtility;
 use Twilio\Rest\Client;
 use Hash;
 
@@ -58,10 +59,9 @@ class OTPVerificationController extends Controller
 
     public function resend_verificcation_code(Request $request){
         $user = Auth::user();
-        $user->verification_code = rand(1000,9999);
+        $user->verification_code = rand(100000,999999);
         $user->save();
-
-        sendSMS($user->phone, env("APP_NAME"), $user->verification_code.' is your verification code for '.env('APP_NAME'));
+        SmsUtility::phone_number_verification($user);
 
         return back();
     }
@@ -104,7 +104,7 @@ class OTPVerificationController extends Controller
      */
 
     public function send_code($user){
-        sendSMS($user->phone, env('APP_NAME'), $user->verification_code.' is your verification code for '.env('APP_NAME'));
+        SmsUtility::phone_number_verification($user);
     }
 
     /**
@@ -112,8 +112,10 @@ class OTPVerificationController extends Controller
      * @return void
      */
     public function send_order_code($order){
-        if(json_decode($order->shipping_address)->phone != null){
-            sendSMS(json_decode($order->shipping_address)->phone, env('APP_NAME'), 'You order has been placed and Order Code is : '.$order->code);
+        $phone = json_decode($order->shipping_address)->phone;
+        if($phone != null){
+            SmsUtility::order_placement($phone, $order);
+            // sendSMS(json_decode($order->shipping_address)->phone, env('APP_NAME'), 'You order has been placed and Order Code is : '.$order->code);
         }
     }
 
@@ -122,8 +124,11 @@ class OTPVerificationController extends Controller
      * @return void
      */
     public function send_delivery_status($order){
-        if(json_decode($order->shipping_address)->phone != null){
-            sendSMS(json_decode($order->shipping_address)->phone, env('APP_NAME'), 'Your delivery status has been updated to '.$order->orderDetails->first()->delivery_status.' for Order code : '.$order->code);
+        $phone = json_decode($order->shipping_address)->phone;
+        if($phone != null){
+            SmsUtility::delivery_status_change($phone, $order);
+
+            // sendSMS(json_decode($order->shipping_address)->phone, env('APP_NAME'), 'Your delivery status has been updated to '.$order->orderDetails->first()->delivery_status.' for Order code : '.$order->code);
         }
     }
 
@@ -132,8 +137,10 @@ class OTPVerificationController extends Controller
      * @return void
      */
     public function send_payment_status($order){
-        if(json_decode($order->shipping_address)->phone != null){
-            sendSMS(json_decode($order->shipping_address)->phone, env('APP_NAME'), 'Your payment status has been updated to '.$order->payment_status.' for Order code : '.$order->code);
+        $phone = json_decode($order->shipping_address)->phone;
+        if($phone != null){
+            SmsUtility::payment_status_change($phone, $order);
+            // sendSMS(json_decode($order->shipping_address)->phone, env('APP_NAME'), 'Your payment status has been updated to '.$order->payment_status.' for Order code : '.$order->code);
         }
     }
 }

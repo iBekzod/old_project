@@ -11,11 +11,11 @@
             <tr>
                 <th>#</th>
                 <th>{{ translate('Name')}}</th>
-                <th>{{ translate('Phone')}}</th>
-                <th>{{ translate('Email Address')}}</th>
-                <th>{{ translate('Verification Info')}}</th>
+                <th data-breakpoints="lg">{{ translate('Phone')}}</th>
+                <th data-breakpoints="lg">{{ translate('Email Address')}}</th>
+                <th data-breakpoints="lg">{{ translate('Verification Info')}}</th>
                 <th>{{ translate('Approval')}}</th>
-                <th>{{  translate('Due Amount') }}</th>
+                <th data-breakpoints="lg">{{  translate('Due Amount') }}</th>
                 <th width="10%" class="text-right">{{ translate('Options')}}</th>
             </tr>
             </thead>

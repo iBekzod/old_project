@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\SettingsCollection;
-use App\Models\AppSettings;
+use App\AppSettings;
 
 class SettingsController extends Controller
 {

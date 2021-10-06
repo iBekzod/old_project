@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Category;
+use App\Element;
 use App\Http\Controllers\Controller;
 use App\Http\HelperTrait;
-use App\Models\FlashDealProduct;
+use App\FlashDealProduct;
+use App\Http\Resources\ProductCollection;
 use App\Product;
 use App\Shop;
 use Illuminate\Http\Request;
@@ -19,10 +21,14 @@ class SearchController extends Controller
         ]);
 
         $keywords = [];
-        $products = Product::where('published', 1)->where('tags', 'like', '%'.$request->search.'%')->get();
+        $search = $request->search;
+        $products = Product::where('published', 1)
+        ->whereHas('element', function ($relation) use ($search) {
+            $relation->where('tags', 'like', '%'.$search.'%');
+        })->get();
         foreach ($products as $key => $product) {
-            foreach (explode(',',$product->tags) as $key => $tag) {
-                if(stripos($tag, $request->search) !== false){
+            foreach (explode(',',$product->element->tags) as $key => $tag) {
+                if(stripos($tag, $search) !== false){
                     if(sizeof($keywords) > 5){
                         break;
                     }
@@ -35,7 +41,7 @@ class SearchController extends Controller
             }
         }
 
-        $products = filter_products(Product::where('published', 1)->where('name', 'like', '%'.$request->search.'%'))->get()->take(3);
+        $products = getPublishedProducts('product', ['where' => [['name', 'like', '%'.$request->search.'%']]])->get()->take(3);
 
         $categories = Category::where('name', 'like', '%'.$request->search.'%')->get()->take(3);
 
@@ -43,7 +49,7 @@ class SearchController extends Controller
 
         if(sizeof($keywords)>0 || sizeof($categories)>0 || sizeof($products)>0 || sizeof($shops) >0){
             return response()->json([
-                'products' => $products,
+                'products' => new ProductCollection($products),
                 'categories' => $categories,
                 'keywords' => $keywords,
                 'shops' => $shops,
@@ -61,15 +67,13 @@ class SearchController extends Controller
         ]);
 
         $keywords = [];
-
-        $products = Product::where('published', 1)
-            ->where('tags', 'like', '%'.$request->search.'%')
-            ->where('category_id', $request->get('category_id'))
-            ->get();
-
+        $search = $request->search;
+        $products=Product::whereHas('element', function ($relation) use ($search) {
+                $relation->where('tags', 'like', '%'.$search.'%');
+        })->where('published', 1)->get();
         foreach ($products as $key => $product) {
-            foreach (explode(',',$product->tags) as $key => $tag) {
-                if(stripos($tag, $request->search) !== false){
+            foreach (explode(',',$product->element->tags) as $key => $tag) {
+                if(stripos($tag, $search) !== false){
                     if(sizeof($keywords) > 5){
                         break;
                     }
@@ -101,10 +105,18 @@ class SearchController extends Controller
                 $this->cycleCategories($subcategory, $category_ids);
             }
         }
-
-        $products = filter_products(Product::where('published', 1)
-            ->where('name', 'like', '%' . $request->search . '%'))
-            ->where('category_id', $request->get('category_id'))
+        $category_id=$request->get('category_id');
+        $products = getPublishedProducts('product')
+            ->where('name', 'like', '%' . $request->search . '%')
+            ->whereHas('element', function ($relation) use ($category_id) {
+                $relation->where('category_id', $category_id);
+            })
+            ->whereHas('element', function ($relation) use ($category_ids) {
+                foreach ($category_ids as $category_id)
+                {
+                    $relation->orWhere('category_id', $category_id);
+                }
+            })
             ->where(function ($query) use ($category_ids) {
                 foreach ($category_ids as $category_id)
                 {
@@ -130,7 +142,7 @@ class SearchController extends Controller
             sizeof($shops) >0
         ){
             return response()->json([
-                'products' => $products,
+                'products' => new ProductCollection($products) ,
                 'categories' => $categories,
                 'keywords' => $keywords,
                 'shops' => $shops,
@@ -143,7 +155,7 @@ class SearchController extends Controller
     public function cycleCategories($category, &$arr)
     {
         if($category->childrenCategories)
-        {;
+        {
             foreach ($category->childrenCategories as $subcategory)
             {
                 array_push($arr, $subcategory->id);

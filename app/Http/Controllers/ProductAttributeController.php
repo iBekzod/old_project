@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Category;
-use App\Models\AttributeValue;
-use App\Models\ProductAttribute;
-use App\Models\ProductAttributeCharacteristics;
-use App\Models\ProductAttributeCharacteristicTranslation;
-use App\Models\ProductAttributeTranslation;
+use App\AttributeValue;
+use App\ProductAttribute;
+use App\ProductAttributeCharacteristics;
+use App\ProductAttributeCharacteristicTranslation;
+use App\ProductAttributeTranslation;
 use App\Product;
 use Illuminate\Http\Request;
 
@@ -127,7 +127,7 @@ class ProductAttributeController extends Controller
     public function updateAttr(Request $request, $id)
     {
         $attribute = ProductAttributeCharacteristics::findOrFail($id);
-        if ($request->lang == env("DEFAULT_LANGUAGE")) {
+        if ($request->lang == default_language()) {
             $attribute->name = $request->name;
         }
         $attribute->save();
@@ -194,7 +194,7 @@ class ProductAttributeController extends Controller
     public function update(Request $request, $id)
     {
         $attribute = ProductAttribute::findOrFail($id);
-        if ($request->lang == env("DEFAULT_LANGUAGE")) {
+        if ($request->lang == default_language()) {
             $attribute->name = $request->name;
         }
         $attribute->save();

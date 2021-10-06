@@ -26,22 +26,20 @@
 
 <div class="aiz-sidebar-wrap">
     <div class="aiz-sidebar left c-scrollbar bg-light">
-        <div class="aiz-side-nav-logo-wrap bg-light">
-            <a href="{{ route('admin.dashboard') }}" class="text-left d-block">
-                @if(get_setting('system_logo_white') != null)
-                    <img class="mw-100"
-                         src="{{ uploaded_asset(get_setting('system_logo_white'))??static_asset('assets/img/logo.jpg') }}"
-                         class="brand-icon"
-                         alt="{{ get_setting('site_name') }}">
-                @else
-                    <img class="mw-100" src="{{ static_asset('assets/img/logo.png') }}" class="brand-icon"
-                         alt="{{ get_setting('site_name') }}">
-                @endif
-            </a>
-        </div>
+                <div class="aiz-side-nav-logo-wrap bg-light">
+                    <a href="{{ route('admin.dashboard') }}" class="text-left d-block">
+                        @if(get_setting('system_logo_white') != null)
+                            <img class="mw-100" src="{{ uploaded_asset(get_setting('system_logo_white'))??static_asset('assets/img/logo.png') }}" class="brand-icon"
+                                 alt="{{ get_setting('site_name') }}">
+                        @else
+                            <img class="mw-100" src="{{ static_asset('assets/img/logo.png') }}" class="brand-icon"
+                                 alt="{{ get_setting('site_name') }}">
+                        @endif
+                    </a>
+                </div>
         <div class="aiz-side-nav-wrap">
             <div class="mb-3 px-20px">
-                <input class="text-white border-0 form-control bg-soft-secondary form-control-sm" type="text" name=""
+                <input class="text-black border-0 form-control bg-soft-secondary form-control-sm" type="text" name=""
                        placeholder="{{ translate('Search in menu') }}" id="menu-search" onkeyup="menuSearch()">
             </div>
             <ul class="aiz-side-nav-list" id="search-menu">
@@ -56,7 +54,7 @@
 
                 <!-- POS Addon-->
             {{--@if ($pos_system != null && $pos_system->activated)
-                @if(Auth::user()->user_type == 'admin' || in_array('1', json_decode(Auth::user()->staff->role->permissions)))
+                @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('1', json_decode(Auth::user()->staff->role->permissions))))
                     <li class="aiz-side-nav-item">
                         <a href="#" class="aiz-side-nav-link">
                             <i class="las la-tasks aiz-side-nav-icon"></i>
@@ -81,7 +79,7 @@
             @endif--}}
 
             <!-- Product -->
-                @if(Auth::user()->user_type == 'admin' || in_array('2', json_decode(Auth::user()->staff->role->permissions)))
+                @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('2', json_decode(Auth::user()->staff->role->permissions))))
                     <li class="aiz-side-nav-item">
                         <a href="#" class="aiz-side-nav-link">
                             <i class="las la-shopping-cart aiz-side-nav-icon"></i>
@@ -90,47 +88,63 @@
                         </a>
                         <!--Submenu-->
                         <ul class="aiz-side-nav-list level-2">
-                            <li class="aiz-side-nav-item">
+                            {{--  <li class="aiz-side-nav-item">
                                 <a class="aiz-side-nav-link" href="{{route('products.create')}}">
                                     <span class="aiz-side-nav-text">{{translate('Add New product')}}</span>
                                 </a>
-                            </li>
-                            <li class="aiz-side-nav-item">
+                            </li>  --}}
+                             <li class="aiz-side-nav-item">
                                 <a href="{{route('products.all')}}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{ translate('All Products') }}</span>
                                 </a>
                             </li>
+                            {{-- <li class="aiz-side-nav-item">
+                                <a href="{{route('elements.all')}}" class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{ translate('All Elements') }}</span>
+                                </a>
+                            </li> --}}
                             <li class="aiz-side-nav-item">
-                                <a href="{{route('products.manage')}}" class="aiz-side-nav-link">
-                                    <span class="aiz-side-nav-text">{{ translate('Mange Added Products') }}</span>
+                                <a href="{{route('elements.index')}}" class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{ translate('All Elements') }}</span>
                                     @php
-                                        $on_moderation = \App\Product::where('on_moderation', 1)->get();
+                                    $on_moderation_element = \App\Element::where('on_moderation', 1)->get();
                                     @endphp
-                                    @if($on_moderation->count())
-                                        <span class="badge badge-info">{{ $on_moderation->count() }}</span>
+                                    @if($on_moderation_element->count())
+                                        <span class="badge badge-info">{{ $on_moderation_element->count() }}</span>
                                     @endif
                                 </a>
                             </li>
-                            <li class="aiz-side-nav-item">
+                             <li class="aiz-side-nav-item">
+                                <a href="{{route('products.manage')}}" class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{ translate('Mange Added Products') }}</span>
+                                    @php
+                                     $on_moderation_product = \App\Product::where('on_moderation', 1)->get();
+                                    @endphp
+                                    @if($on_moderation_product->count())
+                                        <span class="badge badge-info">{{ $on_moderation_product->count() }}</span>
+                                    @endif
+                                </a>
+                            </li>
+                            {{--  <li class="aiz-side-nav-item">
                                 <a href="{{route('products.admin')}}"
                                    class="aiz-side-nav-link {{ areActiveRoutes(['products.admin', 'products.create', 'products.admin.edit']) }}">
                                     <span class="aiz-side-nav-text">{{ translate('In House Products') }}</span>
                                 </a>
-                            </li>
-                            @if($vendor_system_activation->value == 1)
+                            </li>  --}}
+                            {{--  @if($vendor_system_activation->value == 1)
                                 <li class="aiz-side-nav-item">
                                     <a href="{{route('products.seller')}}"
                                        class="aiz-side-nav-link {{ areActiveRoutes(['products.seller', 'products.seller.edit']) }}">
                                         <span class="aiz-side-nav-text">{{ translate('Seller Products') }}</span>
                                     </a>
                                 </li>
-                            @endif
-                            <li class="aiz-side-nav-item">
+                            @endif  --}}
+                            {{--  <li class="aiz-side-nav-item">
                                 <a href="{{route('digitalproducts.index')}}"
                                    class="aiz-side-nav-link {{ areActiveRoutes(['digitalproducts.index', 'digitalproducts.create', 'digitalproducts.edit']) }}">
                                     <span class="aiz-side-nav-text">{{ translate('Digital Products') }}</span>
                                 </a>
-                            </li>
+                            </li>  --}}
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('product_bulk_upload.index') }}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{ translate('Bulk Import') }}</span>
@@ -154,23 +168,24 @@
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
+                                <a href="{{route('branches.index')}}" class="aiz-side-nav-link {{ areActiveRoutes([
+                                                                        'branches.index',
+                                                                        'branches.create',
+                                                                        'branches.edit'
+                                                                    ])}}">
+
+                                    <span class="aiz-side-nav-text">
+                                        {{ translate('Branches') }}
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
                                 <a href="{{route('attributes.index')}}"
                                    class="aiz-side-nav-link {{ areActiveRoutes(['attributes.index','attributes.create','attributes.edit'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Attribute')}}</span>
                                 </a>
                             </li>
-                            <li class="aiz-side-nav-item">
-                                <a href="{{route('product-attributes.index')}}" class="aiz-side-nav-link {{ areActiveRoutes([
-                                                                        'product-attributes.index',
-                                                                        'product-attributes.create',
-                                                                        'product-attributes.edit'
-                                                                    ])}}">
 
-                                    <span class="aiz-side-nav-text">
-                                        {{ translate('Product Attributes') }}
-                                    </span>
-                                </a>
-                            </li>
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('reviews.index')}}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{translate('Product Reviews')}}</span>
@@ -199,70 +214,89 @@
                    </ul>
                </li> --}}
             <!-- Sale -->
-                <li class="aiz-side-nav-item">
+            @if (Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('3', json_decode(Auth::user()->staff->role->permissions))))
+
+            @endif
+            <li class="aiz-side-nav-item">
+                @if (Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('3', json_decode(Auth::user()->staff->role->permissions))))
                     <a href="#" class="aiz-side-nav-link">
                         <i class="las la-money-bill aiz-side-nav-icon"></i>
                         <span class="aiz-side-nav-text">{{translate('Sales')}}</span>
                         <span class="aiz-side-nav-arrow"></span>
                     </a>
-                    <!--Submenu-->
-                    <ul class="aiz-side-nav-list level-2">
-                        @if(Auth::user()->user_type == 'admin' || in_array('3', json_decode(Auth::user()->staff->role->permissions)))
-                            <li class="aiz-side-nav-item">
-                                <a href="{{ route('all_orders.index') }}"
-                                   class="aiz-side-nav-link {{ areActiveRoutes(['all_orders.index', 'all_orders.show'])}}">
-                                    <span class="aiz-side-nav-text">{{translate('All Orders')}}</span>
-                                </a>
-                            </li>
-                        @endif
+            @endif
+                <!--Submenu-->
+                <ul class="aiz-side-nav-list level-2">
+                    @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('3', json_decode(Auth::user()->staff->role->permissions))))
+                        <li class="aiz-side-nav-item">
+                            <a href="{{ route('all_orders.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['all_orders.index', 'all_orders.show'])}}">
+                                <span class="aiz-side-nav-text">{{translate('All Orders')}}</span>
+                            </a>
+                        </li>
+                    @endif
 
-                        @if(Auth::user()->user_type == 'admin' || in_array('4', json_decode(Auth::user()->staff->role->permissions)))
-                            <li class="aiz-side-nav-item">
-                                <a href="{{ route('inhouse_orders.index') }}"
-                                   class="aiz-side-nav-link {{ areActiveRoutes(['inhouse_orders.index', 'inhouse_orders.show'])}}">
-                                    <span class="aiz-side-nav-text">{{translate('Inhouse orders')}}</span>
-                                </a>
-                            </li>
-                        @endif
-                        @if(Auth::user()->user_type == 'admin' || in_array('5', json_decode(Auth::user()->staff->role->permissions)))
-                            <li class="aiz-side-nav-item">
-                                <a href="{{ route('seller_orders.index') }}"
-                                   class="aiz-side-nav-link {{ areActiveRoutes(['seller_orders.index', 'seller_orders.show'])}}">
-                                    <span class="aiz-side-nav-text">{{translate('Seller Orders')}}</span>
-                                </a>
-                            </li>
-                        @endif
-                        @if(Auth::user()->user_type == 'admin' || in_array('6', json_decode(Auth::user()->staff->role->permissions)))
-                            <li class="aiz-side-nav-item">
-                                <a href="{{ route('pick_up_point.order_index') }}"
-                                   class="aiz-side-nav-link {{ areActiveRoutes(['pick_up_point.order_index','pick_up_point.order_show'])}}">
-                                    <span class="aiz-side-nav-text">{{translate('Pick-up Point Order')}}</span>
-                                </a>
-                            </li>
-                        @endif
-                    </ul>
-                </li>
+                    @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('4', json_decode(Auth::user()->staff->role->permissions))))
+                        <li class="aiz-side-nav-item">
+                            <a href="{{ route('inhouse_orders.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['inhouse_orders.index', 'inhouse_orders.show'])}}" >
+                                <span class="aiz-side-nav-text">{{translate('Inhouse orders')}}</span>
+                            </a>
+                        </li>
+                    @endif
+                    @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('5', json_decode(Auth::user()->staff->role->permissions))))
+                        <li class="aiz-side-nav-item">
+                            <a href="{{ route('seller_orders.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['seller_orders.index', 'seller_orders.show'])}}">
+                                <span class="aiz-side-nav-text">{{translate('Seller Orders')}}</span>
+                            </a>
+                        </li>
+                    @endif
+                    @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('6', json_decode(Auth::user()->staff->role->permissions))))
+                        <li class="aiz-side-nav-item">
+                            <a href="{{ route('pick_up_point.order_index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['pick_up_point.order_index','pick_up_point.order_show'])}}">
+                                <span class="aiz-side-nav-text">{{translate('Pick-up Point Order')}}</span>
+                            </a>
+                        </li>
+                    @endif
+                </ul>
+            </li>
 
                 <!-- Refund addon -->
                 @if ($refund_request != null && $refund_request->activated)
-                    @if(Auth::user()->user_type == 'admin' || in_array('7', json_decode(Auth::user()->staff->role->permissions)))
+                    @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('7', json_decode(Auth::user()->staff->role->permissions))))
                         <li class="aiz-side-nav-item">
                             <a href="#" class="aiz-side-nav-link">
                                 <i class="las la-backward aiz-side-nav-icon"></i>
                                 <span class="aiz-side-nav-text">{{ translate('Refunds') }}</span>
+
                                 <span class="aiz-side-nav-arrow"></span>
                             </a>
-                            <ul class="aiz-side-nav-list level-2">
-                                <li class="aiz-side-nav-item">
-                                    <a href="{{route('refund_requests_all')}}"
-                                       class="aiz-side-nav-link {{ areActiveRoutes(['refund_requests_all', 'reason_show'])}}">
 
+                            <ul class="aiz-side-nav-list level-2">
+                                @php
+                                    $refund_request=\App\RefundRequest::where('admin_seen',0)->where('admin_approval',0)->get();
+                                    // $refund_request=\App\RefundRequest::where('refund_status',0)->get();
+                                @endphp
+                                <li class="aiz-side-nav-item">
+                                    <a href="{{route('refund_requests_all')}}" class="aiz-side-nav-link {{ areActiveRoutes(['refund_requests_all', 'reason_show'])}}">
                                         <span class="aiz-side-nav-text">{{translate('Refund Requests')}}</span>
+
+                                        @if (count($refund_request) > 0)
+                                           <span class="badge badge-info">{{ count($refund_request) }}</span>
+                                        @endif
+                                    </a>
+                                </li>
+                                <li class="aiz-side-nav-item">
+                                    <a href="{{route('reasons_all')}}" class="aiz-side-nav-link {{ areActiveRoutes(['reasons_all', 'reason_show'])}}">
+                                        <span class="aiz-side-nav-text">{{translate('Reasons')}}</span>
                                     </a>
                                 </li>
                                 <li class="aiz-side-nav-item">
                                     <a href="{{route('paid_refund')}}" class="aiz-side-nav-link">
-                                        <span class="aiz-side-nav-text">{{translate('Approved Refund')}}</span>
+                                        <span class="aiz-side-nav-text">{{translate('Approved Refunds')}}</span>
+                                    </a>
+                                </li>
+                                <li class="aiz-side-nav-item">
+                                    <a href="{{route('rejected_refund')}}" class="aiz-side-nav-link">
+                                        <span class="aiz-side-nav-text">{{translate('rejected Refunds')}}</span>
                                     </a>
                                 </li>
                                 <li class="aiz-side-nav-item">
@@ -277,7 +311,7 @@
 
 
             <!-- Customers -->
-                @if(Auth::user()->user_type == 'admin' || in_array('8', json_decode(Auth::user()->staff->role->permissions)))
+                @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('8', json_decode(Auth::user()->staff->role->permissions))))
                     <li class="aiz-side-nav-item">
                         <a href="#" class="aiz-side-nav-link">
                             <i class="las la-user-friends aiz-side-nav-icon"></i>
@@ -308,7 +342,7 @@
                 @endif
 
             <!-- Sellers -->
-                @if((Auth::user()->user_type == 'admin' || in_array('9', json_decode(Auth::user()->staff->role->permissions))) && $vendor_system_activation->value == 1)
+                @if((Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('9', json_decode(Auth::user()->staff->role->permissions)))) && $vendor_system_activation->value == 1)
                     <li class="aiz-side-nav-item">
                         <a href="#" class="aiz-side-nav-link">
                             <i class="las la-user aiz-side-nav-icon"></i>
@@ -363,7 +397,7 @@
                 </li>
 
                 <!-- Reports -->
-                @if(Auth::user()->user_type == 'admin' || in_array('10', json_decode(Auth::user()->staff->role->permissions)))
+                @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('10', json_decode(Auth::user()->staff->role->permissions))))
                     <li class="aiz-side-nav-item">
                         <a href="#" class="aiz-side-nav-link">
                             <i class="las la-file-alt aiz-side-nav-icon"></i>
@@ -401,12 +435,22 @@
                                     <span class="aiz-side-nav-text">{{ translate('User Searches') }}</span>
                                 </a>
                             </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{ route('commission-log.index') }}" class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{ translate('Commission History') }}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{ route('wallet-history.index') }}" class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{ translate('Wallet Recharge History') }}</span>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 @endif
 
             <!-- marketing -->
-                @if(Auth::user()->user_type == 'admin' || in_array('11', json_decode(Auth::user()->staff->role->permissions)))
+                @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('11', json_decode(Auth::user()->staff->role->permissions))))
                     <li class="aiz-side-nav-item">
                         <a href="#" class="aiz-side-nav-link">
                             <i class="las la-bullhorn aiz-side-nav-icon"></i>
@@ -414,7 +458,7 @@
                             <span class="aiz-side-nav-arrow"></span>
                         </a>
                         <ul class="aiz-side-nav-list level-2">
-                            @if(Auth::user()->user_type == 'admin' || in_array('2', json_decode(Auth::user()->staff->role->permissions)))
+                            @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('2', json_decode(Auth::user()->staff->role->permissions))))
                                 <li class="aiz-side-nav-item">
                                     <a href="{{ route('flash_deals.index') }}"
                                        class="aiz-side-nav-link {{ areActiveRoutes(['flash_deals.index', 'flash_deals.create', 'flash_deals.edit'])}}">
@@ -428,7 +472,7 @@
                                     </a>
                                 </li>
                             @endif
-                            @if(Auth::user()->user_type == 'admin' || in_array('7', json_decode(Auth::user()->staff->role->permissions)))
+                            @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('7', json_decode(Auth::user()->staff->role->permissions))))
                                 <li class="aiz-side-nav-item">
                                     <a href="{{route('newsletters.index')}}" class="aiz-side-nav-link">
                                         <span class="aiz-side-nav-text">{{ translate('Newsletters') }}</span>
@@ -458,7 +502,7 @@
                 @endif
 
             <!-- Support -->
-                @if(Auth::user()->user_type == 'admin' || in_array('12', json_decode(Auth::user()->staff->role->permissions)))
+                @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('12', json_decode(Auth::user()->staff->role->permissions))))
                     <li class="aiz-side-nav-item">
                         <a href="#" class="aiz-side-nav-link">
                             <i class="las la-link aiz-side-nav-icon"></i>
@@ -466,7 +510,7 @@
                             <span class="aiz-side-nav-arrow"></span>
                         </a>
                         <ul class="aiz-side-nav-list level-2">
-                            @if(Auth::user()->user_type == 'admin' || in_array('13', json_decode(Auth::user()->staff->role->permissions)))
+                            @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('13', json_decode(Auth::user()->staff->role->permissions))))
                                 @php
                                     $support_ticket = DB::table('tickets')
                                                 ->where('viewed', 0)
@@ -474,36 +518,104 @@
                                                 ->count();
                                 @endphp
                                 <li class="aiz-side-nav-item">
-                                    <a href="{{ route('support_ticket.admin_index') }}"
-                                       class="aiz-side-nav-link {{ areActiveRoutes(['support_ticket.admin_index', 'support_ticket.admin_show'])}}">
-                                        <span class="aiz-side-nav-text">{{translate('Ticket')}}</span>
+                                    <a href="{{ route('support_ticket_seller.admin_index') }}"
+                                       class="aiz-side-nav-link {{ areActiveRoutes(['support_ticket_seller.admin_index', 'support_ticket_seller.admin_show'])}}">
+                                        <span class="aiz-side-nav-text">{{translate('Ticket seller')}}</span>
                                         @if($support_ticket > 0)<span
-                                            class="badge badge-info">{{ $support_ticket }}</span>@endif
+                                        class="badge badge-info">{{ $support_ticket }}</span>
+                                        @endif
                                     </a>
                                 </li>
+                                {{-- <li class="aiz-side-nav-item">
+                                    <a href="{{ route('support_ticket_user.admin_index') }}"
+                                       class="aiz-side-nav-link {{ areActiveRoutes(['support_ticket_user.admin_index', 'support_ticket.admin_show'])}}">
+                                        <span class="aiz-side-nav-text">{{translate('Ticket user ')}}</span>
+                                        @if($support_ticket > 0)<span
+                                        class="badge badge-info">{{ $support_ticket }}</span>
+                                        @endif
+                                    </a>
+                                </li> --}}
                             @endif
 
                             @php
-                                $conversation = \App\Conversation::where('receiver_id', Auth::user()->id)->where('receiver_viewed', '1')->get();
+                                // $conversation = \App\Conversation::where('receiver_id', Auth::user()->id)->where('receiver_viewed', '1')->get();
+                                $conversation = \App\Conversation::where('sender_viewed', 0)->get();
+                                // $conversation = \App\Conversation::where('receiver_viewed', 0)->get();
+
+
                             @endphp
-                            @if(Auth::user()->user_type == 'admin' || in_array('16', json_decode(Auth::user()->staff->role->permissions)))
+                            @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('16', json_decode(Auth::user()->staff->role->permissions))))
                                 <li class="aiz-side-nav-item">
                                     <a href="{{ route('conversations.admin_index') }}"
                                        class="aiz-side-nav-link {{ areActiveRoutes(['conversations.admin_index', 'conversations.admin_show'])}}">
                                         <span class="aiz-side-nav-text">{{translate('Product Queries')}}</span>
+
                                         @if (count($conversation) > 0)
                                             <span class="badge badge-info">{{ count($conversation) }}</span>
                                         @endif
                                     </a>
                                 </li>
                             @endif
+                          @php
+                                $found_it_cheaper=\App\FoundItCheaper::where('viewed',0)->get();
+                          @endphp
+                            @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('16', json_decode(Auth::user()->staff->role->permissions))))
+                                <li class="aiz-side-nav-item">
+                                    <a href="{{ route('conversations.found_it_cheaper') }}"
+                                       class="aiz-side-nav-link {{ areActiveRoutes(['conversations.found_it_cheaper', 'found_it_cheapers.admin_show'])}}">
+                                          <span class="aiz-side-nav-text">{{translate('Found it cheaper')}}</span>
+                                        @if (count($found_it_cheaper) > 0)
+                                            <span class="badge badge-info">{{ count($found_it_cheaper) }}</span>
+                                        @endif
+                                    </a>
+                                </li>
+                            @endif
+                            {{-- @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('16', json_decode(Auth::user()->staff->role->permissions))))
+                            <li class="aiz-side-nav-item">
+                                <a href="{{ route('conversation.price_reduction') }}"
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['conversation.price_reduction', 'conversations.admin_show'])}}">
+                                    <span class="aiz-side-nav-text">{{translate('Frice Reduction')}}</span>
+                                    @if (count($conversation) > 0)
+                                        <span class="badge badge-info">{{ count($conversation) }}</span>
+                                    @endif
+                                </a>
+                            </li>
+                        @endif --}}
+                        @php
+                             $report_description=\App\ReportDescription::where('viewed',0)->get();
+                        @endphp
+                        @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('16', json_decode(Auth::user()->staff->role->permissions))))
+                            <li class="aiz-side-nav-item">
+                                <a href="{{ route('conversation.report_description') }}"
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['conversation.report_description', 'report_description.admin_show'])}}">
+                                    <span class="aiz-side-nav-text">{{translate('Report description')}}</span>
+                                    @if (count($report_description) > 0)
+                                        <span class="badge badge-info">{{ count($report_description) }}</span>
+                                    @endif
+                                </a>
+                            </li>
+                        @endif
+                        @php
+                          $support_service=\App\SupportService::where('viewed',0)->get();
+                        @endphp
+                        @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('16', json_decode(Auth::user()->staff->role->permissions))))
+                            <li class="aiz-side-nav-item">
+                                <a href="{{ route('conversation.support_service') }}"
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['conversation.support_service', 'support_service.admin_show'])}}">
+                                    <span class="aiz-side-nav-text">{{translate('Support service')}}</span>
+                                    @if (count($support_service) > 0)
+                                        <span class="badge badge-info">{{ count($support_service) }}</span>
+                                    @endif
+                                </a>
+                            </li>
+                        @endif
                         </ul>
                     </li>
                 @endif
 
             <!-- Affiliate Addon -->
                 @if ($affiliate_system && $affiliate_system->activated)
-                    @if(Auth::user()->user_type == 'admin' || in_array('15', json_decode(Auth::user()->staff->role->permissions)))
+                    @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('15', json_decode(Auth::user()->staff->role->permissions))))
                         <li class="aiz-side-nav-item">
                             <a href="#" class="aiz-side-nav-link">
                                 <i class="las la-link aiz-side-nav-icon"></i>
@@ -545,8 +657,8 @@
                 @endif
 
             <!-- Offline Payment Addon-->
-                @if ($offline_payment != null && $offline_payment->activated)
-                    @if(Auth::user()->user_type == 'admin' || in_array('16', json_decode(Auth::user()->staff->role->permissions)))
+                @if (false && $offline_payment != null && $offline_payment->activated)
+                    @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('16', json_decode(Auth::user()->staff->role->permissions))))
                         <li class="aiz-side-nav-item">
                             <a href="#" class="aiz-side-nav-link">
                                 <i class="las la-money-check-alt aiz-side-nav-icon"></i>
@@ -590,8 +702,8 @@
                 @endif
 
             <!-- Paytm Addon -->
-                @if ($paytm != null && $paytm->activated)
-                    @if(Auth::user()->user_type == 'admin' || in_array('17', json_decode(Auth::user()->staff->role->permissions)))
+                @if (false && $paytm != null && $paytm->activated)
+                    @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('17', json_decode(Auth::user()->staff->role->permissions))))
                         <li class="aiz-side-nav-item">
                             <a href="#" class="aiz-side-nav-link">
                                 <i class="las la-mobile-alt aiz-side-nav-icon"></i>
@@ -611,7 +723,7 @@
 
             <!-- Club Point Addon-->
                 @if ($club_point != null && $club_point->activated)
-                    @if(Auth::user()->user_type == 'admin' || in_array('18', json_decode(Auth::user()->staff->role->permissions)))
+                    @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('18', json_decode(Auth::user()->staff->role->permissions))))
                         <li class="aiz-side-nav-item">
                             <a href="#" class="aiz-side-nav-link">
                                 <i class="lab la-btc aiz-side-nav-icon"></i>
@@ -643,32 +755,39 @@
                 @endif
 
             <!--OTP addon -->
-                @if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null && \App\Addon::where('unique_identifier', 'otp_system')->first()->activated)
-                    @if(Auth::user()->user_type == 'admin' || in_array('19', json_decode(Auth::user()->staff->role->permissions)))
-                        <li class="aiz-side-nav-item">
-                            <a href="#" class="aiz-side-nav-link">
-                                <i class="las la-phone aiz-side-nav-icon"></i>
-                                <span class="aiz-side-nav-text">{{translate('OTP System')}}</span>
-                                <span class="aiz-side-nav-arrow"></span>
-                            </a>
-                            <ul class="aiz-side-nav-list level-2">
-                                <li class="aiz-side-nav-item">
-                                    <a href="{{ route('otp.configconfiguration') }}" class="aiz-side-nav-link">
-                                        <span class="aiz-side-nav-text">{{translate('OTP Configurations')}}</span>
-                                    </a>
-                                </li>
-                                <li class="aiz-side-nav-item">
-                                    <a href="{{route('otp_credentials.index')}}" class="aiz-side-nav-link">
-                                        <span class="aiz-side-nav-text">{{translate('Set OTP Credentials')}}</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    @endif
-                @endif
+                                @if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null && \App\Addon::where('unique_identifier', 'otp_system')->first()->activated)
+                                    @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('19', json_decode(Auth::user()->staff->role->permissions))))
+                                        <li class="aiz-side-nav-item">
+                                            <a href="#" class="aiz-side-nav-link">
+                                                <i class="las la-phone aiz-side-nav-icon"></i>
+                                                <span class="aiz-side-nav-text">{{translate('OTP System')}}</span>
+                                                <span class="aiz-side-nav-arrow"></span>
+                                            </a>
+                                            <ul class="aiz-side-nav-list level-2">
+                                                <li class="aiz-side-nav-item">
+                                                    <a href="{{ route('otp.configconfiguration') }}" class="aiz-side-nav-link">
+                                                        <span class="aiz-side-nav-text">{{translate('OTP Configurations')}}</span>
+                                                    </a>
+                                                </li>
+                                                <li class="aiz-side-nav-item">
+                                                    <a href="{{route('sms-templates.index')}}" class="aiz-side-nav-link">
+                                                        <span class="aiz-side-nav-text">{{translate('SMS Templates')}}</span>
+                                                    </a>
+                                                </li>
+                                                <li class="aiz-side-nav-item">
+                                                    <a href="{{route('otp_credentials.index')}}" class="aiz-side-nav-link">
+                                                        <span class="aiz-side-nav-text">{{translate('Set OTP Credentials')}}</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    @endif
+                                @endif
+
+
 
                 @if($afr_pg != null && $afr_pg->activated)
-                    @if(Auth::user()->user_type == 'admin' || in_array('19', json_decode(Auth::user()->staff->role->permissions)))
+                    @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('19', json_decode(Auth::user()->staff->role->permissions))))
                         <li class="aiz-side-nav-item">
                             <a href="#" class="aiz-side-nav-link">
                                 <i class="las la-phone aiz-side-nav-icon"></i>
@@ -694,7 +813,7 @@
                 @endif
 
             <!-- Website Setup -->
-                @if(Auth::user()->user_type == 'admin' || in_array('13', json_decode(Auth::user()->staff->role->permissions)))
+                @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('13', json_decode(Auth::user()->staff->role->permissions))))
                     <li class="aiz-side-nav-item">
                         <a href="#" class="aiz-side-nav-link">
                             <i class="las la-desktop aiz-side-nav-icon"></i>
@@ -728,36 +847,139 @@
                 @endif
 
             <!-- Translations -->
-                @if(Auth::user()->user_type == 'admin' || in_array('14', json_decode(Auth::user()->staff->role->permissions)))
+                @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('14', json_decode(Auth::user()->staff->role->permissions))))
                     <li class="aiz-side-nav-item">
                         <a href="#" class="aiz-side-nav-link">
-                            <i class="las la-dharmachakra aiz-side-nav-icon"></i>
+                            <i class="las la-language aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{translate('Translations')}}</span>
                             <span class="aiz-side-nav-arrow"></span>
                         </a>
                         <ul class="aiz-side-nav-list level-2">
                             <li class="aiz-side-nav-item">
-                                <a href="{{route('translations.show_translation', ['base_table'=>'products', 'table_translations'=>'product_translations', 'relation_id'=>'product_id', 'language_selected'=>'ru'])}}"
+                                <a href="{{route('translations.show_translation', ['base_table'=>'frontends', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'frontend_translations', 'relation_id'=>'frontend_id', 'language_selected'=>'ru'])}}"
                                    class="aiz-side-nav-link">
-                                    <span class="aiz-side-nav-text">{{translate('Products')}}</span>
+                                    <span class="aiz-side-nav-text">{{translate('Frontend')}}</span>
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
-                                <a href="{{route('translations.show_translation', ['base_table'=>'categories', 'table_translations'=>'category_translations', 'relation_id'=>'category_id', 'language_selected'=>'ru'])}}"
-                                   class="aiz-side-nav-link">
-                                    <span class="aiz-side-nav-text">{{translate('Categories')}}</span>
-                                </a>
-                            </li>
-                            <li class="aiz-side-nav-item">
-                                <a href="{{route('translations.show_translation', ['base_table'=>'attributes', 'table_translations'=>'attribute_translations', 'relation_id'=>'attribute_id', 'language_selected'=>'ru'])}}"
+                                <a href="{{route('translations.show_translation', ['base_table'=>'attributes', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'attribute_translations', 'relation_id'=>'attribute_id', 'language_selected'=>'ru'])}}"
                                    class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{translate('Attributes')}}</span>
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
-                                <a href="{{route('translations.show_translation', ['base_table'=>'brands', 'table_translations'=>'brand_translations', 'relation_id'=>'brand_id', 'language_selected'=>'ru'])}}"
+                                <a href="{{route('translations.show_translation', ['base_table'=>'branches', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'branch_translations', 'relation_id'=>'branch_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Branches')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'brands', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'brand_translations', 'relation_id'=>'brand_id', 'language_selected'=>'ru'])}}"
                                    class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{translate('Brands')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'categories', 'fields'=>['name'], 'selected_field'=>0,  'table_translations'=>'category_translations', 'relation_id'=>'category_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Categories')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'characteristics', 'fields'=>['name'], 'selected_field'=>0,  'table_translations'=>'characteristic_translations', 'relation_id'=>'characteristic_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Characteristics')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'cities', 'fields'=>['name'], 'selected_field'=>0,  'table_translations'=>'city_translations', 'relation_id'=>'city_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Cities')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'
+
+
+
+
+
+                                ', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'country_translations', 'relation_id'=>'country_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Countries')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'colors', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'color_translations', 'relation_id'=>'color_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Colors')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'customer_packages', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'customer_package_translations', 'relation_id'=>'customer_package_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Customer Packages')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'customer_products', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'customer_product_translations', 'relation_id'=>'customer_product_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Customer Products')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'elements', 'fields'=>['name', 'unit', 'description'], 'selected_field'=>0, 'table_translations'=>'element_translations', 'relation_id'=>'element_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Elements')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'flash_deals', 'fields'=>['title'], 'selected_field'=>0, 'table_translations'=>'flash_deal_translations', 'relation_id'=>'flash_deal_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Flash deals')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'languages', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'language_translations', 'relation_id'=>'language_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Languages')}}</span>
+                                </a>
+                            </li>
+
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'pages', 'fields'=>['title','content'], 'selected_field'=>0, 'table_translations'=>'page_translations', 'relation_id'=>'page_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Pages')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'pickup_points', 'fields'=>['title','content'], 'selected_field'=>0, 'table_translations'=>'pickup_point_translations', 'pickup_point_id'=>'page_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Pickup Points')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'products', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'product_translations', 'relation_id'=>'product_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Products')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'roles', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'role_translations', 'relation_id'=>'role_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Roles')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'variations', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'variation_translations', 'relation_id'=>'variation_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Variations')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('translations.show_translation', ['base_table'=>'reasons', 'fields'=>['name'], 'selected_field'=>0, 'table_translations'=>'reason_translations', 'relation_id'=>'reason_id', 'language_selected'=>'ru'])}}"
+                                   class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Reasons')}}</span>
                                 </a>
                             </li>
                             {{-- <li class="aiz-side-nav-item">
@@ -769,8 +991,72 @@
                         </ul>
                     </li>
                 @endif
+                {{-- Delivery --}}
+                @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('14', json_decode(Auth::user()->staff->role->permissions))))
+                    <li class="aiz-side-nav-item">
+                        <a href="#" class="aiz-side-nav-link">
+                            <i class="las la-truck aiz-side-nav-icon"></i>
+                            <span class="aiz-side-nav-text">{{translate('Delivery')}}</span>
+                            <span class="aiz-side-nav-arrow"></span>
+                        </a>
+
+                        <ul class="aiz-side-nav-list level-2">
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('countries.index')}}"
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['countries.index','countries.edit','countries.update'])}}">
+                                    <span class="aiz-side-nav-text">{{translate('Shipping Countries')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('cities.index')}}"
+                                class="aiz-side-nav-link {{ areActiveRoutes(['cities.index','cities.edit','cities.update'])}}">
+                                    <span class="aiz-side-nav-text">{{translate('Shipping Cities')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('deliveries.index')}}"
+                                class="aiz-side-nav-link {{ areActiveRoutes(['deliveries.index','deliveries.update','deliveries.store', 'deliveries.destroy'])}}">
+                                    <span class="aiz-side-nav-text">{{translate('Delivery distance')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('delivery_prices.index')}}"
+                                class="aiz-side-nav-link {{ areActiveRoutes(['delivery_prices.index','delivery_prices.update','delivery_prices.store', 'delivery_prices.destroy'])}}">
+                                    <span class="aiz-side-nav-text">{{translate('Delivery prices')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('delivery_tarifs.index')}}"
+                                class="aiz-side-nav-link {{ areActiveRoutes(['delivery_tarifs.index','delivery_tarifs.update','delivery_tarifs.store', 'delivery_tarifs.destroy'])}}">
+                                    <span class="aiz-side-nav-text">{{translate('Delivery tarifs')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('delivery-boys.index')}}" class="aiz-side-nav-link {{ areActiveRoutes(['delivery-boys.index'])}}">
+                                    <span class="aiz-side-nav-text">{{translate('All Delivery Boy')}}</span>
+                                </a>
+                            </li>
+                            {{-- <li class="aiz-side-nav-item">
+                                <a href="{{route('delivery-boys.create')}}" class="aiz-side-nav-link {{ areActiveRoutes(['delivery-boys.create'])}}">
+                                    <span class="aiz-side-nav-text">{{translate('Add Delivery Boy')}}</span>
+                                </a>
+                            </li> --}}
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('delivery-boy.cancel-request')}}" class="aiz-side-nav-link {{ areActiveRoutes(['delivery-boy.cancel-request'])}}">
+                                    <span class="aiz-side-nav-text">{{translate('Cancel Request')}}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('delivery-boy-configuration')}}" class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Configuration')}}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                @endif
             <!-- Setup & Configurations -->
-                @if(Auth::user()->user_type == 'admin' || in_array('14', json_decode(Auth::user()->staff->role->permissions)))
+
+                @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('14', json_decode(Auth::user()->staff->role->permissions))))
                     <li class="aiz-side-nav-item">
                         <a href="#" class="aiz-side-nav-link">
                             <i class="las la-dharmachakra aiz-side-nav-icon"></i>
@@ -842,31 +1128,21 @@
                                     <span class="aiz-side-nav-text">{{translate('Google reCAPTCHA')}}</span>
                                 </a>
                             </li>
-                            <li class="aiz-side-nav-item">
+                            {{-- <li class="aiz-side-nav-item">
                                 <a href="{{route('shipping_configuration.index')}}"
                                    class="aiz-side-nav-link {{ areActiveRoutes(['shipping_configuration.index','shipping_configuration.edit','shipping_configuration.update'])}}">
                                     <span class="aiz-side-nav-text">{{translate('Shipping Configuration')}}</span>
                                 </a>
-                            </li>
-                            <li class="aiz-side-nav-item">
-                                <a href="{{route('countries.index')}}"
-                                   class="aiz-side-nav-link {{ areActiveRoutes(['countries.index','countries.edit','countries.update'])}}">
-                                    <span class="aiz-side-nav-text">{{translate('Shipping Countries')}}</span>
-                                </a>
-                            </li>
-                            <li class="aiz-side-nav-item">
-                                <a href="{{route('cities.index')}}"
-                                   class="aiz-side-nav-link {{ areActiveRoutes(['cities.index','cities.edit','cities.update'])}}">
-                                    <span class="aiz-side-nav-text">{{translate('Shipping Cities')}}</span>
-                                </a>
-                            </li>
+                            </li> --}}
+
+
                         </ul>
                     </li>
                 @endif
 
 
             <!-- Staffs -->
-                @if(Auth::user()->user_type == 'admin' || in_array('20', json_decode(Auth::user()->staff->role->permissions)))
+                @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('20', json_decode(Auth::user()->staff->role->permissions))))
                     <li class="aiz-side-nav-item">
                         <a href="#" class="aiz-side-nav-link">
                             <i class="las la-user-tie aiz-side-nav-icon"></i>
@@ -911,17 +1187,17 @@
                 {{--                        </ul>--}}
                 {{--                    </li>--}}
 
-                {{--                    <!-- Addon Manager -->--}}
-                {{--                    @if(Auth::user()->user_type == 'admin' || in_array('21', json_decode(Auth::user()->staff->role->permissions)))--}}
-                {{--                        <li class="aiz-side-nav-item">--}}
-                {{--                            <a href="{{route('addons.index')}}"--}}
-                {{--                               class="aiz-side-nav-link {{ areActiveRoutes(['addons.index', 'addons.create'])}}">--}}
-                {{--                                <i class="las la-wrench aiz-side-nav-icon"></i>--}}
-                {{--                                <span class="aiz-side-nav-text">{{translate('Addon Manager')}}</span>--}}
-                {{--                            </a>--}}
-                {{--                        </li>--}}
-                {{--                    @endif--}}
-                {{--                @endif--}}
+{{--                    <!-- Addon Manager -->--}}
+{{--                    @if(Auth::user()->user_type == 'admin' || (Auth::user()->staff && in_array('21', json_decode(Auth::user()->staff->role->permissions))))--}}
+{{--                        <li class="aiz-side-nav-item">--}}
+{{--                            <a href="{{route('addons.index')}}"--}}
+{{--                               class="aiz-side-nav-link {{ areActiveRoutes(['addons.index', 'addons.create'])}}">--}}
+{{--                                <i class="las la-wrench aiz-side-nav-icon"></i>--}}
+{{--                                <span class="aiz-side-nav-text">{{translate('Addon Manager')}}</span>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+{{--                    @endif--}}
+{{--                @endif--}}
             </ul><!-- .aiz-side-nav -->
         </div><!-- .aiz-side-nav-wrap -->
     </div><!-- .aiz-sidebar -->

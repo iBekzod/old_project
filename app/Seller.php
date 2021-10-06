@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Seller extends Model
 {
+    // protected $attributes = ['verification_info'];
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -23,6 +24,7 @@ class Seller extends Model
 
     public function getVerificationInfoAttribute($value)
     {
-        return json_decode($value);
+        // return $this->attributes['verification_info']=json_decode($value, true);
+        return json_decode($value, true);
     }
 }

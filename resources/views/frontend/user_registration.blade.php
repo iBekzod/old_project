@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app')
+@extends('frontend.layouts.seller')
 
 @section('content')
     <section class="gry-bg py-4">
@@ -14,7 +14,7 @@
                             </div>
                             <div class="px-4 py-3 py-lg-4">
                                 <div class="">
-                                    <form id="reg-form" class="form-default" role="form" action="{{ route('register') }}" method="POST">
+                                    <form id="reg-form" class="form-default" role="form" action="{{ route('seller.registration') }}" method="POST">
                                         @csrf
                                         <div class="form-group">
                                             <input type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" value="{{ old('name') }}" placeholder="{{  translate('Full Name') }}" name="name">
@@ -27,12 +27,13 @@
 
                                         @if (\App\Addon::where('unique_identifier', 'otp_system')->first() != null && \App\Addon::where('unique_identifier', 'otp_system')->first()->activated)
                                             <div class="form-group phone-form-group mb-1">
-                                                <input type="tel" id="phone-code" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" value="{{ old('phone') }}" placeholder="" name="phone" autocomplete="off">
+                                                <input type="tel" id="phone-code" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" value="{{ old('phone') }}" placeholder="97 777 77 77" name="phone" autocomplete="off">
                                             </div>
 
                                             <input type="hidden" name="country_code" value="">
 
-                                            <div class="form-group email-form-group mb-1 d-none">
+
+                                            <div class="form-group email-form-group mt-2 ">
                                                 <input type="email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" placeholder="{{  translate('Email') }}" name="email"  autocomplete="off">
                                                 @if ($errors->has('email'))
                                                     <span class="invalid-feedback" role="alert">
@@ -41,9 +42,9 @@
                                                 @endif
                                             </div>
 
-                                            <div class="form-group text-right">
-                                                <button class="btn btn-link p-0 opacity-50 text-reset" type="button" onclick="toggleEmailPhone(this)">{{ translate('Use Email Instead') }}</button>
-                                            </div>
+                                            {{-- <div class="form-group text-right">
+                                                <button class="btn btn-link p-0 opacity-50 text-reset" type="button" onclick="toggleEmailPhone(this)">{{ translate('email link to your number') }}</button>
+                                            </div> --}}
                                         @else
                                             <div class="form-group">
                                                 <input type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" placeholder="{{  translate('Email') }}" name="email">
@@ -98,7 +99,7 @@
                                                     </a>
                                                 </li>
                                             @endif
-                                            @if(\App\BusinessSetting::where('type', 'google_login')->first()->value == 1)
+                                            @if(\App\BusinessSetting::where('type', 'google_login')->firFst()->value == 1)
                                                 <li class="list-inline-item">
                                                     <a href="{{ route('social.login', ['provider' => 'google']) }}" class="google">
                                                         <i class="lab la-google"></i>
@@ -141,20 +142,20 @@
         // making the CAPTCHA  a required field for form submission
         $(document).ready(function(){
             // alert('helloman');
-            $("#reg-form").on("submit", function(evt)
-            {
-                var response = grecaptcha.getResponse();
-                if(response.length == 0)
-                {
-                //reCaptcha not verified
-                    alert("please verify you are humann!");
-                    evt.preventDefault();
-                    return false;
-                }
-                //captcha verified
-                //do the rest of your validations here
-                $("#reg-form").submit();
-            });
+            // $("#reg-form").on("submit", function(evt)
+            // {
+            //     var response = grecaptcha.getResponse();
+            //     if(response.length == 0)
+            //     {
+            //     //reCaptcha not verified
+            //         alert("please verify you are humann!");
+            //         evt.preventDefault();
+            //         return false;
+            //     }
+            //     //captcha verified
+            //     //do the rest of your validations here
+            //     $("#reg-form").submit();
+            // });
         });
         @endif
 
@@ -192,19 +193,32 @@
 
         });
 
-        function toggleEmailPhone(el){
-            if(isPhoneShown){
-                $('.phone-form-group').addClass('d-none');
-                $('.email-form-group').removeClass('d-none');
-                isPhoneShown = false;
-                $(el).html('{{ translate('Use Phone Instead') }}');
-            }
-            else{
-                $('.phone-form-group').removeClass('d-none');
-                $('.email-form-group').addClass('d-none');
-                isPhoneShown = true;
-                $(el).html('{{ translate('Use Email Instead') }}');
-            }
-        }
+        // function toggleEmailPhone(el){
+        //     if(isPhoneShown){
+        //         $('.phone-form-group').addClass('d-none');
+        //         $('.email-form-group').removeClass('d-none');
+        //         isPhoneShown = false;
+        //         $(el).html('{{ translate('Use Phone Instead') }}');
+        //     }
+        //     else{
+        //         $('.phone-form-group').removeClass('d-none');
+        //         $('.email-form-group').addClass('d-none');
+        //         isPhoneShown = true;
+        //         $(el).html('{{ translate('Use Email Instead') }}');
+        //     }
+        // }
     </script>
 @endsection
+
+
+{{-- <form id="reg-form" class="form-default" role="form" action="{{ route('seller.registration') }}" method="POST">
+    @csrf
+    <label for="name">name:
+         <input type="text" placeholder="your name" style="margin:10px"> <br>
+    </label>
+    <label for="email">name:
+        <input type="email" placeholder="your email" style="margin:10px"> <br>
+   </label>
+    <input type="submit" value="inter" style="margin:20px" >
+
+</form> --}}

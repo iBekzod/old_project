@@ -3,13 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App;
 
 class PickupPoint extends Model
 {
     public function getTranslation($field = '', $lang = false){
-        $lang = $lang == false ? App::getLocale() : $lang;
-        $pickup_point_translation = $this->hasMany(PickupPointTranslation::class)->where('lang', $lang)->first();
+        $lang = $lang == false ? app()->getLocale() : $lang;
+        $pickup_point_translation = $this->pickup_point_translations()->where('lang', $lang)->first();
         return $pickup_point_translation != null ? $pickup_point_translation->$field : $this->$field;
     }
 

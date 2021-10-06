@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\HomeCategoryCollection;
-use App\Models\HomeCategory;
+use App\HomeCategory;
 
 class HomeCategoryController extends Controller
 {

@@ -8,10 +8,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Laravel\Passport\HasApiTokens;
-use App\Models\Cart;
+use App\Cart;
 use App\Notifications\EmailVerificationNotification;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable// implements MustVerifyEmail
 {
     public const PROFILE_IMAGE_URL = 'uploads/profile/';
     use Notifiable, HasApiTokens;
@@ -144,6 +144,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function addresses()
     {
         return $this->hasMany(Address::class);
+    }
+
+    public function affiliate_log()
+    {
+        return $this->hasMany(AffiliateLog::class);
     }
 
     /**

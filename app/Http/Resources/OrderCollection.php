@@ -13,6 +13,8 @@ class OrderCollection extends ResourceCollection
                 return [
                     'id' => $data->id,
                     'code' => $data->code,
+                    'delivery_status' => $data->delivery_status,
+                    'grand_total' => (double) $data->grand_total,
                     'commission_calculated' => $data->commision_calculated,
                     'coupon_discount' => $data->coupon_discount,
                     'created_at' => $data->created_at,
@@ -39,6 +41,7 @@ class OrderCollection extends ResourceCollection
     public function with($request)
     {
         return [
+            'lang'=> app()->getLocale(),
             'success' => true,
             'status' => 200
         ];

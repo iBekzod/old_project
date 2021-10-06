@@ -12,16 +12,25 @@
 
     <title>@yield('meta_title', get_setting('website_name').' | '.get_setting('site_motto'))</title>
 
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="index, follow">
     <meta name="description" content="@yield('meta_description', get_setting('meta_description') )" />
     <meta name="keywords" content="@yield('meta_keywords', get_setting('meta_keywords') )">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     @yield('meta')
-
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script src="/supportboard/js/min/jquery.min.js"></script>
     <script id="sbinit" src="/supportboard/js/main.js"></script>
+    <link href="https://developers.google.com/maps/documentation/javascript/examples/default.css" rel="stylesheet">
+    <script type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPEW1j0_XsP39Xm8Mo8XMM939vW6qbR2Q&sensor=false">
+    </script>
+
     @php
         $code = '';
         if (Auth::check() && !isAdmin()) $code = 'var SB_AECOMMERCE_ACTIVE_USER = ' . Auth::user()->id . ';';
@@ -59,7 +68,8 @@
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap" rel="stylesheet">
-
+     <!-- font awesome -->
+     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <!-- CSS Files -->
     <link rel="stylesheet" href="{{ static_asset('assets/css/vendors.css') }}">
     @if(\App\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()->rtl == 1)
@@ -67,7 +77,31 @@
     @endif
     <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css') }}">
     <link rel="stylesheet" href="{{ static_asset('assets/css/custom-style.css') }}">
-
+    @yield('css')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .select2-selection__rendered li{
+            background-color: transparent !important;
+            border: none;
+            border-right: 1px solid #aaa;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+            color: gray;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            padding: 0 4px;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        .select2-selection__rendered li button:hover{
+            background: rgba(255, 0, 0, 0.5) !important;
+        }
+        .select2-selection__rendered li:hover {
+            background: rgba(255, 0, 0, 0.3) !important;
+        }
+    </style>
 
     <script>
         var AIZ = AIZ || {};
@@ -84,7 +118,29 @@
             --soft-primary: {{ hex2rgba(get_setting('base_color','#e62d04'),.15) }};
         }
     </style>
-
+<style>
+        .select2-selection__rendered li{
+            background-color: transparent !important;
+            border: none;
+            border-right: 1px solid #aaa;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+            color: gray;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            padding: 0 4px;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        .select2-selection__rendered li button:hover{
+            background: rgba(255, 0, 0, 0.5) !important;
+        }
+        .select2-selection__rendered li:hover {
+            background: rgba(255, 0, 0, 0.3) !important;
+        }
+    </style>
 @if (\App\BusinessSetting::where('type', 'google_analytics')->first()->value == 1)
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ env('TRACKING_ID') }}"></script>
@@ -128,8 +184,12 @@
     @yield('css')
     @yield('js')
 </head>
-<body>
-
+<body onload="initialize()">
+    @php
+        if(isset($lang) && $lang==null){
+            $lang=default_language();
+        }
+    @endphp
     <!-- aiz-main-wrapper -->
     <div class="aiz-main-wrapper d-flex flex-column">
 
@@ -587,7 +647,13 @@
     </script>
 
     @yield('script')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('.js-example-basic-multiple').select2();
 
+    });
+    </script>
     @php
         echo get_setting('footer_script');
     @endphp

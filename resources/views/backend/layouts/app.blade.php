@@ -57,7 +57,11 @@
 
 </head>
 <body class="">
-
+    @php
+        if(isset($lang) && $lang==null){
+            $lang=default_language();
+        }
+    @endphp
 	<div class="aiz-main-wrapper">
         @include('backend.inc.admin_sidenav')
 		<div class="aiz-content-wrapper">
@@ -66,9 +70,9 @@
 				<div class="px-15px px-lg-25px">
                     @yield('content')
 				</div>
-				<div class="bg-white text-center py-3 px-15px px-lg-25px mt-auto">
+				{{-- <div class="bg-white text-center py-3 px-15px px-lg-25px mt-auto">
 					<p class="mb-0">&copy; {{ get_setting('site_name') }} v{{ get_setting('current_version') }}</p>
-				</div>
+				</div> --}}
 			</div><!-- .aiz-main-content -->
 		</div><!-- .aiz-content-wrapper -->
 	</div><!-- .aiz-main-wrapper -->

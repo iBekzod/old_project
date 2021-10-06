@@ -2,7 +2,7 @@
 
 @section('content')
 <section class="py-5">
-    <div class="container">
+    <div class="container" >
         <div class="d-flex align-items-start">
             @include('frontend.inc.user_side_nav')
             <div class="aiz-user-panel">
@@ -27,7 +27,6 @@
                                     <input type="text" class="form-control" placeholder="{{ translate('Your Name') }}" name="name" value="{{ Auth::user()->name }}">
                                 </div>
                             </div>
-
                             <div class="form-group row">
                                 <label class="col-md-2 col-form-label">{{ translate('Your Phone') }}</label>
                                 <div class="col-md-10">
@@ -55,48 +54,17 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-2 col-form-label">{{ translate('Text') }}</label>
-                                <div class="col-md-10">
-                                    <input type="password" class="form-control" placeholder="{{ translate('New Password') }}" name="new_password">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-2 col-form-label">{{ translate('Your Password') }}</label>
-                                <div class="col-md-10">
-                                    <input type="password" class="form-control" placeholder="{{ translate('New Password') }}" name="new_password">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-2 col-form-label">{{ translate('Your Password') }}</label>
-                                <div class="col-md-10">
-                                    <input type="password" class="form-control" placeholder="{{ translate('New Password') }}" name="new_password">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-2 col-form-label">{{ translate('Your Password') }}</label>
-                                <div class="col-md-10">
-                                    <input type="password" class="form-control" placeholder="{{ translate('New Password') }}" name="new_password">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-2 col-form-label">{{ translate('Your Password') }}</label>
-                                <div class="col-md-10">
-                                    <input type="password" class="form-control" placeholder="{{ translate('New Password') }}" name="new_password">
-                                </div>
-                            </div>
-                            <div class="form-group row">
                                 <label class="col-md-2 col-form-label">{{ translate('Confirm Password') }}</label>
                                 <div class="col-md-10">
                                     <input type="password" class="form-control" placeholder="{{ translate('Confirm Password') }}" name="confirm_password">
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
                     <!-- Address -->
                     {{-- @if(Auth::user()->has('addresses')) --}}
-                    <div class="card">
+                    {{-- <div class="card">
                         <div class="card-header">
                             <h5 class="mb-0 h6">{{ translate('Address')}}</h5>
                         </div>
@@ -115,7 +83,7 @@
                                             </div>
                                             <div>
                                                 <span class="w-50 fw-600">{{ translate('City') }}:</span>
-                                                <span class="ml-2">{{ $address->city }}</span>
+                                                <span class="ml-2">{{$address->city}}</span>
                                             </div>
                                             <div>
                                                 <span class="w-50 fw-600">{{ translate('Country') }}:</span>
@@ -152,7 +120,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     {{-- @endif --}}
                     <!-- Payment System -->
                     <div class="card">
@@ -178,30 +146,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="row">
-                            <label class="col-md-3 col-form-label">{{ translate('Bank Name') }}</label>
-                            <div class="col-md-9">
-                                <input type="text" class="mb-3 form-control" placeholder="{{ translate('Bank Name')}}" value="{{ Auth::user()->seller->bank_name }}" name="bank_name">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label class="col-md-3 col-form-label">{{ translate('Bank Account Name') }}</label>
-                            <div class="col-md-9">
-                                <input type="text" class="mb-3 form-control" placeholder="{{ translate('Bank Account Name')}}" value="{{ Auth::user()->seller->bank_acc_name }}" name="bank_acc_name">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label class="col-md-3 col-form-label">{{ translate('Bank Account Number') }}</label>
-                            <div class="col-md-9">
-                                <input type="text" class="mb-3 form-control" placeholder="{{ translate('Bank Account Number')}}" value="{{ Auth::user()->seller->bank_acc_no }}" name="bank_acc_no">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label class="col-md-3 col-form-label">{{ translate('Bank Routing Number') }}</label>
-                            <div class="col-md-9">
-                                <input type="number" lang="en" class="mb-3 form-control" placeholder="{{ translate('Bank Routing Number')}}" value="{{ Auth::user()->seller->bank_routing_no }}" name="bank_routing_no">
-                            </div>
-                        </div>
+
                       </div>
                   </div>
                   <div class="mb-0 text-right form-group">
@@ -209,6 +154,133 @@
                   </div>
                 </form>
                 <br>
+
+                <!--Seller Verification Form -->
+                <form action="{{ route('update.autoidentification') }}" method="POST">
+                   @csrf
+                   <div class="card">
+                       <div class="card-header">
+                        <h5 class="mb-0 h6">{{ translate('Seller Verification Form')}}</h5>
+                       </div>
+                       <div class="card-body">
+                        <div class="form-group row">
+                            <div class=" offset-lg-1 col-lg-11 form-horizontal" id="form">
+                                <div class="row m-0 p-0">
+                                    <div class="col-lg-12 m-0 p-0">
+                                            @foreach (json_decode(\App\BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element)
+                                                @if($element->type=='text')
+                                                    <div class="form-group row" id="category">
+                                                        @if ($element->label=='forma_sobstvennosti')
+
+                                                            <label class="col-lg-3 col-from-label mb-2"> {{translate($element->name)}}</label>
+                                                            <div class="col-lg-8">
+                                                                <select name="{{($element->label)}}" value="{{$information[$key]['value']?? ""}}" class="form-control py-2">
+                                                                    <option @if($information[$key]['value']=="OАО") selected @endif value="OАО">OАО</option>
+                                                                    <option @if($information[$key]['value']=="ЗАО") selected @endif  value="ЗАО">ЗАО</option>
+                                                                    <option @if($information[$key]['value']=="ООО") selected @endif  value="ООО">ООО</option>
+                                                                    <option @if($information[$key]['value']=="Частное предприятие") selected @endif  value="Частное предприятие">Частное предприятие</option>
+                                                                    <option @if($information[$key]['value']=="Частный предприниматель") selected @endif  value="Частный предприниматель">Частный предприниматель</option>
+                                                                    <option @if($information[$key]['value']=="СП") selected @endif  value="СП">СП</option>
+                                                                    <option @if($information[$key]['value']=="ИП") selected @endif  value="ИП">ИП</option>
+                                                                    <option @if($information[$key]['value']=="ГУП") selected @endif  value="ГУП">ГУП</option>
+                                                                    <option @if($information[$key]['value']=="Семейное предприятие") selected @endif  value="Семейное предприятие">Семейное предприятие</option>
+                                                                    <option @if($information[$key]['value']=="Фермерское хозяйство") selected @endif  value="Фермерское хозяйство">Фермерское хозяйство</option>
+                                                                    <option @if($information[$key]['value']=="Частное лицо") selected @endif  value="Частное лицо">Частное лицо</option>
+                                                                </select>
+                                                            </div>
+                                                        @else
+                                                            <label class="col-lg-3 col-from-label mb-2"> {{translate($element->name)}}</label>
+                                                            <div class="col-lg-8">
+                                                                <input class="form-control" type="text" value="{{$information[$key]['value']?? ""}}" name="{{($element->label)}}" required>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                @elseif($element->type=='number')
+                                                    <div class="form-group row" id="category">
+                                                        <label class="col-lg-3 col-from-label mb-2"> {{translate($element->name)}}</label>
+                                                        <div class="col-lg-8">
+                                                        <input class="form-control" type="number" value="{{$information[$key]['value']?? "kemadi"}}" name="{{($element->label)}}" required>
+                                                        </div>
+                                                    </div>
+                                                @elseif($element->type=='email')
+                                                    <div class="form-group row" id="category">
+                                                        <label class="col-lg-3 col-from-label mb-2"> {{translate($element->name)}}</label>
+                                                        <div class="col-lg-8">
+                                                        <input class="form-control" type="email" value="{{$information[$key]['value']?? "kemadi"}}" name="{{($element->label)}}" required>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                    </div>
+                                </div>
+                                <div class="row">
+                                        <div class=" col-lg-11 my-2 form-horizontal">
+                                            <h5 class="mb-0">{{translate('Address Seller')}}</h5>
+                                            <hr>
+                                        </div>
+                                        <div class=" col-lg-5 pl-0" style="display:inline-block">
+                                            <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
+                                                id="country_dd" name="country_id">
+                                                <option value="0">{{ translate('All countries') }}</option>
+
+                                                {{-- <option value="{{$country->id}}">{{$country->name}}</option> --}}
+                                                @foreach (App\Country::where('status', 1)->get() as $data)
+                                                    <option @if(App\Country::where('code', 'UZ')->first()->id==$data->id) selected @endif value="{{$data->id}}">
+                                                        {{$data->getTranslation('name')}}
+                                                    </option>
+                                                 @endforeach
+                                            </select>
+                                        </div>
+                                        <div class=" col-lg-3" style="display:inline-block">
+                                            <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
+                                            id="state_dd" name="region_id" >
+                                            @foreach($regions as $data)
+
+                                                <option @if($selected_region->id==$data->id) selected @endif value="{{$data->id}}">
+                                                    {{$data->getTranslation('name')}}
+                                                </option>
+                                            @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-3" style="display:inline-block">
+                                            <select class="mb-2 form-control form-control-sm aiz-selectpicker mb-md-0" data-live-search="true"
+                                            id="city_dd"  name="city_id" >
+                                                {{-- <option value="0">{{ translate('All citys') }}</option> --}}
+                                                @foreach ($cities as $data)
+                                                <option @if($selected_city->id==$data->id) selected @endif value="{{$data->id}}">
+                                                    {{$data->getTranslation('name')}}
+                                                </option>
+                                                @endforeach
+
+                                            </select>
+                                        </div>
+                                </div>
+                                <div class="row my-3">
+                                    <div class="col-md-12 p-0">
+                                           <div class="form-inline justify-content-center">
+
+                                               {{-- <input id="address" type="textbox" style="width:40%" value="tashken"> --}}
+                                               {{-- <input type="button" class="btn-outline-info p-2 " style="display: inline-block" value="Geocode" onclick="codeAddress()"> <br> --}}
+                                               <label for="lat" class="p-2">{{translate('Latitude:')}}</label>
+                                               <input type="text" id="lat" class="p-2" value="{{$addresses->latitude ?? "" }}" name="latitude"/>
+                                               <label for="lat" class="p-2">{{translate('Longitude:')}}</label>
+                                               <input type="text" id="lng" class="p-2" value="{{$addresses->longitude ?? "" }}" name="longitude"/>
+                                               {{-- @dd($addresses->latitude) --}}
+                                           </div>
+                                           <div id="map_canvas" class="my-2" style="width:95%; height:300px;"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-0 text-right form-group">
+                                        <button type="submit" class="btn btn-primary">{{translate('Update Form')}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   </div>
+                </form>
+
 
                 <!-- Change Email -->
                 <form action="{{ route('user.change.email') }}" method="POST">
@@ -296,9 +368,9 @@
                                 </div>
                                 <div class="col-md-10">
                                     <select class="mb-3 form-control aiz-selectpicker" data-live-search="true" name="city" required>
-                                        @foreach (\App\City::get() as $key => $city)
+                                        {{-- @foreach (\App\City::get() as $key => $city)
                                             <option value="{{ $city->name }}">{{ $city->getTranslation('name') }}</option>
-                                        @endforeach
+                                        @endforeach --}}
                                     </select>
                                 </div>
                             </div>
@@ -342,58 +414,188 @@
 
 @section('script')
     <script type="text/javascript">
-        function add_new_address(){
-            $('#new-address-modal').modal('show');
-        }
+        // function add_new_address(){
+        //     $('#new-address-modal').modal('show');
+        // }
 
-        $('.new-email-verification').on('click', function() {
-            $(this).find('.loading').removeClass('d-none');
-            $(this).find('.default').addClass('d-none');
-            var email = $("input[name=email]").val();
+        // $('.new-email-verification').on('click', function() {
+        //     $(this).find('.loading').removeClass('d-none');
+        //     $(this).find('.default').addClass('d-none');
+        //     var email = $("input[name=email]").val();
 
-            $.post('{{ route('user.new.verify') }}', {_token:'{{ csrf_token() }}', email: email}, function(data){
-                data = JSON.parse(data);
-                $('.default').removeClass('d-none');
-                $('.loading').addClass('d-none');
-                if(data.status == 2)
-                    AIZ.plugins.notify('warning', data.message);
-                else if(data.status == 1)
-                    AIZ.plugins.notify('success', data.message);
-                else
-                    AIZ.plugins.notify('danger', data.message);
+        //     $.post('{{ route('user.new.verify') }}', {_token:'{{ csrf_token() }}', email: email}, function(data){
+        //         data = JSON.parse(data);
+        //         $('.default').removeClass('d-none');
+        //         $('.loading').addClass('d-none');
+        //         if(data.status == 2)
+        //             AIZ.plugins.notify('warning', data.message);
+        //         else if(data.status == 1)
+        //             AIZ.plugins.notify('success', data.message);
+        //         else
+        //             AIZ.plugins.notify('danger', data.message);
+        //     });
+        // });
+
+        // function initialize() {
+
+        //     var map_canvas = document.getElementById('map_canvas');
+
+        //     // Initialise the map
+        //     var map_options = {
+        //         center: location,
+        //         zoom: 10,
+        //         mapTypeId: google.maps.MapTypeId.ROADMAP
+        //     }
+        //     var map = new google.maps.Map(map_canvas, map_options)
+
+        //     // Put all locations into array
+        //     var locations = [
+        //         foreach($addresses as $location)
+        //             [  $location->latitude ,  $location->longitude  ]
+        //         endforeach
+
+        //     ];
+
+        //     for (i = 0; i < locations.length; i++) {
+        //         var location = new google.maps.LatLng(locations[i][0], locations[i][1]);
+        //         var marker = new google.maps.Marker({
+        //             position: location,
+        //             map: map,
+        //         });
+        //     }
+
+        //     marker.setMap(map); // Probably not necessary since you set the map above
+
+        // }
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#country_dd').on('change', function () {
+                var idCountry = this.value;
+                $("#state_dd").html('');
+                $.ajax({
+                    url: "{{url('api/fetch-states')}}",
+                    type: "POST",
+                    data: {
+                        country_id: idCountry,
+                        _token: '{{csrf_token()}}'
+                    },
+                    dataType: 'json',
+                    success: function (result) {
+                        $('#state_dd').html('<option value="">All regions</option>');
+                        $.each(result.states, function (key, value) {
+                            $("#state_dd").append('<option value="' + value
+                                .id + '">' + value.name + '</option>');
+                        });
+                        $('#city_dd').html('<option value="">All citys</option>');
+                    }
+                });
+                var address=this.options[this.selectedIndex].text;
+                setAddressGeo(address, 5);
             });
+
+            $('#state_dd').on('change', function () {
+                var idState = this.value;
+                $("#city_dd").html('');
+                $.ajax({
+                    url: "{{url('api/fetch-cities')}}",
+                    type: "POST",
+                    data: {
+                        state_id: idState,
+                        _token: '{{csrf_token()}}'
+                    },
+                    dataType: 'json',
+                    success: function (res) {
+                        // alert(res.cities);
+                        $('#city_dd').html('<option value="">All citys</option>');
+                        $.each(res.cities, function (key, value) {
+                        var inform = $("#city_dd").append('<option value="' + value
+                                .id + '">' + value.name + '</option>');
+                        });
+                    }
+                });
+                var address=this.options[this.selectedIndex].text;
+                setAddressGeo(address, 9);
+            });
+
+            $('#city_dd').on('change', function () {
+                var address=this.options[this.selectedIndex].text;
+                setAddressGeo(address, 11);
+            });
+
+
+            // setAddressGeo('{{$selected_city->name}}', 11);
         });
 
+        var geocoder;
+        var map;
+        var mapOptions = {
+            zoom: 9,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+          }
+        var marker;
+
         function initialize() {
+          geocoder = new google.maps.Geocoder();
+          map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+        //   codeAddress();
 
-            var map_canvas = document.getElementById('map_canvas');
+          setAddressGeo('{{$selected_city->name}}', 15, '{{$addresses->latitude??0}}', '{{$addresses->longitude??0}}');
+        }
 
-            // Initialise the map
-            var map_options = {
-                center: location,
-                zoom: 10,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
+
+        function setAddressGeo(address, my_zoom=9, lat_=0, lng_=0){
+            if(address==""){
+                address='toshkent';
             }
-            var map = new google.maps.Map(map_canvas, map_options)
+            map.setZoom(my_zoom);
+            // a=getElementById('lat').value;
+            // b=getElementById('lng').value;
+            // console.log(lat);
+            // console.log(lng);
+            geocoder.geocode( { 'address': address}, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    position_=results[0].geometry.location;
+                    // alert(position_)
+                    if(lat_!=0 && lng_!=0){
+                        position_ = new google.maps.LatLng(lat_, lng_);
+                    }
+                    map.setCenter(position_);
+                    if(marker)
+                        marker.setMap();
+                    marker = new google.maps.Marker({
+                        map: map,
+                        // position:{lat=40.1250439,lng=67.8808243},
+                        position: position_,
+                        draggable: true,
 
-            // Put all locations into array
-            var locations = [
-                @foreach($addresses as $location)
-                    [ {{ $location->latitude }}, {{ $location->longitude }} ]
-                @endforeach
 
-            ];
 
-            for (i = 0; i < locations.length; i++) {
-                var location = new google.maps.LatLng(locations[i][0], locations[i][1]);
-                var marker = new google.maps.Marker({
-                    position: location,
-                    map: map,
-                });
-            }
+                    });
+                    // alert(results[0].geometry.location.lat());
+                    // alert(results[0].geometry.location.lng());
+                    google.maps.event.addListener(marker, "dragend", function() {
+                        document.getElementById('lat').value = marker.getPosition().lat();
+                        document.getElementById('lng').value = marker.getPosition().lng();
+                    });
+                    document.getElementById('lat').value = marker.getPosition().lat();
+                    document.getElementById('lng').value = marker.getPosition().lng();
+                } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
 
-            marker.setMap(map); // Probably not necessary since you set the map above
-
+        function city_selected(){
+            var address=$('#city_dd').options[$('#city_dd').selectedIndex].text;
+            setAddressGeo(address, 11);
         }
     </script>
+
+@endsection
+
+@section('script')
+
 @endsection

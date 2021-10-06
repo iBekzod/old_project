@@ -4,8 +4,8 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use App\Http\Resources\ProductCollection;
-use App\Models\FlashDeal;
-use App\Models\Product;
+use App\FlashDeal;
+use App\Product;
 
 class FlashDealsCollection extends ResourceCollection
 {
@@ -30,8 +30,8 @@ class FlashDealsCollection extends ResourceCollection
                     "text_color"=> $data->text_color,
                     "banner"=> api_asset($data->banner),
                     "slug"=> $data->slug,
-                    "created_at"=> $data->created_at,
-                    "updated_at"=> $data->updated_at,
+                    "created_at"=> formatDate($data->created_at),
+                    "updated_at"=> formatDate($data->updated_at),
                     "user_id"=> $data->user_id,
                     "on_moderation"=> $data->on_moderation
                 ];
@@ -42,6 +42,7 @@ class FlashDealsCollection extends ResourceCollection
     public function with($request)
     {
         return [
+            'lang'=> app()->getLocale(),
             'success' => true,
             'status' => 200
         ];

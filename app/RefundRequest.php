@@ -25,4 +25,9 @@ class RefundRequest extends Model
     {
         return $this->belongsTo(Order::class);
     }
+
+    public function my_reason()
+    {
+        return $this->belongsTo(Reason::class, 'reason_id', 'id');
+    }
 }

@@ -28,6 +28,15 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::get('/brands/edit/{id}', 'BrandController@edit')->name('brands.edit');
 	Route::get('/brands/destroy/{id}', 'BrandController@destroy')->name('brands.destroy');
 
+	Route::post('/products/seller/featured', 'SellerProductController@updateSellerFeatured')->name('products.seller.featured');
+
+    Route::post('/products/store/','ProductController@store')->name('products.store');
+	Route::post('/products/update/{id}','ProductController@update')->name('products.update');
+	Route::get('/products/destroy/{id}', 'ProductController@destroy')->name('products.destroy');
+    Route::get('/products/make_combination', 'ProductController@make_combination')->name('products.make_combination');
+	Route::post('/products/published', 'ProductController@updatePublished')->name('products.published');
+	Route::post('/products/accepted', 'ProductController@updateAccepted')->name('products.accepted');
+	Route::post('/products/publisheds', 'ProductController@updatePublisheds')->name('products.publisheds');
 	Route::get('/products/admin','ProductController@admin_products')->name('products.admin');
 	Route::get('/products/seller','ProductController@seller_products')->name('products.seller');
 	Route::get('/products/all','ProductController@all_products')->name('products.all');
@@ -35,15 +44,44 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::get('/products/manage/{id}/accept','ProductController@changeOnModerationAccept')->name('products.manage.change.accept');
 	Route::get('/products/manage/{id}/refuse','ProductController@changeOnModerationRefuse')->name('products.manage.change.refuse');
 	Route::get('/products/create','ProductController@create')->name('products.create');
-	Route::get('/products/admin/{id}/edit','ProductController@admin_product_edit')->name('products.admin.edit');
-	Route::get('/products/seller/{id}/edit','ProductController@seller_product_edit')->name('products.seller.edit');
-	Route::post('/products/todays_deal', 'ProductController@updateTodaysDeal')->name('products.todays_deal');
-	Route::post('/products/featured', 'ProductController@updateFeatured')->name('products.featured');
-    Route::get('/products/{id}/characteristics', 'ProductController@characteristics')->name('products.characteristics');
-    Route::post('/products/{id}/characteristics', 'ProductController@characteristics')->name('products.characteristics');
+	Route::get('/products/admin/edit/{id}','ProductController@admin_product_edit')->name('products.admin.edit');
+	Route::get('/products/seller/edit/{id}','ProductController@seller_product_edit')->name('products.seller.edit');
+    Route::post('/products/todays_deal', 'ProductController@updateTodaysDeal')->name('products.todays_deal');
+    Route::post('/products/todays_deals', 'ProductController@updateTodaysDeals')->name('products.todays_deals');
+    Route::post('/products/featured', 'ProductController@updateFeatured')->name('products.featured');
+    Route::post('/products/refundable', 'ProductController@updateRefundable')->name('products.refundable');
+    Route::post('/products/featureds', 'ProductController@updateFeatureds')->name('products.featureds');
+    Route::post('/products/refundables', 'ProductController@updateRefundables')->name('products.refundables');
     Route::post('/products/get_products_by_subcategory', 'ProductController@get_products_by_subcategory')->name('products.get_products_by_subcategory');
-    Route::get('/products/{id}/in-stock', 'ProductController@inStock')->name('products.in_stock');
-	Route::get('/products/{id}/in-stock/add/attrs', 'ProductController@addInStockProductAttrs')->name('products.in_stock_add_attrs');
+
+	Route::post('/elements/update/{id}','ElementController@update')->name('elements.update');
+	Route::get('/elements/destroy/{id}', 'ElementController@destroy')->name('elements.destroy');
+    Route::get('/elements/variation/remove','ElementController@remove_variation')->name('elements.variation.remove');
+    Route::get('/elements/admin','ElementController@elementsIndex')->name('elements.admin');
+	Route::get('/elements/seller','ElementController@elementsIndex')->name('elements.seller');
+	Route::get('/elements/all','ElementController@elementsIndex')->name('elements.all');
+	Route::get('/elements/manage','ElementController@manageElements')->name('elements.manage');
+	Route::get('/elements/manage/{id}/accept','ElementController@changeOnModerationAccept')->name('elements.manage.change.accept');
+	Route::get('/elements/manage/{id}/refuse','ElementController@changeOnModerationRefuse')->name('elements.manage.change.refuse');
+    Route::get('/elements/create','ElementController@create')->name('elements.create');
+    Route::post('/elements/store','ElementController@store')->name('elements.store');
+	Route::get('/elements/admin/{id}/edit','ElementController@admin_element_edit')->name('elements.admin.edit');
+	Route::get('/elements/seller/{id}/edit','ElementController@seller_element_edit')->name('elements.seller.edit');
+	Route::post('/elements/todays_deal', 'ElementController@updateTodaysDeal')->name('elements.todays_deal');
+	Route::post('/elements/featured', 'ElementController@updateFeatured')->name('elements.featured');
+	Route::post('/elements/refundable', 'ElementController@updateRefundable')->name('elements.refundable');
+    Route::get('/elements/make_selected_attribute_options', 'ElementController@make_selected_attribute_options')->name('elements.make_selected_attribute_options');
+    Route::get('/elements/make_attribute_options', 'ElementController@make_attribute_options')->name('elements.make_attribute_options');
+    Route::get('/elements/make_color_options', 'ElementController@make_color_options')->name('elements.make_color_options');
+    Route::get('/elements/make_attribute_variations', 'ElementController@make_attribute_variations')->name('elements.make_attribute_variations');
+    Route::get('/elements/make_all_combination', 'ElementController@make_all_combination')->name('elements.make_all_combination');
+    Route::get('/element/products', 'ElementController@elementProducts')->name('element.products.edit');
+    Route::get('/element/index', 'ElementController@elementsIndex')->name('elements.index');
+	Route::post('/elements/accepted', 'ElementController@updateAccepted')->name('elements.accepted');
+
+    // Route::get('/elements/make_choice_options', 'ElementController@make_choice_options')->name('elements.make_choice_options');
+    // Route::post('/elements/make_choice_options', 'ElementController@make_choice_options')->name('elements.make_choice_options');
+	Route::post('/elements/published', 'ElementController@updatePublished')->name('elements.published');
 
 	Route::resource('sellers','SellerController');
 	Route::get('sellers_ban/{id}','SellerController@ban')->name('sellers.ban');
@@ -144,22 +182,44 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	// Route::get('/sales', 'OrderController@sales')->name('sales.index');
 
 	// All Orders
-	Route::get('/all_orders', 'OrderController@all_orders')->name('all_orders.index');
-	Route::get('/all_orders/{id}/show', 'OrderController@all_orders_show')->name('all_orders.show');
+	// Route::get('/all_orders', 'OrderController@all_orders')->name('all_orders.index');
+	// Route::get('/all_orders/{id}/show', 'OrderController@all_orders_show')->name('all_orders.show');
 
-	// Inhouse Orders
-	Route::get('/inhouse-orders', 'OrderController@admin_orders')->name('inhouse_orders.index');
-	Route::get('/inhouse-orders/{id}/show', 'OrderController@show')->name('inhouse_orders.show');
+	// // Inhouse Orders
+	// Route::get('/inhouse-orders', 'OrderController@admin_orders')->name('inhouse_orders.index');
+	// Route::get('/inhouse-orders/{id}/show', 'OrderController@show')->name('inhouse_orders.show');
 
-	// Seller Orders
-	Route::get('/seller_orders', 'OrderController@seller_orders')->name('seller_orders.index');
-	Route::get('/seller_orders/{id}/show', 'OrderController@seller_orders_show')->name('seller_orders.show');
+	// // Seller Orders
+	// Route::get('/seller_orders', 'OrderController@seller_orders')->name('seller_orders.index');
+	// Route::get('/seller_orders/{id}/show', 'OrderController@seller_orders_show')->name('seller_orders.show');
 
-	// Pickup point orders
-	Route::get('orders_by_pickup_point','OrderController@pickup_point_order_index')->name('pick_up_point.order_index');
-	Route::get('/orders_by_pickup_point/{id}/show', 'OrderController@pickup_point_order_sales_show')->name('pick_up_point.order_show');
+	// // Pickup point orders
+	// Route::get('orders_by_pickup_point','OrderController@pickup_point_order_index')->name('pick_up_point.order_index');
+	// Route::get('/orders_by_pickup_point/{id}/show', 'OrderController@pickup_point_order_sales_show')->name('pick_up_point.order_show');
 
-	Route::get('/orders/destroy/{id}', 'OrderController@destroy')->name('orders.destroy');
+	// Route::get('/orders/destroy/{id}', 'OrderController@destroy')->name('orders.destroy');
+
+    Route::get('/all_orders', 'OrderController@all_orders')->name('all_orders.index');
+    Route::get('/all_orders/{id}/show', 'OrderController@all_orders_show')->name('all_orders.show');
+
+    // Inhouse Orders
+    Route::get('/inhouse-orders', 'OrderController@admin_orders')->name('inhouse_orders.index');
+    Route::get('/inhouse-orders/{id}/show', 'OrderController@show')->name('inhouse_orders.show');
+
+    // Seller Orders
+    Route::get('/seller_orders', 'OrderController@seller_orders')->name('seller_orders.index');
+    Route::get('/seller_orders/{id}/show', 'OrderController@seller_orders_show')->name('seller_orders.show');
+
+    Route::post('/bulk-order-status', 'OrderController@bulk_order_status')->name('bulk-order-status');
+
+
+    // Pickup point orders
+    Route::get('orders_by_pickup_point', 'OrderController@pickup_point_order_index')->name('pick_up_point.order_index');
+    Route::get('/orders_by_pickup_point/{id}/show', 'OrderController@pickup_point_order_sales_show')->name('pick_up_point.order_show');
+
+    Route::get('/orders/destroy/{id}', 'OrderController@destroy')->name('orders.destroy');
+    Route::post('/bulk-order-delete', 'OrderController@bulk_order_delete')->name('bulk-order-delete');
+
 	Route::get('invoice/admin/{order_id}', 'InvoiceController@admin_invoice_download')->name('admin.invoice.download');
 
 	Route::post('/pay_to_seller', 'CommissionController@pay_to_seller')->name('commissions.pay_to_seller');
@@ -170,6 +230,7 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::get('/seller_sale_report', 'ReportController@seller_sale_report')->name('seller_sale_report.index');
 	Route::get('/wish_report', 'ReportController@wish_report')->name('wish_report.index');
 	Route::get('/user_search_report', 'ReportController@user_search_report')->name('user_search_report.index');
+    Route::get('/wallet-history', 'ReportController@wallet_transaction_history')->name('wallet-history.index');
 
 	//Coupons
 	Route::resource('coupon','CouponController');
@@ -179,12 +240,18 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 
 	//Reviews
 	Route::get('/reviews', 'ReviewController@index')->name('reviews.index');
-	Route::post('/reviews/published', 'ReviewController@updatePublished')->name('reviews.published');
+    Route::post('/reviews/published', 'ReviewController@updatePublished')->name('reviews.published');
+//    Route::post('/reviews/publisheds', 'ReviewController@updatePublisheds')->name('reviews.publisheds');
 
-	//Support_Ticket
-	Route::get('support_ticket/','SupportTicketController@admin_index')->name('support_ticket.admin_index');
-	Route::get('support_ticket/{id}/show','SupportTicketController@admin_show')->name('support_ticket.admin_show');
-	Route::post('support_ticket/reply','SupportTicketController@admin_store')->name('support_ticket.admin_store');
+	//Support_Ticket seller
+	Route::get('support_ticket/seller','SupportTicketController@seller_admin_index')->name('support_ticket_seller.admin_index');
+	Route::get('support_ticket/seller/{id}/show','SupportTicketController@seller_show')->name('support_ticket_seller.admin_show');
+	Route::post('support_ticket/seller/reply','SupportTicketController@admin_store')->name('support_ticket.admin_store');
+
+    //  Support_Ticket user
+    // Route::get('support_ticket/user','SupportTicketController@user_admin_index')->name('support_ticket_user.admin_index');
+	// Route::get('support_ticket/user/{id}/show','SupportTicketController@admin_show')->name('support_ticket.admin_show');
+	// Route::post('support_ticket/user/reply','SupportTicketController@admin_store')->name('support_ticket.admin_store');
 
 	//Pickup_Points
 	Route::resource('pick_up_points','PickupPointController');
@@ -192,26 +259,54 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::get('/pick_up_points/destroy/{id}', 'PickupPointController@destroy')->name('pick_up_points.destroy');
 
 	//conversation of seller customer
-	Route::get('conversations','ConversationController@admin_index')->name('conversations.admin_index');
-	Route::get('conversations/{id}/show','ConversationController@admin_show')->name('conversations.admin_show');
+	Route::get('conversations','ConversationController@product_queries')->name('conversations.admin_index');
+    Route::post('conversations/admin_store','ConversationController@admin_store')->name('conversation.admin_store');
+    Route::get('conversations/{id}/show','ConversationController@admin_show')->name('conversations.admin_show');
+        // Route::get('conversation/price_reduction','ConversationController@price_reduction')->name('conversation.price_reduction');
+
+    //found_it_cheaper of seller customer
+    Route::get('conversation/found_it_cheaper','FoundItCheaperController@index')->name('conversations.found_it_cheaper');
+    Route::get('found_it_cheaper/{id}/show', 'FoundItCheaperController@show')->name('found_it_cheapers.admin_show');
+
+     //report_description of seller customer
+    Route::get('conversation/report_description','ReportDescriptionController@index')->name('conversation.report_description');
+    Route::get('report_description/{id}/show','ReportDescriptionController@show')->name('report_description.admin_show');
+
+         //support_service of seller customer
+    Route::get('conversation/support_service','SupportServiceController@index')->name('conversation.support_service');
+    Route::get('support_service/{id}/show','SupportServiceController@show')->name('support_service.admin_show');
+
 
     Route::post('/sellers/profile_modal', 'SellerController@profile_modal')->name('sellers.profile_modal');
     Route::post('/sellers/approved', 'SellerController@updateApproved')->name('sellers.approved');
 
-	Route::resource('product-attributes','ProductAttributeController');
+//	Route::resource('branches','BranchController');
+    Route::get('/branches', 'BranchController@index')->name('branches.index');
+    Route::get('/branches/edit/{id}', 'BranchController@edit')->name('branches.edit');
+    Route::get('/branches/attributes/{id}', 'BranchController@arribute_index')->name('branches.arributes');
+    Route::post('/branches/{id}/update/attributes', 'BranchController@updateAttributes')->name('branches.update.arributes');
+    Route::get('/branches/destroy/{id}', 'BranchController@destroy')->name('branches.destroy');
+	Route::post('/branches/{id}/update','BranchController@update')->name('branches.update');
+    Route::post('/branches/store','BranchController@store')->name('branches.store');
 	// Route::resource('product-attribute-sets','ProductAttributeSetController');
-	Route::post('product-attributes/add/attr','ProductAttributeController@createAttr')->name('product-attributes.add_attr');
-	Route::get('product-attributes/{id}/attr/edit','ProductAttributeController@editAttr')->name('product-attributes.edit_attr');
-	Route::post('product-attributes/{id}/attr/edit','ProductAttributeController@editAttr')->name('product-attributes.edit_attr');
-	Route::patch('product-attributes/{id}/attr/update','ProductAttributeController@updateAttr')->name('product-attributes.update_attr');
-	Route::delete('product-attributes/{id}/attr/destoy','ProductAttributeController@destroyAttr')->name('product-attributes.destroy_attr');
-	Route::post('product-attributes/{id}/change/categories','ProductAttributeController@changeCategories')->name('product-attributes.change_categories');
+//	Route::post('product-attributes/add/attr','ProductAttributeController@createAttr')->name('product-attributes.add_attr');
+//	Route::get('product-attributes/{id}/attr/edit','ProductAttributeController@editAttr')->name('product-attributes.edit_attr');
+//	Route::post('product-attributes/{id}/attr/edit','ProductAttributeController@editAttr')->name('product-attributes.edit_attr');
+//	Route::patch('product-attributes/{id}/attr/update','ProductAttributeController@updateAttr')->name('product-attributes.update_attr');
+//	Route::delete('product-attributes/{id}/attr/destoy','ProductAttributeController@destroyAttr')->name('product-attributes.destroy_attr');
+//	Route::post('product-attributes/{id}/change/categories','ProductAttributeController@changeCategories')->name('product-attributes.change_categories');
 
 	Route::resource('attributes','AttributeController');
-	Route::get('/attributes/edit/{id}', 'AttributeController@edit')->name('attributes.edit');
+//	Route::get('/attributes/edit/{id}', 'AttributeController@edit')->name('attributes.edit');
+    Route::post('/attributes/{id}/update','AttributeController@update')->name('attributes.update');
 	Route::get('/attributes/destroy/{id}', 'AttributeController@destroy')->name('attributes.destroy');
-
-	Route::resource('addons','AddonController');
+//    Route::post('attributes/{id}/update/categories','AttributeController@updateCategories')->name('attributes.update.categories');
+//    Route::get('attributes/edit/categories/{id}','AttributeController@editCategories')->name('attributes.edit.categories');
+    Route::post('attributes/edit/characteristics','AttributeController@updateCharacteristics')->name('attributes.edit.characteristics');
+    Route::get('attributes/edit/characteristics','AttributeController@editCharacteristics')->name('attributes.edit.characteristics');
+    Route::post('attributes/update/combination','AttributeController@update_combination_status')->name('attributes.combination');
+//
+    Route::resource('addons','AddonController');
 	Route::post('/addons/activation', 'AddonController@activation')->name('addons.activation');
 
 	Route::get('/customer-bulk-upload/index', 'CustomerBulkUploadController@index')->name('customer_bulk_upload.index');
@@ -231,6 +326,7 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	//Shipping Configuration
 	Route::get('/shipping_configuration', 'BusinessSettingsController@shipping_configuration')->name('shipping_configuration.index');
 	Route::post('/shipping_configuration/update', 'BusinessSettingsController@shipping_configuration_update')->name('shipping_configuration.update');
+	Route::post('/seller_configuration/update', 'SellerSettingsController@seller_configuration_update')->name('seller_configuration.update');
 
 	// Route::resource('pages', 'PageController');
 	// Route::get('/pages/destroy/{id}', 'PageController@destroy')->name('pages.destroy');
@@ -239,6 +335,8 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::post('/countries/status', 'CountryController@updateStatus')->name('countries.status');
 
 	Route::resource('cities', 'CityController');
+	Route::post('/cities/express', 'CityController@updateExpress')->name('cities.express');
+	Route::post('/cities/selected', 'CityController@updateSelected')->name('cities.selected');
 	Route::get('/cities/edit/{id}', 'CityController@edit')->name('cities.edit');
 	Route::get('/cities/destroy/{id}', 'CityController@destroy')->name('cities.destroy');
 
@@ -255,6 +353,23 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
 	Route::resource('warehouse', 'WarehouseController')->except([
 		'create'
 	]);
+
+
+    Route::get('deliveries', 'DeliveryController@index')->name('deliveries.index');
+    Route::post('deliveries/{id}/edit', 'DeliveryController@update')->name('deliveries.update');
+    Route::post('deliveries', 'DeliveryController@store')->name('deliveries.store');
+    Route::get('deliveries/destroy/{id}', 'DeliveryController@destroy')->name('deliveries.destroy');
+
+    Route::get('delivery_prices', 'DeliveryPriceController@index')->name('delivery_prices.index');
+    Route::post('delivery_prices/{id}/edit', 'DeliveryPriceController@update')->name('delivery_prices.update');
+    Route::post('delivery_prices', 'DeliveryPriceController@store')->name('delivery_prices.store');
+    Route::get('delivery_prices/destroy/{id}', 'DeliveryPriceController@destroy')->name('delivery_prices.destroy');
+
+    Route::get('delivery_tarifs', 'DeliveryTarifController@index')->name('delivery_tarifs.index');
+    Route::post('delivery_tarifs/{id}/edit', 'DeliveryTarifController@update')->name('delivery_tarifs.update');
+    Route::post('delivery_tarifs', 'DeliveryTarifController@store')->name('delivery_tarifs.store');
+    Route::get('delivery_tarifs/destroy/{id}', 'DeliveryTarifController@destroy')->name('delivery_tarifs.destroy');
+
 	Route::post('importwarehouse', 'WarehouseController@importWarehouse')->name('warehouse.import');
 	Route::post('warehouse/deletebyselection', 'WarehouseController@deleteBySelection');
 	Route::get('warehouse/lims_warehouse_search', 'WarehouseController@limsWarehouseSearch')->name('warehouse.search');

@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App;
 use Cviebrock\EloquentSluggable\Sluggable;
 class Brand extends Model
 {
@@ -17,8 +16,8 @@ class Brand extends Model
       ];
   }
   public function getTranslation($field = '', $lang = false){
-      $lang = $lang == false ? App::getLocale() : $lang;
-      $brand_translation = $this->hasMany(BrandTranslation::class)->where('lang', $lang)->first();
+      $lang = $lang == false ? app()->getLocale() : $lang;
+      $brand_translation = $this->brand_translations()->where('lang', $lang)->first();
       return $brand_translation != null ? $brand_translation->$field : $this->$field;
   }
 
@@ -26,4 +25,9 @@ class Brand extends Model
     return $this->hasMany(BrandTranslation::class);
   }
 
+  public function delete()
+  {
+      $this->brand_translations()->delete();
+      return parent::delete();
+  }
 }

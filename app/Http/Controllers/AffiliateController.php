@@ -11,13 +11,19 @@ use App\AffiliateConfig;
 use App\AffiliateUser;
 use App\AffiliatePayment;
 use App\AffiliateEarningDetail;
+use App\AffiliateWithdrawRequest;
+use App\AffiliateLog;
+use App\AffiliateStats;
+use Carbon\Carbon;
 use App\User;
 use App\Customer;
 use App\Category;
 use Session;
 use Cookie;
 use Auth;
+use DB;
 use Hash;
+use Illuminate\Auth\Events\Registered;
 
 class AffiliateController extends Controller
 {
@@ -56,6 +62,16 @@ class AffiliateController extends Controller
         $affiliate_option->details = json_encode($commision_details);
         if ($request->has('status')) {
             $affiliate_option->status = 1;
+            if($request->type == 'product_sharing'){
+                $affiliate_option_status_update = AffiliateOption::where('type', 'category_wise_affiliate')->first();
+                $affiliate_option_status_update->status = 0;
+                $affiliate_option_status_update->save();
+            }
+            if($request->type == 'category_wise_affiliate'){
+                $affiliate_option_status_update = AffiliateOption::where('type', 'product_sharing')->first();
+                $affiliate_option_status_update->status = 0;
+                $affiliate_option_status_update->save();
+            }
         }
         else {
             $affiliate_option->status = 0;
@@ -70,28 +86,49 @@ class AffiliateController extends Controller
     }
 
     public function config_store(Request $request){
-        $form = array();
-        $select_types = ['select', 'multi_select', 'radio'];
-        $j = 0;
-        for ($i=0; $i < count($request->type); $i++) {
-            $item['type'] = $request->type[$i];
-            $item['label'] = $request->label[$i];
-            if(in_array($request->type[$i], $select_types)){
-                $item['options'] = json_encode($request['options_'.$request->option[$j]]);
-                $j++;
+        if($request->type == 'validation_time') {
+            //affiliate validation time
+            $affiliate_config = AffiliateConfig::where('type', $request->type)->first();
+            if($affiliate_config == null){
+                $affiliate_config = new AffiliateConfig;
             }
-            array_push($form, $item);
-        }
-        $affiliate_config = AffiliateConfig::where('type', 'verification_form')->first();
-        $affiliate_config->value = json_encode($form);
-        if($affiliate_config->save()){
+            $affiliate_config->type = $request->type;
+            $affiliate_config->value = $request[$request->type];
+            $affiliate_config->save();
+
+            flash("Validation time updated successfully")->success();
+        } else {
+
+            $form = array();
+            $select_types = ['select', 'multi_select', 'radio'];
+            $j = 0;
+            for ($i=0; $i < count($request->type); $i++) {
+                $item['type'] = $request->type[$i];
+                $item['label'] = $request->label[$i];
+                if(in_array($request->type[$i], $select_types)){
+                    $item['options'] = json_encode($request['options_'.$request->option[$j]]);
+                    $j++;
+                }
+                array_push($form, $item);
+            }
+            $affiliate_config = AffiliateConfig::where('type', 'verification_form')->first();
+            $affiliate_config->value = json_encode($form);
+
             flash("Verification form updated successfully")->success();
+        }
+        if($affiliate_config->save()){
             return back();
         }
     }
 
     public function apply_for_affiliate(Request $request){
         return view('affiliate.frontend.apply_for_affiliate');
+    }
+
+    public function affiliate_logs_admin()
+    {
+        $affiliate_logs = AffiliateLog::latest()->paginate(10);
+        return view('affiliate.affiliate_logs',compact('affiliate_logs'));
     }
 
     public function store_affiliate_user(Request $request){
@@ -113,6 +150,14 @@ class AffiliateController extends Controller
                 $customer->save();
 
                 auth()->login($user, false);
+
+                if(BusinessSetting::where('type', 'email_verification')->first()->value != 1){
+                    $user->email_verified_at = date('Y-m-d H:m:s');
+                    $user->save();
+                }
+                else {
+                    event(new Registered($user));
+                }
             }
             else{
                 flash(__('Sorry! Password did not match.'))->error();
@@ -234,12 +279,42 @@ class AffiliateController extends Controller
         return view('affiliate.payment_history', compact('affiliate_payments', 'affiliate_user'));
     }
 
-    public function user_index(){
+    public function user_index(Request $request){
+        $affiliate_logs = AffiliateLog::where('referred_by_user', Auth::user()->id)->latest()->paginate(10);
+
+        $query = AffiliateStats::query();
+        $query = $query->select(
+                        DB::raw('SUM(no_of_click) AS count_click, SUM(no_of_order_item) AS count_item, SUM(no_of_delivered) AS count_delivered,  SUM(no_of_cancel) AS count_cancel')
+                );
+        if($request->type == 'Today') {
+            $query->whereDate('created_at', Carbon::today());
+        } else if($request->type == '7' || $request->type ==  '30') {
+            $query->whereRaw('created_at  <= NOW() AND created_at >= DATE_SUB(created_at, INTERVAL '. $request->type .' DAY)');
+        }
+        $query->where('affiliate_user_id', Auth::user()->id);
+        $affliate_stats = $query->first();
+        $type = $request->type;
+
+//        dd($type);
+        return view('affiliate.frontend.index', compact('affiliate_logs', 'affliate_stats', 'type'));
+    }
+
+    // payment history for user
+    public function user_payment_history(){
         $affiliate_user = Auth::user()->affiliate_user;
         $affiliate_payments = $affiliate_user->affiliate_payments();
-        $affiliate_withdraw_requests = \App\AffiliateWithdrawRequest::where('id', $affiliate_user->id)->paginate(10);
-        return view('affiliate.frontend.index', compact('affiliate_payments', 'affiliate_withdraw_requests'));
+
+        return view('affiliate.frontend.payment_history', compact('affiliate_payments'));
     }
+
+    // withdraw request history for user
+    public function user_withdraw_request_history(){
+        $affiliate_user = Auth::user()->affiliate_user;
+        $affiliate_withdraw_requests = AffiliateWithdrawRequest::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->paginate(10);
+
+        return view('affiliate.frontend.withdraw_request_history', compact('affiliate_withdraw_requests'));
+    }
+
 
     public function payment_settings(){
         $affiliate_user = Auth::user()->affiliate_user;
@@ -267,6 +342,15 @@ class AffiliateController extends Controller
                             if($affiliate_user != null){
                                 $affiliate_user->balance += $amount;
                                 $affiliate_user->save();
+
+                                // Affiliate log
+                                $affiliate_log                      = new AffiliateLog;
+                                $affiliate_log->user_id             = $order->user_id;
+                                $affiliate_log->referred_by_user    = $order->user->referred_by;
+                                $affiliate_log->amount              = $amount;
+                                $affiliate_log->order_id            = $order->id;
+                                $affiliate_log->affiliate_type      = 'user_registration_first_purchase';
+                                $affiliate_log->save();
                             }
                         }
                     }
@@ -288,6 +372,21 @@ class AffiliateController extends Controller
                             if($affiliate_user != null){
                                 $affiliate_user->balance += $amount;
                                 $affiliate_user->save();
+
+                                // Affiliate log
+                                $affiliate_log                      = new AffiliateLog;
+                                if($order->user_id != null){
+                                    $affiliate_log->user_id         = $order->user_id;
+                                }
+                                else{
+                                    $affiliate_log->guest_id        = $order->guest_id;
+                                }
+                                $affiliate_log->referred_by_user    = $referred_by_user->id;
+                                $affiliate_log->amount              = $amount;
+                                $affiliate_log->order_id            = $order->id;
+                                $affiliate_log->order_detail_id     = $orderDetail->id;
+                                $affiliate_log->affiliate_type      = 'product_sharing';
+                                $affiliate_log->save();
                             }
                         }
                     }
@@ -315,12 +414,65 @@ class AffiliateController extends Controller
                             if($affiliate_user != null){
                                 $affiliate_user->balance += $amount;
                                 $affiliate_user->save();
+
+                                // Affiliate log
+                                $affiliate_log                      = new AffiliateLog;
+                                if($order->user_id != null){
+                                    $affiliate_log->user_id         = $order->user_id;
+                                }
+                                else{
+                                    $affiliate_log->guest_id        = $order->guest_id;
+                                }
+                                $affiliate_log->referred_by_user    = $referred_by_user->id;
+                                $affiliate_log->amount              = $amount;
+                                $affiliate_log->order_id            = $order->id;
+                                $affiliate_log->order_detail_id     = $orderDetail->id;
+                                $affiliate_log->affiliate_type      = 'category_wise_affiliate';
+                                $affiliate_log->save();
                             }
                         }
                     }
                 }
             }
         }
+    }
+    public function processAffiliateStats($affiliate_user_id, $no_click = 0, $no_item = 0, $no_delivered = 0, $no_cancel = 0) {
+        $affiliate_stats = AffiliateStats::whereDate('created_at', Carbon::today())
+                ->where("affiliate_user_id", $affiliate_user_id)
+                ->first();
+
+        if(!$affiliate_stats) {
+            $affiliate_stats = new AffiliateStats;
+            $affiliate_stats->no_of_order_item = 0;
+            $affiliate_stats->no_of_delivered = 0;
+            $affiliate_stats->no_of_cancel = 0;
+            $affiliate_stats->no_of_click = 0;
+        }
+
+        $affiliate_stats->no_of_order_item += $no_item;
+        $affiliate_stats->no_of_delivered += $no_delivered;
+        $affiliate_stats->no_of_cancel += $no_cancel;
+        $affiliate_stats->no_of_click += $no_click;
+        $affiliate_stats->affiliate_user_id = $affiliate_user_id;
+
+//        dd($affiliate_stats);
+        $affiliate_stats->save();
+
+//        foreach($order->orderDetails as $key => $orderDetail) {
+//            $referred_by_user = User::where('referral_code', $orderDetail->product_referral_code)->first();
+//
+//            if($referred_by_user != null) {
+//                if($orderDetail->delivery_status == 'delivered') {
+//                    $affiliate_stats->no_of_delivered++;
+//                } if($orderDetail->delivery_status == 'cancelled') {
+//                    $affiliate_stats->no_of_cancel++;
+//                }
+//
+//                $affiliate_stats->affiliate_user_id = $referred_by_user->id;
+//                dd($affiliate_stats);
+//                $affiliate_stats->save();
+//            }
+//        }
     }
 
     public function refferal_users()
@@ -344,7 +496,7 @@ class AffiliateController extends Controller
             $affiliate_user->save();
 
             flash(translate('New withdraw request created successfully'))->success();
-            return redirect()->route('affiliate.user.index');
+            return redirect()->route('affiliate.user.withdraw_request_history');
         }
         else{
             flash(translate('Something went wrong'))->error();

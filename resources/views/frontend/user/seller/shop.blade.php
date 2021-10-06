@@ -35,7 +35,7 @@
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <label class="col-md-2 col-form-label">{{ translate('Shop Logo') }} <br>(200x200)</label>
+                                    <label class="col-md-2 col-form-label">{{ translate('Shop Logo') }} <br>(250x250)</label>
                                     <div class="col-md-10">
                                         <div class="input-group" data-toggle="aizuploader" data-type="image">
                                             <div class="input-group-prepend">
@@ -111,7 +111,7 @@
                                 @csrf
 
                                 <div class="row mb-3">
-                                    <label class="col-md-2 col-form-label">{{ translate('Banners') }} (1450x300)</label>
+                                    <label class="col-md-2 col-form-label">{{ translate('Banners') }} <strong>(1450x450)</strong></label>
                                     <div class="col-md-10">
                                         <div class="input-group" data-toggle="aizuploader" data-type="image" data-multiple="true">
                                             <div class="input-group-prepend">
@@ -123,6 +123,29 @@
                                         <div class="file-preview box sm">
                                         </div>
                                         <small class="text-muted">{{ translate('We had to limit height to maintian consistancy. In some device both side of the banner might be cropped for height limitation.') }}</small>
+                                    </div>
+                                </div>
+
+                                <div class="form-group mb-0 text-right">
+                                    <button type="submit" class="btn btn-sm btn-primary">{{translate('Save')}}</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    {{-- Delivery day settings --}}
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0 h6">{{ translate('Days purchased product will be ready') }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <form action="{{ route('seller.seller_configuration.update') }}" method="POST" enctype="multipart/form-data">
+                                <input type="hidden" name="type" value="product_preparation_days">
+                                @csrf
+
+                                <div class="row mb-3">
+                                    <label class="col-md-2 col-form-label">{{ translate('In days') }} </label>
+                                    <div class="col-md-10">
+                                        <input class="form-control" type="text" name="product_preparation_days" value="{{ \App\SellerSetting::where('type', 'product_preparation_days')->where('user_id', auth()->id())->first()->value??\App\SellerSetting::where('type', 'product_preparation_days')->first()->value??0 }}">
                                     </div>
                                 </div>
 

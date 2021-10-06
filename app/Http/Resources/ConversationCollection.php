@@ -14,12 +14,14 @@ class ConversationCollection extends ResourceCollection
                     'id' => (integer) $data->id,
                     'sender_id' => $data->sender_id,
                     'receiver_id' => $data->receiver_id,
-                    'title' => $data->title,
+                    'title' => $data->msg,
                     'sender_viewed' => $data->sender_viewed,
                     'receiver_viewed' => $data->receiver_viewed,
-                    'created_at' => $data->created_at,
+                    'created_at' => formatDate($data->created_at),
                     'updated_at' => $data->updated_at,
-                    'messages'=> $data->messages()
+                    'messages'=> $data->messages,
+                    'product_name'=>($data->product)?$data->product->name:'',
+                    'product_slug'=>($data->product)?$data->product->slug:'',
                 ];
             })
         ];
@@ -28,6 +30,7 @@ class ConversationCollection extends ResourceCollection
     public function with($request)
     {
         return [
+            'lang'=> app()->getLocale(),
             'success' => true,
             'status' => 200
         ];

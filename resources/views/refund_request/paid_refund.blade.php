@@ -4,7 +4,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h5 class="mb-0 h6">{{translate('Refund Request All')}}</h5>
+        <h5 class="mb-0 h6">{{translate('Approved Request')}}</h5>
     </div>
     <div class="card-body">
         <table class="table aiz-table">
@@ -12,11 +12,11 @@
                 <tr>
                     <th>#</th>
                     <th>{{translate('Order Code')}}</th>
-                    <th>{{translate('Seller Name')}}</th>
-                    <th>{{translate('Product')}}</th>
-                    <th>{{translate('Price')}}</th>
-                    <th>{{translate('Seller Approval')}}</th>
-                    <th>{{translate('Admin Approval')}}</th>
+                    <th data-breakpoints="lg">{{translate('Seller Name')}}</th>
+                    <th data-breakpoints="lg">{{translate('Product')}}</th>
+                    <th data-breakpoints="lg">{{translate('Price')}}</th>
+                    <th data-breakpoints="lg">{{translate('Seller Approval')}}</th>
+                    <th data-breakpoints="lg">{{translate('Admin Approval')}}</th>
                     <th>{{translate('Refund Status')}}</th>
                 </tr>
             </thead>
@@ -40,10 +40,10 @@
                             @if ($refund->orderDetail != null && $refund->orderDetail->product != null)
                               <a href="{{ route('product', $refund->orderDetail->product->slug) }}" target="_blank" class="media-block">
                                 <div class="form-group row">
-                                  <div class="col-md-5">
-                                    <img src="{{ uploaded_asset($refund->orderDetail->product->thumbnail_img)??static_asset('assets/img/placeholder.jpg')}}" alt="Image" class="w-50px">
+                                  <div class="col-md-2">
+                                    <img src="{{ uploaded_asset($refund->orderDetail->product->variation->thumbnail_img)}}" alt="Image" class="w-50px">
                                   </div>
-                                  <div class="col-md-7">
+                                  <div class="col-md-10">
                                     <div class="media-body">{{ $refund->orderDetail->product->getTranslation('name') }}</div>
                                   </div>
                                 </div>

@@ -36,7 +36,7 @@
                   </div>
                 </td>
                 <td>
-                    <span>{{ $product->unit_price }}</span>
+                    <span>{{ $product->price }}</span>
                 </td>
                 @if ($flash_deal_product != null)
                 <td>
@@ -44,8 +44,8 @@
                 </td>
                 <td>
                     <select class="aiz-selectpicker" name="discount_type_{{ $id }}">
-                        <option value="amount" <?php if($flash_deal_product->discount_type == 'amount') echo "selected";?> >{{ translate('Flat') }}</option>
-                        <option value="percent" <?php if($flash_deal_product->discount_type == 'percent') echo "selected";?> >{{ translate('Percent') }}</option>
+                        <option value="amount" <?php if($flash_deal_product->discount_type??$product->discount_type == 'amount') echo "selected";?> >{{ translate('Flat') }}</option>
+                        <option value="percent" <?php if($flash_deal_product->discount_type??$product->discount_type == 'percent') echo "selected";?> >{{ translate('Percent') }}</option>
                     </select>
                 </td>
                 @else
@@ -54,8 +54,8 @@
                 </td>
                 <td>
                     <select class="aiz-selectpicker" name="discount_type_{{ $id }}">
-                        <option value="amount" <?php if($product->discount_type == 'amount') echo "selected";?> >{{ translate('Flat') }}</option>
-                        <option value="percent" <?php if($product->discount_type == 'percent') echo "selected";?> >{{ translate('Percent') }}</option>
+                        <option value="amount" @if($product->discount_type == 'amount') selected @endif >{{ translate('Flat') }}</option>
+                        <option value="percent"  @if($product->discount_type == 'percent') selected @endif >{{ translate('Percent') }}</option>
                     </select>
                 </td>
                 @endif

@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\User;
-use App\Models\PasswordReset;
+use App\PasswordReset;
 use App\Notifications\PasswordResetRequest;
 use Illuminate\Support\Str;
+use App\Http\Controllers\Controller;
+
 
 class PasswordResetController extends Controller
 {

@@ -1379,7 +1379,6 @@ class PHPMailer
             }
         }
 
-        // TODO: If possible, this should be changed to escapeshellarg.  Needs thorough testing.
         $sendmail = sprintf($sendmailFmt, escapeshellcmd($this->Sendmail), $this->Sender);
 
         if ($this->SingleTo) {

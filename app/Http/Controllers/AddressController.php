@@ -44,14 +44,17 @@ class AddressController extends Controller
             $address->user_id = Auth::user()->id;
         }
         $address->address = $request->address;
-        $address->country = $request->country;
-        $address->city = $request->city;
+        $address->region_id = $request->region_id;
+        $address->city_id = $request->city_id;
         $address->postal_code = $request->postal_code;
         $address->phone = $request->phone;
-        // if($request->has('longitude') && $request->has('latitude')){
-        //     $address->longitude = $request->longitude;
-        //     $address->latitude = $request->latitude;
-        // }
+        if($request->has('longitude') && $request->has('latitude')){
+            $address->longitude = $request->longitude;
+            $address->latitude = $request->latitude;
+        }
+        if($request->has('customer_note') ){
+            $address->customer_note = $request->customer_note;
+        }
         $address->save();
 
         return back();
@@ -69,7 +72,7 @@ class AddressController extends Controller
             $user_id=$id;
         }else{
             $user_id = Auth::user()->id;
-        }        
+        }
         $addresses = Address::where('user_id',$user_id)->get();
         return $addresses;
     }

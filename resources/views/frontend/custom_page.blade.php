@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app')
+@extends('frontend.layouts.seller')
 
 @section('meta_title'){{ $page->meta_title }}@stop
 

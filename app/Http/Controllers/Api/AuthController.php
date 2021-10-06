@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\BusinessSetting;
-use App\Models\Customer;
+use App\BusinessSetting;
+use App\Customer;
+use App\IpAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -15,6 +16,8 @@ use App\Seller;
 use App\Shop;
 use Illuminate\Support\Facades\Hash;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
+use App\Http\Controllers\Controller;
+
 
 class AuthController extends Controller
 {
@@ -36,7 +39,7 @@ class AuthController extends Controller
         }
         else {
             // TODO Check for maintenance
-//            $user->notify(new EmailVerificationNotification());
+        //            $user->notify(new EmailVerificationNotification());
         }
         $user->save();
 
@@ -57,7 +60,7 @@ class AuthController extends Controller
 
         $phone_verified = DB::table('phone_verifications')
             ->where('phone', '=', $request->phone)
-//            ->where('verification_code', '=', $request->verification_code)
+        //            ->where('verification_code', '=', $request->verification_code)
             ->orderBy('id', 'desc')
             ->first();
 
@@ -75,6 +78,7 @@ class AuthController extends Controller
                     if(BusinessSetting::where('type', 'email_verification')->first()->value != 1){
                         $user->email_verified_at = date('Y-m-d H:m:s');
                     }
+
                     $user->save();
 
                     $customer = new Customer;
@@ -129,20 +133,29 @@ class AuthController extends Controller
                 'created_at' => now()
             ]);
         }
+
+        // if($request->has('device_token')){
+        //     $ip_address=IpAddress::firstOrNew(['ip'=> getClientIp()]);
+        //     $ip_address->data=$request->device_token;
+        // }
         try {
-            $sms_response = Sms::send($request->phone, 'Your ashop.uz verification code '.$verification_code);
+            $device_token=($request->has('device_token'))?$request->device_token:'';
+            $sms_response = Sms::send($request->phone,' <#>'.
+            translate(' Tinfis portali uchun tasdiqlash kodi: ').
+            $verification_code.' . Kodni hech kimga bermang '.$device_token);
         } catch (\Exception $th) {
-            //throw $th;
+            return $th->getMessage();
         }
 
 
         return response()->json([
-//            'verification_code' => $verification_code,
-//            'sms_response'=>$sms_response['message']
+                   'verification_code' => $verification_code,
+        //            'sms_response'=>$sms_response['message']
         ], 200);
     }
 
     private function generateRandomOtp(){
+        return 1111;
         return rand(1000, 9999);
     }
 
@@ -213,7 +226,8 @@ class AuthController extends Controller
             'expires_at' => Carbon::parse(
                 $tokenResult->token->expires_at
             )->toDateTimeString(),
-            'user' => $user
+            'user' => $user,
+            'address_count'=>$user->addresses->count()
         ]);
     }
 

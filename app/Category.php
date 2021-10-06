@@ -7,12 +7,16 @@ use App;
 use Kalnoy\Nestedset\NodeTrait;
 use Rennokki\QueryCache\Traits\QueryCacheable;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Category extends Model
 {
     use Sluggable , NodeTrait {
         NodeTrait::replicate as replicateNode;
         Sluggable::replicate as replicateSlug;
     }
+    use SoftDeletes;
     public function replicate(array $except = null)
     {
         $instance = $this->replicateNode($except);
@@ -31,7 +35,7 @@ class Category extends Model
     }
 
     public function getTranslation($field = '', $lang = false){
-        $lang = $lang == false ? App::getLocale() : $lang;
+        $lang = $lang == false ? app()->getLocale() : $lang;
         $category_translation = $this->category_translations()->where('lang', $lang)->first();
         return $category_translation != null ? $category_translation->$field : $this->$field;
     }
@@ -41,8 +45,22 @@ class Category extends Model
     }
 
     public function products(){
-    	return $this->hasMany(Product::class);
+    	return $this->hasMany(Element::class);
     }
+
+    public function elements(){
+        $category_ids = $this->descendants()->pluck('id');
+        $category_ids[] = $this->getKey();
+    	return Element::whereIn('category_id', $category_ids);
+    }
+
+    public function brands(){
+        $category_ids = $this->descendants()->pluck('id');
+        $category_ids[] = $this->getKey();
+        $brand_ids=$this->elements()->distinct('brand_id')->pluck('brand_id');
+    	return Brand::whereIn('id', $brand_ids);
+    }
+
 
     public function classified_products(){
     	return $this->hasMany(CustomerProduct::class);
@@ -68,12 +86,39 @@ class Category extends Model
         return $this->hasOne(Category::class, 'id', 'parent_id')->with('parentCategoryHierarchy');
     }
 
-    public function productAttributes()
+    public function attributes()
     {
-        return $this->belongsToMany(\App\Models\ProductAttribute::class,
-            'product_attribute_category',
-            'category_id',
-            'product_attribute_id'
-        )->with('attributes');
+        return $this->belongsToMany(Attribute::class, 'attribute_category');
+    }
+//    public function productAttributes()
+//    {
+//        return $this->belongsToMany(\App\Models\ProductAttribute::class,
+//            'attribute_category',
+//            'category_id',
+//            'attribute_id'
+//        )->with('attributes');
+//    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function subCategories()
+    {
+        return $this->hasMany(SubCategory::class);
+    }
+
+
+    public function subSubCategories()
+    {
+        return $this->hasMany(SubSubCategory::class);
+    }
+
+    public function delete()
+    {
+        $this->attributes()->detach();
+        $this->category_translations()->delete();
+        return parent::delete();
     }
 }

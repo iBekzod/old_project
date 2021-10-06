@@ -42,8 +42,8 @@
               </td>
               <td>
                   <select class="form-control aiz-selectpicker" name="discount_type_{{ $id }}">
-                    <option value="amount">{{ translate('Flat') }}</option>
-                    <option value="percent">{{ translate('Percent') }}</option>
+                    <option value="amount" @if($product->discount_type == 'amount') selected @endif >{{ translate('Flat') }}</option>
+                    <option value="percent"  @if($product->discount_type == 'percent') selected @endif >{{ translate('Percent') }}</option>
                   </select>
               </td>
             </tr>

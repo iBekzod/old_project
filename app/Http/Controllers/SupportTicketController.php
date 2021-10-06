@@ -9,7 +9,7 @@ use Auth;
 use App\TicketReply;
 use App\Mail\SupportMailManager;
 use Mail;
-
+use App\Conversation;
 class SupportTicketController extends Controller
 {
     /**
@@ -19,22 +19,43 @@ class SupportTicketController extends Controller
      */
     public function index()
     {
+        // return "came";
         $tickets = Ticket::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(9);
+        // dd($tickets);
         return view('frontend.user.support_ticket.index', compact('tickets'));
     }
 
-    public function admin_index(Request $request)
+    public function seller_admin_index(Request $request)
     {
+    //    dd($request->all());
+
         $sort_search =null;
         $tickets = Ticket::orderBy('created_at', 'desc');
+        // dd($tickets);
         if ($request->has('search')){
             $sort_search = $request->search;
             $tickets = $tickets->where('code', 'like', '%'.$sort_search.'%');
+
         }
         $tickets = $tickets->paginate(15);
-        return view('backend.support.support_tickets.index', compact('tickets', 'sort_search'));
+        return view('backend.support.support_tickets_seller.index', compact('tickets', 'sort_search'));
     }
 
+
+    public function user_admin_index(Request $request)
+    {
+    //    dd($request->all());
+        $sort_search =null;
+        $tickets = Ticket::orderBy('created_at', 'desc');
+        // dd($tickets);
+        if ($request->has('search')){
+            $sort_search = $request->search;
+            $tickets = $tickets->where('code', 'like', '%'.$sort_search.'%');
+
+        }
+        $tickets = $tickets->paginate(15);
+        return view('backend.support.support_tickets_user.index', compact('tickets', 'sort_search'));
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -78,7 +99,7 @@ class SupportTicketController extends Controller
         $array['subject'] = 'Support ticket Code is:- '.$ticket->code;
         $array['from'] = env('MAIL_USERNAME');
         $array['content'] = 'Hi. A ticket has been created. Please check the ticket.';
-        $array['link'] = route('support_ticket.admin_show', encrypt($ticket->id));
+        $array['link'] = route('support_ticket.show', encrypt($ticket->id));
         $array['sender'] = $ticket->user->name;
         $array['details'] = $ticket->details;
 
@@ -103,13 +124,15 @@ class SupportTicketController extends Controller
         try {
             Mail::to($ticket->user->email)->queue(new SupportMailManager($array));
         } catch (\Exception $e) {
-            //dd($e->getMessage());
+            // dd($e->getMessage());
         }
     }
 
     public function admin_store(Request $request)
     {
+        // return $request->all();
         $ticket_reply = new TicketReply;
+
         $ticket_reply->ticket_id = $request->ticket_id;
         $ticket_reply->user_id = Auth::user()->id;
         $ticket_reply->reply = $request->reply;
@@ -117,10 +140,12 @@ class SupportTicketController extends Controller
         $ticket_reply->ticket->client_viewed = 0;
         $ticket_reply->ticket->status = $request->status;
         $ticket_reply->ticket->save();
+        // dd($ticket_reply);
 
         if($ticket_reply->save()){
             flash(translate('Reply has been sent successfully'))->success();
             $this->send_support_reply_email_to_user($ticket_reply->ticket, $ticket_reply);
+            // dd($ticket_reply);
             return back();
         }
         else{
@@ -163,12 +188,13 @@ class SupportTicketController extends Controller
         return view('frontend.user.support_ticket.show', compact('ticket','ticket_replies'));
     }
 
-    public function admin_show($id)
+    public function seller_show($id)
     {
         $ticket = Ticket::findOrFail(decrypt($id));
         $ticket->viewed = 1;
         $ticket->save();
-        return view('backend.support.support_tickets.show', compact('ticket'));
+        // dd($ticket);
+        return view('backend.support.support_tickets_seller.show', compact('ticket'));
     }
 
     /**

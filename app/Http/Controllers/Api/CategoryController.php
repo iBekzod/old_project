@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Category;
 use App\Http\Resources\CategoryCollection;
-use App\Models\BusinessSetting;
+use App\BusinessSetting;
+use App\Http\Controllers\Controller;
+
 
 class CategoryController extends Controller
 {

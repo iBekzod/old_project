@@ -2,21 +2,28 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Cart;
-use App\Models\Coupon;
-use App\Models\CouponUsage;
+use App\Cart;
+use App\Coupon;
+use App\CouponUsage;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\CouponUsageCollection;
 
 class CouponController extends Controller
 {
+    public function index(){
+        $coupon_usages = CouponUsage::where('user_id', auth()->id())->orderBy('created_at','desc')->get();
+        return new CouponUsageCollection($coupon_usages);
+    }
+
     public function apply(Request $request)
     {
         $coupon = Coupon::where('code', $request->code)->first();
 
-        if ($coupon != null && strtotime(date('d-m-Y')) >= $coupon->start_date && strtotime(date('d-m-Y')) <= $coupon->end_date && CouponUsage::where('user_id', $request->user_id)->where('coupon_id', $coupon->id)->first() == null) {
+        if ($coupon != null && strtotime(date('d-m-Y')) >= $coupon->start_date && strtotime(date('d-m-Y')) <= $coupon->end_date && CouponUsage::where('user_id', auth()->id())->where('coupon_id', $coupon->id)->first() == null) {
             $couponDetails = json_decode($coupon->details);
             if ($coupon->type == 'cart_base') {
-                $sum = Cart::where('user_id', $request->user_id)->sum('price');
+                $sum = Cart::where('user_id', auth()->id())->sum('price');
                 if ($sum > $couponDetails->min_buy) {
                     if ($coupon->discount_type == 'percent') {
                         $couponDiscount =  ($sum * $coupon->discount) / 100;
@@ -26,7 +33,7 @@ class CouponController extends Controller
                     } elseif ($coupon->discount_type == 'amount') {
                         $couponDiscount = $coupon->discount;
                     }
-                    if ($this->isCouponAlreadyApplied($request->user_id, $coupon->id)) {
+                    if ($this->isCouponAlreadyApplied(auth()->id(), $coupon->id)) {
                         return response()->json([
                             'success' => false,
                             'message' => 'The coupon is already applied. Please try another coupon'
@@ -40,7 +47,7 @@ class CouponController extends Controller
                 }
             } elseif ($coupon->type == 'product_base') {
                 $couponDiscount = 0;
-                $cartItems = Cart::where('user_id', $request->user_id)->get();
+                $cartItems = Cart::where('user_id', auth()->id())->get();
                 foreach ($cartItems as $key => $cartItem) {
                     foreach ($couponDetails as $key => $couponDetail) {
                         if ($couponDetail->product_id == $cartItem->product_id) {
@@ -52,7 +59,7 @@ class CouponController extends Controller
                         }
                     }
                 }
-                if ($this->isCouponAlreadyApplied($request->user_id, $coupon->id)) {
+                if ($this->isCouponAlreadyApplied(auth()->id(), $coupon->id)) {
                     return response()->json([
                         'success' => false,
                         'message' => 'The coupon is already applied. Please try another coupon'

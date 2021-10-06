@@ -2,170 +2,173 @@
 
 namespace App;
 
-use App\Models\ProductAttribute;
-use Illuminate\Database\Eloquent\Model;
-use App;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Exception;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-  use Sluggable;
-  public function sluggable(): array
-  {
-      return [
-          'slug' => [
-              'source' => 'name'
-          ]
-      ];
-  }
+    use SoftDeletes;
     protected $fillable = [
-        'name', 'added_by', 'user_id', 'category_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
-        'purchase_price', 'unit', 'slug', 'colors', 'choice_options', 'variations', 'current_stock', 'on_moderation',
-        'is_accepted'
+        'name',
+        'slug',
+        'user_id',
+        'added_by',
+        'currency_id',
+        'price',
+        'discount',
+        'discount_type',
+        'variation_id',
+        'element_id',
+        'todays_deal',
+        'num_of_sale',
+        'delivery_group_id',
+        'qty',
+        'published',
+        'tax',
+        'tax_type',
+        'featured',
+        'seller_featured',
+        'on_moderation',
+        'is_accepted',
+        'rating',
+        'barcode',
+        'earn_point',
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
+
+    use Sluggable;
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
+    }
 
     public $appends = [
-        'thumbnaile_image', 'characteristicValues2'
+        'currency_rate', 'address'
     ];
 
-    public function characteristicValues()
+    // public function characteristicValues()
+    // {
+    //     return $this->hasMany(App\Models\CharacteristicValues::class, 'product_id', 'id');
+    // }
+
+    // public function parentHierarchy()
+    // {
+    //     return $this->hasOne(Category::class, 'id', 'category_id')->with('parentCategoryHierarchy');
+    // }
+
+    public function getCurrencyRateAttribute()
     {
-        return $this->hasMany(App\Models\CharacteristicValues::class, 'product_id', 'id');
+        return $this->price/$this->currency->exchange_rate;
     }
 
-    public function getTranslation($field = '', $lang = false)
+    public function getAddressAttribute()
     {
-        $lang = $lang == false ? App::getLocale() : $lang;
-
-        $product_translations = $this->product_translations()->where('lang', $lang)->get();
-
-        if ((int)$product_translations->count()) {
-            return isset($product_translations[0]) ? $product_translations[0]->{$field} : $this->{$field};
-        } else {
-            return $this->{$field};
-        }
+        return $this->user->addresses->first();
     }
 
-    public function product_translations()
-    {
-        return $this->hasMany(ProductTranslation::class);
+    public function getTranslation($field = '', $lang = false){
+        $lang = $lang == false ? app()->getLocale() : $lang;
+        $product_translations = $this->product_translations()->where('lang', $lang)->first();
+        return $product_translations != null ? $product_translations->$field : $this->$field;
     }
 
-    public function category()
+     public function product_translations()
+     {
+
+         return $this->hasMany(ProductTranslation::class);
+     }
+
+     public function user()
+     {
+         return $this->belongsTo(User::class);
+     }
+
+    public function currency()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Currency::class);
     }
 
-    public function parentHierarchy()
+    public function variation()
     {
-        return $this->hasOne(Category::class, 'id', 'category_id')->with('parentCategoryHierarchy');
+        return $this->belongsTo(Variation::class);
     }
 
-    public function brand()
+     public function orderDetails()
+     {
+         return $this->hasMany(OrderDetail::class);
+     }
+
+    //  public function brand()
+    //  {
+    //      return $this->element->brand;
+    //  }
+
+     public function reviews()
+     {
+         return $this->hasMany(Review::class)->where('status', 1);
+     }
+
+     public function wishlists()
+     {
+         return $this->hasMany(Wishlist::class);
+     }
+
+     public function element()
     {
-        return $this->belongsTo(Brand::class);
+        return $this->belongsTo(Element::class, 'element_id', 'id');
     }
 
-    public function user()
+     public function delete()
     {
-        return $this->belongsTo(User::class);
+        // $this->published=false;
+        // $this->added_by="deleted";
+        // $this->save();
+
+        // $this->reviews()->delete();
+        // $this->wishlists()->delete();
+        // $this->product_translations()->delete();
+        return parent::delete();
     }
 
-    public function orderDetails()
+
+    public function save(array $options = [])
     {
-        return $this->hasMany(OrderDetail::class);
-    }
-
-    public function reviews()
-    {
-        return $this->hasMany(Review::class)->where('status', 1);
-    }
-
-    public function wishlists()
-    {
-        return $this->hasMany(Wishlist::class);
-    }
-
-    public function stocks()
-    {
-        return $this->hasMany(ProductStock::class)->with('product');
-    }
-
-    public function getThumbnaileImageAttribute()
-    {
-        return api_asset($this->thumbnail_img);
-    }
-
-    public function getCharacteristicValues2Attribute()
-    {
-        $arr = [];
-
-        foreach ($this->characteristicValues as $key => $item) {
-            $attr = App\Models\ProductAttributeCharacteristics::where('id', $item->attr_id)->with('values')->first();
-
-            $arr[$key] = [
-                'attr_id' => $item->attr_id,
-                'parent_id' => $item->parent_id,
-                'key' => $item->name,
-                'value' => $item->values,
-                'values' => array_map(function ($el) {
-                    return [
-                        'id' => $el,
-                        'text' => $el,
-                        'selected' => true
-                    ];
-                }, explode(' / ', $item->values))
-            ];
-
-            if ($attr) {
-                if ($attr->values->count()) {
-                    foreach ($attr->values as $value) {
-                        if (!in_array($value->value, explode(' / ', $item->values))) {
-                            array_push($arr[$key]['values'], [
-                                'id' => $value->value,
-                                'text' => $value->value
-                            ]);
-                        }
-                    }
-                }
+       // before save code
+        $result = parent::save($options);
+        try{
+            $variation=$this->variation;
+            $products = Product::where('variation_id', $variation->id)->where('published', true);
+            if(count($products->get())>0){
+                $min_price=$products->min("price");
+                $lowest_price_list=$products->where('price', $min_price)->pluck('id');
+                $lowest_price_id=$lowest_price_list[rand(0, count($lowest_price_list)-1)];
+                $variation->lowest_price_id=$lowest_price_id;
+                $variation->qty=$products->sum('qty');
+                $variation->num_of_sale=$products->sum('num_of_sale');
+                $variation->prices=$products->pluck('price');
+                $variation->rating=(double)$products->sum('rating')/$products->count();
+                $variation->save();
             }
+        }catch(Exception $e){
+            // dd($e->getMessage());
         }
 
-        return $arr;
-    }
-
-    public function productAttributes()
-    {
-        return $this->belongsToMany(ProductAttribute::class,
-            'product_product_attributes',
-            'product_id',
-            'product_attribute_id'
-        );
-    }
-
-    public function getCharacteristicValuesForDetailProductAttribute()
-    {
-        $arr = collect();
-
-        foreach ($this->characteristicValues as $item) {
-            $arr->push([
-                'parent_id' => $item->parent_id,
-                'attribute_id' => $item->attr_id,
-                'attribute' => App\Models\ProductAttributeCharacteristics::where('id', $item->attr_id)->first(),
-                'key' => $item->name,
-                'value' => $item->values
-            ]);
+        foreach (Language::all() as $language) {
+            // Product Translations
+            $product_translation = ProductTranslation::firstOrNew(['lang' => $language->code, 'product_id' => $this->id]);
+            $product_translation->name = $this->name;
+            $product_translation->save();
         }
+        // dd($variation);
+       return $result; // do not ignore it eloquent calculates this value and returns this, not just to ignore
 
-        $parents = collect();
-
-        foreach ($arr->groupBy('parent_id') as $key => $val) {
-            $parents[] = App\Models\ProductAttribute::where('id', $key)->first();
-        }
-
-        return [
-            'attrs' => $arr,
-            'parents' => $parents
-        ];
     }
 }

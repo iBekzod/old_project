@@ -40,9 +40,9 @@ class CartController extends Controller
         $str = '';
         $tax = 0;
 
-        if($product->digital != 1 && $request->quantity < $product->min_qty) {
+        if($product->digital != 1 && $request->quantity < $product->qty) {
             return array('status' => 0, 'view' => view('frontend.partials.minQtyNotSatisfied', [
-                'min_qty' => $product->min_qty
+                'min_qty' => $product->qty
             ])->render());
         }
 
@@ -53,22 +53,22 @@ class CartController extends Controller
             $str = Color::where('code', $request['color'])->first()->name;
         }
 
-        if ($product->digital != 1) {
-            //Gets all the choice values of customer choice option and generate a string like Black-S-Cotton
-            foreach (json_decode(Product::find($request->id)->choice_options) as $key => $choice) {
-                if($str != null){
-                    $str .= '-'.str_replace(' ', '', $request['attribute_id_'.$choice->attribute_id]);
-                }
-                else{
-                    $str .= str_replace(' ', '', $request['attribute_id_'.$choice->attribute_id]);
-                }
-            }
-        }
+        // if ($product->digital != 1) {
+        //     //Gets all the choice values of customer choice option and generate a string like Black-S-Cotton
+        //     foreach (json_decode(Product::find($request->id)->choice_options) as $key => $choice) {
+        //         if($str != null){
+        //             $str .= '-'.str_replace(' ', '', $request['attribute_id_'.$choice->attribute_id]);
+        //         }
+        //         else{
+        //             $str .= str_replace(' ', '', $request['attribute_id_'.$choice->attribute_id]);
+        //         }
+        //     }
+        // }
 
         $data['variant'] = $str;
 
-        if($str != null && $product->variant_product){
-            $product_stock = $product->stocks->where('variant', $str)->first();
+        if($str != null ){//&& $product->variant_product){
+            $product_stock = $product;
             $price = $product_stock->price;
             $quantity = $product_stock->qty;
 
@@ -77,7 +77,7 @@ class CartController extends Controller
             }
         }
         else{
-            $price = $product->unit_price;
+            $price = $product->price;
         }
 
         //discount calculation based on flash deal and regular discount
@@ -124,9 +124,9 @@ class CartController extends Controller
             $data['quantity'] = 1;
         }
 
-        if(Cookie::has('referred_product_id') && Cookie::get('referred_product_id') == $product->id) {
-            $data['product_referral_code'] = Cookie::get('product_referral_code');
-        }
+        // if(Cookie::has('referred_product_id') && Cookie::get('referred_product_id') == $product->id) {
+        //     $data['product_referral_code'] = Cookie::get('product_referral_code');
+        // }
 
         if($request->session()->has('cart')){
             $foundInCart = false;
@@ -135,7 +135,7 @@ class CartController extends Controller
             foreach ($request->session()->get('cart') as $key => $cartItem){
                 if($cartItem['id'] == $request->id){
                     if($cartItem['variant'] == $str && $str != null){
-                        $product_stock = $product->stocks->where('variant', $str)->first();
+                        $product_stock = $product;
                         $quantity = $product_stock->qty;
 
                         if($quantity < $cartItem['quantity'] + $request['quantity']){
@@ -153,11 +153,11 @@ class CartController extends Controller
             if (!$foundInCart) {
                 $cart->push($data);
             }
-            $request->session()->put('cart', $cart);
+            // $request->session()->put('cart', $cart);
         }
         else{
             $cart = collect([$data]);
-            $request->session()->put('cart', $cart);
+            // $request->session()->put('cart', $cart);
         }
 
         return array('status' => 1, 'view' => view('frontend.partials.addedToCart', compact('product', 'data'))->render());
@@ -183,16 +183,16 @@ class CartController extends Controller
             if($key == $request->key){
                 $product = \App\Product::find($object['id']);
                 if($object['variant'] != null && $product->variant_product){
-                    $product_stock = $product->stocks->where('variant', $object['variant'])->first();
+                    $product_stock = $product;
                     $quantity = $product_stock->qty;
                     if($quantity >= $request->quantity){
-                        if($request->quantity >= $product->min_qty){
+                        if($request->quantity >= $product->qty){
                             $object['quantity'] = $request->quantity;
                         }
                     }
                 }
                 elseif ($product->current_stock >= $request->quantity) {
-                    if($request->quantity >= $product->min_qty){
+                    if($request->quantity >= $product->qty){
                         $object['quantity'] = $request->quantity;
                     }
                 }

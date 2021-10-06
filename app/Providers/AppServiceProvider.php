@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\HelperClasses\Translations;
+
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 
@@ -15,9 +16,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // \Debugbar::disable();
+        if(env('DEMO_MODE') != 'On'){
+            \Debugbar::disable();
+        }
         Translations::getInstance()->getTranslations();
-        \Debugbar::disable();
         Schema::defaultStringLength(191);
     }
 
@@ -28,6 +30,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+
         //
+//        $app->register(\KitLoong\MigrationsGenerator\MigrationsGeneratorServiceProvider::class);
     }
 }

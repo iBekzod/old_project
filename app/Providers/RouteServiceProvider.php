@@ -37,8 +37,6 @@ class RouteServiceProvider extends ServiceProvider
   {
     $this->mapApiRoutes();
 
-    $this->mapApiV2Routes();
-
     $this->mapAdminRoutes();
 
     $this->mapAffiliateRoutes();
@@ -61,10 +59,27 @@ class RouteServiceProvider extends ServiceProvider
 
     $this->mapWebRoutes();
 
+    $this->mapDeliveryBoyRoutes();
+
     //$this->mapInstallRoutes();
 
     //$this->mapUpdateRoutes();
   }
+
+  /**
+   * Define the "delivery boy" routes for the application.
+   *
+   * These routes all receive session state, CSRF protection, etc.
+   *
+   * @return void
+   */
+  protected function mapDeliveryBoyRoutes()
+  {
+    Route::middleware('web')
+       ->namespace($this->namespace)
+       ->group(base_path('routes/delivery_boy.php'));
+  }
+
 
   /**
    * Define the "seller package" routes for the application.
@@ -259,23 +274,8 @@ class RouteServiceProvider extends ServiceProvider
   protected function mapApiRoutes()
   {
     Route::prefix('api')
-       ->middleware('spa')
-       ->namespace($this->namespace)
-       ->group(base_path('routes/api.php'));
-  }
-
-  /**
-   * Define the "api" routes for the application.
-   *
-   * These routes are typically stateless.
-   *
-   * @return void
-   */
-  protected function mapApiV2Routes()
-  {
-    Route::prefix('api')
        ->middleware('api')
        ->namespace($this->namespace)
-       ->group(base_path('routes/api_v2.php'));
+       ->group(base_path('routes/api.php'));
   }
 }

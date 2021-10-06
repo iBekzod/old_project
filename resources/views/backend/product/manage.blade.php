@@ -25,13 +25,16 @@
                 <tr>
                     <th>#</th>
                     <th width="20%">{{translate('Name')}}</th>
+                    <th>{{translate('Status')}}</th>
                     <th>{{translate('Added By')}}</th>
                     <th>{{translate('Num of Sale')}}</th>
                     <th>{{translate('Total Stock')}}</th>
                     <th>{{translate('Base Price')}}</th>
+                    <th>{{translate('Todays deal')}}</th>
                     <th>{{translate('Published')}}</th>
                     <th>{{translate('Featured')}}</th>
-                    <th class="text-right">{{translate('Options')}}</th>
+                    <th>{{translate('Refundable')}}</th>
+                    <th class="text-right">{{translate('Accepted')}}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -39,35 +42,42 @@
                     <tr>
                         <td>{{ ($key+1) + ($products->currentPage() - 1)*$products->perPage() }}</td>
                         <td>
-                            <a href="{{ route('product', $product->slug) }}" target="_blank">
+                            {{-- @php
+                                $variation=$product->variation;
+                            @endphp --}}
+                            <a href="{{ url('single_product/'.$product->slug) }}" target="_blank">
                                 <div class="form-group row">
-                                    <div class="col-md-4">
-                                        <img src="{{ uploaded_asset($product->thumbnail_img)??static_asset('assets/img/placeholder.jpg')}}" alt="Image"
-                                             class="w-50px">
+                                    <div class="col-lg-4">
+                                        {{-- @if($product->on_moderation)
+                                            <span class="badge badge-pill badge-info"> </span>
+                                        @endif --}}
+
+                                        <img src="{{ ($product->variation)?uploaded_asset($product->variation->thumbnail_img)??static_asset('assets/img/placeholder.jpg'):static_asset('assets/img/placeholder.jpg')}}" alt=""
+                                                class="w-50px">
                                     </div>
-                                    <div class="col-md-8">
-                                        <span class="text-muted">{{ $product->getTranslation('name') }}</span>
+                                    <div class="col-lg-8">
+                                        <span class="text-muted">{{  $product->getTranslation('name')??null}}</span>
+
                                     </div>
                                 </div>
                             </a>
                         </td>
+                        <td>@if($product->on_moderation)
+                            <span class="badge badge-inline badge-info">{{ translate('New') }}</span>
+                            @endif</td>
                         <td>{{ $product->user->name }}</td>
                         <td>{{ $product->num_of_sale }} {{translate('times')}}</td>
                         <td>
-                            @php
-                                $qty = 0;
-                                if($product->variant_product){
-                                    foreach ($product->stocks as $key => $stock) {
-                                        $qty += $stock->qty;
-                                    }
-                                }
-                                else{
-                                    $qty = $product->current_stock;
-                                }
-                                echo $qty;
-                            @endphp
+                            {{$product->qty}}
                         </td>
-                        <td>{{ number_format($product->unit_price,2) }}</td>
+                        <td>{{ number_format($product->price,2) }}</td>
+                        <td>
+                            <label class="aiz-switch aiz-switch-success mb-0">
+                                <input onchange="update_todays_deal(this)" value="{{ $product->id }}"
+                                       type="checkbox" <?php if ($product->todays_deal == 1) echo "checked";?> >
+                                <span class="slider round"></span>
+                            </label>
+                        </td>
                         <td>
                             <label class="aiz-switch aiz-switch-success mb-0">
                                 <input onchange="update_published(this)" value="{{ $product->id }}"
@@ -82,8 +92,20 @@
                                 <span class="slider round"></span>
                             </label>
                         </td>
+                        <td>
+                            <label class="aiz-switch aiz-switch-success mb-0">
+                                <input onchange="update_refundable(this)" value="{{ $product->id }}"
+                                       type="checkbox" <?php if ($product->refundable == 1) echo "checked";?> >
+                                <span class="slider round"></span>
+                            </label>
+                        </td>
                         <td class="text-right">
-                            <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
+                            <label class="aiz-switch aiz-switch-success mb-0">
+                                <input onchange="update_accepted(this)" value="{{ $product->id }}"
+                                       type="checkbox" @if($product->is_accepted == 1) checked @endif>
+                                <span class="slider round"></span>
+                            </label>
+                            {{-- <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
                                href="{{ route('products.manage.change.accept', $product->id) }}"
                                title="{{ translate('Accept') }}">
                                 <i class="las la-check"></i>
@@ -92,7 +114,8 @@
                                href="{{ route('products.manage.change.refuse', $product->id) }}"
                                title="{{ translate('Cancel') }}">
                                 <i class="las la-times"></i>
-                            </a>
+                            </a> --}}
+
                         </td>
                     </tr>
                 @endforeach
@@ -156,6 +179,24 @@
             });
         }
 
+        function update_accepted(el) {
+            if (el.checked) {
+                var status = 1;
+            } else {
+                var status = 0;
+            }
+            $.post('{{ route('products.accepted') }}', {
+                _token: '{{ csrf_token() }}',
+                id: el.value,
+                status: status
+            }, function (data) {
+                if (data == 1) {
+                    AIZ.plugins.notify('success', '{{ translate('Accepted products updated successfully') }}');
+                } else {
+                    AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
+                }
+            });
+        }
         function update_featured(el) {
             if (el.checked) {
                 var status = 1;
@@ -169,6 +210,24 @@
             }, function (data) {
                 if (data == 1) {
                     AIZ.plugins.notify('success', '{{ translate('Featured products updated successfully') }}');
+                } else {
+                    AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
+                }
+            });
+        }
+        function update_refundable(el) {
+            if (el.checked) {
+                var status = 1;
+            } else {
+                var status = 0;
+            }
+            $.post('{{ route('products.refundable') }}', {
+                _token: '{{ csrf_token() }}',
+                id: el.value,
+                status: status
+            }, function (data) {
+                if (data == 1) {
+                    AIZ.plugins.notify('success', '{{ translate('Refundable products updated successfully') }}');
                 } else {
                     AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
                 }

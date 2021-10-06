@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="h-100 bg-cover bg-center py-5 d-flex align-items-center" style="background-image: url({{ uploaded_asset(get_setting('admin_login_background'))??static_asset('assets/img/placeholder.jpg') }})">
+<div class="h-100 bg-cover bg-center py-5 d-flex align-items-center">
     <div class="container">
         <div class="row">
             <div class="col-lg-6 col-xl-4 mx-auto">
@@ -25,8 +25,8 @@
                             </div>
                             <div class="form-group">
                                 <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required placeholder="{{ translate('Password') }}">
-                                @if ($errors->has('password'))
                                     <span class="invalid-feedback" role="alert">
+                                @if ($errors->has('password'))
                                         <strong>{{ $errors->first('password') }}</strong>
                                     </span>
                                 @endif
@@ -39,6 +39,11 @@
                                             <span>{{ translate('Remember Me') }}</span>
                                             <span class="aiz-square-check"></span>
                                         </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="text-right">
+                                        <a href="{{ route('user.login') }}" class="text-reset fs-14">{{translate('Login as seller or customer')}} ?</a>
                                     </div>
                                 </div>
                                 @if(env('MAIL_USERNAME') != null && env('MAIL_PASSWORD') != null)
@@ -58,8 +63,8 @@
                                 <table class="table table-bordered">
                                     <tbody>
                                         <tr>
-                                            <td>admin@admin.uz</td>
-                                            <td>admin123456</td>
+                                            <td>Tinfis@admin.uz</td>
+                                            <td>Tinfis12345</td>
                                             <td><button class="btn btn-info btn-xs" onclick="autoFill()">{{ translate('Copy') }}</button></td>
                                         </tr>
                                     </tbody>
@@ -79,8 +84,8 @@
 @section('script')
     <script type="text/javascript">
         function autoFill(){
-            $('#email').val('admin@admin.uz');
-            $('#password').val('admin123456');
+            $('#email').val('tinfis@admin.uz');
+            $('#password').val('Tinfis12345');
         }
     </script>
 @endsection

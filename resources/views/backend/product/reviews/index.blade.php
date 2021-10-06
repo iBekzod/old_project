@@ -44,7 +44,7 @@
                         <tr>
                             <td>{{ ($key+1) + ($reviews->currentPage() - 1)*$reviews->perPage() }}</td>
                             <td>
-                                <a href="{{ route('product', $review->product->slug) }}" target="_blank" class="text-reset">{{ $review->product->getTranslation('name') }}</a>
+                                <a href="{{ url('single_product/'.$review->product->slug) }}" target="_blank" class="text-reset">{{ $review->product->getTranslation('name') }}</a>
                             </td>
                             <td>{{ $review->product->added_by }}</td>
                             <td>{{ $review->user->name }} ({{ $review->user->email }})</td>

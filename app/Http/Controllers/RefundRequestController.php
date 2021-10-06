@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\BusinessSetting;
+use App\Order;
 use App\RefundRequest;
 use App\OrderDetail;
 use App\Seller;
+use App\Shop;
 use App\Wallet;
 use App\User;
 use Auth;
@@ -47,15 +49,18 @@ class RefundRequestController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Http\Response
      */
     public function vendor_index()
     {
         $refunds = RefundRequest::where('seller_id', Auth::user()->id)->latest()->paginate(10);
+        // dd($refunds);
         if (Auth::user()->user_type == 'admin' || Auth::user()->user_type == 'staff') {
+
             return view('refund_request.frontend.recieved_refund_request.index', compact('refunds'));
         }
         else {
+            // dd("keldi");
             return view('refund_request.frontend.recieved_refund_request.index', compact('refunds'));
         }
     }
@@ -110,17 +115,13 @@ class RefundRequestController extends Controller
     {
         $business_settings = BusinessSetting::where('type', $request->type)->first();
         if ($business_settings != null) {
-            if($request->hasFile('logo')){
-                $business_settings->value = $request->file('logo')->store('frontend/refund_sticker');
-            }
+            $business_settings->value = $request->logo;
             $business_settings->save();
         }
         else {
             $business_settings = new BusinessSetting;
             $business_settings->type = $request->type;
-            if($request->hasFile('logo')){
-                $business_settings->value = $request->file('logo')->store('frontend/refund_sticker');
-            }
+            $business_settings->value = $request->logo;
             $business_settings->save();
         }
         flash( translate("Refund Sticker has been updated successfully"))->success();
@@ -135,6 +136,8 @@ class RefundRequestController extends Controller
     public function admin_index()
     {
         $refunds = RefundRequest::where('refund_status', 0)->latest()->paginate(15);
+        // $refunds = RefundRequest::where('refund_status', 0)->first();
+        // dd($refunds);
         return view('refund_request.index', compact('refunds'));
     }
 
@@ -146,7 +149,15 @@ class RefundRequestController extends Controller
     public function paid_index()
     {
         $refunds = RefundRequest::where('refund_status', 1)->latest()->paginate(15);
+
+        // dd($refunds);
         return view('refund_request.paid_refund', compact('refunds'));
+    }
+
+    public function rejected_index()
+    {
+        $refunds = RefundRequest::where('refund_status', 2)->latest()->paginate(15);
+        return view('refund_request.rejected_refund', compact('refunds'));
     }
 
     /**
@@ -210,6 +221,27 @@ class RefundRequestController extends Controller
         }
     }
 
+    public function reject_refund_request(Request $request){
+      $refund = RefundRequest::findOrFail($request->refund_id);
+      if (Auth::user()->user_type == 'admin' || Auth::user()->user_type == 'staff') {
+          $refund->admin_approval = 2;
+          $refund->refund_status  = 2;
+          $refund->reject_reason  = $request->reject_reason;
+      }
+      else{
+          $refund->seller_approval = 2;
+          $refund->reject_reason  = $request->reject_reason;
+      }
+
+      if ($refund->save()) {
+          flash(translate('Refund request rejected successfully.'))->success();
+          return back();
+      }
+      else {
+          return back();
+      }
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -234,9 +266,12 @@ class RefundRequestController extends Controller
      * @return \Illuminate\Http\Response
      */
     //Shows the refund reason
-    public function reason_view($id)
+    public function admin_reason_view($id)
     {
+        //   return "keldi";
+        //   dd($id);
         $refund = RefundRequest::findOrFail($id);
+        //  dd($refund);
         if (Auth::user()->user_type == 'admin' || Auth::user()->user_type == 'staff') {
             if ($refund->orderDetail != null) {
                 $refund->admin_seen = 1;
@@ -245,7 +280,15 @@ class RefundRequestController extends Controller
             }
         }
         else {
+            // dd($refund);
             return view('refund_request.frontend.refund_request.reason', compact('refund'));
         }
     }
+
+    public function reject_reason_view($id)
+    {
+        $refund = RefundRequest::findOrFail($id);
+        return $refund->reject_reason;
+    }
+
 }

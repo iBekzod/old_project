@@ -14,8 +14,11 @@
 //Admin Panel
 Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function(){
     Route::get('/refund-request-all', 'RefundRequestController@admin_index')->name('refund_requests_all');
+    Route::get('/reasons-all', 'ReasonController@index')->name('reasons_all');
+
     Route::get('/refund-request-config', 'RefundRequestController@refund_config')->name('refund_time_config');
     Route::get('/paid-refund', 'RefundRequestController@paid_index')->name('paid_refund');
+    Route::get('/rejected-refund', 'RefundRequestController@rejected_index')->name('rejected_refund');
     Route::post('/refund-request-pay', 'RefundRequestController@refund_pay')->name('refund_request_money_by_admin');
     Route::post('/refund-request-time-store', 'RefundRequestController@refund_time_update')->name('refund_request_time_config');
     Route::post('/refund-request-sticker-store', 'RefundRequestController@refund_sticker_update')->name('refund_sticker_config');
@@ -31,5 +34,8 @@ Route::group(['middleware' => ['user', 'verified']], function(){
 });
 
 Route::group(['middleware' => ['auth']], function(){
-    Route::get('refund-request-reason/{id}', 'RefundRequestController@reason_view')->name('reason_show');
+    Route::Post('/reject-refund-request','RefundRequestController@reject_refund_request')->name('reject_refund_request');
+
+    Route::get('refund-request-reason/{id}', 'RefundRequestController@admin_reason_view')->name('reason_show');
+    Route::get('refund-request-reject-reason/{id}', 'RefundRequestController@reject_reason_view')->name('reject_reason_show');
 });

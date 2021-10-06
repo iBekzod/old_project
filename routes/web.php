@@ -12,8 +12,9 @@
 */
 // use App\Mail\SupportMailManager;
 //demo
-use Cviebrock\EloquentSluggable\Services\SlugService;
-use App\Category;
+// use Cviebrock\EloquentSluggable\Services\SlugService;
+// use App\Category;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/demo/cron_1', 'DemoController@cron_1');
 Route::get('/demo/cron_2', 'DemoController@cron_2');
@@ -34,24 +35,73 @@ Route::get('/verification-confirmation/{code}', 'Auth\VerificationController@ver
 Route::get('/email_change/callback', 'HomeController@email_change_callback')->name('email_change.callback');
 Route::post('/password/reset/email/submit', 'HomeController@reset_password_with_code')->name('password.update');
 
-Route::get('/test', function (Request $request) {
-    $data=$request->all();
-    return view('test', compact('data'));
-});
+// Route::get('/test', function () {
+    //    $variations= new \App\Http\Controllers\ProductController();
+
+    //    dd($variations->make_variation(78));
+//    $categories = \App\Category::all();
+//    $categories = $categories->groupBy('slug');
+//    foreach ($categories as $category) {
+//        if($category->count() > 1) {
+////            dd($category);
+//            foreach ($category as $item) {
+//                $item->slug = SlugService::createSlug(Category::class, 'slug', slugify($item->name));
+//                $item->save();
+//            }
+//        }
+//    }
+// });
 
 Route::post('/language', 'LanguageController@changeLanguage')->name('language.change');
 Route::post('/currency', 'CurrencyController@changeCurrency')->name('currency.change');
 
 Route::get('/social-login/redirect/{provider}', 'Auth\LoginController@redirectToProvider')->name('social.login');
 Route::get('/social-login/{provider}/callback', 'Auth\LoginController@handleProviderCallback')->name('social.callback');
-// Route::get('/users/login', 'HomeController@login')->name('user.login');
-// Route::get('/users/registration', 'HomeController@registration')->name('user.registration');
-//Route::post('/users/login', 'HomeController@user_login')->name('user.login.submit');
+// Route::get('/user/login', 'HomeController@login');
+Route::match(['get', 'post'],'/users/login', 'HomeController@login')->name('user.login');
+
+
+Route::get('/seller/registration', 'HomeController@seller_registration')->name('user.registration');
+
+Route::post('/seller/registration', 'HomeController@seller_registration')->name('seller.registration');
+
+// country-state-city-dropdown-with-ajax
+Route::post('api/fetch-states','HomeController@fetchState');
+Route::post('api/fetch-cities','HomeController@fetchCity');
+
+// Route::post('/users/login', 'HomeController@user_login')->name('user.login.submit');
 // Route::post('/users/login/cart', 'HomeController@cart_login')->name('cart.login.submit');
 
+// Route::get('/users/login', 'HomeController@login')->name('user.login');
+// Route::get('/users/registration', 'HomeController@registration')->name('user.registration');
+
+Route::post('/users/login/cart', 'HomeController@cart_login')->name('cart.login.submit');
+
+//Route::post('/users/login', 'HomeController@user_login')->name('user.login.submit');
+Route::get('get/email', 'HomeController@email');
+
 //Home Page
+
+// Route::get('/seller/login', 'HomeController@seller_login')->name('user.login');
+// Route::post('/seller/login', 'HomeController@seller_login')->name('seller.login');
+
+
+
+Route::post('seller/autoidentification/form','SellerAutoidentificationFormController@seller_autoidentification_form_save')->name('seller.autoidentification');
+Route::get('seller/autoidentification/form','SellerAutoidentificationFormController@seller_autoidentification_form_save')->name('seller.autoidentification');
+Route::post('seller/autoidentification/form/update', 'SellerAutoidentificationFormController@Seller_autoidentification_form_update')->name('update.autoidentification');
+
+//  pdf
+Route::get('/pdf/file','SellerDeliveryFormController@generatorPDF');
+Route::post('seller/delivery/form','SellerDeliveryFormController@seller_delivery_form_save')->name('seller.delivery');
+Route::get('seller/delivery/form','SellerDeliveryFormController@seller_delivery_form_save')->name('seller.delivery');
+
+Route::post('seller/gape/form','SellerDeliveryFormController@seller_page_form_save')->name('seller.page');
+Route::get('seller/gape/form','SellerDeliveryFormController@seller_page_form_save')->name('seller.page');
+
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/page', 'HomeController@home')->name('homePage');
+Route::get('/single_product/{slug}', 'HomeController@single_product');
 Route::post('/home/section/featured', 'HomeController@load_featured_section')->name('home.section.featured');
 Route::post('/home/section/best_selling', 'HomeController@load_best_selling_section')->name('home.section.best_selling');
 Route::post('/home/section/home_categories', 'HomeController@load_home_categories_section')->name('home.section.home_categories');
@@ -62,9 +112,10 @@ Route::post('/category/nav-element-list', 'HomeController@get_category_items')->
 //Flash Deal Details Page
 Route::get('/flash-deal/{slug}', 'HomeController@flash_deal_details')->name('flash-deal-details');
 
-Route::get('/sitemap.xml', function(){
-	return base_path('sitemap.xml');
-});
+// Route::get('/sitemap.xml', function(){
+// 	return base_path('sitemap.xml');
+// });
+
 
 
 Route::get('/customer-products', 'CustomerProductController@customer_products_listing')->name('customer.products');
@@ -79,6 +130,7 @@ Route::get('/search?q={search}', 'HomeController@search')->name('suggestion.sear
 Route::post('/ajax-search', 'HomeController@ajax_search')->name('search.ajax');
 
 Route::get('/product/{slug}', 'HomeController@product')->name('product');
+Route::get('/element/{slug}', 'HomeController@element')->name('element');
 Route::get('/category/{category_slug}', 'HomeController@listingByCategory')->name('products.category');
 Route::get('/brand/{brand_slug}', 'HomeController@listingByBrand')->name('products.brand');
 Route::post('/product/variant_price', 'HomeController@variant_price')->name('products.variant_price');
@@ -175,6 +227,30 @@ Route::group(['middleware' => ['user', 'verified','unbanned']], function(){
 Route::get('/customer_products/destroy/{id}', 'CustomerProductController@destroy')->name('customer_products.destroy');
 
 Route::group(['prefix' =>'seller', 'middleware' => ['seller', 'verified', 'user']], function(){
+
+    Route::get('/products/create','ProductController@create')->name('products.create');
+	Route::get('/products/{id}/edit','ProductController@seller_product_edit')->name('seller.products.edit');
+
+    Route::get('elements/all','SellerElementController@elementsIndex')->name('seller.elements.all');
+	// Route::get('elements/clone','SellerElementController@clone_elements')->name('seller.elements.clone');
+	// Route::post('elements/clone/selected','SellerElementController@clone_selected_elements')->name('seller.elements.clone.selected');
+	Route::get('elements/variation/remove','SellerElementController@remove_variation')->name('seller.elements.variation.remove');
+	Route::get('elements/seller','SellerElementController@elementsIndex')->name('seller.elements.seller');
+	Route::get('elements/manage','SellerElementController@manageElements')->name('seller.elements.manage');
+	Route::get('elements/manage/{id}/accept','SellerElementController@changeOnModerationAccept')->name('seller.elements.manage.change.accept');
+	Route::get('elements/manage/{id}/refuse','SellerElementController@changeOnModerationRefuse')->name('seller.elements.manage.change.refuse');
+    Route::get('elements/create','SellerElementController@create')->name('seller.elements.create');
+    // Route::post('elements/store','SellerElementController@store')->name('seller.elements.store');
+	Route::get('elements/{id}/edit','SellerElementController@seller_element_edit')->name('seller.elements.edit');
+	Route::post('elements/todays_deal', 'SellerElementController@updateTodaysDeals')->name('seller.elements.todays_deal');
+	Route::post('elements/refundable', 'SellerElementController@updateRefundables')->name('seller.elements.refundable');
+	Route::post('elements/featured', 'SellerElementController@updateFeatured')->name('seller.elements.featured');
+    Route::get('elements/make_selected_attribute_options', 'SellerElementController@make_selected_attribute_options')->name('seller.elements.make_selected_attribute_options');
+    Route::get('elements/make_attribute_options', 'SellerElementController@make_attribute_options')->name('seller.elements.make_attribute_options');
+    Route::get('elements/make_color_options', 'SellerElementController@make_color_options')->name('seller.elements.make_color_options');
+    Route::get('elements/make_attribute_variations', 'SellerElementController@make_attribute_variations')->name('seller.elements.make_attribute_variations');
+    Route::get('elements/make_all_combination', 'SellerElementController@make_all_combination')->name('seller.elements.make_all_combination');
+    Route::get('element/products', 'SellerElementController@elementProducts')->name('seller.elements.products.edit');
     Route::post('/flash_deals/product_discount', 'FlashDealController@product_discount')->name('seller.flash_deals.product_discount');
     Route::post('/flash_deals/product_discount_edit', 'FlashDealController@product_discount_edit')->name('seller.flash_deals.product_discount_edit');
     Route::patch('/flash_deals/update/{id}', 'FlashDealController@update')->name('seller.flash_deals.update');
@@ -186,13 +262,14 @@ Route::group(['prefix' =>'seller', 'middleware' => ['seller', 'verified', 'user'
     Route::post('/marketing/update/status', 'MarketingController@updateStatus')->name('marketing.update_status');
     Route::post('/marketing/update_featured', 'MarketingController@updateFeatured')->name('marketing.update_featured');
 	Route::get('/products', 'HomeController@seller_product_list')->name('seller.products');
+	// Route::get('/elements', 'HomeController@seller_product_list')->name('seller.elements');
 	Route::get('/product/upload', 'HomeController@show_product_upload_form')->name('seller.products.upload');
 	Route::get('/product/clone', 'HomeController@show_product_clone_form')->name('seller.products.clone');
-	Route::post('/product/clone', 'HomeController@show_product_clone_form')->name('seller.products.clone');
+	// Route::post('/product/clone', 'HomeController@show_product_clone_form')->name('seller.products.clone');
 	// Route::post('/product/clone-from-all', 'HomeController@show_product_clone_form')->name('seller.products.clone');
-	Route::get('/product/{id}/edit', 'HomeController@show_product_edit_form')->name('seller.products.edit');
-	Route::get('/product/{id}/characteristics', 'HomeController@characteristics')->name('seller.products.characteristics');
-	Route::post('/product/{id}/characteristics', 'HomeController@characteristics')->name('seller.products.characteristics');
+	// Route::get('/product/{id}/edit', 'HomeController@show_product_edit_form')->name('seller.products.edit');
+	// Route::get('/product/{id}/characteristics', 'HomeController@characteristics')->name('seller.products.characteristics');
+	// Route::post('/product/{id}/characteristics', 'HomeController@characteristics')->name('seller.products.characteristics');
 	Route::resource('payments','PaymentController');
 
 	Route::get('/shop/apply_for_verification', 'ShopController@verify_form')->name('shop.verify');
@@ -204,27 +281,61 @@ Route::group(['prefix' =>'seller', 'middleware' => ['seller', 'verified', 'user'
 	Route::get('/digitalproducts', 'HomeController@seller_digital_product_list')->name('seller.digitalproducts');
 	Route::get('/digitalproducts/upload', 'HomeController@show_digital_product_upload_form')->name('seller.digitalproducts.upload');
 	Route::get('/digitalproducts/{id}/edit', 'HomeController@show_digital_product_edit_form')->name('seller.digitalproducts.edit');
+
+    Route::any('/uploads', 'AizUploadController@index')->name('my_uploads.all');
+    Route::any('/uploads/new', 'AizUploadController@create')->name('my_uploads.new');
+    Route::any('/uploads/file-info', 'AizUploadController@file_info')->name('my_uploads.info');
+    Route::get('/uploads/destroy/{id}', 'AizUploadController@destroy')->name('my_uploads.destroy');
+
+    Route::resource('deliveries', 'SellerDeliveryController')->except([
+		'seller.create', 'seller.show', 'seller.destroy'
+	]);
+    Route::get('deliveries', 'SellerDeliveryController@index')->name('seller.deliveries.index');
+    Route::post('deliveries/edit/{id}', 'SellerDeliveryController@edit')->name('seller.deliveries.edit');
+    Route::get('deliveries/destroy/{id}', 'SellerDeliveryController@destroy')->name('seller.deliveries.destroy');
+	Route::post('/seller_configuration/update', 'SellerSettingsController@seller_configuration_update')->name('seller.seller_configuration.update');
+
 });
 
 Route::group(['middleware' => ['auth']], function(){
-	Route::post('/products/store/','ProductController@store')->name('products.store');
-	Route::post('/products/update/{id}','ProductController@update')->name('products.update');
-	Route::get('/products/destroy/{id}', 'ProductController@destroy')->name('products.destroy');
-	Route::get('/products/duplicate/{id}', 'ProductController@duplicate')->name('products.duplicate');
-	Route::post('/products/sku_combination', 'ProductController@sku_combination')->name('products.sku_combination');
-	Route::post('/products/sku_combination_edit', 'ProductController@sku_combination_edit')->name('products.sku_combination_edit');
-	Route::post('/products/seller/featured', 'ProductController@updateSellerFeatured')->name('products.seller.featured');
-	Route::post('/products/published', 'ProductController@updatePublished')->name('products.published');
+
+    Route::post('/products/store/','SellerProductController@store')->name('seller.products.store');
+    Route::post('/products/update/{id}','SellerProductController@update')->name('seller.products.update');
+	Route::get('/products/destroy/{id}', 'SellerProductController@destroy')->name('seller.products.destroy');
+    Route::get('/products/make_combination', 'SellerProductController@make_combination')->name('seller.products.make_combination');
+	Route::post('/products/published', 'SellerProductController@updatePublished')->name('seller.products.published');
+	Route::post('/products/accepted', 'SellerProductController@updateAccepted')->name('seller.products.accepted');
+	Route::post('/products/publisheds', 'SellerProductController@updatePublisheds')->name('seller.products.publisheds');
+    Route::post('/products/todays_deal', 'SellerProductController@updateTodaysDeal')->name('seller.products.todays_deal');
+    Route::post('/products/refundable', 'SellerProductController@updateRefundable')->name('seller.products.refundable');
+
+	Route::post('/products/seller/featured', 'SellerProductController@updateSellerFeatured')->name('seller.products.featured');
+
+    Route::post('/elements/store/','SellerElementController@store')->name('seller.elements.store');
+	Route::post('/elements/update/{id}','SellerElementController@update')->name('seller.elements.update');
+	Route::get('/elements/destroy/{id}', 'SellerElementController@destroy')->name('seller.elements.destroy');
+	Route::post('/elements/seller/featured', 'SellerElementController@updateSellerFeatured')->name('seller.elements.seller.featured');
+	Route::post('/elements/published', 'SellerElementController@updatePublished')->name('seller.elements.published');
 
 	Route::get('invoice/customer/{order_id}', 'InvoiceController@customer_invoice_download')->name('customer.invoice.download');
 	Route::get('invoice/seller/{order_id}', 'InvoiceController@seller_invoice_download')->name('seller.invoice.download');
 
-	Route::resource('orders','OrderController');
-	Route::get('/orders/destroy/{id}', 'OrderController@destroy')->name('orders.destroy');
-	Route::post('/orders/details', 'OrderController@order_details')->name('orders.details');
-	Route::post('/orders/update_delivery_status', 'OrderController@update_delivery_status')->name('orders.update_delivery_status');
-	Route::post('/orders/update_payment_status', 'OrderController@update_payment_status')->name('orders.update_payment_status');
 
+    // Route::get('test/order','OrderController@order_customer');
+    // Route::get('test/order/information','OrderController@order_information');
+	// Route::resource('orders','OrderController');
+	// Route::get('/orders/destroy/{id}', 'OrderController@destroy')->name('orders.destroy');
+	// Route::post('/orders/details', 'OrderController@order_details')->name('orders.details');
+	// Route::post('/orders/update_delivery_status', 'OrderController@update_delivery_status')->name('orders.update_delivery_status');
+	// Route::post('/orders/update_payment_status', 'OrderController@update_payment_status')->name('orders.update_payment_status');
+
+    Route::resource('orders', 'OrderController');
+    Route::get('/orders/destroy/{id}', 'OrderController@destroy')->name('orders.destroy');
+    Route::post('/orders/details', 'OrderController@order_details')->name('orders.details');
+    Route::post('/orders/update_delivery_status', 'OrderController@update_delivery_status')->name('orders.update_delivery_status');
+    Route::post('/orders/update_payment_status', 'OrderController@update_payment_status')->name('orders.update_payment_status');
+    Route::post('/orders/delivery-boy-assign', 'OrderController@assign_delivery_boy')->name('orders.delivery-boy-assign');
+    Route::get('invoice/{order_id}', 'InvoiceController@invoice_download')->name('invoice.download');
 	Route::resource('/reviews', 'ReviewController');
 
 	Route::resource('/withdraw_requests', 'SellerWithdrawRequestController');
@@ -235,7 +346,16 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::resource('conversations','ConversationController');
 	Route::get('/conversations/destroy/{id}', 'ConversationController@destroy')->name('conversations.destroy');
 	Route::post('conversations/refresh','ConversationController@refresh')->name('conversations.refresh');
+
+    Route::get('conversations/{id}/show','ConversationController@show')->name('conversations.show');
+
 	Route::resource('messages','MessageController');
+
+    Route::get('/found_it_cheapers/destroy/{id}','FoundItCheaperController@destroy')->name('found_it_cheapers.destroy');
+
+    Route::get('report_description/destroy/{id}','ReportDescriptionController@destroy')->name('report_description.destroy');
+
+    Route::get('support_service/destroy/{id}','SupportServiceController@destroy')->name('support_service.destroy');
 
 	//Product Bulk Upload
 	Route::get('/product-bulk-upload/index', 'ProductBulkUploadController@index')->name('product_bulk_upload.index');
@@ -257,6 +377,10 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('/digitalproducts/edit/{id}', 'DigitalProductController@edit')->name('digitalproducts.edit');
 	Route::get('/digitalproducts/destroy/{id}', 'DigitalProductController@destroy')->name('digitalproducts.destroy');
 	Route::get('/digitalproducts/download/{id}', 'DigitalProductController@download')->name('digitalproducts.download');
+
+    //Reports
+    Route::get('/commission-log', 'ReportController@commission_history')->name('commission-log.index');
+
 });
 
 Route::resource('shops', 'ShopController');
@@ -317,6 +441,7 @@ Route::get('/nagad/callback', 'NagadController@verify')->name('nagad.callback');
 //Custom page
 Route::get('/{slug}', 'PageController@show_custom_page')->name('custom-pages.show_custom_page');
 Route::get('map', 'Test\MapController@index');
+// Route::get('/return_back', 'HomeController@return_back')->name('return_back');
+Route::get('resolve-dependencies','ResolveDependenciesController@resolveDependencyManually');
 
-
-
+Route::post('/get-city', 'CityController@get_city')->name('get-city');

@@ -2,102 +2,125 @@
 
 namespace App\Http\Resources;
 
-use App\ProductStock;
-use App\ProductTranslation;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use App\Models\Review;
-use App\Models\Attribute;
-use App\Models\FlashDealProduct;
+use App\Review;
+use App\Attribute;
+use App\Branch;
+use App\Characteristic;
+use App\Element;
+use App\FlashDealProduct;
+use App\Product;
+use App\User;
+use App\Variation;
+use App\Wishlist;
+use Auth;
 class ProductDetailCollection extends ResourceCollection
 {
     public function toArray($request)
     {
-        return [
-            'data' => $this->collection->map(function($data) {
-                $lang = ProductTranslation::where('product_id', $data->id)->where('lang', app()->getLocale())->first();
-
-                $arr = [
-                    'id' => (integer) $data->id,
-                    'name' => $data->name,
-                    'added_by' => $data->added_by,
-                    'user' => [
-                        'name' => $data->user->name,
-                        'email' => $data->user->email,
-                        'avatar' => $data->user->avatar,
-                        'avatar_original' => api_asset($data->user->avatar_original),
-                        'shop_name' => $data->added_by == 'admin' ? '' : $data->user->shop->name,
-                        'shop_logo' => $data->added_by == 'admin' ? '' : uploaded_asset($data->user->shop->logo),
-                        'shop_link' => $data->added_by == 'admin' ? '' : route('shops.info', $data->user->shop->id)
-                    ],
-                    'brand' => [
-                        'name' => $data->brand != null ? $data->brand->name : null,
-                        'logo' => $data->brand != null ? api_asset($data->brand->logo) : null,
-                        'links' => [
-                            'products' => $data->brand != null ? route('api.products.brand', $data->brand_id) : null
-                        ]
-                    ],
-                    'translations' => ProductTranslation::where('product_id', $data->id)->get(),
-                    'variations' => ProductStock::where('product_id', $data->id)->groupBy('user_id', true)->get(),
-                    'photos' => $this->convertPhotos(explode(',', $data->photos)),
-                    'thumbnail_image' => api_asset($data->thumbnail_img),
-                    'tag' => explode(',', $data->tags),
-                    'price_lower' => (double) explode('-', homeDiscountedPrice($data->id))[0],
-                    'price_higher' => (double) explode('-', homeDiscountedPrice($data->id))[1],
-                    'choice_options' => $this->convertToChoiceOptions(json_decode($data->choice_options)),
-                    'colors' => new ProductColorCollection(json_decode($data->colors)),
-                    'todays_deal' => (integer) $data->todays_deal,
-                    'featured' => (integer) $data->featured,
-                    'base_price' => (double) homeBasePrice($data->id),
-                    'base_discounted_price' => (double) homeDiscountedBasePrice($data->id),
-                    'current_stock' => (integer) $data->current_stock,
-                    'slug' => $data->slug,
-                    'unit' => $data->unit,
-                    'video_link' => $data->video_link,
-                    'video_provider' => $data->video_provider,
-                    'discount' => (integer) $data->discount,
-                    'discount_type' => $data->discount_type,
-                    'tax' => (double) $data->tax,
-                    'tax_type' => $data->tax_type,
-                    'shipping_type' => $data->shipping_type,
-                    'shipping_cost' => (double) $data->shipping_cost,
-                    'number_of_sales' => (integer) $data->num_of_sale,
-                    'rating' => (double) $data->rating,
-                    'rating_count' => (integer) Review::where(['product_id' => $data->id])->count(),
-                    'description' => $data->description,
-                    'characteristics' => $data->characteristicValuesForDetailProduct,
-                    'reviews' => new ReviewCollection(Review::where('product_id', $data->id)->latest()->get()),
+        $product=Product::where('slug', $request->id)->orWhere('id', $request->id)->first();
+        if(!($product->is_accepted && $product->published)){
+            return [];
+        }
+        $wishlist=false;
+        if(Auth::check()){
+            $user_id=auth()->id();
+            $wishlist= Wishlist::where('user_id', $user_id)->where('product_id', $product->id)->exists();
+        }
+        $variation=Variation::withTrashed()->find($product->variation_id);
+        // $products=getPublishedProducts('product', ['where'=>[['variation_id', $variation->id]]], [], []);
+        $element=Element::withTrashed()->find($variation->element_id);
+        $seller_products=getPublishedProducts('product', ['where'=>[['user_id', $product->user_id],['element_id', $product->element_id]]], [], [])->get();
+        try{
+            $data = [
+                'flashDeal'=> FlashDealProduct::where('product_id', $product->id)->first()??[],
+                'weight'=>$element->weight,
+                'refundable'=>$product->refundable,
+                'shipping_type' => $product->delivery_type,
+                'shipping_cost' => $this->calculateShippingCost($product, false),
+                // 'express_shipping_cost'=>$this->calculateShippingCost($product, true),
+                'id' => (integer) $product->id,
+                'name' => $variation->getTranslation('name'),
+                'added_by' => $product->added_by,
+                'variant' => $this->makeVariation($product)??[],
+                'variations' => $this->makeVariations($product)??[],
+                'user' => [
+                    'name' => $product->user->name,
+                    'email' => $product->user->email,
+                    'avatar' => $product->user->avatar,
+                    'avatar_original' => api_asset($product->user->avatar_original),
+                    'shop_name' => $product->added_by == 'admin' ? '' : $product->user->shop->name,
+                    'shop_logo' => $product->added_by == 'admin' ? '' : api_asset($product->user->shop->logo),
+                    'shop_link' => $product->added_by == 'admin' ? '' : route('shops.info', $product->user->shop->id)
+                ],
+                'selers'=>$this->getSellers($product),
+                'brand' => [
+                    'name' => $element != null ? $element->brand->getTranslation('name'):null,
+                    'slug' => $element != null ? $element->brand->slug : null,
+                    'logo' => $element != null ? api_asset($element->brand->logo) : null,
                     'links' => [
-                        'reviews' => route('api.reviews.index', $data->id),
-                        'related' => route('products.related', $data->id)
+                        'products' => route('api.products.brand', $element->brand->id)
                     ]
-                ];
+                ],
+                'photos' => $this->convertPhotos(explode(',', $element->photos)),
+                'thumbnail_image' => api_asset($variation->thumbnail_img),
+                'earn_point'=>($product->earn_point!=0)?$product->earn_point:calculateProductClubPoint($product->id),
+                'base_price' => (double) homeBasePrice($product->id),
+                'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
+                'currency_code'=>defaultCurrency(),
+                'exchange_rate'=>defaultExchangeRate(),
+                'todays_deal' => (integer) $product->todays_deal,
+                'featured' =>(integer) $product->featured,
+                'unit' => $element->unit,
+                'discount' => (integer) $product->discount,
+                'discount_type' => $product->discount_type,
+                'tax' => (double) $product->tax,
+                'tax_type' => $product->tax_type,
+                'rating' => (double) $product->rating,
+                'number_of_sales' => (integer) $product->num_of_sale,
+                'current_stock' => (integer) $product->qty,
+                'tag' => explode(',', $element->tags),
+                'slug' => $product->slug,
+                'unit' => $element->unit,
+                'qty'=>$product->qty,
+                'video_link' => $element->video_link,
+                'video_provider' => $element->video_provider,
+                'rating' => (double) $product->rating,
+                'rating_count' => (integer) Review::where(['product_id' => $product->id])->count(),
+                'description' => $element->getTranslation('description'),
+                'reviews' => new ReviewCollection(Review::where('product_id', $product->id)->latest()->get()),
+                'price_lower' => (double) convertCurrency($seller_products->min('price'), $product->currency_id),
+                'price_higher' => (double) convertCurrency($seller_products->max('price'), $product->currency_id),
+                // 'choice_options' => $this->convertToChoiceOptions(json_decode($product->variation, true), $product),
+                'choice_options' => $this->convertToChoiceOptions($seller_products),
+                'short_characteristics' => $this->convertToShortCharacteristics(json_decode($element->characteristics)),
+                'colors' => new ProductColorCollection(json_decode($element->variation_colors)),
 
-                if ($lang) {
-                    $arr['name'] = $lang->name;
-                    $arr['description'] = $lang->description;
-                }
+                'characteristics' => $this->convertToCharacteristics(json_decode($element->characteristics, true)),
 
-                if($flashDeal = FlashDealProduct::where('product_id',$data->id)->first())
-                {
-                   $arr['flashDeal'] = $flashDeal;
-                }
 
-                if($data->category_id !== 0)
-                {
-                    $arr['category'] = [
-                        'name' => $data->category->name,
-                        'banner' => api_asset($data->category->banner),
-                        'icon' => $data->category->icon,
-                        'links' => [
-                            'products' => route('api.products.category', $data->category_id),
-                            'sub_categories' => route('subCategories.index', $data->category_id)
-                        ]
-                    ];
-                }
-
-                return $arr;
-            })
-        ];
+                'category'=>[
+                    'name' => $element->category->getTranslation('name'),
+                    'banner' => api_asset($element->category->banner),
+                    'icon' => $element->category->icon,
+                    'links' => [
+                        'products' => route('api.products.category', $element->category_id),
+                        'sub_categories' => route('subCategories.index', $element->category_id)
+                    ]
+                ],
+                'links' => [
+                    'reviews' => route('api.reviews.index', $product->id),
+                    'related' => route('products.related', $product->id)
+                ],
+                'is_wishlist'=>$wishlist,
+            ];
+        } catch (\Exception $th) {
+            // dd($th->getMessage());
+            // return null;
+            return abort(404, 'not found');
+            // return ($th->getTrace());
+        }
+        return $data;
     }
 
     public function with($request)
@@ -106,28 +129,160 @@ class ProductDetailCollection extends ResourceCollection
             'breadcrumbs' => [
                 $this->collection
             ],
+            'lang'=> app()->getLocale(),
             'success' => true,
             'status' => 200
         ];
     }
 
-    protected function convertToChoiceOptions($data){
-        $result = array();
-        foreach ($data as $key => $choice) {
-            $attr = Attribute::find($choice->attribute_id);
-            if($attr && $choice->values!=null)
-            {
-                $item['name'] = $choice->attribute_id;
-                $item['title'] = Attribute::find($choice->attribute_id)->name;
-                $item['options'] = $choice->values;
-                if($item['name']!=null && $item['title']!=null){
-                    array_push($result, $item);
+    protected function convertToCharacteristics($attributes){
+        $result=array();
+        $collected_characteristics=[];
+        if ($attributes) {
+            foreach($attributes as $attribute_id=>$value_ids){
+                $characteristics=Characteristic::withTrashed()->whereIn('id',$value_ids)->get();
+                $attribute=Attribute::withTrashed()->where('id',$attribute_id)->first();
+                $branch=Branch::where('id',$attribute->branch_id)->first();
+                if(!(isset($attribute) && isset($branch))){
+                    continue;
                 }
-
+                $items=array();
+                foreach($characteristics as $characteristic){
+                    $items[]=[
+                        'id'=>$characteristic->id,
+                        'name'=>$characteristic->getTranslation('name')
+                    ];
+                }
+                $collected_characteristics['id']=$attribute->id;
+                $collected_characteristics['attribute']=$attribute->getTranslation('name');
+                $collected_characteristics['values']=$items;
+                if( is_array($items) && count($items)>0){
+                    $result[]=[
+                        'id'=>$branch->id,
+                        'title'=>$branch->getTranslation('name'),
+                        'options'=>$collected_characteristics
+                    ];
+                }
             }
+
+            foreach($result as $key => $value){
+                $newarray[$value['id']]['id'] = $value['id'];
+                $newarray[$value['id']]['title'] = $value['title'];
+                $newarray[$value['id']]['options'][$key] = $value['options'];
+            }
+            return $newarray;
         }
         return $result;
     }
+
+    protected function convertToShortCharacteristics($attributes, $number=10){
+        $collected_characteristics=[];
+        if ($attributes) {
+            foreach($attributes as $attribute_id=>$value_ids){
+                if( is_array($value_ids) && count($value_ids)>0){
+                    $characteristics=Characteristic::withTrashed()->whereIn('id',$value_ids)->get();
+                    $attribute=Attribute::withTrashed()->where('id',$attribute_id)->first();
+                    if(!(isset($attribute))){
+                        continue;
+                    }
+                    $items=array();
+                    foreach($characteristics as $characteristic){
+                        $items[]=[
+                            'id'=>$characteristic->id,
+                            'name'=>$characteristic->getTranslation('name')
+                        ];
+                    }
+                    if( is_array($items) && count($items)==1 && $number>0){
+                        $collected_characteristics[]=[
+                            'id'=>$attribute->id,
+                            'attribute'=>$attribute->getTranslation('name'),
+                            'values'=>$items
+                        ];
+                        $number--;
+                    }
+                }
+            }
+        }
+        return $collected_characteristics;
+    }
+
+    protected function convertToChoiceOptions($products){
+        $color_ids=[];
+        $characteristic_ids=[];
+        if(count($products)>0){
+            foreach($products as $product){
+                if($product->variation->characteristics)$characteristic_ids=array_unique(array_merge($characteristic_ids, explode(',', $product->variation->characteristics)));
+                if($product->variation->color_id)$color_ids=array_unique(array_merge($color_ids, [$product->variation->color_id]));
+            }
+            $attributes=Characteristic::withTrashed()->whereIn('id', $characteristic_ids)->get()->groupBy('attribute_id');
+            $collected_characteristics=[];
+
+            if ($attributes) {
+                foreach($attributes as $attribute_id=>$models){
+
+                    // dd(is_array($models));
+                    if( count($models)>0){
+                        $characteristics=$models;
+                        $attribute=Attribute::withTrashed()->where('id',$attribute_id)->first();
+                        if($attribute==null){
+                            continue;
+                        }
+                        $items=array();
+                        foreach($characteristics as $characteristic){
+                            $items[]=[
+                                'id'=>$characteristic->id,
+                                'is_active'=>hasSuchAttribute($product, $characteristic->id),
+                                'name'=>$characteristic->getTranslation('name')
+                            ];
+                        }
+                        // dd($attribute);
+                        if( is_array($items) && count($items)>0){
+                            $collected_characteristics[]=[
+                                'id'=>$attribute->id,
+                                'attribute'=>$attribute->getTranslation('name'),
+                                'values'=>$items
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+        // dd($collected_characteristics);
+        return $collected_characteristics;
+    }
+    // protected function convertToChoiceOptions($attributes, $product){
+    //     $collected_characteristics=[];
+    //     // dd($attributes);
+    //     if ($attributes) {
+    //         foreach($attributes as $attribute_id=>$value_ids){
+
+    //             if( is_array($value_ids) && count($value_ids)>0){
+    //                 $characteristics=Characteristic::withTrashed()->whereIn('id', $value_ids)->get();
+    //                 $attribute=Attribute::withTrashed()->where('id',$attribute_id)->first();
+    //                 if(!(isset($attribute))){
+    //                     continue;
+    //                 }
+    //                 $items=array();
+    //                 foreach($characteristics as $characteristic){
+    //                     $items[]=[
+    //                         'id'=>$characteristic->id,
+    //                         'is_active'=>hasSuchAttribute($product, $characteristic->id),
+    //                         'name'=>$characteristic->getTranslation('name')
+    //                     ];
+    //                 }
+    //                 // dd($items);
+    //                 if( is_array($items) && count($items)>0){
+    //                     $collected_characteristics[]=[
+    //                         'id'=>$attribute->id,
+    //                         'attribute'=>$attribute->getTranslation('name'),
+    //                         'values'=>$items
+    //                     ];
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return $collected_characteristics;
+    // }
 
     protected function convertPhotos($data){
         $result = array();
@@ -135,5 +290,82 @@ class ProductDetailCollection extends ResourceCollection
             array_push($result, api_asset($item));
         }
         return $result;
+    }
+
+    protected function makeVariations($product){
+        $products=Product::where('element_id', $product->element_id)->where('user_id', $product->user_id)->get();
+        $variations=array();
+        foreach($products as $product){
+            $variation=$product->variation;
+            $variations[]=[
+                'slug'=>$product->slug??null,
+                'attributes'=>array_map(function($v){ return (int)$v; }, explode(",",$variation->characteristics)??null),
+                'color'=>$variation->color_id??null
+            ];
+        }
+        return $variations;
+    }
+
+    protected function makeVariation($product){
+        $variation=$product->variation;
+        return [
+            'slug'=>$product->slug??null,
+            'attributes'=>array_map(function($v){ return (int)$v; }, explode(",",$variation->characteristics)??null),
+            'color'=>$variation->color_id??null,
+            'photos' => $this->convertPhotos(explode(',', $variation->photos)),
+            'thumbnail_image' => api_asset($variation->thumbnail_img),
+        ];
+    }
+
+
+    protected function getSellers($item){
+        $products=Product::where('variation_id', $item->variation_id)->get();
+        $sellers=array();
+        foreach($products as $product){
+            $sellers[]=[
+                'product'=>[
+                    'id' => (integer) $product->id,
+                    'thumbnailImage' => $product->added_by == 'admin' ? api_asset(get_setting('system_logo_black'))??static_asset('assets/img/logo.png') : api_asset($product->user->shop->logo),
+                    'name' => $product->variation->getTranslation('name'),
+                    'variant' => $this->makeVariation($product)??[],
+                    'base_price' => (double) homeBasePrice($product->id),
+                    'base_discounted_price' => (double) homeDiscountedBasePrice($product->id),
+                    'currency_code'=>defaultCurrency(),
+                    'exchange_rate'=>defaultExchangeRate(),
+                    'discount' => (integer) $product->discount,
+                    'discount_type' => $product->discount_type,
+                    'slug' => $product->slug,
+                    'links' => [
+                        'reviews' => route('api.reviews.index', $product->id),
+                        'related' => route('products.related', $product->id)
+                    ],
+                ],
+                'name' => $product->user->name,
+                'slug' => $product->added_by == 'admin' ? '' : $product->user->shop->slug,
+                'shipping_type' => $product->delivery_type,
+                'shipping_cost' => $this->calculateShippingCost($product),
+                'is_current'=>($item->id==$product->id),
+                'seller_name' => $product->user->name,
+                'email' => $product->user->email,
+                'avatar' => $product->user->avatar,
+                'avatar_original' => api_asset($product->user->avatar_original),
+                'shop_name' => $product->added_by == 'admin' ? '' : $product->user->shop->name,
+                'shop_logo' => $product->added_by == 'admin' ? '' : uploaded_asset($product->user->shop->logo),
+                'shop_link' => $product->added_by == 'admin' ? '' : route('shops.info', $product->user->shop->id)
+            ];
+        }
+        return $sellers;
+    }
+
+    protected function calculateShippingCost($product, $is_express=false){
+        // return 20000;
+        // dd(request()->ip());
+        // if($product->delivery_type=='free'){
+        //     return 0;
+        // }else {
+        $address=getUserAddress();
+        return calculateDeliveryCost($product, $address->id, $product->delivery_type);
+            // return calculateShipping(['product_id'=>$product->id, 'type'=>'precise', 'address_id'=>$address->id]);
+        // }
     }
 }

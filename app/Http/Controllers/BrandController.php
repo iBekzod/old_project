@@ -8,6 +8,7 @@ use App\BrandTranslation;
 use App\Product;
 use Illuminate\Support\Str;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
+use App\Language;
 
 class BrandController extends Controller
 {
@@ -63,9 +64,12 @@ class BrandController extends Controller
         $brand->logo = $request->logo;
         $brand->save();
 
-        $brand_translation = BrandTranslation::firstOrNew(['lang' => env('DEFAULT_LANGUAGE'), 'brand_id' => $brand->id]);
-        $brand_translation->name = $request->name;
-        $brand_translation->save();
+        foreach (Language::all() as $language){
+            $brand_translation = BrandTranslation::firstOrNew(['lang' => $language->code, 'brand_id' => $brand->id]);
+            $brand_translation->name = $brand->name;
+            $brand_translation->save();
+        }
+
 
         flash(translate('Brand has been inserted successfully'))->success();
         return redirect()->route('brands.index');
@@ -106,7 +110,7 @@ class BrandController extends Controller
     public function update(Request $request, $id)
     {
         $brand = Brand::findOrFail($id);
-        if($request->lang == env("DEFAULT_LANGUAGE")){
+        if($request->lang ==default_language()){
             $brand->name = $request->name;
         }
         $brand->meta_title = $request->meta_title;
@@ -123,10 +127,13 @@ class BrandController extends Controller
         $brand->logo = $request->logo;
         $brand->save();
 
-        $brand_translation = BrandTranslation::firstOrNew(['lang' => $request->lang, 'brand_id' => $brand->id]);
-        $brand_translation->name = $request->name;
-        $brand_translation->save();
-
+        if(BrandTranslation::where('brand_id' , $brand->id)->where('lang' , default_language())->first()){
+            foreach (Language::all() as $language){
+                $brand_translation = BrandTranslation::firstOrNew(['lang' => $language->code, 'brand_id' => $brand->id]);
+                $brand_translation->name = $request->name;
+                $brand_translation->save();
+            }
+        }
         flash(translate('Brand has been updated successfully'))->success();
         return back();
 

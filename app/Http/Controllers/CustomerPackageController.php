@@ -18,7 +18,7 @@ use App\Http\Controllers\InstamojoController;
 use App\Http\Controllers\RazorpayController;
 use App\Http\Controllers\VoguePayController;
 use App\Utility\PayhereUtility;
-
+use App\Language;
 class CustomerPackageController extends Controller
 {
     /**
@@ -58,10 +58,12 @@ class CustomerPackageController extends Controller
 
         $customer_package->save();
 
-        $customer_package_translation = CustomerPackageTranslation::firstOrNew(['lang' => env('DEFAULT_LANGUAGE'), 'customer_package_id' => $customer_package->id]);
-        $customer_package_translation->name = $request->name;
-        $customer_package_translation->save();
-
+        foreach (Language::all() as $language){
+            // CustomerPackage Translations
+            $customer_package_translation = CustomerPackageTranslation::firstOrNew(['lang' => $language->code, 'customer_package_id' => $customer_package->id]);
+            $customer_package_translation->name = $customer_package->name;
+            $customer_package_translation->save();
+        }
 
         flash(translate('Package has been inserted successfully'))->success();
         return redirect()->route('customer_packages.index');
@@ -101,7 +103,7 @@ class CustomerPackageController extends Controller
     public function update(Request $request, $id)
     {
         $customer_package = CustomerPackage::findOrFail($id);
-        if ($request->lang == env("DEFAULT_LANGUAGE")) {
+        if ($request->lang == default_language()) {
             $customer_package->name = $request->name;
         }
         $customer_package->amount = $request->amount;
@@ -110,9 +112,13 @@ class CustomerPackageController extends Controller
 
         $customer_package->save();
 
-        $customer_package_translation = CustomerPackageTranslation::firstOrNew(['lang' => $request->lang, 'customer_package_id' => $customer_package->id]);
-        $customer_package_translation->name = $request->name;
-        $customer_package_translation->save();
+        if(CustomerPackageTranslation::where('customer_package_id' , $customer_package->id)->where('lang' , default_language())->first()){
+            foreach (Language::all() as $language){
+                $customer_package = CustomerPackageTranslation::firstOrNew(['lang' => $language->code, 'customer_package_id' => $customer_package->id]);
+                $customer_package->name = $request->name;
+                $customer_package->save();
+            }
+        }
 
         flash(translate('Package has been updated successfully'))->success();
         return back();
