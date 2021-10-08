@@ -50,6 +50,7 @@ class ProductDetailCollection extends ResourceCollection
                     'avatar' => $product->user->avatar,
                     'avatar_original' => api_asset($product->user->avatar_original),
                     'shop_name' => $product->added_by == 'admin' ? '' : $product->user->shop->name,
+                    'shop_slug' => $product->added_by == 'admin' ? '' : $product->user->shop->slug,
                     'shop_logo' => $product->added_by == 'admin' ? '' : api_asset($product->user->shop->logo),
                     'shop_link' => $product->added_by == 'admin' ? '' : route('shops.info', $product->user->shop->id)
                 ],
